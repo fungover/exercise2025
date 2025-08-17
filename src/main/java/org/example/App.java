@@ -1,7 +1,3 @@
-package org.example;
-
-public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello There!");
-    }
+void main() {
+    System.out.println("Hello World");
 }

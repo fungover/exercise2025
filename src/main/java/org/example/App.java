@@ -1,8 +1,13 @@
 package org.example;
 
+import org.example.cli.ZoneSelection;
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello There!");
-        System.out.println("Testing write adccess");
+
+        ZoneSelection zoneSelection = new ZoneSelection();
+        String zone = zoneSelection.chooseZone();
+        System.out.println("You have selected zone: " + zone);
+
     }
 }

@@ -1,0 +1,27 @@
+Uppgift 1: Hej användare
+Be användaren mata in sitt namn 
+Skriv ut ett personligt välkomstmeddelande, t.ex.. "Hej Martin!"
+ 
+Uppgift 2: Temperaturkonvertering 
+Användaren matar in temperatur i Celsius Programmet konverterar
+till Fahrenheit med formeln: F = C * 9 / 5 + 32 Skriv ut resultatet
+ 
+Uppgift 3: Jämför två tal
+Användaren matar in två heltal
+Programmet skriver ut vilket tal som är störst, eller om de är lika
+ 
+Uppgift 4: BMI-kalkylator
+Användaren matar in längd i meter och vikt i kilogram 
+Programmet beräknar BMI: vikt / (längd * längd) 
+Skriv ut BMI och ge en tolkning:
+ 
+BMI < 18.5 → Undervikt
+ 
+BMI 18.5–24.9 → Normalvikt
+ 
+BMI ≥ 25 → Övervikt
+ 
+Uppgift 6: Gissa talet
+Programmet har ett hemligt tal (t.ex. 42 eller ett slumpmässigt tal)
+Användaren gissar tills rätt tal anges Programmet ger feedback: "För högt", "För lågt", "Rätt!" 
+Räkna antal försök och skriv ut när användaren gissat rätt

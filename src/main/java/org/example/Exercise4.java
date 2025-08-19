@@ -14,8 +14,6 @@ void main() {
 
     System.out.println("BMI: " + bmi);
 
-    //Någon som vill köra resten
-
     if(bmi < 18.5) {
         System.out.println("Undervikt");
     } else if ( bmi < 25) {

@@ -9,7 +9,7 @@ public class Exercise5 {
         Random random = new Random();
         Scanner scanner = new Scanner(System.in);
 
-        int number = random.nextInt(1,101);
+        int magicNumber = random.nextInt(1,101);
         int guessCount = 0;
         boolean notCompleted = true;
 
@@ -18,10 +18,10 @@ public class Exercise5 {
             int guess = scanner.nextInt();
             guessCount++;
 
-            if (guess == number) {
+            if (guess == magicNumber) {
                 System.out.println("You guessed it right!");
                 notCompleted = false;
-            } else if (guess < number) {
+            } else if (guess < magicNumber) {
                 System.out.println("Too low!");
             } else {
                 System.out.println("Too high");

@@ -21,5 +21,7 @@ public class App {
         System.out.println(CalculateMeanPrice.meanSEK(jsonToday));
 
 
+
+
     }
 }

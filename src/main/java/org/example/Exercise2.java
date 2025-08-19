@@ -12,8 +12,12 @@ public class Exercise2 {
         System.out.print("Temperatur i celsius: ");
         String celsius = scanner.nextLine();
 
-        double convert = Double.parseDouble(celsius) * 9 / 5 + 32;
-        System.out.printf(Locale.US,"Temperatur i Fahrenheit: %.2f", convert);
+        try {
+            double convert = Double.parseDouble(celsius) * 9 / 5 + 32;
+            System.out.printf(Locale.US,"Temperatur i Fahrenheit: %.2f", convert);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input: " + celsius);
+        }
     }
 }
 

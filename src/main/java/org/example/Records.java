@@ -19,8 +19,6 @@ public class Records {
         if( largeBox.equals( anotherLargeBox ))
             System.out.println("Large Box is equal to AnotherLarge Box");
     }
-
-
 }
 
 class Box {

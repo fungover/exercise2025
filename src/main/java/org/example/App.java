@@ -28,21 +28,21 @@ public class App {
             switch (choice) {
                 case "1" -> {
                     System.out.println("You've chosen option 1");
-                    System.out.print("Enter Zone (SE1–SE4, default SE3): ");
+                    System.out.println("Enter Zone (SE1–SE4, default SE3): ");
                     String zone = scanner.nextLine().trim().toUpperCase();
-                    if (zone.isEmpty()) {
-                        zone = "SE3";
-                    } else if (!zone.trim().equalsIgnoreCase("SE1")
-                    && !zone.trim().toUpperCase().equals("SE2")
-                    && !zone.trim().toUpperCase().equals("SE3")
-                    && !zone.trim().toUpperCase().equals("SE4")) {
-                        zone = "SE3";
-                    }
+                    if (zone.isEmpty()) zone = "SE3";
 
-                    showPricesForToday(LocalDate.now(), zone);
+                    showPricesForToday(zone);
                 }
 
-                case "2" -> System.out.println("You've chosen option 2");
+                case "2" -> {
+                    System.out.println("You've chosen option 2");
+                    System.out.println("Enter Zone (SE1–SE4, default SE3): ");
+                    String zone = scanner.nextLine().trim().toUpperCase();
+                    if (zone.isEmpty()) zone = "SE3";
+
+                    showPricesForTomorrow(zone);
+                }
                 case "3" -> System.out.println("You've chosen option 3");
                 case "4" -> System.out.println("You've chosen option 4");
                 case "5" -> System.out.println("You've chosen option 5");
@@ -51,16 +51,41 @@ public class App {
             }
         }
     }
-    private static void showPricesForToday(LocalDate now, String zone) {
+
+    private static void showPricesForTomorrow(String zone) {
+        try {
+            var http = java.net.http.HttpClient.newHttpClient();
+            var tomorrow = java.time.LocalDate.now().plusDays(1);
+
+            PriceRequests request = new PriceRequests(tomorrow.getYear(), tomorrow.getMonthValue(), tomorrow.getDayOfMonth(), zone);
+
+            String url = request.buildUrl();
+
+
+            var req = java.net.http.HttpRequest.newBuilder(java.net.URI.create(url)).GET().build();
+            var res = http.send(req, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+            if (res.statusCode() != 200) {
+                System.out.println("The prices for tomorrow hasn't been released yet, try again later");
+                return;
+            }
+
+            String body = res.body();
+            System.out.println(body);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void showPricesForToday(String zone) {
         try {
             var http = java.net.http.HttpClient.newHttpClient(); // Creates a HTTP Client
             var today = java.time.LocalDate.now(); // Gets current date 2025-08-20
 
-            String year = String.valueOf(today.getYear());
-            String month = String.format("%02d",today.getMonthValue()); // Format to add a 0 if it's not a double nummber
-            String day = String.format("%02d",today.getDayOfMonth()); // 8 becomes 08
+            PriceRequests request = new PriceRequests(today.getYear(), today.getMonthValue(), today.getDayOfMonth(), zone);
 
-            String url = "https://www.elprisetjustnu.se/api/v1/prices/" + year + "/" + month + "-" + day + "_" + zone + ".json";
+            String url = request.buildUrl();
+
 
             var req = java.net.http.HttpRequest.newBuilder(java.net.URI.create(url)).GET().build();
             var res = http.send(req, java.net.http.HttpResponse.BodyHandlers.ofString());
@@ -69,9 +94,6 @@ public class App {
                 System.out.println("HTTP " + res.statusCode() + " for " + url);
                 return;
             }
-
-/*          System.out.println(url); Debuggers
-            System.out.println(today);*/
 
             String body = res.body();
             System.out.println(body);

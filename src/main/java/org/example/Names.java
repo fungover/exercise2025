@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Arrays;
+
 public class Names {
 
     static void main() {
@@ -17,9 +19,13 @@ public class Names {
 
         System.out.println("You entered the following names:");
         for(int i = 0; i < nameCount; i++) {
-            System.out.println(names[i]);
+            System.out.println(i + 1 + ". " + names[i]);
         }
 
+        for (String s : names) {
+                System.out.println(s);
+        }
 
+        Arrays.stream(names).forEach(System.out::println);
     }
 }

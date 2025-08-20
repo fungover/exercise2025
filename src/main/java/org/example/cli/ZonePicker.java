@@ -41,8 +41,8 @@ public class ZonePicker {
                   "Invalid choice, please input a number between 1 and 4.");
                 sc.next();
             }
+            sc.close();
         }
-
 
     }
 }

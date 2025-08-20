@@ -29,6 +29,7 @@ public class App {
                 case "1" -> {
                     System.out.println("You've chosen option 1");
                     System.out.println("Enter Zone (SE1–SE4, default SE3): ");
+                    printZoneAreas();
                     String zone = scanner.nextLine().trim().toUpperCase();
                     if (zone.isEmpty()) zone = "SE3";
 
@@ -38,6 +39,7 @@ public class App {
                 case "2" -> {
                     System.out.println("You've chosen option 2");
                     System.out.println("Enter Zone (SE1–SE4, default SE3): ");
+                    printZoneAreas();
                     String zone = scanner.nextLine().trim().toUpperCase();
                     if (zone.isEmpty()) zone = "SE3";
 
@@ -50,6 +52,13 @@ public class App {
                 default -> System.out.println("Invalid choice");
             }
         }
+    }
+
+    private static void printZoneAreas() {
+        System.out.println("SE1: Luleå / Norra Sverige");
+        System.out.println("SE2: Sundsvall / Norra ");
+        System.out.println("SE3: Stockholm / Södra Mellansverige");
+        System.out.println("SE4: Malmö / Södra Sverige");
     }
 
     private static void showPricesForTomorrow(String zone) {

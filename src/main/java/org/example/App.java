@@ -12,7 +12,9 @@ public class App {
         System.out.println("Choose option:");
 
         Scanner scanner = new Scanner(System.in);
-        getChoice(scanner);
+        int choice = getChoice(scanner);
+
+        handleChoice(choice);
 
         /* String URL = "https://www.elprisetjustnu.se/api/v1/prices/2025/08-19_SE3.json";
         getPrices(URL); */
@@ -25,7 +27,8 @@ public class App {
             System.out.println("1. Download prices for the current day and next day");
             System.out.println("2. Print the mean price for the current 24-hour period");
             System.out.println("3. Identify and print the hours with the cheapest and most expensive prices");
-            System.out.println("4. Exit");
+            System.out.println("4. Determine the best time to charge an electric car for durations of 2, 4, or 8 hours");
+            System.out.println("5. Exit");
             System.out.print("Enter your choice: ");
 
             if (scanner.hasNextInt()) {
@@ -43,6 +46,28 @@ public class App {
         return choice;
     }
 
+    private static String handleChoice(int choice) {
+
+        switch (choice) {
+            case 1:
+                System.out.println("Downloading prices for the current day and next day");
+                break;
+            case 2:
+                System.out.println("Printing the mean price for the current 24-hour period");
+                break;
+            case 3:
+                System.out.println("Identifying and printing the hours with the cheapest and most expensive prices");
+                break;
+            case 4:
+                System.out.println("Determining the best time to charge an electric car for durations of 2, 4, or 8 hours");
+                break;
+            case 5:
+                System.out.println("Exiting");
+                break;
+        }
+
+        return null;
+    }
 
     static void getPrices(String url_string) {
         try {

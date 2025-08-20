@@ -12,16 +12,6 @@ public class Client {
                     .uri(URI.create("https://www.elprisetjustnu.se/api/v1/prices/2025/08-21_SE3.json"))
                     .GET()
                     .build();
-            /*int status = client.sendAsync(request, BodyHandlers.ofString())
-                    .thenApply(HttpResponse::statusCode)
-                    .join();
-
-            String data = null;
-            if (status == 200) {
-                data = client.sendAsync(request, BodyHandlers.ofString())
-                        .thenApply(HttpResponse::body)
-                        .join();
-            }*/
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             int statusCode = response.statusCode();

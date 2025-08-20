@@ -3,6 +3,7 @@ package org.example;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.api.ElprisApi;
+import org.example.cli.MenuOptions;
 import org.example.cli.ZonePicker;
 import org.example.util.ElectricityPrice;
 import org.example.util.PriceUtils;
@@ -10,6 +11,26 @@ import org.example.util.PriceUtils;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
+
+/*
+1.Create a CLI (Command-Line Interface) program that can:
+
+done 2.Download prices for the current day and the next day (if available).
+
+done 3.Print the mean price for the current 24-hour period.
+
+4.Identify and print the hours with the cheapest and most expensive prices.
+
+5.If multiple hours share the same price, select the earliest hour.
+
+6.Determine the best time to charge an electric car for durations of 2, 4, or 8 hours.
+(Use a Sliding Window algorithm for this.)
+
+done 7.Allow selection of the price zone ("zon") for which to retrieve data.
+(Possible input methods: command-line argument, config file, or interactive prompt.)
+
+
+ */
 
 public class App {
     ZonePicker zonePicker = new ZonePicker();
@@ -28,33 +49,18 @@ public class App {
           new TypeReference<>() {
           });
 
-        boolean running = true;
+
         Scanner scanner = new Scanner(System.in);
 
-        while (running) {
-            System.out.println("\nSelected Zone " + zone);
-            System.out.println("""
-                               1. Average price for the day in your zone
-                               2. Full list of the price for the day in your zone
-                               5. Exit
-                               """);
-            if (scanner.hasNextInt()) {
-                int input = scanner.nextInt();
 
-                switch (input) {
-                    case 1 -> System.out.printf(
-                      "the average price for the day\nin your zone is %" + ".3f SEK/kWh\n",
-                      PriceUtils.avgPrice(pricesToday));
-                    case 2 -> PriceUtils.priceCheck(pricesToday);
-                    case 5 -> running = false;
-                    default -> System.out.println("Invalid choice, please try " + "again");
-                }
-            } else {
-                System.out.println(
-                  "Invalid choice, please input a number between 1 and 4 or 5" + " to exit.");
-                scanner.next();
-            }
-        }
+//            System.out.println("""
+//                               1. Average price for the day in your zone
+//                               2. Full list of the price for the day in your zone
+//                               5. Exit
+//                               """);
+        MenuOptions.mainMenu(scanner, pricesToday, pricesTomorrow, zone);
+
+
         scanner.close();
 
 

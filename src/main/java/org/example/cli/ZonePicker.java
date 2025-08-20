@@ -37,12 +37,12 @@ public class ZonePicker {
                     // not a number between 1-4
                 }
             } else {
-                System.out.println(
-                  "Invalid choice, please input a number between 1 and 4.");
+                System.out.println("Invalid choice, please input a number between 1 and 4.");
                 sc.next();
             }
             sc.close();
         }
 
     }
+
 }

@@ -1,7 +1,9 @@
 package org.example;
 
+import org.example.cli.Elpris;
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello There!");
+        Elpris.main(args);
     }
 }

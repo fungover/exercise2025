@@ -1,5 +1,8 @@
 package org.example.chat;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -9,20 +12,25 @@ import java.time.Duration;
 
 public class AIChat {
 
-    //Todo: Send user query to OpenRouter AI using java HttpClient.
+    //Send user query to OpenRouter AI using java HttpClient.
     //https://openjdk.org/groups/net/httpclient/intro.html
     //https://openrouter.ai/docs/api-reference/overview
     //Todo: Add support for setting API-Key using dotenv-java
     //https://github.com/cdimascio/dotenv-java?tab=readme-ov-file
-    //Todo: Convert json response to record Objects using Jackson and print the answer on screen.
+    //Convert json response to record Objects using Jackson and print the answer on screen.
     //https://github.com/FasterXML/jackson
     //Todo: Create a complete chat conversation by including previous messages in next query for context
 
     static void main() throws IOException, InterruptedException {
+        //Todo: Prompt user for content.
         String prompt = """
                 {
-                	"model": "deepseek/deepseek-chat-v3-0324:free",
+                	"model": "moonshotai/kimi-k2:free",
                 	"messages": [
+                	    {
+                	        "role": "system",
+                	        "content": "Svara kort helst inte med mer än 5 meningar. Försök att svara på rim."
+                	    },
                 		{
                 			"role": "user",
                 			"content": "Vad är meningen med livet?"
@@ -40,6 +48,22 @@ public class AIChat {
                 .build();
 
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        String json = response.body();
         System.out.println(response.body());
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        ChatCompletion completion = mapper.readValue(json, ChatCompletion.class);
+
+        System.out.println(completion.choices()[0].message().content());
     }
 }
+
+record ChatCompletion(Choice[] choices) {
+}
+
+record Choice(Message message) {
+}
+
+record Message(String role, String content, String refusal) {
+}
+

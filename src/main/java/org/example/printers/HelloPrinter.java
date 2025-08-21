@@ -6,7 +6,7 @@ public class HelloPrinter {
     }
 
     public static void sayHello(String name) {
-        System.out.println("Hello " + name);
+        sayHello(name, 1);
     }
 
     public static void sayHello(String name, int number) {

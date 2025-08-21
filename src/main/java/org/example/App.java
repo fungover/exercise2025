@@ -8,7 +8,7 @@ import java.util.List;
 
 public class App {
     public static void main(String[] args) {
-        HelloPrinter.sayHello("Test");
+        HelloPrinter.sayHello("Test", 1);
         HelloPrinter.sayHello();
 
 //        int x = 1;
@@ -27,11 +27,23 @@ public class App {
         list.add("World");
 
         var copyOfList = List.of(list);
-
-
+        register("Martin", "Mustermann",
+                new Address(new StreetName("MyStreet"), "123", new CityName("MyCity")));
     }
 
+    static void register(String firstName, String lastName,
+                         Address address){
+
+    }
+    record StreetName(String streetName){}
+    record CityName(String cityName){}
+
+    record Address(StreetName street, String houseNumber,
+                   CityName city){}
+
     static void test(int[] values){
+        if( values == null)
+            return;
         values[0] = 4;
         System.out.println(values[0]);
     }
@@ -41,6 +53,14 @@ public class App {
         System.out.println(value);
     }
 
+    static int add(int a, int b){
+         return a + b;
+    }
 
+    static Tuple add(int[] a, int[] b){
+        return new Tuple("a", "b");
+    }
+
+    record Tuple(String a, String b){}
 
 }

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 // This class is used to map the JSON response from the API to a Java object.
 // It uses Jackson annotations to specify the JSON property names that correspond to the fields in this class
 // The class is immutable, meaning once an instance is created, its fields cannot be changed.
-// Note to myself (@JsonPropery) annotation tells jackson to map the JSON field SEK_per_kWh to the Java record sekPerKwh.
+// Note to myself (@JsonProperty) annotation tells jackson to map the JSON field SEK_per_kWh to the Java record sekPerKwh.
 
 public record ElectricityPrice(
     @JsonProperty("SEK_per_kWh") BigDecimal sekPerKwh,

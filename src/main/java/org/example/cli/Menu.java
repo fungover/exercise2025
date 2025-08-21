@@ -1,6 +1,7 @@
 package org.example.cli;
 
 import org.example.utils.CalculateMeanPrice;
+import org.example.utils.LowAndHighPrices;
 
 import java.util.Scanner;
 
@@ -41,8 +42,7 @@ public class Menu {
                         return;
                     }
                     case 2 -> {
-                        System.out.println("Cheapest and most expensive hours in the current 24-hour period: (not implemented)");
-                        // TODO: Implement the logic for this option..
+                        LowAndHighPrices.printMinMaxPrices(json);
                         return;
                     }
                     case 3 -> {

@@ -4,11 +4,19 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Elpris {
-    private double EUR_per_kWh;
-    private double SEK_per_kWh;
-    private double EXR;
-    private String time_start;
-    private String time_end;
+    private final double EUR_per_kWh;
+    private final double SEK_per_kWh;
+    private final double EXR;
+    private final String time_start;
+    private final String time_end;
+
+    public Elpris(double eurPerKWh, double sekPerKWh, double exr, String timeStart, String timeEnd) {
+        EUR_per_kWh = eurPerKWh;
+        SEK_per_kWh = sekPerKWh;
+        EXR = exr;
+        time_start = timeStart;
+        time_end = timeEnd;
+    }
 
     public double getSEK() {
         return SEK_per_kWh;
@@ -16,6 +24,10 @@ public class Elpris {
 
     public double getEUR() {
         return EUR_per_kWh;
+    }
+
+    public double getEXR() {
+        return EXR;
     }
 
     public ZonedDateTime getTimeStart() {

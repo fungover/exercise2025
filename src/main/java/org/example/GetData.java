@@ -1,3 +1,5 @@
+package org.example;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -16,12 +18,36 @@ public class Client {
 
             int statusCode = response.statusCode();
             String data = (statusCode == 200) ? response.body() : null;
-            System.out.println(statusCode);
-            System.out.println(data);
+            /*System.out.println(statusCode);
+            System.out.println(data);*/
+
+            if (data != null) {
+                convertToJson(data);
+            }
         } catch (Exception e) {
             /*throw new RuntimeException(e);*/
             System.out.println("Something went wrong: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    /**
+     *
+     * @param jsonData
+     * @return
+     */
+    static void convertToJson(String jsonData) {
+        System.out.println(jsonData);
+        /*try {
+            ObjectMapper mapper = new ObjectMapper();
+            List<Map<String, Object>> jsonList = mapper.readValue(jsonData, new TypeReference<>() {});
+            for (Map<String, Object> item : jsonList) {
+                System.out.println("Starttid: " + item.get("time_start"));
+                System.out.println("Sluttid: " + item.get("time_end"));
+                System.out.println("SEK/kWh: " + item.get("SEK_per_kWh"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
     }
 }

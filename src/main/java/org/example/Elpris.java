@@ -1,4 +1,4 @@
-package org.example.cli;
+package org.example;
 
 public class Elpris {
     public static void main(String[] args) {
@@ -33,6 +33,7 @@ public class Elpris {
             switch(choice) {
                 case "1":
                     System.out.println("1");
+                    String zone = System.console().readLine("Enter Zone Name: ");
                     System.out.println("\n\n");
                     break;
                 case "2":

@@ -14,7 +14,7 @@ public class Printers {
     }
 
     public static void printMenu() {
-        System.out.println("Welcome to Christians Java CLI!");
+        System.out.println("Welcome to Christians CLI for electrical prices in Sweden!");
         System.out.println("1. Show prices for today");
         System.out.println("2. Show prices for tomorrow");
         System.out.println("3. Show prices for yesterday");

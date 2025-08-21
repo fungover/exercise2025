@@ -44,7 +44,10 @@ public class App {
                 case "4" -> System.out.println("You've chosen option 4");
                 case "5" -> System.out.println("You've chosen option 5");
                 case "6" -> System.out.println("You've chosen option 6");
-                case "7" -> cliActive = false;
+                case "7" -> {
+                    System.out.println("You have exited the CLI!");
+                    cliActive = false;
+                }
                 default -> System.out.println("Invalid choice");
             }
         }

@@ -1,5 +1,7 @@
 package org.example.cli;
 
+import org.example.utils.CalculateMeanPrice;
+
 import java.util.Scanner;
 
 public class ZoneSelection {
@@ -27,11 +29,7 @@ public class ZoneSelection {
                     case 4 -> {return "SE4";}
                     default -> System.out.println("Invalid choice. Please try again."); // Handle invalid choices
                 }
-            } else {
-                System.out.println("Invalid input. Please enter a number."); // Handle non-integer input
-                scanner.next(); // Clear the invalid input
             }
-
 
         }
 

@@ -1,11 +1,12 @@
 package org.example.utils;
 
-
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.model.ElectricityPrice;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 public class CalculateMeanPrice {
 
@@ -17,28 +18,27 @@ public static BigDecimal meanEUR(String json) {
 }
 
 private static BigDecimal calculateMean(String json, String currency) {
-    try {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonArray = mapper.readTree(json);
 
-        BigDecimal sum = BigDecimal.ZERO;
-        int count = 0;
+ try {
+     ObjectMapper mapper = new ObjectMapper();
+     List<ElectricityPrice> prices = mapper.readValue(json, new TypeReference<>() {});
 
-        for (JsonNode entry : jsonArray) {
-            BigDecimal price = entry.get(currency).decimalValue();
-            sum = sum.add(price);
-            count++;
-        }
-        if (count == 0) return BigDecimal.ZERO;
+     BigDecimal sum = BigDecimal.ZERO;
+     int count = 0;
 
-        return sum.divide(BigDecimal.valueOf(count), 5, RoundingMode.HALF_UP);
-    } catch (Exception e) {
-        System.err.println("Error: " + e.getMessage());
-        return BigDecimal.ZERO;
-    }
-}
+     for (ElectricityPrice price : prices) {
+         if ("SEK_per_kWh".equals(currency)) {
+             sum = sum.add(price.sekPerKwh());
+         } else if ("EUR_per_kWh".equals(currency)) {
+                sum = sum.add(price.eurPerKwh());
+         }
+         count++;
+     }
+     return sum.divide(BigDecimal.valueOf(count), 5, RoundingMode.HALF_UP);
+ } catch (Exception e) {
+     return BigDecimal.ZERO;
+ }
 
-
-
+};
 }
 

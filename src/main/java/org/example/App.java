@@ -12,12 +12,38 @@ public class App {
         System.out.println("Choose option:");
 
         Scanner scanner = new Scanner(System.in);
+        String area = getArea(scanner);
         int choice = getChoice(scanner);
 
-        handleChoice(choice);
+        handleChoice(choice, area);
 
         /* String URL = "https://www.elprisetjustnu.se/api/v1/prices/2025/08-19_SE3.json";
         getPrices(URL); */
+    }
+
+    private static String getArea(Scanner scanner) {
+        int area;
+
+        do {
+            System.out.println("1. Luleå / Northern Sweden");
+            System.out.println("2. Sundsvall / Northern Central Sweden");
+            System.out.println("3. Stockholm / Southern Central Sweden");
+            System.out.println("4. Malmö / Southern Sweden");
+            System.out.print("Enter your choice: ");
+
+            if (scanner.hasNextInt()) {
+                area = scanner.nextInt();
+                if (area < 1 || area > 4) {
+                    System.out.println("Invalid choice, must be between 1 and 4");
+                }
+            } else {
+                System.out.println("Invalid choice, must be a number between 1 and 4");
+                scanner.next();
+                area = -1;
+            }
+        } while (area < 1 || area > 4);
+
+        return "SE" + area;
     }
 
     private static int getChoice(Scanner scanner) {
@@ -33,24 +59,26 @@ public class App {
 
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
-                if (choice < 1 || choice > 4) {
-                    System.out.println("Invalid choice, must be between 1 and 4");
+                if (choice < 1 || choice > 5) {
+                    System.out.println("Invalid choice, must be between 1 and 5");
                 }
             } else {
-                System.out.println("Invalid choice, must be a number between 1 and 4");
+                System.out.println("Invalid choice, must be a number between 1 and 5");
                 scanner.next();
                 choice = -1;
             }
-        } while (choice < 1 || choice > 4);
+        } while (choice < 1 || choice > 5);
 
         return choice;
     }
 
-    private static String handleChoice(int choice) {
+    private static String handleChoice(int choice, String area) {
 
         switch (choice) {
             case 1:
                 System.out.println("Downloading prices for the current day and next day");
+                String result = urlBuilder( "123", area);
+                System.out.println(result);
                 break;
             case 2:
                 System.out.println("Printing the mean price for the current 24-hour period");
@@ -67,6 +95,11 @@ public class App {
         }
 
         return null;
+    }
+
+    private static String urlBuilder(String date, String zone) {
+        String year = String.valueOf(java.time.LocalDate.now().getYear());
+        return "https://www.elprisetjustnu.se/api/v1/prices/" + year + "/" + date + "_" + zone + ".json";
     }
 
     static void getPrices(String url_string) {

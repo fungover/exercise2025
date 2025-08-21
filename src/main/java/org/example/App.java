@@ -2,7 +2,9 @@ package org.example;
 
 import org.example.printers.HelloPrinter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
@@ -19,6 +21,13 @@ public class App {
 
         test(copy);
         System.out.println(array[0]);
+
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Hello");
+        list.add("World");
+
+        var copyOfList = List.of(list);
+
 
     }
 

@@ -1,11 +1,9 @@
-package SpinalGlitter;
+package org.SpinalGlitter;
 
 import java.util.Scanner;
 
 public class CLI {
     public static void main(String[] args) {
-        System.out.println("Hello There!");
-        // You can add more functionality here as needed
 
         Scanner input = new Scanner(System.in);
         boolean CliRunning = true;
@@ -23,6 +21,7 @@ public class CLI {
             System.out.println("5 Show the cheapest and most expensive hour for today");
             System.out.println("6 Show the the best ours to charge your car for today");
             System.out.println("7 Exit");
+            System.out.print("Choose: ");
 
             // Read the user input
             String userInput = input.nextLine().trim();
@@ -35,4 +34,5 @@ public class CLI {
 
         }
     }
+}
 }

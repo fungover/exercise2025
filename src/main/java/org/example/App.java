@@ -16,6 +16,7 @@ public class App {
 
         Menu menu = new Menu();
         menu.showMenu(jsonToday, jsonTomorrow);
+        System.out.println(jsonTomorrow);
 
     }
 }

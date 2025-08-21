@@ -16,7 +16,16 @@ public class Menu {
             System.out.println("1. Today");
             System.out.println("2. Tomorrow");
             System.out.print("Enter your choice: ");
-            int dayChoice = scanner.nextInt();
+            int dayChoice;
+
+            if (scanner.hasNextInt()) {
+                dayChoice = scanner.nextInt();
+                scanner.nextLine();
+            } else {
+                System.out.println("Not a number, please try again.");
+                scanner.nextLine();
+                continue;
+            }
 
             String json;
             if (dayChoice == 1) {
@@ -33,7 +42,16 @@ public class Menu {
                 System.out.println("2. Print cheapest and most expensive hours in the current 24-hour period. (not implemented)");
                 System.out.println("3. Best time to charge the electric car (not implemented)");
                 System.out.print("Enter your choice: ");
+
                 int choice = scanner.nextInt();
+                if (scanner.hasNextInt()) {
+                    choice = scanner.nextInt();
+                    scanner.nextLine();
+                } else {
+                    System.out.println("Not a number, please try again.");
+                    scanner.nextLine();
+                    continue;
+                }
 
                 switch (choice) {
                     case 1 -> {

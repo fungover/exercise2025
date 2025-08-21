@@ -1,8 +1,23 @@
 package org.example;
+import com.fasterxml.jackson.jr.ob.JSON;
+import java.net.URI;
+import java.net.URL;
+import java.util.Map;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello There!");
+        try {
+            URL url = new URI("https://www.elprisetjustnu.se/api/v1/prices/2025/08-20_SE3.json").toURL();
+            List<Object> result = JSON.std.listFrom(url);
+
+            for (Object o : result) {
+                Map<String, Object> map = (Map<String, Object>) o;
+                System.out.println(map);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

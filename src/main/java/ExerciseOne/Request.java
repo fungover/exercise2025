@@ -1,5 +1,8 @@
 package ExerciseOne;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -10,21 +13,32 @@ import java.time.LocalDate;
 
 public class Request {
 
-    String idag = LocalDate.now().toString();
-    String imorgon = LocalDate.now().plusDays(1).toString();
+    //Todo: Check if possible to get data for coming pricing
+    //Todo: Save prices from both days
 
+    String today = LocalDate.now().toString();
+    String tomorrow = LocalDate.now().plusDays(1).toString();
 
-    static void request(int area){
+    String URL = "";
+
+    public void request(int area) throws IOException, InterruptedException {
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://www.elprisetjustnu.se/api/v1/prices/2025/08-2"+area+"_SE1.json"))
+                .uri(URI.create("https://www.elprisetjustnu.se/api/v1/prices/2025/08-22_SE"+area+".json"))
+                .GET()
                 .build();
-        var send = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(HttpResponse::body)
-                .thenAccept(System.out::println)
-                .join();
 
+        //client.send när du behöver svaret direkt, enkla anrop
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+
+        ObjectMapper mapper = new ObjectMapper();
+        Pricing[] prices = mapper.readValue(response.body(), Pricing[].class);
+
+        System.out.println("Total Prices: " + prices.length);
     }
+
+    record Pricing (double SEK_per_kWh, double EUR_per_kWh, double EXR, String time_start, String time_end){}
 
 }

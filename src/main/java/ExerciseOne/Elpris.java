@@ -22,7 +22,7 @@ public class Elpris {
                     3 = Stockholm / Södra Mellansverige
                     4 = Malmö / Södra Sverige
                """);
-            System.out.print("Ange vilken prisklass du vill beräkna elpriset för: ");
+            System.out.print("Ange prisklass för det område som du vill beräkna elpriset för: ");
             area = input.nextInt();
 
             if(area == 1 || area == 2 || area == 3 || area == 4){

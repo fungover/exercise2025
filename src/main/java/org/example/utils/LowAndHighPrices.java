@@ -1,11 +1,13 @@
 package org.example.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.model.ElectricityPrice;
 
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -15,8 +17,11 @@ public class LowAndHighPrices {
 
     public static void printMinMaxPrices(String json) {
 
-        try { // the try block, which will jump to the catch block if an excepetion occours.
-            ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Creates an ObjectMapper that read JSON and maps it to Java objects.
+        try {
+            ObjectMapper mapper = new ObjectMapper()  // Objectmapper is used to convert JSON strings to Java objects and vice versa.
+                    .registerModule(new JavaTimeModule()) // Makes Jackson aware of how to read and write Java 8 date/time types.
+                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) //  When printing dates Java -> JSON, we want to use ISO-8601 format instead of timestamps.
+                    .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE); // Makes sure we dont adjust times and keeps the original time zone information from the JSON.
 
             List<ElectricityPrice> prices = mapper.readValue(json, new TypeReference<>() {}); // Reads the JSON string and maps it to a list of ElectricityPrice objects.
 
@@ -48,15 +53,18 @@ public class LowAndHighPrices {
                 }
             }
 
-            System.out.println("Best price (SEK): " + minSEK.timeStart().format(HHMM) + " - " + minSEK.timeEnd().format(HHMM) + " (" + minSEK.sekPerKwh() + " SEK/kWh)");
-            System.out.println("Worst price (SEK): " + maxSEK.timeStart().format(HHMM) + " - " + maxSEK.timeEnd().format(HHMM) + " (" + maxSEK.sekPerKwh() + " SEK/kWh)");
+            System.out.println("Best price (SEK): " + hhmm(minSEK.timeStart()) + " - " + hhmm(minSEK.timeEnd()) + " (" + minSEK.sekPerKwh() + " SEK/kWh)");
+            System.out.println("Worst price (SEK): " + hhmm(maxSEK.timeStart()) + " - " + hhmm(maxSEK.timeEnd()) + " (" + maxSEK.sekPerKwh() + " SEK/kWh)");
 
-            System.out.println("Best price (EUR): " + minEUR.timeStart().format(HHMM) + " - " + minEUR.timeEnd().format(HHMM) + " (" + minEUR.eurPerKwh() + " EUR/kWh)");
-            System.out.println("Worst price (EUR): " + maxEUR.timeStart().format(HHMM) + " - " + maxEUR.timeEnd().format(HHMM) + " (" + maxEUR.eurPerKwh() + " EUR/kWh)");
+            System.out.println("Best price (EUR): " + hhmm(minEUR.timeStart()) + " - " + hhmm(minEUR.timeEnd()) + " (" + minEUR.eurPerKwh() + " EUR/kWh)");
+            System.out.println("Worst price (EUR): " + hhmm(maxEUR.timeStart()) + " - " + hhmm(maxEUR.timeEnd()) + " (" + maxEUR.eurPerKwh() + " EUR/kWh)");
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+    private static String hhmm(OffsetDateTime time) {
+        return time.toLocalTime().format(HHMM);
     }
 
 }

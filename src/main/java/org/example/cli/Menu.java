@@ -39,11 +39,11 @@ public class Menu {
 
             while (true) {
                 System.out.println("1. Print mean price for current 24-hour period.");
-                System.out.println("2. Print cheapest and most expensive hours in the current 24-hour period. (not implemented)");
+                System.out.println("2. Print cheapest and most expensive hours in the current 24-hour period.");
                 System.out.println("3. Best time to charge the electric car (not implemented)");
                 System.out.print("Enter your choice: ");
 
-                int choice = scanner.nextInt();
+                int choice;
                 if (scanner.hasNextInt()) {
                     choice = scanner.nextInt();
                     scanner.nextLine();

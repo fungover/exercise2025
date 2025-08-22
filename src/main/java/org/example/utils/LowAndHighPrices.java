@@ -21,7 +21,8 @@ public class LowAndHighPrices {
             ObjectMapper mapper = new ObjectMapper()  // Objectmapper is used to convert JSON strings to Java objects and vice versa.
                     .registerModule(new JavaTimeModule()) // Makes Jackson aware of how to read and write Java 8 date/time types.
                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) //  When printing dates Java -> JSON, we want to use ISO-8601 format instead of timestamps.
-                    .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE); // Makes sure we dont adjust times and keeps the original time zone information from the JSON.
+                    .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE) // Makes sure we dont adjust times and keeps the original time zone information from the JSON.
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // This prevents Jackson from failing if there are unknown properties in the JSON that are not mapped to the Java class.
 
             List<ElectricityPrice> prices = mapper.readValue(json, new TypeReference<>() {}); // Reads the JSON string and maps it to a list of ElectricityPrice objects.
 

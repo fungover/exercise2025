@@ -13,7 +13,6 @@ import java.time.OffsetDateTime;
 public record ElectricityPrice(
     @JsonProperty("SEK_per_kWh") BigDecimal sekPerKwh,
     @JsonProperty("EUR_per_kWh") BigDecimal eurPerKwh,
-    @JsonProperty("EXR") BigDecimal exr,
     @JsonProperty("time_start") OffsetDateTime timeStart,
     @JsonProperty("time_end") OffsetDateTime timeEnd
 ) {}

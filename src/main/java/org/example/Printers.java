@@ -13,14 +13,34 @@ public class Printers {
 
             PriceEntry[] prices = mapper.readValue(json, PriceEntry[].class);
 
+            PriceEntry lowestPrice = prices[0];
+            for (int i = 0; i < prices.length; i++) {
+                if(prices[i].SEK_per_kWh < lowestPrice.SEK_per_kWh) {
+                    lowestPrice = prices[i];
+                }
+            }
+
+            PriceEntry highestPrice = prices[0];
+            for (int i = 0; i < prices.length; i++) {
+                if(prices[i].SEK_per_kWh > highestPrice.SEK_per_kWh) {
+                    highestPrice = prices[i];
+                }
+            }
+
+            System.out.println("----------------------------------------------------------");
+
             System.out.println("Prices for " + date + " in " + zone + ":");
 
             for (PriceEntry p : prices) {
                 System.out.printf("%s → %s: %.3f SEK/kWh%n",
-                        p.time_start,
-                        p.time_end,
+                        p.time_start.substring(11, 16),
+                        p.time_end.substring(11, 16),
                         p.SEK_per_kWh);
             }
+            System.out.println("----------------------------------------------------------");
+
+            System.out.println("Cheapest hour: " + lowestPrice.time_start.substring(11, 16) + " " + lowestPrice.time_end.substring(11, 16));
+            System.out.println("Most expensive hour: " + lowestPrice.time_start.substring(11, 16) + " " + lowestPrice.time_end.substring(11, 16));
 
         } catch (Exception e) {
             System.err.println("Couldn't read prices: " + e.getMessage());
@@ -28,14 +48,14 @@ public class Printers {
     }
 
     public static void printMenu() {
+        System.out.println("----------------------------------------------------------");
         System.out.println("Welcome to Christians CLI for electrical prices in Sweden!");
         System.out.println("1. Show prices for today");
         System.out.println("2. Show prices for tomorrow");
         System.out.println("3. Show prices for yesterday");
         System.out.println("4. Show todays average prices");
-        System.out.println("5. Show cheapest and most expensive hour for a day");
-        System.out.println("6. Find best charging hours time");
-        System.out.println("7. Exit");
+        System.out.println("5. Find best charging hours time");
+        System.out.println("6. Exit");
     }
 
     public static void printZoneAreas() {

@@ -17,6 +17,7 @@ public class App {
 
             switch (choice) {
                 case "1" -> {
+                    System.out.println("----------------------------------------------------------");
                     System.out.println("You've chosen option 1");
                     Printers.printZoneAreas();
                     String zone = scanner.nextLine().trim().toUpperCase();
@@ -25,6 +26,7 @@ public class App {
                 }
 
                 case "2" -> {
+                    System.out.println("----------------------------------------------------------");
                     System.out.println("You've chosen option 2");
                     Printers.printZoneAreas();
                     String zone = scanner.nextLine().trim().toUpperCase();
@@ -33,6 +35,7 @@ public class App {
                 }
 
                 case "3" -> {
+                    System.out.println("----------------------------------------------------------");
                     System.out.println("You've chosen option 3");
                     Printers.printZoneAreas();
                     String zone = scanner.nextLine().trim().toUpperCase();
@@ -42,6 +45,7 @@ public class App {
                 }
 
                 case "4" -> {
+                    System.out.println("----------------------------------------------------------");
                     System.out.println("You've chosen option 4 (mean price today)");
                     Printers.printZoneAreas();
                     String zone = scanner.nextLine().trim().toUpperCase();
@@ -55,9 +59,8 @@ public class App {
                     }
                 }
 
-                case "5" -> System.out.println("You've chosen option 5");
-                case "6" -> System.out.println("You've chosen option 6");
-                case "7" -> {
+                case "5" -> System.out.println("You've chosen option 6");
+                case "6" -> {
                     System.out.println("You have exited the CLI!");
                     cliActive = false;
                 }

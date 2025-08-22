@@ -41,7 +41,20 @@ public class App {
                     Printers.printPricesForDay(LocalDate.now().minusDays(1), zone, json);
                 }
 
-                case "4" -> System.out.println("You've chosen option 4");
+                case "4" -> {
+                    System.out.println("You've chosen option 4 (mean price today)");
+                    Printers.printZoneAreas();
+                    String zone = scanner.nextLine().trim().toUpperCase();
+                    if (zone.isEmpty()) zone = "SE3";
+
+                    String json = fetchers.fetchPricesForDay(LocalDate.now(), zone);
+                    if (json == null) {
+                        System.out.println("Couldn't read prices in : " + zone);
+                    } else {
+                        MeanPriceCalculator.printMeanPrice(json);
+                    }
+                }
+
                 case "5" -> System.out.println("You've chosen option 5");
                 case "6" -> System.out.println("You've chosen option 6");
                 case "7" -> {

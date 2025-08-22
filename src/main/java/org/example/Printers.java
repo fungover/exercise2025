@@ -1,16 +1,30 @@
 package org.example;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.time.LocalDate;
+import java.util.List;
 
 public class Printers {
 
     public static void printPricesForDay(LocalDate date, String zone, String json) {
-        if (json == null) {
-            System.out.println("No prices published for " + date + " in " + zone + ".");
-            return;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            PriceEntry[] prices = mapper.readValue(json, PriceEntry[].class);
+
+            System.out.println("Prices for " + date + " in " + zone + ":");
+
+            for (PriceEntry p : prices) {
+                System.out.printf("%s → %s: %.3f SEK/kWh%n",
+                        p.time_start,
+                        p.time_end,
+                        p.SEK_per_kWh);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Couldn't read prices: " + e.getMessage());
         }
-        System.out.println("Prices for " + date + " in " + zone + ":");
-        System.out.println(json);
     }
 
     public static void printMenu() {
@@ -18,7 +32,7 @@ public class Printers {
         System.out.println("1. Show prices for today");
         System.out.println("2. Show prices for tomorrow");
         System.out.println("3. Show prices for yesterday");
-        System.out.println("4. Show average price for a day");
+        System.out.println("4. Show todays average prices");
         System.out.println("5. Show cheapest and most expensive hour for a day");
         System.out.println("6. Find best charging hours time");
         System.out.println("7. Exit");

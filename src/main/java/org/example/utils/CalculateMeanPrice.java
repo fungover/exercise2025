@@ -20,7 +20,7 @@ public static BigDecimal meanEUR(String json) {
 private static BigDecimal calculateMean(String json, String currency) {
 
  try {
-     ObjectMapper mapper = new ObjectMapper();
+     ObjectMapper mapper = JsonMapper.get();
      List<ElectricityPrice> prices = mapper.readValue(json, new TypeReference<>() {});
 
      BigDecimal sum = BigDecimal.ZERO;

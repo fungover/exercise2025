@@ -1,5 +1,7 @@
 package org.example;
 import org.example.menus.OptionMenu;
+import org.example.services.PriceService;
+
 import java.util.Scanner;
 
 //TODO List
@@ -44,7 +46,8 @@ public class App {
         int mainMenuChoice = mainMenu.getOption();
         mainMenu.menuExit(mainMenuChoice);
 
-        System.out.println("Area is " + areaCode);
-        System.out.println("Option is " + mainMenuChoice);
+        PriceService priceService = new PriceService();
+        String result = priceService.handleChoice(mainMenuChoice, areaCode);
+        System.out.println(result);
     }
 }

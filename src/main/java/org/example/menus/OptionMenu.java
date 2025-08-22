@@ -1,7 +1,7 @@
 package org.example.menus;
 import java.util.Scanner;
 
-public record MainMenu(Scanner scanner, String[] OPTIONS) {
+public record OptionMenu(Scanner scanner, String[] OPTIONS) {
 
     public int getOption() {
         boolean mainMenuActive = true;
@@ -14,6 +14,10 @@ public record MainMenu(Scanner scanner, String[] OPTIONS) {
             if (scanner.hasNextInt()) {
                 option = scanner.nextInt();
 
+                if (option == 0) {
+                    return 0;
+                }
+
                 if (option >= 1 && option <= OPTIONS.length) {
                     mainMenuActive = false;
                 } else {
@@ -25,13 +29,19 @@ public record MainMenu(Scanner scanner, String[] OPTIONS) {
             }
         }
 
-
         return option;
     }
 
     private  void printOptions() {
+        System.out.println("0. Exit");
         for(int i = 0; i < OPTIONS.length; i++) {
             System.out.println((i + 1) + ". " + OPTIONS[i]);
         }
+    }
+
+    public void menuExit(int areaMenuChoice) {
+        if (areaMenuChoice == 0) {
+            System.out.println("Goodbye!");
+            System.exit(0);        }
     }
 }

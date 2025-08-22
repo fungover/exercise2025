@@ -1,12 +1,11 @@
 package org.example;
-import org.example.menus.AreaMenu;
-import org.example.menus.MainMenu;
+import org.example.menus.OptionMenu;
 import java.util.Scanner;
 
 //TODO List
 //Create boilerplate for project
 //Setup menu for Area selection
-//Todo: Setup main menu selection (A exit option should be included)
+//Setup main menu selection (A exit option should be included)
 //Todo: Setup URL Builder
 //Todo: Setup API request for electricity prices data
 //Todo: Setup error handling for failed http request etc
@@ -29,20 +28,23 @@ public class App {
             "Print mean price for current 24h",
             "Show cheapest & most expensive hour",
             "Best charging window (2/4/8h)",
-            "Exit"
     };
 
     public static void main(String[] args) {
         System.out.println("Welcome to my Command-Line Interface that helps you optimize your electricity consumption and reduce costs!\n");
         Scanner scanner = new Scanner(System.in);
 
-        AreaMenu areaMenu = new AreaMenu(scanner, AREAS);
-        String area = areaMenu.getArea();
+        OptionMenu areaMenu = new OptionMenu(scanner, AREAS);
+        int areaMenuChoice = areaMenu.getOption();
+        areaMenu.menuExit(areaMenuChoice);
 
-        MainMenu mainMenu = new MainMenu(scanner, OPTIONS);
-        int option = mainMenu.getOption();
+        String areaCode = "SE" + areaMenuChoice;
 
-        System.out.println("Area is " + area);
-        System.out.println("Option is " + option);
+        OptionMenu mainMenu = new OptionMenu(scanner, OPTIONS);
+        int mainMenuChoice = mainMenu.getOption();
+        mainMenu.menuExit(mainMenuChoice);
+
+        System.out.println("Area is " + areaCode);
+        System.out.println("Option is " + mainMenuChoice);
     }
 }

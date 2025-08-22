@@ -1,5 +1,8 @@
 package org.example;
 import com.fasterxml.jackson.jr.ob.JSON;
+import org.example.model.MeanPrice;
+import org.example.util.PriceUtil;
+
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +20,7 @@ public class App {
 
         String todayPath = now.format(formatter);
         String tomorrowPath = tomorrow.format(formatter);
-        String region = "SE3";
+        String region = "SE4";
 
         URL urlToday = new URL("https://www.elprisetjustnu.se/api/v1/prices/" + todayPath + "_" + region + ".json");
         URL urlTomorrow = new URL("https://www.elprisetjustnu.se/api/v1/prices/" + tomorrowPath + "_" + region + ".json");
@@ -29,15 +32,24 @@ public class App {
                 Map<String, Object> map = (Map<String, Object>) o;
                 System.out.println(map);
             }
+
+            MeanPrice todayMean = PriceUtil.calculateMeanPrice(urlToday);
+            System.out.println("Mean price for today: " + todayMean);
+
+            // Condition to ensure the next days data is available before processing it
             if (now.getHour() >= 13) {
                 List<Object> tomorrowResults = JSON.std.listFrom(urlTomorrow);
+                System.out.println("Prices for tomorrow:");
                 for (Object o : tomorrowResults) {
                     Map<String, Object> map = (Map<String, Object>) o;
                     System.out.println(map);
                 }
+                MeanPrice tomorrowMean = PriceUtil.calculateMeanPrice(urlTomorrow);
+                System.out.println("Mean price for tomorrow: " + tomorrowMean);
             } else {
                 System.out.println("Prices for tomorrow are not available yet.");
             }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -54,7 +66,7 @@ public class App {
 //✅ Requirements
 //Create a CLI (Command-Line Interface) program that can:
 //
-//Download prices for the current day and the next day (if available).
+//Download prices for the current day and the next day (if available). X
 //
 //Print the mean price for the current 24-hour period.
 //

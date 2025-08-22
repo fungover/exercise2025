@@ -1,21 +1,41 @@
 package org.example;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class App {
      static void main(String[] args) {
-        try {
-            String year = "2025";
-            String month = "08";
-            String day = "20";
-            String priceArea = "SE2";
+         System.out.println("Välkommen!");
+         System.out.println("Här kan du se elpriser per timme för olika områden i Sverige.");
+         System.out.println("\nTillgängliga priszoner:");
+         System.out.println("SE1 = Luleå / Norra Sverige");
+         System.out.println("SE2 = Sundsvall / Norra Mellansverige");
+         System.out.println("SE3 = Stockholm / Södra Mellansverige");
+         System.out.println("SE4 = Malmö / Södra Sverige");
 
-            ApiClient.PriceData[] prices = ApiClient.fetchPrices(year, month, day, priceArea);
+         String priceArea;
+         if (System.console() != null) {
+             priceArea = System.console().readLine("\nAnge önskad zon (SE1, SE2, SE3 eller SE4): ");
+         } else {
+             System.out.println("\nIngen console tillgänglig (IDE?), använder default: SE3");
+             priceArea = "SE3";
+         }
 
-            for (ApiClient.PriceData price : prices) {
-                System.out.printf("Start: %s | End: %s | SEK: %.2f%n",
-                        price.time_start(), price.time_end(), price.SEK_per_kWh());
-            }
+         priceArea = priceArea.trim().toUpperCase();
+
+         LocalDate today = LocalDate.now();
+         String year = String.valueOf(today.getYear());
+         String month = String.format("%02d", today.getMonthValue());
+         String day = String.format("%02d", today.getDayOfMonth());
+
+         try {
+             ApiClient.PriceData[] prices = ApiClient.fetchPrices(year, month, day, priceArea);
+
+             System.out.printf("%nElpriser för %s den %s-%s-%s:%n", priceArea, year, month, day);
+             for (ApiClient.PriceData price : prices) {
+                 System.out.printf("Start: %s | Slut: %s | SEK: %.2f%n",
+                         price.time_start(), price.time_end(), price.SEK_per_kWh());
+             }
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             System.err.println("The request was interrupted: " + ie.getMessage());

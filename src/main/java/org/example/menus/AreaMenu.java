@@ -1,13 +1,7 @@
 package org.example.menus;
 import java.util.Scanner;
 
-public record AreaMenu(Scanner scanner) {
-    private static final String[] AREAS = {
-            "Luleå / Northern Sweden",
-            "Sundsvall / Northern Central Sweden",
-            "Stockholm / Southern Central Sweden",
-            "Malmö / Southern Sweden"
-    };
+public record AreaMenu(Scanner scanner, String[] AREAS) {
 
     public String getArea() {
         boolean areaMenuActive = true;

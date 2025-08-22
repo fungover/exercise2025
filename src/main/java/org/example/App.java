@@ -1,19 +1,42 @@
 package org.example;
 import com.fasterxml.jackson.jr.ob.JSON;
-import java.net.URI;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.List;
 
 public class App {
-    public static void main(String[] args) {
-        try {
-            URL url = new URI("https://www.elprisetjustnu.se/api/v1/prices/2025/08-20_SE3.json").toURL();
-            List<Object> result = JSON.std.listFrom(url);
+    public static void main(String[] args) throws Exception {
 
-            for (Object o : result) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM-dd");
+
+        // LocalDateTime now = LocalDateTime.of(2025, 8,22, 13, 1); // To simulate time past 13.00 for testing purposes
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime tomorrow = now.plusDays(1); // Set -1 for testing tomorrowResults
+
+        String todayPath = now.format(formatter);
+        String tomorrowPath = tomorrow.format(formatter);
+        String region = "SE3";
+
+        URL urlToday = new URL("https://www.elprisetjustnu.se/api/v1/prices/" + todayPath + "_" + region + ".json");
+        URL urlTomorrow = new URL("https://www.elprisetjustnu.se/api/v1/prices/" + tomorrowPath + "_" + region + ".json");
+
+        try {
+            List<Object> todayResults = JSON.std.listFrom(urlToday);
+
+            for (Object o : todayResults) {
                 Map<String, Object> map = (Map<String, Object>) o;
                 System.out.println(map);
+            }
+            if (now.getHour() >= 13) {
+                List<Object> tomorrowResults = JSON.std.listFrom(urlTomorrow);
+                for (Object o : tomorrowResults) {
+                    Map<String, Object> map = (Map<String, Object>) o;
+                    System.out.println(map);
+                }
+            } else {
+                System.out.println("Prices for tomorrow are not available yet.");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

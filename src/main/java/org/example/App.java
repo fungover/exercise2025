@@ -10,8 +10,12 @@ public class App {
             String day = "20";
             String priceArea = "SE2";
 
-            String body = ApiClient.fetchPrices(year, month, day, priceArea);
-            System.out.println(body);
+            ApiClient.PriceData[] prices = ApiClient.fetchPrices(year, month, day, priceArea);
+
+            for (ApiClient.PriceData price : prices) {
+                System.out.printf("Start: %s | End: %s | SEK: %.2f%n",
+                        price.time_start(), price.time_end(), price.SEK_per_kWh());
+            }
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             System.err.println("The request was interrupted: " + ie.getMessage());

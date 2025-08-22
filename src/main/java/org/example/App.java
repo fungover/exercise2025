@@ -33,10 +33,11 @@ public class App {
 
              System.out.printf("%nElpriser för %s den %s-%s-%s:%n", priceArea, year, month, day);
              for (ApiClient.PriceData price : prices) {
-                 System.out.printf("Start: %s | Slut: %s | SEK: %.2f%n",
-                         price.time_start(), price.time_end(), price.SEK_per_kWh());
+                 System.out.printf("%s | Pris: %.2f öre/kWh%n", price.formattedHourRange(), price.SEK_per_kWh() * 100);
              }
-        } catch (InterruptedException ie) {
+
+
+         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             System.err.println("The request was interrupted: " + ie.getMessage());
         } catch (IOException ioe) {

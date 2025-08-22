@@ -10,6 +10,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class ApiClient {
 
     public static PriceData[] fetchPrices(String year, String month, String day, String priceArea)
@@ -32,12 +35,20 @@ public class ApiClient {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper.readValue(response.body(), PriceData[].class);
     }
+
     public record PriceData(
             double SEK_per_kWh,
             double EUR_per_kWh,
             double EXR,
             String time_start,
             String time_end
-    ) {}
+    ) {
+        public String formattedHourRange() {
+            ZonedDateTime start = ZonedDateTime.parse(time_start);
+            ZonedDateTime end = ZonedDateTime.parse(time_end);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            return String.format("kl %s - %s", start.format(formatter), end.format(formatter));
+        }
+        }
+    }
 
-}

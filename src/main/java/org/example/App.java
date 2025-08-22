@@ -68,7 +68,7 @@ public class App {
 //
 //Download prices for the current day and the next day (if available). X
 //
-//Print the mean price for the current 24-hour period.
+//Print the mean price for the current 24-hour period. X
 //
 //Identify and print the hours with the cheapest and most expensive prices.
 //

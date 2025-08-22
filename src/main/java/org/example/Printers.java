@@ -28,8 +28,9 @@ public class Printers {
             }
 
             System.out.println("----------------------------------------------------------");
-
             System.out.println("Prices for " + date + " in " + zone + ":");
+            System.out.println("----------------------------------------------------------");
+
 
             for (PriceEntry p : prices) {
                 System.out.printf("%s → %s: %.3f SEK/kWh%n",
@@ -38,9 +39,26 @@ public class Printers {
                         p.SEK_per_kWh);
             }
             System.out.println("----------------------------------------------------------");
+            System.out.printf("Cheapest hour: %s → %s, %.3f SEK/kWh%n",
+                    lowestPrice.time_start.substring(11, 16),
+                    lowestPrice.time_end.substring(11, 16),
+                    lowestPrice.SEK_per_kWh);
 
-            System.out.println("Cheapest hour: " + lowestPrice.time_start.substring(11, 16) + " " + lowestPrice.time_end.substring(11, 16));
-            System.out.println("Most expensive hour: " + lowestPrice.time_start.substring(11, 16) + " " + lowestPrice.time_end.substring(11, 16));
+            System.out.printf("Most expensive hour: %s → %s, %.3f SEK/kWh%n",
+                    highestPrice.time_start.substring(11, 16),
+                    highestPrice.time_end.substring(11, 16),
+                    highestPrice.SEK_per_kWh);
+
+            System.out.printf("Cheapest hour: %s → %s, %.3f EUR/kWh%n",
+                    lowestPrice.time_start.substring(11, 16),
+                    lowestPrice.time_end.substring(11, 16),
+                    lowestPrice.EUR_per_kWh);
+
+            System.out.printf("Most expensive hour: %s → %s, %.3f EUR/kWh%n",
+                    highestPrice.time_start.substring(11, 16),
+                    highestPrice.time_end.substring(11, 16),
+                    highestPrice.EUR_per_kWh);
+
 
         } catch (Exception e) {
             System.err.println("Couldn't read prices: " + e.getMessage());

@@ -6,24 +6,24 @@ import org.example.api.ElprisApi;
 import org.example.cli.MenuOptions;
 import org.example.cli.ZonePicker;
 import org.example.util.ElectricityPrice;
-import org.example.util.PriceUtils;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
 /*
-1.Create a CLI (Command-Line Interface) program that can:
 
-done 2.Download prices for the current day and the next day (if available).
+TODO 1.Create a CLI (Command-Line Interface) program that can:
 
-done 3.Print the mean price for the current 24-hour period.
+TODO done 2.Download prices for the current day and the next day (if available).
 
-4.Identify and print the hours with the cheapest and most expensive prices.
+TODO done 3.Print the mean price for the current 24-hour period.
 
-5.If multiple hours share the same price, select the earliest hour.
+TODO 4.Identify and print the hours with the cheapest and most expensive prices.
 
-6.Determine the best time to charge an electric car for durations of 2, 4, or 8 hours.
+TODO 5.If multiple hours share the same price, select the earliest hour.
+
+TODO 6.Determine the best time to charge an electric car for durations of 2, 4, or 8 hours.
 (Use a Sliding Window algorithm for this.)
 
 done 7.Allow selection of the price zone ("zon") for which to retrieve data.
@@ -42,6 +42,7 @@ public class App {
         String tomorrow = api.getRequest(LocalDate.now()
                                                   .plusDays(1), zone);
 
+        //jackson to read our json
         ObjectMapper mapper = new ObjectMapper();
         List<ElectricityPrice> pricesToday = mapper.readValue(today, new TypeReference<>() {
         });
@@ -49,15 +50,9 @@ public class App {
           new TypeReference<>() {
           });
 
-
         Scanner scanner = new Scanner(System.in);
 
-
-//            System.out.println("""
-//                               1. Average price for the day in your zone
-//                               2. Full list of the price for the day in your zone
-//                               5. Exit
-//                               """);
+        //creates the menu for our user
         MenuOptions.mainMenu(scanner, pricesToday, pricesTomorrow, zone);
 
 

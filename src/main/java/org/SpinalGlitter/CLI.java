@@ -28,11 +28,46 @@ public class CLI {
 
             // Process the user input
             switch (userInput) {
-                case "1":
+                case "1": {
                     System.out.println("You chose option 1: Show the electricity price for today.");
+                    return;
+                }
 
+                case "2": {
+                    System.out.println("You chose option 2: Show the average electricity price for today.");
+                    return;
+                }
 
+                case "3": {
+                    System.out.println("You chose option 3: Show the electricity price for tomorrow.");
+                    return;
+                }
+
+                case "4": {
+                    System.out.println("You chose option 4: Show the average electricity price for tomorrow.");
+                    return;
+                }
+
+                case "5": {
+                    System.out.println("You chose option 5: Show the cheapest and most expensive hour for today.");
+                    return;
+                }
+
+                case "6": {
+                    System.out.println("You chose option 6: Show the the best ours to charge your car for today.");
+                    return;
+                }
+
+                case "7": {
+                    System.out.println("Exiting the CLI. Goodbye!");
+                    CliRunning = false;
+                    break;
+                }
+
+                default: {
+                    System.out.println("Invalid option. Please try again.");
+                }
+            }
         }
     }
-}
 }

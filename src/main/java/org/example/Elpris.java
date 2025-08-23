@@ -33,7 +33,7 @@ public class Elpris {
             switch(choice) {
                 case "1":
                     System.out.println("1");
-                    String zone = System.console().readLine("Enter Zone Name: ");
+                    String zone = System.console().readLine("Enter Date and Zone: (yyyy-mm--SEn): ");
                     System.out.println("\n\n");
                     break;
                 case "2":

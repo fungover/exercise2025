@@ -21,7 +21,7 @@ public class ChargingOptimizer {
 
       try {
 
-          //step 1: Convert json to java object.
+          //Convert json to java object.
 
           ObjectMapper mapper = JsonMapper.get(); // Create an instance of ObjectMapper to parse the JSON string.
           List<ElectricityPrice> prices = mapper.readValue(json, new TypeReference<>() {});
@@ -31,26 +31,33 @@ public class ChargingOptimizer {
               return null;
           }
 
-          // step 3: Calculate the first windows sum, (for example first 2 hours).
+          // Calculate the first windows sum, (for example first 2 hours).
 
           BigDecimal currentWindowSum = BigDecimal.ZERO; // Starting with 0.
-          for (int i = 0; i < chargingHours; i++) {
+          for (int i = 0; i < chargingHours; i++) { //we loop through the number of hours the user choose to charge.
               currentWindowSum = currentWindowSum.add(prices.get(i).sekPerKwh()); // Add each price in the first window to the currentWindowSum.
           }
 
-          // step 4: set the first window as the "best one yet".
+          // set the first window as the "best one yet".
           BigDecimal bestSum = currentWindowSum;
           int bestStartIndex = 0; // the index where the best window starts.
 
-          //Step 5: SLIDING WINDOW - slide window over the rest of data.
-          // we start from position 1 and go to the end of the list.
+
+
+          /**
+           * Here we start at index 1, since index 0 is the first window we already calculated.
+           * Then we continue as long as we can fit a full window of chargingHours.
+           * So when using prices.size() - chargingHours, we get for example 24 - 4 = 20. meaning the last window starts at index 20 and ends at index 23.
+           */
 
           for (int i = 1; i <= prices.size() - chargingHours; i++) {
 
               // Remove the element that "falls out" from the left side of the window.
+              // example: [1,2,3] -> [2,3,4] we remove 1 and add 4.
               currentWindowSum = currentWindowSum.subtract(prices.get(i - 1).sekPerKwh());
 
               // Add the new element that "enter" from the right side of the window.
+               // Here we add the last element for example number 4 in [2,3,4].
               currentWindowSum = currentWindowSum.add(prices.get(i + chargingHours - 1).sekPerKwh());
 
               // compare the best one yet - is this sum less (cheaper).
@@ -60,7 +67,7 @@ public class ChargingOptimizer {
               }
           }
 
-          // step 6: Build the result-objekt with the best period we found.
+          // Build the result-objekt with the best period we found.
           OffsetDateTime bestStartTime = prices.get(bestStartIndex).timeStart();
           OffsetDateTime bestEndTime = prices.get(bestStartIndex + chargingHours - 1).timeEnd();
 

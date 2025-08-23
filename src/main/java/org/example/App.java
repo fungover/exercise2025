@@ -10,12 +10,17 @@ public class App {
         ZoneSelection zoneSelection = new ZoneSelection();
         String zone = zoneSelection.chooseZone();
 
-        ApiClient apiClient = new ApiClient();
-        String jsonToday = apiClient.getRequest(java.time.LocalDate.now(), zone);
-        String jsonTomorrow = apiClient.getRequest(java.time.LocalDate.now().plusDays(1), zone);
+        if (zone != null) {
 
-        Menu menu = new Menu();
-        menu.showMenu(jsonToday, jsonTomorrow);
-        System.out.println(jsonToday);
+            ApiClient apiClient = new ApiClient();
+            String jsonToday = apiClient.getRequest(java.time.LocalDate.now(), zone);
+            String jsonTomorrow = apiClient.getRequest(java.time.LocalDate.now().plusDays(1), zone);
+
+            Menu menu = new Menu();
+            menu.showMenu(jsonToday, jsonTomorrow);
+            System.out.println(jsonToday);
+        } else {
+            System.out.println("CSN calculation done, exiting program.");
+        }
     }
 }

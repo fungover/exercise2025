@@ -15,10 +15,10 @@ public class Menu {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Select time period:");
+            System.out.println("\nSelect time period:\n");
             System.out.println("1. Today");
             System.out.println("2. Tomorrow");
-            System.out.print("Enter your choice: ");
+            System.out.print("\nEnter your choice: ");
             int dayChoice;
 
             if (scanner.hasNextInt()) {
@@ -41,9 +41,10 @@ public class Menu {
             }
 
             while (true) {
+                System.out.println("\nSelect the information you want to see:\n");
                 System.out.println("1. Print mean price for current 24-hour period.");
                 System.out.println("2. Print cheapest and most expensive hours in the current 24-hour period.");
-                System.out.println("3. Best time to charge the electric car.");
+                System.out.println("3. Best time to charge the electric car.\n");
                 System.out.print("Enter your choice: ");
 
                 int choice;
@@ -80,7 +81,7 @@ public class Menu {
 
     private void showChargingMenu(String json, Scanner scanner) {
         while (true) {
-            System.out.println("Choose your charging duration:");
+            System.out.println("Choose your charging duration:\n");
             System.out.println("1. 2 hours");
             System.out.println("2. 4 hours");
             System.out.println("3. 8 hours\n");
@@ -114,7 +115,7 @@ public class Menu {
                 var avg = sum.divide(java.math.BigDecimal.valueOf(result.chargingHours()),
                         6, RoundingMode.HALF_UP);
 
-                System.out.println("\n Best charging time:");
+                System.out.println("Best charging time:\n");
                 System.out.printf("Duration: %d hours\n", chargingHours);
                 System.out.printf("Start time: %s\n", result.startTime().toLocalDateTime().toLocalTime());
                 System.out.printf("End time: %s\n", result.endTime().toLocalDateTime().toLocalTime());

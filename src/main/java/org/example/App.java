@@ -10,7 +10,7 @@ public class App {
         ZoneSelection zoneSelection = new ZoneSelection();
         String zone = zoneSelection.chooseZone();
 
-        if (zone != null) {
+        if (zone != null) { // if zone is not null, we proceed with api calls and show the menu for that.
 
             ApiClient apiClient = new ApiClient();
             String jsonToday = apiClient.getRequest(java.time.LocalDate.now(), zone);
@@ -18,9 +18,9 @@ public class App {
 
             Menu menu = new Menu();
             menu.showMenu(jsonToday, jsonTomorrow);
-            System.out.println(jsonToday);
-        } else {
-            System.out.println("CSN calculation done, exiting program.");
+            System.out.println(jsonTomorrow);
+        } else { // If the zone is null, we do the calculation from csv and exit the program.
+            System.out.println("CSV calculation done, exiting program.");
         }
     }
 }

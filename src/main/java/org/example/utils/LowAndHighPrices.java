@@ -16,7 +16,7 @@ public class LowAndHighPrices {
 
         try {
 
-            ObjectMapper mapper = JsonMapper.get(); //
+            ObjectMapper mapper = JsonMapper.get(); // calls our custom ObjectMapper from JsonMapper class.
 
             List<ElectricityPrice> prices = mapper.readValue(json, new TypeReference<>() {}); // Reads the JSON string and maps it to a list of ElectricityPrice objects.
 
@@ -53,7 +53,7 @@ public class LowAndHighPrices {
                 }
             }
 
-            System.out.println("Best price (SEK): " + hhmm(minSEK.timeStart()) + " - " + hhmm(minSEK.timeEnd()) + " (" + minSEK.sekPerKwh() + " SEK/kWh)"); // Prints the best price in SEK with the start and end time.
+            System.out.println("\nBest price (SEK): " + hhmm(minSEK.timeStart()) + " - " + hhmm(minSEK.timeEnd()) + " (" + minSEK.sekPerKwh() + " SEK/kWh)"); // Prints the best price in SEK with the start and end time.
             System.out.println("Worst price (SEK): " + hhmm(maxSEK.timeStart()) + " - " + hhmm(maxSEK.timeEnd()) + " (" + maxSEK.sekPerKwh() + " SEK/kWh)"); // Prints the worst price in SEK with the start and end time.
 
             System.out.println("Best price (EUR): " + hhmm(minEUR.timeStart()) + " - " + hhmm(minEUR.timeEnd()) + " (" + minEUR.eurPerKwh() + " EUR/kWh)"); // Prints the best price in EUR with the start and end time.

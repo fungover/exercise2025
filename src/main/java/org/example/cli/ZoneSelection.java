@@ -13,18 +13,18 @@ public class ZoneSelection {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Please select an option:");
+            System.out.println("\nPlease select an option:\n");
             System.out.println("1. Energy zone selection");
             System.out.println("2. Calculate consumption from CSV file.");
-            System.out.print("Enter your choice: ");
+            System.out.print("\nEnter your choice: ");
 
             if (scanner.hasNextInt()) {
                 int mainChoice = scanner.nextInt();
                 scanner.nextLine();
 
                 if (mainChoice == 1) {
-                    return selectZone(scanner);
-                } else if (mainChoice == 2) {
+                    return selectZone(scanner); // if choice is 1, we proceed to selectZone method.
+                } else if (mainChoice == 2) { // If choice is 2, we proceed to calculate from CSV and return null to indicate no zone selected.
                     calculateCsv(scanner);
                     return null;
                 } else {
@@ -39,12 +39,12 @@ public class ZoneSelection {
 
     private String selectZone(Scanner scanner) {
         while (true) {
-            System.out.println("Please select a zone:");
+            System.out.println("\nPlease select a zone:\n");
             System.out.println("1. SE1 (Luleå / North Sweden)");
             System.out.println("2. SE2 (Sundsvall / North middle Sweden)");
             System.out.println("3. SE3 (Stockholm / South middle Sweden)");
             System.out.println("4. SE4 (Malmö / South Sweden)");
-            System.out.print("Enter the number of your choice: ");
+            System.out.print("\nEnter the number of your choice: ");
 
             if (scanner.hasNextInt()) {
                 int choice = scanner.nextInt();

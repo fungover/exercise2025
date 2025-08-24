@@ -11,9 +11,6 @@ public class PriceEntry {
     @JsonProperty("SEK_per_kWh")
     public double sekPerKWh;
 
-    @JsonProperty("EUR_per_kWh")
-    public double eurPerKWh;
-
     @JsonProperty("EXR")
     public double exchangeRate;
 

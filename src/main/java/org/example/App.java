@@ -13,8 +13,9 @@ public class App {
         PriceZone zone = Args.parseZone(args);
 
         ElprisClient client = new ElprisClient();
-        client.fetchTodayPrices(zone).forEach(System.out::println);
+        var prices = client.fetchTodayPrices(zone);
 
-        System.out.println("The startup is working!");
+        prices.forEach(System.out::println);
+        System.out.println("Fetched" + prices.size() + "prices from API");
     }
 }

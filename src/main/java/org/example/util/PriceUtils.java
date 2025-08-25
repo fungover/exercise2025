@@ -1,5 +1,7 @@
 package org.example.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class PriceUtils {
@@ -12,13 +14,13 @@ public class PriceUtils {
         System.out.println("-".repeat(20));
     }
 
-    public static double avgPrice(List<ElectricityPrice> prices) {
+    public static BigDecimal avgPrice(List<ElectricityPrice> prices) {
         //TODO done 3.Print the mean price for the current 24-hour period.
-        double sum = 0.0;
+        BigDecimal sum = BigDecimal.ZERO;
         for (ElectricityPrice price : prices) {
-            sum += price.SEK_per_kWh;
+            sum.add(price.SEK_per_kWh);
         }
-        return prices.isEmpty() ? 0.0 : sum / prices.size();
+        return sum.divide(BigDecimal.valueOf(prices.size()), 5, RoundingMode.HALF_UP);
     }
 
     public static void checkMinMaxPrice(List<ElectricityPrice> prices) {
@@ -35,18 +37,18 @@ public class PriceUtils {
         //loop through each price
         for (ElectricityPrice price : prices) {
             //if a price is lower the the current min, update
-            if (price.SEK_per_kWh < min.SEK_per_kWh) {
+            if (price.SEK_per_kWh.compareTo(min.SEK_per_kWh) < 0) {
                 min = price;
             } //if the price is the same check what time is earlier
-            else if (price.SEK_per_kWh == min.SEK_per_kWh &&
+            else if (price.SEK_per_kWh.compareTo(min.SEK_per_kWh) == 0 &&
               price.time_start.compareTo(min.time_start) < 0) {
                 min = price;
             }
 
             //same here but for higher
-            if (price.SEK_per_kWh > max.SEK_per_kWh) {
+            if (price.SEK_per_kWh.compareTo(max.SEK_per_kWh) > 0) {
                 max = price;
-            } else if (price.SEK_per_kWh == max.SEK_per_kWh &&
+            } else if (price.SEK_per_kWh.compareTo(max.SEK_per_kWh) == 0 &&
               /*compareTo returns a 0 if same and a negative number if the first is earlier
                 and a positive if its later
                */
@@ -70,62 +72,39 @@ public class PriceUtils {
         //we run this once for every set of hours (3)
         for (int durationHour : durationList) {
 
-            double minSum = Double.MAX_VALUE; // make sure its way higher than anything else
+            BigDecimal minSum = null; // make sure its way higher than anything else
             int bestTimeToStart = -1; //we save the time its best to start at here
 
             //Calculate sum for first window
-            double currentSum = 0;
+            //this is our baseline that we will compare all other windows to
+            BigDecimal currentSum = BigDecimal.ZERO;
             for (int i = 0; i < durationHour; i++) {
-                currentSum += prices.get(i).SEK_per_kWh;
+                currentSum = currentSum.add(prices.get(i).SEK_per_kWh);
             }
 
+            minSum = currentSum;
+            bestTimeToStart = 0;
             //Slide the window
-            for (int i = 1; i < prices.size() - durationHour; i++) {
-                //remove whats going out and add the thing coming in
-                currentSum = currentSum - prices.get(i - 1).SEK_per_kWh +
-                  prices.get(i + durationHour - 1).SEK_per_kWh;
-                if (currentSum < minSum) {
+            for (int i = 1; i <= prices.size() - durationHour; i++) {
+                /* remove the sum that's leaving and add the new one*/
+                currentSum = currentSum.subtract(prices.get(i - 1).SEK_per_kWh)
+                                       .add(prices.get(i + durationHour - 1).SEK_per_kWh);
+                //check if the new window is better than out current best
+                if (currentSum.compareTo(minSum) < 0) {
                     minSum = currentSum;
                     bestTimeToStart = i;
                 }
             }
             if (bestTimeToStart != -1) {
                 ElectricityPrice startHour = prices.get(bestTimeToStart);
-                ElectricityPrice endHour = prices.get(bestTimeToStart + durationHour - 1);
+                ElectricityPrice endHour = prices.get(bestTimeToStart + durationHour);
 
                 System.out.printf(
                   "charging for %dh: Start charging at %s, end at %s (total cost: %.3f SEK)%n",
                   durationHour, startHour.time_start.substring(11, 16),
                   endHour.time_start.substring(11, 16), minSum);
             }
-
-//            //Sliding window - the window length is our durationHour -> 2,4,8
-//            for (int windowStart = 0;
-//                 windowStart <= prices.size() - durationHour; windowStart++) {
-//                double sum = 0;
-//
-//                //calc total price for this window
-//                for (int j = windowStart; j < windowStart + durationHour; j++) {
-//                    sum += prices.get(j).SEK_per_kWh; //add the price for this hour
-//                }
-//
-//                //if the sum is lower than the current lowest, save it
-//                if (sum < minSum) {
-//                    minSum = sum; //new lowest
-//                    bestTimeToStart = windowStart; //index where the window starts
-//
-//                }
-//            }
-//            ElectricityPrice endHour = prices.get(bestTimeToStart + durationHour - 1);
-//
-//            if (bestTimeToStart != -1) {
-//                ElectricityPrice startHour = prices.get(bestTimeToStart);
-//                System.out.printf(
-//                  "charging for %dh: Start charging at %s, end at %s (total cost: %.3f SEK)%n",
-//                  durationHour, startHour.time_start.substring(11, 16),
-//                  endHour.time_start.substring(11, 16), minSum);
-//            }
-//            //pain in the butt!!!!
+            //pain in the butt!
 
         }
 

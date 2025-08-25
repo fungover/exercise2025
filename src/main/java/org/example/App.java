@@ -50,6 +50,8 @@ public class App {
           new TypeReference<>() {
           });
 
+        System.out.println("Prices today: " + pricesToday);
+
         Scanner scanner = new Scanner(System.in);
 
         //creates the menu for our user

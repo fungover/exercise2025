@@ -1,14 +1,19 @@
 package org.example.cli;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.api.ElprisApi;
 import org.example.util.ElectricityPrice;
 import org.example.util.PriceUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
 public class MenuOptions {
     public static void mainMenu(Scanner scanner, List<ElectricityPrice> pricesToday,
                                 List<ElectricityPrice> pricesTomorrow, String zone) {
+        ElprisApi api = new ElprisApi();
         boolean running = true;
         while (running) {
             System.out.println("\nSelected Zone " + zone);
@@ -18,6 +23,7 @@ public class MenuOptions {
                                3. Lowest/highest price info
                                4. Cheapest charging times
                                5. Exit
+                               6. Refresh price data
                                """);
 
             if (scanner.hasNextInt()) {
@@ -29,6 +35,30 @@ public class MenuOptions {
                     case 3 -> subLowHighPriceInfo(pricesToday, pricesTomorrow);
                     case 4 -> subFindBestChargingTime(pricesToday, pricesTomorrow);
                     case 5 -> running = false;
+                    case 6 -> {
+                        try {
+                            String todayFetchJson = api.getRequest(LocalDate.now(), zone);
+                            String tomorrowFetchJson = api.getRequest(LocalDate.now()
+                                                                               .plusDays(1),
+                              zone);
+                            ObjectMapper mapper = new ObjectMapper();
+
+                            pricesToday.clear();
+                            pricesToday.addAll(
+                              mapper.readValue(todayFetchJson, new TypeReference<>() {
+                              }));
+
+                            pricesTomorrow.clear();
+                            pricesTomorrow.addAll(
+                              mapper.readValue(tomorrowFetchJson, new TypeReference<>() {
+                              }));
+
+                            System.out.println("Prices refreshed successfully!");
+
+                        } catch (Exception e) {
+                            System.out.println("Failed to refresh prices: " + e.getMessage());
+                        }
+                    }
                     default -> System.out.println("Invalid choice, please try " + "again");
                 }
             } else {

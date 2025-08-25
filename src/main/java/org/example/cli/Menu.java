@@ -1,6 +1,9 @@
 package org.example.cli;
 
 import java.util.Scanner;
+import java.util.List;
+
+import org.example.model.PriceHour;
 import org.example.service.ElectricityPriceService;
 
 public class Menu {
@@ -80,10 +83,10 @@ public class Menu {
             switch (choice) {
                 case 1 -> {
                     ElectricityPriceService service = new ElectricityPriceService();
-                    String raw = service.fetchTodayRaw(zoneCode);
-                    if (raw != null) {
-                        System.out.println("First 200 chars of JSON:");
-                        System.out.println(raw.substring(0, 200));
+                    List<PriceHour> hours = service.fetchToday(zoneCode);
+                    if (!hours.isEmpty()) {
+                        System.out.println("Fetched hours: " + hours.size());
+                        System.out.println(hours.get(0));
                     }
                 }
                 case 2 -> System.out.println("Tomorrow for " + zoneCode);

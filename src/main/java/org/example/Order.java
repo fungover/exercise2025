@@ -4,6 +4,11 @@ public class Order {
 
     private int orderNumber;
 
+    //Copy constructor, can read private fields from other instance
+    public Order(Order order) {
+        this.orderNumber = order.orderNumber;
+    }
+
     //Private constructor, only this class can create an instance of this class
     private Order(int orderNumber){
         this.orderNumber = orderNumber;

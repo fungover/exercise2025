@@ -12,37 +12,19 @@ import java.util.Date;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
+
 import java.util.List;
 
 public class GetDataFromAPI {
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
-    public static void main(String[] args) {
 
-        try {
-            /*System.out.println(fetchDataPrices(LocalDate.of(2025, 8, 20), "SE3"));*/
-            String json = fetchDataPrices(LocalDate.of(2025, 8, 20), "SE3");
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<ElectricityPrice> prices = objectMapper.readValue(
-                    json, new TypeReference<List<ElectricityPrice>>() {}
-            );
-            for (ElectricityPrice price : prices) {
-                System.out.println("Time Start: " + price.getTime_end() + ", Price (SEK/kWh): " + price.getEUR_per_kWh());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
     /**
      *
      * @param date Param to fetch data for a specific date
      * @param zone Param to fetch data for a specific price zone (SE1, SE2, SE3)
      * @return Returns the data as a String
-     * @throws IOException          Thrown if an I/O error occurs when sending or receiving
-     * @throws InterruptedException Thrown if the operation is interrupted
      */
-    static String fetchDataPrices(LocalDate date, String zone) throws IOException, InterruptedException {
+    static String fetchDataPrices(LocalDate date, String zone) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .timeout(Duration.ofMinutes(2))
@@ -51,14 +33,27 @@ public class GetDataFromAPI {
 
             HttpResponse<String> response = CLIENT.send(request, BodyHandlers.ofString());
 
-            if (response.statusCode() == 200) return response.body();
-            if (response.statusCode() == 404) return null;
-
-            throw new IOException("Unexpected status code: " + response.statusCode());
+            return response.statusCode() == 200 ? response.body() : null;
         } catch (IOException | InterruptedException e) {
             System.err.println("Request failed: " + e.getMessage());
-            throw e;
+            return null;
         }
+    }
+
+    /**
+     * Convert JSON data to a list of ElectricityPrice objects
+     *
+     * @param json The JSON data as a String
+     * @return Returns a list of ElectricityPrice objects
+     * @throws IOException if the JSON data cannot be parsed
+     */
+    static List<ElectricityPrice> ConvertDataToObjects(String json) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<ElectricityPrice> prices = objectMapper.readValue(
+                json, new TypeReference<List<ElectricityPrice>>() {
+                }
+        );
+        return prices;
     }
 
     /**

@@ -79,13 +79,17 @@ public class MenuUtil {
                 PriceService.downloadPrices(urlTomorrow, "pricesTomorrow.txt", "Tomorrow's prices");
 
                 break;
+
             case 2:
                 System.out.println("Printing the mean price for the current 24-hour period");
                 PriceService.fetchAndCalculateMeanPrice(urlToday, "prices.txt", "Today's mean price");
                 break;
+
             case 3:
                 System.out.println("Identifying and printing the hours with the cheapest and most expensive prices");
+                PriceService.fetchAndPrintCheapestAndMostExpensivePrices(urlToday, "prices.txt", "Today's cheapest and most expensive prices");
                 break;
+
             case 4:
                 System.out.println("Determining the best time to charge an electric car for durations of 2, 4, or 8 hours");
                 break;

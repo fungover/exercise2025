@@ -1,7 +1,11 @@
-package org.example;
+import org.example.Rectangle;
+import java.awt.Color;
 
-public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello There!");
-    }
+void main() {
+    System.out.println( "Hello World!");
+    Rectangle rectangle = new Rectangle();
+
+    rectangle.setWidth(10);
+    System.out.println(rectangle.getWidth());
 }
+

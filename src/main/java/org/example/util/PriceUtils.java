@@ -18,7 +18,7 @@ public class PriceUtils {
         //TODO done 3.Print the mean price for the current 24-hour period.
         BigDecimal sum = BigDecimal.ZERO;
         for (ElectricityPrice price : prices) {
-            sum.add(price.SEK_per_kWh);
+            sum = sum.add(price.SEK_per_kWh);
         }
         return sum.divide(BigDecimal.valueOf(prices.size()), 5, RoundingMode.HALF_UP);
     }

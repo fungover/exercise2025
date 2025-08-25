@@ -5,7 +5,23 @@ import java.awt.*;
 public class Rectangle {
     private int width;
     private int height;
-    private Color color;
+    private Color color = Color.BLACK;
+
+    //Default constructor
+    public Rectangle(){
+        this(1,1);  //Constructor chaining
+    }
+
+    public Rectangle(int width, int height){
+        this(width,height,Color.BLACK);
+    }
+
+    //Parameterized constructor
+    public Rectangle(int width, int height, Color color){
+        this.width = width;
+        this.height = height;
+        this.color = color;
+    }
 
     public int getHeight() {
         return height;

@@ -82,76 +82,32 @@ public class App {
     }
 
     private static String handleChoice(int choice, String area) {
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
+        String date = today.format(formatter);
+        String dateTomorrow = tomorrow.format(formatter);
+        String urlToday = urlBuilder( date, area);
+        String urlTomorrow = urlBuilder( dateTomorrow, area);
 
         switch (choice) {
             case 1:
-                LocalDate today = LocalDate.now();
-                LocalDate tomorrow = today.plusDays(1);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
-
-                String date = today.format(formatter);
-                String dateTomorrow = tomorrow.format(formatter);
-
                 System.out.println("Downloading prices for the current day and next day");
-                String urlToday = urlBuilder( date, area);
-                String urlTomorrow = urlBuilder( dateTomorrow, area);
-
                 //Today's prices
-                HttpResponse<String> todayPrices = getPrices(urlToday);
-                if (todayPrices != null && todayPrices.statusCode() == 200) {
-                    System.out.println("Today's prices downloaded successfully!");
-
-                    ObjectMapper mapper = new ObjectMapper();
-                    mapper.findAndRegisterModules();
-
-                    try {
-                        PriceEntry[] entries = mapper.readValue(todayPrices.body(), PriceEntry[].class);
-                        System.out.println("Today's prices:");
-                        createFile("prices.txt");
-
-                        boolean firstLine = true;
-
-                        for (PriceEntry entry : entries) {
-                            if (firstLine) {
-                                System.out.println("=====" + today + "=====");
-                                writeToFile("prices.txt", "=====" + today + "=====\n");
-                                firstLine = false;
-                            }
-                            System.out.println(entry.time_start + " - " + entry.time_end + ": " + entry.SEK_per_kWh);
-                            writeToFile("prices.txt", entry.time_start + " - " + entry.time_end + ": " + entry.SEK_per_kWh + " SEK_per_kWh" + "\n");
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
-                    System.out.println("Today's prices could not be downloaded. Status: " +
-                            (todayPrices != null ? todayPrices.statusCode() : "No response"));
-                }
+                downloadAndSavePrices(urlToday, "prices.txt", "Today's prices");
 
                 //Tomorrow's prices'
-                HttpResponse<String> tomorrowPrices = getPrices(urlTomorrow);
-                if (tomorrowPrices != null && tomorrowPrices.statusCode() == 200) {
-                    System.out.println("Tomorrow's prices downloaded successfully!");
-
-                    ObjectMapper mapper = new ObjectMapper();
-                    mapper.findAndRegisterModules();
-
-                    try {
-                        PriceEntry[] entries = mapper.readValue(tomorrowPrices.body(), PriceEntry[].class);
-                        System.out.println("Tomorrow's prices: " + tomorrowPrices.body());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
-                    System.out.println("Tomorrow's prices could not be downloaded. Status: " +
-                            (tomorrowPrices != null ? tomorrowPrices.statusCode() : "No response"));
-                }
+                downloadAndSavePrices(urlTomorrow, "pricesTomorrow.txt", "Tomorrow's prices");
 
                 break;
             case 2:
                 System.out.println("Printing the mean price for the current 24-hour period");
+                HttpResponse<String> price = getPrices(urlToday);
+                if (price != null && price.statusCode() == 200) {
+                    System.out.println("Mean price downloaded successfully!");
+                }
+
+
                 break;
             case 3:
                 System.out.println("Identifying and printing the hours with the cheapest and most expensive prices");
@@ -217,4 +173,38 @@ public class App {
             double EXR,
             OffsetDateTime time_start,
             OffsetDateTime time_end) {}
+
+    private static void downloadAndSavePrices(String url, String fileName, String dayLabel) {
+        HttpResponse<String> prices = getPrices(url);
+        if (prices != null && prices.statusCode() == 200) {
+            System.out.println(dayLabel);
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules();
+
+            try {
+                PriceEntry[] entries = mapper.readValue(prices.body(), PriceEntry[].class);
+                System.out.println(dayLabel + " prices:");
+                createFile(fileName);
+
+                boolean firstLine = true;
+
+                for (PriceEntry entry : entries) {
+                    if (firstLine) {
+                        System.out.println("=====" + dayLabel + "=====");
+                        writeToFile(fileName, "=====" + dayLabel + "=====\n");
+                        firstLine = false;
+                    }
+                    System.out.println(entry.time_start + " - " + entry.time_end + ": " + entry.SEK_per_kWh);
+                    writeToFile(fileName, entry.time_start + " - " + entry.time_end + ": " + entry.SEK_per_kWh + " SEK_per_kWh" + "\n");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            System.out.println(dayLabel + "'s prices could not be downloaded. Status: " +
+                    (prices != null ? prices.statusCode() : "No response"));
+        }
+    }
 }

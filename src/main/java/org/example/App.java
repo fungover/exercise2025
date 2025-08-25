@@ -2,7 +2,13 @@ package org.example;
 
 import org.example.cli.Args;
 import org.example.client.ElprisClient;
+import org.example.model.PricePoint;
 import org.example.model.PriceZone;
+import org.example.service.PriceService;
+import org.example.service.PriceServiceImpl;
+import org.example.service.StatsCalculator;
+
+import java.util.List;
 
 // Will wire everything together.
 // Read arguments such as zone, cvs, and date,
@@ -10,12 +16,19 @@ import org.example.model.PriceZone;
 // run calculators and prints results to the console.
 public class App {
     public static void main(String[] args) {
-        PriceZone zone = Args.parseZone(args);
+        PriceZone zone = PriceZone.SE3;
 
-        ElprisClient client = new ElprisClient();
-        var prices = client.fetchTodayPrices(zone);
+        PriceService service = new PriceServiceImpl(new ElprisClient());
+        List<PricePoint> prices = service.getTodayPrices(zone);
 
-        prices.forEach(System.out::println);
-        System.out.println("Fetched" + prices.size() + "prices from API");
+        double mean = StatsCalculator.mean(prices);
+        PricePoint cheapest = StatsCalculator.min(prices);
+        PricePoint mostExpensive = StatsCalculator.max(prices);
+
+        System.out.printf("Mean price: %.3f SEK/kWh%n", mean);
+        System.out.printf("Cheapest: %s → %.3f SEK/kWh%n",
+                cheapest.start(), cheapest.price());
+        System.out.printf("Most expensive: %s → %.3f SEK/kWh%n",
+                mostExpensive.start(), mostExpensive.price());
     }
 }

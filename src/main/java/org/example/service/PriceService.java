@@ -1,4 +1,10 @@
 package org.example.service;
-// Call ElprisClient to get today’s prices (and maybe tomorrow’s).
-public class PriceService {
+
+import org.example.model.PricePoint;
+import org.example.model.PriceZone;
+
+import java.util.List;
+
+public interface PriceService {
+    List<PricePoint> getTodayPrices(PriceZone zone);
 }

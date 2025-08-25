@@ -64,9 +64,8 @@ public class PriceUtils {
 
     public static void findBestChargingTime(List<ElectricityPrice> prices,
                                             int[] durationList) {
-                /*TODO 6.Determine the best time to charge an electric car for durations of 2, 4, or 8 hours.
-                durationList will be [2 ,4 ,8]
-                 */
+        /*TODO 6.Determine the best time to charge an electric car for durations of 2, 4, or 8 hours.
+           durationList will be [2 ,4 ,8]*/
 
         //we run this once for every set of hours (3)
         for (int durationHour : durationList) {
@@ -74,33 +73,59 @@ public class PriceUtils {
             double minSum = Double.MAX_VALUE; // make sure its way higher than anything else
             int bestTimeToStart = -1; //we save the time its best to start at here
 
-            //Sliding window - the window length is our durationHour -> 2,4,8
-            for (int windowStart = 0;
-                 windowStart <= prices.size() - durationHour; windowStart++) {
-                double sum = 0;
+            //Calculate sum for first window
+            double currentSum = 0;
+            for (int i = 0; i < durationHour; i++) {
+                currentSum += prices.get(i).SEK_per_kWh;
+            }
 
-                //calc total price for this window
-                for (int j = windowStart; j < windowStart + durationHour; j++) {
-                    sum += prices.get(j).SEK_per_kWh; //add the price for this hour
-                }
-
-                //if the sum is lower than the current lowest, save it
-                if (sum < minSum) {
-                    minSum = sum; //new lowest
-                    bestTimeToStart = windowStart; //index where the window starts
-
+            //Slide the window
+            for (int i = 1; i < prices.size() - durationHour; i++) {
+                //remove whats going out and add the thing coming in
+                currentSum = currentSum - prices.get(i - 1).SEK_per_kWh +
+                  prices.get(i + durationHour - 1).SEK_per_kWh;
+                if (currentSum < minSum) {
+                    minSum = currentSum;
+                    bestTimeToStart = i;
                 }
             }
-            ElectricityPrice endHour = prices.get(bestTimeToStart + durationHour - 1);
-
             if (bestTimeToStart != -1) {
                 ElectricityPrice startHour = prices.get(bestTimeToStart);
+                ElectricityPrice endHour = prices.get(bestTimeToStart + durationHour - 1);
+
                 System.out.printf(
                   "charging for %dh: Start charging at %s, end at %s (total cost: %.3f SEK)%n",
                   durationHour, startHour.time_start.substring(11, 16),
                   endHour.time_start.substring(11, 16), minSum);
             }
-            //pain in the butt!!!!
+
+//            //Sliding window - the window length is our durationHour -> 2,4,8
+//            for (int windowStart = 0;
+//                 windowStart <= prices.size() - durationHour; windowStart++) {
+//                double sum = 0;
+//
+//                //calc total price for this window
+//                for (int j = windowStart; j < windowStart + durationHour; j++) {
+//                    sum += prices.get(j).SEK_per_kWh; //add the price for this hour
+//                }
+//
+//                //if the sum is lower than the current lowest, save it
+//                if (sum < minSum) {
+//                    minSum = sum; //new lowest
+//                    bestTimeToStart = windowStart; //index where the window starts
+//
+//                }
+//            }
+//            ElectricityPrice endHour = prices.get(bestTimeToStart + durationHour - 1);
+//
+//            if (bestTimeToStart != -1) {
+//                ElectricityPrice startHour = prices.get(bestTimeToStart);
+//                System.out.printf(
+//                  "charging for %dh: Start charging at %s, end at %s (total cost: %.3f SEK)%n",
+//                  durationHour, startHour.time_start.substring(11, 16),
+//                  endHour.time_start.substring(11, 16), minSum);
+//            }
+//            //pain in the butt!!!!
 
         }
 

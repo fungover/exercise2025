@@ -33,7 +33,7 @@ done 7.Allow selection of the price zone ("zon") for which to retrieve data.
  */
 
 public class App {
-    ZonePicker zonePicker = new ZonePicker();
+//    ZonePicker zonePicker = new ZonePicker();
 
     public static void main(String[] args) throws Exception {
         ElprisApi api = new ElprisApi();

@@ -1,13 +1,11 @@
 package ExerciseOne;
 
-
-import java.time.LocalDate;
-import java.util.Date;
+import java.io.IOException;
 import java.util.Scanner;
 
-public class Elpris {
+public class Area {
 
-    static void main() {
+    static void main() throws IOException, InterruptedException {
 
         Scanner input = new Scanner(System.in);
 
@@ -31,10 +29,9 @@ public class Elpris {
 
         }while (correctInput);
 
-        Request req = new Request();
-        req.request(area);
+       GetDate date = new GetDate();
+       date.getDate(area);
+
     }
 }
-
-
 

@@ -3,7 +3,6 @@ package org.example;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class Printers {
 
@@ -66,21 +65,41 @@ public class Printers {
     }
 
     public static void printMenu() {
-        System.out.println("----------------------------------------------------------");
-        System.out.println("Welcome to Christians CLI for electrical prices in Sweden!");
-        System.out.println("1. Show prices for today");
-        System.out.println("2. Show prices for tomorrow");
-        System.out.println("3. Show prices for yesterday");
-        System.out.println("4. Show todays average prices");
-        System.out.println("5. Find best charging hours time");
-        System.out.println("6. Exit");
+        System.out.println("==========================================================");
+        System.out.println("          Welcome to Christians CLI");
+        System.out.println("==========================================================");
+        System.out.println("| 1 | Show electrical prices for a day");
+        System.out.println("| 2 | Show average price for a day");
+        System.out.println("| 3 | Show best charging hours for a day");
+        System.out.println("| 4 | Exit");
+        System.out.println("==========================================================");
+        System.out.print("> ");
     }
 
+
     public static void printZoneAreas() {
-        System.out.println("Enter Zone (SE1–SE4, default SE3): ");
-        System.out.println("SE1: Luleå / Norra Sverige");
-        System.out.println("SE2: Sundsvall / Norra ");
-        System.out.println("SE3: Stockholm / Södra Mellansverige");
-        System.out.println("SE4: Malmö / Södra Sverige");
+        System.out.println("==========================================================");
+        System.out.println("   Select Electricity Price Zone (SE1 – SE4)");
+        System.out.println("   Default: SE3");
+        System.out.println("==========================================================");
+        System.out.println("| SE1 | Luleå / Norra Sverige");
+        System.out.println("| SE2 | Sundsvall / Norra");
+        System.out.println("| SE3 | Stockholm / Södra Mellansverige");
+        System.out.println("| SE4 | Malmö / Södra Sverige");
+        System.out.println("==========================================================");
+        System.out.print("Enter Zone (SE1–SE4, default SE3): ");
     }
+    public static void printBestChargingWindows(PriceEntry[] prices) {
+        System.out.println("==========================================================");
+        System.out.println(" Best charging windows (2 / 4 / 8 hours) ");
+        System.out.println("==========================================================");
+
+        SlidingWindowCalculator.findCheapestWindow(prices, 2);
+        SlidingWindowCalculator.findCheapestWindow(prices, 4);
+        SlidingWindowCalculator.findCheapestWindow(prices, 8);
+
+
+        System.out.println("==========================================================");
+    }
+
 }

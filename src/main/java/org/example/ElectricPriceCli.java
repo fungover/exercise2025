@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ElectricPriceCli {
     private static List<ElectricityPrice> pricesToday;
@@ -35,12 +38,13 @@ public class ElectricPriceCli {
             System.out.println("5. Select a price zone (SE1/SE2/SE3/SE4)");
             System.out.println("6. Import hourly consumption data from a CSV file");
             System.out.println("0. Exit");
-            
+
             String choice = System.console().readLine("Enter your choice: ");
 
             switch (choice) {
                 case "1":
                     System.out.println("1");
+                    System.out.println(LocalDate.now());
                     boolean stmt = false;
                     /*String[] parts;*/
                     do {
@@ -104,7 +108,7 @@ public class ElectricPriceCli {
                 case "2":
                     System.out.println("2");
                     if (pricesToday != null) {
-                        BigDecimal meanPrice = meanPriceCalculator(pricesToday);
+                        BigDecimal meanPrice = meanPrice();
                         System.out.println("The mean price for today is: " + meanPrice + " SEK/kWh");
                     } else {
                         System.out.println("You need to download the prices first (option 1)");
@@ -113,6 +117,11 @@ public class ElectricPriceCli {
                     break;
                 case "3":
                     System.out.println("3");
+                    if (pricesToday != null) {
+                            System.out.println("Hej");
+                    } else {
+                        System.out.println("You need to download the prices first (option 1)");
+                    }
                     System.out.println("\n\n");
                     break;
                 case "4":
@@ -163,11 +172,45 @@ public class ElectricPriceCli {
     }*/
 
     /**
-     * Calculate the mean price from a list of ElectricityPrice objects
+     * Calculate the mean price for the current 24-hour period (if tomorrow's data is available, it will be used to calculate the mean price for the next 24 hours).
      *
-     * @param prices List of ElectricityPrice objects
      * @return Returns the mean price as a BigDecimal
      */
+    public static BigDecimal meanPrice() {
+        BigDecimal meanPrice;
+        if (pricesTomorrow != null) {
+            ZonedDateTime start = ZonedDateTime.now();
+            ZonedDateTime end = start.plusHours(24);
+            //TODO: Test this function more thoroughly
+            // create a formatter
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            // Filter prices from now to the end of this day.
+            List<ElectricityPrice> remainingEleToday = pricesToday.stream()
+                    .filter(p -> {
+                        ZonedDateTime priceTime = ZonedDateTime.parse(p.time_start());
+                        return !priceTime.isBefore(start);
+                    }).toList();
+
+            // Filter prices from the next day to the end of your 24h period.
+            List<ElectricityPrice> remainingEleUnderPeriod = pricesTomorrow.stream()
+                    .filter(p -> {
+                        ZonedDateTime priceTime = ZonedDateTime.parse(p.time_end());
+                        return !priceTime.isAfter(end);
+                    }).toList();
+            // Combine the two lists
+            List<ElectricityPrice> newList = Stream.concat(remainingEleToday.stream(), remainingEleUnderPeriod.stream())
+                    .toList();
+
+            meanPrice = meanPriceCalculator(newList);
+
+        } else {
+            meanPrice = meanPriceCalculator(pricesToday);
+            /*}*/
+        }
+        return meanPrice;
+    }
+
     public static BigDecimal meanPriceCalculator(List<ElectricityPrice> prices) {
         BigDecimal sum = BigDecimal.ZERO;
         System.out.println(sum);
@@ -177,4 +220,6 @@ public class ElectricPriceCli {
 
         return sum.divide(BigDecimal.valueOf(prices.size()), 5, RoundingMode.HALF_UP);
     }
+
+
 }

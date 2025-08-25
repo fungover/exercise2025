@@ -6,7 +6,9 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
+
 import java.util.stream.Stream;
 
 public class ElectricPriceCli {
@@ -66,43 +68,6 @@ public class ElectricPriceCli {
                             System.out.println("Invalid Zone Input");
                         }
                     } while (!stmt);
-                    /*if (input.equals("s")) {
-                        do {
-                            String userInput = System.console().readLine("Enter Date and Zone: (yyyy-mm--dd-SEn): ");
-                            parts = userInput.split("-");
-
-                            // isValidInput checks if input is valid (returns true or false)
-                            stmt = isValidInput(parts);
-                            if (stmt) {
-                                String jsonData = GetDataFromAPI.fetchDataPrices(LocalDate.of(
-                                        Integer.parseInt(parts[0]),
-                                        Integer.parseInt(parts[1]),
-                                        Integer.parseInt(parts[2])
-                                ), parts[3]);
-                                List<ElectricityPrice> pricesInputDay = GetDataFromAPI.ConvertDataToObjects(jsonData);
-                                for (ElectricityPrice price : pricesInputDay) {
-                                    System.out.println(price.SEK_per_kWh());
-                                }
-                            }
-
-                        } while (!stmt);
-                        for (String part : parts) {
-                            System.out.println(part);
-                        }
-                    } else if (input.equals("t")) {
-                        String zoneInput = System.console().readLine("Enter Zone (SE1, SE2, SE3, SE4): ");
-                        if (zoneInput.matches("SE[1-4]")) {
-                            System.out.println("Invalid Zone Input");
-                            String jsonData = GetDataFromAPI.fetchDataPrices(LocalDate.now(), zoneInput);
-                            List<ElectricityPrice> pricesToday = GetDataFromAPI.ConvertDataToObjects(jsonData);
-                            for (ElectricityPrice price : pricesToday) {
-                                System.out.println(price);
-                            }
-                        }
-                    } else {
-                        System.out.println("You have chosen an incorrect alternative, please try again.\n\n");
-                    }*/
-
                     System.out.println("\n\n");
                     break;
                 case "2":
@@ -118,7 +83,7 @@ public class ElectricPriceCli {
                 case "3":
                     System.out.println("3");
                     if (pricesToday != null) {
-                            System.out.println("Hej");
+                        printCheapestAndMostExpensiveHours();
                     } else {
                         System.out.println("You need to download the prices first (option 1)");
                     }
@@ -181,7 +146,7 @@ public class ElectricPriceCli {
         if (pricesTomorrow != null) {
             ZonedDateTime start = ZonedDateTime.now();
             ZonedDateTime end = start.plusHours(24);
-            //TODO: Test this function more thoroughly
+
             // create a formatter
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -211,6 +176,12 @@ public class ElectricPriceCli {
         return meanPrice;
     }
 
+    /**
+     * Calculate the mean price from a list of ElectricityPrice objects
+     *
+     * @param prices List of ElectricityPrice objects
+     * @return Returns the mean price as a BigDecimal
+     */
     public static BigDecimal meanPriceCalculator(List<ElectricityPrice> prices) {
         BigDecimal sum = BigDecimal.ZERO;
         System.out.println(sum);
@@ -221,5 +192,38 @@ public class ElectricPriceCli {
         return sum.divide(BigDecimal.valueOf(prices.size()), 5, RoundingMode.HALF_UP);
     }
 
+    /**
+     * Identify and print the cheapest and most expensive hours from the combined list of today's and tomorrow's prices.
+     * If tomorrow's prices are not available, only today's prices will be considered.
+     */
+    public static void printCheapestAndMostExpensiveHours() {
+        List<ElectricityPrice> allPrices = pricesToday;
+        if (pricesTomorrow != null) {
+            allPrices = Stream.concat(pricesToday.stream(), pricesTomorrow.stream()).toList();
+        }
 
+        if (allPrices.isEmpty()) {
+            System.out.println("No price data available.");
+            return;
+        }
+
+        // Get the cheapest hour and most expensive hour
+        ElectricityPrice cheapest = allPrices.stream()
+                .min(Comparator.comparing(ElectricityPrice::SEK_per_kWh))
+                .get();
+
+        ElectricityPrice mostExpensive = allPrices.stream()
+                .max(Comparator.comparing(ElectricityPrice::SEK_per_kWh))
+                .get();
+
+        // Format time
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String cheapestTime = ZonedDateTime.parse(cheapest.time_start()).format(formatter);
+        String mostExpensiveTime = ZonedDateTime.parse(mostExpensive.time_start()).format(formatter);
+
+        System.out.printf("Cheapest hour is: %s with a price of: %.5f SEK/kWh%n", cheapestTime, cheapest.SEK_per_kWh());
+        System.out.printf("Most expensive hour is %s with a price of %.5f SEK/kWh%n", mostExpensiveTime, mostExpensive.SEK_per_kWh());
+    }
 }
+

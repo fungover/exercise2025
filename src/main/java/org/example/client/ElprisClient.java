@@ -14,19 +14,17 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// HTTP calls -> DayPrices. Will talk to the API.
 public class ElprisClient {
     private final HttpClient client =  HttpClient.newHttpClient();
     private final Gson gson = new Gson();
 
-    public List <PricePoint> fetchTodayPrices(PriceZone zone) {
-        LocalDate today = LocalDate.now();
+    public List <PricePoint> fetchDayPrices(PriceZone zone, LocalDate date) {
 
         String url = String.format(
                 "https://www.elprisetjustnu.se/api/v1/prices/%d/%02d-%02d_%s.json",
-                today.getYear(),
-                today.getMonthValue(),
-                today.getDayOfMonth(),
+                date.getYear(),
+                date.getMonthValue(),
+                date.getDayOfMonth(),
                 zone.name()
         );
 
@@ -50,4 +48,9 @@ public class ElprisClient {
             throw new RuntimeException("Failed to fetch prices", e);
         }
     }
+
+    public List<PricePoint> fetchTodayPrices(PriceZone zone) {
+        return fetchDayPrices(zone, LocalDate.now());
+    }
+
 }

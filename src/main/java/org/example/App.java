@@ -9,17 +9,33 @@ import org.example.service.PriceServiceImpl;
 import org.example.service.StatsCalculator;
 
 import java.util.List;
+import java.util.Scanner;
 
-// Will wire everything together.
-// Read arguments such as zone, cvs, and date,
-// call services to fetch prices from the API,
-// run calculators and prints results to the console.
 public class App {
     public static void main(String[] args) {
-        PriceZone zone = PriceZone.SE3;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Which price zone do you want? (SE1, SE2, SE3, SE4):");
 
-        PriceService service = new PriceServiceImpl(new ElprisClient());
-        List<PricePoint> prices = service.getTodayPrices(zone);
+        PriceZone zone = null;
+        while (zone == null) {
+            String input = scanner.nextLine().trim().toUpperCase();
+            try {
+                zone = PriceZone.valueOf(input);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid zone. Please enter SE1, SE2, SE3, or SE4:");
+            }
+        }
+
+        ElprisClient client = new ElprisClient();
+        PriceService service = new PriceServiceImpl(client);
+        StatsCalculator stats = new StatsCalculator();
+
+        List<PricePoint> prices = service.getAvailablePrices(zone);
+
+        if (prices.isEmpty()) {
+            System.out.println("No prices available");
+            return;
+        }
 
         double mean = StatsCalculator.mean(prices);
         PricePoint cheapest = StatsCalculator.min(prices);

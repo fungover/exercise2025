@@ -13,15 +13,7 @@ public class App {
          System.out.println("SE3 = Stockholm / Södra Mellansverige");
          System.out.println("SE4 = Malmö / Södra Sverige");
 
-         String priceArea;
-         if (System.console() != null) {
-             priceArea = System.console().readLine("\nAnge önskad zon (SE1, SE2, SE3 eller SE4): ");
-         } else {
-             System.out.println("\nIngen console tillgänglig (IDE?), använder default: SE3");
-             priceArea = "SE3";
-         }
-
-         priceArea = priceArea.trim().toUpperCase();
+         String priceArea = UserInput.getValidatedPriceArea();
 
          LocalDate today = LocalDate.now();
          String year = String.valueOf(today.getYear());

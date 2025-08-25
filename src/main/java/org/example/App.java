@@ -35,11 +35,11 @@ TODO:
       [x] Error handling for menu
 */
 
-import org.example.menu.MainMenu;
+import org.example.cli.Menu;
 
 public class App {
     public static void main(String[] args) {
-            MainMenu menu = new MainMenu();
+            Menu menu = new Menu();
 
             menu.start();
     }

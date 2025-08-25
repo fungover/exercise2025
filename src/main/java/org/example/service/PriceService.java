@@ -72,12 +72,16 @@ public class PriceService {
         try {
             PriceEntry[] entries = mapper.readValue(response.body(), PriceEntry[].class);
             PriceEntry cheapestEntry = Arrays.stream(entries)
-                    .min((e1, e2) -> Double.compare(e1.SEK_per_kWh(), e2.SEK_per_kWh()))
+                    .min(java.util.Comparator
+                            .comparingDouble(PriceEntry::SEK_per_kWh)
+                            .thenComparing(PriceEntry::time_start))
                     .orElse(null);
 
-            PriceEntry expensiveEntry = Arrays.stream(entries)
-                    .max((e1, e2) -> Double.compare(e1.SEK_per_kWh(), e2.SEK_per_kWh()))
-                    .orElse(null);
+           PriceEntry expensiveEntry = Arrays.stream(entries)
+                           .max(java.util.Comparator
+                                   .comparingDouble(PriceEntry::SEK_per_kWh)
+                                   .thenComparing(PriceEntry::time_start))
+                                   .orElse(null);
 
             System.out.println("Cheapest price: \n" + cheapestEntry.time_start() + " - " + cheapestEntry.time_end() + "\n" + cheapestEntry.SEK_per_kWh() + " SEK_per_kWh");
             System.out.println("Most expensive price: \n" + expensiveEntry.time_start() + " - " + expensiveEntry.time_end() + "\n" + expensiveEntry.SEK_per_kWh() + " SEK_per_kWh");

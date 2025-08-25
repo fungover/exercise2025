@@ -4,7 +4,7 @@ public class SlidingWindowCalculator {
 
     public static void findCheapestWindow(PriceEntry[] prices, int hours) {
         if (prices == null || prices.length < hours) {
-            System.out.println("Inte tillräckligt många timmar i datan.");
+            System.out.println("Not enough hours.");
             return;
         }
 
@@ -30,7 +30,7 @@ public class SlidingWindowCalculator {
 
         // Print result
         int bestEnd = bestStart + hours - 1;
-        System.out.printf("%dh billigaste: %s → %s | Medelpris: %.3f SEK/kWh%n",
+        System.out.printf("%dh cheapest: %s → %s | Average: %.3f SEK/kWh%n",
                 hours,
                 prices[bestStart].time_start.substring(11, 16),
                 prices[bestEnd].time_end.substring(11, 16),

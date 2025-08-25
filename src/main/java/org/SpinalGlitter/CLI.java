@@ -82,12 +82,50 @@ public class CLI {
                 }
 
                 case "3": {
-                    System.out.println("You chose option 3: Show the electricity price for tomorrow.");
+                    try {
+                        API api = new API();
+                        var tomorrow = java.time.LocalDate.now(java.time.ZoneId.of("Europe/Stockholm")).plusDays(1);
+                        var entries = api.fetchDay(tomorrow, "SE3");
+
+                        if (entries.isEmpty()) {
+                            System.out.println("No data available for tomorrow.");
+                        } else {
+                            java.time.format.DateTimeFormatter fmt =
+                                    java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                                            .withZone(java.time.ZoneId.of("Europe/Stockholm"));
+
+                            entries.stream()
+                                    .sorted(java.util.Comparator.comparing(e -> e.timeStart))
+                                    .forEach(e -> System.out.printf("%s - %s : %.4f SEK/kWh%n",
+                                            fmt.format(e.timeStart),
+                                            fmt.format(e.timeEnd),
+                                            e.sekPerKWh));
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error fetching data: " + ex.getMessage());
+                    }
                     return;
                 }
 
                 case "4": {
-                    System.out.println("You chose option 4: Show the average electricity price for tomorrow.");
+                    try {
+                        API api = new API();
+                        var tomorrow = java.time.LocalDate.now(java.time.ZoneId.of("Europe/Stockholm")).plusDays(1);
+                        var entries = api.fetchDay(tomorrow, "SE3");
+
+                        if (entries.isEmpty()) {
+                            System.out.println("No data available for today.");
+                        } else {
+                            double avgPrice = entries.stream()
+                                    .mapToDouble(e -> e.sekPerKWh)
+                                    .average()
+                                    .orElse(0.0);
+
+                            System.out.printf("Average electricity price for tomorrow: %.6f SEK/kWh%n", avgPrice);
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Error fetching data: " + ex.getMessage());
+                    }
                     return;
                 }
 

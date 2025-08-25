@@ -9,7 +9,6 @@ public class Printers {
     public static void printPricesForDay(LocalDate date, String zone, String json) {
         try {
             ObjectMapper mapper = new ObjectMapper();
-
             PriceEntry[] prices = mapper.readValue(json, PriceEntry[].class);
 
             PriceEntry lowestPrice = prices[0];
@@ -29,7 +28,6 @@ public class Printers {
             System.out.println("----------------------------------------------------------");
             System.out.println("Prices for " + date + " in " + zone + ":");
             System.out.println("----------------------------------------------------------");
-
 
             for (PriceEntry p : prices) {
                 System.out.printf("%s → %s: %.3f SEK/kWh%n",
@@ -76,7 +74,6 @@ public class Printers {
         System.out.print("> ");
     }
 
-
     public static void printZoneAreas() {
         System.out.println("==========================================================");
         System.out.println("   Select Electricity Price Zone (SE1 – SE4)");
@@ -89,6 +86,7 @@ public class Printers {
         System.out.println("==========================================================");
         System.out.print("Enter Zone (SE1–SE4, default SE3): ");
     }
+
     public static void printBestChargingWindows(PriceEntry[] prices) {
         System.out.println("==========================================================");
         System.out.println(" Best charging windows (2 / 4 / 8 hours) ");
@@ -101,5 +99,4 @@ public class Printers {
 
         System.out.println("==========================================================");
     }
-
 }

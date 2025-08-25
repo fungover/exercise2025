@@ -11,4 +11,3 @@ public record PriceRequests(int year, int month, int day, String zone) {
                 + zone + ".json";
     }
 }
-

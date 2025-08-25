@@ -86,7 +86,6 @@ public class App {
                 return LocalDate.now();
             }
 
-            // Hantera de fasta orden
             switch (s) {
                 case "today" -> { return LocalDate.now(); }
                 case "tomorrow" -> { return LocalDate.now().plusDays(1); }
@@ -102,7 +101,6 @@ public class App {
             }
         }
     }
-
 
     private static String askForZone(Scanner scanner) {
         while (true) {
@@ -128,8 +126,4 @@ public class App {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(json, PriceEntry[].class);
     }
-
 }
-
-
-

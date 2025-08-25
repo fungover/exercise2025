@@ -1,14 +1,12 @@
 package org.example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
 
 public class MeanPriceCalculator {
 
     public static void printMeanPrice(String json) {
         try {
             ObjectMapper mapper = new ObjectMapper();
-
             PriceEntry[] prices = mapper.readValue(json, PriceEntry[].class);
 
             double sum = 0;

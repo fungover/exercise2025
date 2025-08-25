@@ -1,12 +1,9 @@
 package org.example;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -102,12 +99,7 @@ public class App {
                 break;
             case 2:
                 System.out.println("Printing the mean price for the current 24-hour period");
-                HttpResponse<String> price = getPrices(urlToday);
-                if (price != null && price.statusCode() == 200) {
-                    System.out.println("Mean price downloaded successfully!");
-                }
-
-
+                fetchAndCalculateMeanPrice(urlToday, "prices.txt", "Today's mean price");
                 break;
             case 3:
                 System.out.println("Identifying and printing the hours with the cheapest and most expensive prices");
@@ -191,8 +183,8 @@ public class App {
 
                 for (PriceEntry entry : entries) {
                     if (firstLine) {
-                        System.out.println("=====" + dayLabel + "=====");
-                        writeToFile(fileName, "=====" + dayLabel + "=====\n");
+                        System.out.println("===== " + dayLabel + " =====");
+                        writeToFile(fileName, "===== " + dayLabel + " =====\n");
                         firstLine = false;
                     }
                     System.out.println(entry.time_start + " - " + entry.time_end + ": " + entry.SEK_per_kWh);
@@ -202,6 +194,46 @@ public class App {
                 e.printStackTrace();
             }
 
+        } else {
+            System.out.println(dayLabel + "'s prices could not be downloaded. Status: " +
+                    (prices != null ? prices.statusCode() : "No response"));
+        }
+    }
+
+    private static void fetchAndCalculateMeanPrice(String url, String fileName, String dayLabel) {
+        HttpResponse<String> prices = getPrices(url);
+        if (prices != null && prices.statusCode() == 200) {
+            System.out.println(dayLabel);
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules();
+
+            boolean firstLine = true;
+
+            try {
+                PriceEntry[] entries = mapper.readValue(prices.body(), PriceEntry[].class);
+                int numberOfEntries = entries.length;
+                double totalPrice = 0;
+                for (PriceEntry entry : entries) {
+                    totalPrice += entry.SEK_per_kWh;
+                }
+                double meanPrice = totalPrice / numberOfEntries;
+
+                System.out.println(dayLabel + " prices:");
+                createFile(fileName);
+
+                if (firstLine) {
+                    System.out.println(dayLabel + "'s prices:");
+                    writeToFile(fileName, "===== " + dayLabel + " =====\n");
+                    firstLine = false;
+                }
+
+                System.out.println(meanPrice + " SEK_per_kWh");
+                writeToFile(fileName, meanPrice + " SEK_per_kWh" + "\n");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             System.out.println(dayLabel + "'s prices could not be downloaded. Status: " +
                     (prices != null ? prices.statusCode() : "No response"));

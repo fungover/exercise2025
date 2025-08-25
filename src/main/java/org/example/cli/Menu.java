@@ -1,6 +1,7 @@
 package org.example.cli;
 
 import java.util.Scanner;
+import org.example.service.ElectricityPriceService;
 
 public class Menu {
 
@@ -77,7 +78,14 @@ public class Menu {
 
             int choice = readIntInRange(scanner, 1, 4);
             switch (choice) {
-                case 1 -> System.out.println("Today for " + zoneCode);
+                case 1 -> {
+                    ElectricityPriceService service = new ElectricityPriceService();
+                    String raw = service.fetchTodayRaw(zoneCode);
+                    if (raw != null) {
+                        System.out.println("First 200 chars of JSON:");
+                        System.out.println(raw.substring(0, 200));
+                    }
+                }
                 case 2 -> System.out.println("Tomorrow for " + zoneCode);
                 case 3 -> System.out.println("Search by date for " + zoneCode);
                 case 4 -> back = true;

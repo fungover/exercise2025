@@ -2,7 +2,7 @@ package org.example.travel;
 
 import java.util.Objects;
 
-public final class Point {
+public class Point {
     private final double x;
     private final double y;
 

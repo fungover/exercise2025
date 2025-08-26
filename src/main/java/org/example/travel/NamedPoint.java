@@ -1,15 +1,16 @@
 package org.example.travel;
 
-public class NamedPoint {
-    private final Point point;
+public class NamedPoint extends Point {
+
     private final String name;
 
-    public NamedPoint(Point point, String name) {
-        this.point = point;
+    public NamedPoint(String name, int x, int y) {
+        super(x, y);
         this.name = name;
     }
 
+    @Override
     public String display() {
-        return name + ": " + point.display();
+        return name + ": " + super.display();
     }
 }

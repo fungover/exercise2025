@@ -1,6 +1,5 @@
 import org.example.Order;
 import org.example.Rectangle;
-import java.awt.Color;
 
 void main() {
     System.out.println("Hello World!");

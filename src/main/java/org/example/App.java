@@ -3,10 +3,7 @@ package org.example;
 import org.example.client.ElprisClient;
 import org.example.model.PricePoint;
 import org.example.model.PriceZone;
-import org.example.service.ChargingPlanner;
-import org.example.service.PriceService;
-import org.example.service.PriceServiceImpl;
-import org.example.service.StatsCalculator;
+import org.example.service.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -47,7 +44,7 @@ public class App {
         System.out.printf("Most expensive: %s → %.3f SEK/kWh%n",
                 mostExpensive.start(), mostExpensive.price());
 
-        int [] durations = {2, 4, 8};
+        int[] durations = {2, 4, 8};
         System.out.println("\nBest charging windows:");
         for (int hours : durations) {
             var window = ChargingPlanner.findBestWindow(prices, hours);
@@ -60,6 +57,28 @@ public class App {
             } else {
                 System.out.printf("%d hours: Not enough data available%n", hours);
             }
+        }
+        System.out.print("Do you want to import consumption data (CSV)? (y/n): ");
+        String importCsv = scanner.nextLine().trim().toLowerCase();
+
+        if (importCsv.equals("y")) {
+            System.out.print("Enter path to CSV file (press Enter for default 'data/consumption.csv'): ");
+            String path = scanner.nextLine().trim();
+
+            if (path.isEmpty()) {
+                path = "data/consumption.csv";
+            }
+
+            try {
+                var consumption = new CsvConsumptionCalculator().readConsumption(path);
+                double totalCost = new CsvConsumptionCalculator().calculateTotalCost(prices, consumption);
+                System.out.printf("Total cost based on your consumption: %.3f SEK%n", totalCost);
+            } catch (Exception e) {
+                System.out.println("Failed to read CSV file: " + path);
+                System.out.println("Please make sure the file exists and is formatted correctly.");
             }
         }
+
     }
+}
+

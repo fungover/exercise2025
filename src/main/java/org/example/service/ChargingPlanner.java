@@ -23,15 +23,23 @@ public class ChargingPlanner {
     }
 
     public static ChargingWindow findBestWindow(List<PricePoint> prices, int hours) {
-        if (prices.size() <  hours) return null;
 
+        LocalDateTime now = LocalDateTime.now();
+        List <PricePoint> futurePrices = prices.stream()
+                .filter(p -> !p.start().isBefore(now))
+                .toList();
+
+
+        if (futurePrices.size() <  hours) return null;
+
+        int maxWindow = Math.min(hours, futurePrices.size());
         double minSum = Double.MAX_VALUE;
         int minIndex = 0;
 
-        for (int i = 0; i < prices.size() - hours; i++) {
+        for (int i = 0; i < futurePrices.size() - maxWindow; i++) {
             double sum = 0;
-            for (int j = 0; j < hours; j++) {
-                sum += prices.get(i + j).price();
+            for (int j = 0; j < maxWindow; j++) {
+                sum += futurePrices.get(i + j).price();
             }
 
             if (sum < minSum) {
@@ -40,8 +48,8 @@ public class ChargingPlanner {
             }
         }
 
-        LocalDateTime start = prices.get(minIndex).start();
-        LocalDateTime end = prices.get(minIndex + hours - 1).start().plusHours(1);
+        LocalDateTime start = futurePrices.get(minIndex).start();
+        LocalDateTime end = futurePrices.get(minIndex + maxWindow - 1).start().plusHours(1);
         return new ChargingWindow(start, end, minSum);
     }
 }

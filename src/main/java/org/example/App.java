@@ -6,7 +6,7 @@ import java.time.LocalDate;
 //TODO Change output to present new features
 
 public class App {
-     static void main(String[] args) {
+    static void main(String[] args) {
          System.out.println("Välkommen!");
          System.out.println("Här kan du se elpriser per timme för olika områden i Sverige.");
          System.out.println("\nTillgängliga priszoner:");

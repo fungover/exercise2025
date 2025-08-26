@@ -8,4 +8,5 @@ public record ElectricityPrice(
         @JsonProperty("EXR") double EXR,
         @JsonProperty("time_start") String time_start,
         @JsonProperty("time_end") String time_end
-) {}
+) {
+}

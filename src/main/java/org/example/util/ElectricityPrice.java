@@ -11,6 +11,15 @@ public class ElectricityPrice {
 
     @Override
     public String toString() {
-        return String.format("%s - %.3f SEK/kWh", time_start.substring(11, 16), SEK_per_kWh);
+        //
+        String time = (time_start != null && time_start.length() >= 16) ? time_start.substring(
+          11, 16) : "??:??";
+        java.math.BigDecimal value = (SEK_per_kWh !=
+          null) ? SEK_per_kWh : java.math.BigDecimal.ZERO;
+
+        return String.format("%s - %s SEK/kWh", time,
+          value.setScale(3, java.math.RoundingMode.HALF_UP)
+               .toPlainString());
+        //return String.format("%s - %.3f SEK/kWh", time_start.substring(11, 16), SEK_per_kWh);
     }
 }

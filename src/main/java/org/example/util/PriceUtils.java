@@ -16,6 +16,9 @@ public class PriceUtils {
 
     public static BigDecimal avgPrice(List<ElectricityPrice> prices) {
         //TODO done 3.Print the mean price for the current 24-hour period.
+        if (prices == null || prices.isEmpty()) {
+            return BigDecimal.ZERO.setScale(5, RoundingMode.HALF_UP);
+        }
         BigDecimal sum = BigDecimal.ZERO;
         for (ElectricityPrice price : prices) {
             sum = sum.add(price.SEK_per_kWh);
@@ -71,6 +74,13 @@ public class PriceUtils {
 
         //we run this once for every set of hours (3)
         for (int durationHour : durationList) {
+            //check if duration is bigger then the list
+            if (prices == null || prices.size() < durationHour) {
+                System.out.printf("Not enough data to compute a %dh charging window.%n",
+                  durationHour);
+                continue;
+            }
+
 
             BigDecimal minSum = null; // make sure its way higher than anything else
             int bestTimeToStart = -1; //we save the time its best to start at here
@@ -97,12 +107,21 @@ public class PriceUtils {
             }
             if (bestTimeToStart != -1) {
                 ElectricityPrice startHour = prices.get(bestTimeToStart);
-                ElectricityPrice endHour = prices.get(bestTimeToStart + durationHour);
+                int endIdxInclusive = bestTimeToStart + durationHour - 1;
+//                ElectricityPrice endHour = prices.get(bestTimeToStart + durationHour);
+
+                //display-ready end time
+                String endAt;
+                if (endIdxInclusive + 1 < prices.size()) {
+                    endAt = prices.get(endIdxInclusive + 1).time_start.substring(11, 16);
+                } else {
+                    endAt = "24:00";
+                }
+
 
                 System.out.printf(
-                  "charging for %dh: Start charging at %s, end at %s (total cost: %.3f SEK)%n",
-                  durationHour, startHour.time_start.substring(11, 16),
-                  endHour.time_start.substring(11, 16), minSum);
+                  "charging for %dh: Start at %s, end at %s (total cost: %.3f SEK)%n",
+                  durationHour, startHour.time_start.substring(11, 16), endAt, minSum);
             }
             //pain in the butt!
 

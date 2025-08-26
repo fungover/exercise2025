@@ -28,11 +28,11 @@ public class PriceDisplay {
             System.out.println("\nPrisstatistik:");
             System.out.printf("Medelpris: %.2f öre/kWh%n", PriceCalculator.calculateAveragePrice(List.of(prices)) * 100);
             
-            ApiClient.ElectricityPrice minPrice = PriceCalculator.findMinPrice(prices);
+            ApiClient.ElectricityPrice minPrice = PriceCalculator.findMinPrice(List.of(prices));
             System.out.printf("Lägsta pris: %.2f öre/kWh (%s)%n", 
                     minPrice.SEK_per_kWh() * 100, minPrice.formattedHourRange());
             
-            ApiClient.ElectricityPrice maxPrice = PriceCalculator.findMaxPrice(prices);
+            ApiClient.ElectricityPrice maxPrice = PriceCalculator.findMaxPrice(List.of(prices));
             System.out.printf("Högsta pris: %.2f öre/kWh (%s)%n", 
                     maxPrice.SEK_per_kWh() * 100, maxPrice.formattedHourRange());
 

@@ -1,6 +1,5 @@
 package org.example.travel;
 
-import java.awt.*;
 import java.util.Objects;
 
 public final class Point {

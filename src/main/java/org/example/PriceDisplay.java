@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 public class PriceDisplay {
 
@@ -25,7 +26,7 @@ public class PriceDisplay {
             
 
             System.out.println("\nPrisstatistik:");
-            System.out.printf("Medelpris: %.2f öre/kWh%n", PriceCalculator.calculateAveragePrice(prices) * 100);
+            System.out.printf("Medelpris: %.2f öre/kWh%n", PriceCalculator.calculateAveragePrice(List.of(prices)) * 100);
             
             ApiClient.ElectricityPrice minPrice = PriceCalculator.findMinPrice(prices);
             System.out.printf("Lägsta pris: %.2f öre/kWh (%s)%n", 

@@ -42,9 +42,19 @@ public class SlidingWindowCalculator {
         }
 
         int bestEnd = bestStart + hours - 1;
+
         DateTimeFormatter hm = DateTimeFormatter.ofPattern("HH:mm");
-        String startHm = OffsetDateTime.parse(prices[bestStart].time_start).toLocalTime().format(hm);
-        String endHm   = OffsetDateTime.parse(prices[bestEnd].time_end).toLocalTime().format(hm);
+        String startHm;
+        String endHm;
+        try {
+            startHm = OffsetDateTime.parse(prices[bestStart].time_start).toLocalTime().format(hm);
+            endHm   = OffsetDateTime.parse(prices[bestEnd].time_end).toLocalTime().format(hm);
+        } catch (java.time.format.DateTimeParseException | NullPointerException e) {
+            startHm = (prices[bestStart].time_start != null && prices[bestStart].time_start.length() >= 16)
+                    ? prices[bestStart].time_start.substring(11, 16) : "??:??";
+            endHm = (prices[bestEnd].time_end != null && prices[bestEnd].time_end.length() >= 16)
+                    ? prices[bestEnd].time_end.substring(11, 16) : "??:??";
+        }
         double avg = bestSum / hours;
         double total = avg * energyKWh;
         System.out.printf("%dh cheapest: %s → %s | Average price: %.3f SEK/kWh | Total for %.2f kWh: %.2f SEK%n",

@@ -3,8 +3,6 @@ package org.example;
 import java.io.IOException;
 import java.time.LocalDate;
 
-//TODO Change output to present new features
-
 public class App {
     static void main(String[] args) {
          System.out.println("Välkommen!");

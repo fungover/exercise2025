@@ -25,6 +25,13 @@ public class ElprisFetch {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+            String json = response.body().trim();
+
+            if (!json.startsWith("[")) {
+                System.out.println("Ingen data för " + datum + " (" + zon + ")");
+                return Collections.emptyList();
+            }
+
             Gson gson = new Gson();
             Elpris[] prices = gson.fromJson(response.body(), Elpris[].class);
 

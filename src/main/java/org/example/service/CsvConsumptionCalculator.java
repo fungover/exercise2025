@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,8 @@ import java.util.Map;
 public class CsvConsumptionCalculator {
 
     private static final String DEFAULT_FILE = "data/consumption.csv";
-    private static final DateTimeFormatter KEY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+    private static final ZoneId PRICE_ZONE = ZoneId.of("Europe/Stockholm");
+    private static final DateTimeFormatter KEY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mmXXX");
 
     public Map<String, Double> readConsumption(String filePath) {
         Map<String, Double> consumption = new HashMap<>();
@@ -38,13 +40,18 @@ public class CsvConsumptionCalculator {
                     } catch (NumberFormatException ex) {
                     continue;
                     }
-                LocalDateTime ts;
+                OffsetDateTime normalizedTs;
                 try {
-                    ts = LocalDateTime.parse(tsRaw); // ISO_LOCAL_DATE_TIME; seconds optional
-                    } catch (java.time.format.DateTimeParseException ex) {
-                    ts = OffsetDateTime.parse(tsRaw).toLocalDateTime();
+                    normalizedTs = OffsetDateTime.parse(tsRaw);
+                    } catch (java.time.format.DateTimeParseException ex1) {
+                    try {
+                        LocalDateTime ts = LocalDateTime.parse(tsRaw); // ISO_LOCAL_DATE_TIME; seconds optional
+                        normalizedTs = ts.atZone(PRICE_ZONE).toOffsetDateTime();
+                        } catch (java.time.format.DateTimeParseException ex2) {
+                        continue;
+                        }
                     }
-                consumption.put(KEY_FORMATTER.format(ts), kWh);
+                consumption.put(KEY_FORMATTER.format(normalizedTs), kWh);
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to read CSV file: " + pathToUse, e);
@@ -61,7 +68,6 @@ public class CsvConsumptionCalculator {
         for (PricePoint price : prices) {
             String key = KEY_FORMATTER.format(price.start());
             if (consumption.containsKey(key)) {
-                // convert consumption value to BigDecimal and multiply
                 BigDecimal cost = price.price().multiply(BigDecimal.valueOf(consumption.get(key)));
                 total = total.add(cost);
             }

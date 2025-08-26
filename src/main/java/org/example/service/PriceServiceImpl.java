@@ -32,8 +32,17 @@ public class PriceServiceImpl implements PriceService {
         List<PricePoint> today = getTodayPrices(zone);
         List<PricePoint> tomorrow = getTomorrowPrices(zone);
 
-        if (today == null || today.isEmpty()) return (tomorrow == null ? List.of() : tomorrow);
-        if (tomorrow == null || tomorrow.isEmpty()) return today;
+        if (today == null || today.isEmpty()) {
+            if (tomorrow == null || tomorrow.isEmpty()) return List.of();
+            List<PricePoint> onlyTomorrow = new ArrayList<>(tomorrow);
+            onlyTomorrow.sort(Comparator.comparing(PricePoint::start));
+            return onlyTomorrow;
+            }
+        if (tomorrow == null || tomorrow.isEmpty()) {
+            List<PricePoint> onlyToday = new ArrayList<>(today);
+            onlyToday.sort(Comparator.comparing(PricePoint::start));
+            return onlyToday;
+            }
 
         List<PricePoint> merged = new ArrayList<>(today.size() + tomorrow.size());
         merged.addAll(today);

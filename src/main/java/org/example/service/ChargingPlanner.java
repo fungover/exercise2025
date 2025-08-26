@@ -3,8 +3,8 @@ package org.example.service;
 import org.example.model.PricePoint;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 public class ChargingPlanner {
@@ -28,9 +28,9 @@ public class ChargingPlanner {
     public static ChargingWindow findBestWindow(List<PricePoint> prices, int hours) {
         if (hours <= 0) throw new IllegalArgumentException("hours must be > 0");
 
-        OffsetDateTime now = OffsetDateTime.now(ZoneId.of("CET"));
+        Instant now = Instant.now();
         List<PricePoint> futurePrices = prices.stream()
-                .filter(p -> !p.start().isBefore(now))
+                .filter(p -> !p.start().toInstant().isBefore(now))
                 .sorted(java.util.Comparator.comparing(PricePoint::start))
                 .toList();
 

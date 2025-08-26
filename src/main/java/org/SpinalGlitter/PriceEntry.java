@@ -11,9 +11,6 @@ public class PriceEntry {
     @JsonProperty("SEK_per_kWh")
     public double sekPerKWh;
 
-    @JsonProperty("EXR")
-    public double exchangeRate;
-
     @JsonProperty("time_start")
     public ZonedDateTime timeStart;
 

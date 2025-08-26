@@ -27,7 +27,13 @@ public class App {
         PriceService service = new PriceServiceImpl(client);
         StatsCalculator stats = new StatsCalculator();
 
-        List<PricePoint> prices = service.getAvailablePrices(zone);
+        List<PricePoint> prices;
+        try {
+            prices = service.getAvailablePrices(zone);
+            } catch (Exception e) {
+            System.err.println("Failed to fetch prices: " + e.getMessage());
+            return;
+            }
 
         if (prices.isEmpty()) {
             System.out.println("No prices available");

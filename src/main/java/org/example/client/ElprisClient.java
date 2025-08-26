@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ElprisClient {
-    private final HttpClient client =  HttpClient.newHttpClient();
+    private final HttpClient client = HttpClient.newBuilder()
+            .connectTimeout(java.time.Duration.ofSeconds(10))
+            .build();
     private final Gson gson = new Gson();
 
     public List <PricePoint> fetchDayPrices(PriceZone zone, LocalDate date) {

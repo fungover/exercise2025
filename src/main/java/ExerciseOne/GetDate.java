@@ -1,32 +1,28 @@
 package ExerciseOne;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class GetDate {
 
-    public void getDate(int area) throws IOException, InterruptedException {
-
-        Request req = new Request();
+    public String geToday(int area) {
 
         String today = formatDate(LocalDate.now());
-        String search = today+"_SE"+area;
+        return today+"_SE"+area;
+    }
 
-       req.request(search);
-
+    public int getTime(){
         LocalTime time = LocalTime.now();
         DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("HH");
         String  formatedTime = time.format(dtf2);
 
-        int timeToday = Integer.parseInt(formatedTime);
+        return Integer.parseInt(formatedTime);
+    }
 
-        if(timeToday >= 13){
-            String tomorrow = formatDate(LocalDate.now().plusDays(1));
-            String searchTomorrow = tomorrow+"_SE"+area;
-            req.request(searchTomorrow);
-        }
+    public String getTomorrow(int area) {
+        String tomorrow = formatDate(LocalDate.now().plusDays(1));
+        return tomorrow+"_SE"+area;
     }
 
     public String formatDate(LocalDate date){

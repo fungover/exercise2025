@@ -2,7 +2,6 @@
 package org.example.electricity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -20,7 +19,7 @@ public class ElPriceCli {
 
     public static List<PriceData> fetchDay(LocalDate date, String zone) {
         try {
-            String url = "Https://www.elprisetjustnu.se/api/v1/prices/%d/%02d-%02d_%s.json"
+            String url = "https://www.elprisetjustnu.se/api/v1/prices/%d/%02d-%02d_%s.json"
                     .formatted(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), zone.toUpperCase());
 
             HttpRequest req = HttpRequest.newBuilder(URI.create(url))
@@ -39,7 +38,7 @@ public class ElPriceCli {
         }
     }
 
-    //Utility class
+    /* Utility class */
     private ElPriceCli() {
     }
 }

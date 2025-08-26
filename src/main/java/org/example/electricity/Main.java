@@ -1,7 +1,7 @@
 /* The Real CLI entry, since App.java was only to test. This is my MAIN for this project */
 package org.example.electricity;
 
-// Imports and why I use them
+/* Imports and why I use them */
 
 import java.time.LocalDate; //DATE without time (YY-MM-DD)
 import java.time.ZoneId; //Especially important and not to forget, converts to exact Time for relevant zone
@@ -13,6 +13,7 @@ public class Main {
         String zone = "SE3"; //Default value
         LocalDate date = LocalDate.now(ZoneId.of("Europe/Stockholm"));
 
+        /* Reading CLI arguments */
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "--zone" -> {
@@ -22,30 +23,24 @@ public class Main {
                     if (i + 1 < args.length) date = LocalDate.parse(args[++i], DateTimeFormatter.ISO_LOCAL_DATE);
                 }
                 case "--help" -> {
-                    System.out.println("You typed" + "--help" + "THIS should provide user with help");
+                    Printer.printHelp();
                     return;
                 }
             }
         }
 
-        //Fetch prices
+        /* Fetch prices */
         var prices = ElPriceCli.fetchDay(date, zone);
         if (prices.isEmpty()) {
-            System.out.printf("No prices found for %s i %s.%n", date, zone);
+            Printer.printError("No prices found for" + date + " i " + zone);
             return;
         }
 
-        final Locale SV = Locale.forLanguageTag("sv-SE"); //Swedish decimal, REPLACE this!!
-        System.out.printf(SV, "fetched %d rows for %s in %s.%n", prices.size(), date, zone);
-        var tz = ZoneId.of("Europe/Stockholm");
-        int show = Math.min(24, prices.size());
-        for (int i = 0; i < show; i++) {
-            var p = prices.get(i);
-            int h1 = p.timeStart().atZone(tz).getHour();
-            int h2 = p.timeEnd().atZone(tz).getHour();
-            System.out.printf(SV,"  %02d:00–%02d:00 → %.3f kr/kWh%n",
-                    h1, h2 == 0 ? 24 : h2, p.sekPerkWh());
-        }
-
+        /* Using my Printer */
+        Printer.printHeader(date, zone, prices.size());
+        Printer.printPrices(prices);
+        Printer.printStats(prices);
     }
+
 }
+

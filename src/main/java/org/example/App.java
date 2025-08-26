@@ -46,10 +46,11 @@ public class App {
 
         //jackson to read our json
         ObjectMapper mapper = new ObjectMapper();
-        List<ElectricityPrice> pricesToday = mapper.readValue(today, new TypeReference<>() {
-        });
+        List<ElectricityPrice> pricesToday = mapper.readValue(today,
+          new TypeReference<List<ElectricityPrice>>() {
+          });
         List<ElectricityPrice> pricesTomorrow = mapper.readValue(tomorrow,
-          new TypeReference<>() {
+          new TypeReference<List<ElectricityPrice>>() {
           });
 
 

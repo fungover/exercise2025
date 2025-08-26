@@ -44,7 +44,7 @@ public class PriceUtils {
 
         //loop through each price
         for (ElectricityPrice price : prices) {
-            //if a price is lower the the current min, update
+            //if a price is lower the current min, update
             if (price.SEK_per_kWh.compareTo(min.SEK_per_kWh) < 0) {
                 min = price;
             } //if the price is the same check what time is earlier
@@ -87,8 +87,8 @@ public class PriceUtils {
             }
 
 
-            BigDecimal minSum; // make sure its way higher than anything else
-            int bestTimeToStart; //we save the time its best to start at here
+            BigDecimal minSum;
+            int bestTimeToStart;
 
             //Calculate sum for first window
             //this is our baseline that we will compare all other windows to

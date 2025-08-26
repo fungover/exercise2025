@@ -48,13 +48,13 @@ public class MenuOptions {
 
 
                             pricesToday.clear();
-                            pricesToday.addAll(
-                              mapper.readValue(todayFetchJson, new TypeReference<>() {
+                            pricesToday.addAll(mapper.readValue(todayFetchJson,
+                              new TypeReference<List<ElectricityPrice>>() {
                               }));
 
                             pricesTomorrow.clear();
-                            pricesTomorrow.addAll(
-                              mapper.readValue(tomorrowFetchJson, new TypeReference<>() {
+                            pricesTomorrow.addAll(mapper.readValue(tomorrowFetchJson,
+                              new TypeReference<List<ElectricityPrice>>() {
                               }));
 
                             System.out.println("Prices refreshed successfully!");

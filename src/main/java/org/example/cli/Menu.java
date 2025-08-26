@@ -10,19 +10,21 @@ import java.util.Scanner;
 
 public class Menu {
 
-    public void showMenu(String jsonToday, String jsonTomorrow) {
+    public void showMenu(String jsonData) {
 
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("\nSelect time period:\n");
-            System.out.println("1. Today");
-            System.out.println("2. Tomorrow");
+            System.out.println("\nSelect the information you want to see:\n");
+            System.out.println("1. Print mean price for the current 24 hour period from current time.");
+            System.out.println("2. Print cheapest and most expensive hours in the available period.");
+            System.out.println("3. Best time to charge the electric car from the current time forward.");
             System.out.print("\nEnter your choice: ");
-            int dayChoice;
+
+            int choice;
 
             if (scanner.hasNextInt()) {
-                dayChoice = scanner.nextInt();
+                choice = scanner.nextInt();
                 scanner.nextLine();
             } else {
                 System.out.println("Not a number, please try again.");
@@ -30,56 +32,29 @@ public class Menu {
                 continue;
             }
 
-            String json;
-            if (dayChoice == 1) {
-                json = jsonToday;
-            } else if (dayChoice == 2) {
-                json = jsonTomorrow;
-            } else {
-                System.out.println("Invalid choice, Please try again!");
-                continue;
-            }
-
-            while (true) {
-                System.out.println("\nSelect the information you want to see:\n");
-                System.out.println("1. Print mean price for current 24-hour period.");
-                System.out.println("2. Print cheapest and most expensive hours in the current 24-hour period.");
-                System.out.println("3. Best time to charge the electric car.\n");
-                System.out.print("Enter your choice: ");
-
-                int choice;
-                if (scanner.hasNextInt()) {
-                    choice = scanner.nextInt();
-                    scanner.nextLine();
-                } else {
-                    System.out.println("Not a number, please try again.");
-                    scanner.nextLine();
-                    continue;
+            switch (choice) {
+                case 1 -> {
+                    System.out.println("\nThe mean price " + CalculateMeanPrice.getPeriodInfo(jsonData));
+                    System.out.println("Mean price in SEK: " + CalculateMeanPrice.meanSEK(jsonData));
+                    System.out.println("Mean price in EUR: " + CalculateMeanPrice.meanEUR(jsonData));
+                    return;
                 }
-
-                switch (choice) {
-                    case 1 -> {
-                        System.out.println("Mean price in SEK: " + CalculateMeanPrice.meanSEK(json));
-                        System.out.println("Mean price in EUR: " + CalculateMeanPrice.meanEUR(json));
-                        return;
-                    }
-                    case 2 -> {
-                        LowAndHighPrices.printMinMaxPrices(json);
-                        return;
-                    }
-                    case 3 -> {
-                        showChargingMenu(json, scanner);
-                        return;
-                    }
-                    default -> {
-                        System.out.println("Invalid choice, please try again.");
-                    }
+                case 2 -> {
+                    LowAndHighPrices.printMinMaxPrices(jsonData);
+                    return;
+                }
+                case 3 -> {
+                    showChargingMenu(jsonData, scanner);
+                    return;
+                }
+                default -> {
+                    System.out.println("Invalid choice, please try again.");
                 }
             }
         }
     }
 
-    private void showChargingMenu(String json, Scanner scanner) {
+    private void showChargingMenu(String jsonData, Scanner scanner) {
         while (true) {
             System.out.println("Choose your charging duration:\n");
             System.out.println("1. 2 hours");
@@ -107,7 +82,7 @@ public class Menu {
                     continue;
                 }
             }
-            ChargingResult result = ChargingOptimizer.findBestChargingTime(json, chargingHours);
+            ChargingResult result = ChargingOptimizer.findBestChargingTime(jsonData, chargingHours);
 
             if (result != null) {
 
@@ -117,9 +92,14 @@ public class Menu {
 
                 System.out.println("Best charging time:\n");
                 System.out.printf("Duration: %d hours\n", chargingHours);
-                System.out.printf("Start time: %s\n", result.startTime().toLocalDateTime().toLocalTime());
-                System.out.printf("End time: %s\n", result.endTime().toLocalDateTime().toLocalTime());
+                System.out.printf("Start time: %s %s\n",
+                        result.startTime().toLocalDate(),
+                        result.startTime().toLocalDateTime().toLocalTime());
+                System.out.printf("End time: %s %s\n",
+                        result.endTime().toLocalDate(),
+                        result.endTime().toLocalDateTime().toLocalTime());
                 System.out.printf("Total cost: %,3f SEK\n", result.totalCost());
+                System.out.printf("Average price per kWh: %.3f SEK\n", avg);
             } else {
                 System.out.printf("Could not find suitable %d-hour period\n", chargingHours);
             }

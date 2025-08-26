@@ -23,14 +23,28 @@ private static BigDecimal calculateMean(String json, String currency) {
      ObjectMapper mapper = JsonMapper.get();
      List<ElectricityPrice> prices = mapper.readValue(json, new TypeReference<>() {});
 
+     if (prices.isEmpty()) {
+         return BigDecimal.ZERO;
+     }
+
+     int startIndex = PriceDataUtils.findCurrentOrNextHourIndex(prices);
+
+     int availableHours = prices.size() - startIndex;
+     int hoursToInclude = Math.min(24, availableHours);
+
+     if (hoursToInclude == 0) {
+         return BigDecimal.ZERO;
+     }
+
      BigDecimal sum = BigDecimal.ZERO;
      int count = 0;
 
-     for (ElectricityPrice price : prices) {
+     for (int i = startIndex; i < startIndex + hoursToInclude; i++) {
+         ElectricityPrice price = prices.get(i);
          if ("SEK_per_kWh".equals(currency)) {
              sum = sum.add(price.sekPerKwh());
          } else if ("EUR_per_kWh".equals(currency)) {
-                sum = sum.add(price.eurPerKwh());
+             sum = sum.add(price.eurPerKwh());
          }
          count++;
      }
@@ -39,6 +53,25 @@ private static BigDecimal calculateMean(String json, String currency) {
      return BigDecimal.ZERO;
  }
 
-};
+}
+
+public static String getPeriodInfo(String json) {
+    try {
+        ObjectMapper mapper = JsonMapper.get();
+        List<ElectricityPrice> prices = mapper.readValue(json, new TypeReference<>() {});
+
+        int startIndex = PriceDataUtils.findCurrentOrNextHourIndex(prices);
+        int hoursToInclude = Math.min(24, prices.size() - startIndex);
+
+        if (hoursToInclude <= 0) return "No data available";
+
+        return String.format("from %s to %s (%d hours)\n",
+                prices.get(startIndex).timeStart().toLocalDateTime().toLocalTime(),
+                prices.get(startIndex + hoursToInclude - 1).timeEnd().toLocalDateTime().toLocalTime(),
+                hoursToInclude);
+    } catch (Exception e) {
+        return "Error retrieving period info";
+    }
+}
 }
 

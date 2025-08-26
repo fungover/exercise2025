@@ -11,6 +11,7 @@ import java.util.List;
 public class LowAndHighPrices {
 
     private static final DateTimeFormatter HHMM = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static void printMinMaxPrices(String json) {
 
@@ -24,7 +25,6 @@ public class LowAndHighPrices {
                 System.out.println("No prices available for the selected period.");
                 return;
             }
-
 
             ElectricityPrice minSEK = prices.get(0), maxSEK = prices.get(0); // Initialize min and max prices in SEK with the first price in the list.
             ElectricityPrice minEUR = prices.get(0), maxEUR = prices.get(0); // Initialize min and max prices in EUR with the first price in the list.
@@ -53,18 +53,23 @@ public class LowAndHighPrices {
                 }
             }
 
-            System.out.println("\nBest price (SEK): " + hhmm(minSEK.timeStart()) + " - " + hhmm(minSEK.timeEnd()) + " (" + minSEK.sekPerKwh() + " SEK/kWh)"); // Prints the best price in SEK with the start and end time.
-            System.out.println("Worst price (SEK): " + hhmm(maxSEK.timeStart()) + " - " + hhmm(maxSEK.timeEnd()) + " (" + maxSEK.sekPerKwh() + " SEK/kWh)"); // Prints the worst price in SEK with the start and end time.
+            System.out.println("\nBest price (SEK): " + formatTimeWithDate(minSEK.timeStart()) + " - " +
+                    formatTimeWithDate(minSEK.timeEnd()) + " (" + minSEK.sekPerKwh() + " SEK/kWh)");
+            System.out.println("Worst price (SEK): " + formatTimeWithDate(maxSEK.timeStart()) + " - " +
+                    formatTimeWithDate(maxSEK.timeEnd()) + " (" + maxSEK.sekPerKwh() + " SEK/kWh)");
 
-            System.out.println("Best price (EUR): " + hhmm(minEUR.timeStart()) + " - " + hhmm(minEUR.timeEnd()) + " (" + minEUR.eurPerKwh() + " EUR/kWh)"); // Prints the best price in EUR with the start and end time.
-            System.out.println("Worst price (EUR): " + hhmm(maxEUR.timeStart()) + " - " + hhmm(maxEUR.timeEnd()) + " (" + maxEUR.eurPerKwh() + " EUR/kWh)"); // Prints the worst price in EUR with the start and end time.
+            System.out.println("Best price (EUR): " + formatTimeWithDate(minEUR.timeStart()) + " - " +
+                    formatTimeWithDate(minEUR.timeEnd()) + " (" + minEUR.eurPerKwh() + " EUR/kWh)");
+            System.out.println("Worst price (EUR): " + formatTimeWithDate(maxEUR.timeStart()) + " - " +
+                    formatTimeWithDate(maxEUR.timeEnd()) + " (" + maxEUR.eurPerKwh() + " EUR/kWh)");
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
-    private static String hhmm(OffsetDateTime time) { // Converts the OffsetDateTime to a string in HH:mm format.
-        return time.toLocalTime().format(HHMM);
+
+    private static String formatTimeWithDate(OffsetDateTime time) {
+        return time.format(DATE) + " " + time.toLocalTime().format(HHMM);
     }
 
 }

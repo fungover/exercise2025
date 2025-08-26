@@ -31,16 +31,23 @@ public class ChargingOptimizer {
               return null;
           }
 
+          int startIndex = PriceDataUtils.findCurrentOrNextHourIndex(prices);
+
+          int availableHours = prices.size() - startIndex;
+          if (availableHours < chargingHours) {
+              return null;
+          }
+
           // Calculate the first windows sum, (for example first 2 hours).
 
           BigDecimal currentWindowSum = BigDecimal.ZERO; // Starting with 0.
-          for (int i = 0; i < chargingHours; i++) { //we loop through the number of hours the user choose to charge.
+          for (int i = startIndex; i < startIndex + chargingHours; i++) { //we loop through the number of hours the user choose to charge.
               currentWindowSum = currentWindowSum.add(prices.get(i).sekPerKwh()); // Add each price in the first window to the currentWindowSum.
           }
 
           // set the first window as the "best one yet".
           BigDecimal bestSum = currentWindowSum;
-          int bestStartIndex = 0; // the index where the best window starts.
+          int bestStartIndex = startIndex; // the index where the best window starts.
 
 
 
@@ -50,7 +57,7 @@ public class ChargingOptimizer {
            * So when using prices.size() - chargingHours, we get for example 24 - 4 = 20. meaning the last window starts at index 20 and ends at index 23.
            */
 
-          for (int i = 1; i <= prices.size() - chargingHours; i++) {
+          for (int i = startIndex + 1; i <= prices.size() - chargingHours; i++) {
 
               // Remove the element that "falls out" from the left side of the window.
               // example: [1,2,3] -> [2,3,4] we remove 1 and add 4.
@@ -78,6 +85,4 @@ public class ChargingOptimizer {
           return null;
       }
     }
-
-
 }

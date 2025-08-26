@@ -10,15 +10,14 @@ public class App {
         ZoneSelection zoneSelection = new ZoneSelection();
         String zone = zoneSelection.chooseZone();
 
-        if (zone != null) { // if zone is not null, we proceed with api calls and show the menu for that.
+        if (zone != null) { // if the zone is not null, we proceed with api calls and show the menu for that.
 
             ApiClient apiClient = new ApiClient();
-            String jsonToday = apiClient.getRequest(java.time.LocalDate.now(), zone);
-            String jsonTomorrow = apiClient.getRequest(java.time.LocalDate.now().plusDays(1), zone);
+            String jsonData = apiClient.getPrices(java.time.LocalDate.now(), zone); // Getting today's data from API.
 
             Menu menu = new Menu();
-            menu.showMenu(jsonToday, jsonTomorrow);
-            System.out.println(jsonTomorrow);
+            menu.showMenu(jsonData);
+            System.out.println(jsonData);
         } else { // If the zone is null, we do the calculation from csv and exit the program.
             System.out.println("CSV calculation done, exiting program.");
         }

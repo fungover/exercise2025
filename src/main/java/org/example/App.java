@@ -15,20 +15,40 @@ import java.util.List;
 public class App {
     public static void main(String[] args) throws Exception {
 
-        // Välj zon (SE1/SE2/SE3/SE4)
-        String zone = "SE1";
+        // Välj zon (SE1/SE2/SE3/SE4) som argument nr 1
+        String zone;
+        if (args.length > 0) {
+            zone = args[0].toUpperCase();
+        } else {
+            zone = "SE1";
+        }
+
+        // Välj CSV som argument nr 2 (tex: SE1 lulea-energi-homeadress-consumption.csv)
+        String csvPath;
+        if (args.length > 1) {
+            csvPath = args[1];
+        } else {
+            csvPath = null;
+        }
+
+        System.out.println("Vald zon: " + zone);
 
         // Skapa HttpClient en gång
         HttpClient client = HttpClient.newHttpClient();
 
-        // Datum i svensk tidzon
+        // CSV-läge - Hämtar historiska priser för datumen i CSV och räknar total kostnad
+        if (csvPath != null) {
+            System.out.println("CSV angiven: " + csvPath);
+            calculateTotalCostFromCsv(client, zone, csvPath);
+            return;
+        }
+
+        // Standardläge - Kör baskrav (idag och imorgon) - Datum i svensk tidzon
         LocalDate today = LocalDate.now(ZoneId.of("Europe/Stockholm"));
         LocalDate tomorrow = today.plusDays(1);
 
-        // Hämta dagens priser
+        // Hämta dagens priser och ev morgondagens priser om dessa finns tillgängliga
         List<PricePoint> pricesToday = fetchPrices(client, today, zone);
-
-        // Försök hämta morgondagens priser
         List<PricePoint> pricesTomorrow = fetchPrices(client, tomorrow, zone);
 
         // Slå ihop allt i en lista
@@ -56,7 +76,7 @@ public class App {
             System.out.println("Kunde inte hämta priser för idag.");
         }
 
-        // Sanity check hur många priser vi fick
+        // Sanity check hur många priser vi hämtat
         System.out.println("Totalt antal priser hämtat: " + allPrices.size());
 
         // Sliding Window – bästa 2h, 4h, 8h fönster
@@ -86,6 +106,50 @@ public class App {
             return objectMapper.readValue(response.body(), new TypeReference<List<PricePoint>>() {});
         } else {
             return List.of();
+        }
+    }
+
+    // Läser en CSV-fil med elförbrukning och
+    // hämtar priser för de datumen och räknar ut total kostnad (pris * kWh per timme).
+    private static void calculateTotalCostFromCsv(HttpClient client, String zone, String csvPath) {
+        try {
+            // Läs in förbrukning från CSV
+            List<ConsumptionPoint> consumption = CsvConsumptionReader.readConsumption(csvPath);
+
+            // Samla unika datum från CSV så vi vet vilka dagar vi måste hämta priser för
+            java.util.Set<java.time.LocalDate> csvDates = new java.util.HashSet<>();
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            for (ConsumptionPoint c : consumption) {
+                LocalDate date = LocalDate.parse(c.time(), formatter);
+                csvDates.add(date);
+            }
+
+            // Hämta priser för varje datum och samla i en lista
+            List<PricePoint> pricePointsForCsvDates = new ArrayList<>();
+            for (java.time.LocalDate date : csvDates) {
+                List<PricePoint> oneDay = fetchPrices(client, date, zone);
+                pricePointsForCsvDates.addAll(oneDay);
+            }
+
+            // Bygg uppslag enligt "yyyy-MM-dd HH:mm" -> pris kr/kWh
+            java.util.Map<String, Double> priceByHour = new java.util.HashMap<>();
+            for (PricePoint p : pricePointsForCsvDates) {
+                String key = PriceUtils.formatDateTime(p);
+                priceByHour.put(key, p.price());
+            }
+
+            // Summera kostnad för varje CSV rad som har pris
+            double totalCost = 0;
+            for (ConsumptionPoint c : consumption) {
+                Double price = priceByHour.get(c.time());
+                if (price != null) {
+                    totalCost += price * c.consumption();
+                }
+            }
+
+            System.out.printf("Total kostnad för CSV-perioden: %.2fkr%n", totalCost);
+        } catch (Exception e) {
+            System.err.println("Fel vid CSV baserad kostnadsberäkning: " + e.getMessage());
         }
     }
 }

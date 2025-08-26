@@ -18,24 +18,37 @@ public class App {
          String priceArea = UserInput.getValidatedPriceArea();
 
          LocalDate today = LocalDate.now();
-         String year = String.valueOf(today.getYear());
-         String month = String.format("%02d", today.getMonthValue());
-         String day = String.format("%02d", today.getDayOfMonth());
+         printPricesForDate(today, priceArea, "dagen");
 
+         LocalDate tomorrow = today.plusDays(1);
          try {
-             ApiClient.PriceData[] prices = ApiClient.fetchPrices(year, month, day, priceArea);
+             printPricesForDate(tomorrow, priceArea, "morgondagen");
+         } catch (Exception e) {
+             System.out.printf("%n⚠️ Priser för morgondagen (%s) är ännu inte publicerade.%n", tomorrow);
+         }
+     }
 
-             System.out.printf("%nElpriser för %s den %s-%s-%s:%n", priceArea, year, month, day);
-             for (ApiClient.PriceData price : prices) {
-                 System.out.printf("%s | Pris: %.2f öre/kWh%n", price.formattedHourRange(), price.SEK_per_kWh() * 100);
-             }
+    private static void printPricesForDate(LocalDate date, String priceArea, String label) {
+        String year = String.valueOf(date.getYear());
+        String month = String.format("%02d", date.getMonthValue());
+        String day = String.format("%02d", date.getDayOfMonth());
 
+        try {
+            ApiClient.PriceData[] prices = ApiClient.fetchPrices(year, month, day, priceArea);
 
-         } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-            System.err.println("The request was interrupted: " + ie.getMessage());
+            System.out.printf("%nElpriser för %s (%s den %s-%s-%s):%n",
+                    priceArea, label, year, month, day);
+            for (ApiClient.PriceData price : prices) {
+                System.out.printf("%s | Pris: %.2f öre/kWh%n",
+                        price.formattedHourRange(),
+                        price.SEK_per_kWh() * 100);
+            }
+
         } catch (IOException ioe) {
-            System.err.println("Network/IO error: " + ioe.getMessage());
+            throw new RuntimeException("Kunde inte hämta priser för " + date + ": " + ioe.getMessage());
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Avbrutet anrop för " + date, ie);
         }
     }
 }

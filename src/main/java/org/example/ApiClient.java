@@ -13,8 +13,6 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-//TODO Fetch tomorrows prices if possible
-
 public class ApiClient {
 
     public static PriceData[] fetchPrices(String year, String month, String day, String priceArea)

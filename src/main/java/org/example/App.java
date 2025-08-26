@@ -4,7 +4,7 @@ import org.example.electricity.PriceData;
 
 import java.time.Instant;
 
-public class App {
+class App {
     public static void main(String[] args) {
         PriceData price = new PriceData(
                 Instant.now(),
@@ -15,6 +15,6 @@ public class App {
         );
 
         System.out.println(price);
-        System.out.println("Pris i SEK: " + price.sekPerKWh());
+        System.out.println("Pris i SEK: " + price.sekPerkWh());
     }
 }

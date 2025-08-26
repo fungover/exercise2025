@@ -17,6 +17,19 @@ What to do:
 * Printer (For Separation of concerns. This Help-class provides user with all the System.out.println:s)
 * CsvConsumption (⭐ Shows the exact cost for user based on real electricity usage. Real user value stuff! )
 
+### 🧠❓What IMPORTED classes will I need?
+In this project I am working with 
+**Dates, Times, Sorting and JSON Data**
+
+
+#### _Functionality_: 
+* Read JSON
+* Convert JSON
+* Handle Times correctly (UTC-EU)
+* Save prices in a List
+* Sort the List to know min/max
+* Display prices in Swedish
+
 ### API
 
 When GET https://www.elprisetjustnu.se/api/v1/prices/2025/08-25_SE3.json
@@ -26,4 +39,9 @@ API returns: An array with price entries:
 "EXR": 00.00,
 "time_start": "YYYY-MM-DDT00:00:00+00:00",
 "time_end": "YYYY-MM-DDT00:00:00+00:00".
+
+### Mind-blowing things I learned
+* It´s possible to convert a record to a class in IntelliJ
+
+
 

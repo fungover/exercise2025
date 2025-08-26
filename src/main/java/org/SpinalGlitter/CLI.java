@@ -6,7 +6,7 @@ import java.util.Set;
 public class CLI {
     private static final Set<String> ALLOWED_ZONES = Set.of("SE1", "SE2", "SE3", "SE4");//Will be used later
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
         //String zone = askZone(input);
@@ -114,7 +114,7 @@ public class CLI {
                         var entries = api.fetchDay(tomorrow, "SE3");// TODO: Change to users chosen zone
 
                         if (entries.isEmpty()) {
-                            System.out.println("No data available for today.");
+                            System.out.println("No data available for tomorrow.");
                         } else {
                             double avgPrice = entries.stream()
                                     .mapToDouble(e -> e.sekPerKWh)
@@ -162,7 +162,7 @@ public class CLI {
                                 fmt.format(mostExpensive.timeStart),
                                 fmt.format(mostExpensive.timeEnd),
                                 mostExpensive.sekPerKWh
-                                );
+                        );
 
                     } catch (Exception ex) {
                         System.out.println("Error fetching data: " + ex.getMessage());
@@ -170,8 +170,49 @@ public class CLI {
                 }
 
                 case "6": {
-                    System.out.println("You chose option 6: Show the the best ours to charge your car for today.");
-                    return;
+                    try {
+                        API api = new API();
+                        var today = java.time.LocalDate.now(java.time.ZoneId.of("Europe/Stockholm"));
+                        var entries = api.fetchDay(today, "SE3");// TODO: Change to users chosen
+
+                        if (entries.isEmpty()) {
+                            System.out.println("No data available for today.");
+                            break;
+                        }
+                        entries.sort(java.util.Comparator.comparing(e -> e.timeStart));
+
+                        int periodsPerHour = periodsPerHour(entries);
+
+                        var fmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                                .withZone(java.time.ZoneId.of("Europe/Stockholm"));
+
+                        System.out.println("Best charging hours today");
+                        for (int hours : new int[]{2, 4, 8}) {
+                            int window = hours * periodsPerHour;
+                            int[] range = bestWindow(entries, window);
+
+                            if (range[0] < 0) {
+                                System.out.printf("%2dh: not enough periods%n", hours);
+                                continue;
+                            }
+
+                            var start = entries.get(range[0]);
+                            var end = entries.get(range[1]);
+
+                            double avg = entries.subList(range[0], range[1] + 1)
+                                    .stream()
+                                    .mapToDouble(e -> e.sekPerKWh)
+                                    .average()
+                                    .orElse(Double.NaN);
+
+                            System.out.printf("%2dh: %s – %s  (avg %.4f SEK/kWh)%n",
+                                    hours, fmt.format(start.timeStart), fmt.format(end.timeEnd), avg);
+                        }
+
+                    } catch (Exception ex) {
+                        System.out.println("Error fetching data: " + ex.getMessage());
+                    }
+
                 }
 
                 case "7": {
@@ -185,5 +226,32 @@ public class CLI {
                 }
             }
         }
+    }
+
+    private static int periodsPerHour(java.util.List<PriceEntry> entries) {
+        return entries.size() >= 48 ? 4 : 1;
+    }
+
+    private static int[] bestWindow(java.util.List<PriceEntry> entries, int windowSize) {
+        int n = entries.size();
+        if (n < windowSize) return new int[]{-1, -1};
+
+        double sum = 0.0;
+        for (int i = 0; i < windowSize; i++) sum += entries.get(i).sekPerKWh;
+
+        double bestSum = sum;
+        int bestStart = 0;
+
+        for (int i = windowSize; i < n; i++) {
+            sum += entries.get(i).sekPerKWh;
+            sum -= entries.get(i - windowSize).sekPerKWh;
+            int start = i - windowSize + 1;
+
+            if (sum < bestSum - 1e-12) {
+                bestSum = sum;
+                bestStart = start;
+            }
+        }
+        return new int[]{bestStart, bestStart + windowSize - 1};
     }
 }

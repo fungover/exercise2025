@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 
 public class ApiClient {
 
-    public static PriceData[] fetchPrices(String year, String month, String day, String priceArea)
+    public static ElectricityPrice[] fetchPrices(String year, String month, String day, String priceArea)
             throws IOException, InterruptedException {
         String url = String.format(
                 "https://www.elprisetjustnu.se/api/v1/prices/%s/%s-%s_%s.json",
@@ -33,10 +33,11 @@ public class ApiClient {
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        return objectMapper.readValue(response.body(), PriceData[].class);
+        return objectMapper.readValue(response.body(), ElectricityPrice[].class);
     }
 
-    public record PriceData(
+
+    public record ElectricityPrice(
             double SEK_per_kWh,
             String time_start,
             String time_end
@@ -47,6 +48,6 @@ public class ApiClient {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             return String.format("kl %s - %s", start.format(formatter), end.format(formatter));
         }
-        }
     }
+}
 

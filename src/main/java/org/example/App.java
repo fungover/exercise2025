@@ -34,11 +34,11 @@ public class App {
         String day = String.format("%02d", date.getDayOfMonth());
 
         try {
-            ApiClient.PriceData[] prices = ApiClient.fetchPrices(year, month, day, priceArea);
+            ApiClient.ElectricityPrice[] prices = ApiClient.fetchPrices(year, month, day, priceArea);
 
             System.out.printf("%nElpriser för %s (%s den %s-%s-%s):%n",
                     priceArea, label, year, month, day);
-            for (ApiClient.PriceData price : prices) {
+            for (ApiClient.ElectricityPrice price : prices) {
                 System.out.printf("%s | Pris: %.2f öre/kWh%n",
                         price.formattedHourRange(),
                         price.SEK_per_kWh() * 100);

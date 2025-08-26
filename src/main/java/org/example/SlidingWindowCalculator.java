@@ -1,10 +1,23 @@
 package org.example;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class SlidingWindowCalculator {
 
     public static void findCheapestWindow(PriceEntry[] prices, int hours) {
-        if (prices == null || prices.length < hours) {
-            System.out.println("Not enough hours.");
+        findCheapestWindow(prices, hours, 1.0);
+    }
+
+
+    public static void findCheapestWindow(PriceEntry[] prices, int hours, double energyKWh) {
+
+        if(hours <= 0) {
+            System.out.println("Hours must be greater than zero");
+            return;
+        }
+        if(prices == null || prices.length < hours) {
+            System.out.println("Not enough hours");
             return;
         }
 
@@ -28,13 +41,16 @@ public class SlidingWindowCalculator {
             }
         }
 
-        // Print result
         int bestEnd = bestStart + hours - 1;
-        System.out.printf("%dh cheapest: %s → %s | Average: %.3f SEK/kWh%n",
-                hours,
-                prices[bestStart].time_start.substring(11, 16),
-                prices[bestEnd].time_end.substring(11, 16),
-                bestSum / hours);
+        DateTimeFormatter hm = DateTimeFormatter.ofPattern("HH:mm");
+        String startHm = OffsetDateTime.parse(prices[bestStart].time_start).toLocalTime().format(hm);
+        String endHm   = OffsetDateTime.parse(prices[bestEnd].time_end).toLocalTime().format(hm);
+        double avg = bestSum / hours;
+        double total = avg * energyKWh;
+        System.out.printf("%dh cheapest: %s → %s | Average price: %.3f SEK/kWh | Total for %.2f kWh: %.2f SEK%n",
+                hours, startHm, endHm, avg, energyKWh, total);
+
     }
 }
+
 

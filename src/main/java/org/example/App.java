@@ -115,11 +115,16 @@ public class App {
     }
 
     private static String fetchJsonForDay(LocalDate day, String zone) {
+        try {
         String json = fetchers.fetchPricesForDay(day, zone);
         if (json == null) {
             System.out.println("No data available for " + day + " in zone " + zone + ".");
-        }
+            }
         return json;
+        } catch (Exception e) {
+            System.err.println("Failed to fetch prices for " + day + " (" + zone + "): " + e.getMessage());
+            return null;
+        }
     }
 
     private static PriceEntry[] parseEntries(String json) throws Exception {

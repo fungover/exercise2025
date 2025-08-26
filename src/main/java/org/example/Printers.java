@@ -11,18 +11,17 @@ public class Printers {
             ObjectMapper mapper = new ObjectMapper();
             PriceEntry[] prices = mapper.readValue(json, PriceEntry[].class);
 
-            PriceEntry lowestPrice = prices[0];
-            for (int i = 0; i < prices.length; i++) {
-                if(prices[i].SEK_per_kWh < lowestPrice.SEK_per_kWh) {
-                    lowestPrice = prices[i];
-                }
+            if(prices.length == 0) {
+                System.out.println("No prices were found");
+                return;
             }
-
+            PriceEntry lowestPrice = prices[0];
             PriceEntry highestPrice = prices[0];
-            for (int i = 0; i < prices.length; i++) {
-                if(prices[i].SEK_per_kWh > highestPrice.SEK_per_kWh) {
-                    highestPrice = prices[i];
-                }
+            for(int i = 1; i < prices.length; i++) {
+                PriceEntry p = prices[i];
+                if(p.SEK_per_kWh < lowestPrice.SEK_per_kWh) lowestPrice = p;
+                if(p.SEK_per_kWh > highestPrice.SEK_per_kWh) lowestPrice = p;
+
             }
 
             System.out.println("----------------------------------------------------------");

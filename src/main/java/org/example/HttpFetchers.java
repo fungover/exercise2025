@@ -1,14 +1,19 @@
 package org.example;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.Duration;
+
 
 public class HttpFetchers {
 
-    private final HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
 
     public String fetchPricesForDay(LocalDate date, String zone) {
         try {
@@ -29,8 +34,16 @@ public class HttpFetchers {
 
             throw new IllegalStateException("HTTP " + response.statusCode() + " for " + url);
 
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("API request interrupted", ie);
+        } catch (java.io.IOException ioe) {
+            throw new java.io.UncheckedIOException("API request failed", ioe);
+        } catch (RuntimeException re) {
+            throw re;
         } catch (Exception e) {
-            throw new RuntimeException("API request failed: " + e.getMessage(), e);
+            throw new RuntimeException("API request failed", e);
         }
     }
 }
+

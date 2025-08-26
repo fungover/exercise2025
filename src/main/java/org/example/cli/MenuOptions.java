@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MenuOptions {
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     public static void mainMenu(Scanner scanner, List<ElectricityPrice> pricesToday,
                                 List<ElectricityPrice> pricesTomorrow, String zone,
                                 java.time.ZoneId seZone) {
@@ -43,7 +45,7 @@ public class MenuOptions {
                             String tomorrowFetchJson = api.getRequest(LocalDate.now(seZone)
                                                                                .plusDays(1),
                               zone);
-                            ObjectMapper mapper = new ObjectMapper();
+
 
                             pricesToday.clear();
                             pricesToday.addAll(
@@ -110,6 +112,7 @@ public class MenuOptions {
                     break;
                 case "3":
                     runningSub = false;
+                    break;
                 default:
                     System.out.println("Invalid choice, please try again");
 
@@ -149,6 +152,7 @@ public class MenuOptions {
                     break;
                 case "3":
                     runningSub = false;
+                    break;
                 default:
                     System.out.println("Invalid choice, please try again");
 
@@ -173,21 +177,21 @@ public class MenuOptions {
             switch (input) {
                 case "1":
                     if (pricesToday.isEmpty()) {
-                        System.out.println("No price data available for tomorrow");
+                        System.out.println("No price data available for today");
                     } else {
                         PriceUtils.checkMinMaxPrice(pricesToday);
-                        break;
                     }
+                    break;
                 case "2":
                     if (pricesTomorrow.isEmpty()) {
                         System.out.println("No price data available for tomorrow");
                     } else {
-
                         PriceUtils.checkMinMaxPrice(pricesTomorrow);
-                        break;
                     }
+                    break;
                 case "3":
                     runningSub = false;
+                    break;
                 default:
                     System.out.println("Invalid choice, please try again");
 
@@ -214,20 +218,23 @@ public class MenuOptions {
                 //today
                 case "1":
                     if (pricesToday.isEmpty()) {
-                        System.out.println("No price data available for tomorrow");
+                        System.out.println("No price data available for today");
                     } else {
                         PriceUtils.findBestChargingTime(pricesToday, chargingWindow);
-                        break;
                     }
+                    break;
                 case "2":
                     if (pricesTomorrow.isEmpty()) {
                         System.out.println("No price data available for tomorrow");
                     } else {
                         PriceUtils.findBestChargingTime(pricesTomorrow, chargingWindow);
-                        break;
                     }
+                    break;
                 case "3":
                     runningSub = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice, please try again");
             }
         }
     }

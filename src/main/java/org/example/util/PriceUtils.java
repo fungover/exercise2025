@@ -7,6 +7,11 @@ import java.util.List;
 public class PriceUtils {
 
     public static void priceCheck(List<ElectricityPrice> prices) {
+        if (prices == null || prices.isEmpty()) {
+            System.out.println("No prices to display");
+            System.out.println("-".repeat(20));
+            return;
+        }
         for (ElectricityPrice price : prices) {
             System.out.printf("%s -> %.3f SEK/kWh%n", price.time_start.substring(11, 16),
               price.SEK_per_kWh);
@@ -34,8 +39,8 @@ public class PriceUtils {
         }
 
         //set min and max variables to the first thing in the list to start with
-        ElectricityPrice min = prices.get(0);
-        ElectricityPrice max = prices.get(0);
+        ElectricityPrice min = prices.getFirst();
+        ElectricityPrice max = prices.getFirst();
 
         //loop through each price
         for (ElectricityPrice price : prices) {
@@ -82,8 +87,8 @@ public class PriceUtils {
             }
 
 
-            BigDecimal minSum = null; // make sure its way higher than anything else
-            int bestTimeToStart = -1; //we save the time its best to start at here
+            BigDecimal minSum; // make sure its way higher than anything else
+            int bestTimeToStart; //we save the time its best to start at here
 
             //Calculate sum for first window
             //this is our baseline that we will compare all other windows to

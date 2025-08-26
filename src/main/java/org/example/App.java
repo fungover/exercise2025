@@ -1,9 +1,9 @@
 package org.example;
 
-import org.example.cli.Args;
 import org.example.client.ElprisClient;
 import org.example.model.PricePoint;
 import org.example.model.PriceZone;
+import org.example.service.ChargingPlanner;
 import org.example.service.PriceService;
 import org.example.service.PriceServiceImpl;
 import org.example.service.StatsCalculator;
@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Which price zone do you want? (SE1, SE2, SE3, SE4):");
+        System.out.println("Which price zone do you want? (SE1 / Luleå / Norra Sverige, SE2 / Sundsvall / Norra Mellansverige, SE3 / Stockholm / Södra Mellansverige, SE4 / Malmö / Södra Sverige):");
 
         PriceZone zone = null;
         while (zone == null) {
@@ -22,7 +22,7 @@ public class App {
             try {
                 zone = PriceZone.valueOf(input);
             } catch (IllegalArgumentException e) {
-                System.out.println("Invalid zone. Please enter SE1, SE2, SE3, or SE4:");
+                System.out.println("Invalid zone. Please enter SE1 / Luleå / Norra Sverige, SE2 / Sundsvall / Norra Mellansverige, SE3 / Stockholm / Södra Mellansverige, SE4 / Malmö / Södra Sverige:");
             }
         }
 
@@ -46,5 +46,20 @@ public class App {
                 cheapest.start(), cheapest.price());
         System.out.printf("Most expensive: %s → %.3f SEK/kWh%n",
                 mostExpensive.start(), mostExpensive.price());
+
+        int [] durations = {2, 4, 8};
+        System.out.println("\nBest charging windows:");
+        for (int hours : durations) {
+            var window = ChargingPlanner.findBestWindow(prices, hours);
+            if (window != null) {
+                System.out.printf("%d hours: %s → %s (Total: %.3f SEK)%n",
+                        hours,
+                        window.getStart(),
+                        window.getEnd(),
+                        window.getTotalPrice());
+            } else {
+                System.out.printf("%d hours: Not enough data available%n", hours);
+            }
+            }
+        }
     }
-}

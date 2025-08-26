@@ -49,8 +49,4 @@ public class ElprisClient {
         }
     }
 
-    public List<PricePoint> fetchTodayPrices(PriceZone zone) {
-        return fetchDayPrices(zone, LocalDate.now());
-    }
-
 }

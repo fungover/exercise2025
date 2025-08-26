@@ -3,7 +3,10 @@ package org.example.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.model.PriceEntry;
 import org.example.util.FileUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -11,10 +14,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class PriceService {
+    private static final Logger logger = LoggerFactory.getLogger(PriceService.class);
+
     private static PriceEntry[] fetchPrices(String url) {
         HttpResponse<String> response = ApiClient.getPrices(url);
         if (response == null || response.statusCode() != 200) {
-            System.out.println("Prices could not be downloaded.");
+            logger.error("Prices could not be fetched from {}", url);
             return new PriceEntry[0];
         }
 
@@ -30,13 +35,11 @@ public class PriceService {
 
             return entries;
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            logger.error("Prices could not be parsed from {}", url, e);
+            return new PriceEntry[0];
         }
-
-        return new PriceEntry[0];
     }
-
 
     public static void downloadPrices(String url, String fileName, String dayLabel) {
         PriceEntry[] entries = fetchPrices(url);
@@ -50,8 +53,8 @@ public class PriceService {
                 System.out.println(line);
                 FileUtil.writeToFile(fileName, line + "\n");
             });
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (RuntimeException e) {
+            logger.error("Prices could not be written to {}", fileName, e);
         }
     }
 
@@ -75,8 +78,8 @@ public class PriceService {
             String line = meanPrice + " SEK_per_kWh";
             System.out.println(line);
             FileUtil.writeToFile(fileName, line + "\n");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            logger.error("Prices could not be parsed from {}", url, e);
         }
     }
 
@@ -107,8 +110,8 @@ public class PriceService {
             System.out.println("Cheapest price: \n" + formatTimeRange(cheapestEntry.time_start(), cheapestEntry.time_end()) + "\n" + cheapestEntry.SEK_per_kWh() + " SEK_per_kWh");
             System.out.println("Most expensive price: \n" + formatTimeRange(expensiveEntry.time_start(), expensiveEntry.time_end()) + "\n" + expensiveEntry.SEK_per_kWh() + " SEK_per_kWh");
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            logger.error("Prices could not be parsed from {}", url, e);
         }
     }
 
@@ -128,15 +131,15 @@ public class PriceService {
             int[] durations = {2, 4, 8};
 
             for (int duration : durations) {
-                int omptimalHours = slidingWindowAlgorithm(entries, entries.length, duration);
+                int optimalHours = slidingWindowAlgorithm(entries, entries.length, duration);
                 System.out.println("Optimal charge time (" + duration + "h): " +
-                        formatTimeRange(entries[omptimalHours].time_start(),
-                                entries[omptimalHours + duration - 1].time_end()));
+                        formatTimeRange(entries[optimalHours].time_start(),
+                                entries[optimalHours + duration - 1].time_end()));
             }
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            logger.error("Prices could not be parsed from {}", url, e);
         }
 
     }

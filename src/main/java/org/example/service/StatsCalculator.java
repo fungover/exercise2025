@@ -9,19 +9,20 @@ public class StatsCalculator {
 
     public static double mean(List<PricePoint> prices) {
         return prices.stream()
-                .mapToDouble(PricePoint::price)
+                .mapToDouble(p -> p.price().doubleValue())  // convert BigDecimal to double
                 .average()
                 .orElse(0.0);
     }
+
     public static PricePoint min(List<PricePoint> prices) {
         return prices.stream()
-                .min(Comparator.comparingDouble(PricePoint::price))
+                .min(Comparator.comparing(p -> p.price().doubleValue()))  // convert BigDecimal to double
                 .orElseThrow();
     }
 
     public static PricePoint max(List<PricePoint> prices) {
         return prices.stream()
-                .max(Comparator.comparingDouble(PricePoint::price))
+                .max(Comparator.comparing(p -> p.price().doubleValue()))  // convert BigDecimal to double
                 .orElseThrow();
     }
 }

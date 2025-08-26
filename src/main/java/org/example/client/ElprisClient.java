@@ -33,17 +33,25 @@ public class ElprisClient {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
+                    .timeout(java.time.Duration.ofSeconds(10))
+                    .GET()
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString(java.nio.charset.StandardCharsets.UTF_8));
+            if (response.statusCode() / 100 != 2) {
+                throw new RuntimeException("Non-2xx status " + response.statusCode() + " for " + url);
+                }
 
             var listType = new TypeToken<List<PriceDto>>() {}.getType();
             List<PriceDto> dtos = gson.fromJson(response.body(), listType);
 
-            return dtos.stream()
+            return (dtos == null ? java.util.List.<PriceDto>of() : dtos).stream()
                     .map(dto -> {
-                        OffsetDateTime odt = OffsetDateTime.parse(dto.time_start());
-                        return new PricePoint(odt.toLocalDateTime(), dto.SEK_per_kWh());
+                        OffsetDateTime odt = OffsetDateTime.parse(dto.timeStart());
+                        return new PricePoint(
+                                odt,
+                                dto.sekPerKWh()
+                        );
                     })
                     .collect(Collectors.toList());
         } catch (Exception e) {

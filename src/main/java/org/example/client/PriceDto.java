@@ -1,7 +1,11 @@
 package org.example.client;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.math.BigDecimal;
+
 public record PriceDto (
-        String time_start,
-        String time_end,
-        double SEK_per_kWh
+@SerializedName("time_start") String timeStart,
+@SerializedName("time_end") String timeEnd,
+@SerializedName("SEK_per_kWh") BigDecimal sekPerKWh
 ) {}

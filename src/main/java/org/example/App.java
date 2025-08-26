@@ -22,7 +22,7 @@ public class App {
          try {
              printPricesForDate(tomorrow, priceArea, "morgondagen");
          } catch (Exception e) {
-             System.out.printf("%n⚠️ Priser för morgondagen (%s) är ännu inte publicerade.%n", tomorrow);
+             System.out.printf("%nPriser för morgondagen (%s) är ännu inte publicerade.%n", tomorrow);
          }
      }
 

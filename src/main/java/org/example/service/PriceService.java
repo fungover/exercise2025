@@ -11,7 +11,9 @@ import java.net.http.HttpResponse;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class PriceService {
     private static final Logger logger = LoggerFactory.getLogger(PriceService.class);
@@ -42,9 +44,8 @@ public class PriceService {
     }
 
     public static void downloadPrices(String url, String fileName, String dayLabel) {
-        PriceEntry[] entries = fetchPrices(url);
-
         try {
+            PriceEntry[] entries = fetchPrices(url);
             FileUtil.createFile(fileName);
             writeHeader(fileName, dayLabel);
 
@@ -59,17 +60,8 @@ public class PriceService {
     }
 
     public static void fetchAndCalculateMeanPrice(String url, String fileName, String dayLabel) {
-        HttpResponse<String> response = ApiClient.getPrices(url);
-        if (response == null || response.statusCode() != 200) {
-            System.out.println(dayLabel + " could not be downloaded.");
-            return;
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.findAndRegisterModules();
-
         try {
-            PriceEntry[] entries = mapper.readValue(response.body(), PriceEntry[].class);
+            PriceEntry[] entries = fetchPrices(url);
             double meanPrice = Arrays.stream(entries).mapToDouble(PriceEntry::SEK_per_kWh).average().orElse(0);
 
             FileUtil.createFile(fileName);
@@ -78,23 +70,14 @@ public class PriceService {
             String line = meanPrice + " SEK_per_kWh";
             System.out.println(line);
             FileUtil.writeToFile(fileName, line + "\n");
-        } catch (IOException e) {
+        } catch (RuntimeException e) {
             logger.error("Prices could not be parsed from {}", url, e);
         }
     }
 
     public static void fetchAndPrintCheapestAndMostExpensivePrices(String url, String fileName, String dayLabel) {
-        HttpResponse<String> response = ApiClient.getPrices(url);
-        if (response == null || response.statusCode() != 200) {
-            System.out.println(dayLabel + " could not be downloaded.");
-            return;
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.findAndRegisterModules();
-
         try {
-            PriceEntry[] entries = mapper.readValue(response.body(), PriceEntry[].class);
+            PriceEntry[] entries = fetchPrices(url);
             PriceEntry cheapestEntry = Arrays.stream(entries)
                     .min(java.util.Comparator
                             .comparingDouble(PriceEntry::SEK_per_kWh)
@@ -110,35 +93,40 @@ public class PriceService {
             System.out.println("Cheapest price: \n" + formatTimeRange(cheapestEntry.time_start(), cheapestEntry.time_end()) + "\n" + cheapestEntry.SEK_per_kWh() + " SEK_per_kWh");
             System.out.println("Most expensive price: \n" + formatTimeRange(expensiveEntry.time_start(), expensiveEntry.time_end()) + "\n" + expensiveEntry.SEK_per_kWh() + " SEK_per_kWh");
 
-        } catch (IOException e) {
+        } catch (RuntimeException e) {
             logger.error("Prices could not be parsed from {}", url, e);
         }
     }
 
     public static void optimalChargeTime(String url, String fileName, String dayLabel) {
-        HttpResponse<String> response = ApiClient.getPrices(url);
-        if (response == null || response.statusCode() != 200) {
-            System.out.println(dayLabel + " could not be downloaded.");
-            return;
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.findAndRegisterModules();
-
         try {
-            PriceEntry[] entries = mapper.readValue(response.body(), PriceEntry[].class);
+            PriceEntry[] entries = fetchPrices(url);
+
+            System.out.println("=== " + dayLabel + " ===");
 
             int[] durations = {2, 4, 8};
 
             for (int duration : durations) {
                 int optimalHours = slidingWindowAlgorithm(entries, entries.length, duration);
-                System.out.println("Optimal charge time (" + duration + "h): " +
+
+                if (optimalHours == -1) {
+                    System.out.println("Not enough data to calculate optimal charge time for " + duration + "h");
+                    continue;
+                }
+
+                double totalCost = 0;
+                for (int i = optimalHours; i < optimalHours + duration; i++) {
+                    totalCost += entries[i].SEK_per_kWh();
+                }
+
+                System.out.println("(" + duration + "h): " +
                         formatTimeRange(entries[optimalHours].time_start(),
-                                entries[optimalHours + duration - 1].time_end()));
+                                entries[optimalHours + duration - 1].time_end()) + "\n Total cost: " + totalCost + "SEK_per_kWh");
+                //Add SEK
             }
 
 
-        } catch (IOException e) {
+        } catch (RuntimeException e) {
             logger.error("Prices could not be parsed from {}", url, e);
         }
 
@@ -158,7 +146,6 @@ public class PriceService {
 
     private static int slidingWindowAlgorithm(PriceEntry[] array, int arrayLength, int windowSize) {
         if (arrayLength <= windowSize) {
-            System.out.println("Invalid");
             return -1;
         }
 

@@ -93,6 +93,7 @@ public class MenuUtil {
             case 4:
                 System.out.println("Determining the best time to charge an electric car for durations of 2, 4, or 8 hours");
                 PriceService.optimalChargeTime(urlToday, "prices.txt", "Today's optimal charge time");
+                PriceService.optimalChargeTime(urlTomorrow, "prices.txt", "Tomorrow's optimal charge time");
                 break;
 
             case 5:

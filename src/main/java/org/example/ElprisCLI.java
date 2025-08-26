@@ -12,51 +12,53 @@ public class ElprisCLI {
 
         ElprisFetch fetcher = new ElprisFetch();
 
-        LocalDate idag = LocalDate.now();
-        LocalDate imorgon = idag.plusDays(1);
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
 
-        List<Elpris> priser = new ArrayList<>();
-                priser.addAll(fetcher.getPrice(zon, idag));
-                priser.addAll(fetcher.getPrice(zon, imorgon));
+        List<Elpris> prices = new ArrayList<>();
+                prices.addAll(fetcher.getPrice(zon, today));
+                prices.addAll(fetcher.getPrice(zon, tomorrow));
 
-        if (priser.isEmpty()) {
+        if (prices.isEmpty()) {
             System.out.println("Inga priser hittades.");
             return;
         }
 
         // 1. Analyze
-        double mean = ElprisAnalyzer.mean(priser);
-        Elpris billigast = ElprisAnalyzer.cheapest(priser);
-        Elpris dyrast = ElprisAnalyzer.mostExpensive(priser);
+        double mean = ElprisAnalyzer.mean(prices);
+        Elpris cheapest = ElprisAnalyzer.cheapest(prices);
+        Elpris expensive = ElprisAnalyzer.mostExpensive(prices);
 
         System.out.printf("Medelpris:  %.2f kr%n", mean);
         System.out.printf("Billigaste timme: %s %02d:00 (%.2f kr)%n",
-        billigast.getTimeStart().toLocalDate(),
-        billigast.getTimeStart().getHour(), billigast.getSEK());
+        cheapest.getTimeStart().toLocalDate(),
+        cheapest.getTimeStart().getHour(), cheapest.getSEK());
         System.out.printf("Dyraste timme: %s %02d:00 (%.2f kr)%n",
-        dyrast.getTimeStart().toLocalDate(),
-        dyrast.getTimeStart().getHour(), dyrast.getSEK());
+        expensive.getTimeStart().toLocalDate(),
+        expensive.getTimeStart().getHour(), expensive.getSEK());
 
         for (int h: new int[]{2, 4, 8}) {
-            Elpris start = ElprisAnalyzer.bestPeriod(priser, h);
-            double avg = ElprisAnalyzer.periodAverage(priser, start, h);
+            Elpris start = ElprisAnalyzer.bestPeriod(prices, h);
+            double avg = ElprisAnalyzer.periodAverage(prices, start, h);
             System.out.printf("Bästa tid för %dh laddning: %s %02d:00, medelpris %.2f kr%n",
                     h,
                     start.getTimeStart().toLocalDate(),
                     start.getTimeStart().getHour(),
-                    avg); // Right?
+                    avg);
         }
 
 
 
 
         System.out.println("\nAlla timpriser:");
-        for (Elpris elpris :priser) {
-            System.out.printf("%s %02d:00 - %02d:00: %.2f kr%n",
+        for (Elpris elpris :prices) {
+            System.out.printf("%s %02d:00 - %02d:00: %.2f kr (%.4f EUR, EXR: %.4f)%n",
                     elpris.getTimeStart().toLocalDate(),
                     elpris.getTimeStart().getHour(),
                     elpris.getTimeEnd().getHour(),
-                    elpris.getSEK()
+                    elpris.getSEK(),
+                    elpris.getEUR(),
+                    elpris.getEXR()
             );
 
         }

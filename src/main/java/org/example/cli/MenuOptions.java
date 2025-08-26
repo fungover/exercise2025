@@ -46,16 +46,18 @@ public class MenuOptions {
                                                                                .plusDays(1),
                               zone);
 
+                            List<ElectricityPrice> newToday = mapper.readValue(todayFetchJson,
+                              new TypeReference<List<ElectricityPrice>>() {
+                              });
+                            List<ElectricityPrice> newTomorrow = mapper.readValue(
+                              tomorrowFetchJson, new TypeReference<List<ElectricityPrice>>() {
+                              });
 
                             pricesToday.clear();
-                            pricesToday.addAll(mapper.readValue(todayFetchJson,
-                              new TypeReference<List<ElectricityPrice>>() {
-                              }));
+                            pricesToday.addAll(newToday);
 
                             pricesTomorrow.clear();
-                            pricesTomorrow.addAll(mapper.readValue(tomorrowFetchJson,
-                              new TypeReference<List<ElectricityPrice>>() {
-                              }));
+                            pricesTomorrow.addAll(newTomorrow);
 
                             System.out.println("Prices refreshed successfully!");
 
@@ -94,7 +96,8 @@ public class MenuOptions {
                     } else {
                         System.out.printf(
                           "the average price for the day\nin your zone is %" + ".3f SEK/kWh\n",
-                          PriceUtils.avgPrice(pricesToday));
+                          PriceUtils.avgPrice(pricesToday)
+                                    .doubleValue());
                         System.out.println("-".repeat(20));
                     }
                     break;
@@ -105,7 +108,8 @@ public class MenuOptions {
 
                         System.out.printf(
                           "the average price for tomorrow\nis in your zone is %" +
-                            ".3f SEK/kWh\n", PriceUtils.avgPrice(pricesTomorrow));
+                            ".3f SEK/kWh\n", PriceUtils.avgPrice(pricesTomorrow)
+                                                       .doubleValue());
                         System.out.println("-".repeat(20));
 
                     }

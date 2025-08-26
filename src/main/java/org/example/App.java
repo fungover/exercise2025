@@ -38,8 +38,10 @@ public class App {
     public static void main(String[] args) throws Exception {
         ElprisApi api = new ElprisApi();
         String zone = new ZonePicker().getZone();
-        String today = api.getRequest(LocalDate.now(), zone);
-        String tomorrow = api.getRequest(LocalDate.now()
+        //FIX: date computed to Eu/Sthlm local dates
+        java.time.ZoneId seZone = java.time.ZoneId.of("Europe/Stockholm");
+        String today = api.getRequest(LocalDate.now(seZone), zone);
+        String tomorrow = api.getRequest(LocalDate.now(seZone)
                                                   .plusDays(1), zone);
 
         //jackson to read our json
@@ -50,12 +52,11 @@ public class App {
           new TypeReference<>() {
           });
 
-        System.out.println("Prices today: " + pricesToday);
 
         Scanner scanner = new Scanner(System.in);
 
         //creates the menu for our user
-        MenuOptions.mainMenu(scanner, pricesToday, pricesTomorrow, zone);
+        MenuOptions.mainMenu(scanner, pricesToday, pricesTomorrow, zone, seZone);
 
 
         scanner.close();

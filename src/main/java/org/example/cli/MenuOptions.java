@@ -12,7 +12,8 @@ import java.util.Scanner;
 
 public class MenuOptions {
     public static void mainMenu(Scanner scanner, List<ElectricityPrice> pricesToday,
-                                List<ElectricityPrice> pricesTomorrow, String zone) {
+                                List<ElectricityPrice> pricesTomorrow, String zone,
+                                java.time.ZoneId seZone) {
         ElprisApi api = new ElprisApi();
         boolean running = true;
         while (running) {
@@ -37,8 +38,9 @@ public class MenuOptions {
                     case 5 -> running = false;
                     case 6 -> {
                         try {
-                            String todayFetchJson = api.getRequest(LocalDate.now(), zone);
-                            String tomorrowFetchJson = api.getRequest(LocalDate.now()
+                            String todayFetchJson = api.getRequest(LocalDate.now(seZone),
+                              zone);
+                            String tomorrowFetchJson = api.getRequest(LocalDate.now(seZone)
                                                                                .plusDays(1),
                               zone);
                             ObjectMapper mapper = new ObjectMapper();

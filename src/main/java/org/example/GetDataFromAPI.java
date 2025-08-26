@@ -8,7 +8,6 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.LocalDate;
 import java.time.Duration;
-import java.util.Date;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -49,11 +48,10 @@ public class GetDataFromAPI {
      */
     static List<ElectricityPrice> ConvertDataToObjects(String json) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<ElectricityPrice> prices = objectMapper.readValue(
-                json, new TypeReference<List<ElectricityPrice>>() {
+        return objectMapper.readValue(
+                json, new TypeReference<>() {
                 }
         );
-        return prices;
     }
 
     /**

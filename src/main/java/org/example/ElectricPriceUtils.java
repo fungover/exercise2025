@@ -22,9 +22,6 @@ public class ElectricPriceUtils {
             ZonedDateTime start = ZonedDateTime.now();
             ZonedDateTime end = start.plusHours(24);
 
-            // create a formatter
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
             // Filter prices from now to the end of this day.
             List<ElectricityPrice> remainingEleToday = pricesToday.stream()
                     .filter(p -> {
@@ -67,7 +64,7 @@ public class ElectricPriceUtils {
     }
 
     /**
-     * Identify and print the cheapest and most expensive hours from the combined list of today's and tomorrow's prices.
+     * Identify and print the least expensive and most expensive hours from the combined list of today's and tomorrow's prices.
      * If tomorrow's prices are not available, only today's prices will be considered.
      *
      * @param pricesToday    The list of prices for today
@@ -81,7 +78,7 @@ public class ElectricPriceUtils {
             return;
         }
 
-        // Get the cheapest hour and most expensive hour
+        // Get the least expensive hour and the most expensive hour
         ElectricityPrice cheapest = allPrices.stream()
                 .min(Comparator.comparing(ElectricityPrice::SEK_per_kWh))
                 .get();
@@ -123,9 +120,9 @@ public class ElectricPriceUtils {
         // Implementation goes here
         List<ElectricityPrice> allPrices = concatLists(pricesToday, pricesTomorrow);
         String input = System.console().readLine("How many hours do you want to charge? (2, 4, or 8) ");
-        if (input.matches("[2|4|8]")) {
+        if (input.matches("[248]")) {
             int hours = Integer.parseInt(input);
-            slidingWindowAlgorithm(allPrices, hours);
+            System.out.println(slidingWindowAlgorithm(allPrices, hours));
         } else {
             System.out.println("Invalid input. Please enter 2, 4, or 8.");
         }
@@ -138,16 +135,14 @@ public class ElectricPriceUtils {
      * @param allPrices List of all ElectricityPrice objects
      * @param hours     Duration in hours to charge (2, 4, or 8)
      */
-    public static void slidingWindowAlgorithm(List<ElectricityPrice> allPrices, int hours) {
-        //Filter list to only include prices from now
+    public static String slidingWindowAlgorithm(List<ElectricityPrice> allPrices, int hours) {
+        //Filter the list to only include prices from now
         ZonedDateTime start = ZonedDateTime.now();
         List<ElectricityPrice> filteredList = allPrices.stream()
                 .filter(p -> {
                     ZonedDateTime priceTime = ZonedDateTime.parse(p.time_start());
                     return !priceTime.isBefore(start);
                 }).toList();
-
-        System.out.println(filteredList);
 
         BigDecimal optimalSum = BigDecimal.ZERO;
         int optimalStartIndex = 0;
@@ -167,17 +162,13 @@ public class ElectricPriceUtils {
             }
 
         }
-        System.out.println("The sum is " + optimalSum + "and the index is " + optimalStartIndex);
-        System.out.println("The optimal sum is " + filteredList.get(optimalStartIndex) + "/// " + filteredList.get(optimalStartIndex + hours));
-        // Save the start time for the first ele in the window as the optimal start time and the end time the last ele in the window.
-        //Step 2
-        // Move the window one element to the right, the average price for those elements
-        // Compare the first window with the new window, if the new window has a lower average price, update the optimal start time and optimal end time.
-        // Step 3:
-        // Compare the average price of the new window with the previous window
-        // If the new window has a lower average price, update the optimal start time and optimal
+        // Format time
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        //
-        //TODO: Loop through the list depending on the hours
+        String startTime = ZonedDateTime.parse(filteredList.get(optimalStartIndex).time_start()).format(formatter);
+        String endTime = ZonedDateTime.parse(filteredList.get(optimalStartIndex + hours - 1).time_end()).format(formatter);
+
+        return "The optimal time is: " + startTime + " and the total price will be: " + optimalSum + " SEK/kWh" + "\n" +
+                "The charging will end at: " + endTime;
     }
 }

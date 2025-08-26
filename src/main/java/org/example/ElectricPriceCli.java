@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ElectricPriceCli {
 
-    public static void main(String[] args) throws IOException {
+    public static void main() throws IOException {
         // Declare List variables
         List<ElectricityPrice> pricesToday = null;
         List<ElectricityPrice> pricesTomorrow = null;
@@ -56,7 +56,6 @@ public class ElectricPriceCli {
             System.out.println("\t1. Calculate and display the mean price for the current 24-hour period");
             System.out.println("\t2. Identify the cheapest and most expensive hours");
             System.out.println("\t3. Suggest optimal time to charge an electric car (2, 4, or 8 hours)");
-            System.out.println("\t4. Import hourly consumption data from a CSV file");
             System.out.println("\t0. Exit");
 
             String choice = System.console().readLine("Enter your choice: ");
@@ -74,7 +73,7 @@ public class ElectricPriceCli {
                     System.out.println("\n\n");
                     break;
                 case "3":
-                    System.out.println("Startig optimal charging time calculator...\n");
+                    System.out.println("Starting optimal charging time calculator...\n");
                     ElectricPriceUtils.suggestOptimalChargingTime(pricesToday, pricesTomorrow);
                     System.out.println("\n\n");
                     break;

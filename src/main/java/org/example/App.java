@@ -21,7 +21,7 @@ public class App {
                 Menu menu = new Menu(); // Creating an instance of Menu to display options to the user.
                 menu.showMenu(jsonData, mainScanner); // Showing the menu and passing the fetched JSON data and scanner for user interaction.
 
-                System.out.println(jsonData);
+//                System.out.println(jsonData);
             } else {
                 System.out.println("CSV calculation done, exiting program."); // If CSV calculation was chosen, inform the user and exit.
             }

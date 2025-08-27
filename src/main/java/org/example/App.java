@@ -1,7 +1,9 @@
 package org.example;
+import org.example.api.PriceApiClient;
 import org.example.menus.OptionMenu;
 import org.example.services.PriceService;
-
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Scanner;
 
 //TODO List
@@ -46,8 +48,15 @@ public class App {
         int mainMenuChoice = mainMenu.getOption();
         mainMenu.menuExit(mainMenuChoice);
 
-        PriceService priceService = new PriceService();
-        String result = priceService.handleChoice(mainMenuChoice, areaCode);
-        System.out.println(result);
+        PriceApiClient apiClient = new PriceApiClient();
+        PriceService service = new PriceService(apiClient);
+        LocalDate date = LocalDate.now(ZoneId.of("Europe/Stockholm"));
+
+        try {
+            String result = service.handleChoice(mainMenuChoice, date, areaCode);
+            System.out.println(result);
+        } catch (Exception e) {
+            System.err.println("Something went wrong while fetching electricity prices. Please try again later.");
+        }
     }
 }

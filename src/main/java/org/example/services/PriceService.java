@@ -1,9 +1,13 @@
 package org.example.services;
+import org.example.api.PriceApiClient;
+import java.io.IOException;
+import java.time.LocalDate;
 
-public class PriceService {
-    public String handleChoice(int mainMenuChoice, String areaCode) {
+public record PriceService(PriceApiClient apiClient) {
+
+    public String handleChoice(int mainMenuChoice, LocalDate date, String areaCode) throws IOException, InterruptedException {
         return switch (mainMenuChoice) {
-            case 1 -> downloadPrices(areaCode);
+            case 1 -> downloadPrices(date, areaCode);
             case 2 -> calculateMean(areaCode);
             case 3 -> findExtremes(areaCode);
             case 4 -> bestChargingWindow(areaCode);
@@ -12,8 +16,9 @@ public class PriceService {
 
     }
 
-    private String downloadPrices(String areaCode) {
-        return "Downloading prices for area " + areaCode + ": ... (not implemented yet)";
+
+    private String downloadPrices(LocalDate date, String areaCode) throws IOException, InterruptedException {
+        return apiClient.fetchPrices(date, areaCode);
     }
 
     private String calculateMean(String areaCode) {

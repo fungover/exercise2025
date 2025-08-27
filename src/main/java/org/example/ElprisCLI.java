@@ -60,6 +60,21 @@ public class ElprisCLI {
                     elpris.getEUR(),
                     elpris.getEXR()
             );
+        }
+        // CSV-handler: Reads file and calculate cost with ConsumptionCSVReader + CostCalc.
+        System.out.print("\nVill du importera en CSV med förbrukning och räkna kostnad? (j/n): ");
+        String answer = scanner.nextLine().trim().toLowerCase();
+        if (answer.equals("j")) {
+            System.out.print("Ange sökväg till CSV: ");
+            String path = scanner.nextLine().trim().toLowerCase();
+
+            try {
+                List<Consumption> usage = ConsumptionCSVReader.readCSV(path);
+                double cost = CostCalc.calculateTotalCost(usage, prices);
+                System.out.printf("Total kostnad: %2f kr%n", cost);
+            } catch (Exception e) {
+                System.out.println("Fel vid läsning eller beräkning: " + e.getMessage());
+            }
 
         }
     }

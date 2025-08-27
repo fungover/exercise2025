@@ -1,7 +1,7 @@
-package org.example;
+import org.example.Price;
 
-public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello There!");
-    }
+void main() throws IOException, InterruptedException {
+
+    Price list = new Price();
+    System.out.println(list);
 }

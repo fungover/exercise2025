@@ -60,7 +60,7 @@ public class MenuUtil {
         return choice;
     }
 
-    public static String handleChoice(int choice, String area) {
+    public static void handleChoice(int choice, String area) {
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = today.plusDays(1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
@@ -75,7 +75,7 @@ public class MenuUtil {
                 //Today's prices
                 PriceService.downloadPrices(urlToday, "TodaysPrices.csv", "Today's prices");
 
-                //Tomorrow's prices'
+                //Tomorrow's prices
                 PriceService.downloadPrices(urlTomorrow, "TomorrowsPrices.csv", "Tomorrow's prices");
 
                 break;
@@ -101,6 +101,5 @@ public class MenuUtil {
                 break;
         }
 
-        return null;
     }
 }

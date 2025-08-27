@@ -8,6 +8,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class ApiClient {
     private static final Logger logger = LoggerFactory.getLogger(ApiClient.class);
@@ -18,14 +21,16 @@ public class ApiClient {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url_string))
+                    .timeout(Duration.ofSeconds(15))
+                    .GET()
                     .build();
 
-        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        } catch (IOException | InterruptedException e) {
-            if (e instanceof InterruptedException) {
-                Thread.currentThread().interrupt();
-            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            logger.error("Prices fetching interrupted for {}", url_string, e);
+        } catch (IOException | IllegalArgumentException e) {
             logger.error("Prices could not be fetched from {}", url_string, e);
         }
         return response;

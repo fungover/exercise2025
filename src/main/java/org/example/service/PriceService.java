@@ -75,7 +75,7 @@ public class PriceService {
                 double roundedPrice = Math.round(entry.SEK_per_kWh() * 100) / 100.0;
 
                 String line = formatTimeRange(entry.time_start(), entry.time_end()) + ": \n" + roundedPrice + " SEK_per_kWh \n";
-                String csvLine = entry.time_start() + "," + entry.time_end() + "," + roundedPrice + "," ;
+                String csvLine = entry.time_start() + "," + entry.time_end() + "," + roundedPrice + ",";
 
                 System.out.println(line);
 
@@ -165,8 +165,8 @@ public class PriceService {
 
             int fileStatus = FileUtil.createFile(fileName);
 
-            if (fileStatus != -1) {
-                FileUtil.writeToFile(fileName, "Duration (h),Start,End,Price_SEK_per_kWh\n");
+            if (fileStatus == 0) {
+                FileUtil.writeToFile(fileName, "Duration (h),Start,End,Sum_SEK_per_kWh\n");
             }
 
             System.out.println("=== " + dayLabel + " ===");
@@ -190,7 +190,7 @@ public class PriceService {
 
                 String line = "(" + duration + "h): " +
                         formatTimeRange(entries[optimalHours].time_start(),
-                                entries[optimalHours + duration - 1].time_end()) + "\n Total cost: " + roundedTotalCost + " SEK_per_kWh\n";
+                                entries[optimalHours + duration - 1].time_end()) + "\n Sum of prices: " + roundedTotalCost + " SEK/kWh\n";
 
                 String csvLine = duration + "," + entries[optimalHours].time_start().toString() + "," + entries[optimalHours + duration - 1].time_end().toString() + "," + roundedTotalCost;
 

@@ -4,3 +4,5 @@ CheapestAndExpensivePrices.csv
 MeanPrices.csv
 OptimalChargingToday.csv
 TodaysPrices.csv
+TomorrowsPrices.csv
+OptimalChargingTomorrow.csv

@@ -9,21 +9,21 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) throws Exception {
 
-        try (Scanner mainScanner = new Scanner(System.in)) {
+        try (Scanner mainScanner = new Scanner(System.in)) { // Using try-with-resources to ensure the scanner is closed automatically.
 
-            ZoneSelection zoneSelection = new ZoneSelection();
-            String zone = zoneSelection.chooseZone(mainScanner);
+            ZoneSelection zoneSelection = new ZoneSelection(); // Creating an instance of ZoneSelection to handle user input for zone or CSV calculation.
+            String zone = zoneSelection.chooseZone(mainScanner); // Getting the selected zone or null if CSV calculation was chosen.
 
-            if (zone != null) {
-               ApiClient apiClient = new ApiClient();
-               String jsonData = apiClient.getPrices(java.time.LocalDate.now(), zone);
+            if (zone != null) { // If a zone was selected, proceed to fetch prices from the API.
+               ApiClient apiClient = new ApiClient(); // Creating an instance of ApiClient to handle API requests.
+               String jsonData = apiClient.getPrices(java.time.LocalDate.now(), zone); // Fetching electricity prices for today and tomorrow for the selected zone.
 
-                Menu menu = new Menu();
-                menu.showMenu(jsonData, mainScanner);
+                Menu menu = new Menu(); // Creating an instance of Menu to display options to the user.
+                menu.showMenu(jsonData, mainScanner); // Showing the menu and passing the fetched JSON data and scanner for user interaction.
 
-                System.out.println(jsonData);
+                System.out.println(jsonData); // Printing the raw JSON data for debugging or informational purposes.
             } else {
-                System.out.println("CSV calculation done, exiting program.");
+                System.out.println("CSV calculation done, exiting program."); // If CSV calculation was chosen, inform the user and exit.
             }
         }
     }

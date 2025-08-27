@@ -26,8 +26,9 @@ public class LowAndHighPrices {
                 return;
             }
 
-            ElectricityPrice minSEK = prices.getFirst(), maxSEK = prices.getFirst(); // Initialize min and max prices in SEK with the first price in the list.
-            ElectricityPrice minEUR = prices.getFirst(), maxEUR = prices.getFirst(); // Initialize min and max prices in EUR with the first price in the list.
+            ElectricityPrice first = prices.get(0);
+            ElectricityPrice minSEK = first, maxSEK = first;
+            ElectricityPrice minEUR = first, maxEUR = first;
 
             // Iterate through the list prices to find the minimum and maximum prices in both SEK and EUR.
             for (ElectricityPrice price : prices) {

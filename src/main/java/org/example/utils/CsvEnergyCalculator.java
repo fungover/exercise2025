@@ -8,32 +8,41 @@ import java.math.RoundingMode;
 
 public class CsvEnergyCalculator {
 
-    public static void calculateFromCsv(String csvFilePath, BigDecimal electricityPrice) throws IOException {
+    public static void calculateFromCsv(String csvFilePath, BigDecimal electricityPrice) throws IOException { // Method to calculate total consumption and cost from a CSV file.
+        BigDecimal totalConsumption = BigDecimal.ZERO; // Initialize total consumption to 0.
 
-            BigDecimal totalConsumption = BigDecimal.ZERO; // Sets total consumption to zero initially.
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) { // Using try-with-resources to ensure the reader is closed automatically.
 
-            BufferedReader reader = new BufferedReader(new FileReader(csvFilePath)); // Filereader opens the file, BufferedReader makes it more efficient to read.
-            reader.readLine(); // reads the first line (header) and ignores it. ("Datum";El kWh") in our csv file.
-
+            reader.readLine(); // Skip the header line.
             String line; // Variable to hold each line read from the file.
 
-        //
-            while ((line = reader.readLine()) != null) { // Reads each line in our CSV file until the end (as long as its not null).
-                String[] parts = line.split(";"); // Splits the line into parts using semicolon as the delimiter.
+            while ((line = reader.readLine()) != null) { // Read each line until the end of the file.
 
-                String consumptionStr = parts[1].replace("\"", "").replace(",", ".");
-                BigDecimal consumption = new BigDecimal(consumptionStr); //Converts the cleaned string to BigDecimal.
-                totalConsumption = totalConsumption.add(consumption); // Adds the consumption value to the total consumption.
+                if (line.isBlank()) continue; // Skip empty lines.
+
+                String[] parts = line.split(";"); // Split the line by semicolon to get individual columns.
+
+
+                if (parts.length < 2) { // Ensure there are at least two columns (timestamp and consumption).
+                    System.err.printf("Skipping malformed row (expected 2+ columns): %s%n", line); // Log and skip malformed rows.
+                    continue;
+                }
+
+                String consumptionStr = parts[1].replace("\"", "").trim().replace(",", "."); // Get the consumption value, remove quotes, trim whitespace, and replace commas with dots for decimal format.
+                if (consumptionStr.isEmpty()) continue; // Skip if consumption is empty.
+
+                try {
+                    BigDecimal consumption = new BigDecimal(consumptionStr); // Parse the consumption value to BigDecimal.
+                    totalConsumption = totalConsumption.add(consumption); // Add the consumption to the total.
+                } catch (NumberFormatException nfe) { // Handle invalid number formats.
+                    System.err.printf("Skipping unparsable consumption '%s' in row: %s%n", consumptionStr, line); // Log and skip unparsable consumption values.
+                }
             }
-
-            reader.close(); // Closing the reader.
-
-            BigDecimal totalCost = totalConsumption.multiply(electricityPrice) //count the total cost by multiplying total consumption with the price per kWh.
-                    .setScale(2, RoundingMode.HALF_UP); // Rounds the result to 2 decimal places.
-
-            System.out.printf("Total consumption: %s kWh%n", totalConsumption.toPlainString());
-            System.out.printf("Total cost: %s SEK%n", totalCost.toPlainString());
-
         }
+
+        BigDecimal totalCost = totalConsumption.multiply(electricityPrice).setScale(2, RoundingMode.HALF_UP); // Calculate total cost and round to 2 decimal places.
+        System.out.printf("Total consumption: %s kWh%n", totalConsumption.toPlainString()); // Display total consumption.
+        System.out.printf("Total cost: %s SEK%n", totalCost.toPlainString()); // Display total cost.
     }
 
+}

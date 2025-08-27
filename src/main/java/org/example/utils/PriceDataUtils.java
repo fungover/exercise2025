@@ -22,6 +22,6 @@ public class PriceDataUtils {
                 return i; // Return the index of the current hour or the next hour.
             }
         }
-        return 0; // If no such hour is found, return 0 (this case should not happen with valid data).
+        return prices.size(); // No future hours available, return the size of the list.
     }
 }

@@ -15,9 +15,9 @@ public class ApiClient {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
 
-    public String getPrices(LocalDate startDate, String zone) throws Exception {
+    public String getPrices(String zone) throws Exception {
 
-        LocalDate swedenDate =  LocalDate.now(ZoneId.of("Europe/Stockholm")); // Get current date in Sweden timezone
+        LocalDate swedenDate =  LocalDate.now(ZoneId.of("Europe/Stockholm")); // Get the current date in Sweden timezone
 
         String todayJson = getSingleDay(swedenDate, zone); // Fetch today's prices
         String tomorrowJson = getSingleDay(swedenDate.plusDays(1), zone); // Fetch tomorrow's prices

@@ -16,7 +16,7 @@ public class App {
 
             if (zone != null) { // If a zone was selected, proceed to fetch prices from the API.
                ApiClient apiClient = new ApiClient(); // Creating an instance of ApiClient to handle API requests.
-               String jsonData = apiClient.getPrices(java.time.LocalDate.now(), zone); // Fetching electricity prices for today and tomorrow for the selected zone.
+               String jsonData = apiClient.getPrices(zone); // Fetching electricity prices for today and tomorrow for the selected zone.
 
                 Menu menu = new Menu(); // Creating an instance of Menu to display options to the user.
                 menu.showMenu(jsonData, mainScanner); // Showing the menu and passing the fetched JSON data and scanner for user interaction.

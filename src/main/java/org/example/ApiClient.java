@@ -29,6 +29,13 @@ public class ApiClient {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        int status = response.statusCode();
+        if (status == 404) {
+            throw new IOException("Priser ej publicerade (404) för angivet datum/område.");
+        }
+        if (status < 200 || status >= 300) {
+            throw new IOException("Oväntat HTTP-svar: " + status);
+        }
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.example.model.PriceHour;
 import org.example.service.ElectricityPriceService;
+import org.example.utils.FormatUtil;
 
 public class Menu {
 
@@ -87,6 +88,16 @@ public class Menu {
                     if (!hours.isEmpty()) {
                         System.out.println("Fetched hours: " + hours.size());
                         System.out.println(hours.get(0));
+                    }
+                    for (PriceHour hour : hours) {
+                        System.out.println("__________________________" + "\n Zone: " + zoneCode + "\n Date: " +
+                                FormatUtil.formatDate(hour.time_start()) + "\n Time: " +
+                                FormatUtil.formatTime(hour.time_start()) + " - " +
+                                FormatUtil.formatTime(hour.time_end()) + "\n SEK: " +
+                                FormatUtil.formatPriceSEK(hour.SEK_per_kWh()) + "\n EUR: " +
+                                FormatUtil.formatPriceEUR(hour.EUR_per_kWh()) + "\n Exchange rate: " +
+                                FormatUtil.formatEXR(hour.EXR())
+                        );
                     }
                 }
                 case 2 -> System.out.println("Tomorrow for " + zoneCode);

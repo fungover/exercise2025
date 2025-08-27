@@ -39,14 +39,22 @@ public class FileUtil {
 
     public static void writeToFile(String fileName, String content) {
         Path path = Path.of(fileName);
+
         try {
-            Files.writeString(
+            Path parent = path.getParent();
+            if (parent != null) {
+                Files.createDirectories(parent);
+            }
+            try (BufferedWriter writer = Files.newBufferedWriter(
                     path,
-                    content,
                     StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE,
-                    StandardOpenOption.APPEND
-            );
+                    StandardOpenOption.APPEND)) {
+                writer.write(content);
+                if (!content.endsWith(System.lineSeparator())) {
+                    writer.newLine();
+                }
+            }
         } catch (IOException e) {
             logger.error("File could not be written to: {}", fileName, e);
         }

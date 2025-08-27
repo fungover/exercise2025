@@ -4,22 +4,27 @@ import org.example.api.ApiClient;
 import org.example.cli.Menu;
 import org.example.cli.ZoneSelection;
 
+import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) throws Exception {
 
-        ZoneSelection zoneSelection = new ZoneSelection();
-        String zone = zoneSelection.chooseZone();
+        try (Scanner mainScanner = new Scanner(System.in)) {
 
-        if (zone != null) { // if the zone is not null, we proceed with api calls and show the menu for that.
+            ZoneSelection zoneSelection = new ZoneSelection();
+            String zone = zoneSelection.chooseZone(mainScanner);
 
-            ApiClient apiClient = new ApiClient();
-            String jsonData = apiClient.getPrices(java.time.LocalDate.now(), zone); // Getting today's data from API.
+            if (zone != null) {
+               ApiClient apiClient = new ApiClient();
+               String jsonData = apiClient.getPrices(java.time.LocalDate.now(), zone);
 
-            Menu menu = new Menu();
-            menu.showMenu(jsonData);
-            System.out.println(jsonData);
-        } else { // If the zone is null, we do the calculation from csv and exit the program.
-            System.out.println("CSV calculation done, exiting program.");
+                Menu menu = new Menu();
+                menu.showMenu(jsonData, mainScanner);
+
+                System.out.println(jsonData);
+            } else {
+                System.out.println("CSV calculation done, exiting program.");
+            }
         }
     }
 }

@@ -8,33 +8,32 @@ import java.util.Scanner;
 
 public class ZoneSelection {
 
-    public String chooseZone() {
+    public String chooseZone(Scanner scanner) {
 
-        Scanner scanner = new Scanner(System.in);
+            while (true) {
+                System.out.println("\nPlease select an option:\n");
+                System.out.println("1. Energy zone selection.");
+                System.out.println("2. Calculate consumption from CSV file.");
+                System.out.print("\nEnter your choice: ");
 
-        while (true) {
-            System.out.println("\nPlease select an option:\n");
-            System.out.println("1. Energy zone selection");
-            System.out.println("2. Calculate consumption from CSV file.");
-            System.out.print("\nEnter your choice: ");
+                if (scanner.hasNextInt()) {
+                    int mainChoice = scanner.nextInt();
+                    scanner.nextLine();
 
-            if (scanner.hasNextInt()) {
-                int mainChoice = scanner.nextInt();
-                scanner.nextLine();
-
-                if (mainChoice == 1) {
-                    return selectZone(scanner); // if choice is 1, we proceed to selectZone method.
-                } else if (mainChoice == 2) { // If choice is 2, we proceed to calculate from CSV and return null to indicate no zone selected.
-                    calculateCsv(scanner);
-                    return null;
+                    if (mainChoice == 1) {
+                        return selectZone(scanner);
+                    } else if (mainChoice == 2) {
+                        calculateCsv(scanner);
+                        return null;
+                    } else {
+                        System.out.println("Invalid choice, please try again:");
+                    }
                 } else {
-                    System.out.println("Invalid choice, please try again:");
+                    System.out.println("Not a number, please try again.");
+                    scanner.nextLine();
                 }
-            } else {
-                System.out.println("Not a number, please try again!");
-                scanner.nextLine();
             }
-        }
+
     }
 
     private String selectZone(Scanner scanner) {
@@ -49,24 +48,26 @@ public class ZoneSelection {
             if (scanner.hasNextInt()) {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
+
                 switch (choice) {
-                    case 1 -> {return "SE1";}
-                    case 2 -> {return "SE2";}
-                    case 3 -> {return "SE3";}
-                    case 4 -> {return "SE4";}
-                    default -> System.out.println("Invalid choice, please try again:");
+                    case 1 ->{return "SE1";}
+                    case 2 ->{return "SE2";}
+                    case 3 ->{return "SE3";}
+                    case 4 ->{return "SE4";}
+                    default -> System.out.println("Invalid choice, please try again.");
                 }
             } else {
-                System.out.println("Not a number, please try again!");
+                System.out.println("Not a number, please try again.");
                 scanner.nextLine();
             }
         }
     }
 
     private void calculateCsv(Scanner scanner) {
-        System.out.print("Enter CSV file path: ");
+        System.out.println("Enter CSV file path:");
         String csvPath = scanner.nextLine();
-        System.out.print("Enter electricity price (SEK/kWh): ");
+
+        System.out.print("Enter electricity price per kWh: ");
 
         try {
             BigDecimal price = new BigDecimal(scanner.nextLine());

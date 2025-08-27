@@ -6,13 +6,14 @@ import java.util.Set;
 public class CLI {
     private static final Set<String> ALLOWED_ZONES = Set.of("SE1", "SE2", "SE3", "SE4");
 
-    static void main(String[] args) {
+    static void main() {
 
         Scanner input = new Scanner(System.in);
         String zone;
 
         while (true) {
             System.out.println("Hello! Welcome to a electricity price CLI!");
+            System.out.println("--------------------------------");
             System.out.print("""
                     SE1 (Norra Sverige)
                     SE2 (Norra Mellansverige)
@@ -32,6 +33,7 @@ public class CLI {
             System.out.println("Invalid zone. Please try again.");
         }
         System.out.println("You picked zone " + zone);
+        System.out.println("--------------------------------");
 
         boolean CliRunning = true;
         while (CliRunning) {
@@ -57,7 +59,10 @@ public class CLI {
 
                         if (entries.isEmpty()) {
                             System.out.println("No data available for today.");
+                            System.out.println("--------------------------------");
                         } else {
+                            System.out.println("Electricity prices for today:");
+                            System.out.println("--------------------------------");
                             java.time.format.DateTimeFormatter fmt =
                                     java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                                             .withZone(java.time.ZoneId.of("Europe/Stockholm"));
@@ -69,10 +74,11 @@ public class CLI {
                                             fmt.format(e.timeEnd),
                                             e.sekPerKWh));
                         }
+                        System.out.println("--------------------------------");
                     } catch (Exception ex) {
                         System.out.println("Error fetching data: " + ex.getMessage());
                     }
-                    return;
+                    break;
                 }
 
                 case "2": {
@@ -88,13 +94,14 @@ public class CLI {
                                     .mapToDouble(e -> e.sekPerKWh)
                                     .average()
                                     .orElse(0.0);
-
-                            System.out.printf("Average electricity price for today: %.6f SEK/kWh%n", avgPrice);
+                            System.out.println("--------------------------------");
+                            System.out.printf("Average electricity price for today: %.4f SEK/kWh%n", avgPrice);
                         }
+                        System.out.println("--------------------------------");
                     } catch (Exception ex) {
                         System.out.println("Error fetching data: " + ex.getMessage());
                     }
-                    return;
+                    break;
                 }
 
                 case "3": {
@@ -105,7 +112,10 @@ public class CLI {
 
                         if (entries.isEmpty()) {
                             System.out.println("No data available for tomorrow.");
+                            System.out.println("--------------------------------");
                         } else {
+                            System.out.println("Electricity prices for tomorrow:");
+                            System.out.println("--------------------------------");
                             java.time.format.DateTimeFormatter fmt =
                                     java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                                             .withZone(java.time.ZoneId.of("Europe/Stockholm"));
@@ -117,10 +127,11 @@ public class CLI {
                                             fmt.format(e.timeEnd),
                                             e.sekPerKWh));
                         }
+                        System.out.println("--------------------------------");
                     } catch (Exception ex) {
                         System.out.println("Error fetching data: " + ex.getMessage());
                     }
-                    return;
+                    break;
                 }
 
                 case "4": {
@@ -136,13 +147,14 @@ public class CLI {
                                     .mapToDouble(e -> e.sekPerKWh)
                                     .average()
                                     .orElse(0.0);
-
-                            System.out.printf("Average electricity price for tomorrow: %.6f SEK/kWh%n", avgPrice);
+                            System.out.println("--------------------------------");
+                            System.out.printf("Average electricity price for tomorrow: %.4f SEK/kWh%n", avgPrice);
                         }
+                        System.out.println("--------------------------------");
                     } catch (Exception ex) {
                         System.out.println("Error fetching data: " + ex.getMessage());
                     }
-                    return;
+                    break;
                 }
 
                 case "5": {
@@ -153,6 +165,7 @@ public class CLI {
 
                         if (entries.isEmpty()) {
                             System.out.println("No data available for today.");
+                            System.out.println("--------------------------------");
                             break;
                         }
 
@@ -170,8 +183,8 @@ public class CLI {
 
                         var fmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                                 .withZone(java.time.ZoneId.of("Europe/Stockholm"));
-
-                        System.out.printf("Cheapest hour: %s – %s : %.4f SEK/kWh%nMost exp.: %s – %s : %.4f SEK/kWh%n",
+                        System.out.println("--------------------------------");
+                        System.out.printf("Cheapest hour: %s – %s : %.4f SEK/kWh%nMost expensive: %s – %s : %.4f SEK/kWh%n",
                                 fmt.format(cheapest.timeStart),
                                 fmt.format(cheapest.timeEnd),
                                 cheapest.sekPerKWh,
@@ -179,10 +192,11 @@ public class CLI {
                                 fmt.format(mostExpensive.timeEnd),
                                 mostExpensive.sekPerKWh
                         );
-
+                        System.out.println("--------------------------------");
                     } catch (Exception ex) {
                         System.out.println("Error fetching data: " + ex.getMessage());
                     }
+                    break;
                 }
 
                 case "6": {
@@ -202,13 +216,16 @@ public class CLI {
                         var fmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                                 .withZone(java.time.ZoneId.of("Europe/Stockholm"));
 
-                        System.out.println("Best charging hours today");
+                        System.out.println("""
+                                Best charging hours today:
+                                --------------------------------""");
                         for (int hours : new int[]{2, 4, 8}) {
                             int window = hours * periodsPerHour;
                             int[] range = bestWindow(entries, window);
 
                             if (range[0] < 0) {
                                 System.out.printf("%2dh: not enough periods%n", hours);
+                                System.out.println("--------------------------------");
                                 continue;
                             }
 
@@ -224,11 +241,12 @@ public class CLI {
                             System.out.printf("%2dh: %s – %s  (avg %.4f SEK/kWh)%n",
                                     hours, fmt.format(start.timeStart), fmt.format(end.timeEnd), avg);
                         }
+                        System.out.println("--------------------------------");
 
                     } catch (Exception ex) {
                         System.out.println("Error fetching data: " + ex.getMessage());
                     }
-
+                    break;
                 }
 
                 case "7": {

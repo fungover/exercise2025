@@ -23,24 +23,65 @@ public class PriceDisplay {
                         price.formattedHourRange(),
                         price.SEK_per_kWh() * 100);
             }
-            
-
-            System.out.println("\nPrisstatistik:");
-            System.out.printf("Medelpris: %.2f öre/kWh%n", PriceCalculator.calculateAveragePrice(List.of(prices)) * 100);
-            
-            ApiClient.ElectricityPrice minPrice = PriceCalculator.findMinPrice(List.of(prices));
-            System.out.printf("Lägsta pris: %.2f öre/kWh (%s)%n", 
-                    minPrice.SEK_per_kWh() * 100, minPrice.formattedHourRange());
-            
-            ApiClient.ElectricityPrice maxPrice = PriceCalculator.findMaxPrice(List.of(prices));
-            System.out.printf("Högsta pris: %.2f öre/kWh (%s)%n", 
-                    maxPrice.SEK_per_kWh() * 100, maxPrice.formattedHourRange());
-
         } catch (IOException ioe) {
             throw new RuntimeException("Kunde inte hämta priser för " + date + ": " + ioe.getMessage());
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Avbrutet anrop för " + date, ie);
+        }
+    }
+
+    public static void printStatisticsAndBestChargingTimes(
+            ApiClient.ElectricityPrice[] todayPrices,
+            ApiClient.ElectricityPrice[] tomorrowPrices) {
+
+        if (todayPrices != null && todayPrices.length > 0) {
+            System.out.println("\n" + "-".repeat(50));
+            System.out.println("\nPrisstatistik för idag:");
+            System.out.printf("Medelpris: %.2f öre/kWh%n", PriceCalculator.calculateAveragePrice(List.of(todayPrices)) * 100);
+
+            ApiClient.ElectricityPrice minPrice = PriceCalculator.findMinPrice(List.of(todayPrices));
+            System.out.printf("Lägsta pris: %.2f öre/kWh (%s)%n", minPrice.SEK_per_kWh() * 100, minPrice.formattedHourRange());
+
+            ApiClient.ElectricityPrice maxPrice = PriceCalculator.findMaxPrice(List.of(todayPrices));
+            System.out.printf("Högsta pris: %.2f öre/kWh (%s)%n", maxPrice.SEK_per_kWh() * 100, maxPrice.formattedHourRange());
+        }
+
+        if (tomorrowPrices != null && tomorrowPrices.length > 0) {
+            System.out.println("\n" + "-".repeat(50));
+            System.out.println("\nPrisstatistik för morgondagen:");
+            System.out.printf("Medelpris: %.2f öre/kWh%n", PriceCalculator.calculateAveragePrice(List.of(tomorrowPrices)) * 100);
+
+            ApiClient.ElectricityPrice minPrice = PriceCalculator.findMinPrice(List.of(tomorrowPrices));
+            System.out.printf("Lägsta pris: %.2f öre/kWh (%s)%n", minPrice.SEK_per_kWh() * 100, minPrice.formattedHourRange());
+
+            ApiClient.ElectricityPrice maxPrice = PriceCalculator.findMaxPrice(List.of(tomorrowPrices));
+            System.out.printf("Högsta pris: %.2f öre/kWh (%s)%n", maxPrice.SEK_per_kWh() * 100, maxPrice.formattedHourRange());
+        }
+
+        List<ApiClient.ElectricityPrice> allPrices = PriceCalculator.combineAllAvailablePrices(todayPrices, tomorrowPrices);
+
+        if (!allPrices.isEmpty()) {
+            System.out.println("\n" + "-".repeat(50));
+            System.out.println("\nBästa laddspann för elbil:");
+
+            int[] chargingDurations = {2, 4, 8};
+
+            for (int duration : chargingDurations) {
+                PriceCalculator.ChargingWindow bestWindow =
+                        PriceCalculator.findBestChargingWindow(allPrices, duration);
+
+                if (bestWindow != null) {
+                    System.out.printf("%d timmar: %s (%.2f öre/kWh i snitt)%n",
+                            duration,
+                            bestWindow.getFormattedTimeRange(),
+                            bestWindow.averagePrice() * 100);
+                } else {
+                    System.out.printf("\n%d timmar: Inte tillräckligt med data tillgänglig%n", duration);
+                }
+            }
+
+            System.out.println("\nTips baserat på: " + (tomorrowPrices != null ? "dagens och morgondagens" : "endast dagens") + " priser");
         }
     }
 }

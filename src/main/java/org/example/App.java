@@ -15,15 +15,34 @@ public class App {
          String priceArea = UserInput.getValidatedPriceArea();
 
          LocalDate today = LocalDate.now();
-         PriceDisplay.printPricesForDate(today, priceArea, "dagen");
 
-         LocalDate tomorrow = today.plusDays(1);
-         try {
-             PriceDisplay.printPricesForDate(tomorrow, priceArea, "morgondagen");
-         } catch (Exception e) {
-             System.out.printf("%nPriser för morgondagen (%s) är ännu inte publicerade.%n", tomorrow);
-         }
-     }
+        ApiClient.ElectricityPrice[] todayPrices = null;
+        try {
+            PriceDisplay.printPricesForDate(today, priceArea, "dagen");
+            todayPrices = fetchPricesForDate(today, priceArea);
+        } catch (Exception e) {
+            System.out.println("Kunde inte hämta dagens priser: " + e.getMessage());
+            return;
+        }
 
+        LocalDate tomorrow = today.plusDays(1);
+        ApiClient.ElectricityPrice[] tomorrowPrices = null;
+        try {
+            PriceDisplay.printPricesForDate(tomorrow, priceArea, "morgondagen");
+            tomorrowPrices = fetchPricesForDate(tomorrow, priceArea);
+        } catch (Exception e) {
+            System.out.printf("%nPriser för morgondagen (%s) är ännu inte publicerade.%n", tomorrow);
+        }
 
+        PriceDisplay.printStatisticsAndBestChargingTimes(todayPrices, tomorrowPrices);
+    }
+
+    private static ApiClient.ElectricityPrice[] fetchPricesForDate(LocalDate date, String priceArea)
+            throws Exception {
+        String year = String.valueOf(date.getYear());
+        String month = String.format("%02d", date.getMonthValue());
+        String day = String.format("%02d", date.getDayOfMonth());
+
+        return ApiClient.fetchPrices(year, month, day, priceArea);
+    }
 }

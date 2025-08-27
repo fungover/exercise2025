@@ -4,7 +4,6 @@ import org.example.service.ApiClient;
 import org.example.service.PriceService;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class MenuUtil {
@@ -17,21 +16,30 @@ public class MenuUtil {
             System.out.println("2. Sundsvall / Northern Central Sweden");
             System.out.println("3. Stockholm / Southern Central Sweden");
             System.out.println("4. Malmö / Southern Sweden");
+            System.out.println("5. Exit");
             System.out.print("Enter your choice: ");
 
             if (scanner.hasNextInt()) {
                 area = scanner.nextInt();
-                if (area < 1 || area > 4) {
-                    System.out.println("Invalid choice, must be between 1 and 4");
+                if (area == 5) {
+                    System.out.println("Exiting");
+                    break;
+                } else if (area < 1 || area > 5) {
+                    System.out.println("Invalid choice, must be between 1 and 5");
                 }
+
             } else {
-                System.out.println("Invalid choice, must be a number between 1 and 4");
+                System.out.println("Invalid choice, must be a number between 1 and 5");
                 scanner.next();
                 area = -1;
             }
-        } while (area < 1 || area > 4);
+        } while (area < 1 || area > 5);
 
-        return "SE" + area;
+        if (area == 5) {
+            return "Exit";
+        } else {
+            return "SE" + area;
+        }
     }
 
     public static int getChoice(Scanner scanner) {

@@ -1,20 +1,26 @@
 package org.example.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 public class ApiClient {
 
-    /**
-     * Get electricity prices for today and tomorrow (if available)
-     * This gets called only if the user choose a zone (SE1 - SE4) in ZoneSelection.
-     */
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+
     public String getPrices(LocalDate startDate, String zone) throws Exception {
-        String todayJson = getSingleDay(startDate, zone); // Fetch today's prices
-        String tomorrowJson = getSingleDay(startDate.plusDays(1), zone); // Fetch tomorrow's prices
+
+        LocalDate swedenDate =  LocalDate.now(ZoneId.of("Europe/Stockholm")); // Get current date in Sweden timezone
+
+        String todayJson = getSingleDay(swedenDate, zone); // Fetch today's prices
+        String tomorrowJson = getSingleDay(swedenDate.plusDays(1), zone); // Fetch tomorrow's prices
 
         return combineJsonArrays(todayJson, tomorrowJson); // Combine both days' prices into a single JSON array
     }
@@ -36,16 +42,25 @@ public class ApiClient {
     }
 
     private String combineJsonArrays(String jsonToday, String jsonTomorrow) { //Method to combine two JSON arrays into one.
-        if (jsonToday.equals("[]") && jsonTomorrow.equals("[]")) { // If both arrays are empty, return an empty array.
-            return "[]";
-        }
-        if (jsonToday.equals("[]")) { // If only today's array is empty, return tomorrow's array.
-            return jsonTomorrow;
-        }
-        if (jsonTomorrow.equals("[]")) { // If only tomorrow's array is empty, return today's array.
-            return jsonToday;
-        }
+        try {
 
-        return jsonToday.substring(0, jsonToday.length() - 1) + "," + jsonTomorrow.substring(1); // Combine the two arrays by removing the closing bracket from the first and the opening bracket from the second, and joining them with a comma.
+            String todayTrimmed = jsonToday == null ? "[]" : jsonToday.trim(); // Trim whitespace and handle null case for today's JSON.
+            String tomorrowTrimmed = jsonTomorrow == null ? "[]" : jsonTomorrow.trim(); // Trim whitespace and handle null case for tomorrow's JSON.
+
+            ArrayNode combinedArray = objectMapper.createArrayNode(); // Create a new empty JSON array.
+
+            if (!"[]".equals(todayTrimmed)) {
+                ArrayNode todayArray = (ArrayNode) objectMapper.readTree(todayTrimmed); // Parse today's JSON string into a JSON array.
+                combinedArray.addAll(todayArray);
+            }
+            if (!"[]".equals(tomorrowTrimmed)) {
+                ArrayNode tomorrowArray = (ArrayNode) objectMapper.readTree(tomorrowTrimmed); // Parse tomorrow's JSON string into a JSON array.
+                combinedArray.addAll(tomorrowArray);
+            }
+            return objectMapper.writeValueAsString(combinedArray); // Convert the combined JSON array back to a JSON string and return it.
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to merge JSON arrays: " + e.getMessage(), e); // Throw a runtime exception if merging fails.
+        }
     }
 }

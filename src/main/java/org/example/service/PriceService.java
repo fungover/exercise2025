@@ -216,7 +216,7 @@ public class PriceService {
     }
 
     private static int slidingWindowAlgorithm(PriceEntry[] array, int arrayLength, int windowSize) {
-        if (arrayLength <= windowSize) {
+        if (arrayLength < windowSize) {
             return -1;
         }
 

@@ -1,4 +1,7 @@
-package org.example;
+package org.example.service;
+import org.example.model.Consumption;
+import org.example.model.Elpris;
+
 import java.util.List;
 
 public class CostCalc {

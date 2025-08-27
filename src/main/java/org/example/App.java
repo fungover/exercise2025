@@ -1,7 +1,9 @@
 package org.example;
 
+import org.example.cli.ElprisCLI;
+
 public class App {
-    public static void main(String[] args) {
+     static void main() {
         new ElprisCLI().start();
     }
 }

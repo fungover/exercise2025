@@ -1,4 +1,6 @@
-package org.example;
+package org.example.service;
+
+import org.example.model.Elpris;
 
 import java.util.Comparator;
 import java.util.List;

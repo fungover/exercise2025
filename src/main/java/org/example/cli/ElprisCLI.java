@@ -1,4 +1,11 @@
-package org.example;
+package org.example.cli;
+import org.example.model.Consumption;
+import org.example.model.Elpris;
+import org.example.service.ConsumptionCSVReader;
+import org.example.service.CostCalc;
+import org.example.service.ElprisAnalyzer;
+import org.example.service.ElprisFetch;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.time.LocalDate;

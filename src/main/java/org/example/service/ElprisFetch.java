@@ -1,10 +1,12 @@
-package org.example;
+package org.example.service;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import com.google.gson.Gson;
+import org.example.model.Elpris;
+
 import java.time.LocalDate;
 import java.util.*;
 

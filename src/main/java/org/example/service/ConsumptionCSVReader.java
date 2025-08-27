@@ -1,4 +1,6 @@
-package org.example;
+package org.example.service;
+
+import org.example.model.Consumption;
 
 import java.io.*;
 import java.time.*;

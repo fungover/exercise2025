@@ -1,4 +1,4 @@
-package org.example;
+package org.example.model;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;

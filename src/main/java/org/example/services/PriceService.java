@@ -4,6 +4,8 @@ import org.example.model.PricePoint;
 import org.example.util.PriceJson;
 import org.example.util.PriceOps;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -12,10 +14,11 @@ import java.util.List;
 
 public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
 
-    public String handleChoice(int mainMenuChoice, LocalDate date, String areaCode) throws IOException, InterruptedException {
+    public String handleChoice(int mainMenuChoice, LocalDate date, String areaCode)
+            throws IOException, InterruptedException {
         return switch (mainMenuChoice) {
             case 1 -> downloadPrices(date, areaCode);
-            case 2 -> calculateMean(areaCode);
+            case 2 -> calculateMean(date, areaCode);
             case 3 -> findExtremes(areaCode);
             case 4 -> bestChargingWindow(areaCode);
             default -> "Invalid option!";
@@ -38,13 +41,37 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
         OffsetDateTime now = ZonedDateTime.now(zoneId).toOffsetDateTime();
         List<PricePoint> futureOnly = PriceOps.futureOrCurrent(merged, now);
 
-        // Return as JSON so the CLI can just println
+        // Return as pretty JSON so the CLI can just println
         return PriceJson.toPrettyJson(futureOnly);
     }
 
-    private String calculateMean(String areaCode) {
-        return "Mean price for area " + areaCode + ": ... (not implemented yet)";
+    private String calculateMean(LocalDate date, String areaCode)
+            throws IOException, InterruptedException {
+
+        String todayJson = apiClient.fetchPrices(date, areaCode);
+        List<PricePoint> points = PriceJson.parseList(todayJson);
+        // Guard: no data for that day
+        if (points.isEmpty()) {
+            return "No price data available for " + date + " (" + areaCode + ").";
+        }
+
+        // Sum precisely with BigDecimal
+        BigDecimal sum = BigDecimal.ZERO;
+        for (PricePoint p : points) {
+            sum = sum.add(p.sekPerKWh());
+        }
+
+        // Mean = sum / count, then format for display
+        BigDecimal mean = sum.divide(BigDecimal.valueOf(points.size()), 5, RoundingMode.HALF_UP);
+
+        String meanText = mean.setScale(3, RoundingMode.HALF_UP)
+                .stripTrailingZeros()
+                .toPlainString();
+
+        return "Mean price for " + date + " (" + areaCode + "): "
+                + meanText + " SEK/kWh (" + points.size() + " hours)";
     }
+
 
     private String findExtremes(String areaCode) {
         return "Cheapest and most expensive hours for area " + areaCode + ": ... (not implemented yet)";

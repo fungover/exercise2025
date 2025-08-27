@@ -1,6 +1,7 @@
 package ExerciseOne;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class Calculate {
 
         BigDecimal mean = new BigDecimal(sum/size);
 
-        System.out.printf("Mean price coming %,d hours : %.4f SEK per kWh %n",size, mean);
+        System.out.printf("Medelpriset för de kommande %,d timmar är : %.4f SEK per kWh %n",size, mean);
     }
 
     public void calculateMin(List<Pricing> priceList){
@@ -27,8 +28,11 @@ public class Calculate {
                         .filter(elem -> elem.SEK_per_kWh() == minValue)
                                 .toList();
 
-        System.out.println("Min price coming "+minValue);
-        System.out.println("Min price:"+ minValueObject.getFirst().time_start());
+        OffsetDateTime time = OffsetDateTime.parse(minValueObject.getFirst().time_start());
+        GetDateAndTime gd = new GetDateAndTime();
+
+        System.out.println("Lägsta kilowattpriset under kommande "+priceList.size()+" timmar är "
+                +gd.formatDateAndTime(time)+": "+minValue+" SEK per kWh");
     }
 
     public void calculateMax(List<Pricing> priceList){
@@ -41,8 +45,11 @@ public class Calculate {
                 .filter(elem -> elem.SEK_per_kWh() == maxValue)
                 .toList();
 
-        System.out.println("Max price coming "+maxValue);
-        System.out.println("Max price:"+maxValueObject.getFirst().time_start());
+        OffsetDateTime time = OffsetDateTime.parse(maxValueObject.getFirst().time_start());
+        GetDateAndTime gd = new GetDateAndTime();
+
+        System.out.println("Högsta kilowattpriset under kommande "+priceList.size()+" timmar är "
+                +gd.formatDateAndTime(time)+": "+maxValue+" SEK per kWh");
     }
 
     public void calculateCheapest(List<Pricing> priceList, int hours){
@@ -51,20 +58,20 @@ public class Calculate {
 
         for(int i = 0; i <= priceList.size()-hours; i++){
             double sum = 0;
-            String start = "";
-            String end = "";
+            String start = priceList.get(i).time_start();
+            String end = priceList.get(i).time_end();
+
             for(int j = i; j < i+ hours; j++){
                 sum += priceList.get(j).SEK_per_kWh();
-                 start = priceList.get(j).time_start();
-                 end = priceList.get(j).time_end();
             }
             listOfCost.add(new Cost(sum, start, end));
         }
 
-        displayCheapest(listOfCost);
+        displayCheapest(listOfCost, hours);
+        listOfCost.clear();
     }
 
-    public void displayCheapest(List<Cost> prices){
+    public void displayCheapest(List<Cost> prices, int hours){
         double cheapestValue = prices.stream()
                 .mapToDouble(Cost::cheapest)
                 .min().orElse(0);
@@ -73,7 +80,10 @@ public class Calculate {
                 .filter(elem -> elem.cheapest() ==  cheapestValue)
                 .toList();
 
-        System.out.println("Billigaste tiden att ladda bilen är mellan: "+cheapestObject.getFirst().timeStart()+" och "+cheapestObject.getFirst().timeEnd());
+        OffsetDateTime start = OffsetDateTime.parse(cheapestObject.getFirst().timeStart());
+        GetDateAndTime gd = new GetDateAndTime();
+
+        System.out.println("Billigaste tiden att ladda bilen "+hours +" i sträck är från: "+gd.formatDateAndTime(start));
     }
 
 }

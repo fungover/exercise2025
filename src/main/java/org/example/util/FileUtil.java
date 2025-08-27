@@ -15,6 +15,10 @@ import java.nio.file.StandardOpenOption;
 public class FileUtil {
     private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
 
+    private FileUtil() {
+        // utility class to prevent accidental instantiation.
+    }
+
     public static int createFile(String fileName) {
         Path path = Path.of(fileName);
         Path parent = path.getParent();
@@ -22,18 +26,17 @@ public class FileUtil {
         try {
             if (parent != null) {
                 Files.createDirectories(parent);
+                logger.info("Directory created: {}", parent.getFileName());
             }
             Files.createFile(path);
-            logger.info("File created: " + path.getFileName());
+            logger.info("File created: {}", path.getFileName());
             return 0;
+        } catch (FileAlreadyExistsException e) {
+            logger.info("File already exists: {}", path);
+            return -1;
         } catch (IOException e) {
-            if (Files.exists(path)) {
-                logger.info("File already exists: " + path.getFileName());
-                return -1;
-            } else {
-                logger.error("File could not be created: {}", fileName, e);
-                return -2;
-            }
+            logger.error("File could not be created: {}", fileName, e);
+            return -2;
         }
     }
 
@@ -51,7 +54,7 @@ public class FileUtil {
                     StandardOpenOption.CREATE,
                     StandardOpenOption.APPEND)) {
                 writer.write(content);
-                if (!content.endsWith(System.lineSeparator())) {
+                if (!(content.endsWith("\n") || content.endsWith("\r"))) {
                     writer.newLine();
                 }
             }

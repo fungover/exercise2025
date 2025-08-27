@@ -67,7 +67,7 @@ public class PriceService {
 
             int fileStatus = FileUtil.createFile(fileName);
 
-            if (fileStatus != -1) {
+            if (fileStatus == 0) {
                 FileUtil.writeToFile(fileName, "Start,End,Price_SEK_per_kWh\n");
             }
             System.out.println("=== " + dayLabel + " ===");
@@ -96,7 +96,7 @@ public class PriceService {
 
             int fileStatus = FileUtil.createFile(fileName);
 
-            if (fileStatus != -1) {
+            if (fileStatus == 0) {
                 FileUtil.writeToFile(fileName, "Start,End,Price_SEK_per_kWh\n");
             }
 
@@ -118,7 +118,7 @@ public class PriceService {
 
             int fileStatus = FileUtil.createFile(fileName);
 
-            if (fileStatus != -1) {
+            if (fileStatus == 0) {
                 FileUtil.writeToFile(fileName, "Start,End,Price_SEK_per_kWh\n");
             }
 

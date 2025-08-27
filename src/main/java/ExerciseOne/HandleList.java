@@ -8,14 +8,20 @@ public class HandleList {
   private final List<Pricing> listOfPrices =  new ArrayList<>();
 
     public void addList(List<Pricing> priceList) {
-       listOfPrices.addAll(priceList);
+        listOfPrices.addAll(priceList);
     }
 
     public List<Pricing> getListOfPrices() {
         return listOfPrices;
     }
 
-    public void printList(){
-        System.out.println("LIST"+listOfPrices);
+    public void removePastTime() {
+
+        GetDateAndTime getDateAndTime = new GetDateAndTime();
+        int time = getDateAndTime.getHour();
+
+            for(int i = 0; i < time; i++){
+                listOfPrices.removeFirst();
+            }
     }
-}
+ }

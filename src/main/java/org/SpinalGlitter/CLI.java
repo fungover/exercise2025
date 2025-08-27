@@ -4,20 +4,38 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class CLI {
-    private static final Set<String> ALLOWED_ZONES = Set.of("SE1", "SE2", "SE3", "SE4");//Will be used later
+    private static final Set<String> ALLOWED_ZONES = Set.of("SE1", "SE2", "SE3", "SE4");
 
     static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
-        //String zone = askZone(input);
+        String zone;
 
+        while (true) {
+            System.out.println("Hello! Welcome to a electricity price CLI!");
+            System.out.print("""
+                    SE1 (Norra Sverige)
+                    SE2 (Norra Mellansverige)
+                    SE3 (Sädra Mellansverige)
+                    SE4 (Södra Sverige)
+                    Please pick the area you want see the electricity price for (default SE3):\s""");
+            String answer = input.nextLine().trim().toUpperCase();
+
+            if (answer.isBlank()) {
+                zone = "SE3";
+                break;
+            }
+            if (ALLOWED_ZONES.contains(answer)) {
+                zone = answer;
+                break;
+            }
+            System.out.println("Invalid zone. Please try again.");
+        }
+        System.out.println("You picked zone " + zone);
 
         boolean CliRunning = true;
         while (CliRunning) {
 
-            // Display the options for the user.
-            System.out.println("Hello! Welcome to SpinalGlitter CLI!");
-            //System.out.println("Zone: " + zone);
             System.out.println("Please choose an option:");
             System.out.println("1 Show the electricity price for today");
             System.out.println("2 Show the average electricity price for today");
@@ -28,16 +46,14 @@ public class CLI {
             System.out.println("7 Exit");
             System.out.print("Choose: ");
 
-            // Read the user input
             String userInput = input.nextLine().trim();
 
-            // Process the user input
             switch (userInput) {
                 case "1": {
                     try {
                         API api = new API();
                         var today = java.time.LocalDate.now(java.time.ZoneId.of("Europe/Stockholm"));
-                        var entries = api.fetchDay(today, "SE3");// TODO: Change to users chosen zone
+                        var entries = api.fetchDay(today, zone);
 
                         if (entries.isEmpty()) {
                             System.out.println("No data available for today.");
@@ -63,7 +79,7 @@ public class CLI {
                     try {
                         API api = new API();
                         var today = java.time.LocalDate.now(java.time.ZoneId.of("Europe/Stockholm"));
-                        var entries = api.fetchDay(today, "SE3");// TODO: Change to users chosen zone
+                        var entries = api.fetchDay(today, zone);
 
                         if (entries.isEmpty()) {
                             System.out.println("No data available for today.");
@@ -85,7 +101,7 @@ public class CLI {
                     try {
                         API api = new API();
                         var tomorrow = java.time.LocalDate.now(java.time.ZoneId.of("Europe/Stockholm")).plusDays(1);
-                        var entries = api.fetchDay(tomorrow, "SE3");// TODO: Change to users chosen zone
+                        var entries = api.fetchDay(tomorrow, zone);
 
                         if (entries.isEmpty()) {
                             System.out.println("No data available for tomorrow.");
@@ -111,7 +127,7 @@ public class CLI {
                     try {
                         API api = new API();
                         var tomorrow = java.time.LocalDate.now(java.time.ZoneId.of("Europe/Stockholm")).plusDays(1);
-                        var entries = api.fetchDay(tomorrow, "SE3");// TODO: Change to users chosen zone
+                        var entries = api.fetchDay(tomorrow, zone);
 
                         if (entries.isEmpty()) {
                             System.out.println("No data available for tomorrow.");
@@ -133,7 +149,7 @@ public class CLI {
                     try {
                         API api = new API();
                         var today = java.time.LocalDate.now(java.time.ZoneId.of("Europe/Stockholm"));
-                        var entries = api.fetchDay(today, "SE3");// TODO: Change to users chosen zone
+                        var entries = api.fetchDay(today, zone);
 
                         if (entries.isEmpty()) {
                             System.out.println("No data available for today.");
@@ -173,7 +189,7 @@ public class CLI {
                     try {
                         API api = new API();
                         var today = java.time.LocalDate.now(java.time.ZoneId.of("Europe/Stockholm"));
-                        var entries = api.fetchDay(today, "SE3");// TODO: Change to users chosen
+                        var entries = api.fetchDay(today, zone);
 
                         if (entries.isEmpty()) {
                             System.out.println("No data available for today.");

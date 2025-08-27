@@ -91,13 +91,18 @@ public class PriceService {
     public static void fetchAndCalculateMeanPrice(String url, String fileName, String dayLabel) {
         try {
             PriceEntry[] entries = fetchPrices(url, false);
+            if (entries.length == 0) {
+                logger.warn("No prices found for {}", url);
+                return;
+            }
+
             double meanPrice = Arrays.stream(entries).mapToDouble(PriceEntry::SEK_per_kWh).average().orElse(0);
             double roundedMeanPrice = Math.round(meanPrice * 100) / 100.0;
 
             int fileStatus = FileUtil.createFile(fileName);
 
             if (fileStatus == 0) {
-                FileUtil.writeToFile(fileName, "Start,End,Price_SEK_per_kWh\n");
+                FileUtil.writeToFile(fileName, "Mean_SEK_per_kWh\\n");
             }
 
             String line = roundedMeanPrice + " SEK_per_kWh \n";
@@ -108,7 +113,7 @@ public class PriceService {
             FileUtil.writeToFile(fileName, csvLine + "\n");
 
         } catch (RuntimeException e) {
-            logger.error("Prices could not be parsed from {}", url, e);
+            logger.error("Failed to compute or persist mean price for {}", url, e);
         }
     }
 
@@ -117,7 +122,6 @@ public class PriceService {
             PriceEntry[] entries = fetchPrices(url, true);
 
             int fileStatus = FileUtil.createFile(fileName);
-
             if (fileStatus == 0) {
                 FileUtil.writeToFile(fileName, "Start,End,Price_SEK_per_kWh\n");
             }

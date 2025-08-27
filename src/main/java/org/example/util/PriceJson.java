@@ -1,0 +1,28 @@
+package org.example.util;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.example.model.PricePoint;
+import java.io.IOException;
+import java.util.List;
+
+public final class PriceJson {
+    private PriceJson() {}
+
+    private static final ObjectMapper MAPPER = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+    public static List<PricePoint> parseList(String json) throws IOException {
+        return MAPPER.readValue(json, new TypeReference<List<PricePoint>>() {});
+    }
+
+    public static String toJson(List<PricePoint> data) throws IOException {
+        return MAPPER.writeValueAsString(data);
+    }
+
+    public static String toPrettyJson(List<PricePoint> data) throws IOException {
+        return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(data);
+    }
+}

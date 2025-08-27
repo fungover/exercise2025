@@ -6,6 +6,7 @@ import org.example.model.ElectricityPrice;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public class CalculateMeanPrice {
@@ -65,9 +66,14 @@ public static String getPeriodInfo(String json) {  // Method to get information 
 
         if (hoursToInclude <= 0) return "No data available"; // If there are no hours to include, return a message indicating no data is available.
 
-        return String.format("from %s to %s (%d hours)\n", // Return a formatted string with the start and end times and the number of hours included.
-                prices.get(startIndex).timeStart().toLocalDateTime().toLocalTime(),
-                prices.get(startIndex + hoursToInclude - 1).timeEnd().toLocalDateTime().toLocalTime(),
+        OffsetDateTime startTime = prices.get(startIndex).timeStart();
+        OffsetDateTime endTime = prices.get(startIndex + hoursToInclude - 1).timeEnd();
+
+        return String.format("from %s %s to %s %s (%d hours)\n",
+                startTime.toLocalDate(),
+                startTime.toLocalTime(),
+                endTime.toLocalDate(),
+                endTime.toLocalTime(),
                 hoursToInclude);
     } catch (Exception e) {
         return "Error retrieving period info"; // In case of any exception, return an error message.

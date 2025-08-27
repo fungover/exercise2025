@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class ZoneSelection {
 
-    public String chooseZone(Scanner scanner) {
+    public String chooseZone(Scanner mainScanner) {
 
             while (true) { // Loop until a valid option is selected
                 System.out.println("\nPlease select an option:\n");
@@ -16,27 +16,27 @@ public class ZoneSelection {
                 System.out.println("2. Calculate consumption from CSV file."); // The CSV route, where the user can calculate cost from a CSV file.
                 System.out.print("\nEnter your choice: ");
 
-                if (scanner.hasNextInt()) {
-                    int mainChoice = scanner.nextInt();
-                    scanner.nextLine();
+                if (mainScanner.hasNextInt()) {
+                    int mainChoice = mainScanner.nextInt();
+                    mainScanner.nextLine();
 
                     if (mainChoice == 1) {
-                        return selectZone(scanner); // proceeds to zone selection
+                        return selectZone(mainScanner); // proceeds to zone selection
                     } else if (mainChoice == 2) {
-                        calculateCsv(scanner); // procees to CSV calculation.
+                        calculateCsv(mainScanner); // procees to CSV calculation.
                         return null;
                     } else {
                         System.out.println("Invalid choice, please try again:"); // Handles invalid choices.
                     }
                 } else {
                     System.out.println("Not a number, please try again."); // Handles non-integer inputs.
-                    scanner.nextLine(); // Clear the invalid input
+                    mainScanner.nextLine(); // Clear the invalid input
                 }
             }
 
     }
 
-    private String selectZone(Scanner scanner) { // Method for selecting the energy zone.
+    private String selectZone(Scanner mainScanner) { // Method for selecting the energy zone.
         while (true) { // Loop until a valid zone is selected
             System.out.println("\nPlease select a zone:\n");
             System.out.println("1. SE1 (Luleå / North Sweden)");
@@ -45,9 +45,9 @@ public class ZoneSelection {
             System.out.println("4. SE4 (Malmö / South Sweden)");
             System.out.print("\nEnter the number of your choice: ");
 
-            if (scanner.hasNextInt()) {
-                int choice = scanner.nextInt();
-                scanner.nextLine();
+            if (mainScanner.hasNextInt()) {
+                int choice = mainScanner.nextInt();
+                mainScanner.nextLine();
 
                 switch (choice) {
                     case 1 ->{return "SE1";} // Returns the zone code based on user choice.
@@ -58,19 +58,19 @@ public class ZoneSelection {
                 }
             } else {
                 System.out.println("Not a number, please try again."); // Handles non-integer inputs.
-                scanner.nextLine(); // Clear the invalid input
+                mainScanner.nextLine(); // Clear the invalid input
             }
         }
     }
 
-    private void calculateCsv(Scanner scanner) { // Method for calculating energy consumption from a CSV file.
+    private void calculateCsv(Scanner mainScanner) { // Method for calculating energy consumption from a CSV file.
         System.out.println("Enter CSV file path:"); // Prompting user for the CSV file path.
-        String csvPath = scanner.nextLine(); // Reading the file path input.
+        String csvPath = mainScanner.nextLine(); // Reading the file path input.
 
         System.out.print("Enter electricity price per kWh: "); // Prompting user for the electricity price.
 
         try {
-            BigDecimal price = new BigDecimal(scanner.nextLine()); // Reading and converting the price input to BigDecimal.
+            BigDecimal price = new BigDecimal(mainScanner.nextLine()); // Reading and converting the price input to BigDecimal.
             CsvEnergyCalculator.calculateFromCsv(csvPath, price); // Calling the CSV calculation method with the provided file path and price.
         } catch (IOException e) {
             System.out.println("Could not read CSV file: " + e.getMessage()); // Handling file read errors.

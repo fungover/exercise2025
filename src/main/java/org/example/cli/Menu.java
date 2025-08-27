@@ -85,7 +85,7 @@ public class Menu {
             System.out.printf("Duration: %d hours\n", chargingHours); // Displaying the duration of the charging period.
             System.out.printf("Start time: %s %s\n", result.startTime().toLocalDate(), result.startTime().toLocalDateTime().toLocalTime()); // Displaying the start time of the charging period.
             System.out.printf("End time: %s %s\n", result.endTime().toLocalDate(), result.endTime().toLocalDateTime().toLocalTime()); // Displaying the end time of the charging period.
-            System.out.printf("Sum of hourly prices: %,.3f SEK\n", result.totalCost()); // Displaying the total cost for the charging period.
+            System.out.printf("Sum of hourly prices: %.3f SEK\n", result.totalCost()); // Displaying the total cost for the charging period.
             System.out.printf("Average price during charging: %.3f SEK/KwH\n", avg); // Displaying the average price per kWh for the charging period.
         } else {
             System.out.printf("Could not find suitable %d-hour period\n", chargingHours); // If no suitable period was found, inform the user.

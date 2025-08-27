@@ -20,14 +20,11 @@ public class ChargingOptimizer {
     public static ChargingResult findBestChargingTime(String json, int chargingHours) {
 
       try {
-
-          //Convert json to java object.
-
           ObjectMapper mapper = JsonMapper.get(); // Create an instance of ObjectMapper to parse the JSON string.
           List<ElectricityPrice> prices = mapper.readValue(json, new TypeReference<>() {});
 
-          // Step 2: validate input
-          if (prices.size() < chargingHours) {
+
+          if (prices.size() < chargingHours) { // If there are not enough prices to cover the charging hours, return null.
               return null;
           }
 

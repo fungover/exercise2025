@@ -21,10 +21,6 @@ public class CsvEnergyCalculator {
             while ((line = reader.readLine()) != null) { // Reads each line in our CSV file until the end (as long as its not null).
                 String[] parts = line.split(";"); // Splits the line into parts using semicolon as the delimiter.
 
-                /**
-                 * Replace removes unwanted characters from the string. In our case we remove quotes and replace comma with dot
-                 * since BigDecimal needs dot as decimal separator.
-                 */
                 String consumptionStr = parts[1].replace("\"", "").replace(",", ".");
                 BigDecimal consumption = new BigDecimal(consumptionStr); //Converts the cleaned string to BigDecimal.
                 totalConsumption = totalConsumption.add(consumption); // Adds the consumption value to the total consumption.

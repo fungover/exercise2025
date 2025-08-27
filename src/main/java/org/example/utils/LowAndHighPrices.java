@@ -10,10 +10,10 @@ import java.util.List;
 
 public class LowAndHighPrices {
 
-    private static final DateTimeFormatter HHMM = DateTimeFormatter.ofPattern("HH:mm");
-    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter HHMM = DateTimeFormatter.ofPattern("HH:mm"); // Formatter to display time in HH:mm format.
+    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Formatter to display date in yyyy-MM-dd format.
 
-    public static void printMinMaxPrices(String json) {
+    public static void printMinMaxPrices(String json) { // Method to print the minimum and maximum electricity prices in both SEK and EUR.
 
         try {
 
@@ -21,13 +21,13 @@ public class LowAndHighPrices {
 
             List<ElectricityPrice> prices = mapper.readValue(json, new TypeReference<>() {}); // Reads the JSON string and maps it to a list of ElectricityPrice objects.
 
-            if (prices.isEmpty()) {
+            if (prices.isEmpty()) { // If the list is empty, we print a message and return.
                 System.out.println("No prices available for the selected period.");
                 return;
             }
 
-            ElectricityPrice minSEK = prices.get(0), maxSEK = prices.get(0); // Initialize min and max prices in SEK with the first price in the list.
-            ElectricityPrice minEUR = prices.get(0), maxEUR = prices.get(0); // Initialize min and max prices in EUR with the first price in the list.
+            ElectricityPrice minSEK = prices.getFirst(), maxSEK = prices.getFirst(); // Initialize min and max prices in SEK with the first price in the list.
+            ElectricityPrice minEUR = prices.getFirst(), maxEUR = prices.getFirst(); // Initialize min and max prices in EUR with the first price in the list.
 
             // Iterate through the list prices to find the minimum and maximum prices in both SEK and EUR.
             for (ElectricityPrice price : prices) {
@@ -53,12 +53,12 @@ public class LowAndHighPrices {
                 }
             }
 
-            System.out.println("\nBest price (SEK): " + formatTimeWithDate(minSEK.timeStart()) + " - " +
-                    formatTimeWithDate(minSEK.timeEnd()) + " (" + minSEK.sekPerKwh() + " SEK/kWh)");
-            System.out.println("Worst price (SEK): " + formatTimeWithDate(maxSEK.timeStart()) + " - " +
-                    formatTimeWithDate(maxSEK.timeEnd()) + " (" + maxSEK.sekPerKwh() + " SEK/kWh)");
+            System.out.println("\nBest price (SEK): " + formatTimeWithDate(minSEK.timeStart()) + " - " + // Printing the best price in SEK with formatted start and end times.
+                    formatTimeWithDate(minSEK.timeEnd()) + " (" + minSEK.sekPerKwh() + " SEK/kWh)"); // Using the helper method formatTimeWithDate to format the date and time.
+            System.out.println("Worst price (SEK): " + formatTimeWithDate(maxSEK.timeStart()) + " - " + // Printing the worst price in SEK with formatted start and end times.
+                    formatTimeWithDate(maxSEK.timeEnd()) + " (" + maxSEK.sekPerKwh() + " SEK/kWh)"); // Using the helper method formatTimeWithDate to format the date and time.
 
-            System.out.println("Best price (EUR): " + formatTimeWithDate(minEUR.timeStart()) + " - " +
+            System.out.println("Best price (EUR): " + formatTimeWithDate(minEUR.timeStart()) + " - " + //same as above, but for EUR prices.
                     formatTimeWithDate(minEUR.timeEnd()) + " (" + minEUR.eurPerKwh() + " EUR/kWh)");
             System.out.println("Worst price (EUR): " + formatTimeWithDate(maxEUR.timeStart()) + " - " +
                     formatTimeWithDate(maxEUR.timeEnd()) + " (" + maxEUR.eurPerKwh() + " EUR/kWh)");
@@ -68,8 +68,8 @@ public class LowAndHighPrices {
         }
     }
 
-    private static String formatTimeWithDate(OffsetDateTime time) {
-        return time.format(DATE) + " " + time.toLocalTime().format(HHMM);
+    private static String formatTimeWithDate(OffsetDateTime time) { //Helper method to format the date and time.
+        return time.format(DATE) + " " + time.toLocalTime().format(HHMM); // Returns the formatted date and time as a string.
     }
 
 }

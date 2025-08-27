@@ -50,13 +50,6 @@ public class ChargingOptimizer {
           int bestStartIndex = startIndex; // the index where the best window starts.
 
 
-
-          /**
-           * Here we start at index 1, since index 0 is the first window we already calculated.
-           * Then we continue as long as we can fit a full window of chargingHours.
-           * So when using prices.size() - chargingHours, we get for example 24 - 4 = 20. meaning the last window starts at index 20 and ends at index 23.
-           */
-
           for (int i = startIndex + 1; i <= prices.size() - chargingHours; i++) {
 
               // Remove the element that "falls out" from the left side of the window.

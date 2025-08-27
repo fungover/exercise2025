@@ -1,3 +1,10 @@
+/**
+ * Reads consumption data from a CSV file.
+ * Expected format per line:  yyyy-MM-dd HH:mm,kWh
+ * Parses each line into a Consumption object with a ZonedDateTime (Europe/Stockholm time zone) and a kWh value.
+ */
+
+
 package org.example.service;
 
 import org.example.model.Consumption;

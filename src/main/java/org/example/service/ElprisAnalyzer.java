@@ -1,3 +1,12 @@
+/**
+ * Provides static analysis methods for electricity price data:
+ * -mean: Calculate the average SEK price.
+ * -cheapest: Finds the cheapest hour.
+ * -mostExpensive: Finds the most expensive hour.
+ * -bestPeriod: Sliding window search for the cheapest block of hours.
+ * -periodAverage: Calculate average price for a given period length.
+ */
+
 package org.example.service;
 
 import org.example.model.Elpris;

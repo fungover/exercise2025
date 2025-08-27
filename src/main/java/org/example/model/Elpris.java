@@ -1,3 +1,9 @@
+/**
+ * Represent a single hourly electricity price entry.
+ * Fields include SEK per kWh, EUR per kWh, exchange rate, and start/end times.
+ * Parsing of ISO date-time strings to ZonedDateTime.
+ */
+
 package org.example.model;
 
 import java.time.ZonedDateTime;

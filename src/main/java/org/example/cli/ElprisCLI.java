@@ -1,3 +1,13 @@
+/**
+ * Command-line interface for electricity price application.
+ * Functionality:
+ * -Asks the user for the price zone.
+ * -Fetch and analyze electricity prices for today and tomorrow.
+ * Display statistics: average price, cheapest and most expensive hour and also best charging hours.
+ * Extra credit: Prompts user in the end to import CSV file with actual consumption data,
+ to use simply write consumption.csv then it will read it and calculate the total cost.
+ */
+
 package org.example.cli;
 import org.example.model.Consumption;
 import org.example.model.Elpris;

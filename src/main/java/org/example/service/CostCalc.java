@@ -1,3 +1,9 @@
+/**
+ * Calculates the total electricity cost from consumption and price data.
+ * For each consumption entry, find the matching hourly price by date and hour,
+ * multiplies SEK price by kWh usage and sums the result.
+ */
+
 package org.example.service;
 import org.example.model.Consumption;
 import org.example.model.Elpris;

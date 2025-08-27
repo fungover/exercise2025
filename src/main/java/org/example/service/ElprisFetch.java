@@ -1,3 +1,9 @@
+/**
+ * Service for fetching hourly electricity prices from elprisetjustnu.se API.
+ * Given a price zone and date, it builds the API URL, send HTTP request,
+ * parses the JSON response and return a list of Elpris objects.
+ */
+
 package org.example.service;
 
 import java.net.URI;

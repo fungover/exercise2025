@@ -27,7 +27,7 @@ public class Calculate {
                                 .toList();
 
         System.out.println("Min price coming "+minValue);
-        System.out.println("Min price:"+minValueObject);
+        System.out.println("Min price:"+ minValueObject.getFirst().time_start());
     }
 
     public void calculateMax(List<Pricing> priceList){
@@ -41,7 +41,7 @@ public class Calculate {
                 .toList();
 
         System.out.println("Max price coming "+maxValue);
-        System.out.println("Max price:"+maxValueObject);
+        System.out.println("Max price:"+maxValueObject.getFirst().time_start());
     }
 }
 //[Pricing[SEK_per_kWh=1.14889, EUR_per_kWh=0.10315, EXR=11.138022, time_start=2025-08-26T00:00:00+02:00, time_end=2025-08-26T01:00:00+02:00],

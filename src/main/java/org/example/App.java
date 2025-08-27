@@ -7,7 +7,7 @@ import org.example.cli.ZoneSelection;
 import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws java.io.IOException, InterruptedException {
 
         try (Scanner mainScanner = new Scanner(System.in)) { // Using try-with-resources to ensure the scanner is closed automatically.
 

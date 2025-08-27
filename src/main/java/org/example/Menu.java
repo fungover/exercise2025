@@ -1,10 +1,11 @@
 package org.example;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Menu {
 
-    public static void showDefaultMenu() {
+    public static void showDefaultMenu(ElectricityPriceFetcher electricityPriceFetcher) throws IOException, InterruptedException {
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
 
@@ -20,7 +21,7 @@ public class Menu {
             switch (choice) {
                 case 1:
                     isRunning = false;
-                    showMenuForDownloadingPrices(scanner);
+                    showMenuForDownloadingPrices(scanner, electricityPriceFetcher);
                     break;
                 case 2:
                     // Print mean price;
@@ -39,7 +40,7 @@ public class Menu {
 
     }
 
-    public static void showMenuForDownloadingPrices(Scanner scanner) {
+    public static void showMenuForDownloadingPrices(Scanner scanner, ElectricityPriceFetcher electricityPriceFetcher) throws IOException, InterruptedException {
         boolean isRunning = true;
 
         do {
@@ -54,7 +55,7 @@ public class Menu {
             switch (choice) {
                 case "SE1", "SE2", "SE3", "SE4" -> {
                     isRunning = false;
-                    //download prices
+                    electricityPriceFetcher.getTodayAndTomorrow(choice);
                 }
                 default -> System.out.println("Invalid choice. You must enter a valid zone.");
             }

@@ -3,7 +3,7 @@ package org.example;
 import java.time.LocalDate;
 
 public class App {
-    static void main() {
+    public static void main(String[] args) {
         System.out.println("Välkommen!");
         System.out.println("Här kan du se elpriser per timme för olika områden i Sverige.");
         System.out.println("\nTillgängliga priszoner:");

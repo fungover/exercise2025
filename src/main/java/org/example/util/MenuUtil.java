@@ -63,11 +63,8 @@ public class MenuUtil {
     public static void handleChoice(int choice, String area) {
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = today.plusDays(1);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
-        String date = today.format(formatter);
-        String dateTomorrow = tomorrow.format(formatter);
-        String urlToday = ApiClient.urlBuilder( date, area);
-        String urlTomorrow = ApiClient.urlBuilder( dateTomorrow, area);
+        var urlToday = ApiClient.urlBuilder(today, area);
+        var urlTomorrow = ApiClient.urlBuilder(tomorrow, area);
 
         switch (choice) {
             case 1:

@@ -36,8 +36,9 @@ public class ApiClient {
         return response;
     }
 
-    public static String urlBuilder(String date, String zone) {
-        String year = String.valueOf(java.time.LocalDate.now().getYear());
-        return "https://www.elprisetjustnu.se/api/v1/prices/" + year + "/" + date + "_" + zone + ".json";
+    public static String urlBuilder(LocalDate date, String zone) {
+        String year = String.valueOf(date.getYear());
+        String datePart = date.format(DateTimeFormatter.ofPattern("MM-dd"));
+        return "https://www.elprisetjustnu.se/api/v1/prices/" + year + "/" + datePart + "_" + zone + ".json";
     }
 }

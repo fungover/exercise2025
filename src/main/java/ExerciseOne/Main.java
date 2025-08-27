@@ -1,8 +1,6 @@
 package ExerciseOne;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
 
@@ -11,21 +9,31 @@ public class Main {
         Input input = new Input();
         int area = input.areaInput();
 
-        GetDate gd = new GetDate();
-        String today = gd.geToday(area);
+        GetDateAndTime gd = new GetDateAndTime();
+        String today = gd.getToday(area);
+
 
         Request req = new Request();
-        List<Pricing> pricing = new ArrayList<>(req.request(today));
+        HandleList hl = new HandleList();
 
-        int timeOfToday = gd.getTime();
+        hl.addList(req.request(today));
+
+        int timeOfToday = gd.getHour();
 
         if(timeOfToday >= 13){
-            String tomorrow = gd.geToday(area);
-            pricing.addAll(req.request(tomorrow));
+           String tomorrow = gd.getTomorrow(area);
+            hl.addList(req.request(tomorrow));
         }
 
-        Calculate calc = new Calculate(pricing);
-        System.out.println("LIST"+pricing);
+        hl.removePastTime();
+        Calculate calc = new Calculate();
+        calc.calculateMean(hl.getListOfPrices());
+        calc.calculateMin(hl.getListOfPrices());
+        calc.calculateMax(hl.getListOfPrices());
+        calc.calculateCheapest(hl.getListOfPrices(), 2);
+        calc.calculateCheapest(hl.getListOfPrices(), 4);
+        calc.calculateCheapest(hl.getListOfPrices(), 8);
+
 
     }
 }

@@ -14,14 +14,10 @@ public class PriceDisplay {
         try {
             ApiClient.ElectricityPrice[] prices = ApiClient.fetchPrices(year, month, day, priceArea);
 
-            System.out.printf("%nElpriser för %s (%s den %s-%s-%s):%n",
-                    priceArea, label, year, month, day);
-            
+            System.out.printf("%nElpriser för %s (%s den %s-%s-%s):%n", priceArea, label, year, month, day);
 
             for (ApiClient.ElectricityPrice price : prices) {
-                System.out.printf("%s | Pris: %.2f öre/kWh%n",
-                        price.formattedHourRange(),
-                        price.SEK_per_kWh() * 100);
+                System.out.printf("%s | Pris: %.2f öre/kWh%n", price.formattedHourRange(), price.SEK_per_kWh() * 100);
             }
         } catch (IOException ioe) {
             throw new RuntimeException("Kunde inte hämta priser för " + date + ": " + ioe.getMessage());

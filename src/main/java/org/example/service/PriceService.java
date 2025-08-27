@@ -11,9 +11,7 @@ import java.net.http.HttpResponse;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class PriceService {
     private static final Logger logger = LoggerFactory.getLogger(PriceService.class);
@@ -67,16 +65,22 @@ public class PriceService {
                 return;
             }
 
-            FileUtil.createFile(fileName);
-            writeHeader(fileName, dayLabel);
+            int fileStatus = FileUtil.createFile(fileName);
 
+            if (fileStatus != -1) {
+                FileUtil.writeToFile(fileName, "Start,End,Price_SEK_per_kWh\n");
+            }
+            System.out.println("=== " + dayLabel + " ===");
             Arrays.stream(entries).forEach(entry -> {
                 double roundedPrice = Math.round(entry.SEK_per_kWh() * 100) / 100.0;
 
                 String line = formatTimeRange(entry.time_start(), entry.time_end()) + ": \n" + roundedPrice + " SEK_per_kWh \n";
+                String csvLine = entry.time_start() + "," + entry.time_end() + "," + roundedPrice + "," ;
+
                 System.out.println(line);
 
-                FileUtil.writeToFile(fileName, line + "\n");
+                FileUtil.writeToFile(fileName, csvLine + "\n");
+
 
             });
         } catch (RuntimeException e) {
@@ -90,12 +94,18 @@ public class PriceService {
             double meanPrice = Arrays.stream(entries).mapToDouble(PriceEntry::SEK_per_kWh).average().orElse(0);
             double roundedMeanPrice = Math.round(meanPrice * 100) / 100.0;
 
-            FileUtil.createFile(fileName);
-            writeHeader(fileName, dayLabel);
+            int fileStatus = FileUtil.createFile(fileName);
+
+            if (fileStatus != -1) {
+                FileUtil.writeToFile(fileName, "Start,End,Price_SEK_per_kWh\n");
+            }
 
             String line = roundedMeanPrice + " SEK_per_kWh \n";
+            String csvLine = roundedMeanPrice + "";
+
+            System.out.println("=== " + dayLabel + " ===");
             System.out.println(line);
-            FileUtil.writeToFile(fileName, line + "\n");
+            FileUtil.writeToFile(fileName, csvLine + "\n");
 
         } catch (RuntimeException e) {
             logger.error("Prices could not be parsed from {}", url, e);
@@ -106,8 +116,11 @@ public class PriceService {
         try {
             PriceEntry[] entries = fetchPrices(url, true);
 
-            FileUtil.createFile(fileName);
-            writeHeader(fileName, dayLabel);
+            int fileStatus = FileUtil.createFile(fileName);
+
+            if (fileStatus != -1) {
+                FileUtil.writeToFile(fileName, "Start,End,Price_SEK_per_kWh\n");
+            }
 
             PriceEntry cheapestEntry = Arrays.stream(entries)
                     .min(java.util.Comparator
@@ -124,11 +137,14 @@ public class PriceService {
             double roundedCheapestPrice = Math.round(cheapestEntry.SEK_per_kWh() * 100) / 100.0;
             double roundedExpensivePrice = Math.round(expensiveEntry.SEK_per_kWh() * 100) / 100.0;
 
+            System.out.println("=== " + dayLabel + " ===");
             String cheapestLine = "Cheapest price: \n" + formatTimeRange(cheapestEntry.time_start(), cheapestEntry.time_end()) + "\n" + roundedCheapestPrice + " SEK_per_kWh";
             String expensiveLine = "\nMost expensive price: \n" + formatTimeRange(expensiveEntry.time_start(), expensiveEntry.time_end()) + "\n" + roundedExpensivePrice + " SEK_per_kWh";
+            String cheapestCsvLine = cheapestEntry.time_start() + "," + cheapestEntry.time_end() + "," + roundedCheapestPrice;
+            String expensiveCsvLine = expensiveEntry.time_start() + "," + expensiveEntry.time_end() + "," + roundedExpensivePrice;
 
-            FileUtil.writeToFile(fileName, cheapestLine + "\n");
-            FileUtil.writeToFile(fileName, expensiveLine + "\n");
+            FileUtil.writeToFile(fileName, cheapestCsvLine + "\n");
+            FileUtil.writeToFile(fileName, expensiveCsvLine + "\n");
 
             System.out.println(cheapestLine);
             System.out.println(expensiveLine);
@@ -147,8 +163,11 @@ public class PriceService {
                 return;
             }
 
-            FileUtil.createFile(fileName);
-            writeHeader(fileName, dayLabel);
+            int fileStatus = FileUtil.createFile(fileName);
+
+            if (fileStatus != -1) {
+                FileUtil.writeToFile(fileName, "Duration (h),Start,End,Price_SEK_per_kWh\n");
+            }
 
             System.out.println("=== " + dayLabel + " ===");
 
@@ -173,7 +192,9 @@ public class PriceService {
                         formatTimeRange(entries[optimalHours].time_start(),
                                 entries[optimalHours + duration - 1].time_end()) + "\n Total cost: " + roundedTotalCost + " SEK_per_kWh\n";
 
-                FileUtil.writeToFile(fileName, line + "\n");
+                String csvLine = duration + "," + entries[optimalHours].time_start().toString() + "," + entries[optimalHours + duration - 1].time_end().toString() + "," + roundedTotalCost;
+
+                FileUtil.writeToFile(fileName, csvLine + "\n");
                 System.out.println(line);
             }
 
@@ -182,12 +203,6 @@ public class PriceService {
             logger.error("Prices could not be parsed from {}", url, e);
         }
 
-    }
-
-    private static void writeHeader(String fileName, String header) {
-        String line = "===== " + header + " =====";
-        System.out.println(line);
-        FileUtil.writeToFile(fileName, line + "\n");
     }
 
     private static String formatTimeRange(OffsetDateTime start, OffsetDateTime end) {

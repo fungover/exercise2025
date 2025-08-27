@@ -1,4 +1,6 @@
 target/
 /.idea/
-prices.txt
-pricesTomorrow.txt
+CheapestAndExpensivePrices.csv
+MeanPrices.csv
+OptimalChargingToday.csv
+TodaysPrices.csv

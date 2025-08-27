@@ -73,27 +73,27 @@ public class MenuUtil {
             case 1:
                 System.out.println("Downloading prices for the current day and next day");
                 //Today's prices
-                PriceService.downloadPrices(urlToday, "prices.txt", "Today's prices");
+                PriceService.downloadPrices(urlToday, "TodaysPrices.csv", "Today's prices");
 
                 //Tomorrow's prices'
-                PriceService.downloadPrices(urlTomorrow, "pricesTomorrow.txt", "Tomorrow's prices");
+                PriceService.downloadPrices(urlTomorrow, "TomorrowsPrices.csv", "Tomorrow's prices");
 
                 break;
 
             case 2:
                 System.out.println("Printing the mean price for the current 24-hour period");
-                PriceService.fetchAndCalculateMeanPrice(urlToday, "prices.txt", "Today's mean price");
+                PriceService.fetchAndCalculateMeanPrice(urlToday, "MeanPrices.csv", "Today's mean price");
                 break;
 
             case 3:
                 System.out.println("Identifying and printing the hours with the cheapest and most expensive prices");
-                PriceService.fetchAndPrintCheapestAndMostExpensivePrices(urlToday, "prices.txt", "Today's cheapest and most expensive prices");
+                PriceService.fetchAndPrintCheapestAndMostExpensivePrices(urlToday, "CheapestAndExpensivePrices.csv", "Today's Cheapest and Most Expensive");
                 break;
 
             case 4:
                 System.out.println("Determining the best time to charge an electric car for durations of 2, 4, or 8 hours");
-                PriceService.optimalChargeTime(urlToday, "prices.txt", "Today's optimal charge time");
-                PriceService.optimalChargeTime(urlTomorrow, "prices.txt", "Tomorrow's optimal charge time");
+                PriceService.optimalChargeTime(urlToday, "OptimalChargingToday.csv", "Today's optimal charge time");
+                PriceService.optimalChargeTime(urlTomorrow, "OptimalChargingTomorrow.csv", "Tomorrow's optimal charge time");
                 break;
 
             case 5:

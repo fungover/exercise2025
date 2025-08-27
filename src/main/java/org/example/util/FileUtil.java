@@ -14,16 +14,21 @@ import java.nio.file.StandardOpenOption;
 
 public class FileUtil {
     private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
+
     public static int createFile(String fileName) {
         Path path = Path.of(fileName);
+        Path parent = path.getParent();
 
         try {
+            if (parent != null) {
+                Files.createDirectories(parent);
+            }
             Files.createFile(path);
-            System.out.println("File created: " + path.getFileName());
+            logger.info("File created: " + path.getFileName());
             return 0;
         } catch (IOException e) {
             if (Files.exists(path)) {
-                System.out.println("File already exists: " + path.getFileName());
+                logger.info("File already exists: " + path.getFileName());
                 return -1;
             } else {
                 logger.error("File could not be created: {}", fileName, e);

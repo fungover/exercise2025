@@ -46,6 +46,7 @@ public class App {
             switch (choice) {
                 case "1":
                     System.out.println("Valde: Ladda ner priser");
+
                     break;
 
                 case "2":
@@ -71,4 +72,23 @@ public class App {
             System.out.println();
         }
     }
+
+    // Placeholders
+    private static void allPrices() {
+        System.out.println("Du valde: Ladda ner alla priser");
+    }
+
+    private static void meanPrice() {
+        System.out.println("Du valde: Visa medelpris för idag");
+    }
+
+    private static void minMax() {
+        System.out.println("Du valde: Visa billigaste och dyraste timmar");
+    }
+
+    private static void bestChargingTime() {
+        System.out.println("Du valde: Hitta bästa tid att ladda elbil");
+
+    }
 }
+

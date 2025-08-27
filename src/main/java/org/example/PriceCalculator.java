@@ -33,6 +33,14 @@ public class PriceCalculator {
     }
 
     public static ChargingWindow findBestChargingWindow(List<ApiClient.ElectricityPrice> allPrices, int chargingHours) {
+        if (chargingHours <= 0) {
+            throw new IllegalArgumentException("Antal laddningstimmar måste vara minst 1");
+        }
+        // Optional: enforce supported windows only
+        // if (chargingHours != 2 && chargingHours != 4 && chargingHours != 8) {
+        //     throw new IllegalArgumentException("Endast 2, 4 eller 8 timmars laddning stöds");
+        // }
+
         if (allPrices.size() < chargingHours) {
             return null;
         }
@@ -42,7 +50,6 @@ public class PriceCalculator {
         if (availablePrices.size() < chargingHours) {
             return null;
         }
-
         double bestTotalCost = Double.MAX_VALUE;
         int bestStartIndex = 0;
 

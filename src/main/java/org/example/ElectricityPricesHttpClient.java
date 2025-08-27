@@ -4,6 +4,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -12,7 +14,7 @@ import com.google.gson.JsonParser;
 
 public class ElectricityPricesHttpClient {
 
-    public static JsonArray fetchElectricityPrices(int year, int month, int day, String priceArea) throws Exception {
+    public static List<JsonObject> fetchElectricityPrices(int year, int month, int day, String priceArea) throws Exception {
         String url = String.format(
                 "https://www.elprisetjustnu.se/api/v1/prices/%04d/%02d-%02d_%s.json",
                 year, month, day, priceArea
@@ -30,6 +32,12 @@ public class ElectricityPricesHttpClient {
             throw new RuntimeException("HTTP error: " + response.statusCode());
         }
 
-        return JsonParser.parseString(response.body()).getAsJsonArray();
+        JsonArray jsonArray = JsonParser.parseString(response.body()).getAsJsonArray();
+        List<JsonObject> result = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            result.add(jsonArray.get(i).getAsJsonObject());
+        }
+        return result;
     }
 }

@@ -18,10 +18,22 @@ import java.util.List;
 public class PriceService {
     private static final Logger logger = LoggerFactory.getLogger(PriceService.class);
 
-    private static PriceEntry[] fetchPrices(String url) {
+    private static PriceEntry[] fetchPrices(String url, boolean futureOnly) {
         HttpResponse<String> response = ApiClient.getPrices(url);
-        if (response == null || response.statusCode() != 200) {
-            logger.error("Prices could not be fetched from {}", url);
+        if (response == null) {
+            logger.error("No response received from {}", url);
+            return new PriceEntry[0];
+        }
+
+        int status = response.statusCode();
+
+        if (status == 404) {
+            logger.warn("Prices at {} does not exist yet (404)", url);
+            return new PriceEntry[0];
+        }
+
+        if (status != 200) {
+            logger.error("Failed to fetch prices from {}. HTTP status: {}", url, status);
             return new PriceEntry[0];
         }
 
@@ -30,10 +42,13 @@ public class PriceService {
 
         try {
             PriceEntry[] entries = mapper.readValue(response.body(), PriceEntry[].class);
-            OffsetDateTime now = OffsetDateTime.now();
-            entries = Arrays.stream(entries)
-                    .filter(entry -> entry.time_start().isAfter(now) && entry.time_end().isAfter(now))
-                    .toArray(PriceEntry[]::new);
+
+            if (futureOnly) {
+                OffsetDateTime now = OffsetDateTime.now();
+                entries = Arrays.stream(entries)
+                        .filter(entry -> entry.time_end().isAfter(now))
+                        .toArray(PriceEntry[]::new);
+            }
 
             return entries;
 
@@ -45,14 +60,24 @@ public class PriceService {
 
     public static void downloadPrices(String url, String fileName, String dayLabel) {
         try {
-            PriceEntry[] entries = fetchPrices(url);
+            PriceEntry[] entries = fetchPrices(url, true);
+
+            if (entries.length == 0) {
+                logger.warn("No prices found for {}", url);
+                return;
+            }
+
             FileUtil.createFile(fileName);
             writeHeader(fileName, dayLabel);
 
             Arrays.stream(entries).forEach(entry -> {
-                String line = formatTimeRange(entry.time_start(), entry.time_end()) + ": " + entry.SEK_per_kWh() + " SEK_per_kWh";
+                double roundedPrice = Math.round(entry.SEK_per_kWh() * 100) / 100.0;
+
+                String line = formatTimeRange(entry.time_start(), entry.time_end()) + ": \n" + roundedPrice + " SEK_per_kWh \n";
                 System.out.println(line);
+
                 FileUtil.writeToFile(fileName, line + "\n");
+
             });
         } catch (RuntimeException e) {
             logger.error("Prices could not be written to {}", fileName, e);
@@ -61,15 +86,17 @@ public class PriceService {
 
     public static void fetchAndCalculateMeanPrice(String url, String fileName, String dayLabel) {
         try {
-            PriceEntry[] entries = fetchPrices(url);
+            PriceEntry[] entries = fetchPrices(url, false);
             double meanPrice = Arrays.stream(entries).mapToDouble(PriceEntry::SEK_per_kWh).average().orElse(0);
+            double roundedMeanPrice = Math.round(meanPrice * 100) / 100.0;
 
             FileUtil.createFile(fileName);
             writeHeader(fileName, dayLabel);
 
-            String line = meanPrice + " SEK_per_kWh";
+            String line = roundedMeanPrice + " SEK_per_kWh \n";
             System.out.println(line);
             FileUtil.writeToFile(fileName, line + "\n");
+
         } catch (RuntimeException e) {
             logger.error("Prices could not be parsed from {}", url, e);
         }
@@ -77,7 +104,11 @@ public class PriceService {
 
     public static void fetchAndPrintCheapestAndMostExpensivePrices(String url, String fileName, String dayLabel) {
         try {
-            PriceEntry[] entries = fetchPrices(url);
+            PriceEntry[] entries = fetchPrices(url, true);
+
+            FileUtil.createFile(fileName);
+            writeHeader(fileName, dayLabel);
+
             PriceEntry cheapestEntry = Arrays.stream(entries)
                     .min(java.util.Comparator
                             .comparingDouble(PriceEntry::SEK_per_kWh)
@@ -90,8 +121,17 @@ public class PriceService {
                             .thenComparing(PriceEntry::time_start))
                     .orElse(null);
 
-            System.out.println("Cheapest price: \n" + formatTimeRange(cheapestEntry.time_start(), cheapestEntry.time_end()) + "\n" + cheapestEntry.SEK_per_kWh() + " SEK_per_kWh");
-            System.out.println("Most expensive price: \n" + formatTimeRange(expensiveEntry.time_start(), expensiveEntry.time_end()) + "\n" + expensiveEntry.SEK_per_kWh() + " SEK_per_kWh");
+            double roundedCheapestPrice = Math.round(cheapestEntry.SEK_per_kWh() * 100) / 100.0;
+            double roundedExpensivePrice = Math.round(expensiveEntry.SEK_per_kWh() * 100) / 100.0;
+
+            String cheapestLine = "Cheapest price: \n" + formatTimeRange(cheapestEntry.time_start(), cheapestEntry.time_end()) + "\n" + roundedCheapestPrice + " SEK_per_kWh";
+            String expensiveLine = "\nMost expensive price: \n" + formatTimeRange(expensiveEntry.time_start(), expensiveEntry.time_end()) + "\n" + roundedExpensivePrice + " SEK_per_kWh";
+
+            FileUtil.writeToFile(fileName, cheapestLine + "\n");
+            FileUtil.writeToFile(fileName, expensiveLine + "\n");
+
+            System.out.println(cheapestLine);
+            System.out.println(expensiveLine);
 
         } catch (RuntimeException e) {
             logger.error("Prices could not be parsed from {}", url, e);
@@ -100,7 +140,15 @@ public class PriceService {
 
     public static void optimalChargeTime(String url, String fileName, String dayLabel) {
         try {
-            PriceEntry[] entries = fetchPrices(url);
+            PriceEntry[] entries = fetchPrices(url, true);
+
+            if (entries.length == 0) {
+                logger.warn("No prices found for {}", url);
+                return;
+            }
+
+            FileUtil.createFile(fileName);
+            writeHeader(fileName, dayLabel);
 
             System.out.println("=== " + dayLabel + " ===");
 
@@ -119,10 +167,14 @@ public class PriceService {
                     totalCost += entries[i].SEK_per_kWh();
                 }
 
-                System.out.println("(" + duration + "h): " +
+                double roundedTotalCost = Math.round(totalCost * 100) / 100.0;
+
+                String line = "(" + duration + "h): " +
                         formatTimeRange(entries[optimalHours].time_start(),
-                                entries[optimalHours + duration - 1].time_end()) + "\n Total cost: " + totalCost + "SEK_per_kWh");
-                //Add SEK
+                                entries[optimalHours + duration - 1].time_end()) + "\n Total cost: " + roundedTotalCost + " SEK_per_kWh\n";
+
+                FileUtil.writeToFile(fileName, line + "\n");
+                System.out.println(line);
             }
 
 

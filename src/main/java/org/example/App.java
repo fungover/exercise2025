@@ -1,134 +1,160 @@
 package org.example;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import javax.swing.text.DateFormatter;
-import javax.swing.text.Element;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Objects;
+import java.util.Scanner;
 
-
-/// Create a CLI (Command-Line Interface) program that can:
-/// Download prices for the current day and the next day (if available).
-///  Print the mean price for the current 24-hour period.
-///  Identify and print the hours with the cheapest and most expensive prices.
-/// TODO: Fix algorithm for when tomorrows prices are also available
-/// TODO: If multiple hours share the same price, select the earliest hour.
-/// TODO: Determine the best time to charge an electric car for durations of 2, 4, or 8 hours. (Use a Sliding Window algorithm for this.)
-/// TODO: Allow selection of the price zone ("zon") for which to retrieve data. (Possible input methods: command-line argument, config file, or interactive prompt.)
 public class App {
     record ElectricityPrice(double SEK_per_kWh, double EUR_per_kWh, String EXR, String time_start, String time_end) {}
-    record ElectricityInfo(int id, ElectricityPrice price) {}
 
     public static void main(String[] args) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
-        getPrices(date, time);
-
+        handleElectricityPrices(date, time);
     }
-    public static void getPrices(LocalDate date, LocalTime time){
-        ArrayList<ElectricityPrice> electricityPrices = new ArrayList<>();
+    public static void handleElectricityPrices(LocalDate date, LocalTime time){
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<ElectricityPrice> electricityPrices;
         String timeString = time.toString();
         String hourString = timeString.substring(0,2);
         int hour = Integer.parseInt(hourString);
+        System.out.println("What zone do you want the information for?");
+        System.out.println("Type SE1, SE2, SE3 or SE4");
+        String zone = scanner.nextLine();
+        electricityPrices= getElectricityPrices(date, hour, zone);
+        calculateMean(electricityPrices);
+        findCheapestHour(electricityPrices);
+        findMostExpensiveHour(electricityPrices);
+        findCheapestPeriod(2, electricityPrices);
+        findCheapestPeriod(4, electricityPrices);
+        findCheapestPeriod(8, electricityPrices);
+    }
+
+    private static ArrayList<ElectricityPrice> getElectricityPrices(LocalDate date, int hour, String zone) {
+        ArrayList<ElectricityPrice> electricityPrices;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM-dd");
         String formattedDate = date.format(formatter);
-
-        System.out.println(formattedDate);
-        System.out.println(hour);
         if(hour < 13){
-            electricityPrices = jsonDownloadAndConvert(formattedDate);
+            electricityPrices = jsonDownloadAndConvert(formattedDate, zone);
         }
         else{
             LocalDate nextDay = LocalDate.now().plusDays(1);
             String formattedNextDay = nextDay.format(formatter);
-            electricityPrices = jsonDownloadAndConvert(formattedDate);
-            ArrayList<ElectricityPrice> electricityPricesTomorrow = jsonDownloadAndConvert(formattedNextDay);
+            electricityPrices = jsonDownloadAndConvert(formattedDate, zone);
+            ArrayList<ElectricityPrice> electricityPricesTomorrow = jsonDownloadAndConvert(formattedNextDay, zone);
             electricityPrices.addAll(electricityPricesTomorrow);
-        }
-        calculateMean(electricityPrices, hour);
-        findCheapestHour(electricityPrices);
-        findMostExpensiveHour(electricityPrices);
-    }
-
-    private static void findMostExpensiveHour(ArrayList<ElectricityPrice> electricityPrices) {
-        double mostExpensive = Integer.MIN_VALUE;
-        String time = null;
-        for(ElectricityPrice electricityPrice : electricityPrices) {
-            if(electricityPrice.SEK_per_kWh > mostExpensive){
-                mostExpensive = electricityPrice.SEK_per_kWh;
-                time = electricityPrice.time_start;
+            electricityPrices.subList(0, hour).clear();
+            if (electricityPrices.size() > 24) {
+                electricityPrices.subList(24, electricityPrices.size()).clear();
             }
         }
-        String hour= time.substring(11,13);
-        int startHour = Integer.parseInt(hour);
-        int endHour = startHour+1;
-        System.out.println("The most expensive hour is between "+startHour+"  and "+endHour+". The price is "+mostExpensive+" SEK.");
+        return electricityPrices;
     }
 
-    private static void findCheapestHour(ArrayList<ElectricityPrice> electricityPrices) {
-        double cheapest = Integer.MAX_VALUE;
-        String time = null;
-        for(ElectricityPrice electricityPrice : electricityPrices) {
-            if(electricityPrice.SEK_per_kWh < cheapest){
-                cheapest = electricityPrice.SEK_per_kWh;
-                time = electricityPrice.time_start;
-            }
-        }
-        String hour= time.substring(11,13);
-        int startHour = Integer.parseInt(hour);
-        int endHour = startHour+1;
-        System.out.println("The cheapest hour is between "+startHour+"  and "+endHour+". The price is "+cheapest+" SEK.");
-    }
-
-    private static void calculateMean(ArrayList<ElectricityPrice> electricityPrices, int hour) {
-        if(hour < 13){
-            double totalPrice = 0;
-            for(ElectricityPrice electricityPrice : electricityPrices){
-                System.out.println(electricityPrice.SEK_per_kWh);
-                totalPrice += electricityPrice.SEK_per_kWh;
-            }
-            double mean = totalPrice / electricityPrices.size();
-            System.out.println("The mean price for the current 24h period is " + mean + " SEK");
-        }
-        else{
-            //TODO: calculate the coming 24 h mean price
-        }
-
-    }
-
-    private static ArrayList<ElectricityPrice> jsonDownloadAndConvert(String date) {
-        String baseURI = "https://www.elprisetjustnu.se/api/v1/prices";
-        String URL = baseURI + "/"+date+"_SE3.json";
-        System.out.println("URL: " + URL);
+    private static ArrayList<ElectricityPrice> jsonDownloadAndConvert(String date, String zone) {
+        String URL = "https://www.elprisetjustnu.se/api/v1/prices" + "/"+date+"_"+zone+".json";
         try {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder().uri(URI.create(URL)).build();
-            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response;
+            try (HttpClient client = HttpClient.newHttpClient()) {
+                HttpRequest request = HttpRequest.newBuilder().uri(URI.create(URL)).build();
+                response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            }
             String json = response.body();
-
             ObjectMapper objectMapper = new ObjectMapper();
             ArrayList <ElectricityPrice>electricity = objectMapper.readValue(json, new TypeReference<ArrayList<ElectricityPrice>>() {
             });
             return electricity;
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
     }
 
+    private static void findCheapestPeriod(int k, ArrayList<ElectricityPrice> prices) {
+        double windowSum = 0;
+        int startHour = 0;
+        int endHour = 0;
+        for(int i=0; i<k; i++){
+            windowSum += prices.get(i).SEK_per_kWh;
+        }
+        double minSum = Integer.MAX_VALUE;
+        LocalDate date = null;
+        for(int i=k; i< prices.size(); i++){
+            windowSum += prices.get(i).SEK_per_kWh-prices.get(i-k).SEK_per_kWh;
+            if(windowSum < minSum){
+                minSum = windowSum;
+                String startTime = prices.get(i-k).time_start;
+                String hour= startTime.substring(11,13);
+                startHour = Integer.parseInt(hour);
+                endHour = startHour+k;
+                date = LocalDate.parse(prices.get(i).time_start.substring(0,10));
+            }
+        }
+        if(date.isAfter(LocalDate.now())){
+            System.out.println("The cheapest time to charge an electric car for "+k+" hours is between "+startHour+" and "+endHour+" tomorrow.");
+        }else{
+            System.out.println("The cheapest time to charge an electric car for "+k+" hours is between "+startHour+" and "+endHour+" today.");
+        }
+    }
 
+    private static void findMostExpensiveHour(ArrayList<ElectricityPrice> electricityPrices) {
+        double mostExpensive = Integer.MIN_VALUE;
+        String time = null;
+        LocalDate date = LocalDate.now();
+        for(ElectricityPrice electricityPrice : electricityPrices) {
+            if(electricityPrice.SEK_per_kWh > mostExpensive){
+                mostExpensive = electricityPrice.SEK_per_kWh;
+                time = electricityPrice.time_start;
+                date = LocalDate.parse(electricityPrice.time_start.substring(0,10));
+            }
+        }
+        String hour= Objects.requireNonNull(time).substring(11,13);
+        int startHour = Integer.parseInt(hour);
+        int endHour = startHour+1;
+        if(date.isAfter(LocalDate.now())){
+            System.out.println("The most expensive hour is between "+startHour+"  and "+endHour+" tomorrow. The price is "+mostExpensive+" SEK per kWh.");
+        }else{
+            System.out.println("The most expensive hour is between "+startHour+"  and "+endHour+" today. The price is "+mostExpensive+" SEK per kWh.");
+        }
+    }
 
+    private static void findCheapestHour(ArrayList<ElectricityPrice> electricityPrices) {
+        double cheapest = Integer.MAX_VALUE;
+        LocalDate date = LocalDate.now();
+        String time = null;
+        for(ElectricityPrice electricityPrice : electricityPrices) {
+            if(electricityPrice.SEK_per_kWh < cheapest){
+                cheapest = electricityPrice.SEK_per_kWh;
+                time = electricityPrice.time_start;
+                date = LocalDate.parse(electricityPrice.time_start.substring(0,10));
+            }
+        }
+        String hour= Objects.requireNonNull(time).substring(11,13);
+        int startHour = Integer.parseInt(hour);
+        int endHour = startHour+1;
+        if(date.isAfter(LocalDate.now())){
+            System.out.println("The cheapest hour is between "+startHour+"  and "+endHour+" tomorrow. The price is "+cheapest+" SEK per kWh.");
+        }else{
+            System.out.println("The cheapest hour is between "+startHour+"  and "+endHour+" today. The price is "+cheapest+" SEK per kWh.");
+        }
+    }
+
+    private static void calculateMean(ArrayList<ElectricityPrice> electricityPrices) {
+        double totalPrice = 0;
+        for(ElectricityPrice electricityPrice : electricityPrices){
+            totalPrice += electricityPrice.SEK_per_kWh;
+        }
+        double mean = totalPrice / electricityPrices.size();
+        System.out.println("The mean price for the current 24h period is " + mean + " SEK per kWh");
+    }
 }

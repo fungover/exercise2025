@@ -14,14 +14,4 @@ public class HandleList {
     public List<Pricing> getListOfPrices() {
         return listOfPrices;
     }
-
-    public void removePastTime() {
-
-        GetDateAndTime getDateAndTime = new GetDateAndTime();
-        int time = getDateAndTime.getHour();
-
-            for(int i = 0; i < time; i++){
-                listOfPrices.removeFirst();
-            }
-    }
  }

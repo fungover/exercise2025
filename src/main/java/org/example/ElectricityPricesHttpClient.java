@@ -1,5 +1,7 @@
 package org.example;
 
+import java.time.OffsetDateTime;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -14,7 +16,7 @@ import com.google.gson.JsonParser;
 
 public class ElectricityPricesHttpClient {
 
-    public static List<JsonObject> fetchElectricityPrices(int year, int month, int day, String priceArea) throws Exception {
+    public static List<PriceEntry> fetchElectricityPrices(int year, int month, int day, String priceArea) throws Exception {
         String url = String.format(
                 "https://www.elprisetjustnu.se/api/v1/prices/%04d/%02d-%02d_%s.json",
                 year, month, day, priceArea
@@ -33,10 +35,13 @@ public class ElectricityPricesHttpClient {
         }
 
         JsonArray jsonArray = JsonParser.parseString(response.body()).getAsJsonArray();
-        List<JsonObject> result = new ArrayList<>();
+        List<PriceEntry> result = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.size(); i++) {
-            result.add(jsonArray.get(i).getAsJsonObject());
+            JsonObject obj = jsonArray.get(i).getAsJsonObject();
+            OffsetDateTime time = OffsetDateTime.parse(obj.get("time_start").getAsString());
+            double price = obj.get("SEK_per_kWh").getAsDouble();
+            result.add(new PriceEntry(time, price));
         }
         return result;
     }

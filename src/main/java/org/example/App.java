@@ -54,14 +54,28 @@ public class App {
             System.out.print("Ditt val: ");
             String choice = scanner.nextLine();
 
+            List<PriceEntry> prices = null;
+
+            try {
+                prices = ElectricityPricesHttpClient.fetchElectricityPrices(
+                        LocalDate.now().getYear(),
+                        LocalDate.now().getMonthValue(),
+                        LocalDate.now().getDayOfMonth(),
+                        area
+                );
+            } catch (Exception e) {
+                System.out.println("Fel vid hämtning av priser: " + e.getMessage());
+                return;
+            }
+
             switch (choice) {
                 case "1":
-                    showAllPrices(area);
+                    Prices.showAllPrices(prices);
 
                     break;
 
                 case "2":
-                    System.out.println("Valde: Visa medelpris för idag");
+                    Prices.showAveragePrice(prices);
                     break;
 
                 case "3":

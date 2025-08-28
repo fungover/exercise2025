@@ -6,34 +6,32 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Prices {
-    public static void showAllPrices(String area) {
-        try {
-            // Hämtar dagens datum
-            LocalDate today = LocalDate.now();
+    public static void showAllPrices(List<PriceEntry> prices) {
+        if (prices == null || prices.isEmpty()) {
+            System.out.println("Inga priser tillgängliga.");
+            return;
+        }
 
-            // Anropar HttpClient för att hämta alla priser
-            List<JsonObject> prices = ElectricityPricesHttpClient.fetchElectricityPrices(
-                    today.getYear(),
-                    today.getMonthValue(),
-                    today.getDayOfMonth(),
-                    area
-            );
-
-            // Visar info i konsolen
-            System.out.println("Hämtade " + prices.size() + " timpriser för zon " + area + ":");
-            for (JsonObject obj : prices) {
-                String time = obj.get("time_start").getAsString();
-                double price = obj.get("SEK_per_kWh").getAsDouble();
-                System.out.println(time + " - " + price + " kr/kWh");
-            }
-
-        } catch (Exception e) {
-            System.out.println("Fel vid hämtning: " + e.getMessage());
+        System.out.println("Alla priser:");
+        for (PriceEntry entry : prices) {
+            System.out.println(entry.startTime() + " - " + entry.pricePerKWh() + " kr/kWh");
         }
     }
 
-    private static void showAveragePrice() {
-        System.out.println("Du valde: Visa medelpris för idag");
+    public static void showAveragePrice(List<PriceEntry> prices) {
+        // If there aren't any prices available, show a message to the user
+        if (prices == null || prices.isEmpty()) {
+            System.out.println("Inga priser tillgängliga.");
+            return;
+        }
+     // Add all prices in list and count meanprice
+        double sum = 0;
+        for (PriceEntry entry : prices) {
+            sum += entry.pricePerKWh();
+        }
+
+        double average = sum / prices.size();
+        System.out.printf("Medelpris: %.2f kr/kWh%n", average);
     }
 
     private static void showMinAndMaxPrice() {

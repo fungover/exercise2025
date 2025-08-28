@@ -1,6 +1,5 @@
 package ExerciseOne;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,16 +10,26 @@ public class Calculate {
 
     public void calculateMean(List<Pricing> priceList){
         int size = priceList.size();
+
+        if(priceList.isEmpty()){
+            System.out.println("Inga tillgängliga priser");
+            return;
+        }
         double sum = priceList.stream()
                 .mapToDouble(Pricing::SEK_per_kWh)
                 .sum();
 
-        BigDecimal mean = new BigDecimal(sum/size);
+        double mean = sum/size;
 
-        System.out.printf("Medelpriset för aktuellt dygn är : %.4f SEK per kWh %n", mean);
+        System.out.printf("Medelpriset för aktuellt dygn är : %.2f SEK per kWh %n", mean);
     }
 
     public void calculateMin(List<Pricing> priceList){
+
+        if(priceList.isEmpty()){
+            System.out.println("Inga tillgängliga priser");
+            return;
+        }
 
         double minValue = priceList.stream()
                 .mapToDouble(Pricing::SEK_per_kWh)
@@ -39,6 +48,11 @@ public class Calculate {
 
     public void calculateMax(List<Pricing> priceList){
 
+        if(priceList.isEmpty()){
+            System.out.println("Inga tillgängliga priser");
+            return;
+        }
+
         double maxValue = priceList.stream()
                 .mapToDouble(Pricing::SEK_per_kWh)
                 .max().orElse(0);
@@ -56,12 +70,17 @@ public class Calculate {
 
     public void calculateCheapest(List<Pricing> priceList, int hours){
 
+        if(priceList.isEmpty()){
+            System.out.println("Inga tillgängliga priser");
+            return;
+        }
+
         List<Cost> listOfCost = new ArrayList<>();
 
         for(int i = 0; i <= priceList.size()-hours; i++){
             double sum = 0;
             String start = priceList.get(i).time_start();
-            String end = priceList.get(i).time_end();
+            String end = priceList.get(i + hours -1).time_end();
 
             for(int j = i; j < i+ hours; j++){
                 sum += priceList.get(j).SEK_per_kWh();

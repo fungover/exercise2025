@@ -9,9 +9,9 @@ public class RemoveHours {
         GetDateAndTime getDateAndTime = new GetDateAndTime();
         int time = getDateAndTime.getHour();
 
-        for(int i = 0; i < time; i++){
-            priceList.removeFirst();
-        }
-    return priceList;
+        int hoursToRemove = Math.min(Math.max(0, time), priceList.size());
+        priceList.subList(0, hoursToRemove).clear();
+
+        return priceList;
     }
 }

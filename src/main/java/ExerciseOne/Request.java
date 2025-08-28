@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,25 +17,33 @@ public class Request {
 
     public List<Pricing> request(String search) throws IOException, InterruptedException {
 
+        ObjectMapper mapper = new ObjectMapper()
+                .findAndRegisterModules()
+                .configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
         String elprisURL = "https://www.elprisetjustnu.se/api/v1/prices/"+search+".json";
 
-            HttpClient client = HttpClient.newHttpClient();
+            HttpClient client = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .build();
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(elprisURL))
+                    .timeout(Duration.ofSeconds(10))
+                    .header("Content-Type", "application/json")
+                    .header("User-Agent", "exercise2025-cli/1.0")
                     .GET()
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            List<Pricing> responseList = new ArrayList<>();
-
-            if(response.statusCode() == 200 && response.body().startsWith("[")){
-                ObjectMapper mapper = new ObjectMapper();
-                List<Pricing> pricing = mapper.readValue(response.body(), new TypeReference<List<Pricing>>() {});
-                responseList.addAll(pricing);
+            String body = response.body();
+            String check = body == null ? "" : body.stripLeading();
+            if(response.statusCode() == 200 && check.startsWith("[")) {
+                return mapper.readValue(check, new TypeReference<List<Pricing>>() {});
             }
 
-            return responseList;
+            return List.of();
 
     }
 }

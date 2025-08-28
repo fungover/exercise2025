@@ -42,4 +42,10 @@ public class Input {
         return answer.equals("y");
 
     }
+
+    public String  pathToFile(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Ange sökväg till csv fil: ");
+        return sc.nextLine();
+    }
 }

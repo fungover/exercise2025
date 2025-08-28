@@ -43,7 +43,8 @@ public class Main {
 
         if(check){
             ReadFile rf = new ReadFile();
-            calc.costOfConsumption(rf.readFile(), listHoursRemoved);
+            String pathFile = input.pathToFile();
+            calc.costOfConsumption(rf.readFile(pathFile), listHoursRemoved);
         }
     }
 }

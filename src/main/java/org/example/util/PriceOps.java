@@ -36,19 +36,23 @@ public final class PriceOps {
     }
 
     public static PricePoint minByPriceEarliest(List<PricePoint> list) {
+        if (list == null || list.isEmpty()) {
+            throw new IllegalArgumentException("minByPriceEarliest: list must not be null or empty");
+        }
         return list.stream()
                 .min(Comparator.comparing(PricePoint::sekPerKWh)
                         .thenComparing(PricePoint::start))
-                .orElseThrow();
+                .get();
     }
 
     public static PricePoint maxByPriceEarliest(List<PricePoint> list) {
-        Comparator<PricePoint> byPriceDescThenStartAsc =
-                Comparator.comparing(PricePoint::sekPerKWh, Comparator.reverseOrder())
-                        .thenComparing(PricePoint::start);
-        return list.stream()
-                .min(byPriceDescThenStartAsc)
-                .orElseThrow();
+        if (list == null || list.isEmpty()) {
+            throw new IllegalArgumentException("maxByPriceEarliest: list must not be null or empty");
+        }
+        Comparator<PricePoint> cmp =
+                Comparator.comparing(PricePoint::sekPerKWh)
+                        .thenComparing(PricePoint::start, Comparator.reverseOrder());
+        return list.stream().max(cmp).get();
     }
 
     public static HourExtremes extremesByPriceEarliest(List<PricePoint> list) {

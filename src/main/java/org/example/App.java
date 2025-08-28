@@ -18,8 +18,8 @@ public class App {
 
         ApiClient.ElectricityPrice[] todayPrices;
         try {
-            PriceDisplay.printPricesForDate(today, priceArea, "dagen");
             todayPrices = fetchPricesForDate(today, priceArea);
+            PriceDisplay.printPricesForDate(today, priceArea, "dagen", todayPrices);
         } catch (Exception e) {
             System.out.println("Kunde inte hämta dagens priser: " + e.getMessage());
             return;
@@ -28,8 +28,8 @@ public class App {
         LocalDate tomorrow = today.plusDays(1);
         ApiClient.ElectricityPrice[] tomorrowPrices = null;
         try {
-            PriceDisplay.printPricesForDate(tomorrow, priceArea, "morgondagen");
             tomorrowPrices = fetchPricesForDate(tomorrow, priceArea);
+            PriceDisplay.printPricesForDate(tomorrow, priceArea, "morgondagen", tomorrowPrices);
         } catch (Exception e) {
             System.out.printf("%nPriser för morgondagen (%s) är ännu inte publicerade.%n", tomorrow);
         }

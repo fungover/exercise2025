@@ -13,17 +13,24 @@ public class PriceDisplay {
 
         try {
             ApiClient.ElectricityPrice[] prices = ApiClient.fetchPrices(year, month, day, priceArea);
-
-            System.out.printf("%nElpriser för %s (%s den %s-%s-%s):%n", priceArea, label, year, month, day);
-
-            for (ApiClient.ElectricityPrice price : prices) {
-                System.out.printf("%s | Pris: %.2f öre/kWh%n", price.formattedHourRange(), price.SEK_per_kWh() * 100);
-            }
+            printPricesForDate(date, priceArea, label, prices);
         } catch (IOException ioe) {
             throw new RuntimeException("Kunde inte hämta priser för " + date + ": " + ioe.getMessage());
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Avbrutet anrop för " + date, ie);
+        }
+    }
+
+    public static void printPricesForDate(LocalDate date, String priceArea, String label, ApiClient.ElectricityPrice[] prices) {
+        String year = String.valueOf(date.getYear());
+        String month = String.format("%02d", date.getMonthValue());
+        String day = String.format("%02d", date.getDayOfMonth());
+
+        System.out.printf("%nElpriser för %s (%s den %s-%s-%s):%n", priceArea, label, year, month, day);
+
+        for (ApiClient.ElectricityPrice price : prices) {
+            System.out.printf("%s | Pris: %.2f öre/kWh%n", price.formattedHourRange(), price.SEK_per_kWh() * 100);
         }
     }
 

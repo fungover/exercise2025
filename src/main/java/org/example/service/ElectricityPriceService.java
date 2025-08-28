@@ -56,12 +56,4 @@ public class ElectricityPriceService {
         }
     }
 
-    public List<PriceHour> fetchToday(String zoneCode) {
-        return fetchByDate(zoneCode, LocalDate.now());
-    }
-
-    public List<PriceHour> fetchTomorrow(String zoneCode) {
-        return fetchByDate(zoneCode, LocalDate.now().plusDays(1));
-    }
-
 }

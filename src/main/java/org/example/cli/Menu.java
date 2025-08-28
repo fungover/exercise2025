@@ -1,5 +1,7 @@
 package org.example.cli;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.List;
 import java.time.LocalDate;
@@ -11,6 +13,8 @@ import org.example.utils.StatsUtil;
 public class Menu {
 
     private final Scanner scanner = new Scanner(System.in);
+    private static final DateTimeFormatter InputDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
     public void start() {
         boolean start = true;
@@ -72,10 +76,20 @@ public class Menu {
         };
     }
 
+    private String zoneName(String code) {
+        return switch (code) {
+            case "SE1" -> "Luleå / Northern Sweden";
+            case "SE2" -> "Sundsvall / Northern Central Sweden";
+            case "SE3" -> "Stockholm / Southern Central Sweden";
+            case "SE4" -> "Malmö / Southern Sweden";
+            default -> "";
+        };
+    }
+
     private void zoneMenu(String zoneCode) {
         boolean back = false;
         while (!back) {
-            System.out.println("\n*** Zone: " + zoneCode + " ***");
+            System.out.println("\n*** Zone: " + zoneCode +  " (" + zoneName(zoneCode) + ") " + " ***");
             System.out.println("[1] Today (24-hours + Summary)");
             System.out.println("[2] Tomorrow (if available)");
             System.out.println("[3] Search (date)");
@@ -85,7 +99,26 @@ public class Menu {
             switch (choice) {
                 case 1 -> showDay(zoneCode, LocalDate.now());
                 case 2 -> showDay(zoneCode, LocalDate.now().plusDays(1));
-                case 3 -> System.out.println("Search by date for " + zoneCode);
+                case 3 -> {
+                    boolean searching = true;
+                    while (searching) {
+                        System.out.println("Enter date (YYYY-MM-DD), or 'b' to go back: ");
+                        String searchDateInput = scanner.nextLine().trim();
+
+                        if (searchDateInput.equalsIgnoreCase("b")) {
+                            searching = false;
+                        } else {
+                            try {
+                                LocalDate date = LocalDate.parse(searchDateInput, InputDateFormatter);
+                                showDay(zoneCode, date);
+                                searching = false;
+                            } catch (DateTimeParseException e) {
+                                System.out.println("Invalid date format. Please use YYYY-MM-DD (example: 2024-02-10)");
+                            }
+                        }
+                    }
+
+                }
                 case 4 -> back = true;
             }
         }
@@ -95,12 +128,13 @@ public class Menu {
         List<PriceHour> hours = service.fetchByDate(zoneCode, date);
 
         if (hours.isEmpty()) {
-            System.out.println("*** No prices available for " + zoneCode + " on " +
-                    date + " (maybe not published yet). ***");
+            System.out.println("*** No prices available for " + zoneCode +  " (" + zoneName(zoneCode) + ") " +
+                    " on " + date + " (maybe not published yet). ***");
             return;
         }
         for (PriceHour hour : hours) {
-            System.out.println("__________________________" + "\n Zone: " + zoneCode + "\n Date: " +
+            System.out.println("__________________________" + "\n Zone: " + zoneCode +
+                    " (" + zoneName(zoneCode) + ") " + "\n Date: " +
                     FormatUtil.formatDate(hour.time_start()) + "\n Time: " +
                     FormatUtil.formatTime(hour.time_start()) + " - " +
                     FormatUtil.formatTime(hour.time_end()) + "\n SEK: " +
@@ -115,7 +149,7 @@ public class Menu {
         PriceHour mostExpensive = StatsUtil.findMostExpensiveSek(hours);
 
         System.out.println("____________________________________________________" + "\n * SUMMARY: *" +
-                "\n Zone: " + zoneCode + "\n Date: " +
+                "\n Zone: " + zoneCode + " (" + zoneName(zoneCode) + ") " + "\n Date: " +
                 FormatUtil.formatDate(hours.get(0).time_start()) + "\n Average: " +
                 FormatUtil.formatPriceSEK(avgSEK) + " | " +
                 FormatUtil.formatPriceEUR(avgEUR) + "\n Cheapest hour: " +

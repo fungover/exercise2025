@@ -12,7 +12,7 @@ public class ReadFile {
     public List<Consumption> readFile() {
 
         Scanner sc = new Scanner(System.in);
-        System.out.print("Ange sökväg till filen: ");
+        System.out.print("Ange sökväg till csv fil: ");
         String filePath = sc.nextLine();
 
         try(CSVReader reader = new CSVReader(new FileReader(filePath))){
@@ -25,7 +25,8 @@ public class ReadFile {
                     .map(elem -> new Consumption(elem[0], Double.parseDouble(elem[1])))
                     .toList();
 
-        } catch (IOException | CsvException e) {
+        } catch (IOException | CsvException e )  {
+            System.out.printf("Error: %s\n", e.getMessage());
             throw new RuntimeException(e);
         }
     }

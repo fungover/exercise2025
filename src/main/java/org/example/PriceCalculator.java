@@ -98,8 +98,12 @@ public class PriceCalculator {
             }
         }
 
+        availablePrices.sort(Comparator.comparing(p ->
+                ZonedDateTime.parse(p.time_start()).withZoneSameInstant(SWEDISH_ZONE)
+        ));
         return availablePrices;
     }
+// — remove this lone closing brace so ChargingWindow remains inside PriceCalculator
 
     public record ChargingWindow(
             List<ApiClient.ElectricityPrice> hours,

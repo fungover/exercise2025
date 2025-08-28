@@ -1,5 +1,7 @@
 package org.example.services;
 import org.example.api.PriceApiClient;
+import org.example.model.DailyExtremes;
+import org.example.model.HourExtremes;
 import org.example.model.PricePoint;
 import org.example.util.PriceJson;
 import org.example.util.PriceOps;
@@ -19,32 +21,22 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
         return switch (mainMenuChoice) {
             case 1 -> downloadPrices(date, areaCode);
             case 2 -> calculateMean(date, areaCode);
-            case 3 -> findExtremes(areaCode);
+            case 3 -> findExtremes(date, areaCode);
             case 4 -> bestChargingWindow(areaCode);
             default -> "Invalid option!";
         };
     }
 
+    /** Get current and future hours data only (today/tomorrow) */
     private String downloadPrices(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
-
-        // Fetch raw JSON for today and tomorrow
-        String todayJson = apiClient.fetchPrices(date, areaCode);
-        String tomorrowJson = apiClient.fetchPrices(date.plusDays(1), areaCode);
-
-        // Parse to typed lists
-        List<PricePoint> today = PriceJson.parseList(todayJson);
-        List<PricePoint> tomorrow = PriceJson.parseList(tomorrowJson);
-
-        // Merge + filter by time (zoneId provided by App)
+        List<PricePoint> today = fetchUpcomingToday(date, areaCode);
+        List<PricePoint> tomorrow = fetchUpcomingTomorrow(date, areaCode);
         List<PricePoint> merged = PriceOps.mergeSorted(today, tomorrow);
-        OffsetDateTime now = ZonedDateTime.now(zoneId).toOffsetDateTime();
-        List<PricePoint> futureOnly = PriceOps.futureOrCurrent(merged, now);
-
-        // Return as pretty JSON so the CLI can just println
-        return PriceJson.toPrettyJson(futureOnly);
+        return PriceJson.toPrettyJson(merged);
     }
 
+    /** Get mean for today only */
     private String calculateMean(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
 
@@ -72,12 +64,41 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
                 + meanText + " SEK/kWh (" + points.size() + " hours)";
     }
 
+    /** Get current and future hours data only (today/tomorrow) */
+    private String findExtremes(LocalDate date, String areaCode)
+            throws IOException, InterruptedException {
 
-    private String findExtremes(String areaCode) {
-        return "Cheapest and most expensive hours for area " + areaCode + ": ... (not implemented yet)";
+        var today = fetchUpcomingToday(date, areaCode);
+        var tomorrow = fetchUpcomingTomorrow(date, areaCode);
+        var todayEx = today.isEmpty() ? HourExtremes.EMPTY : PriceOps.extremesByPriceEarliest(today);
+        var tomorrowEx = tomorrow.isEmpty() ? HourExtremes.EMPTY : PriceOps.extremesByPriceEarliest(tomorrow);
+
+        return PriceJson.toPrettyJson(new DailyExtremes(todayEx, tomorrowEx));
     }
 
     private String bestChargingWindow(String areaCode) {
         return "Best charging window for area " + areaCode + ": ... (not implemented yet)";
+    }
+
+    /** Upcoming prices for *today* only (filters past hours). */
+    private List<PricePoint> fetchUpcomingToday(LocalDate date, String areaCode)
+            throws IOException, InterruptedException {
+
+        String json = apiClient.fetchPrices(date, areaCode);
+        List<PricePoint> points = PriceJson.parseList(json);
+
+        OffsetDateTime now = ZonedDateTime.now(zoneId).toOffsetDateTime();
+        return PriceOps.futureOrCurrent(points, now);
+    }
+
+    /** Upcoming prices for *tomorrow* only (filters past hours relative to now). */
+    private List<PricePoint> fetchUpcomingTomorrow(LocalDate date, String areaCode)
+            throws IOException, InterruptedException {
+
+        String json = apiClient.fetchPrices(date.plusDays(1), areaCode);
+        List<PricePoint> points = PriceJson.parseList(json);
+
+        OffsetDateTime now = ZonedDateTime.now(zoneId).toOffsetDateTime();
+        return PriceOps.futureOrCurrent(points, now);
     }
 }

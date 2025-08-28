@@ -13,7 +13,7 @@ import java.util.Scanner;
 // Setup URL Builder
 // Setup API request for electricity prices data
 // Setup error handling for failed http request etc
-//Todo: Implement mean price calculation for current 24h
+// Implement mean price calculation for current 24h
 //Todo: Implement logic to find cheapest and most expensive hour (earliest if tie)
 //Todo: Implement sliding window algorithm for best charging time (2, 4, 8 hours)
 //Todo: Format and print results clearly to user
@@ -29,10 +29,10 @@ public class App {
     };
 
     private static final String[] OPTIONS = {
-            "Download prices for today/next day",
+            "Download prices for today/tomorrow",
             "Print mean price for current 24h",
-            "Show cheapest & most expensive hour",
-            "Best charging window (2/4/8h)",
+            "Show cheapest & most expensive hour for today and tomorrow",
+            "Best charging window (2/4/8h) for today and tomorrow",
     };
 
     public static void main(String[] args) {

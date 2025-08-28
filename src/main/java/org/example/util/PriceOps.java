@@ -1,6 +1,9 @@
 package org.example.util;
+import org.example.model.ChargeWindow;
 import org.example.model.HourExtremes;
 import org.example.model.PricePoint;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -46,5 +49,38 @@ public final class PriceOps {
                 minByPriceEarliest(list),
                 maxByPriceEarliest(list)
         );
+    }
+
+    /** Best contiguous k-hour window by total price; earliest on ties. */
+    public static ChargeWindow bestWindow(List<PricePoint> points, int k) {
+        int n = points.size();
+        if (n < k) return null;  // not enough hours left
+
+        // Sum of the first k hours
+        BigDecimal sum = BigDecimal.ZERO;
+        for (int i = 0; i < k; i++) {
+            sum = sum.add(points.get(i).sekPerKWh());
+        }
+        BigDecimal bestSum = sum;
+        int bestStart = 0;
+
+        // Slide the window one hour at a time
+        for (int i = k; i < n; i++) {
+            sum = sum
+                    .subtract(points.get(i - k).sekPerKWh())
+                    .add(points.get(i).sekPerKWh());
+
+            // strictly cheaper → update (keeps earliest on ties)
+            if (sum.compareTo(bestSum) < 0) {
+                bestSum = sum;
+                bestStart = i - k + 1;
+            }
+        }
+
+        PricePoint startPt = points.get(bestStart);
+        PricePoint endPt = points.get(bestStart + k - 1);
+        BigDecimal avg = bestSum.divide(BigDecimal.valueOf(k), 5, RoundingMode.HALF_UP);
+
+        return new ChargeWindow(startPt.start(), endPt.end(), k, avg, bestSum);
     }
 }

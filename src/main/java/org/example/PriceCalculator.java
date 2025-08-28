@@ -1,16 +1,15 @@
 package org.example;
 
-//TODO implement identifier for best charge hours in span of 2, 4 or 8 hours (sliding window algorithm)
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class PriceCalculator {
+
+    private static final ZoneId SWEDISH_ZONE = ZoneId.of("Europe/Stockholm");
 
     public static double calculateAveragePrice(List<ApiClient.ElectricityPrice> prices) {
         return prices.stream()
@@ -18,7 +17,6 @@ public class PriceCalculator {
                 .average()
                 .orElseThrow(() -> new IllegalArgumentException("Prislistan kan inte vara tom"));
     }
-
 
     public static ApiClient.ElectricityPrice findMaxPrice(List<ApiClient.ElectricityPrice> prices) {
         return prices.stream()
@@ -46,27 +44,25 @@ public class PriceCalculator {
         if (availablePrices.size() < chargingHours) {
             return null;
         }
-        double bestTotalCost = Double.MAX_VALUE;
+
+        double windowCost = 0;
+        for (int i = 0; i < chargingHours; i++) {
+            windowCost += availablePrices.get(i).SEK_per_kWh();
+        }
+
+        double bestTotalCost = windowCost;
         int bestStartIndex = 0;
 
-        // Sliding window algoritm (slides one position at a time)
-        for (int i = 0; i <= availablePrices.size() - chargingHours; i++) {
-            double windowCost = 0;
-
-            for (int j = i; j < i + chargingHours; j++) {
-                windowCost += availablePrices.get(j).SEK_per_kWh();
-            }
-
+        for (int i = chargingHours; i < availablePrices.size(); i++) {
+            windowCost += availablePrices.get(i).SEK_per_kWh() - availablePrices.get(i - chargingHours).SEK_per_kWh();
             if (windowCost < bestTotalCost) {
                 bestTotalCost = windowCost;
-                bestStartIndex = i;
+                bestStartIndex = i - chargingHours + 1;
             }
         }
 
-        List<ApiClient.ElectricityPrice> bestWindow = new ArrayList<>();
-        for (int i = bestStartIndex; i < bestStartIndex + chargingHours; i++) {
-            bestWindow.add(availablePrices.get(i));
-        }
+        List<ApiClient.ElectricityPrice> bestWindow =
+                availablePrices.subList(bestStartIndex, bestStartIndex + chargingHours);
 
         return new ChargingWindow(bestWindow, bestTotalCost / chargingHours);
     }
@@ -77,35 +73,28 @@ public class PriceCalculator {
 
         List<ApiClient.ElectricityPrice> combinedPrices = new ArrayList<>();
 
-        if (todayPrices != null) {
-            for (ApiClient.ElectricityPrice price : todayPrices) {
-                combinedPrices.add(price);
-            }
-        }
-
-        if (tomorrowPrices != null) {
-            for (ApiClient.ElectricityPrice price : tomorrowPrices) {
-                combinedPrices.add(price);
-            }
-        }
+        if (todayPrices != null) combinedPrices.addAll(List.of(todayPrices));
+        if (tomorrowPrices != null) combinedPrices.addAll(List.of(tomorrowPrices));
 
         return combinedPrices;
     }
 
     private static List<ApiClient.ElectricityPrice> filterPastHours(List<ApiClient.ElectricityPrice> prices) {
-        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime now = ZonedDateTime.now(SWEDISH_ZONE)
+                .withMinute(0).withSecond(0).withNano(0);
+
         List<ApiClient.ElectricityPrice> availablePrices = new ArrayList<>();
 
         for (ApiClient.ElectricityPrice price : prices) {
             try {
-                ZonedDateTime priceStart = ZonedDateTime.parse(price.time_start());
-                LocalDateTime priceStartLocal = priceStart.toLocalDateTime();
+                ZonedDateTime priceStart = ZonedDateTime.parse(price.time_start())
+                        .withZoneSameInstant(SWEDISH_ZONE);
 
-                if (priceStartLocal.isAfter(now) || priceStartLocal.equals(now.withMinute(0).withSecond(0).withNano(0))) {
+                if (!priceStart.isBefore(now)) {
                     availablePrices.add(price);
                 }
             } catch (Exception e) {
-
+                System.err.println("Felaktigt datumformat: " + price.time_start());
             }
         }
 
@@ -116,7 +105,6 @@ public class PriceCalculator {
             List<ApiClient.ElectricityPrice> hours,
             double averagePrice
     ) {
-
         public String getFormattedTimeRange() {
             if (hours.isEmpty()) {
                 return "Inget laddfönster tillgängligt";
@@ -125,8 +113,10 @@ public class PriceCalculator {
             ApiClient.ElectricityPrice firstHour = hours.get(0);
             ApiClient.ElectricityPrice lastHour = hours.get(hours.size() - 1);
 
-            ZonedDateTime start = ZonedDateTime.parse(firstHour.time_start());
-            ZonedDateTime end = ZonedDateTime.parse(lastHour.time_end());
+            ZonedDateTime start = ZonedDateTime.parse(firstHour.time_start())
+                    .withZoneSameInstant(SWEDISH_ZONE);
+            ZonedDateTime end = ZonedDateTime.parse(lastHour.time_end())
+                    .withZoneSameInstant(SWEDISH_ZONE);
 
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM");
@@ -144,5 +134,3 @@ public class PriceCalculator {
         }
     }
 }
-
-

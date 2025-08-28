@@ -22,6 +22,7 @@ public class PriceDisplay {
             System.out.println("Avbrutet anrop för " + priceArea + " (" + label + " " + date + "). Försök igen senare.");
             return;
         }
+    }
 
     public static void printPricesForDate(LocalDate date, String priceArea, String label, ApiClient.ElectricityPrice[] prices) {
         String year = String.valueOf(date.getYear());
@@ -85,7 +86,7 @@ public class PriceDisplay {
                 }
             }
 
-            System.out.println("\nTips baserat på: " + (tomorrowPrices != null ? "dagens och morgondagens" : "endast dagens") + " priser");
+            System.out.println("\nTips baserat på: " + ((tomorrowPrices != null && tomorrowPrices.length > 0) ? "dagens och morgondagens" : "endast dagens") + " priser");
         }
     }
 }

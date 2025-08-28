@@ -1,5 +1,6 @@
 package ExerciseOne;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Input {
@@ -28,5 +29,18 @@ public class Input {
         }while (correctInput);
 
         return area;
+    }
+
+    public boolean calculate(){
+        Scanner input = new Scanner(System.in);
+        String answer;
+
+        do {
+            System.out.print("Vill du välja csv fil för att beräkna kostnad av elförbrukning Y/N: ");
+            answer = input.next().toLowerCase();
+        }while(!answer.equals("y") && !answer.equals("n"));
+
+        return answer.equals("y");
+
     }
 }

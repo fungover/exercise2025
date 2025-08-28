@@ -60,8 +60,40 @@ public class Prices {
         System.out.println(maxEntry.startTime() + " - " + maxEntry.pricePerKWh() + " kr/kWh");
     }
 
-    public static void findBestChargingTime() {
-        System.out.println("Du valde: Hitta bästa tid att ladda elbil");
+    public static void findBestChargingTime(List<PriceEntry> prices, int durationHours) {
+        if (prices == null || prices.size() < durationHours) {
+            System.out.println("Inte tillräckligt med prisdata för " + durationHours + " timmar.");
+            return;
+        }
+
+        // cheapest total so far
+        double minSum = 0;
+        // start index of cheapest window
+        int minStartIndex = 0;
+
+        // sum the first durationHours prices
+        for (int i = 0; i < durationHours; i++) {
+            minSum += prices.get(i).pricePerKWh();
+        }
+
+        double currentSum = minSum;
+
+        // sliding window
+        for (int i = 1; i <= prices.size() - durationHours; i++) {
+
+            currentSum = currentSum - prices.get(i - 1).pricePerKWh() + prices.get(i + durationHours - 1).pricePerKWh();
+
+            if (currentSum < minSum) {
+                minSum = currentSum;
+                minStartIndex = i;
+            }
+        }
+
+        System.out.println("Bästa tid att ladda " + durationHours + " timmar:");
+        for (int i = minStartIndex; i < minStartIndex + durationHours; i++) {
+            PriceEntry entry = prices.get(i);
+            System.out.println(entry.startTime() + " - " + entry.pricePerKWh() + " kr/kWh");
+        }
 
     }
 }

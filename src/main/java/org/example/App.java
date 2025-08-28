@@ -83,7 +83,9 @@ public class App {
                     break;
 
                 case "4":
-                    System.out.println("Valde: Hitta bästa tid att ladda elbil");
+                    System.out.print("Laddningstid? (2, 4 eller 8 timmar: ");
+                    int hours = Integer.parseInt(scanner.nextLine());
+                    Prices.findBestChargingTime(prices, hours);
                     break;
 
                 case "5":

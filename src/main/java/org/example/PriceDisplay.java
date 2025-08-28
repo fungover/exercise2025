@@ -1,28 +1,9 @@
 package org.example;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class PriceDisplay {
-
-    public static void printPricesForDate(LocalDate date, String priceArea, String label) {
-        String year = String.valueOf(date.getYear());
-        String month = String.format("%02d", date.getMonthValue());
-        String day = String.format("%02d", date.getDayOfMonth());
-
-        try {
-            ApiClient.ElectricityPrice[] prices = ApiClient.fetchPrices(year, month, day, priceArea);
-            printPricesForDate(date, priceArea, label, prices);
-        } catch (IOException ioe) {
-            System.out.println("Kunde inte hämta priser för " + priceArea + " (" + label + " " + date + "): " + ioe.getMessage());
-            return;
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-            System.out.println("Avbrutet anrop för " + priceArea + " (" + label + " " + date + "). Försök igen senare.");
-            return;
-        }
-    }
 
     public static void printPricesForDate(LocalDate date, String priceArea, String label, ApiClient.ElectricityPrice[] prices) {
         String year = String.valueOf(date.getYear());

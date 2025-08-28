@@ -2,23 +2,10 @@ package org.example;
 import org.example.api.PriceApiClient;
 import org.example.menus.OptionMenu;
 import org.example.services.PriceService;
+import org.example.ui.ResultViews;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Scanner;
-
-//TODO List
-//Create boilerplate for project
-//Setup menu for Area selection
-//Setup main menu selection (A exit option should be included)
-// Setup URL Builder
-// Setup API request for electricity prices data
-// Setup error handling for failed http request etc
-// Implement mean price calculation for current 24h
-//Todo: Implement logic to find cheapest and most expensive hour (earliest if tie)
-//Todo: Implement sliding window algorithm for best charging time (2, 4, 8 hours)
-//Todo: Format and print results clearly to user
-//Todo: (Optional) Add CSV import for consumption data and calculate total cost
-// TODO: Later, replace JSON print with a nice informative message
 
 public class App {
     private static final String[] AREAS = {
@@ -47,6 +34,7 @@ public class App {
         OptionMenu mainMenu = new OptionMenu(scanner, OPTIONS);
         int mainMenuChoice = mainMenu.getOption();
         mainMenu.menuExit(mainMenuChoice);
+        scanner.nextLine();
 
         ZoneId zone = ZoneId.of("Europe/Stockholm");
         LocalDate date = LocalDate.now(zone);
@@ -56,7 +44,15 @@ public class App {
 
         try {
             String result = service.handleChoice(mainMenuChoice, date, areaCode);
-            System.out.println(result);
+            String pretty = switch (mainMenuChoice) {
+                case 1 -> ResultViews.prices(result, zone, date, areaCode, scanner);
+                case 2 -> result; // service already returns a friendly sentence (will change later)
+                case 3 -> ResultViews.extremes(result, zone, date, areaCode);
+                case 4 -> ResultViews.chargeWindows(result, zone, date, areaCode);
+                default -> result;
+            };
+            System.out.println(pretty);
+
         } catch (Exception e) {
             System.err.println("Something went wrong while fetching electricity prices. Please try again later.");
         }

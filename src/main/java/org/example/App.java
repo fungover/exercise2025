@@ -40,8 +40,6 @@ public class App {
         if (mainMenu.shouldExit(mainMenuChoice)) {
             System.exit(0);
         }
-        scanner.nextLine();
-
         ZoneId zone = ZoneId.of("Europe/Stockholm");
         LocalDate date = LocalDate.now(zone);
 

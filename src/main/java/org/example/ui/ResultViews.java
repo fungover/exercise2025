@@ -24,7 +24,6 @@ public final class ResultViews {
         List<PricePoint> pts = M.readValue(json, new TypeReference<List<PricePoint>>() {});
         if (pts.isEmpty()) return "No upcoming hours for " + date + " (" + area + ").";
 
-        // Preview
         StringBuilder preview = new StringBuilder("Upcoming hours for ")
                 .append(area).append(" starting ").append(date).append(":\n");
         int limit = Math.min(pts.size(), 8);
@@ -41,6 +40,19 @@ public final class ResultViews {
 
         var path = PriceCsvExporter.exportPricesCsv(pts, zone, date, area);
         return (path == null) ? "No data to save." : "Saved " + pts.size() + " rows to " + path.toAbsolutePath();
+    }
+
+    /** Option 2: daily mean */
+    public static String mean(String json, ZoneId zone, LocalDate date, String area) throws IOException {
+        DailyMean m = M.readValue(json, DailyMean.class);
+
+        if (m.meanSekPerKWh() == null || m.hours() == 0) {
+            return "No price data available for " + date + " (" + area + ").";
+        }
+
+        String meanText = price(m.meanSekPerKWh());
+        return "Mean price for " + date + " (" + area + "): "
+                + meanText + " SEK/kWh (" + m.hours() + " hours)";
     }
 
     /** Option 3: extremes (today and tomorrow) */

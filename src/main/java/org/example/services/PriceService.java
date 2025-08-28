@@ -37,50 +37,37 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
     /** Get mean for today only */
     private String calculateMean(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
-
         String todayJson = apiClient.fetchPrices(date, areaCode);
         List<PricePoint> points = PriceJson.parseList(todayJson);
-        // Guard: no data for that day
+
         if (points.isEmpty()) {
-            return "No price data available for " + date + " (" + areaCode + ").";
+            return PriceJson.toPrettyJson(new DailyMean(date, areaCode, null, 0));
         }
 
-        // Sum precisely with BigDecimal
         BigDecimal sum = BigDecimal.ZERO;
         for (PricePoint p : points) {
             sum = sum.add(p.sekPerKWh());
         }
 
-        // Mean = sum / count, then format for display
         BigDecimal mean = sum.divide(BigDecimal.valueOf(points.size()), 5, RoundingMode.HALF_UP);
-
-        String meanText = mean.setScale(3, RoundingMode.HALF_UP)
-                .stripTrailingZeros()
-                .toPlainString();
-
-        return "Mean price for " + date + " (" + areaCode + "): "
-                + meanText + " SEK/kWh (" + points.size() + " hours)";
+        return PriceJson.toPrettyJson(new DailyMean(date, areaCode, mean, points.size()));
     }
 
     /** Get current and future hours data only (today/tomorrow) */
     private String findExtremes(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
-
         var today = fetchUpcomingToday(date, areaCode);
         var tomorrow = fetchUpcomingTomorrow(date, areaCode);
         var todayEx = today.isEmpty() ? HourExtremes.EMPTY : PriceOps.extremesByPriceEarliest(today);
         var tomorrowEx = tomorrow.isEmpty() ? HourExtremes.EMPTY : PriceOps.extremesByPriceEarliest(tomorrow);
-
         return PriceJson.toPrettyJson(new DailyExtremes(todayEx, tomorrowEx));
     }
 
     /** Best charging windows (2/4/8h) for today & tomorrow, using upcoming hours only. */
     private String bestChargingWindow(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
-
         var today = fetchUpcomingToday(date, areaCode);
         var tomorrow = fetchUpcomingTomorrow(date, areaCode);
-
         // Compute best windows; nulls if not enough hours left
         ChargeWindows todayWins = new ChargeWindows(
                 PriceOps.bestWindow(today, 2),
@@ -93,29 +80,27 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
                 PriceOps.bestWindow(tomorrow, 4),
                 PriceOps.bestWindow(tomorrow, 8)
         );
-
         return PriceJson.toPrettyJson(new DailyChargeWindows(todayWins, tomorrowWins));
     }
 
     /** Upcoming prices for *today* only (filters past hours). */
     private List<PricePoint> fetchUpcomingToday(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
-
         String json = apiClient.fetchPrices(date, areaCode);
         List<PricePoint> points = PriceJson.parseList(json);
-
-        OffsetDateTime now = ZonedDateTime.now(zoneId).toOffsetDateTime();
-        return PriceOps.futureOrCurrent(points, now);
+        return PriceOps.futureOrCurrent(points, now()); // includes current hour
     }
 
     /** Upcoming prices for *tomorrow* only (filters past hours relative to now). */
     private List<PricePoint> fetchUpcomingTomorrow(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
-
         String json = apiClient.fetchPrices(date.plusDays(1), areaCode);
         List<PricePoint> points = PriceJson.parseList(json);
-
-        OffsetDateTime now = ZonedDateTime.now(zoneId).toOffsetDateTime();
-        return PriceOps.futureOrCurrent(points, now);
+        return PriceOps.futureOrCurrent(points, now());
     }
+
+    private OffsetDateTime now() {
+        return ZonedDateTime.now(zoneId).toOffsetDateTime();
+    }
+
 }

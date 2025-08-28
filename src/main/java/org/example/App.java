@@ -46,7 +46,7 @@ public class App {
             String result = service.handleChoice(mainMenuChoice, date, areaCode);
             String pretty = switch (mainMenuChoice) {
                 case 1 -> ResultViews.prices(result, zone, date, areaCode, scanner);
-                case 2 -> result; // service already returns a friendly sentence (will change later)
+                case 2 -> ResultViews.mean(result, zone, date, areaCode);
                 case 3 -> ResultViews.extremes(result, zone, date, areaCode);
                 case 4 -> ResultViews.chargeWindows(result, zone, date, areaCode);
                 default -> result;

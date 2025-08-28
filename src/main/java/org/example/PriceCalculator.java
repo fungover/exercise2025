@@ -103,7 +103,7 @@ public class PriceCalculator {
         ));
         return availablePrices;
     }
-    }
+// — remove this lone closing brace so ChargingWindow remains inside PriceCalculator
 
     public record ChargingWindow(
             List<ApiClient.ElectricityPrice> hours,

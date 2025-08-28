@@ -33,7 +33,7 @@ public class Menu {
             System.out.println("[4] SE4 = Malmö / Southern Sweden");
             System.out.println("[5] Exit");
 
-            int mainMenuChoice = readIntInRange(scanner, 1, 5);
+            int mainMenuChoice = readIntInRange(scanner, 5);
 
             switch (mainMenuChoice) {
                 case 1, 2, 3, 4 -> zoneMenu(zoneCodeFromChoice(mainMenuChoice));
@@ -55,16 +55,16 @@ public class Menu {
 
     }
 
-    private int readIntInRange(Scanner sc, int min, int max) {
+    private int readIntInRange(Scanner sc, int max) {
         while (true) {
             if (sc.hasNextInt()) {
                 int v = sc.nextInt();
                 sc.nextLine();
-                if (v >= min && v <= max) return v;
+                if (v >= 1 && v <= max) return v;
             } else  {
                 sc.nextLine();
             }
-            System.out.println("Please select from the menu [" + min + "]-[" + max + "] and press Enter.");
+            System.out.println("Please select from the menu [" + 1 + "]-[" + max + "] and press Enter.");
         }
     }
 
@@ -97,7 +97,7 @@ public class Menu {
             System.out.println("[3] Search (date)");
             System.out.println("[4] Back");
 
-            int choice = readIntInRange(scanner, 1, 4);
+            int choice = readIntInRange(scanner, 4);
             var timeZone = java.time.ZoneId.of("Europe/Stockholm");
             switch (choice) {
                 case 1 -> showDay(zoneCode, LocalDate.now(timeZone));

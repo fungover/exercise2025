@@ -1,11 +1,11 @@
 package org.example.map;
 
 public enum TileType {
-    WALL('#', false),
+    WALL('█', false),
     FLOOR('.', true),
-    PLAYER('P', true),
-    ENEMY('E', true),
-    ITEM('I', true);
+    PLAYER('☺', true),
+    ENEMY('☠', true),
+    ITEM('◊', true);
 
     private final char symbol;
     private final boolean walkable;

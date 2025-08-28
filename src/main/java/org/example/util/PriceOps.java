@@ -54,9 +54,8 @@ public final class PriceOps {
     /** Best contiguous k-hour window by total price; earliest on ties. */
     public static ChargeWindow bestWindow(List<PricePoint> points, int k) {
         int n = points.size();
-        if (n < k) return null;  // not enough hours left
+        if (n < k) return null;
 
-        // Sum of the first k hours
         BigDecimal sum = BigDecimal.ZERO;
         for (int i = 0; i < k; i++) {
             sum = sum.add(points.get(i).sekPerKWh());
@@ -64,13 +63,11 @@ public final class PriceOps {
         BigDecimal bestSum = sum;
         int bestStart = 0;
 
-        // Slide the window one hour at a time
         for (int i = k; i < n; i++) {
             sum = sum
                     .subtract(points.get(i - k).sekPerKWh())
                     .add(points.get(i).sekPerKWh());
 
-            // strictly cheaper → update (keeps earliest on ties)
             if (sum.compareTo(bestSum) < 0) {
                 bestSum = sum;
                 bestStart = i - k + 1;

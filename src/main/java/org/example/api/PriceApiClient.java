@@ -7,7 +7,6 @@ import java.net.http.HttpResponse;
 import java.time.LocalDate;
 
 public final class PriceApiClient {
-
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
     /** Builds the API URL for a given date and price zone. */

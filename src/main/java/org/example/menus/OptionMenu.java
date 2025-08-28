@@ -32,7 +32,7 @@ public record OptionMenu(Scanner scanner, String[] OPTIONS) {
         return option;
     }
 
-    private  void printOptions() {
+    private void printOptions() {
         System.out.println("0. Exit");
         for(int i = 0; i < OPTIONS.length; i++) {
             System.out.println((i + 1) + ". " + OPTIONS[i]);
@@ -42,6 +42,7 @@ public record OptionMenu(Scanner scanner, String[] OPTIONS) {
     public void menuExit(int areaMenuChoice) {
         if (areaMenuChoice == 0) {
             System.out.println("Goodbye!");
-            System.exit(0);        }
+            System.exit(0);
+        }
     }
 }

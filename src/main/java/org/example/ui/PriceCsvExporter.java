@@ -19,10 +19,9 @@ public final class PriceCsvExporter {
             throws IOException {
         if (pts == null || pts.isEmpty()) return null;
 
-        Path dir = Path.of("out");                 // project-local
+        Path dir = Path.of("out");
         Files.createDirectories(dir);
 
-        // local dates for filename
         LocalDate startDate = pts.getFirst().start().atZoneSameInstant(zone).toLocalDate();
         LocalDate endDate   = pts.getLast().end().atZoneSameInstant(zone).toLocalDate();
 
@@ -32,8 +31,6 @@ public final class PriceCsvExporter {
                 : "prices_" + safeArea + "_" + startDate + "_to_" + endDate + "_upcoming.csv";
 
         Path file = dir.resolve(fileName);
-
-        // CSV content
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         StringBuilder csv = new StringBuilder("start_local,end_local,sek_per_kwh\n");
         for (PricePoint p : pts) {

@@ -4,9 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.model.DailyChargeWindows;
-import org.example.model.DailyExtremes;
-import org.example.model.HourExtremes;
 import org.example.model.PricePoint;
 import java.io.IOException;
 import java.util.List;
@@ -23,19 +20,7 @@ public final class PriceJson {
         return MAPPER.readValue(json, new TypeReference<List<PricePoint>>() {});
     }
 
-    public static String toPrettyJson(List<PricePoint> data) throws IOException {
-        return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(data);
-    }
-
-    public static String toPrettyJson(HourExtremes data) throws IOException {
-        return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(data);
-    }
-
-    public static String toPrettyJson(DailyExtremes data) throws IOException {
-        return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(data);
-    }
-
-    public static String toPrettyJson(DailyChargeWindows data) throws IOException {
+    public static String toPrettyJson(Object data) throws IOException {
         return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(data);
     }
 }

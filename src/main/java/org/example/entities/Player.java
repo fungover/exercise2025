@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import org.example.map.Dungeon;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,20 +20,44 @@ public class Player {
         this.inventory = new ArrayList<>();
     }
 
-    public void moveNorth() {
-        this.position = position.moveNorth();
+    public boolean moveNorth(Dungeon dungeon) {
+        Position newPos = position.moveNorth();
+        if (dungeon.getTile(newPos.getX(), newPos.getY()) != null &&
+        dungeon.getTile(newPos.getX(), newPos.getY()).isWalkable()) {
+            this.position = newPos;
+            return true;
+        }
+        return false;
     }
 
-    public void moveSouth() {
-        this.position = position.moveSouth();
+    public boolean moveSouth(Dungeon dungeon) {
+        Position newPos = position.moveSouth();
+        if (dungeon.getTile(newPos.getX(), newPos.getY()) != null &&
+        dungeon.getTile(newPos.getX(), newPos.getY()).isWalkable()) {
+            this.position = newPos;
+            return true;
+        }
+        return false;
     }
 
-    public void moveEast() {
-        this.position = position.moveEast();
+    public boolean moveEast(Dungeon dungeon) {
+        Position newPos = position.moveEast();
+        if (dungeon.getTile(newPos.getX(), newPos.getY()) != null &&
+        dungeon.getTile(newPos.getX(), newPos.getY()).isWalkable()) {
+            this.position = newPos;
+            return true;
+        }
+        return false;
     }
 
-    public void moveWest() {
-        this.position = position.moveWest();
+    public boolean moveWest(Dungeon dungeon) {
+        Position newPos = position.moveWest();
+        if (dungeon.getTile(newPos.getX(), newPos.getY()) != null &&
+        dungeon.getTile(newPos.getX(), newPos.getY()).isWalkable()) {
+            this.position = newPos;
+            return true;
+        }
+        return false;
     }
 
     public void takeDamage(int damage) {

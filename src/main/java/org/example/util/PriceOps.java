@@ -64,6 +64,8 @@ public final class PriceOps {
      * Best contiguous k-hour window by total price; earliest on ties.
      */
     public static ChargeWindow bestWindow(List<PricePoint> points, int k) {
+        if (points == null) return null;
+        if (k <= 0) throw new IllegalArgumentException("k must be >= 1");
         int n = points.size();
         if (n < k) return null;
 

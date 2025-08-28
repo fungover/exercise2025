@@ -1,7 +1,6 @@
 import org.example.Price;
 
-void main() throws IOException, InterruptedException {
-
+void main() {
     Price priceList = new Price();
-    System.out.println(priceList);
+    priceList.getPrices();
 }

@@ -18,7 +18,8 @@ public class FetchPrice {
     private final String month = dFormat.format(Month.from(presentDate).getValue());
     private final String today = dFormat.format(MonthDay.now().getDayOfMonth());
     private final String tomorrow = dFormat.format(MonthDay.of(
-            Integer.parseInt(month), Integer.parseInt(today) + 1).getDayOfMonth()
+            Integer.parseInt(month), Integer.parseInt(today) + 1)
+            .getDayOfMonth()
     );
 
     private String fetchPrice(String day) {
@@ -30,7 +31,8 @@ public class FetchPrice {
                     .header("Content-Type", "application/json")
                     .build();
         try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
             payload = response.body();
         } catch (IOException | InterruptedException e) {
             payload = e.getMessage();

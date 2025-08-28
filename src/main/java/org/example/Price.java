@@ -1,98 +1,60 @@
 package org.example;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.text.DecimalFormat;
-import java.time.*;
-import java.util.Arrays;
 
 public class Price {
-    private final DecimalFormat dFormat = new DecimalFormat("00");
-    private final LocalDate today = LocalDate.now();
-    private final String year = String.valueOf(Year.now().getValue());
-    private final String month = dFormat.format(Month.from(today).getValue());
-    private final String day = dFormat.format(MonthDay.now().getDayOfMonth());
+    private Properties[] todayPrices;
+    private Properties[] tomorrowPrices;
 
-    String uri = "https://www.elprisetjustnu.se/api/v1/prices/"
-                + year + "/" + month + "-" + day + "_SE3.json";
-
-    HttpClient client =  HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(uri))
-            .header("Content-Type", "application/json")
-            .build();
-
-    public Price() throws IOException, InterruptedException {
-        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        String payload = response.body();
-
+    public Price() {
+        FetchPrice fetch = new FetchPrice();
         ObjectMapper mapper = new ObjectMapper();
-        Properties[] prices = mapper.readValue(payload, Properties[].class);
-        System.out.println(Arrays.toString(prices));
-    }
-}
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-class Properties {
-    @JsonProperty("SEK_per_kWh")
-    private double sekPerKWh;
+        //Get electricity prices for today
+        try {
+            String firstPayload = fetch.getTodayPrices();
+            todayPrices = mapper.readValue(firstPayload, Properties[].class);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getMessage());
+        }
 
-    @JsonProperty("EUR_per_kWh")
-    private double eurPerKWh;
-
-    @JsonProperty("EXR")
-    private double exr;
-
-    @JsonProperty("time_start")
-    private String timeStart;
-
-    @JsonProperty("time_end")
-    private String timeEnd;
-
-    public String getTimeEnd() {
-        return timeEnd;
+        //Get electricity prices for tomorrow if available
+        try {
+            String secondPayload = fetch.getTomorrowPrices();
+            tomorrowPrices = mapper.readValue(secondPayload, Properties[].class);
+        } catch (JsonProcessingException e) {
+            System.out.println("Prices Today:");
+        }
     }
 
-    public void setTimeEnd(String timeEnd) {
-        this.timeEnd = timeEnd;
-    }
+    public void getPrices() {
+        if (tomorrowPrices != null)
+            System.out.println("Prices Today:");
 
-    public String getTimeStart() {
-        return timeStart;
-    }
+        for  (var price : todayPrices) {
+            System.out.println(
+                            "SEK_per_kWh: " + price.getSekPerKWh() + "\n" +
+                            "EUR_per_kWh: " + price.getEurPerKWh() + "\n" +
+                            "EXR: " + price.getExr() + "\n" +
+                            "time_start: " + price.getTimeStart() + "\n" +
+                            "time_end: " + price.getTimeEnd() + "\n"
+            );
+        }
 
-    public void setTimeStart(String timeStart) {
-        this.timeStart = timeStart;
-    }
-
-    public double getExr() {
-        return exr;
-    }
-
-    public void setExr(double exr) {
-        this.exr = exr;
-    }
-
-    public double getEurPerKWh() {
-        return eurPerKWh;
-    }
-
-    public void setEurPerKWh(double eurPerKWh) {
-        this.eurPerKWh = eurPerKWh;
-    }
-
-    public double getSekPerKWh() {
-        return sekPerKWh;
-    }
-
-    public void setSekPerKWh(double sekPerKWh) {
-        this.sekPerKWh = sekPerKWh;
+        if (tomorrowPrices != null) {
+            System.out.println("Prices Tomorrow:");
+            for (var price : tomorrowPrices) {
+                System.out.println(
+                                "SEK_per_kWh: " + price.getSekPerKWh() + "\n" +
+                                "EUR_per_kWh: " + price.getEurPerKWh() + "\n" +
+                                "EXR: " + price.getExr() + "\n" +
+                                "time_start: " + price.getTimeStart() + "\n" +
+                                "time_end: " + price.getTimeEnd() + "\n"
+                );
+            }
+        }
     }
 }

@@ -24,7 +24,7 @@ public class App {
             "Best charging window (2/4/8h) for today and tomorrow",
     };
 
-     public static void main(String[] args) {
+    public static void main(String[] args) {
         System.out.println("Welcome to my Command-Line Interface that helps you optimize your electricity consumption and reduce costs!\n");
         Scanner scanner = new Scanner(System.in);
 
@@ -55,8 +55,12 @@ public class App {
             };
             System.out.println(pretty);
 
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            System.err.println("Operation interrupted. Please retry.");
+            System.err.println("Details: " + ie.getMessage());
         } catch (Exception e) {
-            System.err.println("Something went wrong while fetching electricity prices. Please try again later.");
+            System.err.println("Failed to fetch/process prices: " + e.getMessage());
         }
     }
 }

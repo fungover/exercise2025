@@ -98,7 +98,11 @@ public class PriceCalculator {
             }
         }
 
+        availablePrices.sort(Comparator.comparing(p ->
+                ZonedDateTime.parse(p.time_start()).withZoneSameInstant(SWEDISH_ZONE)
+        ));
         return availablePrices;
+    }
     }
 
     public record ChargingWindow(

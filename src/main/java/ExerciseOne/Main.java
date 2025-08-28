@@ -1,6 +1,7 @@
 package ExerciseOne;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Main {
 
@@ -20,21 +21,26 @@ public class Main {
 
         int timeOfToday = gd.getHour();
 
+
         if(timeOfToday >= 13){
            String tomorrow = gd.getTomorrow(area);
             hl.addList(req.request(tomorrow));
         }
 
-        hl.removePastTime();
         Calculate calc = new Calculate();
-        calc.calculateMean(hl.getListOfPrices());
-        calc.calculateMin(hl.getListOfPrices());
-        calc.calculateMax(hl.getListOfPrices());
-        calc.calculateCheapest(hl.getListOfPrices(), 2);
-        calc.calculateCheapest(hl.getListOfPrices(), 4);
-        calc.calculateCheapest(hl.getListOfPrices(), 8);
+        calc.calculateMean(req.request(today));
 
+        RemoveHours hr = new RemoveHours();
+        List<Pricing> listHoursRemoved = hr.removePastTime(hl.getListOfPrices());
 
+        calc.calculateMin(listHoursRemoved);
+        calc.calculateMax(listHoursRemoved);
+        calc.calculateCheapest(listHoursRemoved, 2);
+        calc.calculateCheapest(listHoursRemoved, 4);
+        calc.calculateCheapest(listHoursRemoved, 8);
+
+        ReadFile rf = new ReadFile();
+        calc.costOfConsumption(rf.readFile(), listHoursRemoved);
     }
 }
 

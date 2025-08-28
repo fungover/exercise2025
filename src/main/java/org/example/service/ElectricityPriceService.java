@@ -6,17 +6,17 @@ import org.example.model.PriceHour;
 
 import java.net.http.*;
 import java.net.URI;
-import java.time.*;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ElectricityPriceService {
     private final HttpClient client = HttpClient.newHttpClient();
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    public String fetchTodayRaw(String zoneCode) {
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM-dd");
-        String pathDate = today.format(formatter);
+    public String fetchRawByDate(String zoneCode, LocalDate date) {
+        var formatter = DateTimeFormatter.ofPattern("yyyy/MM-dd");
+        var pathDate = date.format(formatter);
 
         String url = "https://www.elprisetjustnu.se/api/v1/prices/"
                 + pathDate + "_" + zoneCode + ".json";
@@ -44,16 +44,24 @@ public class ElectricityPriceService {
         }
     }
 
-    public List<PriceHour> fetchToday(String zoneCode) {
-        String raw = fetchTodayRaw(zoneCode);
+    public List<PriceHour> fetchByDate(String zoneCode, LocalDate date) {
+        String raw = fetchRawByDate(zoneCode, date);
         if (raw == null) return List.of();
 
         try {
-            ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(raw, new TypeReference<List<PriceHour>>() {});
         } catch (Exception e) {
             System.out.println("JSON parse error: " + e.getMessage());
             return List.of();
         }
     }
+
+    public List<PriceHour> fetchToday(String zoneCode) {
+        return fetchByDate(zoneCode, LocalDate.now());
+    }
+
+    public List<PriceHour> fetchTomorrow(String zoneCode) {
+        return fetchByDate(zoneCode, LocalDate.now().plusDays(1));
+    }
+
 }

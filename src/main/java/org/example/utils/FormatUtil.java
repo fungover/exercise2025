@@ -16,7 +16,7 @@ public class FormatUtil {
     }
 
     public static String formatPriceSEK(double sek) {
-        return String.format(java.util.Locale.US, "%.5f KR/kWh", sek);
+        return String.format(java.util.Locale.US, "%.5f SEK/kWh", sek);
     }
 
     public static String formatPriceEUR(double eur) {

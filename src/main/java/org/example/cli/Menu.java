@@ -185,8 +185,8 @@ public class Menu {
 
         System.out.println(" " + w.length() + " hours: " +
                 FormatUtil.formatTime(start.time_start()) + "-" +
-                FormatUtil.formatTime(end.time_end()) + " Average: ~" +
-                FormatUtil.formatAmountSEK(avgSek) + " | ~" + FormatUtil.formatAmountEUR(avgEUR)
+                FormatUtil.formatTime(end.time_end()) + " Average: " +
+                FormatUtil.formatPriceSEK(avgSek) + " | " + FormatUtil.formatPriceEUR(avgEUR)
         );
 
     }

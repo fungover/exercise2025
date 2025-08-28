@@ -27,11 +27,4 @@ public class FormatUtil {
         return String.format(java.util.Locale.US, "%.6f", exr);
     }
 
-    public static String formatAmountSEK(double sek) {
-        return String.format(java.util.Locale.US, "%.2f SEK", sek);
-    }
-
-    public static String formatAmountEUR(double eur) {
-        return String.format(java.util.Locale.US, "%.2f EUR", eur);
-    }
 }

@@ -7,7 +7,7 @@ public class Input {
     public int areaInput(){
         Scanner input = new Scanner(System.in);
 
-        int area = 0;
+        int area;
         boolean correctInput = true;
 
         do{

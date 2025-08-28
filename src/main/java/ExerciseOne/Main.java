@@ -1,7 +1,6 @@
 package ExerciseOne;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -11,22 +10,37 @@ public class Main {
         Input input = new Input();
         int area = input.areaInput();
 
-        GetDate gd = new GetDate();
-        String today = gd.geToday(area);
+        GetDateAndTime gd = new GetDateAndTime();
+        String today = gd.getToday(area);
+
 
         Request req = new Request();
-        List<Pricing> pricing = new ArrayList<>(req.request(today));
+        HandleList hl = new HandleList();
 
-        int timeOfToday = gd.getTime();
+        hl.addList(req.request(today));
+
+        int timeOfToday = gd.getHour();
+
 
         if(timeOfToday >= 13){
-            String tomorrow = gd.geToday(area);
-            pricing.addAll(req.request(tomorrow));
+           String tomorrow = gd.getTomorrow(area);
+            hl.addList(req.request(tomorrow));
         }
 
-        Calculate calc = new Calculate(pricing);
-        System.out.println("LIST"+pricing);
+        Calculate calc = new Calculate();
+        calc.calculateMean(req.request(today));
 
+        RemoveHours hr = new RemoveHours();
+        List<Pricing> listHoursRemoved = hr.removePastTime(hl.getListOfPrices());
+
+        calc.calculateMin(listHoursRemoved);
+        calc.calculateMax(listHoursRemoved);
+        calc.calculateCheapest(listHoursRemoved, 2);
+        calc.calculateCheapest(listHoursRemoved, 4);
+        calc.calculateCheapest(listHoursRemoved, 8);
+
+        ReadFile rf = new ReadFile();
+        calc.costOfConsumption(rf.readFile(), listHoursRemoved);
     }
 }
 

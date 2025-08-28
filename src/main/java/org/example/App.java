@@ -79,7 +79,7 @@ public class App {
                     break;
 
                 case "3":
-                    System.out.println("Valde: Visa billigaste och dyraste timmar");
+                    Prices.showMinAndMaxPrice(prices);
                     break;
 
                 case "4":

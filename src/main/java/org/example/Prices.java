@@ -34,11 +34,33 @@ public class Prices {
         System.out.printf("Medelpris: %.2f kr/kWh%n", average);
     }
 
-    private static void showMinAndMaxPrice() {
-        System.out.println("Du valde: Visa billigaste och dyraste timmar");
+    public static void showMinAndMaxPrice(List<PriceEntry> prices) {
+        if (prices == null || prices.isEmpty()) {
+            System.out.println("Inga priser tillgängliga.");
+            return;
+        }
+        // Starting values for the cheapest and most expensive hours
+        PriceEntry minEntry = prices.get(0);
+        PriceEntry maxEntry = prices.get(0);
+
+        // loop through all prices to find the cheapest and most expensive
+        for (PriceEntry entry : prices) {
+            if (entry.pricePerKWh() < minEntry.pricePerKWh()) {
+                minEntry = entry;
+            }
+            if (entry.pricePerKWh() > maxEntry.pricePerKWh()) {
+                maxEntry = entry;
+            }
+        }
+
+        System.out.println("Billigaste timmen:");
+        System.out.println(minEntry.startTime() + " - " + minEntry.pricePerKWh() + " kr/kWh");
+
+        System.out.println("Dyraste timmen:");
+        System.out.println(maxEntry.startTime() + " - " + maxEntry.pricePerKWh() + " kr/kWh");
     }
 
-    private static void findBestChargingTime() {
+    public static void findBestChargingTime() {
         System.out.println("Du valde: Hitta bästa tid att ladda elbil");
 
     }

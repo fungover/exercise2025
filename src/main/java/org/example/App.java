@@ -1,10 +1,18 @@
 package org.example;
 
 import java.util.Scanner;
+import static org.example.Prices.showAllPrices;
+
+
+import com.google.gson.JsonObject;
+import java.time.LocalDate;
+import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+
 
 //Electricity prices vary hour to hour, and sometimes the difference can be quite substantial. To help us optimize when to turn on the sauna or charge electric cars, we want a small CLI program that provides the necessary information.
 //
@@ -29,9 +37,12 @@ public class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        System.out.print("Ange elområde: SE1, SE2, SE3 eller SE4 ");
+        String area = scanner.nextLine().toUpperCase();
+
         while (true) {
             System.out.println("-------------");
-            System.out.println("  Elpriser");
+            System.out.println("  Elpriser " + area );
             System.out.println("-------------");
             System.out.println("Vad vill du se:");
             System.out.println("1. Ladda ner alla priser");
@@ -45,7 +56,7 @@ public class App {
 
             switch (choice) {
                 case "1":
-                    System.out.println("Valde: Ladda ner priser");
+                    showAllPrices(area);
 
                     break;
 
@@ -73,22 +84,7 @@ public class App {
         }
     }
 
-    // Placeholders
-    private static void allPrices() {
-        System.out.println("Du valde: Ladda ner alla priser");
-    }
 
-    private static void meanPrice() {
-        System.out.println("Du valde: Visa medelpris för idag");
-    }
 
-    private static void minMax() {
-        System.out.println("Du valde: Visa billigaste och dyraste timmar");
-    }
-
-    private static void bestChargingTime() {
-        System.out.println("Du valde: Hitta bästa tid att ladda elbil");
-
-    }
 }
 

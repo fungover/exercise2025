@@ -24,7 +24,7 @@ public class App {
             "Best charging window (2/4/8h) for today and tomorrow",
     };
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         System.out.println("Welcome to my Command-Line Interface that helps you optimize your electricity consumption and reduce costs!\n");
         Scanner scanner = new Scanner(System.in);
 

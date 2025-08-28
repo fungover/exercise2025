@@ -56,10 +56,8 @@ public final class PriceOps {
     }
 
     public static HourExtremes extremesByPriceEarliest(List<PricePoint> list) {
-        return new HourExtremes(
-                minByPriceEarliest(list),
-                maxByPriceEarliest(list)
-        );
+        if (list == null || list.isEmpty()) return HourExtremes.EMPTY;
+        return new HourExtremes(minByPriceEarliest(list), maxByPriceEarliest(list));
     }
 
     /**

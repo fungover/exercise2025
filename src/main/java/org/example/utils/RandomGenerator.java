@@ -11,28 +11,28 @@ import java.util.Random;
 public class RandomGenerator {
     private static final Random random = new Random();
 
-    public static Position findRandomFloorPosition(Dungeon dungeon) {
-        int attempts = 0;
-        while (attempts < 100) {
-            int x = random.nextInt(dungeon.getColumns());
-            int y = random.nextInt(dungeon.getRows());
+    public static Position findRandomFloorPosition(Dungeon dungeon) { // Find a random floor position in the dungeon
+        int attempts = 0; // Limit attempts to avoid infinite loops
+        while (attempts < 100) { // Setting a limit to prevent infinite loops
+            int x = random.nextInt(dungeon.getColumns()); // Random x coordinate
+            int y = random.nextInt(dungeon.getRows()); // Random y coordinate
 
-            if (dungeon.getTile(x, y).getType() == TileType.FLOOR) {
-                return new Position(x, y);
+            if (dungeon.getTile(x, y).getType() == TileType.FLOOR) { // Check if the tile is a floor
+                return new Position(x, y); // Return the position if it's a floor
             }
-            attempts++;
+            attempts++; // Increment attempts
         }
-        return null;
+        return null; // Return null if no floor position is found after max attempts
     }
 
-    public static List<Position> getRandomFloorPositions(int count, Dungeon dungeon) {
-        List<Position> positions = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            Position pos = findRandomFloorPosition(dungeon);
-            if (pos != null) {
-                positions.add(pos);
+    public static List<Position> getRandomFloorPositions(int count, Dungeon dungeon) { // Get multiple random floor positions
+        List<Position> positions = new ArrayList<>(); // List to hold the positions
+        for (int i = 0; i < count; i++) { // Loop to find the required number of positions
+            Position pos = findRandomFloorPosition(dungeon); // find a position
+            if (pos != null) { // Check if a valid position was found
+                positions.add(pos); // Add position x,y to the list
             }
         }
-        return positions;
+        return positions; // Return the list of positions
     }
 }

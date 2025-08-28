@@ -19,14 +19,14 @@ public class GameController {
     private boolean gameRunning;
 
     public GameController() {
-        this.player = new Player("Rikardo", 100, new Position(1,1));
-        this.dungeon = new Dungeon(8,10);
+        this.player = new Player("Rikardo", 100, new Position(1, 1));
+        this.dungeon = new Dungeon(8, 10);
         this.movementService = new MovementService();
         this.itemService = new ItemService();
         this.scanner = new Scanner(System.in);
         this.gameRunning = true;
 
-        itemService.placeRandomItems(dungeon);
+        itemService.placeRandomItems(dungeon); // Placing items in the dungeon randomly
     }
 
     public void startGame() { // Main game loop
@@ -74,11 +74,9 @@ public class GameController {
 
                 if (x == playerPos.getX() && y == playerPos.getY()) {
                     System.out.print(TileType.PLAYER.getSymbol());
-                }
-                else if (itemService.getItemAt(currentPos) != null) {
+                } else if (itemService.getItemAt(currentPos) != null) {
                     System.out.print(TileType.ITEM.getSymbol());
-                }
-                else {
+                } else {
                     System.out.print(dungeon.getTile(x, y).getSymbol());
                 }
             }

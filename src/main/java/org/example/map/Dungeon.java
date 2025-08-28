@@ -5,9 +5,9 @@ public class Dungeon {
     private final int columns;
     private final Tile[][] grid;
 
-    public Dungeon(int rows, int columns) { //the number of rows and columns in the dungeon
-        this.rows = rows;
-        this.columns = columns;
+    public Dungeon(int rows, int columns) { // constructor to initialize the dungeon with given rows and columns
+        this.rows = rows; //the number of rows in the dungeon
+        this.columns = columns; //the number of columns in the dungeon
         this.grid = new Tile[rows][columns]; //2D array of Tile objects
         generateDungeon(); //method to populate the grid with walls and floors
     }

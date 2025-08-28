@@ -5,6 +5,8 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.List;
 import java.time.LocalDate;
+
+import org.example.model.BestChargingTimes;
 import org.example.model.PriceHour;
 import org.example.service.ElectricityPriceService;
 import org.example.utils.FormatUtil;
@@ -133,8 +135,8 @@ public class Menu {
             return;
         }
         for (PriceHour hour : hours) {
-            System.out.println("__________________________" + "\n Zone: " + zoneCode +
-                    " (" + zoneName(zoneCode) + ") " + "\n Date: " +
+            System.out.println("____________________________________________________" + "\n Zone: " +
+                    zoneCode + " (" + zoneName(zoneCode) + ") " + "\n Date: " +
                     FormatUtil.formatDate(hour.time_start()) + "\n Time: " +
                     FormatUtil.formatTime(hour.time_start()) + " - " +
                     FormatUtil.formatTime(hour.time_end()) + "\n SEK: " +
@@ -160,10 +162,38 @@ public class Menu {
                 "\n Most expensive hour: " + FormatUtil.formatTime(mostExpensive.time_start()) +
                 "-" + FormatUtil.formatTime(mostExpensive.time_end()) +
                 " (" + FormatUtil.formatPriceSEK(mostExpensive.SEK_per_kWh()) + " | " +
-                FormatUtil.formatPriceEUR(mostExpensive.EUR_per_kWh()) +")" +
-                "\n____________________________________________________"
+                FormatUtil.formatPriceEUR(mostExpensive.EUR_per_kWh()) +")"
         );
 
+        System.out.println("\n Cheapest charging hours:");
+        printBestHours(hours, StatsUtil.findBestWindow(hours, 2));
+        printBestHours(hours, StatsUtil.findBestWindow(hours, 4));
+        printBestHours(hours, StatsUtil.findBestWindow(hours, 8));
+        System.out.println("____________________________________________________");
+    }
+
+    private void printBestHours(List<PriceHour> hours, BestChargingTimes.BestWindow w) {
+        if (w == null) return;
+        var start = hours.get(w.startIndex());
+        var end = hours.get(w.startIndex() + w.length() - 1);
+
+        double totalSek = w.totalSek();
+        double totalEur = calcBestHoursToEuro(hours, w);
+
+        System.out.println(" " + w.length() + " hours: " +
+                FormatUtil.formatTime(start.time_start()) + "-" +
+                FormatUtil.formatTime(end.time_end()) + " Total: ~" +
+                FormatUtil.formatAmountSEK(totalSek) + " | ~" + FormatUtil.formatAmountEUR(totalEur)
+        );
+
+    }
+
+    private double calcBestHoursToEuro(List<PriceHour> hours, BestChargingTimes.BestWindow w) {
+        double sum = 0.0;
+        for (int i = w.startIndex(); i < w.startIndex() + w.length(); i++) {
+            sum += hours.get(i).EUR_per_kWh();
+        }
+        return sum;
     }
 
 }

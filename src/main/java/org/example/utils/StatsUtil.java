@@ -1,5 +1,6 @@
 package org.example.utils;
 
+import org.example.model.BestChargingTimes;
 import org.example.model.PriceHour;
 
 import java.util.List;
@@ -48,6 +49,29 @@ public class StatsUtil {
         double sum = 0.0;
         for (PriceHour h : hours) sum += h.EUR_per_kWh();
         return sum / hours.size();
+    }
+
+    public static BestChargingTimes.BestWindow findBestWindow(List<PriceHour> hours, int k) {
+        if (hours == null || hours.size() < k) return null;
+
+        double sum = 0.0;
+        for (int i = 0; i < k; i++) {
+            sum += hours.get(i).SEK_per_kWh();
+        }
+        double best = sum;
+        int bestStart = 0;
+
+        for (int i = k; i < hours.size(); i++) {
+            sum += hours.get(i).SEK_per_kWh();
+            sum -= hours.get(i - k).SEK_per_kWh();
+
+            if (sum < best) {
+                best = sum;
+                bestStart = i - k + 1;
+            }
+        }
+
+        return new BestChargingTimes.BestWindow(bestStart, k, best);
     }
 
 }

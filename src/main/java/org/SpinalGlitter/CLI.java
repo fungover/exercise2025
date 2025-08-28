@@ -16,7 +16,7 @@ public class CLI {
             java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                     .withZone(Z_STHLM);
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         //Scanner object for user input
         Scanner input = new Scanner(System.in);
         // Variable to store the selected zone
@@ -213,18 +213,13 @@ public class CLI {
                         }
                         entries.sort(java.util.Comparator.comparing(e -> e.timeStart));
 
-                        int periodsPerHour = periodsPerHour(entries);
-
-
                         System.out.println("""
                                 Best charging hours today:
                                 --------------------------------""");
                         // Check for 2, 4, and 8 hour windows
                         for (int hours : new int[]{2, 4, 8}) {
-                            // Calculate the window size in periods
-                            int window = hours * periodsPerHour;
                             // Find the best window
-                            int[] range = bestWindow(entries, window);
+                            int[] range = bestWindow(entries, hours);
                             // If not enough periods, notify the user
                             if (range[0] < 0) {
                                 System.out.printf("%2dh: not enough periods%n", hours);
@@ -264,10 +259,7 @@ public class CLI {
             }
         }
     }
-    // Determine the number of price periods per hour
-    private static int periodsPerHour(List<PriceEntry> entries) {
-        return entries.size() >= 48 ? 4 : 1;
-    }
+
     // Find the best (cheapest) contiguous window of given size
     private static int[] bestWindow(List<PriceEntry> entries, int windowSize) {
         // If not enough entries, return invalid range

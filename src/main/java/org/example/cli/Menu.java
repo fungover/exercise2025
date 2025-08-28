@@ -5,7 +5,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.List;
 import java.time.LocalDate;
-import java.time.ZoneId;
 
 import org.example.model.BestChargingTimes;
 import org.example.model.PriceHour;
@@ -154,7 +153,7 @@ public class Menu {
 
         System.out.println("____________________________________________________" + "\n * SUMMARY: *" +
                 "\n Zone: " + zoneCode + " (" + zoneName(zoneCode) + ") " + "\n Date: " +
-                FormatUtil.formatDate(hours.get(0).time_start()) + "\n Average: " +
+                FormatUtil.formatDate(hours.getFirst().time_start()) + "\n Average: " +
                 FormatUtil.formatPriceSEK(avgSEK) + " | " +
                 FormatUtil.formatPriceEUR(avgEUR) + "\n Cheapest hour: " +
                 FormatUtil.formatTime(cheapest.time_start()) + "-" +

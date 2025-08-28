@@ -16,7 +16,7 @@ public class StatsUtil {
 
     public static PriceHour findCheapestSek(List<PriceHour> hours) {
         if (hours == null || hours.isEmpty()) return null;
-        PriceHour best = hours.get(0);
+        PriceHour best = hours.getFirst();
         for (PriceHour h : hours) {
             double p = h.SEK_per_kWh(), bp = best.SEK_per_kWh();
             int compare = Double.compare(p, bp);
@@ -32,7 +32,7 @@ public class StatsUtil {
 
     public static PriceHour findMostExpensiveSek(List<PriceHour> hours) {
         if (hours == null || hours.isEmpty()) return null;
-        PriceHour worst = hours.get(0);
+        PriceHour worst = hours.getFirst();
         for (PriceHour h : hours) {
             double p = h.SEK_per_kWh(), wp = worst.SEK_per_kWh();
             int compare = Double.compare(p, wp);

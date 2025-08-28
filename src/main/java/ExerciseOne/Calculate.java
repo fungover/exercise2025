@@ -1,7 +1,9 @@
 package ExerciseOne;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class Calculate {
 
         BigDecimal mean = new BigDecimal(sum/size);
 
-        System.out.printf("Medelpriset för de kommande %,d timmar är : %.4f SEK per kWh %n",size, mean);
+        System.out.printf("Medelpriset för aktuellt dygn är : %.4f SEK per kWh %n", mean);
     }
 
     public void calculateMin(List<Pricing> priceList){
@@ -31,7 +33,7 @@ public class Calculate {
         OffsetDateTime time = OffsetDateTime.parse(minValueObject.getFirst().time_start());
         GetDateAndTime gd = new GetDateAndTime();
 
-        System.out.println("Lägsta kilowattpriset under kommande "+priceList.size()+" timmar är "
+        System.out.println("Lägsta kilowattpriset kommande "+priceList.size()+" timmar är "
                 +gd.formatDateAndTime(time)+": "+minValue+" SEK per kWh");
     }
 
@@ -48,7 +50,7 @@ public class Calculate {
         OffsetDateTime time = OffsetDateTime.parse(maxValueObject.getFirst().time_start());
         GetDateAndTime gd = new GetDateAndTime();
 
-        System.out.println("Högsta kilowattpriset under kommande "+priceList.size()+" timmar är "
+        System.out.println("Högsta kilowattpriset kommande "+priceList.size()+" timmar är "
                 +gd.formatDateAndTime(time)+": "+maxValue+" SEK per kWh");
     }
 
@@ -84,6 +86,34 @@ public class Calculate {
         GetDateAndTime gd = new GetDateAndTime();
 
         System.out.println("Billigaste tiden att ladda bilen "+hours +" i sträck är från: "+gd.formatDateAndTime(start));
+    }
+
+    public void costOfConsumption(List<Consumption> consumption, List<Pricing> priceList){
+
+        double sum = 0;
+        double consumedElectricity = 0;
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        for (Consumption value : consumption) {
+            String time = value.time();
+            LocalDateTime formatedTime = LocalDateTime.parse(time, dtf);
+
+            for (Pricing pricing : priceList) {
+
+                OffsetDateTime priceTime = OffsetDateTime.parse(pricing.time_start());
+
+                if (priceTime.toLocalDateTime().isEqual(formatedTime)) {
+                    double price = pricing.SEK_per_kWh();
+                    double consumed = value.kWh();
+                    sum += price * consumed;
+                    consumedElectricity += consumed;
+
+                }
+            }
+        }
+        System.out.printf("Förbrukning på %.2f kWh innebär en kostnad på %.2f SEK", consumedElectricity, sum);
+
     }
 
 }

@@ -18,8 +18,14 @@ public class App {
         System.out.println("Första timmen: " + prices.getFirst());
         System.out.println("Sista timmen:  " + prices.getLast());
 
-        // medelvärde
+        // Medelpris
         double mean = PriceStats.mean(prices);
         System.out.printf("Medelpris (24h): %.4f SEK/kWh%n", mean);
+
+        // Billigaste & dyraste
+        Price cheapest = PriceStats.cheapest(prices);
+        Price expensive = PriceStats.mostExpensive(prices);
+        System.out.println("Billigaste timmen:  " + cheapest);
+        System.out.println("Dyraste timmen:    " + expensive);
     }
 }

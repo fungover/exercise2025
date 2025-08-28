@@ -15,12 +15,13 @@ public class PriceDisplay {
             ApiClient.ElectricityPrice[] prices = ApiClient.fetchPrices(year, month, day, priceArea);
             printPricesForDate(date, priceArea, label, prices);
         } catch (IOException ioe) {
-            throw new RuntimeException("Kunde inte hämta priser för " + date + ": " + ioe.getMessage());
+            System.out.println("Kunde inte hämta priser för " + priceArea + " (" + label + " " + date + "): " + ioe.getMessage());
+            return;
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Avbrutet anrop för " + date, ie);
+            System.out.println("Avbrutet anrop för " + priceArea + " (" + label + " " + date + "). Försök igen senare.");
+            return;
         }
-    }
 
     public static void printPricesForDate(LocalDate date, String priceArea, String label, ApiClient.ElectricityPrice[] prices) {
         String year = String.valueOf(date.getYear());

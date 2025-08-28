@@ -1,4 +1,6 @@
 package org.example;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -6,6 +8,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 public class App {
@@ -71,14 +76,17 @@ public class App {
         // Malmö/ Södra Sverige
         String Klass4 = String.format("Malmö / Södra Sverige: %s", k4);
 
-
+        // TODO MENU
+        System.out.println("------------------------------------");
         System.out.println("Enter Region code [1-4]");
+        System.out.println("------------------------------------");
         System.out.println("[1] Luleå / Norra Sverige");
         System.out.println("[2] Sundsvall / Norra Mellansverige");
         System.out.println("[3] Stockholm / Södra Mellansverige");
         System.out.println("[4] Malmö / Södra Sverige");
+        System.out.println("------------------------------------");
 
-        System.out.println("Enter Price Class");
+        System.out.print("Enter Price Class: ");
 
 
         Scanner scanner = new Scanner(System.in);
@@ -104,14 +112,14 @@ public class App {
         }
 
           //  System.out.println("");
-            System.out.println("You chose " + priceClass);
+            //System.out.println("You chose " + priceClass);
 
             String url = String.format("https://www.elprisetjustnu.se/api/v1/prices/%d/%s-%s_%s.json", getYear, sMonth, sDay, priceClass);
 
             //TODO HTTP
             try (HttpClient client = HttpClient.newHttpClient()) {
 
-                //TODO
+
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(url))
                         .GET()
@@ -121,13 +129,57 @@ public class App {
 
                 try {
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                    System.out.println("Status code" + response.statusCode());
-                    System.out.println("Response body: " + response.body());
+                    //System.out.println("Status code" + response.statusCode());
+                    //System.out.println("Response body: " + response.body());
+
+                    String json = response.body();
+                    ObjectMapper mapper = new ObjectMapper();
+
+                    List<Price> prices = mapper.readValue(json, new TypeReference<List<Price>>() {});
+
+                    int responseNumber = 0;
+                    double total = 0;
+                    //TODO INFO OUTPUT
+                    for  (Price price : prices) {
+                        OffsetDateTime timeStart = OffsetDateTime.parse(price.time_start);
+                        OffsetDateTime timeEnd = OffsetDateTime.parse(price.time_end);
+
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd | HH:mm");
+
+                        //System.out.println("-------------");
+                        System.out.println("Object nr: " + responseNumber );
+                        System.out.println("Start: " + timeStart.format(formatter));
+                        System.out.println("End: " + timeEnd.format(formatter));
+                        System.out.println("Price (SEK): " + price.SEK_per_kWh);
+                        System.out.println("Price (EUR): " + price.EUR_per_kWh);
+                        System.out.println("-------------");
+                        responseNumber++;
+
+
+
+                        total += price.SEK_per_kWh;
+
+                        System.out.println("Total Price: " + total);
+
+                    }
+                    double meanPrice = total / responseNumber;
+                    System.out.println("Mean Price: " + meanPrice);
+
+
+
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
 
-
         }
+
+        //TODO PRICE CLASSES
+    public static class Price{
+        public String time_start;
+        public String time_end;
+        public double SEK_per_kWh;
+        public double EUR_per_kWh;
+        public double EXR;
+    }
     }

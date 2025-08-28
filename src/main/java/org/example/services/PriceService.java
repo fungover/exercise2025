@@ -78,17 +78,23 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
             throws IOException, InterruptedException {
         var today = fetchUpcomingToday(date, areaCode);
         var tomorrow = fetchUpcomingTomorrow(date, areaCode);
-        // Compute best windows; nulls if not enough hours left
+        var todaySorted = today.stream()
+                .sorted(java.util.Comparator.comparing(PricePoint::start))
+                .toList();
+        var tomorrowSorted = tomorrow.stream()
+                .sorted(java.util.Comparator.comparing(PricePoint::start))
+                .toList();
+
         ChargeWindows todayWins = new ChargeWindows(
-                PriceOps.bestWindow(today, 2),
-                PriceOps.bestWindow(today, 4),
-                PriceOps.bestWindow(today, 8)
+                PriceOps.bestWindow(todaySorted, 2),
+                PriceOps.bestWindow(todaySorted, 4),
+                PriceOps.bestWindow(todaySorted, 8)
         );
 
         ChargeWindows tomorrowWins = new ChargeWindows(
-                PriceOps.bestWindow(tomorrow, 2),
-                PriceOps.bestWindow(tomorrow, 4),
-                PriceOps.bestWindow(tomorrow, 8)
+                PriceOps.bestWindow(tomorrowSorted, 2),
+                PriceOps.bestWindow(tomorrowSorted, 4),
+                PriceOps.bestWindow(tomorrowSorted, 8)
         );
         return PriceJson.toPrettyJson(new DailyChargeWindows(todayWins, tomorrowWins));
     }

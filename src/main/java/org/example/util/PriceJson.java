@@ -20,8 +20,9 @@ public final class PriceJson {
     }
 
     public static List<PricePoint> parseList(String json) throws IOException {
-        return MAPPER.readValue(json, new TypeReference<>() {
+        return MAPPER.readValue(json, new TypeReference<List<PricePoint>>() {
         });
+
     }
 
     public static String toPrettyJson(Object data) throws IOException {

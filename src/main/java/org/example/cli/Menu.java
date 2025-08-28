@@ -5,6 +5,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.List;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 import org.example.model.BestChargingTimes;
 import org.example.model.PriceHour;
@@ -98,9 +99,10 @@ public class Menu {
             System.out.println("[4] Back");
 
             int choice = readIntInRange(scanner, 1, 4);
+            var timeZone = java.time.ZoneId.of("Europe/Stockholm");
             switch (choice) {
-                case 1 -> showDay(zoneCode, LocalDate.now());
-                case 2 -> showDay(zoneCode, LocalDate.now().plusDays(1));
+                case 1 -> showDay(zoneCode, LocalDate.now(timeZone));
+                case 2 -> showDay(zoneCode, LocalDate.now(timeZone).plusDays(1));
                 case 3 -> {
                     boolean searching = true;
                     while (searching) {
@@ -177,18 +179,19 @@ public class Menu {
         var start = hours.get(w.startIndex());
         var end = hours.get(w.startIndex() + w.length() - 1);
 
-        double totalSek = w.totalSek();
-        double totalEur = calcBestHoursToEuro(hours, w);
+        double avgSek = w.totalSek() / w.length();
+        double sumEur = sumWindowEur(hours, w);
+        double avgEUR = sumEur / w.length();
 
         System.out.println(" " + w.length() + " hours: " +
                 FormatUtil.formatTime(start.time_start()) + "-" +
-                FormatUtil.formatTime(end.time_end()) + " Total: ~" +
-                FormatUtil.formatAmountSEK(totalSek) + " | ~" + FormatUtil.formatAmountEUR(totalEur)
+                FormatUtil.formatTime(end.time_end()) + " Average: ~" +
+                FormatUtil.formatAmountSEK(avgSek) + " | ~" + FormatUtil.formatAmountEUR(avgEUR)
         );
 
     }
 
-    private double calcBestHoursToEuro(List<PriceHour> hours, BestChargingTimes.BestWindow w) {
+    private double sumWindowEur(List<PriceHour> hours, BestChargingTimes.BestWindow w) {
         double sum = 0.0;
         for (int i = w.startIndex(); i < w.startIndex() + w.length(); i++) {
             sum += hours.get(i).EUR_per_kWh();

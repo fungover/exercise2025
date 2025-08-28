@@ -19,8 +19,9 @@ public class StatsUtil {
         PriceHour best = hours.get(0);
         for (PriceHour h : hours) {
             double p = h.SEK_per_kWh(), bp = best.SEK_per_kWh();
-            if (p < bp) best = h;
-            else if (p == bp) {
+            int compare = Double.compare(p, bp);
+            if (compare < 0) best = h;
+            else if (compare == 0) {
                 var t = java.time.OffsetDateTime.parse(h.time_start());
                 var bt = java.time.OffsetDateTime.parse(best.time_start());
                 if (t.isBefore(bt)) best = h;
@@ -34,8 +35,9 @@ public class StatsUtil {
         PriceHour worst = hours.get(0);
         for (PriceHour h : hours) {
             double p = h.SEK_per_kWh(), wp = worst.SEK_per_kWh();
-            if (p > wp) worst = h;
-            else if (p == wp) {
+            int compare = Double.compare(p, wp);
+            if (compare > 0) worst = h;
+            else if (compare == 0) {
                 var t = java.time.OffsetDateTime.parse(h.time_start());
                 var bt = java.time.OffsetDateTime.parse(worst.time_start());
                 if (t.isBefore(bt)) worst = h;

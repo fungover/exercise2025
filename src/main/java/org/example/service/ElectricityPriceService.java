@@ -11,7 +11,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ElectricityPriceService {
-    private final HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client = HttpClient.newBuilder()
+            .connectTimeout(java.time.Duration.ofSeconds(10))
+            .build();
     private final ObjectMapper mapper = new ObjectMapper();
 
     public String fetchRawByDate(String zoneCode, LocalDate date) {
@@ -24,6 +26,7 @@ public class ElectricityPriceService {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
+                    .timeout(java.time.Duration.ofSeconds(15))
                     .header("Accept", "application/json")
                     .header("User-Agent", "ElpriserCLI/1.0")
                     .GET()

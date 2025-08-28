@@ -1,8 +1,5 @@
 package org.example.map;
 
-import org.example.entities.Player;
-import org.example.entities.Position;
-
 public class Dungeon {
     private final int rows;
     private final int columns;
@@ -22,12 +19,9 @@ public class Dungeon {
 
                 if (x == 0 || x == columns - 1 || y == 0 || y == rows - 1) { // create walls around the edges
                     grid[y][x] = new Tile(TileType.WALL); // outer walls
-                }
-                else if ((x == 3 && y > 1 && y < 5) || (x == 6 && y > 3 && y < 7)) { // create some internal walls
+                } else if ((x == 3 && y > 1 && y < 5) || (x == 6 && y > 3 && y < 7)) { // create some internal walls
                     grid[y][x] = new Tile(TileType.WALL); // internal walls
-                }
-
-                else {
+                } else {
                     grid[y][x] = new Tile(TileType.FLOOR); // fill the rest with floors
                 }
             }
@@ -43,22 +37,6 @@ public class Dungeon {
         }
     }
 
-    public void printMapWithPlayer(Player player) {
-        Position playerPos = player.getPosition();
-
-        for (int y = 0; y < rows; y++) {
-            for (int x = 0; x < columns; x++) {
-                if (x == playerPos.getX() && y == playerPos.getY()) {
-                    System.out.print(TileType.PLAYER.getSymbol());
-                }
-                else {
-                    System.out.print(grid[y][x].getSymbol());
-                }
-            }
-            System.out.println();
-        }
-    }
-
     public Tile getTile(int x, int y) { // method to get a tile at specific coordinates
         if (x >= 0 && x < columns && y >= 0 && y < rows) { // check bounds
             return grid[y][x]; // return the tile if within bounds
@@ -66,10 +44,11 @@ public class Dungeon {
         return null; // return null if out of bounds
     }
 
-    public int getWidth() {
+    public int getColumns() {
         return columns;
     }
-    public int getHeight() {
+
+    public int getRows() {
         return rows;
     }
 }

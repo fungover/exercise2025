@@ -3,7 +3,9 @@ package org.example.game;
 import org.example.entities.Player;
 import org.example.entities.Position;
 import org.example.map.Dungeon;
+import org.example.map.TileType;
 import org.example.service.Direction;
+import org.example.service.ItemService;
 import org.example.service.MovementService;
 
 import java.util.Scanner;
@@ -12,6 +14,7 @@ public class GameController {
     private Player player;
     private Dungeon dungeon;
     private MovementService movementService;
+    private ItemService itemService;
     private Scanner scanner;
     private boolean gameRunning;
 
@@ -19,8 +22,11 @@ public class GameController {
         this.player = new Player("Rikardo", 100, new Position(1,1));
         this.dungeon = new Dungeon(8,10);
         this.movementService = new MovementService();
+        this.itemService = new ItemService();
         this.scanner = new Scanner(System.in);
         this.gameRunning = true;
+
+        itemService.placeRandomItems(dungeon);
     }
 
     public void startGame() { // Main game loop
@@ -59,6 +65,27 @@ public class GameController {
         showGameState();
     }
 
+    private void printMapWithPlayer() {
+        Position playerPos = player.getPosition();
+
+        for (int y = 0; y < dungeon.getRows(); y++) {
+            for (int x = 0; x < dungeon.getColumns(); x++) {
+                Position currentPos = new Position(x, y);
+
+                if (x == playerPos.getX() && y == playerPos.getY()) {
+                    System.out.print(TileType.PLAYER.getSymbol());
+                }
+                else if (itemService.getItemAt(currentPos) != null) {
+                    System.out.print(TileType.ITEM.getSymbol());
+                }
+                else {
+                    System.out.print(dungeon.getTile(x, y).getSymbol());
+                }
+            }
+            System.out.println();
+        }
+    }
+
     private void movePlayer(Direction direction) {
         boolean moved = movementService.movePlayer(player, direction, dungeon);
         if (moved) {
@@ -70,7 +97,7 @@ public class GameController {
 
     private void showGameState() {
         System.out.println();
-        dungeon.printMapWithPlayer(player);
+        printMapWithPlayer();
         System.out.println(player);
         System.out.println("Commands: North (N), South (S), East (E), West (W), Quit (Q)");
     }

@@ -55,7 +55,7 @@ public class Menu {
             switch (choice) {
                 case "SE1", "SE2", "SE3", "SE4" -> {
                     isRunning = false;
-                    electricityPriceFetcher.getTodayAndTomorrow(choice);
+                    electricityPriceFetcher.downloadTodayAndTomorrow(choice);
                 }
                 default -> System.out.println("Invalid choice. You must enter a valid zone.");
             }

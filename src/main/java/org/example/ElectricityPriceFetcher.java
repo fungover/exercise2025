@@ -8,10 +8,11 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ElectricityPriceFetcher {
@@ -46,6 +47,25 @@ public class ElectricityPriceFetcher {
         combined.addAll(fetchPrices(tomorrow, zone));
 
         return combined;
+    }
+
+    public void downloadTodayAndTomorrow(String zone) throws IOException, InterruptedException {
+        List<PriceEntry> combined = getTodayAndTomorrow(zone);
+        Path output = Path.of("output", "prices.csv");
+
+        if (output.getParent() != null) {
+            Files.createDirectories(output.getParent());
+        }
+
+        try (var w = Files.newBufferedWriter(output)) {
+            w.write("time_start;time_end;SEK_per_kWh;EUR_per_kWh;EXR");
+            w.newLine();
+
+            for (PriceEntry p : combined) {
+                w.write(p.time_start() + ";" + p.time_end() + ";" + p.SEK_per_kWh() + ";" + p.EUR_per_kWh() + ";" + p.EXR());
+                w.newLine();
+            }
+        }
     }
 
 }

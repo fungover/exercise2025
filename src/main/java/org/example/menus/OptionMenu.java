@@ -1,4 +1,5 @@
 package org.example.menus;
+
 import java.util.Scanner;
 
 public record OptionMenu(Scanner scanner, String[] OPTIONS) {
@@ -34,7 +35,7 @@ public record OptionMenu(Scanner scanner, String[] OPTIONS) {
 
     private void printOptions() {
         System.out.println("0. Exit");
-        for(int i = 0; i < OPTIONS.length; i++) {
+        for (int i = 0; i < OPTIONS.length; i++) {
             System.out.println((i + 1) + ". " + OPTIONS[i]);
         }
     }

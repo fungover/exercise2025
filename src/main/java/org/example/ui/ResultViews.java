@@ -1,27 +1,34 @@
 package org.example.ui;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.model.*;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
 
 public final class ResultViews {
-    private ResultViews() {}
-
     private static final ObjectMapper M = new ObjectMapper().registerModule(new JavaTimeModule());
     private static final DateTimeFormatter TF = DateTimeFormatter.ofPattern("HH:mm");
+    private ResultViews() {
+    }
 
-    /** Option 1: prices (today + tomorrow, upcoming only) */
+    /**
+     * Option 1: prices (today + tomorrow, upcoming only)
+     */
     public static String prices(String json, ZoneId zone, LocalDate date, String area, Scanner scanner)
             throws IOException {
-        List<PricePoint> pts = M.readValue(json, new TypeReference<List<PricePoint>>() {});
+        List<PricePoint> pts = M.readValue(json, new TypeReference<>() {
+        });
         if (pts.isEmpty()) return "No upcoming hours for " + date + " (" + area + ").";
 
         StringBuilder preview = new StringBuilder("Upcoming hours for ")
@@ -38,12 +45,14 @@ public final class ResultViews {
         ans = ans.trim().toLowerCase();
         if (!ans.equals("y") && !ans.equals("yes")) return "Skipped saving.";
 
-        var path = PriceCsvExporter.exportPricesCsv(pts, zone, date, area);
+        var path = PriceCsvExporter.exportPricesCsv(pts, zone, area);
         return (path == null) ? "No data to save." : "Saved " + pts.size() + " rows to " + path.toAbsolutePath();
     }
 
-    /** Option 2: daily mean */
-    public static String mean(String json, ZoneId zone, LocalDate date, String area) throws IOException {
+    /**
+     * Option 2: daily mean
+     */
+    public static String mean(String json, LocalDate date, String area) throws IOException {
         DailyMean m = M.readValue(json, DailyMean.class);
 
         if (m.meanSekPerKWh() == null || m.hours() == 0) {
@@ -55,7 +64,9 @@ public final class ResultViews {
                 + meanText + " SEK/kWh (" + m.hours() + " hours)";
     }
 
-    /** Option 3: extremes (today and tomorrow) */
+    /**
+     * Option 3: extremes (today and tomorrow)
+     */
     public static String extremes(String json, ZoneId zone, LocalDate date, String area) throws IOException {
         DailyExtremes d = M.readValue(json, DailyExtremes.class);
         return "Cheapest & most expensive (remaining) for " + area + ":\n"
@@ -67,7 +78,9 @@ public final class ResultViews {
                 + "  - Most expensive: " + pp(d.tomorrow().mostExpensive(), zone);
     }
 
-    /** Option 4: charging windows (2/4/8h, today and tomorrow) */
+    /**
+     * Option 4: charging windows (2/4/8h, today and tomorrow)
+     */
     public static String chargeWindows(String json, ZoneId zone, LocalDate date, String area) throws IOException {
         DailyChargeWindows d = M.readValue(json, DailyChargeWindows.class);
         return "Best charging windows for " + area + " (remaining hours):\n"
@@ -81,16 +94,23 @@ public final class ResultViews {
                 + win("8h", d.tomorrow().h8(), zone);
     }
 
-    /** helpers */
+    /**
+     * helpers
+     */
     private static String slot(PricePoint p, ZoneId zone) {
         return t(p.start(), zone) + "–" + t(p.end(), zone) + "  " + price(p.sekPerKWh()) + " SEK/kWh";
     }
-    private static String pp(PricePoint p, ZoneId zone) { return (p == null) ? "—" : slot(p, zone); }
+
+    private static String pp(PricePoint p, ZoneId zone) {
+        return (p == null) ? "—" : slot(p, zone);
+    }
+
     private static String win(String label, ChargeWindow w, ZoneId zone) {
         if (w == null) return "  - " + label + ": —";
         return "  - " + label + ": " + t(w.start(), zone) + "–" + t(w.end(), zone)
                 + "  avg " + price(w.averageSekPerKWh()) + " (sum " + price(w.sumSekPerKWh()) + ")";
     }
+
     private static String t(OffsetDateTime odt, ZoneId zone) {
         return odt.atZoneSameInstant(zone).format(TF);
     }

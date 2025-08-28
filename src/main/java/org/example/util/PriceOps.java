@@ -1,7 +1,9 @@
 package org.example.util;
+
 import org.example.model.ChargeWindow;
 import org.example.model.HourExtremes;
 import org.example.model.PricePoint;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
@@ -10,9 +12,12 @@ import java.util.Comparator;
 import java.util.List;
 
 public final class PriceOps {
-    private PriceOps() {}
+    private PriceOps() {
+    }
 
-    /** Merge two lists and sort chronologically by start time. */
+    /**
+     * Merge two lists and sort chronologically by start time.
+     */
     public static List<PricePoint> mergeSorted(List<PricePoint> a, List<PricePoint> b) {
         List<PricePoint> out = new ArrayList<>(a.size() + b.size());
         out.addAll(a);
@@ -21,7 +26,9 @@ public final class PriceOps {
         return out;
     }
 
-    /** Keep only hours that haven't finished yet (includes the current hour). */
+    /**
+     * Keep only hours that haven't finished yet (includes the current hour).
+     */
     public static List<PricePoint> futureOrCurrent(List<PricePoint> in, OffsetDateTime now) {
         return in.stream()
                 .filter(p -> p.end().isAfter(now))
@@ -51,7 +58,9 @@ public final class PriceOps {
         );
     }
 
-    /** Best contiguous k-hour window by total price; earliest on ties. */
+    /**
+     * Best contiguous k-hour window by total price; earliest on ties.
+     */
     public static ChargeWindow bestWindow(List<PricePoint> points, int k) {
         int n = points.size();
         if (n < k) return null;

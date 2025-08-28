@@ -1,5 +1,7 @@
 package org.example.ui;
+
 import org.example.model.PricePoint;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -12,10 +14,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public final class PriceCsvExporter {
-    private PriceCsvExporter() {}
+    private PriceCsvExporter() {
+    }
 
-    /** Writes a CSV to ./out and returns the file path. Returns null if list empty. */
-    public static Path exportPricesCsv(List<PricePoint> pts, ZoneId zone, LocalDate date, String area)
+    /**
+     * Writes a CSV to ./out and returns the file path. Returns null if list empty.
+     */
+    public static Path exportPricesCsv(List<PricePoint> pts, ZoneId zone, String area)
             throws IOException {
         if (pts == null || pts.isEmpty()) return null;
 
@@ -23,7 +28,7 @@ public final class PriceCsvExporter {
         Files.createDirectories(dir);
 
         LocalDate startDate = pts.getFirst().start().atZoneSameInstant(zone).toLocalDate();
-        LocalDate endDate   = pts.getLast().end().atZoneSameInstant(zone).toLocalDate();
+        LocalDate endDate = pts.getLast().end().atZoneSameInstant(zone).toLocalDate();
 
         String safeArea = area.replaceAll("[^A-Za-z0-9_-]", "_");
         String fileName = startDate.equals(endDate)

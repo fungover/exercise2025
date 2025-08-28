@@ -1,8 +1,10 @@
 package org.example;
+
 import org.example.api.PriceApiClient;
 import org.example.menus.OptionMenu;
 import org.example.services.PriceService;
 import org.example.ui.ResultViews;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Scanner;
@@ -22,7 +24,7 @@ public class App {
             "Best charging window (2/4/8h) for today and tomorrow",
     };
 
-    public static void main(String[] args) {
+     public static void main(String[] args) {
         System.out.println("Welcome to my Command-Line Interface that helps you optimize your electricity consumption and reduce costs!\n");
         Scanner scanner = new Scanner(System.in);
 
@@ -46,7 +48,7 @@ public class App {
             String result = service.handleChoice(mainMenuChoice, date, areaCode);
             String pretty = switch (mainMenuChoice) {
                 case 1 -> ResultViews.prices(result, zone, date, areaCode, scanner);
-                case 2 -> ResultViews.mean(result, zone, date, areaCode);
+                case 2 -> ResultViews.mean(result, date, areaCode);
                 case 3 -> ResultViews.extremes(result, zone, date, areaCode);
                 case 4 -> ResultViews.chargeWindows(result, zone, date, areaCode);
                 default -> result;

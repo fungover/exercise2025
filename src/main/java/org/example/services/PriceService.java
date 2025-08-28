@@ -1,8 +1,10 @@
 package org.example.services;
+
 import org.example.api.PriceApiClient;
 import org.example.model.*;
 import org.example.util.PriceJson;
 import org.example.util.PriceOps;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,7 +27,9 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
         };
     }
 
-    /** Get current and future hours data only (today/tomorrow) */
+    /**
+     * Get current and future hours data only (today/tomorrow)
+     */
     private String downloadPrices(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
         List<PricePoint> today = fetchUpcomingToday(date, areaCode);
@@ -34,7 +38,9 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
         return PriceJson.toPrettyJson(merged);
     }
 
-    /** Get mean for today only */
+    /**
+     * Get mean for today only
+     */
     private String calculateMean(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
         String todayJson = apiClient.fetchPrices(date, areaCode);
@@ -53,7 +59,9 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
         return PriceJson.toPrettyJson(new DailyMean(date, areaCode, mean, points.size()));
     }
 
-    /** Get current and future hours data only (today/tomorrow) */
+    /**
+     * Get current and future hours data only (today/tomorrow)
+     */
     private String findExtremes(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
         var today = fetchUpcomingToday(date, areaCode);
@@ -63,7 +71,9 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
         return PriceJson.toPrettyJson(new DailyExtremes(todayEx, tomorrowEx));
     }
 
-    /** Best charging windows (2/4/8h) for today & tomorrow, using upcoming hours only. */
+    /**
+     * Best charging windows (2/4/8h) for today & tomorrow, using upcoming hours only.
+     */
     private String bestChargingWindow(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
         var today = fetchUpcomingToday(date, areaCode);
@@ -83,7 +93,9 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
         return PriceJson.toPrettyJson(new DailyChargeWindows(todayWins, tomorrowWins));
     }
 
-    /** Upcoming prices for *today* only (filters past hours). */
+    /**
+     * Upcoming prices for *today* only (filters past hours).
+     */
     private List<PricePoint> fetchUpcomingToday(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
         String json = apiClient.fetchPrices(date, areaCode);
@@ -91,7 +103,9 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
         return PriceOps.futureOrCurrent(points, now()); // includes current hour
     }
 
-    /** Upcoming prices for *tomorrow* only (filters past hours relative to now). */
+    /**
+     * Upcoming prices for *tomorrow* only (filters past hours relative to now).
+     */
     private List<PricePoint> fetchUpcomingTomorrow(LocalDate date, String areaCode)
             throws IOException, InterruptedException {
         String json = apiClient.fetchPrices(date.plusDays(1), areaCode);

@@ -1,4 +1,5 @@
 package org.example.api;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -9,7 +10,9 @@ import java.time.LocalDate;
 public final class PriceApiClient {
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
-    /** Builds the API URL for a given date and price zone. */
+    /**
+     * Builds the API URL for a given date and price zone.
+     */
     public URI buildUrl(LocalDate date, String zone) {
         String url = String.format(
                 "https://www.elprisetjustnu.se/api/v1/prices/%d/%02d-%02d_%s.json",
@@ -18,7 +21,9 @@ public final class PriceApiClient {
         return URI.create(url);
     }
 
-    /** Sends the HTTP request and returns the JSON response as a String. */
+    /**
+     * Sends the HTTP request and returns the JSON response as a String.
+     */
     public String fetchPrices(LocalDate date, String zone) throws IOException, InterruptedException {
         URI url = buildUrl(date, zone);
         HttpRequest request = HttpRequest.newBuilder(url).GET().build();

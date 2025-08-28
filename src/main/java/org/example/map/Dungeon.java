@@ -1,5 +1,8 @@
 package org.example.map;
 
+import org.example.entities.Player;
+import org.example.entities.Position;
+
 public class Dungeon {
     private final int rows;
     private final int columns;
@@ -37,6 +40,22 @@ public class Dungeon {
                 System.out.print(grid[y][x].getSymbol()); // print the symbol of each tile
             }
             System.out.println(); // new line after each row
+        }
+    }
+
+    public void printMapWithPlayer(Player player) {
+        Position playerPos = player.getPosition();
+
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < columns; x++) {
+                if (x == playerPos.getX() && y == playerPos.getY()) {
+                    System.out.print(TileType.PLAYER.getSymbol());
+                }
+                else {
+                    System.out.print(grid[y][x].getSymbol());
+                }
+            }
+            System.out.println();
         }
     }
 

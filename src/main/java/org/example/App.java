@@ -11,22 +11,71 @@ public class App {
         Player player = new Player("Hero", 100, new Position(1,1));
         Dungeon dungeon = new Dungeon(8, 10);
 
-        System.out.println("Current position (1,1): " + dungeon.getTile(1, 1).getType());
-        System.out.println("North of player (1, 0): " + dungeon.getTile(1, 0).getType());
+        System.out.println("Starting position");
+        dungeon.printMapWithPlayer(player);
+        System.out.println(player);
 
-        dungeon.printMap();
-
-        boolean moved = player.moveNorth(dungeon);
+        System.out.println("Moving east");
+        boolean moved = player.moveEast(dungeon);
         System.out.println("Move successful: " + moved);
-        System.out.println("after north: " + player.getPosition());
+        dungeon.printMapWithPlayer(player);
+        System.out.println(player);
 
+        System.out.println("Moving south");
+        moved = player.moveSouth(dungeon);
+        System.out.println("Move successful: " + moved);
+        dungeon.printMapWithPlayer(player);
+        System.out.println(player);
+
+        System.out.println("Try moving into wall (East)");
         moved = player.moveEast(dungeon);
         System.out.println("Move successful: " + moved);
-        System.out.println("After east: " + player.getPosition());
+        dungeon.printMapWithPlayer(player);
+        System.out.println(player);
 
-        moved = player.moveWest(dungeon);
+        System.out.println("Moving south");
+        moved = player.moveSouth(dungeon);
         System.out.println("Move successful: " + moved);
-        System.out.println("After west" + player.getPosition());
+        dungeon.printMapWithPlayer(player);
+        System.out.println(player);
+
+        System.out.println("Moving south");
+        moved = player.moveSouth(dungeon);
+        System.out.println("Move successful: " + moved);
+        dungeon.printMapWithPlayer(player);
+        System.out.println(player);
+
+        System.out.println("Moving south");
+        moved = player.moveSouth(dungeon);
+        System.out.println("Move successful: " + moved);
+        dungeon.printMapWithPlayer(player);
+        System.out.println(player);
+
+        System.out.println("Moving east");
+        moved = player.moveEast(dungeon);
+        System.out.println("Move successful: " + moved);
+        dungeon.printMapWithPlayer(player);
+        System.out.println(player);
+
+        System.out.println("Moving east");
+        moved = player.moveEast(dungeon);
+        System.out.println("Move successful: " + moved);
+        dungeon.printMapWithPlayer(player);
+        System.out.println(player);
+
+        System.out.println("Moving east");
+        moved = player.moveEast(dungeon);
+        System.out.println("Move successful: " + moved);
+        dungeon.printMapWithPlayer(player);
+        System.out.println(player);
+
+        System.out.println("Moving east");
+        moved = player.moveEast(dungeon);
+        System.out.println("Move successful: " + moved);
+        dungeon.printMapWithPlayer(player);
+        System.out.println(player);
+
+
 
     }
 }

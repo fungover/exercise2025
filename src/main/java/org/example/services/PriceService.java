@@ -1,8 +1,6 @@
 package org.example.services;
 import org.example.api.PriceApiClient;
-import org.example.model.DailyExtremes;
-import org.example.model.HourExtremes;
-import org.example.model.PricePoint;
+import org.example.model.*;
 import org.example.util.PriceJson;
 import org.example.util.PriceOps;
 import java.io.IOException;
@@ -22,7 +20,7 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
             case 1 -> downloadPrices(date, areaCode);
             case 2 -> calculateMean(date, areaCode);
             case 3 -> findExtremes(date, areaCode);
-            case 4 -> bestChargingWindow(areaCode);
+            case 4 -> bestChargingWindow(date, areaCode);
             default -> "Invalid option!";
         };
     }
@@ -76,8 +74,27 @@ public record PriceService(PriceApiClient apiClient, ZoneId zoneId) {
         return PriceJson.toPrettyJson(new DailyExtremes(todayEx, tomorrowEx));
     }
 
-    private String bestChargingWindow(String areaCode) {
-        return "Best charging window for area " + areaCode + ": ... (not implemented yet)";
+    /** Best charging windows (2/4/8h) for today & tomorrow, using upcoming hours only. */
+    private String bestChargingWindow(LocalDate date, String areaCode)
+            throws IOException, InterruptedException {
+
+        var today = fetchUpcomingToday(date, areaCode);
+        var tomorrow = fetchUpcomingTomorrow(date, areaCode);
+
+        // Compute best windows; nulls if not enough hours left
+        ChargeWindows todayWins = new ChargeWindows(
+                PriceOps.bestWindow(today, 2),
+                PriceOps.bestWindow(today, 4),
+                PriceOps.bestWindow(today, 8)
+        );
+
+        ChargeWindows tomorrowWins = new ChargeWindows(
+                PriceOps.bestWindow(tomorrow, 2),
+                PriceOps.bestWindow(tomorrow, 4),
+                PriceOps.bestWindow(tomorrow, 8)
+        );
+
+        return PriceJson.toPrettyJson(new DailyChargeWindows(todayWins, tomorrowWins));
     }
 
     /** Upcoming prices for *today* only (filters past hours). */

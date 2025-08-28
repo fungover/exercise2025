@@ -3,9 +3,13 @@ package org.example;
 import com.google.gson.JsonObject;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Prices {
+
+    private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     public static void showAllPrices(List<PriceEntry> prices) {
         if (prices == null || prices.isEmpty()) {
             System.out.println("Inga priser tillgängliga.");
@@ -14,7 +18,9 @@ public class Prices {
 
         System.out.println("Alla priser:");
         for (PriceEntry entry : prices) {
-            System.out.println(entry.startTime() + " - " + entry.pricePerKWh() + " kr/kWh");
+            System.out.printf("%s - %.2f kr/kWh%n",
+                    entry.startTime().format(timeFormatter),
+                    entry.pricePerKWh());
         }
     }
 
@@ -54,10 +60,14 @@ public class Prices {
         }
 
         System.out.println("Billigaste timmen:");
-        System.out.println(minEntry.startTime() + " - " + minEntry.pricePerKWh() + " kr/kWh");
+        System.out.printf("%s - %.2f kr/kWh%n",
+                minEntry.startTime().format(timeFormatter),
+                minEntry.pricePerKWh());
 
         System.out.println("Dyraste timmen:");
-        System.out.println(maxEntry.startTime() + " - " + maxEntry.pricePerKWh() + " kr/kWh");
+        System.out.printf("%s - %.2f kr/kWh%n",
+                maxEntry.startTime().format(timeFormatter),
+                maxEntry.pricePerKWh());
     }
 
     public static void findBestChargingTime(List<PriceEntry> prices, int durationHours) {
@@ -89,10 +99,12 @@ public class Prices {
             }
         }
 
-        System.out.println("Bästa tid att ladda " + durationHours + " timmar:");
+        System.out.println("Bästa laddningstid är: " + durationHours + " timmar:");
         for (int i = minStartIndex; i < minStartIndex + durationHours; i++) {
             PriceEntry entry = prices.get(i);
-            System.out.println(entry.startTime() + " - " + entry.pricePerKWh() + " kr/kWh");
+            System.out.printf("%s - %.2f kr/kWh%n",
+                    entry.startTime().format(timeFormatter),
+                    entry.pricePerKWh());
         }
 
     }

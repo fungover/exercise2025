@@ -24,18 +24,22 @@ public class App {
             "Best charging window (2/4/8h) for today and tomorrow",
     };
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         System.out.println("Welcome to my Command-Line Interface that helps you optimize your electricity consumption and reduce costs!\n");
         Scanner scanner = new Scanner(System.in);
 
         OptionMenu areaMenu = new OptionMenu(scanner, AREAS);
         int areaMenuChoice = areaMenu.getOption();
-        areaMenu.menuExit(areaMenuChoice);
+        if (areaMenu.shouldExit(areaMenuChoice)) {
+            System.exit(0);
+        }
         String areaCode = "SE" + areaMenuChoice;
 
         OptionMenu mainMenu = new OptionMenu(scanner, OPTIONS);
         int mainMenuChoice = mainMenu.getOption();
-        mainMenu.menuExit(mainMenuChoice);
+        if (mainMenu.shouldExit(mainMenuChoice)) {
+            System.exit(0);
+        }
         scanner.nextLine();
 
         ZoneId zone = ZoneId.of("Europe/Stockholm");

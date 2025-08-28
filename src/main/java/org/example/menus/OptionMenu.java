@@ -45,10 +45,11 @@ public record OptionMenu(Scanner scanner, String[] options) {
         }
     }
 
-    public void menuExit(int areaMenuChoice) {
-        if (areaMenuChoice == 0) {
+    public boolean shouldExit(int choice) {
+        if (choice == 0) {
             System.out.println("Goodbye!");
-            System.exit(0);
+            return true;
         }
+        return false;
     }
 }

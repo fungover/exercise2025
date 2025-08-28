@@ -70,6 +70,7 @@ public class PriceService {
             if (fileStatus == 0) {
                 FileUtil.writeToFile(fileName, "Start,End,Price_SEK_per_kWh\n");
             }
+
             System.out.println("=== " + dayLabel + " ===");
             Arrays.stream(entries).forEach(entry -> {
                 double roundedPrice = Math.round(entry.SEK_per_kWh() * 100) / 100.0;
@@ -80,7 +81,6 @@ public class PriceService {
                 System.out.println(line);
 
                 FileUtil.writeToFile(fileName, csvLine + "\n");
-
 
             });
         } catch (RuntimeException e) {

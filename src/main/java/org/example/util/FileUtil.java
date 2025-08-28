@@ -3,7 +3,7 @@ package org.example.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.io.BufferedWriter;
 import java.nio.charset.StandardCharsets;
@@ -26,16 +26,16 @@ public class FileUtil {
         try {
             if (parent != null) {
                 Files.createDirectories(parent);
-                logger.info("Directory created: {}", parent.getFileName());
+                logger.info("Ensured parent directory exists: {}", parent);
             }
             Files.createFile(path);
-            logger.info("File created: {}", path.getFileName());
+            logger.info("File created: {}", path);
             return 0;
         } catch (FileAlreadyExistsException e) {
-            logger.info("File already exists: {}", path);
+            logger.debug("File already exists: {}", path);
             return -1;
         } catch (IOException e) {
-            logger.error("File could not be created: {}", fileName, e);
+            logger.error("File could not be created: {}", path, e);
             return -2;
         }
     }
@@ -45,9 +45,15 @@ public class FileUtil {
 
         try {
             Path parent = path.getParent();
+            if (content == null) {
+                logger.warn("Null content passed to writeToFile; writing newline only: {}", path);
+                content = "\n";
+            }
+
             if (parent != null) {
                 Files.createDirectories(parent);
             }
+
             try (BufferedWriter writer = Files.newBufferedWriter(
                     path,
                     StandardCharsets.UTF_8,

@@ -70,14 +70,14 @@ public class Calculate {
 
     public void calculateCheapest(List<Pricing> priceList, int hours){
 
-        if(priceList.isEmpty()){
-            System.out.println("Inga tillgängliga priser");
+        if(priceList.isEmpty() || priceList.size() < hours){
+            System.out.println("Inga priser tillgängliga för beräkning");
             return;
         }
 
         List<Cost> listOfCost = new ArrayList<>();
 
-        for(int i = 0; i <= priceList.size()-hours; i++){
+        for(int i = 0; i <= priceList.size() - hours; i++){
             double sum = 0;
             String start = priceList.get(i).time_start();
             String end = priceList.get(i + hours -1).time_end();
@@ -89,7 +89,7 @@ public class Calculate {
         }
 
         displayCheapest(listOfCost, hours);
-        listOfCost.clear();
+        //listOfCost.clear();
     }
 
     public void displayCheapest(List<Cost> prices, int hours){

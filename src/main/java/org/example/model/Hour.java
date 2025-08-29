@@ -1,4 +1,4 @@
-package org.example.elecPrice;
+package org.example.model;
 
 import java.time.OffsetDateTime;
 

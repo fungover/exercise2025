@@ -5,7 +5,8 @@ public enum TileType {
     FLOOR('.', true),
     PLAYER('☺', true),
     ENEMY('☠', true),
-    ITEM('◊', true);
+    ITEM('◊', true),
+    DOOR('▓', true);
 
     private final char symbol;
     private final boolean walkable;
@@ -18,6 +19,7 @@ public enum TileType {
     public char getSymbol() {
         return symbol;
     }
+
     public boolean isWalkable() {
         return walkable;
     }

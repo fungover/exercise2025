@@ -8,7 +8,7 @@ public class Player {
     private int health;
     private int maxHealth;
     private Position position;
-    private List<String> inventory;
+    private List<Item> inventory;
 
     public Player(String name, int maxHealth, Position startPosition) {
         this.name = name;
@@ -26,13 +26,52 @@ public class Player {
         this.health = Math.min(maxHealth, health + healAmount);
     }
 
-    public String getName() { return name; }
-    public int getHealth() { return health; }
-    public int getMaxHealth() { return maxHealth; }
-    public Position getPosition() { return position; }
-    public List<String> getInventory() { return new ArrayList<>(inventory); }
+    public void addToInventory(Item item) {
+        inventory.add(item);
+    }
 
-    public void setPosition(Position position) { this.position = position; }
+    public void removeFromInventory(Item item) {
+        inventory.remove(item);
+    }
+
+    public Item getItemByName(String itemName) {
+        return inventory.stream()
+                .filter(item -> item.getName().equalsIgnoreCase(itemName))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void useItem(String itemName) {
+        Item item = getItemByName(itemName);
+        if (item != null) {
+            item.use(this);
+            inventory.remove(item);
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public List<Item> getInventory() {
+        return new ArrayList<>(inventory);
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
 
     @Override
     public String toString() {

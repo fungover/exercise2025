@@ -26,6 +26,8 @@ public class Dungeon {
                 }
             }
         }
+
+        grid[rows / 2][columns - 1] = new Tile(TileType.DOOR); // add a door at the middle of the right wall
     }
 
     public void printMap() {

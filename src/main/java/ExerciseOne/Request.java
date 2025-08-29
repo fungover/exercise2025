@@ -14,18 +14,16 @@ import java.util.List;
 //https://www.elprisetjustnu.se/api/v1/prices/[ÅR]/[MÅNAD]-[DAG]_[PRISKLASS].json
 
 public class Request {
+    private static final ObjectMapper MAPPER = new ObjectMapper()
+            .findAndRegisterModules()
+            .configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+    private static final HttpClient CLIENT = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
 
     public List<Pricing> request(String search) throws IOException, InterruptedException {
-
-        ObjectMapper mapper = new ObjectMapper()
-                .findAndRegisterModules()
-                .configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
         String elprisURL = "https://www.elprisetjustnu.se/api/v1/prices/"+search+".json";
-
-            HttpClient client = HttpClient.newBuilder()
-                    .connectTimeout(Duration.ofSeconds(10))
-                    .build();
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(elprisURL))
@@ -35,12 +33,12 @@ public class Request {
                     .GET()
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
             String body = response.body();
             String check = body == null ? "" : body.stripLeading();
             if(response.statusCode() == 200 && check.startsWith("[")) {
-                return mapper.readValue(check, new TypeReference<List<Pricing>>() {});
+                return MAPPER.readValue(check, new TypeReference<List<Pricing>>() {});
             }
 
             return List.of();

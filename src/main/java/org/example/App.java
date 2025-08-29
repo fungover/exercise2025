@@ -1,4 +1,3 @@
-// App.java
 package org.example;
 
 import org.example.model.Hour;
@@ -8,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class App {
-	public static void main(String[] args) throws IOException, InterruptedException {
+	static void main(String[] args) throws IOException, InterruptedException {
 		System.out.print("Electricity zone: ");
 		String zone = System.console().readLine().trim().toUpperCase();
 

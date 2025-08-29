@@ -1,4 +1,3 @@
-// ElectricityPriceService.java
 package org.example.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -10,7 +10,7 @@ public class Input {
         int area;
         boolean correctInput = true;
 
-        do{
+        while(true){
             System.out.println("""
                 PRISKLASS:
                     1 = Luleå / Norra Sverige
@@ -18,16 +18,19 @@ public class Input {
                     3 = Stockholm / Södra Mellansverige
                     4 = Malmö / Södra Sverige
                """);
-            System.out.print("Ange prisklass för det område som du vill beräkna elpriset för: ");
-            area = input.nextInt();
+            System.out.print("Ange prisklass för det område som du vill beräkna elpriset för (1-4): ");
 
-            if(area == 1 || area == 2 || area == 3 || area == 4){
-                correctInput = false;
+            if(input.hasNextInt()){
+                area = input.nextInt();
+
+                if(area >= 1 && area <= 4)return area;
+
+                System.out.println("Ogiltigt val. Ange en siffra 1-4: ");
+            }else{
+                System.out.println("Ogiltigt inmatning. Ange en siffra 1-4: ");
+                input.nextLine();
             }
-
-        }while (correctInput);
-
-        return area;
+        }
     }
 
     public boolean calculate(){

@@ -70,8 +70,13 @@ public class Calculate {
 
     public void calculateCheapest(List<Pricing> priceList, int hours){
 
-        if(priceList.isEmpty() || priceList.size() < hours){
-            System.out.println("Inga priser tillgängliga för beräkning");
+        if(priceList.isEmpty()){
+            System.out.println("Inga tillgängliga priser");
+            return;
+        }
+
+        if(priceList.size() < hours){
+            System.out.println("För att beräkna billigaste elpriset måste listan innehålla fler timmar än " +hours);
             return;
         }
 
@@ -89,10 +94,15 @@ public class Calculate {
         }
 
         displayCheapest(listOfCost, hours);
-        //listOfCost.clear();
     }
 
     public void displayCheapest(List<Cost> prices, int hours){
+
+        if(prices.isEmpty()){
+            System.out.println("Inget tillgängligt pris");
+            return;
+        }
+
         double cheapestValue = prices.stream()
                 .mapToDouble(Cost::cheapest)
                 .min().orElse(0);
@@ -108,6 +118,11 @@ public class Calculate {
     }
 
     public void costOfConsumption(List<Consumption> consumption, List<Pricing> priceList){
+
+        if(consumption == null || consumption.isEmpty() || priceList == null || priceList.isEmpty()){
+            System.out.println("Ingen förbrukning eller prislista tillgänglig för beräkning");
+            return;
+        }
 
         double sum = 0;
         double consumedElectricity = 0;
@@ -131,7 +146,7 @@ public class Calculate {
                 }
             }
         }
-        System.out.printf("Förbrukning på %.2f kWh innebär en kostnad på %.2f SEK", consumedElectricity, sum);
+        System.out.printf("Förbrukning på %.2f kWh innebär en kostnad på %.2f SEK %n", consumedElectricity, sum);
 
     }
 

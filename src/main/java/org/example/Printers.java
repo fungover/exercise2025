@@ -19,8 +19,8 @@ public class Printers {
             PriceEntry highestPrice = prices[0];
             for(int i = 1; i < prices.length; i++) {
                 PriceEntry p = prices[i];
-                if(p.SEK_per_kWh < lowestPrice.SEK_per_kWh) lowestPrice = p;
-                if(p.SEK_per_kWh > highestPrice.SEK_per_kWh) lowestPrice = p;
+                if (p.SEK_per_kWh < lowestPrice.SEK_per_kWh) lowestPrice = p;
+                if (p.SEK_per_kWh > highestPrice.SEK_per_kWh) highestPrice = p;
 
             }
 
@@ -29,11 +29,10 @@ public class Printers {
             System.out.println("----------------------------------------------------------");
 
             for (PriceEntry p : prices) {
-                System.out.printf("%s → %s: %.3f SEK/kWh%n",
-                        p.time_start.substring(11, 16),
-                        p.time_end.substring(11, 16),
-                        p.SEK_per_kWh);
-            }
+                String startHm = hm(p.time_start);
+                String endHm   = hm(p.time_end);
+                System.out.printf("%s → %s: %.3f SEK/kWh%n", startHm, endHm, p.SEK_per_kWh);
+                }
             System.out.println("----------------------------------------------------------");
             System.out.printf("Cheapest hour: %s → %s, %.3f SEK/kWh%n",
                     lowestPrice.time_start.substring(11, 16),
@@ -97,5 +96,14 @@ public class Printers {
 
 
         System.out.println("==========================================================");
+    }
+    private static String hm(String iso) {
+        try {
+            return java.time.OffsetDateTime.parse(iso)
+                    .toLocalTime()
+                    .format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"));
+        } catch (Exception e) {
+            return (iso != null && iso.length() >= 16) ? iso.substring(11, 16) : "??:??";
+        }
     }
 }

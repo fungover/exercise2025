@@ -21,10 +21,9 @@ public class MeanPriceCalculator {
                     .average()
                     .orElse(Double.NaN);
 
-            System.out.printf("Mean price: %.3f SEK/kwh%n", mean);
-
+            System.out.printf(java.util.Locale.ROOT, "Mean price: %.3f SEK/kWh%n", mean);
         } catch (Exception e) {
-            System.err.println("Could't calculate mean price: " + e.getMessage());
+            System.err.println("Couldn't calculate mean price: " + e.getMessage());
         }
     }
 }

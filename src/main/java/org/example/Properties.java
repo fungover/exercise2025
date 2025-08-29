@@ -41,14 +41,4 @@ public class Properties {
     public String getTimeEnd() {
         return timeEnd;
     }
-
-    public BigDecimal getMinValue(BigDecimal[] priceArray) {
-        BigDecimal minValue = priceArray[0];
-        for (int i = 1; i < priceArray.length; i++) {
-            if(priceArray[i].compareTo(minValue) < 0) {
-                minValue = priceArray[i];
-            }
-        }
-        return minValue;
-    }
 }

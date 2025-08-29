@@ -1,9 +1,13 @@
 package org.example;
 
 class App {
-    public static void main(String[] args) {
-        Price priceList = new Price();
+    static void main() {
+        MeanPrice priceList = new MeanPrice();
+        TopOrBottomPrice topOrBottomPrice = new TopOrBottomPrice();
+
+        System.out.println();
         priceList.getMeanPrice();
-        priceList.getBottomPrice();
+        System.out.println();
+        topOrBottomPrice.getTopBottomPrice();
     }
 }

@@ -3,11 +3,11 @@ package org.example;
 class App {
     static void main() {
         MeanPrice priceList = new MeanPrice();
-        TopOrBottomPrice topOrBottomPrice = new TopOrBottomPrice();
+        TopBottomPrice topBottomPrice = new TopBottomPrice();
 
         System.out.println();
         priceList.getMeanPrice();
         System.out.println();
-        topOrBottomPrice.getTopBottomPrice();
+        topBottomPrice.getTopBottomPrice();
     }
 }

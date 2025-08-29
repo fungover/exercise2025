@@ -2,7 +2,7 @@ package org.example;
 
 import java.math.BigDecimal;
 
-class TopOrBottomPrice {
+class TopBottomPrice {
     private String dateStart;
     private String dateEnd;
     private String timeStart;

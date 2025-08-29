@@ -1,4 +1,6 @@
 package org.example.menu;
 
-public class MenuAction {
+public interface MenuAction {
+    void execute();
+    String getDescription();
 }

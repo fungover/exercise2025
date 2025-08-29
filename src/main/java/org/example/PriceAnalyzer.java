@@ -28,11 +28,13 @@ public class PriceAnalyzer {
 
             totalPrice += price.SEK_per_kWh;
 
-            if (price.SEK_per_kWh > priceMax || (price.SEK_per_kWh == priceMax && timeStart.isBefore(OffsetDateTime.parse(priceHourMax, formatter)))) {
+            //Todo Max price
+            if (price.SEK_per_kWh > priceMax || price.SEK_per_kWh == priceMax) {
                 priceMax = price.SEK_per_kWh;
                 priceHourMax = timeStart.format(formatter);
             }
-            if (price.EUR_per_kWh < priceMin || (price.SEK_per_kWh == priceMin && timeEnd.isBefore(OffsetDateTime.parse(priceHourMin, formatter)))) {
+            //Todo Min price
+            if (price.EUR_per_kWh < priceMin || price.EUR_per_kWh == priceMin) {
                 priceMin = price.EUR_per_kWh;
                 priceHourMin = timeStart.format(formatter);
             }
@@ -41,9 +43,34 @@ public class PriceAnalyzer {
 
         double meanPrice = totalPrice / prices.size();
 
-        System.out.println("Mean Price : " + meanPrice);
+        System.out.println("Mean Price : " + meanPrice + " SEK");
         System.out.println("Max Price : " + priceMax + " at " + priceHourMax);
         System.out.println("Min Price : " + priceMin + " at " + priceHourMin);
     }
+        //Todo Sliding Window
+    public static void findBestChargingWindow(List<Price> prices,int durationHours) {
+        if (prices.size() < durationHours) {
+            System.out.println("Not enough time for " + durationHours + " hours");
+        }
+        double bestSum = Double.POSITIVE_INFINITY;
+        OffsetDateTime bestStart = null;
+        OffsetDateTime bestEnd = null;
+            //Todo Outer loop finds the best window of time
+        for (int i = 0; i <= prices.size() - durationHours; i++) {
+            double sum = 0;
+            //Todo Inner loop calculate total price
+            for (int j = 0; j < durationHours; j++) {
+                sum += prices.get(i + j).SEK_per_kWh;
+            }
+            if (sum < bestSum) {
+                bestSum = sum;
+                bestStart = OffsetDateTime.parse(prices.get(i).time_start);
+                bestEnd = OffsetDateTime.parse(prices.get(i+ durationHours - 1).time_end);
+            }
+        }
 
+        if (bestStart != null) {
+            System.out.printf("Best %d hours charging window: %s --> %s (total %.0f SEK)%n",durationHours,bestStart.format(formatter),bestEnd.format(formatter),bestSum);
+        }
+    }
 }

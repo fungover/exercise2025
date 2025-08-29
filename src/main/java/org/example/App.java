@@ -1,11 +1,10 @@
 package org.example;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class App {
-    public static void main(String[] args) {
+         static void main() {
         LocalDateTime now = LocalDateTime.now();
 
         String sYear = String.valueOf(now.getYear());
@@ -21,7 +20,11 @@ public class App {
         String url = String.format("https://www.elprisetjustnu.se/api/v1/prices/%s/%s-%s_%s.json", sYear, sMonth, sDay, priceClass);
 
         List<Price> prices = PriceFetcher.fetchPrices(url);
-
+        //Todo Fetch average price and highest and lowest price during 24h period
         PriceAnalyzer.analyze(prices);
+        //Todo Finds best window to charge during 24h period
+        PriceAnalyzer.findBestChargingWindow(prices,2);
+        PriceAnalyzer.findBestChargingWindow(prices,4);
+        PriceAnalyzer.findBestChargingWindow(prices,8);
     }
 }

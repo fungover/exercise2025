@@ -1,12 +1,19 @@
 package org.example.model;
 
 public class MeanPrice {
-    double sek;
-    double eur;
+    private final double sek;
+    private final double eur;
 
     public MeanPrice(double sek, double eur) {
         this.sek = sek;
         this.eur = eur;
+    }
+
+    public double getSek() {
+        return sek;
+    }
+    public double getEur() {
+        return eur;
     }
 
     @Override

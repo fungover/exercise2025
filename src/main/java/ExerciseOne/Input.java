@@ -1,5 +1,6 @@
 package ExerciseOne;
 
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Input {
@@ -8,7 +9,6 @@ public class Input {
         Scanner input = new Scanner(System.in);
 
         int area;
-        boolean correctInput = true;
 
         while(true){
             System.out.println("""
@@ -37,10 +37,12 @@ public class Input {
         Scanner input = new Scanner(System.in);
         String answer;
 
-        do {
+        while (true){
             System.out.print("Vill du välja csv fil för att beräkna kostnad av elförbrukning Y/N: ");
-            answer = input.next().toLowerCase();
-        }while(!answer.equals("y") && !answer.equals("n"));
+            answer = input.next().toLowerCase(Locale.ROOT);
+            if (answer.equals("y") || answer.equals("n")) break;
+            System.out.println("Ange svar med Y eller N");
+        }
 
         return answer.equals("y");
 

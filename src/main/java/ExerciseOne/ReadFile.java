@@ -1,7 +1,5 @@
 package ExerciseOne;
-
 import com.opencsv.exceptions.CsvException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -9,7 +7,8 @@ public class ReadFile {
 
     public List<Consumption> readFile(String filePath) {
 
-        try (var reader = new com.opencsv.CSVReaderBuilder(new FileReader(filePath))
+        try (var reader = new com.opencsv.CSVReaderBuilder(
+                java.nio.file.Files.newBufferedReader(java.nio.file.Path.of(filePath), java.nio.charset.StandardCharsets.UTF_8))
             .withSkipLines(1)
             .withCSVParser(new com.opencsv.CSVParserBuilder().withSeparator(';').build())
             .build()) {
@@ -20,7 +19,7 @@ public class ReadFile {
                         .toList();
 
         } catch (IOException | CsvException e )  {
-            throw new IllegalArgumentException("Kunde inte läsa filen");
+            throw new IllegalArgumentException("Kunde inte läsa filen: " + filePath, e);
         }
     }
 }

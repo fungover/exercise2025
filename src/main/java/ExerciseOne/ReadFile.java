@@ -14,8 +14,15 @@ public class ReadFile {
             .build()) {
                 return reader.readAll().stream()
                         .filter(cols -> cols.length >= 2)
-                        .map(cols -> new Consumption(cols[0].trim(),
-                        Double.parseDouble(cols[1].trim().replace(',', '.'))))
+                        .map(cols -> {
+                            final String time = cols[0].trim();
+                            final String consumed = cols[1].trim().replace(',','.');
+                        try{
+                            return new Consumption(time, Double.parseDouble(consumed));
+                        }catch(NumberFormatException e){
+                            throw new IllegalArgumentException("Ogiltigt värde för "+time+" : "+consumed);
+                        }
+                        })
                         .toList();
 
         } catch (IOException | CsvException e )  {

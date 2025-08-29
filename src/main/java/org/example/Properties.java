@@ -3,16 +3,18 @@ package org.example;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Properties {
     @JsonProperty("SEK_per_kWh")
-    private double sekPerKWh;
+    private BigDecimal sekPerKWh;
 
     @JsonProperty("EUR_per_kWh")
-    private double eurPerKWh;
+    private BigDecimal eurPerKWh;
 
     @JsonProperty("EXR")
-    private double exr;
+    private BigDecimal exr;
 
     @JsonProperty("time_start")
     private String timeStart;
@@ -20,15 +22,15 @@ public class Properties {
     @JsonProperty("time_end")
     private String timeEnd;
 
-    public double getSekPerKWh() {
+    public BigDecimal getSekPerKWh() {
         return sekPerKWh;
     }
 
-    public double getEurPerKWh() {
+    public BigDecimal getEurPerKWh() {
         return eurPerKWh;
     }
 
-    public double getExr() {
+    public BigDecimal getExr() {
         return exr;
     }
 
@@ -38,5 +40,15 @@ public class Properties {
 
     public String getTimeEnd() {
         return timeEnd;
+    }
+
+    public BigDecimal getMinValue(BigDecimal[] priceArray) {
+        BigDecimal minValue = priceArray[0];
+        for (int i = 1; i < priceArray.length; i++) {
+            if(priceArray[i].compareTo(minValue) < 0) {
+                minValue = priceArray[i];
+            }
+        }
+        return minValue;
     }
 }

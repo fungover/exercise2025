@@ -1,6 +1,9 @@
-import org.example.Price;
+package org.example;
 
-void main() {
-    Price priceList = new Price();
-    priceList.getPrices();
+class App {
+    public static void main(String[] args) {
+        Price priceList = new Price();
+        priceList.getMeanPrice();
+        priceList.getBottomPrice();
+    }
 }

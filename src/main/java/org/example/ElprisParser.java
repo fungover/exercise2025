@@ -3,22 +3,22 @@ package org.example;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
-class ElprisParser {
-    private final ObjectMapper om = new ObjectMapper().registerModule(new JavaTimeModule());
+public class ElprisParser {
+    private ObjectMapper om = new ObjectMapper().registerModule(new JavaTimeModule());
 
-
-    List<Price> parsePrices(String json) throws Exception {
+    public List<Price> parsePrices(String json) throws Exception {
         HourlyDTO[] arr = om.readValue(json, HourlyDTO[].class);
-        return Arrays.stream(arr)
-                .map(h -> new Price(h.time_start, h.time_end, h.SEK_per_kWh))
-                .toList();
+        List<Price> result = new ArrayList<>();
+        for (HourlyDTO h : arr) {
+            Price p = new Price(h.time_start, h.time_end, h.SEK_per_kWh);
+            result.add(p);
+        }
+        return result;
     }
 
-    // DTO
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class HourlyDTO {
         public double SEK_per_kWh;

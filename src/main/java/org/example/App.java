@@ -1,30 +1,55 @@
 package org.example;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class App {
+    private static final ZoneId TZ = ZoneId.of("Europe/Stockholm");
+    private static final DateTimeFormatter MD = DateTimeFormatter.ofPattern("MM-dd");
+
     public static void main(String[] args) throws Exception {
-        ElprisApiClient apiClient = new ElprisApiClient();
+        String zone = "SE3";
+        String dateStr = null;
+        boolean includeTomorrow = false;
+
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--zone")) zone = args[i + 1];
+            if (args[i].equals("--date")) dateStr = args[i + 1];
+            if (args[i].equals("--tomorrow")) includeTomorrow = true;
+        }
+
+        LocalDate date = (dateStr == null) ? LocalDate.now(TZ) : LocalDate.parse(dateStr);
+
+        ElprisApiClient api = new ElprisApiClient();
         ElprisParser parser = new ElprisParser();
 
-        String json = apiClient.fetchRaw(2025, "08-27", "SE3");
-        List<Price> prices = parser.parsePrices(json);
+        List<Price> all = new ArrayList<>();
+        String jsonToday = api.fetchRaw(date.getYear(), MD.format(date), zone);
+        all.addAll(parser.parsePrices(jsonToday));
 
-        System.out.println("Antal timmar: " + prices.size());
-        System.out.println("Första timmen: " + prices.getFirst());
-        System.out.println("Sista timmen:  " + prices.getLast());
+        if (includeTomorrow) {
+            LocalDate next = date.plusDays(1);
+            try {
+                String jsonTomorrow = api.fetchRaw(next.getYear(), MD.format(next), zone);
+                all.addAll(parser.parsePrices(jsonTomorrow));
+            } catch (Exception e) {
+                // ignorera om inget finns
+            }
+        }
 
-        double mean = PriceStats.mean(prices);
-        System.out.printf("Medelpris (24h): %.4f SEK/kWh%n", mean);
+        List<Price> first24 = all.subList(0, Math.min(24, all.size()));
 
-        Price cheapest = PriceStats.cheapest(prices);
-        Price expensive = PriceStats.mostExpensive(prices);
-        System.out.println("Billigaste timmen:  " + cheapest);
-        System.out.println("Dyraste timmen:    " + expensive);
-
-        // Sliding windows
-        PriceStats.bestWindow(prices, 2);
-        PriceStats.bestWindow(prices, 4);
-        PriceStats.bestWindow(prices, 8);
+        System.out.println("Zon: " + zone + " | Datum: " + date);
+        System.out.println("Första: " + first24.get(0));
+        System.out.println("Sista:  " + first24.get(first24.size() - 1));
+        System.out.println("Medelpris: " + PriceStats.mean(first24));
+        System.out.println("Billigaste: " + PriceStats.cheapest(first24));
+        System.out.println("Dyraste:    " + PriceStats.mostExpensive(first24));
+        PriceStats.bestWindow(first24, 2);
+        PriceStats.bestWindow(first24, 4);
+        PriceStats.bestWindow(first24, 8);
     }
 }

@@ -1,37 +1,39 @@
 package org.example;
 
-import java.util.Comparator;
 import java.util.List;
 
-class PriceStats {
-    static double mean(List<Price> prices) {
-        return prices.stream()
-                .mapToDouble(Price::getSekPerKwh)
-                .average()
-                .orElse(Double.NaN);
-    }
-
-    static Price cheapest(List<Price> prices) {
-        return prices.stream()
-                .min(Comparator.comparingDouble(Price::getSekPerKwh)
-                        .thenComparing(Price::getStart))
-                .orElse(null);
-    }
-
-    static Price mostExpensive(List<Price> prices) {
-        return prices.stream()
-                .max(Comparator.comparingDouble(Price::getSekPerKwh)
-                        .thenComparing(Price::getStart))
-                .orElse(null);
-    }
-
-    /** Hitta billigaste starttid för en viss laddtid */
-    static void bestWindow(List<Price> prices, int hours) {
-        if (prices.size() < hours) {
-            System.out.println("Inte tillräckligt många timmar för " + hours + "h.");
-            return;
+public class PriceStats {
+    public static double mean(List<Price> prices) {
+        double sum = 0;
+        for (Price p : prices) {
+            sum += p.getSekPerKwh();
         }
+        return sum / prices.size();
+    }
 
+    public static Price cheapest(List<Price> prices) {
+        Price cheapest = prices.get(0);
+        for (Price p : prices) {
+            if (p.getSekPerKwh() < cheapest.getSekPerKwh() ||
+                    (p.getSekPerKwh() == cheapest.getSekPerKwh() && p.getStart().isBefore(cheapest.getStart()))) {
+                cheapest = p;
+            }
+        }
+        return cheapest;
+    }
+
+    public static Price mostExpensive(List<Price> prices) {
+        Price expensive = prices.get(0);
+        for (Price p : prices) {
+            if (p.getSekPerKwh() > expensive.getSekPerKwh() ||
+                    (p.getSekPerKwh() == expensive.getSekPerKwh() && p.getStart().isBefore(expensive.getStart()))) {
+                expensive = p;
+            }
+        }
+        return expensive;
+    }
+
+    public static void bestWindow(List<Price> prices, int hours) {
         double bestAvg = Double.MAX_VALUE;
         int bestIndex = 0;
 
@@ -47,10 +49,9 @@ class PriceStats {
             }
         }
 
-        System.out.printf("Bästa tid för %dh laddning: %s–%s (%.4f SEK/kWh)%n",
-                hours,
-                prices.get(bestIndex).getStart().toLocalTime(),
-                prices.get(bestIndex + hours - 1).getEnd().toLocalTime(),
-                bestAvg);
+        Price start = prices.get(bestIndex);
+        Price end = prices.get(bestIndex + hours - 1);
+        System.out.println("Bästa " + hours + "h: " + start.getStart().toLocalTime() + "–" +
+                end.getEnd().toLocalTime() + " (" + bestAvg + " SEK/kWh)");
     }
 }

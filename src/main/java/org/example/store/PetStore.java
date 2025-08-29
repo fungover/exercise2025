@@ -3,6 +3,7 @@ package org.example.store;
 import org.example.store.animals.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PetStore {
@@ -13,6 +14,9 @@ public class PetStore {
         this.name = name;
     }
 
+    public void printAllAnimals(List<Animal> animals){
+
+    }
 
     public void run(){
         System.out.println("Welcome to " + name);
@@ -22,6 +26,8 @@ public class PetStore {
         Animal buttefly = new ButterFly();
         animals.add(buttefly);
         animals.add(new SeaGull());
+
+        printAllAnimals(animals);
 
         for (Animal animal : animals) {
             System.out.println(animal.name() + " wants to eat: " +  animal.preferredFood());

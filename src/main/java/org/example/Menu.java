@@ -24,7 +24,7 @@ public class Menu {
                     showMenuForDownloadingPrices(scanner, electricityPriceFetcher);
                     break;
                 case 2:
-                    // Print mean price;
+                    System.out.println(ElectricityPriceAnalyzer.hasPriceForToday());
                     break;
                 case 3:
                     // Identify and print hours with cheapest and most expensive hours;

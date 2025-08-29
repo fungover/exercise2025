@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PriceManagerData {
+public class PriceDataManager {
     private List<HourlyPrice> prices = new ArrayList<>();
     private String currentZone = "SE4";
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM-dd");
@@ -46,6 +46,8 @@ public class PriceManagerData {
                 URL urlTomorrow = new URL("https://www.elprisetjustnu.se/api/v1/prices/" + tomorrowPath + "_" + currentZone + ".json");
                 List<Object> tomorrowResults = JSON.std.listFrom(urlTomorrow);
                 prices.addAll(PriceUtil.convertToHourlyPrices(tomorrowResults, currentZone));
+            } else if (includeNextDay) {
+                System.out.println("No prices available for the next day.");
             }
 
         } catch (Exception e) {

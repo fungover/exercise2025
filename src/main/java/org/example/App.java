@@ -15,16 +15,15 @@ public class App {
 		ElectricityPriceService service = new ElectricityPriceService(zone);
 		List<Hour> prices = service.getElectricityPrices();
 
-		double lowest = 0.0;
-		double total = 0.0;
+		double lowest = prices.getFirst().SEK_per_kWh();
 		int lowestHour = 0;
+		double total = 0.0;
 		for (Hour h : prices) {
-			lowest = h.formatHour(h.time_start());
-			total += h.SEK_per_kWh();
 			if (h.SEK_per_kWh() < lowest) {
 				lowest = h.SEK_per_kWh();
 				lowestHour = h.formatHour(h.time_start());
 			}
+			total +=  h.SEK_per_kWh();
 		}
 
 		double avg = total /  prices.size();

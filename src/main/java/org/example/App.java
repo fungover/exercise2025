@@ -16,10 +16,29 @@ public class App {
         boolean includeTomorrow = false;
 
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("--zone")) zone = args[i + 1];
-            if (args[i].equals("--date")) dateStr = args[i + 1];
-            if (args[i].equals("--tomorrow")) includeTomorrow = true;
+            String a = args[i];
+            if ("--zone".equals(a)) {
+                if (i + 1 >= args.length) { System.err.println("Missing value for --zone"); return; }
+                zone = args[++i];
+            } else if ("--date".equals(a)) {
+                if (i + 1 >= args.length) { System.err.println("Missing value for --date"); return; }
+                dateStr = args[++i];
+            } else if ("--tomorrow".equals(a)) {
+                includeTomorrow = true;
+            } else if ("-h".equals(a) || "--help".equals(a)) {
+                System.out.println("Usage: --zone SE1|SE2|SE3|SE4 [--date YYYY-MM-DD] [--tomorrow]");
+                return;
+            } else {
+                System.err.println("Unknown option: " + a);
+                return;
+            }
         }
+
+        if (!zone.matches("SE[1-4]")) {
+            System.err.println("Ogiltig zon: " + zone + " (tillåtna: SE1–SE4)");
+            return;
+        }
+
 
         LocalDate date = (dateStr == null) ? LocalDate.now(TZ) : LocalDate.parse(dateStr);
 
@@ -36,8 +55,13 @@ public class App {
                 String jsonTomorrow = api.fetchRaw(next.getYear(), MD.format(next), zone);
                 all.addAll(parser.parsePrices(jsonTomorrow));
             } catch (Exception e) {
-                // ignorera om inget finns
+                // i
             }
+        }
+
+        if (all.isEmpty()) {
+            System.out.println("Inga priser tillgängliga för " + zone + " " + date);
+            return;
         }
 
         List<Price> first24 = all.subList(0, Math.min(24, all.size()));
@@ -48,8 +72,11 @@ public class App {
         System.out.println("Medelpris: " + PriceStats.mean(first24));
         System.out.println("Billigaste: " + PriceStats.cheapest(first24));
         System.out.println("Dyraste:    " + PriceStats.mostExpensive(first24));
-        PriceStats.bestWindow(first24, 2);
-        PriceStats.bestWindow(first24, 4);
-        PriceStats.bestWindow(first24, 8);
+        for (int h : new int[]{2, 4, 8}) {
+            if (first24.size() >= h) {
+                PriceStats.bestWindow(first24, h);
+            }
+        }
+
     }
 }

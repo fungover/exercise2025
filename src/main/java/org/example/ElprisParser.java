@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ElprisParser {
-    private ObjectMapper om = new ObjectMapper().registerModule(new JavaTimeModule());
+    private static final ObjectMapper OM = new ObjectMapper().registerModule(new JavaTimeModule());
 
     public List<Price> parsePrices(String json) throws Exception {
-        HourlyDTO[] arr = om.readValue(json, HourlyDTO[].class);
+        HourlyDTO[] arr = OM.readValue(json, HourlyDTO[].class);
         List<Price> result = new ArrayList<>();
         for (HourlyDTO h : arr) {
             Price p = new Price(h.time_start, h.time_end, h.SEK_per_kWh);

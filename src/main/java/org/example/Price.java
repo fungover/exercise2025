@@ -3,9 +3,9 @@ package org.example;
 import java.time.ZonedDateTime;
 
 public class Price {
-    private ZonedDateTime start;
-    private ZonedDateTime end;
-    private double sekPerKwh;
+    private final ZonedDateTime start;
+    private final ZonedDateTime end;
+    private final double sekPerKwh;
 
     public Price(ZonedDateTime start, ZonedDateTime end, double sekPerKwh) {
         this.start = start;

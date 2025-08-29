@@ -8,7 +8,7 @@ void main() {
     Object obj = new Point(10, 20);
     if( obj instanceof Point point)
         System.out.println(point.display());
-    Integer
+
     Point point1 = new Point(10, 20);
     Point point2 = new Point(20, 10);
     NamedPoint namedPoint1 = new NamedPoint("Point 1", 100,100);

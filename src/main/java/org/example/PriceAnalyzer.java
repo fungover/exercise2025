@@ -13,28 +13,31 @@ public class PriceAnalyzer {
         double priceMin = Double.MAX_VALUE;
         String priceHourMax = null;
         String priceHourMin = null;
+        boolean debug = false;
 
         int index = 0;
         for (Price price : prices) {
             OffsetDateTime timeStart = OffsetDateTime.parse(price.time_start);
             OffsetDateTime timeEnd = OffsetDateTime.parse(price.time_end);
 
-            System.out.println("Object nr: " + index);
-            System.out.println("Start" + timeStart.format(formatter));
-            System.out.println("End " + timeEnd.format(formatter));
-            System.out.println("Price (SEK): " + price.SEK_per_kWh);
-            System.out.println("Price (EUR): " + price.EUR_per_kWh);
-            System.out.println("---------------");
+            if (debug) {
+                System.out.println("Object nr: " + index);
+                System.out.println("Start" + timeStart.format(formatter));
+                System.out.println("End " + timeEnd.format(formatter));
+                System.out.println("Price (SEK): " + price.SEK_per_kWh);
+                System.out.println("Price (EUR): " + price.EUR_per_kWh);
+                System.out.println("---------------");
+            }
 
             totalPrice += price.SEK_per_kWh;
 
             //Todo Max price
-            if (price.SEK_per_kWh > priceMax || price.SEK_per_kWh == priceMax) {
+            if (price.SEK_per_kWh > priceMax) {
                 priceMax = price.SEK_per_kWh;
                 priceHourMax = timeStart.format(formatter);
             }
             //Todo Min price
-            if (price.EUR_per_kWh < priceMin || price.EUR_per_kWh == priceMin) {
+            if (price.EUR_per_kWh < priceMin) {
                 priceMin = price.EUR_per_kWh;
                 priceHourMin = timeStart.format(formatter);
             }

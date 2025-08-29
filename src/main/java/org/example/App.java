@@ -4,7 +4,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class App {
-         static void main() {
+         /**
+     * Entry point that retrieves today's electricity prices for a user-selected region and runs analysis.
+     *
+     * <p>Constructs a URL using the current date (YYYY, MM, DD) and a region code obtained from
+     * Menu.askForRegion(), fetches the day's prices via PriceFetcher, and invokes PriceAnalyzer to
+     * compute analyses (including best charging windows for 2, 4 and 8-hour periods).</p>
+     *
+     * <p>Side effects:
+     * - Prints an error and returns immediately if the selected region is invalid (null).
+     * - Performs a network fetch to obtain price data and calls analyzer utilities to process results.</p>
+     */
+    static void main() {
         LocalDateTime now = LocalDateTime.now();
 
         String sYear = String.valueOf(now.getYear());

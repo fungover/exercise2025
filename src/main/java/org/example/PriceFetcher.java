@@ -15,6 +15,16 @@ public class PriceFetcher {
     private static final HttpClient client = HttpClient.newHttpClient();
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    /**
+     * Fetches a JSON array of prices from the given URL and returns it as a List of Price objects.
+     *
+     * <p>The method performs an HTTP GET request to the specified endpoint (Accept: application/json)
+     * and deserializes the response body into a List&lt;Price&gt; using Jackson.</p>
+     *
+     * @param url the URL of the endpoint that returns a JSON array representing Price objects
+     * @return a List of Price deserialized from the response body
+     * @throws RuntimeException if an I/O error or interruption occurs while sending the request or parsing the response
+     */
     public static List<Price> fetchPrices(String url) {
         try {
             HttpRequest request = HttpRequest.newBuilder()

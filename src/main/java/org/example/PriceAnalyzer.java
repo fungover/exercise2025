@@ -28,11 +28,11 @@ public class PriceAnalyzer {
 
             totalPrice += price.SEK_per_kWh;
 
-            if (price.SEK_per_kWh > priceMax) {
+            if (price.SEK_per_kWh > priceMax || (price.SEK_per_kWh == priceMax && timeStart.isBefore(OffsetDateTime.parse(priceHourMax, formatter)))) {
                 priceMax = price.SEK_per_kWh;
                 priceHourMax = timeStart.format(formatter);
             }
-            if (price.EUR_per_kWh < priceMin) {
+            if (price.EUR_per_kWh < priceMin || (price.SEK_per_kWh == priceMin && timeEnd.isBefore(OffsetDateTime.parse(priceHourMin, formatter)))) {
                 priceMin = price.EUR_per_kWh;
                 priceHourMin = timeStart.format(formatter);
             }

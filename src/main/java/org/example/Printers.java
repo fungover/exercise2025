@@ -1,5 +1,6 @@
 package org.example;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
@@ -8,13 +9,18 @@ public class Printers {
 
     public static void printPricesForDay(LocalDate date, String zone, String json) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            PriceEntry[] prices = mapper.readValue(json, PriceEntry[].class);
-
-            if(prices.length == 0) {
+            ObjectMapper mapper = new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            if (json == null || json.isBlank()) {
                 System.out.println("No prices were found");
                 return;
-            }
+                }
+            PriceEntry[] prices = mapper.readValue(json, PriceEntry[].class);
+            if (prices == null || prices.length == 0) {
+                System.out.println("No prices were found");
+                return;
+                            }
+
             PriceEntry lowestPrice = prices[0];
             PriceEntry highestPrice = prices[0];
             for(int i = 1; i < prices.length; i++) {

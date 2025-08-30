@@ -4,9 +4,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class UrlFormatter {
-  private String zone = "SE2";
+  private String zone = "SE3";
+
   public UrlFormatter(String zone){
-    this.zone = zone;
+    setZone(zone == null ? "SE3" : zone);
   }
 
   public String formatUrl(){

@@ -16,6 +16,7 @@ public class Main {
   }
 
   static void showMenu() throws IOException, InterruptedException {
+    System.out.println("-----");
     System.out.println("Choose from the menu:");
     System.out.println("1. Download prices(day1, day2)");
     System.out.println("2. Show mean price(24h)");
@@ -27,7 +28,7 @@ public class Main {
     String input = System.console().readLine();
     if(input.equals("1")){
       Api api = new Api("https://www.elprisetjustnu.se/api/v1/prices/2025/08-30_SE2.json");
-      api.showPrices();
+      api.getPrices();
       showMenu();
     }
     if(input.equals("7")){

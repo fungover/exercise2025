@@ -21,11 +21,11 @@ public class ElectricityPriceService {
 		this.objectMapper = new ObjectMapper();
 	}
 
-	public List<Hour> getElectricityPrices() throws IOException, InterruptedException {
+	public List<Hour> getElectricityPrices(int day) throws IOException, InterruptedException {
 		LocalDate today = LocalDate.now();
 		String URL = String.format(
 						"https://www.elprisetjustnu.se/api/v1/prices/%d/%02d-%02d_%s.json",
-						today.getYear(), today.getMonthValue(), today.getDayOfMonth(), zone
+						today.getYear(), today.plusDays(day).getMonthValue(), today.plusDays(day).getDayOfMonth(), zone
 		);
 
 		HttpRequest request = HttpRequest.newBuilder()
@@ -35,6 +35,13 @@ public class ElectricityPriceService {
 
 		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-		return objectMapper.readValue(response.body(), new TypeReference<>() {});
+		try {
+
+			return objectMapper.readValue(response.body(), new TypeReference<>() {
+			});
+		} catch (Exception e) {
+			return null;
+		}
 	}
+
 }

@@ -44,4 +44,20 @@ public class ElectricityPriceService {
 		}
 	}
 
+	public String chargingHours(List<Hour> periods, int hours) {
+		double min_sum = Integer.MAX_VALUE;
+		int bestHour = 0;
+		for (int i = 0; i < periods.size() - hours + 1; i++) {
+			double current = 0.0;
+			int currentHour = periods.get(i).formatHour(periods.get(i).time_start());
+			for (int j = 0; j < hours; j++) {
+				current += periods.get(i + j).SEK_per_kWh();
+			}
+			if (current < min_sum) {
+				min_sum = current;
+				bestHour = currentHour;
+			}
+		}
+		return String.format("Cheapest %dh charging period begins at %02d:00%n", hours,  bestHour);
+	}
 }

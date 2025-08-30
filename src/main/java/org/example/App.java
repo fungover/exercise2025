@@ -4,21 +4,23 @@ import org.example.model.Hour;
 import org.example.service.ElectricityPriceService;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.List;
 
 public class App {
 	static void main(String[] args) throws IOException, InterruptedException {
-		System.out.print("Electricity zone: ");
-		String zone = System.console().readLine().trim().toUpperCase();
+		System.out.print("Electricity zone: SE");
+		String input = System.console().readLine().trim().toUpperCase();
+		String zone = "SE" + input;
 
 		ElectricityPriceService service = new ElectricityPriceService(zone);
 		List<Hour> prices = service.getElectricityPrices(0);
 		List<Hour> tomorrow = service.getElectricityPrices(1);
 
 		printPrices(prices, 0);
+		System.out.println(service.chargingHours(prices, 4));
 		try {
 			printPrices(tomorrow, 1);
+			System.out.println(service.chargingHours(tomorrow, 4));
 		} catch (Exception e) {
 			System.out.println("Tomorrows prices unavailable");
 		}

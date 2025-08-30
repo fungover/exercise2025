@@ -23,18 +23,14 @@ public class ExtremeHoursAction implements MenuAction {
             return;
         }
 
-        HourlyPrice cheapestSek = prices.stream().min(Comparator.comparingDouble(HourlyPrice::getSekPerKwh).thenComparingInt(HourlyPrice::getHour)).orElse(null);
-        HourlyPrice mostExpensiveSek = prices.stream().max(Comparator.comparingDouble(HourlyPrice::getSekPerKwh).thenComparingInt(HourlyPrice::getHour)).orElse(null);
-
-        HourlyPrice cheapestEur = prices.stream().min(Comparator.comparingDouble(HourlyPrice::getEurPerKwh).thenComparingInt(HourlyPrice::getHour)).orElse(null);
-        HourlyPrice mostExpensiveEur = prices.stream().max(Comparator.comparingDouble(HourlyPrice::getEurPerKwh).thenComparingInt(HourlyPrice::getHour)).orElse(null);
+        HourlyPrice cheapest = prices.stream().min(Comparator.comparingDouble(HourlyPrice::getSekPerKwh).thenComparingInt(HourlyPrice::getHour)).orElse(null);
+        HourlyPrice mostExpensive = prices.stream().max(Comparator.comparingDouble(HourlyPrice::getSekPerKwh).thenComparingInt(HourlyPrice::getHour)).orElse(null);
 
         System.out.println("Cheapest price for zone " + dataManager.getZone() + ":");
-        System.out.println(cheapestSek);
-        System.out.println(cheapestEur);
+        System.out.println(cheapest);
+
         System.out.println("Most expensive price for zone " + dataManager.getZone() + ":");
-        System.out.println(mostExpensiveSek);
-        System.out.println(mostExpensiveEur);
+        System.out.println(mostExpensive);
     }
 
     @Override

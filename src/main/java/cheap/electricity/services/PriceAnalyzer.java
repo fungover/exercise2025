@@ -57,6 +57,15 @@ public class PriceAnalyzer {
 
     System.out.println("Mean price is: " + mean);
   }
+
+  public void HighLowPrice() {
+    if (prices == null || prices.isEmpty()) {
+      System.out.println("No prices loaded. Use option 1 first.");
+      return;
+    }
+    
+    System.out.println("High-Low prices: ");
+  }
 }
 
 record Price(double SEK_per_kWh, String time_start, String time_end){}

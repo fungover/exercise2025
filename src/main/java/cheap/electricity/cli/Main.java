@@ -79,6 +79,10 @@ public class Main {
                   break;
       }
         break;
+      case"3":
+        priceAnalyzer.HighLowPrice();
+        showMenu(priceAnalyzer, day);
+        break;
       case "7":
         return;
       default:

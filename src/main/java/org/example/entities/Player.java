@@ -7,6 +7,7 @@ public class Player {
     private String name;
     private int health;
     private int maxHealth;
+    private int damage;
     private Position position;
     private List<Item> inventory;
 
@@ -14,8 +15,14 @@ public class Player {
         this.name = name;
         this.maxHealth = maxHealth;
         this.health = maxHealth;
+        this.damage = 15; // Default damage
         this.position = startPosition;
         this.inventory = new ArrayList<>();
+    }
+
+    public void attack(Enemy enemy) {
+        enemy.takeDamage(damage);
+        System.out.println("You attack " + enemy.getName() + " for " + damage + " damage!");
     }
 
     public void takeDamage(int damage) {
@@ -59,6 +66,18 @@ public class Player {
 
     public int getMaxHealth() {
         return maxHealth;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public boolean isDead() {
+        return health <= 0;
     }
 
     public Position getPosition() {

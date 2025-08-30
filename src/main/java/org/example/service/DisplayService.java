@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.entities.Enemy;
 import org.example.entities.Item;
 import org.example.entities.Player;
 import org.example.entities.Position;
@@ -36,7 +37,7 @@ public class DisplayService {
         System.out.println("Current Room: " + room.getName());
         System.out.println(player);
         System.out.println("Movement: North (N), South (S), East (E), West (W), Quit (Q)");
-        System.out.println("Actions: Pickup (P), Inventory (I), Use (U)");
+        System.out.println("Actions: Pickup (P), Inventory (I), Use (U), Fight (F)");
     }
 
     public void showInventory(Player player) {
@@ -49,5 +50,15 @@ public class DisplayService {
                 System.out.println((i + 1) + ". " + playerInventory.get(i).getName());
             }
         }
+    }
+
+    public void displayCombatStatus(Player player, Enemy enemy) {
+        System.out.println("\n=== COMBAT: " + enemy.getName() + " (Health: " + enemy.getHealth() + ") ===");
+        System.out.println("Your Health: " + player.getHealth() + "/" + player.getMaxHealth());
+        System.out.println();
+        System.out.println("1. Attack (A) - Strike the enemy with a normal attack.");
+        System.out.println("2. Use Item (i) - Use potion");
+        System.out.println("3. Flee (F) - Escape from combat.");
+        System.out.print("Enter choice: ");
     }
 }

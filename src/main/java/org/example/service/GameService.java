@@ -1,8 +1,11 @@
 package org.example.service;
 
+import org.example.entities.Enemy;
 import org.example.entities.Item;
 import org.example.entities.Player;
 import org.example.entities.Position;
+
+import java.util.Scanner;
 
 public class GameService {
     private final RoomService roomService;
@@ -10,6 +13,7 @@ public class GameService {
     private ItemService itemService;
     private EnemyService enemyService;
     private final DisplayService displayService;
+    private final CombatService combatService;
 
     public GameService() {
         this.roomService = new RoomService();
@@ -17,6 +21,7 @@ public class GameService {
         this.itemService = new ItemService();
         this.enemyService = new EnemyService();
         this.displayService = new DisplayService();
+        this.combatService = new CombatService(displayService);
 
         itemService.placeRandomItems(roomService.getCurrentRoom().getDungeon());
 
@@ -64,6 +69,22 @@ public class GameService {
         } else {
             System.out.println("No item to pick up here.");
             return false;
+        }
+    }
+
+    public void handleFight(Player player, Scanner scanner) {
+        Position playerPos = player.getPosition();
+        Enemy enemy = enemyService.getEnemyAt(playerPos);
+
+        if (enemy != null) {
+            combatService.startCombat(player, enemy, scanner);
+
+            if (enemy.isDead()) {
+                enemyService.removeEnemy(enemy);
+                System.out.println("You have defeated the " + enemy.getName() + "!");
+            }
+        } else {
+            System.out.println("No enemy to fight here.");
         }
     }
 

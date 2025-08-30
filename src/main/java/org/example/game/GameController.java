@@ -48,6 +48,7 @@ public class GameController {
             case "pickup", "p" -> handlePickup();
             case "inventory", "i" -> handleInventory();
             case "use", "u" -> handleUseItem();
+            case "fight", "f" -> handleFight();
             case "quit", "q" -> gameRunning = false;
             default -> {
                 System.out.println("Invalid command.");
@@ -70,6 +71,10 @@ public class GameController {
 
     private void handleInventory() {
         gameService.displayInventory(player);
+    }
+
+    private void handleFight() {
+        gameService.handleFight(player, scanner);
     }
 
     private void handleUseItem() {

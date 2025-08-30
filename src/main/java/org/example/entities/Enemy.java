@@ -29,7 +29,6 @@ public abstract class Enemy {
 
     public void takeDamage(int damage) {
         this.health = Math.max(0, this.health - damage);
-        System.out.println(name + " takes " + damage + " damage!");
     }
 
     public boolean isDead() {

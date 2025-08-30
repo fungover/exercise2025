@@ -25,11 +25,15 @@ public class BestChargingTimeAction implements MenuAction {
             return;
         }
 
-        int duration = (int) inputHandler.getDoubleInput("Enter charging duration (2, 4 or 6 hours):");
-        if (duration != 2 && duration != 4 && duration != 6) {
-            System.out.println("Invalid duration must be 2, 4 or 6 hours.");
+        int duration = (int) inputHandler.getDoubleInput("Enter charging duration (2, 4 or 8 hours):");
+        if (duration != 2 && duration != 4 && duration != 8) {
+            System.out.println("Invalid duration. Choose 2, 4 or 8 hours.");
             return;
-        }
+            }
+        if (prices.size() < duration) {
+            System.out.println("Not enough price data for the selected duration.");
+            return;
+            }
 
         double minSekCost = Double.MAX_VALUE;
         double minEurCost = Double.MAX_VALUE;

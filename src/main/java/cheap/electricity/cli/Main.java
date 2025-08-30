@@ -15,22 +15,24 @@ public class Main {
     final java.util.Scanner scanner = console == null ? new java.util.Scanner(System.in) : null;
     String input = console != null ? console.readLine() : scanner.nextLine();
       if ("y".equalsIgnoreCase(input != null ? input.trim() : "")) {
-      UrlFormatter formatter = new UrlFormatter("SE3");
-      String url = formatter.formatUrl();
-
-      PriceAnalyzer priceAnalyzer = new PriceAnalyzer(url);
-        priceAnalyzer.setUrl(formatter.formatUrl());
-        priceAnalyzer.getPrices();
-      showMenu(priceAnalyzer, formatter);
+        UrlFormatter formatter = new UrlFormatter("SE3");
+        PriceAnalyzer priceAnalyzer = new PriceAnalyzer(formatter.formatUrl());
+        try {
+          priceAnalyzer.getPrices();
+          } catch (Exception e) {
+          System.out.println("Failed to download today's prices: " + e.getMessage());
+          }
+        showMenu(priceAnalyzer, formatter, scanner);
       } else {
         System.out.println("Exiting.");
         return;
         }
   }
 
-  static void showMenu(PriceAnalyzer priceAnalyzer, UrlFormatter formatter) throws IOException, InterruptedException {
+  static void showMenu(PriceAnalyzer priceAnalyzer,
+                       UrlFormatter formatter,
+                       java.util.Scanner scanner) throws IOException, InterruptedException {
     var console = System.console();
-    final java.util.Scanner scanner = console == null ? new java.util.Scanner(System.in) : null;
     while (true) {
       System.out.println("----------");
       System.out.println("Current zone is (" + formatter.getZone() + ") " + formatter.getSelectedDateLabel());
@@ -54,10 +56,11 @@ public class Main {
         4. Cancel
         """);
           String dayChoice = console != null ? console.readLine() : scanner.nextLine();
+          dayChoice = dayChoice != null ? dayChoice.trim() : "";
           switch (dayChoice) {
             case "1" -> {
               try {
-                priceAnalyzer.setUrl(formatter.formatUrl());
+                priceAnalyzer.setUrl(formatter.formatTodayUrl());
                 priceAnalyzer.getPrices();
                 System.out.println("Today's prices loaded.");
                 } catch (Exception e) {
@@ -76,13 +79,14 @@ public class Main {
             case "3" -> {
               System.out.println("Enter date (yyyy-MM-dd):");
               String dateStr = console != null ? console.readLine() : scanner.nextLine();
+              dateStr = dateStr != null ? dateStr.trim() : "";
               try {
                 LocalDate date = LocalDate.parse(dateStr);
                 priceAnalyzer.setUrl(formatter.formatUrl(date));
                 priceAnalyzer.getPrices();
                 System.out.println("Prices for " + date + " loaded.");
               } catch (Exception e) {
-                System.out.println("Invalid date format or date is not ready yet");
+                System.out.println("Invalid date format or data unavailable: " + e.getMessage());
               }
             }
             case "4" -> System.out.println("Canceled.");

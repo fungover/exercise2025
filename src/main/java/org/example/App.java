@@ -29,7 +29,11 @@ public class App {
             int choice = inputHandler.getUserChoice(actions.size());
             MenuAction action = menu.getAction(choice);
             if (action != null) {
-                action.execute();
+                try {
+                    action.execute();
+                } catch (Exception e) {
+                    System.out.println("An error occurred: " + e.getMessage());
+                }
             } else {
                 System.out.println("Invalid choice, please try again.");
             }

@@ -18,13 +18,21 @@ public static List<HourlyPrice> convertToHourlyPrices(List<Object> priceData, St
     List<HourlyPrice> prices = new ArrayList<>();
 
     for (Object o : priceData)  {
-    Map<String, Object> map = (Map<String, Object>) o;
-    int hour = parseHour((String) map.get("time_start"));
-        double sekPerKwh = ((Number) map.get("SEK_per_kWh")).doubleValue();
-        double eurPerKwh = ((Number) map.get("EUR_per_kWh")).doubleValue();
+        if (!(o instanceof Map<?, ?> map)) {
+            continue;
+            }
+        Object ts = map.get("time_start");
+        Object sekObj = map.get("SEK_per_kWh");
+        Object eurObj = map.get("EUR_per_kWh");
+        if (!(ts instanceof String) || !(sekObj instanceof Number) || !(eurObj instanceof Number)) {
+            continue; // skip malformed entries
+            }
+        int hour = parseHour((String) ts);
+        double sekPerKwh = ((Number) sekObj).doubleValue();
+        double eurPerKwh = ((Number) eurObj).doubleValue();
         prices.add(new HourlyPrice(hour, sekPerKwh, eurPerKwh, zone));
-    }
-            return prices;
+        }
+        return prices;
     }
 
     public static String formatPrice(double price) {

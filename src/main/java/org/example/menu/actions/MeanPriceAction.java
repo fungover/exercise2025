@@ -14,8 +14,15 @@ public class MeanPriceAction implements MenuAction {
 
     @Override
     public void execute() {
-        MeanPrice meanPrice = PriceUtil.calculateMeanPrice(dataManager.getPrices());
-        System.out.println("Mean price for zone " + dataManager.getZone() + ":");
+        var loaded = dataManager.getPrices();
+        if (loaded.isEmpty()) {
+            System.out.println("No prices available. Download prices first.");
+            return;
+            }
+        // Temporary: if both days are loaded, take the first 24 hours as "today".
+        var todayOnly = loaded.size() >= 24 ? loaded.subList(0, 24) : loaded;
+        MeanPrice meanPrice = PriceUtil.calculateMeanPrice(todayOnly);
+        System.out.println("Mean price for zone " + dataManager.getZone() + " (today):");
         System.out.println(meanPrice);
     }
 

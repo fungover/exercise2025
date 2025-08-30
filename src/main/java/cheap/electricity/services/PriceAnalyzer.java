@@ -9,6 +9,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,8 +64,29 @@ public class PriceAnalyzer {
       System.out.println("No prices loaded. Use option 1 first.");
       return;
     }
-    
-    System.out.println("High-Low prices: ");
+
+    Price minPrice = prices.stream()
+            .min((p1, p2) -> {
+              int cmp = Double.compare(p1.SEK_per_kWh(), p2.SEK_per_kWh());
+              if (cmp != 0) return cmp;
+              ZonedDateTime t1 = ZonedDateTime.parse(p1.time_start());
+              ZonedDateTime t2 = ZonedDateTime.parse(p2.time_start());
+              return t1.compareTo(t2);
+            })
+            .orElse(null);
+
+    Price maxPrice = prices.stream()
+            .max((p1, p2) -> {
+              int cmp = Double.compare(p1.SEK_per_kWh(), p2.SEK_per_kWh());
+              if (cmp != 0) return cmp;
+              ZonedDateTime t1 = ZonedDateTime.parse(p1.time_start());
+              ZonedDateTime t2 = ZonedDateTime.parse(p2.time_start());
+              return t2.compareTo(t1);
+            })
+            .orElse(null);
+
+    System.out.printf("Min price: %.4f SEK/kWh at %s%n", minPrice.SEK_per_kWh(), minPrice.time_start());
+    System.out.printf("Max price: %.4f SEK/kWh at %s%n", maxPrice.SEK_per_kWh(), maxPrice.time_start());
   }
 }
 

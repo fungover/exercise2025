@@ -54,13 +54,13 @@ public class Main {
       case "5":
         System.out.println("Current zone is: " + day.getZone());
         System.out.println("""
-                        Zones available:
-                        1. SE1 = Luleå / Norra Sverige
-                        2. SE2 = Sundsvall / Norra Mellansverige
-                        3. SE3 = Stockholm / Södra Mellansverige
-                        4. SE4 = Malmö / Södra Sverige\\s""\")
-                        5. Cancel
-                        """);
+            Zones available:
+            1. SE1 = Luleå / Norra Sverige
+            2. SE2 = Sundsvall / Norra Mellansverige
+            3. SE3 = Stockholm / Södra Mellansverige
+            4. SE4 = Malmö / Södra Sverige
+            5. Cancel
+            """);
         String input2 = System.console().readLine();
         switch(input2) {
           case "1":

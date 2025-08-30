@@ -12,11 +12,11 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
-public class Api {
+public class PriceAnalyzer {
   private String apiUrl;
   private List<Price> prices;
 
-  public Api(String apiUrl){
+  public PriceAnalyzer(String apiUrl){
     this.apiUrl = apiUrl;
   }
 

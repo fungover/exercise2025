@@ -1,6 +1,6 @@
 package cheap.electricity.cli;
 
-import cheap.electricity.services.Api;
+import cheap.electricity.services.PriceAnalyzer;
 import cheap.electricity.services.UrlFormatter;
 
 import java.io.IOException;
@@ -12,33 +12,34 @@ public class Main {
 
     String input = System.console().readLine();
     if(input.equals("y")){
-      UrlFormatter day = new UrlFormatter("SE2");
+      UrlFormatter day = new UrlFormatter("SE3");
       String url = day.formatUrl();
 
-      Api api = new Api(url);
-      showMenu(api, day);
+      PriceAnalyzer priceAnalyzer = new PriceAnalyzer(url);
+      showMenu(priceAnalyzer, day);
     }
   }
 
-  static void showMenu(Api api, UrlFormatter day) throws IOException, InterruptedException {
+  static void showMenu(PriceAnalyzer priceAnalyzer, UrlFormatter day) throws IOException, InterruptedException {
+    System.out.println("Current zone is (" + day.getZone() + ")");
     System.out.println("-----");
     System.out.println("Choose from the menu:");
     System.out.println("1. Download prices(day1, day2)");
     System.out.println("2. Show mean price(24h)");
     System.out.println("3. Show price highest and lowest(h)");
     System.out.println("4. The best time to charge a car");
-    System.out.println("6. Choose zon(default is: ZONE2)");
+    System.out.println("6. Choose zon");
     System.out.println("7. Exit");
 
     String input = System.console().readLine();
     switch(input) {
       case "1":
-        api.getPrices();
-        showMenu(api, day);
+        priceAnalyzer.getPrices();
+        showMenu(priceAnalyzer, day);
         break;
       case "2":
-        api.showMeanPrice();
-        showMenu(api, day);
+        priceAnalyzer.showMeanPrice();
+        showMenu(priceAnalyzer, day);
         break;
       case "6":
         System.out.println("Current zone is: " + day.getZone());
@@ -54,27 +55,27 @@ public class Main {
         switch(input2) {
           case "1":
             day.setZone("SE1");
-            System.out.println("Zone set to SE1");
-            api.setUrl(day.formatUrl());
-            showMenu(api, day);
+            System.out.println("Zone set to SE1 (Don't forget to download the new prices)");
+            priceAnalyzer.setUrl(day.formatUrl());
+            showMenu(priceAnalyzer, day);
             break;
             case "2":
               day.setZone("SE2");
-              System.out.println("Zone set to SE2");
-              api.setUrl(day.formatUrl());
-              showMenu(api, day);
+              System.out.println("Zone set to SE2 (Don't forget to download the new prices)");
+              priceAnalyzer.setUrl(day.formatUrl());
+              showMenu(priceAnalyzer, day);
               break;
               case "3":
                 day.setZone("SE3");
-                System.out.println("Zone set to SE3");
-                api.setUrl(day.formatUrl());
-                showMenu(api, day);
+                System.out.println("Zone set to SE3 (Don't forget to download the new prices)");
+                priceAnalyzer.setUrl(day.formatUrl());
+                showMenu(priceAnalyzer, day);
                 break;
                 case "4":
                   day.setZone("SE4");
-                  System.out.println("Zone set to SE4");
-                  api.setUrl(day.formatUrl());
-                  showMenu(api, day);
+                  System.out.println("Zone set to SE4 (Don't forget to download the new prices)");
+                  priceAnalyzer.setUrl(day.formatUrl());
+                  showMenu(priceAnalyzer, day);
                   break;
       }
         break;
@@ -82,7 +83,7 @@ public class Main {
         return;
       default:
         System.out.println("Invalid option");
-        showMenu(api, day);
+        showMenu(priceAnalyzer, day);
     }
   }
 }

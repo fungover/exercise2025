@@ -38,7 +38,7 @@ public class Main {
       System.out.println("Current zone is: (" + formatter.getZone() + ") Current date is: " + formatter.getSelectedDateLabel());
       System.out.println("----------");
       System.out.println("Choose from the menu:");
-      System.out.println("1. Download prices");
+      System.out.println("1. Choose date");
       System.out.println("2. Show mean price (24h)");
       System.out.println("3. Show hours with highest and lowest prices");
       System.out.println("4. Best time to charge (shows 2/4/8h windows)");
@@ -110,23 +110,23 @@ public class Main {
           switch (input2) {
             case "1" -> {
               formatter.setZone("SE1");
-              System.out.println("Zone set to SE1 (Don't forget to download the new prices)");
               priceAnalyzer.setUrl(formatter.formatUrl());
+              priceAnalyzer.getPrices();
             }
             case "2" -> {
               formatter.setZone("SE2");
-              System.out.println("Zone set to SE2 (Don't forget to download the new prices)");
               priceAnalyzer.setUrl(formatter.formatUrl());
+              priceAnalyzer.getPrices();
             }
             case "3" -> {
               formatter.setZone("SE3");
-              System.out.println("Zone set to SE3 (Don't forget to download the new prices)");
               priceAnalyzer.setUrl(formatter.formatUrl());
+              priceAnalyzer.getPrices();
             }
             case "4" -> {
               formatter.setZone("SE4");
-              System.out.println("Zone set to SE4 (Don't forget to download the new prices)");
               priceAnalyzer.setUrl(formatter.formatUrl());
+              priceAnalyzer.getPrices();
             }
             case "5" -> System.out.println("Zone change canceled");
             default -> System.out.println("Invalid option");

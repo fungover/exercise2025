@@ -27,7 +27,7 @@ public class BestChargingTimeAction implements MenuAction {
 
         int duration = (int) inputHandler.getDoubleInput("Enter charging duration (2, 4 or 6 hours):");
         if (duration != 2 && duration != 4 && duration != 6) {
-            System.out.println("Invalid duration Must be 2, 4 or 6 hours.");
+            System.out.println("Invalid duration must be 2, 4 or 6 hours.");
             return;
         }
 

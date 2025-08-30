@@ -17,6 +17,7 @@ public class Player {
         this.health = maxHealth;
         this.damage = 10;
         this.inventory = new ArrayList<>();
+
     }
 
     //getters
@@ -63,5 +64,42 @@ public class Player {
         this.health = Math.max(0, this.health - damage);
     }
 
+
     //methods
+    public void heal(int amount) {
+        //to not heal the player for more then the max hp
+        this.health = Math.min(maxHealth, this.health + amount);
+    }
+
+    public void addItem(Item item) {
+        inventory.add(item);
+    }
+
+    public boolean removeItem(Item item) {
+        return inventory.remove(item);
+    }
+
+    public boolean isAlive() {
+        return health > 0;
+    }
+
+    public void displayStats() {
+        System.out.println("=== " + name + " ===");
+        System.out.println("Health: " + health + "/" + maxHealth);
+        System.out.println("Damage:  " + damage);
+        System.out.println("Position: (" + x + ", " + y + ")");
+    }
+
+    public void displayInventory() {
+        System.out.println("=== Inventory ===");
+        if (inventory.isEmpty()) {
+            System.out.println("Empty");
+        } else {
+            for (int i = 0; i < inventory.size(); i++) {
+                System.out.println((i + 1) + ", " + inventory.get(i).getName() + " - " +
+                  inventory.get(i).getDescription());
+            }
+        }
+    }
+
 }

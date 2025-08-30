@@ -1,7 +1,7 @@
 ## Project Structure
 
 - **entities/:** Player, enemies,items,tile?
-- **map/:** Dungeon generation and display
+- **map/:**  Dungeon grid,room,tiles -Dungeon generation and display
 - **game/:** loop and input handling
 - **service/:** combat and movement
 - **utils/:** random number generation (maybe?)
@@ -20,11 +20,11 @@
 
 ## How to play?
 
-1. **Movement**: north,south,east,west (or n,s,e,w)
-2. **Inventory**: inventory or inv to see items/backpack
-3. **Use items**: use 1 (use first item in inventory)
-4. **Look around:** look to see whats around
-5. **Help:** shows command list
+1. **Movement**: **north,south,east,west** (or **n,s,e,w**)
+2. **Inventory**: **inventory** or **inv** to see items/backpack
+3. **Use items**: **use 1** (use first item in inventory)
+4. **Look around:** **look** to see whats around
+5. **Help:** **help** shows command list
 
 ## Game Mechanics
 

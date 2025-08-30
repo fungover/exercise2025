@@ -28,6 +28,6 @@ public class MeanPriceAction implements MenuAction {
 
     @Override
     public String getDescription() {
-        return "Calculate the mean price for the current day";
+        return "Calculate the mean price for loaded prices";
     }
 }

@@ -35,7 +35,7 @@ public class Main {
     var console = System.console();
     while (true) {
       System.out.println("----------");
-      System.out.println("Current zone is (" + formatter.getZone() + ") " + formatter.getSelectedDateLabel());
+      System.out.println("Current zone is: (" + formatter.getZone() + ") Current date is: " + formatter.getSelectedDateLabel());
       System.out.println("----------");
       System.out.println("Choose from the menu:");
       System.out.println("1. Download prices");
@@ -97,7 +97,6 @@ public class Main {
         case "3" -> priceAnalyzer.HighLowPrice();
         case "4" -> priceAnalyzer.showBestChargingTime();
         case "5" -> {
-          System.out.println("Current zone is: " + formatter.getZone());
           System.out.println("""
                     Zones available:
                     1. SE1 = Luleå / Norra Sverige

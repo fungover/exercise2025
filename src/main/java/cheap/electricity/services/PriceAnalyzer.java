@@ -60,7 +60,7 @@ public class PriceAnalyzer {
             .average()
             .orElse(0.0);
 
-    System.out.println("Mean price is: " + mean);
+    System.out.println("Mean price is: " + mean + " SEK/kWh");
   }
 
   public void HighLowPrice() {
@@ -110,7 +110,6 @@ public class PriceAnalyzer {
               .sum();
 
       minSum = currentSum;
-      startIndex = 0;
 
       for (int i = 1; i <= prices.size() - duration; i++) {
         currentSum = currentSum - prices.get(i - 1).SEK_per_kWh() + prices.get(i + duration - 1).SEK_per_kWh();

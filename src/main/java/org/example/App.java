@@ -1,57 +1,38 @@
 package org.example;
-import com.fasterxml.jackson.jr.ob.JSON;
-import org.example.model.MeanPrice;
-import org.example.util.PriceUtil;
 
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
+import org.example.data.PriceDataManager;
+import org.example.menu.InputHandler;
+import org.example.menu.Menu;
+import org.example.menu.MenuAction;
+import org.example.menu.actions.*;
+
 import java.util.List;
 
 public class App {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        String initialZone = args.length > 0 ? args[0] : "SE4";
+        PriceDataManager dataManager = new PriceDataManager();
+        dataManager.setZone(initialZone);
+        InputHandler inputHandler = new InputHandler();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM-dd");
+        List<MenuAction> actions = List.of(
+                new DownloadPricesAction(dataManager, inputHandler),
+                new MeanPriceAction(dataManager),
+                new ExtremeHoursAction(dataManager),
+                new BestChargingTimeAction(dataManager, inputHandler),
+                new SelectZoneAction(dataManager, inputHandler)
+        );
 
-        // LocalDateTime now = LocalDateTime.of(2025, 8,22, 13, 1); // To simulate time past 13.00 for testing purposes
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime tomorrow = now.plusDays(1); // Set -1 for testing tomorrowResults
-
-        String todayPath = now.format(formatter);
-        String tomorrowPath = tomorrow.format(formatter);
-        String region = "SE4";
-
-        URL urlToday = new URL("https://www.elprisetjustnu.se/api/v1/prices/" + todayPath + "_" + region + ".json");
-        URL urlTomorrow = new URL("https://www.elprisetjustnu.se/api/v1/prices/" + tomorrowPath + "_" + region + ".json");
-
-        try {
-            List<Object> todayResults = JSON.std.listFrom(urlToday);
-
-            for (Object o : todayResults) {
-                Map<String, Object> map = (Map<String, Object>) o;
-                System.out.println(map);
-            }
-
-            MeanPrice todayMean = PriceUtil.calculateMeanPrice(urlToday);
-            System.out.println("Mean price for today: " + todayMean);
-
-            // Condition to ensure the next days data is available before processing it
-            if (now.getHour() >= 13) {
-                List<Object> tomorrowResults = JSON.std.listFrom(urlTomorrow);
-                System.out.println("Prices for tomorrow:");
-                for (Object o : tomorrowResults) {
-                    Map<String, Object> map = (Map<String, Object>) o;
-                    System.out.println(map);
-                }
-                MeanPrice tomorrowMean = PriceUtil.calculateMeanPrice(urlTomorrow);
-                System.out.println("Mean price for tomorrow: " + tomorrowMean);
+        Menu menu = new Menu(actions);
+        while (true) {
+            menu.display();
+            int choice = inputHandler.getUserChoice(actions.size());
+            MenuAction action = menu.getAction(choice);
+            if (action != null) {
+                action.execute();
             } else {
-                System.out.println("Prices for tomorrow are not available yet.");
+                System.out.println("Invalid choice, please try again.");
             }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }

@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.time.format.DateTimeFormatter;
 
 public class Main {
-    static void main(String[] args) {
+   public static void main(String[] args) {
         String zone = "SE3"; //Default value
         LocalDate date = LocalDate.now(ZoneId.of("Europe/Stockholm"));
 

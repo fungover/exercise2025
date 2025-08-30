@@ -1,6 +1,7 @@
 package cheap.electricity.cli;
 
 import cheap.electricity.services.Api;
+import cheap.electricity.services.UrlFormatter;
 
 import java.io.IOException;
 
@@ -11,12 +12,15 @@ public class Main {
 
     String input = System.console().readLine();
     if(input.equals("y")){
-      Api api = new Api("https://www.elprisetjustnu.se/api/v1/prices/2025/08-30_SE2.json");
-      showMenu(api);
+      UrlFormatter day = new UrlFormatter("SE2");
+      String url = day.formatUrl();
+
+      Api api = new Api(url);
+      showMenu(api, day);
     }
   }
 
-  static void showMenu(Api api) throws IOException, InterruptedException {
+  static void showMenu(Api api, UrlFormatter day) throws IOException, InterruptedException {
     System.out.println("-----");
     System.out.println("Choose from the menu:");
     System.out.println("1. Download prices(day1, day2)");
@@ -27,16 +31,24 @@ public class Main {
     System.out.println("7. Exit");
 
     String input = System.console().readLine();
-    if(input.equals("1")) {
-      api.getPrices();
-      showMenu(api);
-    }
-    if(input.equals("2")) {
-      api.showMeanPrice();
-      showMenu(api);
-    }
-    if(input.equals("7")) {
-      return;
+    switch(input) {
+      case "1":
+        api.getPrices();
+        showMenu(api, day);
+        break;
+      case "2":
+        api.showMeanPrice();
+        showMenu(api, day);
+        break;
+      case "6":
+        System.out.println("Current zone is: " + day.getZone());
+        showMenu(api, day);
+        break;
+      case "7":
+        return;
+      default:
+        System.out.println("Invalid option");
+        showMenu(api, day);
     }
   }
 }

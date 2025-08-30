@@ -42,7 +42,41 @@ public class Main {
         break;
       case "6":
         System.out.println("Current zone is: " + day.getZone());
-        showMenu(api, day);
+        System.out.println("""
+                        Zones available:
+                        1. SE1 = Luleå / Norra Sverige
+                        2. SE2 = Sundsvall / Norra Mellansverige
+                        3. SE3 = Stockholm / Södra Mellansverige
+                        4. SE4 = Malmö / Södra Sverige\\s""\")
+                        5. Cancel
+                        """);
+        String input2 = System.console().readLine();
+        switch(input2) {
+          case "1":
+            day.setZone("SE1");
+            System.out.println("Zone set to SE1");
+            api.setUrl(day.formatUrl());
+            showMenu(api, day);
+            break;
+            case "2":
+              day.setZone("SE2");
+              System.out.println("Zone set to SE2");
+              api.setUrl(day.formatUrl());
+              showMenu(api, day);
+              break;
+              case "3":
+                day.setZone("SE3");
+                System.out.println("Zone set to SE3");
+                api.setUrl(day.formatUrl());
+                showMenu(api, day);
+                break;
+                case "4":
+                  day.setZone("SE4");
+                  System.out.println("Zone set to SE4");
+                  api.setUrl(day.formatUrl());
+                  showMenu(api, day);
+                  break;
+      }
         break;
       case "7":
         return;

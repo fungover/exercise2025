@@ -13,11 +13,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Api {
-  private final String apiUrl;
+  private String apiUrl;
   private List<Price> prices;
 
   public Api(String apiUrl){
     this.apiUrl = apiUrl;
+  }
+
+  public void setUrl(String url) {
+    this.apiUrl = url;
   }
 
   public void getPrices() throws IOException, InterruptedException {

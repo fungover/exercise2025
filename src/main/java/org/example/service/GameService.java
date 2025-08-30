@@ -8,15 +8,20 @@ public class GameService {
     private final RoomService roomService;
     private final MovementService movementService;
     private ItemService itemService;
+    private EnemyService enemyService;
     private final DisplayService displayService;
 
     public GameService() {
         this.roomService = new RoomService();
         this.movementService = new MovementService();
         this.itemService = new ItemService();
+        this.enemyService = new EnemyService();
         this.displayService = new DisplayService();
 
         itemService.placeRandomItems(roomService.getCurrentRoom().getDungeon());
+
+        String roomName = roomService.getCurrentRoom().getName();
+        enemyService.placeEnemiesForRoom(roomName, roomService.getCurrentRoom().getDungeon());
     }
 
     public boolean handleMovement(Player player, Direction direction) {
@@ -40,6 +45,9 @@ public class GameService {
             itemService = new ItemService();
             itemService.placeRandomItems(roomService.getCurrentRoom().getDungeon());
 
+            enemyService = new EnemyService();
+            enemyService.placeEnemiesForRoom(newRoomName, roomService.getCurrentRoom().getDungeon());
+
             System.out.println("You entered: " + newRoomName);
         }
     }
@@ -60,7 +68,7 @@ public class GameService {
     }
 
     public void displayGameState(Player player) {
-        displayService.printMapWithPlayer(roomService.getCurrentRoom(), player, itemService);
+        displayService.printMapWithPlayer(roomService.getCurrentRoom(), player, itemService, enemyService);
         displayService.showGameState(player, roomService.getCurrentRoom());
     }
 
@@ -78,5 +86,9 @@ public class GameService {
 
     public DisplayService getDisplayService() {
         return displayService;
+    }
+
+    public EnemyService getEnemyService() {
+        return enemyService;
     }
 }

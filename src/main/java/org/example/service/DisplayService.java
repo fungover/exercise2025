@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DisplayService {
 
-    public void printMapWithPlayer(Room room, Player player, ItemService itemService) {
+    public void printMapWithPlayer(Room room, Player player, ItemService itemService, EnemyService enemyService) {
         Position playerPos = player.getPosition();
 
         for (int y = 0; y < room.getDungeon().getRows(); y++) {
@@ -19,6 +19,9 @@ public class DisplayService {
 
                 if (x == playerPos.getX() && y == playerPos.getY()) {
                     System.out.print(TileType.PLAYER.getSymbol());
+                } else if (enemyService.getEnemyAt(currentPos) != null) {
+                    System.out.print(TileType.ENEMY.getSymbol());
+
                 } else if (itemService.getItemAt(currentPos) != null) {
                     System.out.print(TileType.ITEM.getSymbol());
                 } else {

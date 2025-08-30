@@ -1,7 +1,9 @@
 package org.example;
 
+import org.example.entities.items.Inventory;
+import org.example.entities.items.Item;
+
 public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello There!");
-    }
+Inventory inventory = new Inventory;
+
 }

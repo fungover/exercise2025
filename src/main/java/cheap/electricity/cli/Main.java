@@ -10,8 +10,9 @@ public class Main {
     System.out.println("Let's check when it's better to start charging");
     System.out.println("Press y to start");
 
-    String input = System.console().readLine();
-    if(input.equals("y")){
+    var console = System.console();
+      String input = console != null ? console.readLine() : new java.util.Scanner(System.in).nextLine();
+      if ("y".equalsIgnoreCase(input != null ? input.trim() : "")) {
       UrlFormatter day = new UrlFormatter("SE3");
       String url = day.formatUrl();
 

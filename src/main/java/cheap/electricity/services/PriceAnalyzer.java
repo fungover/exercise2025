@@ -88,6 +88,40 @@ public class PriceAnalyzer {
     System.out.printf("Min price: %.4f SEK/kWh at %s%n", minPrice.SEK_per_kWh(), minPrice.time_start());
     System.out.printf("Max price: %.4f SEK/kWh at %s%n", maxPrice.SEK_per_kWh(), maxPrice.time_start());
   }
+
+  public void showBestChargingTime() {
+    if (prices == null || prices.isEmpty()) {
+      System.out.println("No prices loaded.");
+      return;
+    }
+
+    int[] durations = {2, 4, 8};
+
+    for (int duration : durations) {
+      double minSum = Double.MAX_VALUE;
+      int startIndex = 0;
+
+      double currentSum = prices.subList(0, duration).stream()
+              .mapToDouble(Price::SEK_per_kWh)
+              .sum();
+
+      minSum = currentSum;
+      startIndex = 0;
+
+      for (int i = 1; i <= prices.size() - duration; i++) {
+        currentSum = currentSum - prices.get(i - 1).SEK_per_kWh() + prices.get(i + duration - 1).SEK_per_kWh();
+        if (currentSum < minSum) {
+          minSum = currentSum;
+          startIndex = i;
+        }
+      }
+
+      Price start = prices.get(startIndex);
+      Price end = prices.get(startIndex + duration - 1);
+      System.out.printf("Best time to charge for %d hours: from %s to %s, total cost: %.4f SEK%n",
+              duration, start.time_start(), end.time_end(), minSum);
+    }
+  }
 }
 
 record Price(double SEK_per_kWh, String time_start, String time_end){}

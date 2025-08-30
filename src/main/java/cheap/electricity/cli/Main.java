@@ -56,14 +56,22 @@ public class Main {
           String dayChoice = console != null ? console.readLine() : scanner.nextLine();
           switch (dayChoice) {
             case "1" -> {
-              priceAnalyzer.setUrl(formatter.formatTodayUrl());
-              priceAnalyzer.getPrices();
-              System.out.println("Today's prices loaded.");
+              try {
+                priceAnalyzer.setUrl(formatter.formatUrl());
+                priceAnalyzer.getPrices();
+                System.out.println("Today's prices loaded.");
+                } catch (Exception e) {
+                System.out.println("Failed to download today's prices: " + e.getMessage());
+                }
             }
             case "2" -> {
-              priceAnalyzer.setUrl(formatter.formatTomorrowUrl());
-              priceAnalyzer.getPrices();
-              System.out.println("Tomorrow's prices loaded.");
+              try {
+                priceAnalyzer.setUrl(formatter.formatTomorrowUrl());
+                priceAnalyzer.getPrices();
+                System.out.println("Tomorrow's prices loaded.");
+                } catch (Exception e) {
+                System.out.println("Failed to download tomorrow's prices: " + e.getMessage());
+                }
             }
             case "3" -> {
               System.out.println("Enter date (yyyy-MM-dd):");

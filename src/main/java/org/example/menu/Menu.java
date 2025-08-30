@@ -12,7 +12,7 @@ public class Menu {
     public void display() {
         System.out.println("Menu:");
         for (int i = 0; i < actions.size(); i++) {
-            System.out.println(i + ". " + actions.get(i).getDescription());
+            System.out.println((i + + 1) + ". " + actions.get(i).getDescription());
         }
         System.out.println("Enter choice (1-"+actions.size()+"): ");
     }

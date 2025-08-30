@@ -1,12 +1,10 @@
 /* The Real CLI entry, since App.java was only to test. This is my MAIN for this project */
 package org.example.electricity;
 
-/* Imports and why I use them */
-
-import java.time.LocalDate; //DATE without time (YY-MM-DD)
-import java.time.ZoneId; //Especially important and not to forget, converts to exact Time for relevant zone
-import java.util.Locale; //Defines Language and Region, Used with DateTimeFormatter
-import java.time.format.DateTimeFormatter; //Works together with Locale to display month/day in strings & right Language
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Locale;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
     static void main(String[] args) {
@@ -28,7 +26,6 @@ public class Main {
                 }
             }
         }
-
         /* Fetch prices */
         var prices = ElPriceCli.fetchDay(date, zone);
         if (prices.isEmpty()) {
@@ -36,10 +33,27 @@ public class Main {
             return;
         }
 
+        {
+            var w = Stats.bestWindow(prices, 2);
+            int end = w.startHour() + w.length();
+            System.out.printf("Best Price %dh: %02d:00–%02d:00  sum=%.2f  Average=%.2f%n", 2, w.startHour(), end, w.sum(), w.average());
+        }
+        {
+            var w = Stats.bestWindow(prices, 4);
+            int end = w.startHour() + w.length();
+            System.out.printf("Best Price %dh: %02d:00–%02d:00  sum=%.2f  Average=%.2f%n", 4, w.startHour(), end, w.sum(), w.average());
+        }
+        {
+            var w = Stats.bestWindow(prices, 8);
+            int end = w.startHour() + w.length();
+            System.out.printf("Best Price %dh: %02d:00–%02d:00  sum=%.2f  Average=%.2f%n", 8, w.startHour(), end, w.sum(), w.average());
+        }
+
         /* Using my Printer */
         Printer.printHeader(date, zone, prices.size());
         Printer.printPrices(prices);
         Printer.printStats(prices);
+
     }
 
 }

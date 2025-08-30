@@ -1,28 +1,30 @@
-### This is my Development log
+### 📕This is my Development log
 
 where I share my thought processes during this project, to enhance my own learning.
 
 What to do:
 
-1. Plan packages, class- and file structure
-2. Add dependencies in pom.xml file (jackson databind includes annotations & core)
+1. Plan packages, class- and file structure (Separation of concerns)
+2. Add dependencies in pom.xml file (jackson databind is needed to parse JSON (includes annotations & core)
 
-### What classes will I need? 
-[x] Main (My CLI entry who Delegates, calls client, counts and displays mm. NO logic)
+### What classes will I need?
+
+[x] Main (My CLI entry who Delegates, calls clients, counts and is responsible for bestWindow atm)
 [x] PriceData (My Record with time data. Mirrors the data from the API and is easy to work with )
-[x] ElPriceCli (Help class (with no own main-method, used by other classes) Launches the HTTP taxi, Receive the response, Converts JSON to Java object)
+[x] ElPriceCli (Help class with no own main-method, is used by other classes)
 [x] Stats (Statistics, numbers and count-logics. No displays at all & Easy to unit test)
-[] SlidingWindow (Advanced algorithms... When is it the most cost-effective to start the Sauna?? This window will provide us with the answer)
+[x] Printer (This Help-class provides user with all the System.out.println:s)
+[x] SlidingWindow (When is it the most cost-effective to start the Sauna?? This window will provide us with the answer)
 [] Zone (Enumeration SE1, SE2, SE3, SE4- This class validates the Zone & throws an early exception if not valid)
-[] Printer (For Separation of concerns. This Help-class provides user with all the System.out.println:s)
-[] CsvConsumption (⭐ Shows the exact cost for user based on real electricity usage. Real user value stuff! )
+[] CsvConsumption (⭐ Shows the exact cost for user based on real electricity usage. Real user value stuff!)
 
-### 🧠❓What IMPORTED classes will I need?
-In this project I am working with 
+### 🧠❓
+
+In this project I am working with
 **Dates, Times, Sorting and JSON Data**
 
+#### _Functionality_:
 
-#### _Functionality_: 
 * Read JSON
 * Convert JSON
 * Handle Times correctly (UTC-EU)
@@ -41,7 +43,10 @@ API returns: An array with price entries:
 "time_end": "YYYY-MM-DDT00:00:00+00:00".
 
 ### Mind-blowing things I learned
+
 * It´s possible to convert a record to a class in IntelliJ
+
+
 
 
 

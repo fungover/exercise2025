@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @JsonIgnoreProperties(ignoreUnknown = true) //If something changes in the API, our mapping will still work
 public record PriceData(
@@ -16,5 +18,9 @@ public record PriceData(
         @JsonProperty("EUR_per_kWh") double eurPerkWh,
         @JsonProperty("EXR") double exr
 ) {
+
+    public int hour() {
+        return LocalDateTime.ofInstant(timeStart, ZoneId.systemDefault()).getHour();
+    }
 }
 

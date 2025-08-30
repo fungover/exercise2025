@@ -3,7 +3,6 @@ package org.example.electricity;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,7 +18,7 @@ public class Printer {
     /* List with prices */
     public static void printPrices(List<PriceData> prices) {
         if (prices == null || prices.isEmpty()) {
-            System.out.println("No prices to show");
+            System.out.println("No Electricity Prices to show");
             return;
         }
         int show = Math.min(24, prices.size());
@@ -47,7 +46,7 @@ public class Printer {
         }
 
         if (max != null) {
-            int h = min.timeStart().atZone(TZ).getHour();
+            int h = max.timeStart().atZone(TZ).getHour();
             System.out.printf(SV, "Highest Price is: %.3f kr/kWh kl %02d%n", max.sekPerkWh(), h);
         }
     }
@@ -59,7 +58,7 @@ public class Printer {
     /* Manual for how to use this program */
     public static void printHelp() {
         System.out.println("""
-            Usage: java -jar elprice.jar [--zone SE1|SE2|SE3|SE4] [--date YYYY-MM-DD]
+            Usage: java -jar elPrice.jar [--zone SE1|SE2|SE3|SE4] [--date YYYY-MM-DD]
               --zone   Zone (standard: SE3)
               --date   Date (standard: today in Europe/Stockholm)
               --help   Show this help

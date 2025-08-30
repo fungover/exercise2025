@@ -14,6 +14,7 @@ import java.util.List;
 
 public class Api {
   private final String apiUrl;
+  private List<Price> prices;
 
   public Api(String apiUrl){
     this.apiUrl = apiUrl;
@@ -34,9 +35,23 @@ public class Api {
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     Price[] prices = mapper.readValue(json, Price[].class);
 
-    List<Price> priceList = Arrays.asList(prices);
+    this.prices = Arrays.asList(prices);
 
     System.out.println("Prices are downloaded successfully");
+  }
+
+  public void showMeanPrice() {
+    if (prices == null || prices.isEmpty()) {
+      System.out.println("No prices loaded. Use option 1 first.");
+      return;
+    }
+
+    double mean = prices.stream()
+            .mapToDouble(Price::SEK_per_kWh)
+            .average()
+            .orElse(0.0);
+
+    System.out.println("Mean price is: " + mean);
   }
 }
 

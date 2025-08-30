@@ -11,11 +11,12 @@ public class Main {
 
     String input = System.console().readLine();
     if(input.equals("y")){
-      showMenu();
+      Api api = new Api("https://www.elprisetjustnu.se/api/v1/prices/2025/08-30_SE2.json");
+      showMenu(api);
     }
   }
 
-  static void showMenu() throws IOException, InterruptedException {
+  static void showMenu(Api api) throws IOException, InterruptedException {
     System.out.println("-----");
     System.out.println("Choose from the menu:");
     System.out.println("1. Download prices(day1, day2)");
@@ -26,12 +27,15 @@ public class Main {
     System.out.println("7. Exit");
 
     String input = System.console().readLine();
-    if(input.equals("1")){
-      Api api = new Api("https://www.elprisetjustnu.se/api/v1/prices/2025/08-30_SE2.json");
+    if(input.equals("1")) {
       api.getPrices();
-      showMenu();
+      showMenu(api);
     }
-    if(input.equals("7")){
+    if(input.equals("2")) {
+      api.showMeanPrice();
+      showMenu(api);
+    }
+    if(input.equals("7")) {
       return;
     }
   }

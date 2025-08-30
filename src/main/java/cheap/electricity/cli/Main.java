@@ -1,5 +1,7 @@
 package cheap.electricity.cli;
 
+import cheap.electricity.services.Api;
+
 public class Main {
   public static void main(String[] args) {
     System.out.println("Let's check when it's better to start charging");
@@ -19,5 +21,11 @@ public class Main {
     System.out.println("4. The best time to charge a car");
     System.out.println("6. Choose zon(default is: ZONE2)");
     System.out.println("7. Exit");
+
+    String input = System.console().readLine();
+    if(input.equals("1")){
+      Api api = new Api("Link " + "https://www.elprisetjustnu.se/api/v1/prices/2025/08-30_SE3.json ");
+      api.showPrices();
+    }
   }
 }

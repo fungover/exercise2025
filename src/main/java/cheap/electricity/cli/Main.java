@@ -4,6 +4,7 @@ import cheap.electricity.services.PriceAnalyzer;
 import cheap.electricity.services.UrlFormatter;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class Main {
   public static void main(String[] args) throws IOException, InterruptedException {
@@ -18,6 +19,8 @@ public class Main {
       String url = formatter.formatUrl();
 
       PriceAnalyzer priceAnalyzer = new PriceAnalyzer(url);
+        priceAnalyzer.setUrl(formatter.formatUrl());
+        priceAnalyzer.getPrices();
       showMenu(priceAnalyzer, formatter);
       } else {
         System.out.println("Exiting.");
@@ -30,10 +33,10 @@ public class Main {
     final java.util.Scanner scanner = console == null ? new java.util.Scanner(System.in) : null;
     while (true) {
       System.out.println("----------");
-      System.out.println("Current zone is (" + formatter.getZone() + ")");
+      System.out.println("Current zone is (" + formatter.getZone() + ") " + formatter.getSelectedDateLabel());
       System.out.println("----------");
       System.out.println("Choose from the menu:");
-      System.out.println("1. Download prices (today; next day if available)");
+      System.out.println("1. Download prices");
       System.out.println("2. Show mean price (24h)");
       System.out.println("3. Show hours with highest and lowest prices");
       System.out.println("4. Best time to charge (shows 2/4/8h windows)");
@@ -43,15 +46,41 @@ public class Main {
       input = input != null ? input.trim() : "";
       switch (input) {
         case "1" -> {
-          try {
-            priceAnalyzer.getPrices();
-            } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-            System.out.println("Interrupted. Aborting download.");
-            } catch (IOException e) {
-            System.out.println("Failed to download prices: " + e.getMessage());
+          System.out.println("""
+        Choose day to download:
+        1. Today
+        2. Tomorrow
+        3. Enter custom date (yyyy-MM-dd)
+        4. Cancel
+        """);
+          String dayChoice = console != null ? console.readLine() : scanner.nextLine();
+          switch (dayChoice) {
+            case "1" -> {
+              priceAnalyzer.setUrl(formatter.formatUrl());
+              priceAnalyzer.getPrices();
+              System.out.println("Today's prices loaded.");
             }
+            case "2" -> {
+              priceAnalyzer.setUrl(formatter.formatTomorrowUrl());
+              priceAnalyzer.getPrices();
+              System.out.println("Tomorrow's prices loaded.");
+            }
+            case "3" -> {
+              System.out.println("Enter date (yyyy-MM-dd):");
+              String dateStr = console != null ? console.readLine() : scanner.nextLine();
+              try {
+                LocalDate date = LocalDate.parse(dateStr);
+                priceAnalyzer.setUrl(formatter.formatUrl(date));
+                priceAnalyzer.getPrices();
+                System.out.println("Prices for " + date + " loaded.");
+              } catch (Exception e) {
+                System.out.println("Invalid date format or date is not ready yet");
+              }
+            }
+            case "4" -> System.out.println("Canceled.");
+            default -> System.out.println("Invalid option.");
           }
+        }
         case "2" -> priceAnalyzer.showMeanPrice();
         case "3" -> priceAnalyzer.HighLowPrice();
         case "4" -> priceAnalyzer.showBestChargingTime();

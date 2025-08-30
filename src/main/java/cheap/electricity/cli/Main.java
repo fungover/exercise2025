@@ -43,11 +43,11 @@ public class Main {
         priceAnalyzer.showMeanPrice();
         showMenu(priceAnalyzer, day);
         break;
-      case"3":
+      case "3":
         priceAnalyzer.HighLowPrice();
         showMenu(priceAnalyzer, day);
         break;
-      case"4":
+      case "4":
         priceAnalyzer.showBestChargingTime();
         showMenu(priceAnalyzer, day);
         break;
@@ -90,6 +90,9 @@ public class Main {
           case "5":
             showMenu(priceAnalyzer, day);
             break;
+          default:
+            System.out.println("Invalid option");
+            showMenu(priceAnalyzer, day);
         }
       case "6":
         return;

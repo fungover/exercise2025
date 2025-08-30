@@ -26,21 +26,25 @@ public class PriceAnalyzer {
   }
 
   public void getPrices() throws IOException, InterruptedException {
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder()
+      HttpClient client = HttpClient.newHttpClient();
+      HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(this.apiUrl))
             .timeout(Duration.ofSeconds(10))
             .header("Accept", "application/json")
             .build();
 
-    var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    int status = response.statusCode();
+    if (status < 200 || status >= 300) {
+      throw new IOException("Failed to fetch prices. HTTP " + status + " from " + this.apiUrl);
+      }
     String json = response.body();
 
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    Price[] prices = mapper.readValue(json, Price[].class);
+    ObjectMapper mapper = new ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    Price[] parsed = mapper.readValue(json, Price[].class);
 
-    this.prices = Arrays.asList(prices);
+    this.prices = Arrays.asList(parsed);
 
     System.out.println("Prices are downloaded successfully");
   }

@@ -11,39 +11,52 @@ public class Main {
     System.out.println("Press y to start");
 
     var console = System.console();
-      String input = console != null ? console.readLine() : new java.util.Scanner(System.in).nextLine();
+    final java.util.Scanner scanner = console == null ? new java.util.Scanner(System.in) : null;
+    String input = console != null ? console.readLine() : scanner.nextLine();
       if ("y".equalsIgnoreCase(input != null ? input.trim() : "")) {
-      UrlFormatter day = new UrlFormatter("SE3");
-      String url = day.formatUrl();
+      UrlFormatter formatter = new UrlFormatter("SE3");
+      String url = formatter.formatUrl();
 
       PriceAnalyzer priceAnalyzer = new PriceAnalyzer(url);
-      showMenu(priceAnalyzer, day);
-    }
+      showMenu(priceAnalyzer, formatter);
+      } else {
+        System.out.println("Exiting.");
+        return;
+        }
   }
 
-  static void showMenu(PriceAnalyzer priceAnalyzer, UrlFormatter day) throws IOException, InterruptedException {
+  static void showMenu(PriceAnalyzer priceAnalyzer, UrlFormatter formatter) throws IOException, InterruptedException {
     var console = System.console();
     final java.util.Scanner scanner = console == null ? new java.util.Scanner(System.in) : null;
     while (true) {
       System.out.println("----------");
-      System.out.println("Current zone is (" + day.getZone() + ")");
+      System.out.println("Current zone is (" + formatter.getZone() + ")");
       System.out.println("----------");
       System.out.println("Choose from the menu:");
       System.out.println("1. Download prices (today; next day if available)");
       System.out.println("2. Show mean price (24h)");
       System.out.println("3. Show hours with highest and lowest prices");
-      System.out.println("4. Best time to charge (2/4/8h)");
+      System.out.println("4. Best time to charge (shows 2/4/8h windows)");
       System.out.println("5. Change zone");
       System.out.println("6. Exit");
       String input = console != null ? console.readLine() : scanner.nextLine();
       input = input != null ? input.trim() : "";
       switch (input) {
-        case "1" -> priceAnalyzer.getPrices();
+        case "1" -> {
+          try {
+            priceAnalyzer.getPrices();
+            } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            System.out.println("Interrupted. Aborting download.");
+            } catch (IOException e) {
+            System.out.println("Failed to download prices: " + e.getMessage());
+            }
+          }
         case "2" -> priceAnalyzer.showMeanPrice();
         case "3" -> priceAnalyzer.HighLowPrice();
         case "4" -> priceAnalyzer.showBestChargingTime();
         case "5" -> {
-          System.out.println("Current zone is: " + day.getZone());
+          System.out.println("Current zone is: " + formatter.getZone());
           System.out.println("""
                     Zones available:
                     1. SE1 = Luleå / Norra Sverige
@@ -56,27 +69,26 @@ public class Main {
           input2 = input2 != null ? input2.trim() : "";
           switch (input2) {
             case "1" -> {
-              day.setZone("SE1");
+              formatter.setZone("SE1");
               System.out.println("Zone set to SE1 (Don't forget to download the new prices)");
-              priceAnalyzer.setUrl(day.formatUrl());
+              priceAnalyzer.setUrl(formatter.formatUrl());
             }
             case "2" -> {
-              day.setZone("SE2");
+              formatter.setZone("SE2");
               System.out.println("Zone set to SE2 (Don't forget to download the new prices)");
-              priceAnalyzer.setUrl(day.formatUrl());
+              priceAnalyzer.setUrl(formatter.formatUrl());
             }
             case "3" -> {
-              day.setZone("SE3");
+              formatter.setZone("SE3");
               System.out.println("Zone set to SE3 (Don't forget to download the new prices)");
-              priceAnalyzer.setUrl(day.formatUrl());
+              priceAnalyzer.setUrl(formatter.formatUrl());
             }
             case "4" -> {
-              day.setZone("SE4");
+              formatter.setZone("SE4");
               System.out.println("Zone set to SE4 (Don't forget to download the new prices)");
-              priceAnalyzer.setUrl(day.formatUrl());
+              priceAnalyzer.setUrl(formatter.formatUrl());
             }
-            case "5" -> {
-            }
+            case "5" -> System.out.println("Zone change canceled");
             default -> System.out.println("Invalid option");
           }
         }

@@ -15,9 +15,15 @@ public class SelectZoneAction implements MenuAction {
 
     @Override
     public void execute() {
-        String zone = inputHandler.getStringInput("Enter price zone (SE1, SE2, SE3 or SE4:");
-        dataManager.setZone(zone);
-        System.out.println("Price zone set to " + zone);
+        String zone = inputHandler.getStringInput("Enter price zone (SE1, SE2, SE3 or SE4):");
+        if (zone == null || zone.trim().isEmpty()) {
+            System.out.println("Invalid option, price zone unchanged.");
+        } else if (zone.equalsIgnoreCase("SE1") || zone.equalsIgnoreCase("SE2") ||
+                zone.equalsIgnoreCase("SE3") || zone.equalsIgnoreCase("SE4")) {
+            String zoneUpper = zone.toUpperCase();
+            dataManager.setZone(zoneUpper);
+            System.out.println("Price zone set to " + zoneUpper);
+        }
     }
 
     @Override

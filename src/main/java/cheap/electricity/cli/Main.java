@@ -19,8 +19,11 @@ public class Main {
         PriceAnalyzer priceAnalyzer = new PriceAnalyzer(formatter.formatUrl());
         try {
           priceAnalyzer.getPrices();
-          } catch (Exception e) {
-          System.out.println("Failed to download today's prices: " + e.getMessage());
+          } catch (InterruptedException ie) {
+          Thread.currentThread().interrupt();
+          System.out.println("Download interrupted: " + ie.getMessage());
+          } catch (IOException ioe) {
+          System.out.println("Failed to download today's prices: " + ioe.getMessage());
           }
         showMenu(priceAnalyzer, formatter, scanner);
       } else {
@@ -31,7 +34,7 @@ public class Main {
 
   static void showMenu(PriceAnalyzer priceAnalyzer,
                        UrlFormatter formatter,
-                       java.util.Scanner scanner) throws IOException, InterruptedException {
+                       java.util.Scanner scanner) {
     var console = System.console();
     while (true) {
       System.out.println("----------");
@@ -63,8 +66,11 @@ public class Main {
                 priceAnalyzer.setUrl(formatter.formatTodayUrl());
                 priceAnalyzer.getPrices();
                 System.out.println("Today's prices loaded.");
-                } catch (Exception e) {
-                System.out.println("Failed to download today's prices: " + e.getMessage());
+              } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                System.out.println("Download interrupted: " + ie.getMessage());
+                } catch (IOException ioe) {
+                System.out.println("Failed to download today's prices: " + ioe.getMessage());
                 }
             }
             case "2" -> {
@@ -72,8 +78,11 @@ public class Main {
                 priceAnalyzer.setUrl(formatter.formatTomorrowUrl());
                 priceAnalyzer.getPrices();
                 System.out.println("Tomorrow's prices loaded.");
-                } catch (Exception e) {
-                System.out.println("Failed to download tomorrow's prices: " + e.getMessage());
+                } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                System.out.println("Download interrupted: " + ie.getMessage());
+                } catch (IOException ioe) {
+                System.out.println("Failed to download tomorrow's prices: " + ioe.getMessage());
                 }
             }
             case "3" -> {
@@ -85,9 +94,14 @@ public class Main {
                 priceAnalyzer.setUrl(formatter.formatUrl(date));
                 priceAnalyzer.getPrices();
                 System.out.println("Prices for " + date + " loaded.");
-              } catch (Exception e) {
-                System.out.println("Invalid date format or data unavailable: " + e.getMessage());
-              }
+                } catch (java.time.format.DateTimeParseException dtpe) {
+                System.out.println("Invalid date format. Use yyyy-MM-dd.");
+                } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                System.out.println("Download interrupted: " + ie.getMessage());
+                } catch (IOException ioe) {
+                System.out.println("Data unavailable: " + ioe.getMessage());
+                }
             }
             case "4" -> System.out.println("Canceled.");
             default -> System.out.println("Invalid option.");
@@ -108,26 +122,58 @@ public class Main {
           String input2 = console != null ? console.readLine() : scanner.nextLine();
           input2 = input2 != null ? input2.trim() : "";
           switch (input2) {
-            case "1" -> {
-              formatter.setZone("SE1");
-              priceAnalyzer.setUrl(formatter.formatUrl());
-              priceAnalyzer.getPrices();
-            }
+              case "1" -> {
+                formatter.setZone("SE1");
+                priceAnalyzer.setUrl(formatter.formatUrl());
+                try {
+                  priceAnalyzer.getPrices();
+                  System.out.println("Zone set to SE1. Prices loaded for " + formatter.getSelectedDateLabel());
+                  } catch (InterruptedException ie) {
+                  Thread.currentThread().interrupt();
+                  System.out.println("Zone change interrupted: " + ie.getMessage());
+                  } catch (IOException ioe) {
+                  System.out.println("Failed to download prices for the new zone: " + ioe.getMessage());
+                  }
+                }
             case "2" -> {
               formatter.setZone("SE2");
               priceAnalyzer.setUrl(formatter.formatUrl());
-              priceAnalyzer.getPrices();
-            }
+              try {
+                priceAnalyzer.getPrices();
+                System.out.println("Zone set to SE2. Prices loaded for " + formatter.getSelectedDateLabel());
+                } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                System.out.println("Zone change interrupted: " + ie.getMessage());
+                } catch (IOException ioe) {
+                System.out.println("Failed to download prices for the new zone: " + ioe.getMessage());
+                }
+              }
             case "3" -> {
               formatter.setZone("SE3");
               priceAnalyzer.setUrl(formatter.formatUrl());
-              priceAnalyzer.getPrices();
-            }
+              try {
+                priceAnalyzer.getPrices();
+                System.out.println("Zone set to SE3. Prices loaded for " + formatter.getSelectedDateLabel());
+                } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                System.out.println("Zone change interrupted: " + ie.getMessage());
+                } catch (IOException ioe) {
+                System.out.println("Failed to download prices for the new zone: " + ioe.getMessage());
+                }
+              }
             case "4" -> {
               formatter.setZone("SE4");
               priceAnalyzer.setUrl(formatter.formatUrl());
-              priceAnalyzer.getPrices();
-            }
+              try {
+                priceAnalyzer.getPrices();
+                System.out.println("Zone set to SE4. Prices loaded for " + formatter.getSelectedDateLabel());
+                } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                System.out.println("Zone change interrupted: " + ie.getMessage());
+                } catch (IOException ioe) {
+                System.out.println("Failed to download prices for the new zone: " + ioe.getMessage());
+                }
+              }
             case "5" -> System.out.println("Zone change canceled");
             default -> System.out.println("Invalid option");
           }

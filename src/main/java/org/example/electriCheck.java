@@ -1,11 +1,14 @@
 package org.example;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+import java.time.LocalDate;
 
 public class electriCheck {
 
     static Scanner scanner = new Scanner(System.in);
     public static String zone = "";
+    public static String date = formatedDate();
 
 
     public static void main(String[] args) {
@@ -22,6 +25,12 @@ public class electriCheck {
             }
         } while (!zone.equalsIgnoreCase("SE1") && !zone.equalsIgnoreCase("SE2") && !zone.equalsIgnoreCase("SE3") && !zone.equalsIgnoreCase("SE4"));
 
-        System.out.println(zone);
+        System.out.println(zone + date);
+    }
+
+    public static String formatedDate() {
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
+        return now.format(formatter);
     }
 }

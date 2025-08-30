@@ -6,8 +6,8 @@ class App {
         TopBottomPrice topBottomPrice = new TopBottomPrice();
 
         System.out.println();
-        priceList.getMeanPrice();
+        priceList.printMeanPrice();
         System.out.println();
-        topBottomPrice.getTopBottomPrice();
+        topBottomPrice.printTopBottomPrice();
     }
 }

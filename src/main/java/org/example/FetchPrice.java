@@ -5,22 +5,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.text.DecimalFormat;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.MonthDay;
-import java.time.Year;
 
-public class FetchPrice {
-    private final DecimalFormat dFormat = new DecimalFormat("00");
-    private final LocalDate presentDate = LocalDate.now();
-    private final String year = String.valueOf(Year.now().getValue());
-    private final String month = dFormat.format(Month.from(presentDate).getValue());
-    private final String today = dFormat.format(MonthDay.now().getDayOfMonth());
-    private final String tomorrow = dFormat.format(MonthDay.of(
-            Integer.parseInt(month), Integer.parseInt(today) + 1)
-            .getDayOfMonth()
-    );
+class FetchPrice {
+    private final FetchDates dates = new FetchDates();
+    private final String year = dates.getYear();
+    private final String month = dates.getMonth();
+    private final String today = dates.getToday();
+    private final String tomorrow = dates.getTomorrow();
 
     private String fetchPrice(String day) {
         String payload;

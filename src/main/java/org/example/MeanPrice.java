@@ -4,14 +4,15 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 class MeanPrice {
-    private final Prices prices = new Prices();
+    private final PriceMapper prices = new PriceMapper();
+    private final Price[] todayPrices = prices.getTodayPrices();
+    private BigDecimal totalSek = BigDecimal.ZERO;
+    private BigDecimal totalEur = BigDecimal.ZERO;
 
-    public void getMeanPrice() {
-        Properties[] todayPrices = prices.getTodayPrices();
-
-        BigDecimal totalSek = BigDecimal.ZERO;
-        BigDecimal totalEur = BigDecimal.ZERO;
+    private MeanPrices calculateMeanPrice() {
         int count = todayPrices.length;
+        if (count == 0)
+            return new MeanPrices(BigDecimal.ZERO, BigDecimal.ZERO);
 
         for (var price : todayPrices) {
             totalSek = totalSek.add(price.getSekPerKWh());
@@ -23,8 +24,15 @@ class MeanPrice {
         BigDecimal meanPriceEur = totalEur.divide(BigDecimal.valueOf(count),
                 RoundingMode.HALF_UP);
 
-        System.out.println("The mean electricity price today:");
-        System.out.println("SEK: " + meanPriceSek);
-        System.out.println("EUR: " + meanPriceEur);
+        return new MeanPrices(meanPriceSek, meanPriceEur);
     }
+
+    public void printMeanPrice() {
+        MeanPrices meanPrice = calculateMeanPrice();
+        System.out.println("The mean electricity price today:");
+        System.out.println("SEK: " + meanPrice.sekPerKWh);
+        System.out.println("EUR: " + meanPrice.eurPerKWh);
+    }
+
+    private record MeanPrices(BigDecimal sekPerKWh, BigDecimal eurPerKWh) {}
 }

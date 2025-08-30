@@ -20,6 +20,10 @@ public class UrlFormatter {
     return formatUrl(selectedDate);
   }
 
+  public String formatTodayUrl() {
+    return formatUrl(LocalDate.now(ZoneId.of("Europe/Stockholm")));
+  }
+
   public String formatTomorrowUrl() {
     return formatUrl(LocalDate.now(ZoneId.of("Europe/Stockholm")).plusDays(1));
   }

@@ -56,7 +56,7 @@ public class Main {
           String dayChoice = console != null ? console.readLine() : scanner.nextLine();
           switch (dayChoice) {
             case "1" -> {
-              priceAnalyzer.setUrl(formatter.formatUrl());
+              priceAnalyzer.setUrl(formatter.formatTodayUrl());
               priceAnalyzer.getPrices();
               System.out.println("Today's prices loaded.");
             }

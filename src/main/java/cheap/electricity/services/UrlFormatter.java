@@ -10,10 +10,12 @@ public class UrlFormatter {
   private static final String BASE = "https://www.elprisetjustnu.se/api/v1/prices/";
   private static final java.util.Set<String> VALID_ZONES = java.util.Set.of("SE1","SE2","SE3","SE4");
   private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy/MM-dd");
+  private static final ZoneId SE_TZ = ZoneId.of("Europe/Stockholm");
+  private static final DateTimeFormatter LABEL_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd (EEE)");
 
   public UrlFormatter(String zone){
     setZone(zone == null ? "SE3" : zone);
-    this.selectedDate = LocalDate.now(ZoneId.of("Europe/Stockholm"));
+    this.selectedDate = LocalDate.now(SE_TZ);
   }
 
   public String formatUrl(){
@@ -25,10 +27,12 @@ public class UrlFormatter {
   }
 
   public String formatTomorrowUrl() {
-    return formatUrl(LocalDate.now(ZoneId.of("Europe/Stockholm")).plusDays(1));
+    LocalDate base = selectedDate != null ? selectedDate : LocalDate.now(SE_TZ);
+    return formatUrl(base.plusDays(1));
   }
 
   public String formatUrl(LocalDate date){
+    if (date == null) throw new IllegalArgumentException("date must not be null");
     this.selectedDate = date;
     String datePart = date.format(DATE_FMT);
     return BASE + datePart + "_" + zone + ".json";
@@ -52,8 +56,6 @@ public class UrlFormatter {
   }
 
   public String getSelectedDateLabel() {
-    return selectedDate != null
-            ? selectedDate + " (" + selectedDate.getDayOfWeek() + ")"
-            : "No date selected";
+    return selectedDate != null ? selectedDate.format(LABEL_FMT) : "No date selected";
   }
 }

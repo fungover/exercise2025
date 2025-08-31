@@ -11,11 +11,12 @@ class FetchPrice {
     private final String year = dates.getYear();
     private final String month = dates.getMonth();
     private final String today = dates.getToday();
-    private final String tomorrow = dates.getTomorrow();
+    private final String tomorrowDay = dates.getTomorrowDay();
+    private final String tomorrowMonth = dates.getTomorrowMonth();
 
-    private String fetchPrice(String day) {
+    private String fetchPrice(String day, String month) {
         String payload;
-            String uri = createUri(day);
+            String uri = createUri(day, month);
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(uri))
@@ -32,16 +33,16 @@ class FetchPrice {
         return payload;
     }
 
-    private String createUri(String day) {
+    private String createUri(String day, String month) {
         return "https://www.elprisetjustnu.se/api/v1/prices/" + year +
                 "/" + month + "-" + day + "_SE3.json";
     }
 
     public String getTodayPrices() {
-       return fetchPrice(today);
+       return fetchPrice(today, month);
     }
 
     public String getTomorrowPrices() {
-        return fetchPrice(tomorrow);
+        return fetchPrice(tomorrowDay, tomorrowMonth);
     }
 }

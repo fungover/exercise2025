@@ -1,11 +1,7 @@
 package org.example;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.MonthDay;
-import java.time.Year;
 
 class PriceDates {
     private String dateStart;
@@ -32,25 +28,25 @@ class PriceDates {
 }
 
 class FetchDates {
-    private final DecimalFormat dFormat = new DecimalFormat("00");
     private final LocalDate presentDate = LocalDate.now();
-    private final String year = String.valueOf(Year.now().getValue());
-    private final String month = dFormat.format(Month.from(presentDate).getValue());
-    private final String today = dFormat.format(MonthDay.now().getDayOfMonth());
-    private final String tomorrow = dFormat.format(MonthDay.of(
-                    Integer.parseInt(month), Integer.parseInt(today) + 1)
-            .getDayOfMonth());
 
     public String getYear() {
-        return year;
+        return String.valueOf(presentDate.getYear());
     }
     public String getMonth() {
-        return month;
+        return String.format("%02d", presentDate.getMonthValue());
     }
     public String getToday() {
-        return today;
+        return String.format("%02d", presentDate.getDayOfMonth());
     }
-    public String getTomorrow() {
-        return tomorrow;
+    public String getTomorrowDay() {
+        LocalDate tomorrowDay = presentDate.plusDays(1);
+        return String.format("%02d", tomorrowDay.getDayOfMonth());
+    }
+
+    public String getTomorrowMonth() {
+        LocalDate tomorrowMonth = presentDate.plusMonths(1);
+        return String.format("%02d", tomorrowMonth.getMonthValue());
+
     }
 }

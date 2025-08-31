@@ -43,24 +43,4 @@ public class InputHandler {
             return scanner.nextLine().trim();
         }
 
-        public double getDoubleInput(String prompt) {
-            if (!prompt.isEmpty()) {
-                System.out.println(prompt);
-            }
-            while (true) {
-                try {
-                    if (!scanner.hasNextLine()) {
-                        System.out.println("No input available");
-                        return -1;
-                        }
-                    String line = scanner.nextLine().trim();
-                    return Double.parseDouble(line);
-                    } catch (NumberFormatException e) {
-                    System.out.println("Invalid number, please try again");
-                    } catch (IllegalStateException | java.util.NoSuchElementException e) {
-                    System.out.println("Input stream closed");
-                    return -1;
-                    }
-            }
-        }
 }

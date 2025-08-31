@@ -34,15 +34,7 @@ class Price {
         return exr;
     }
 
-    public String getTimeStart() {
-        return timeStart;
-    }
-
-    public String getTimeEnd() {
-        return timeEnd;
-    }
-
-    public String getHourStart() {
+    public String getStartHour() {
             return timeStart.substring(11, 16);
     }
 
@@ -50,7 +42,7 @@ class Price {
         return timeStart.substring(0, 10);
     }
 
-    public String getHourEnd() {
+    public String getEndHour() {
         return timeEnd.substring(11, 16);
     }
 

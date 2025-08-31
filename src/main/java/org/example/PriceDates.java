@@ -14,8 +14,8 @@ class PriceDates {
             if (val.compareTo(price.getSekPerKWh()) == 0) {
                 dateStart = price.getStartDate();
                 dateEnd = price.getEndDate();
-                timeStart = price.getHourStart();
-                timeEnd = price.getHourEnd();
+                timeStart = price.getStartHour();
+                timeEnd = price.getEndHour();
                 break;
             }
         }

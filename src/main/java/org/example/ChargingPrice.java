@@ -5,8 +5,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class ChargingPrice {
-    private final PriceMapper prices = new PriceMapper();
-    private final Price[] allPrices = prices.getAllPrices();
+    private final PriceMapper priceMapper = new PriceMapper();
+    private final Price[] allPrices = priceMapper.getAllPrices();
+    private final Price[] prices = currentPrices();
     private final int hours = LocalDateTime.now().getHour();
     private final int minutes = LocalDateTime.now().getMinute();
 
@@ -14,7 +15,7 @@ public class ChargingPrice {
         int newIndex = 0;
         String now = setHour();
         for (Price price : allPrices) {
-            if (now.equals(price.getHourStart())) {
+            if (now.equals(price.getStartHour())) {
                 break;
             }
             newIndex++;
@@ -29,17 +30,19 @@ public class ChargingPrice {
         } else {
             dateTime = hours;
         }
-        return dateTime + ":00";
+        String formattedTime = String.format("%02d", dateTime);
+        return formattedTime + ":00";
     }
 
-    private BigDecimal checkChargingPrices(Price[] prices, int n, int k) {
-        // n = prices.length and must be greater than k
+    private ChargingPriceDates chargingPrices(Price[] prices, int n, int k) {
+        // n = prices.length and must be greater than k = hours
         if (n <= k) {
-            System.out.println("Invalid");
-            return BigDecimal.valueOf(-1);
+            return new ChargingPriceDates(BigDecimal.valueOf(-1), -1, -1);
         }
 
         // First window
+        int startIndex = 0;
+        int endIndex = k - 1;
         BigDecimal minSum = BigDecimal.ZERO;
         for (int i = 0; i < k; i++) {
             minSum = minSum.add(prices[i].getSekPerKWh());
@@ -52,16 +55,42 @@ public class ChargingPrice {
             BigDecimal windowPrice = prices[i - k].getSekPerKWh();
 
             windowSum = windowSum.add(indexPrice.subtract(windowPrice));
-            minSum = minSum.min(windowSum);
+
+            if (windowSum.compareTo(minSum) < 0) {
+                minSum = windowSum;
+                startIndex = i - k + 1;
+                endIndex = i;
+            }
         }
-        return minSum;
+        return new ChargingPriceDates(minSum, startIndex, endIndex);
     }
 
-    public void printChargingPrice() {
-        Price[] currentPrices = currentPrices();
-        int n = currentPrices.length;
-        System.out.println("2h: " + checkChargingPrices(currentPrices, n, 2));
-        System.out.println("4h: " + checkChargingPrices(currentPrices, n, 4));
-        System.out.println("8h: " + checkChargingPrices(currentPrices, n, 8));
+    private void printChargingPrice(int k) {
+        int n = prices.length;
+
+        ChargingPriceDates chargingPriceDates = chargingPrices(prices, n, k);
+        Price startPrice = prices[chargingPriceDates.startIndex];
+        Price endPrice = prices[chargingPriceDates.endIndex];
+
+        System.out.println("For " + k + " hours: " +
+                chargingPriceDates.minSum + " SEK");
+        System.out.println("Starts: " + startPrice.getStartDate() + " / " +
+                startPrice.getStartHour());
+        System.out.println("Ends: " + endPrice.getEndDate() + " / " +
+                endPrice.getEndHour());
     }
+
+    public void printCharge2() {
+        printChargingPrice(2);
+    }
+
+    public void printCharge4() {
+        printChargingPrice(4);
+    }
+
+    public void printCharge8() {
+        printChargingPrice(8);
+    }
+
+    record ChargingPriceDates(BigDecimal minSum, int startIndex, int endIndex) {}
 }

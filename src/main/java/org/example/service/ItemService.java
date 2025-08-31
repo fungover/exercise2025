@@ -2,12 +2,14 @@ package org.example.service;
 
 import org.example.entities.HealthPotion;
 import org.example.entities.Item;
+import org.example.entities.Player;
 import org.example.entities.Position;
 import org.example.map.Dungeon;
 import org.example.utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ItemService {
 
@@ -35,6 +37,38 @@ public class ItemService {
 
     public void removeItem(Item item) {
         items.remove(item);
+    }
+
+    public boolean useItemFromInventory(Player player, Scanner scanner, DisplayService displayService) {
+        List<Item> inventory = player.getInventory();
+
+        if (inventory.isEmpty()) {
+            System.out.println("Your inventory is empty.");
+            return false;
+        }
+
+        displayService.showInventory(player);
+        System.out.print("Use item (enter number or 0 to cancel): ");
+
+        try {
+            int choice = Integer.parseInt(scanner.nextLine().trim());
+
+            if (choice == 0) {
+                return false;
+            }
+
+            if (choice > 0 && choice <= inventory.size()) {
+                Item item = inventory.get(choice - 1);
+                player.useItem(item.getName());
+                return true;
+            } else {
+                System.out.println("invalid choice.");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("invalid input.");
+            return false;
+        }
     }
 
     public List<Item> getItems() {

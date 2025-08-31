@@ -21,7 +21,7 @@ public class GameService {
         this.itemService = new ItemService();
         this.enemyService = new EnemyService();
         this.displayService = new DisplayService();
-        this.combatService = new CombatService(displayService);
+        this.combatService = new CombatService(displayService, itemService);
 
         itemService.placeRandomItems(roomService.getCurrentRoom().getDungeon());
 

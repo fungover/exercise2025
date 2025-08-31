@@ -7,9 +7,11 @@ import java.util.Scanner;
 
 public class CombatService {
     private final DisplayService displayService;
+    private final ItemService itemService;
 
-    public CombatService(DisplayService displayService) {
+    public CombatService(DisplayService displayService, ItemService itemService) {
         this.displayService = displayService;
+        this.itemService = itemService;
     }
 
     public void startCombat(Player player, Enemy enemy, Scanner scanner) {
@@ -46,8 +48,11 @@ public class CombatService {
                     return true;
                 }
                 case 2 -> {
-                    System.out.println("Using item...Soon to be implemented");
-                    return true;
+                    if (itemService.useItemFromInventory(player, scanner, displayService)) {
+                        return true;
+                    } else {
+                        return playerTurn(player, enemy, scanner);
+                    }
                 }
                 case 3 -> {
                     return false; // Flee

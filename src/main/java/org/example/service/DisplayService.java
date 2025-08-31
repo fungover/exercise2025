@@ -56,9 +56,9 @@ public class DisplayService {
         System.out.println("\n=== COMBAT: " + enemy.getName() + " (Health: " + enemy.getHealth() + ") ===");
         System.out.println("Your Health: " + player.getHealth() + "/" + player.getMaxHealth());
         System.out.println();
-        System.out.println("1. Attack (A) - Strike the enemy with a normal attack.");
-        System.out.println("2. Use Item (i) - Use potion");
-        System.out.println("3. Flee (F) - Escape from combat.");
+        System.out.println("1. Attack - Strike the enemy with a normal attack.");
+        System.out.println("2. Use items");
+        System.out.println("3. Flee - Escape from combat.");
         System.out.print("Enter choice: ");
     }
 }

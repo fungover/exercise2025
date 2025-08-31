@@ -2,13 +2,14 @@ package org.example.map;
 
 import org.example.entities.Enemy;
 import org.example.entities.Item;
+import org.example.entities.Position;
 
 public class Tile {
     private TileType type;
     private Enemy enemy;
     private Item item;
 
-    public Tile(TileType type) {
+    public Tile(Position position, TileType type) {
         this.type = type;
     }
 

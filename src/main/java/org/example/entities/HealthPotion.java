@@ -1,17 +1,12 @@
 package org.example.entities;
 
-public class HealthPotion extends Item {
+public class HealthPotion extends Item implements Usable {
 
     private final int healAmount;
 
     public HealthPotion(Position position) {
         super("Health Potion", "Restores 30 health points.", position);
         this.healAmount = 30;
-    }
-
-    public HealthPotion(Position position, int healAmount) {
-        super("Health Potion", "Restores " + healAmount + " Health points", position);
-        this.healAmount = healAmount;
     }
 
     @Override

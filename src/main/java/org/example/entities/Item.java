@@ -11,11 +11,17 @@ public abstract class Item {
         this.position = position;
     }
 
-    public abstract void use(Player player);
+    public String getName() {
+        return name;
+    }
 
-    public String getName() { return name; }
-    public String getDescription() { return description; }
-    public Position getPosition() { return position; }
+    public String getDescription() {
+        return description;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
 
     @Override
     public String toString() {

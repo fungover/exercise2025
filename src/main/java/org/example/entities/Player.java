@@ -1,7 +1,9 @@
 package org.example.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Player {
     private String name;
@@ -10,19 +12,21 @@ public class Player {
     private int damage;
     private Position position;
     private List<Item> inventory;
+    private Map<EquipmentSlot, Equippable> equippedItems;
 
     public Player(String name, int maxHealth, Position startPosition) {
         this.name = name;
         this.maxHealth = maxHealth;
         this.health = maxHealth;
-        this.damage = 15; // Default damage
+        this.damage = 10; // Default damage
         this.position = startPosition;
         this.inventory = new ArrayList<>();
+        this.equippedItems = new HashMap<>();
     }
 
     public void attack(Enemy enemy) {
         enemy.takeDamage(damage);
-        System.out.println("You attack " + enemy.getName() + " for " + damage + " damage!");
+        System.out.println(">You attack " + enemy.getName() + " for " + damage + " damage!");
     }
 
     public void takeDamage(int damage) {
@@ -50,10 +54,36 @@ public class Player {
 
     public void useItem(String itemName) {
         Item item = getItemByName(itemName);
-        if (item != null) {
-            item.use(this);
+        if (item != null && item instanceof Usable usable) {
+            usable.use(this);
             inventory.remove(item);
         }
+    }
+
+    public void equipItem(Equippable equipment) {
+
+        if (equippedItems.containsKey(equipment.getSlot())) {
+            unequipItem(equipment.getSlot());
+        }
+
+        equippedItems.put(equipment.getSlot(), equipment);
+        equipment.equip(this);
+    }
+
+    public Equippable unequipItem(EquipmentSlot slot) {
+        Equippable item = equippedItems.remove(slot);
+        if (item != null) {
+            item.unequip(this);
+        }
+        return item;
+    }
+
+    public Equippable getEquippedItem(EquipmentSlot slot) {
+        return equippedItems.get(slot);
+    }
+
+    public Map<EquipmentSlot, Equippable> getEquippedItems() {
+        return new HashMap<>(equippedItems);
     }
 
     public String getName() {

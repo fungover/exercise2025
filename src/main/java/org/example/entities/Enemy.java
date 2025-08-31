@@ -19,6 +19,8 @@ public abstract class Enemy {
 
     public abstract String getAttackMessage();
 
+    public abstract void dropLoot(Player player);
+
     protected void setHealth(int health) {
         this.health = Math.max(0, Math.min(maxHealth, health));
     }

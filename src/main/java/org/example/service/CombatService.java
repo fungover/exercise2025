@@ -15,10 +15,9 @@ public class CombatService {
     }
 
     public void startCombat(Player player, Enemy enemy, Scanner scanner) {
-        System.out.println("=== Combat started with " + enemy.getName() + " ===");
 
         while (!player.isDead() && !enemy.isDead()) {
-
+            
             displayService.displayCombatStatus(player, enemy);
             if (!playerTurn(player, enemy, scanner)) {
                 System.out.println("You fled from combat!");
@@ -26,6 +25,7 @@ public class CombatService {
             }
 
             if (enemy.isDead()) {
+                enemy.dropLoot(player);
                 return;
             }
 

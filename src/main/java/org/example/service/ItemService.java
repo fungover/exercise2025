@@ -1,9 +1,6 @@
 package org.example.service;
 
-import org.example.entities.HealthPotion;
-import org.example.entities.Item;
-import org.example.entities.Player;
-import org.example.entities.Position;
+import org.example.entities.*;
 import org.example.map.Dungeon;
 import org.example.utils.RandomGenerator;
 
@@ -12,7 +9,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ItemService {
-
     private final List<Item> items;
 
     public ItemService() {
@@ -67,6 +63,50 @@ public class ItemService {
             }
         } catch (NumberFormatException e) {
             System.out.println("invalid input.");
+            return false;
+        }
+    }
+
+    public boolean equipItemFromInventory(Player player, Scanner scanner, DisplayService displayService) {
+        List<Item> inventory = player.getInventory();
+
+        List<Equippable> equippableItems = inventory.stream()
+                .filter(item -> item instanceof Equippable)
+                .map(item -> (Equippable) item)
+                .toList();
+
+        if (equippableItems.isEmpty()) {
+            System.out.println("You have no equipment to equip.");
+            return false;
+        }
+
+        System.out.println("Choose equipment to equip:");
+        for (int i = 0; i < equippableItems.size(); i++) {
+            Equippable item = equippableItems.get(i);
+            System.out.println((i + 1) + ". " + ((Item) item).getName());
+        }
+
+        System.out.print("Enter number (or 0 to cancel): ");
+
+        try {
+            int choice = Integer.parseInt(scanner.nextLine().trim());
+
+            if (choice == 0) {
+                System.out.println("Cancelled.");
+                return false;
+            }
+
+            if (choice > 0 && choice <= equippableItems.size()) {
+                Equippable equipment = equippableItems.get(choice - 1);
+                player.equipItem(equipment);
+                player.removeFromInventory((Item) equipment);
+                return true;
+            } else {
+                System.out.println("Invalid choice.");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input.");
             return false;
         }
     }

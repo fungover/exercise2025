@@ -72,6 +72,10 @@ public class GameService {
         }
     }
 
+    public void handleEquip(Player player, Scanner scanner) {
+        itemService.equipItemFromInventory(player, scanner, displayService);
+    }
+
     public void handleFight(Player player, Scanner scanner) {
         Position playerPos = player.getPosition();
         Enemy enemy = enemyService.getEnemyAt(playerPos);
@@ -81,12 +85,12 @@ public class GameService {
 
             if (enemy.isDead()) {
                 enemyService.removeEnemy(enemy);
-                System.out.println("You have defeated the " + enemy.getName() + "!");
             }
         } else {
             System.out.println("No enemy to fight here.");
         }
     }
+
 
     public void displayGameState(Player player) {
         displayService.printMapWithPlayer(roomService.getCurrentRoom(), player, itemService, enemyService);

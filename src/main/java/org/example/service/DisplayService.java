@@ -37,7 +37,7 @@ public class DisplayService {
         System.out.println("Current Room: " + room.getName());
         System.out.println(player);
         System.out.println("Movement: North (N), South (S), East (E), West (W), Quit (Q)");
-        System.out.println("Actions: Pickup (P), Inventory (I), Use (U), Fight (F)");
+        System.out.println("Actions: Pickup (P), Inventory (I), Use (U), Equip (EQ), Fight (F)");
     }
 
     public void showInventory(Player player) {
@@ -53,8 +53,8 @@ public class DisplayService {
     }
 
     public void displayCombatStatus(Player player, Enemy enemy) {
-        System.out.println("\n=== COMBAT: " + enemy.getName() + " (Health: " + enemy.getHealth() + ") ===");
-        System.out.println("Your Health: " + player.getHealth() + "/" + player.getMaxHealth());
+        System.out.println("\n=== COMBAT: " + enemy.getName() + " Health: " + enemy.getHealth() + " ===");
+        System.out.println("=== YOUR HEALTH: " + player.getHealth() + "/" + player.getMaxHealth() + " ===");
         System.out.println();
         System.out.println("1. Attack - Strike the enemy with a normal attack.");
         System.out.println("2. Use items");

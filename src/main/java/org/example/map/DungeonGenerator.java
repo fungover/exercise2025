@@ -20,4 +20,30 @@ public class DungeonGenerator {
         this.grid = new Tile[height][width];
         //method to generate the map
     }
+
+    // Getter
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getPlayerStartX() {
+        return playerStartX;
+    }
+
+    public int getPlayerStartY() {
+        return playerStartY;
+    }
+
+    public Tile getTile(int x, int y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            return null;
+        }
+        return grid[y][x];
+    }
+
+
 }

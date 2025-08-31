@@ -1,7 +1,6 @@
 package org.example.service;
 
-import org.example.entities.IronSword;
-import org.example.entities.Player;
+import org.example.entities.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,15 +42,18 @@ public class LootService {
             }
             case "HELMET" -> {
                 helmetDropped = true;
-                System.out.println("To be implemented");
+                player.addToInventory(new IronHelm(player.getPosition()));
+                System.out.println("An Iron Helm was dropped!");
             }
             case "CHESTPLATE" -> {
                 chestplateDropped = true;
-                System.out.println("To be implemented");
+                player.addToInventory(new IronChestplate(player.getPosition()));
+                System.out.println("An Iron Chestplate was dropped!");
             }
             case "BOOTS" -> {
                 bootsDropped = true;
-                System.out.println("To be implemented");
+                player.addToInventory(new IronBoots(player.getPosition()));
+                System.out.println("A pair of Iron Boots was dropped!");
             }
         }
     }

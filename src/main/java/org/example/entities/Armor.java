@@ -12,12 +12,14 @@ public abstract class Armor extends Item implements Equippable {
 
     @Override
     public void equip(Player player) {
-        System.out.println("Equipped " + name + "! Defense increased by " + armorValue);
+        player.setDefense(player.getDefense() + getStatBonus());
+        System.out.println("Equipped " + getName() + "! Defense increased by " + getStatBonus() + ".");
     }
 
     @Override
     public void unequip(Player player) {
-        System.out.println("Unequipped " + name + "! Defense decreased by " + armorValue);
+        player.setDefense(player.getDefense() - getStatBonus());
+        System.out.println("Unequipped " + getName() + "! Defense decreased by " + getStatBonus());
     }
 
     @Override
@@ -29,4 +31,5 @@ public abstract class Armor extends Item implements Equippable {
     public int getStatBonus() {
         return armorValue;
     }
+
 }

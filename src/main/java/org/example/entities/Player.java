@@ -10,6 +10,7 @@ public class Player {
     private int health;
     private int maxHealth;
     private int damage;
+    private int defense = 0;
     private Position position;
     private List<Item> inventory;
     private Map<EquipmentSlot, Equippable> equippedItems;
@@ -29,8 +30,9 @@ public class Player {
         System.out.println(">You attack " + enemy.getName() + " for " + damage + " damage!");
     }
 
-    public void takeDamage(int damage) {
-        this.health = Math.max(0, health - damage);
+    public void takeDamage(int actualDamage, int originalDamage) {
+        this.health = Math.max(0, health - actualDamage);
+
     }
 
     public void heal(int healAmount) {
@@ -122,9 +124,17 @@ public class Player {
         this.position = position;
     }
 
+    public int getDefense() {
+        return defense;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
     @Override
     public String toString() {
-        return name + " [Health: " + health + "/" + maxHealth + ", Position: " + position + "]";
+        return name + " [Health: " + health + "/" + maxHealth + ", Damage: " + damage + ", Defense: " + defense + ", Position: " + position + "]";
     }
 
 }

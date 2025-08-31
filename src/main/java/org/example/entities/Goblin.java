@@ -11,13 +11,18 @@ public class Goblin extends Enemy {
 
     @Override
     public void attack(Player player) {
-        player.takeDamage(getDamage());
-        System.out.println(getAttackMessage());
+        int actualDamage = Math.max(1, getDamage() - player.getDefense());
+        player.takeDamage(actualDamage, getDamage());
+        System.out.println(getAttackMessage(actualDamage, getDamage()));
     }
-
+    
     @Override
-    public String getAttackMessage() {
-        return ">The Goblin stabs you with its sword for " + getDamage() + " damage!";
+    public String getAttackMessage(int actualDamage, int originalDamage) {
+        if (actualDamage < originalDamage) {
+            return "The Goblin stabs you for " + actualDamage + " damage! (reduced from " + originalDamage + " by armor)";
+        } else {
+            return "The Goblin stabs you for " + actualDamage + " damage!";
+        }
     }
 
     @Override

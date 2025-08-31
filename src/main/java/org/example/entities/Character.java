@@ -7,10 +7,10 @@ public abstract class Character {
     protected int baseDamage;
     protected Position position;
 
-    public Character(String name, int maxHP, int hp, int baseDamage, Position position) {
+    public Character(String name, int maxHP, int baseDamage, Position position) {
         this.name = name;
         this.maxHP = maxHP;
-        this.hp = hp;
+        this.hp = maxHP;
         this.baseDamage = baseDamage;
         this.position = position;
     }

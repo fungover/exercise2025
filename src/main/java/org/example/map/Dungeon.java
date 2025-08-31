@@ -1,11 +1,19 @@
 package org.example.map;
 
+import org.example.entities.Item;
 import org.example.entities.Position;
 
 public class Dungeon {
     private Tile[][] grid;
     private int width;
     private int height;
+
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
+    }
 
     public Dungeon(int width, int height) {
         this.width = width;
@@ -29,11 +37,23 @@ public class Dungeon {
     public void printDungeon(Position playerPos) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (playerPos.x() == x && playerPos.y() == y) System.out.print("P ");
-                else System.out.print(grid[y][x].getType() == TileType.FLOOR ? ". " : "# ");
+                Tile tile = grid[y][x];
+
+                if (playerPos.x() == x && playerPos.y() == y) {
+                    System.out.print("P ");
+                } else if (tile.getEnemy() != null && tile.getEnemy().isAlive()) {
+                    System.out.print("E ");
+                } else if (tile.getItem() != null) {
+                    System.out.print("I ");
+                } else if (tile.getType() == TileType.WALL) {
+                    System.out.print("# ");
+                } else if (tile.getType() == TileType.FLOOR) {
+                    System.out.print(". ");
+                } else {
+                    System.out.print("? ");
+                }
             }
             System.out.println();
         }
-
     }
 }

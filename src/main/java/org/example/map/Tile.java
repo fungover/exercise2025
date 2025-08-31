@@ -17,22 +17,24 @@ public class Tile {
     public void setType(TileType type) { this.type = type; }
 
     public Enemy getEnemy() { return enemy; }
-    public void setEnemy(Enemy enemy) { this.type = enemy == null ? TileType.EMPTY : TileType.ENEMY; }
+    public void setEnemy(Enemy enemy) { this.enemy = enemy;}
 
     public Item getItem() { return item; }
-    public void setItem(Item item) { this.item = item; this.type = item == null ? TileType.EMPTY : TileType.ITEM; }
+    public void setItem(Item item) {this.item = item; }
+    public boolean hasItem() { return item != null; }
 
     public boolean isWalkable() { return type != TileType.WALL; }
 
     @Override
     public String toString() {
+        String symbol = ".";
+        switch(type) {
+            case WALL -> symbol = "#";
+            case EMPTY -> symbol = ".";
+        }
+        if (enemy != null && item != null) return "E/I";
         if (enemy != null) return "E";
         if (item != null) return "I";
-        return switch(type) {
-            case WALL -> "#";
-            case EMPTY -> ".";
-            case EXIT -> "⌂";
-            default -> "?";
-        };
+        return symbol;
     }
 }

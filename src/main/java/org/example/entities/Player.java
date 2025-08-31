@@ -25,4 +25,8 @@ public class Player extends Character {
     public void showInventory() {
         inventory.showItems();
     }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
 }

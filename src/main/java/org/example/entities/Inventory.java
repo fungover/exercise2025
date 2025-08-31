@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Inventory {
     private List<Item> items = new ArrayList<Item>();
+    public List<Item> getItems() { return items; }
 
     public void addItem(Item item) {
         items.add(item);
@@ -23,5 +24,9 @@ public class Inventory {
         for (int i = 0; i < items.size(); i++) {
             System.out.println(i +": " + items.get(i).getName());
         }
+    }
+
+    public boolean isEmpty() {
+        return items.isEmpty();
     }
 }

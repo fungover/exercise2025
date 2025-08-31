@@ -17,7 +17,7 @@ public class CombatService {
             System.out.println(player.getName() + " is dead");
         }
         else {
-            System.out.println(enemy.getName() + " is alive");
+            System.out.println(enemy.getName() + " is dead!");
         }
     }
 }

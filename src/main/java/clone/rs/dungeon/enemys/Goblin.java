@@ -26,4 +26,9 @@ public class Goblin extends Enemy {
   public double level() {
     return 3;
   }
+
+  @Override
+  public double location(int x, int y) {
+    return x.y;
+  }
 }

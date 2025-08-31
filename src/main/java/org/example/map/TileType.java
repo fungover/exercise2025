@@ -1,4 +1,10 @@
 package org.example.map;
 
-public class TileType {
+public enum TileType {
+    EMPTY,
+    WALL,
+    ITEM,
+    ENEMY,
+    PLAYER,
+    EXIT
 }

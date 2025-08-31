@@ -8,16 +8,18 @@ import java.util.Scanner;
 public class CombatService {
     private final DisplayService displayService;
     private final ItemService itemService;
+    private final LootService lootService;
 
     public CombatService(DisplayService displayService, ItemService itemService) {
         this.displayService = displayService;
         this.itemService = itemService;
+        this.lootService = new LootService();
     }
 
     public void startCombat(Player player, Enemy enemy, Scanner scanner) {
 
         while (!player.isDead() && !enemy.isDead()) {
-            
+
             displayService.displayCombatStatus(player, enemy);
             if (!playerTurn(player, enemy, scanner)) {
                 System.out.println("You fled from combat!");
@@ -25,7 +27,7 @@ public class CombatService {
             }
 
             if (enemy.isDead()) {
-                enemy.dropLoot(player);
+                enemy.dropLoot(player, lootService);
                 return;
             }
 

@@ -13,6 +13,7 @@ public class GameService {
     private ItemService itemService;
     private EnemyService enemyService;
     private final DisplayService displayService;
+    private final LootService lootService;
     private final CombatService combatService;
 
     public GameService() {
@@ -21,6 +22,7 @@ public class GameService {
         this.itemService = new ItemService();
         this.enemyService = new EnemyService();
         this.displayService = new DisplayService();
+        this.lootService = new LootService();
         this.combatService = new CombatService(displayService, itemService);
 
         itemService.placeRandomItems(roomService.getCurrentRoom().getDungeon());

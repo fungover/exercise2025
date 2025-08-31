@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import org.example.service.LootService;
+
 public class Goblin extends Enemy {
     private static boolean swordDropped = false;
 
@@ -19,14 +21,7 @@ public class Goblin extends Enemy {
     }
 
     @Override
-    public void dropLoot(Player player) {
-        if (!swordDropped) {
-            swordDropped = true;
-            IronSword droppedSword = new IronSword(player.getPosition());
-            player.addToInventory(droppedSword);
-            System.out.println(">The Goblin has fallen and dropped an Iron Sword! It has been added to your inventory.");
-        } else {
-            System.out.println(">No loot dropped.");
-        }
+    public void dropLoot(Player player, LootService lootService) {
+        lootService.tryDropRandomLoot(player);
     }
 }

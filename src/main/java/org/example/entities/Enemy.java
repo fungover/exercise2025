@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import org.example.service.LootService;
+
 public abstract class Enemy {
     private String name;
     private int health;
@@ -19,7 +21,7 @@ public abstract class Enemy {
 
     public abstract String getAttackMessage();
 
-    public abstract void dropLoot(Player player);
+    public abstract void dropLoot(Player player, LootService lootService);
 
     protected void setHealth(int health) {
         this.health = Math.max(0, Math.min(maxHealth, health));

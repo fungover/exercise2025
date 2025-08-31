@@ -2,6 +2,7 @@ package org.example.entities.characters;
 
 import org.example.entities.enemies.Enemy;
 import org.example.entities.enemies.Goblin;
+import org.example.entities.items.Weapon;
 
 public abstract class Player {
     private String name;
@@ -72,6 +73,10 @@ public abstract class Player {
     //Methods
     public String getAttackMessage(Enemy enemy) {
         return getName() + " attacks " + enemy.getName() + " for " + getDamage() + " damage!";
+    }
+
+    public String equipWeapon (Weapon weapon) {
+        return getName() + "equipped " + weapon.getName();
     }
 
     //Randomize all damage

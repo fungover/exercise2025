@@ -10,7 +10,7 @@ public abstract class Enemy {
     public Enemy(String name, int health, int maxHealth, int x, int y, int damage) {
         this.name = name;
         this.health = health;
-        this.maxHealth = health;
+        this.maxHealth = maxHealth;
         this.x = x;
         this.y = y;
         this.damage = damage;

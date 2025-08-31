@@ -8,12 +8,12 @@ public class Goblin extends Enemy {
 
     @Override
     public String getAttackMessage() {
-        return "The" + getName() + "attacks you for " + getDamage();
+        return "The " + getName() + " attacks you for " + getDamage();
     }
 
     @Override
     public String getDeathMessage() {
-        return "The" + getName() + "dies";
+        return "The " + getName() + " dies";
     }
 
 }

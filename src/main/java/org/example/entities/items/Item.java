@@ -44,8 +44,6 @@ public abstract class Item {
     //Method
     public abstract String getEquipMessage();
     public abstract String getUnequipMessage();
-
-    //Send in player?
     public abstract String getUseMessage();
 
 

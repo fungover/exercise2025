@@ -26,11 +26,9 @@ public abstract class Character {
     public int getBaseDamage() {
         return baseDamage;
     }
-
     public void setBaseDamage(int baseDamage) {
         this.baseDamage = baseDamage;
     }
-
     public Position getPosition() {
         return position;
     }
@@ -44,5 +42,10 @@ public abstract class Character {
         hp = Math.min(maxHP, hp + Math.max(0, amount));
     }
     public void takeDamage(int dmg) { hp = Math.max(0, hp - Math.max(0, dmg));
+    }
+    public void attack(Character target) {
+        System.out.println(name + " attacks " + target.getName() + " for " + baseDamage + " damage!");
+        target.takeDamage(baseDamage);
+        System.out.println(target.getName() + " now has " + target.getHp() + " HP left.");
     }
 }

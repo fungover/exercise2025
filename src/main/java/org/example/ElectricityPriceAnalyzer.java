@@ -19,6 +19,82 @@ public class ElectricityPriceAnalyzer {
         return Path.of("output", "prices_" + zone + ".csv");
     }
 
+    public static void printCheapestAndMostExpensiveToday(String zone) throws IOException, InterruptedException {
+        Path csv = csvPathForZone(zone);
+        if (Files.exists(csv)) {
+            ElectricityPriceFetcher.downloadTodayAndTomorrow(zone);
+        }
+
+        LocalDate today = LocalDate.now(zoneId);
+
+        PriceEntry cheapest = null;
+        PriceEntry mostExpensive = null;
+        BigDecimal minPrice = null;
+        BigDecimal maxPrice = null;
+        OffsetDateTime minStart = null;
+        OffsetDateTime maxStart = null;
+
+        try (var reader = Files.newBufferedReader(csv)) {
+            String line;
+            boolean skipFirstLine = true;
+
+            while ((line = reader.readLine()) != null) {
+                if (skipFirstLine) {
+                    skipFirstLine = false;
+                    continue;
+                }
+
+                if (line.isBlank()) {
+                    continue;
+                }
+
+                String[] cols = line.split(";", -1);
+                if (cols.length < 3) {
+                    continue;
+                }
+
+                String timeStart = cols[0];
+                String timeEnd   = cols[1];
+                String sekStr    = cols[2];
+
+                if (!timeStart.startsWith(today.toString())) {
+                    continue;
+                }
+                if (sekStr.isBlank()) {
+                    continue;
+                }
+
+                BigDecimal price;
+                OffsetDateTime start;
+                try {
+                    price = new BigDecimal(sekStr);
+                    start = OffsetDateTime.parse(timeStart);
+                } catch (Exception e) {
+                    continue;
+                }
+
+                if (minPrice == null || price.compareTo(minPrice) < 0
+                        || (price.compareTo(minPrice) == 0 && start.isBefore(minStart))) {
+                    minPrice = price;
+                    minStart = start;
+                    cheapest = new PriceEntry(price, null, null, timeStart, timeEnd);
+                }
+
+                if (maxPrice == null || price.compareTo(maxPrice) > 0
+                        || (price.compareTo(maxPrice) == 0 && start.isBefore(maxStart))) {
+                    maxPrice = price;
+                    maxStart = start;
+                    mostExpensive = new PriceEntry(price, null, null, timeStart, timeEnd);
+                }
+            }
+        }
+        System.out.println(zone + " Cheapest and Most Expensive hours for today");
+        System.out.println("Cheapest: From: " + cheapest.time_start() + " To: " + cheapest.time_end()
+                + " Price: " + cheapest.SEK_per_kWh() + " SEK per kWh");
+        System.out.println("Most expensive: From: " + mostExpensive.time_start() + " To: " + mostExpensive.time_end()
+                + " Price: " + mostExpensive.SEK_per_kWh() + " SEK per kWh");
+    }
+
     public static void printBestChargingHoursFromNow(String zone, int hours) throws IOException, InterruptedException {
         if (hours <= 0) {
             System.out.println("Window must be > 0 hours.");
@@ -150,7 +226,6 @@ public class ElectricityPriceAnalyzer {
             }
         }
     }
-
 
     public static boolean hasPriceForToday(String zone) throws IOException {
         Path csv = csvPathForZone(zone);

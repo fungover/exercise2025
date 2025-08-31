@@ -27,7 +27,7 @@ public class Menu {
                     showMenuForMeanPrice(scanner);
                     break;
                 case 3:
-                    // Identify and print hours with cheapest and most expensive hours;
+                    showMenuForMostExpensiveAndCheapestHours(scanner);
                     break;
                 case 4:
                     showMenuForBestChargingHoursFromNow(scanner);
@@ -40,11 +40,34 @@ public class Menu {
 
     }
 
+    public static void showMenuForMostExpensiveAndCheapestHours(Scanner scanner) throws IOException, InterruptedException {
+        boolean isRunning = true;
+
+        do {
+            System.out.println("Enter what zone you want to see the most expensive and cheapest hours for:");
+            System.out.println("SE1 = Luleå / Norra Sverige");
+            System.out.println("SE2 = Sundsvall / Norra Mellansverige");
+            System.out.println("SE3 = Stockholm / Södra Mellansverige");
+            System.out.println("SE4 = Malmö / Södra Sverige");
+
+            String choice = scanner.nextLine().toUpperCase();
+
+            switch (choice) {
+                case "SE1", "SE2", "SE3", "SE4" -> {
+                    isRunning = false;
+                    ElectricityPriceAnalyzer.printCheapestAndMostExpensiveToday(choice);
+                }
+                default -> System.out.println("Invalid choice. You must enter a valid zone.");
+            }
+
+        } while (isRunning);
+    }
+
     public static void showMenuForBestChargingHoursFromNow(Scanner scanner) throws IOException, InterruptedException {
         boolean isRunning = true;
 
         do {
-            System.out.println("Enter what zone you want to see the mean price for:");
+            System.out.println("Enter what zone you want to see the best charging hours for:");
             System.out.println("SE1 = Luleå / Norra Sverige");
             System.out.println("SE2 = Sundsvall / Norra Mellansverige");
             System.out.println("SE3 = Stockholm / Södra Mellansverige");

@@ -26,6 +26,11 @@ public abstract class Character {
     public int getBaseDamage() {
         return baseDamage;
     }
+
+    public void setBaseDamage(int baseDamage) {
+        this.baseDamage = baseDamage;
+    }
+
     public Position getPosition() {
         return position;
     }

@@ -1,19 +1,23 @@
 package org.example.entities.enemies;
 
+import org.example.utils.RandomUtils;
+
 public abstract class Enemy {
     private String name;
     private int health;
     private int maxHealth;
     private int x, y;
-    private int damage;
+    private int minDamage;
+    private int maxDamage;
 
-    public Enemy(String name, int health, int maxHealth, int x, int y, int damage) {
+    public Enemy(String name, int health, int maxHealth, int x, int y, int minDamage, int maxDamage) {
         this.name = name;
         this.health = health;
         this.maxHealth = maxHealth;
         this.x = x;
         this.y = y;
-        this.damage = damage;
+        this.minDamage = minDamage;
+        this.maxDamage = maxDamage;
     }
 
     //Getters
@@ -38,7 +42,7 @@ public abstract class Enemy {
     }
 
     public int getDamage() {
-        return damage;
+        return RandomUtils.getRandomNumber(minDamage, maxDamage);
     }
 
     //Setters
@@ -62,8 +66,9 @@ public abstract class Enemy {
         this.y = y;
     }
 
-    public void setDamage(int damage) {
-        this.damage = damage;
+    public void setDamage(int minDamage, int maxDamage) {
+        this.minDamage = minDamage;
+        this.maxDamage = maxDamage;
     }
 
     //Methods

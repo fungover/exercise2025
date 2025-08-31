@@ -2,6 +2,7 @@ package org.example.entities.characters;
 
 import org.example.entities.enemies.Enemy;
 import org.example.entities.enemies.Goblin;
+import org.example.entities.items.Item;
 import org.example.entities.items.Weapon;
 
 public abstract class Player {
@@ -10,14 +11,16 @@ public abstract class Player {
     private int maxHealth;
     private int x, y;
     private int damage;
+    private Weapon equippedWeapon;
 
-    public Player(int damage, int y, int x, int maxHealth, int health, String name) {
+    public Player(int damage, int y, int x, int maxHealth, int health, String name, Weapon weapon) {
         this.damage = damage;
         this.y = y;
         this.x = x;
         this.maxHealth = maxHealth;
         this.health = health;
         this.name = name;
+        this.equippedWeapon = weapon;
     }
 
     //Getters
@@ -45,6 +48,8 @@ public abstract class Player {
         return damage;
     }
 
+    public Weapon getEquippedWeapon(){return equippedWeapon;}
+
     //Setters
     public void setName(String name) {
         this.name = name;
@@ -70,6 +75,11 @@ public abstract class Player {
         this.damage = damage;
     }
 
+    public String setEquippedWeapon(Weapon weapon){
+        this.equippedWeapon = weapon;
+        return getName() + " equipped " + weapon.getName();
+    }
+
     //Methods
     public String getAttackMessage(Enemy enemy) {
         return getName() + " attacks " + enemy.getName() + " for " + getDamage() + " damage!";
@@ -79,7 +89,6 @@ public abstract class Player {
         return getName() + "equipped " + weapon.getName();
     }
 
-    //Randomize all damage
     public String getDeathMessage(Enemy enemy) {
         return getName() + "dies after getting struck for" + enemy.getDamage() + " damage!";
     }

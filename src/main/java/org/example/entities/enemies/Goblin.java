@@ -2,8 +2,9 @@ package org.example.entities.enemies;
 
 public class Goblin extends Enemy {
 
-    public Goblin(int x, int y) {
-        super("Goblin", 30, 30, x, y, 5);
+    public Goblin(int x, int y)
+    {
+        super("Goblin", 30, 30, x, y, 1, 5);
     }
 
     @Override

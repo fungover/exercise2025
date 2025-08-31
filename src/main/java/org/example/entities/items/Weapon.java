@@ -6,10 +6,10 @@ public class Weapon extends Item {
     private int minDamage;
     private int maxDamage;
 
-    public Weapon(String name, String description, ItemType type) {
-        super(name, description, type);
-        this.minDamage = 0;
-        this.maxDamage = 0;
+    public Weapon(String name, String description, int minDamage, int maxDamage) {
+        super(name, description, ItemType.Weapon);
+        this.minDamage = minDamage;
+        this.maxDamage = maxDamage;
     }
 
     //Getters
@@ -34,18 +34,14 @@ public class Weapon extends Item {
     public int getDamage() {
         return RandomUtils.getRandomNumber( minDamage, maxDamage );
     }
-
-    //Override Methods
-    @Override
     public String getEquipMessage() {
         return "You equip the " + getName();
     }
-
-    @Override
     public String getUnequipMessage() {
         return "You unequip the " + getName();
     }
 
+    //Override Methods
     @Override
     public String getUseMessage() {
         return "You use the " + getName() + "for " + getDamage() + " damage";

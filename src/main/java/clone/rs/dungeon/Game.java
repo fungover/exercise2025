@@ -1,7 +1,9 @@
 package clone.rs.dungeon;
 
-import clone.rs.dungeon.enemy.Enemy;
-import clone.rs.dungeon.enemy.Goblin;
+import clone.rs.dungeon.enemys.Enemy;
+import clone.rs.dungeon.enemys.Goblin;
+import clone.rs.dungeon.weapons.Hand;
+import clone.rs.dungeon.weapons.Weapon;
 
 public class Game {
   final private String name;
@@ -12,7 +14,8 @@ public class Game {
 
   public void run() {
     System.out.printf("Welcome to %s%n", this.name);
-    Enemy goblin = new Goblin();
+    Weapon hand = new Hand();
+    Enemy goblin = new Goblin(hand.damage());
     goblin.hit();
   }
 

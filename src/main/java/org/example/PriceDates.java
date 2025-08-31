@@ -12,10 +12,10 @@ class PriceDates {
     public void setDates(BigDecimal val, Price[] priceArray) {
         for (var price : priceArray) {
             if (val.compareTo(price.getSekPerKWh()) == 0) {
-                dateStart = price.getTimeStart().substring(0, 10);
-                dateEnd = price.getTimeEnd().substring(0, 10);
-                timeStart = price.getTimeStart().substring(11, 16);
-                timeEnd = price.getTimeEnd().substring(11, 16);
+                dateStart = price.getStartDate();
+                dateEnd = price.getEndDate();
+                timeStart = price.getHourStart();
+                timeEnd = price.getHourEnd();
                 break;
             }
         }

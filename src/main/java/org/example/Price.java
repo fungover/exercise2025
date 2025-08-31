@@ -41,4 +41,20 @@ class Price {
     public String getTimeEnd() {
         return timeEnd;
     }
+
+    public String getHourStart() {
+            return timeStart.substring(11, 16);
+    }
+
+    public String getStartDate() {
+        return timeStart.substring(0, 10);
+    }
+
+    public String getHourEnd() {
+        return timeEnd.substring(11, 16);
+    }
+
+    public String getEndDate() {
+        return timeEnd.substring(0, 10);
+    }
 }

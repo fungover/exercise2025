@@ -3,6 +3,7 @@ package org.example.map;
 import org.example.entities.enemies.Enemy;
 import org.example.entities.items.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Tile {
@@ -23,6 +24,7 @@ public class Tile {
 
     public Tile(TileType type) {
         this.type = type;
+        this.items = new ArrayList<>();
     }
 
     //Getters

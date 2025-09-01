@@ -5,11 +5,21 @@ import java.util.List;
 
 public class Inventory {
     private List<Item> items = new ArrayList<Item>();
-    public List<Item> getItems() { return items; }
+
+    public boolean contains(Item item) {
+        return items.contains(item);
+    }
 
     public void addItem(Item item) {
         items.add(item);
         System.out.println(item.getName() + " added to inventory!");
+    }
+
+    public Item getItem(int index) {
+        if (index >= 0 && index < items.size()) {
+            return items.get(index);
+        }
+        return null;
     }
 
     public void useItem(int index, Character character) {

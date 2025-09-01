@@ -29,7 +29,7 @@ public class ItemTest {
     @Test
     public void testGetRandomItem() {
         for (int i = 0; i < 10; i++) {
-            Item item = Item.getRandomItem(); // if the method is inside Item
+            Item item = Item.getRandomItem();
             assertNotNull(item);
             assertTrue(item instanceof Potion || item instanceof Weapon);
         }

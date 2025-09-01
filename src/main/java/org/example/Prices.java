@@ -96,7 +96,7 @@ public class Prices {
             }
         }
 
-        System.out.println("Bästa laddningstid är: " + durationHours + " timmar:");
+        System.out.println("Bästa laddningstid för " + durationHours + " timmar:");
         for (int i = minStartIndex; i < minStartIndex + durationHours; i++) {
             PriceEntry entry = prices.get(i);
             System.out.printf("%s - %.2f kr/kWh%n",

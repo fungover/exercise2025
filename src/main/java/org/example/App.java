@@ -79,8 +79,16 @@ public class App {
 
                 case "4":
                     System.out.print("Laddningstid? (2, 4 eller 8 timmar: ");
-                    int hours = Integer.parseInt(scanner.nextLine());
-                    Prices.findBestChargingTime(allPrices, hours);
+                    try {
+                        int hours = Integer.parseInt(scanner.nextLine());
+                        if (hours != 2 && hours != 4 && hours != 8) {
+                            System.out.println("Ogiltig laddningstid. Välj 2, 4 eller 8 timmar.");
+                        } else {
+                            Prices.findBestChargingTime(allPrices, hours);
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Ogiltig inmatning. Ange ett nummer.");
+                    }
                     break;
 
                 case "5":

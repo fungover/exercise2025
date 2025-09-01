@@ -1,12 +1,12 @@
 package org.example;
 
-import org.example.entities.Player;
 
-import java.rmi.server.Skeleton;
+import org.example.game.GameLoop;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello There!");
+        GameLoop game = new GameLoop();
+        game.start();
 
 
     }

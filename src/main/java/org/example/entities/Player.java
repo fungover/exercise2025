@@ -22,33 +22,19 @@ public class Player {
 
     //getters
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
 
-    public int getHealth() {
-        return health;
-    }
+    public int getHealth() {return health;}
 
-    public int getMaxHealth() {
-        return maxHealth;
-    }
+    public int getMaxHealth() {return maxHealth;}
 
-    public int getX() {
-        return x;
-    }
+    public int getX() {return x;}
 
-    public int getY() {
-        return y;
-    }
+    public int getY() {return y;}
 
-    public int getDamage() {
-        return damage;
-    }
+    public int getDamage() {return damage;}
 
-    public List<Item> getInventory() {
-        return inventory;
-    }
+    public List<Item> getInventory() {return inventory;}
 
     //setters
     public void setPosition(int x, int y) {

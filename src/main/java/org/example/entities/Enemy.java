@@ -16,29 +16,17 @@ public abstract class Enemy {
 
     //Getters
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
 
-    public int getHealth() {
-        return health;
-    }
+    public int getHealth() {return health;}
 
-    public int getMaxHealth() {
-        return maxHealth;
-    }
+    public int getMaxHealth() {return maxHealth;}
 
-    public int getDamage() {
-        return damage;
-    }
+    public int getDamage() {return damage;}
 
-    public int getX() {
-        return x;
-    }
+    public int getX() {return x;}
 
-    public int getY() {
-        return y;
-    }
+    public int getY() {return y;}
 
 
     //Setters
@@ -52,9 +40,7 @@ public abstract class Enemy {
         this.health = Math.max(0, this.health - damage);
     }
 
-    public boolean isAlive() {
-        return health > 0;
-    }
+    public boolean isAlive() {return health > 0;}
 
     //methods
 

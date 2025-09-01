@@ -13,6 +13,11 @@ public class App {
         System.out.print("Ange elområde: SE1, SE2, SE3 eller SE4 ");
         String area = scanner.nextLine().toUpperCase();
 
+        if (!area.matches("SE[1-4]")) {
+            System.out.println("Ogiltigt elområde. Programmet avslutas.");
+            return;
+        }
+
         while (true) {
             System.out.println("-------------");
             System.out.println("  Elpriser " + area );

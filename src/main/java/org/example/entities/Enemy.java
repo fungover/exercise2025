@@ -2,7 +2,7 @@ package org.example.entities;
 
 import org.example.map.Tile;
 
-public abstract class Enemy {
+public abstract class Enemy implements Hostile {
     // Fields accessible to subclasses
     protected String name;
     protected int health;

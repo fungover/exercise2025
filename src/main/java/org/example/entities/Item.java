@@ -8,7 +8,8 @@ public class Item {
 
     public enum ItemType {
         WEAPON,
-        CONSUMABLE
+        CONSUMABLE,
+        KEY
     }
 
     // Constructor

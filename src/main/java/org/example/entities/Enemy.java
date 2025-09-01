@@ -1,6 +1,6 @@
 package org.example.entities;
 
-class Enemy implements Health {
+public class Enemy implements Health {
     private int health;
 
     public void setHealth(int health) {

@@ -1,8 +1,7 @@
 package org.example.map;
 
-import org.example.entities.Enemy;
-import org.example.entities.DroolingDog;
-import org.example.entities.GiantHeadlessChicken;
+import org.example.entities.*;
+
 import java.util.Random;
 
 public class FarmageddonMap {
@@ -47,9 +46,12 @@ public class FarmageddonMap {
         placeEnemy(new GiantHeadlessChicken(1, 5));
 
         // Place items
-        placeItem(3, 3);
-        placeItem(5, 2);
+        placeItem(new HealingMilk(3, 3));
+        placeItem(new HealingMilk(5, 2));
+        placeItem(new Pitchfork(1, 1));
+        placeItem(new Pitchfork(7, 4));
     }
+
 
     private void placeEnemy(Enemy enemy) {
         int x = enemy.getX();
@@ -59,11 +61,15 @@ public class FarmageddonMap {
         }
     }
 
-    private void placeItem(int x, int y) {
+    private void placeItem(Item item) {
+        int x = item.getX();
+        int y = item.getY();
         if (isValidTile(x, y)) {
             grid[y][x].setType(Tile.Type.ITEM);
+            grid[y][x].setItem(item);
         }
     }
+
 
     private boolean isValidTile(int x, int y) {
         return x >= 0 && x < width && y >= 0 && y < height && grid[y][x].getType() == Tile.Type.PATH;

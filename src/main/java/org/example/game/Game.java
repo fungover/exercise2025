@@ -1,6 +1,7 @@
 package org.example.game;
 
 import org.example.entities.Enemy;
+import org.example.entities.Pitchfork;
 import org.example.entities.Player;
 import org.example.map.FarmageddonMap;
 import org.example.map.Tile;
@@ -72,7 +73,7 @@ public class Game {
             case "move east" -> move(1, 0);
             case "move west" -> move(-1, 0);
             case "look" -> look();
-//            case "inventory" -> showInventory(); //TODO fix inventory
+            case "inventory" -> showInventory();
             case "attack" -> attack();
             default -> System.out.println("Unknown command. Try again");
         }
@@ -82,7 +83,7 @@ public class Game {
         int newX = player.getX() + dx;
         int newY = player.getY() + dy;
 
-        // Controlls that the player can't move outside the farm'
+        // Controlls that the player can't move outside the farm
         if (newX < 0 || newX >= map.getWidth() || newY < 0 || newY >= map.getHeight()) {
             System.out.println("You can't move outside the farm!");
             return;
@@ -110,10 +111,10 @@ public class Game {
         System.out.println("You are standing on a " + tile.getType());
     }
 
-//    private void showInventory() {
-//        System.out.println("Inventory:");
-//        player.getInventory().forEach(item -> System.out.println("- " + item.getName()));
-//    }
+    private void showInventory() {
+        System.out.println("Inventory:");
+      player.getInventory().forEach(item -> System.out.println("- " + item.getName()));
+   }
 
     private void attack() {
         Tile tile = map.getTile(player.getX(), player.getY());

@@ -1,6 +1,7 @@
 package org.example.map;
 
 import org.example.entities.Enemy;
+import org.example.entities.Item;
 
 public class Tile {
     private Enemy enemy;
@@ -12,6 +13,12 @@ public class Tile {
     public void setEnemy(Enemy enemy) {
         this.enemy = enemy;
     }
+
+    private Item item;
+
+    public void setItem(Item item) { this.item = item; }
+    public Item getItem() { return item; }
+
 
     public enum Type { WALL, PATH, ENEMY, ITEM, PLAYER_START }
 

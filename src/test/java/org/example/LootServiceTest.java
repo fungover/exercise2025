@@ -64,6 +64,7 @@ class LootServiceTest {
 
     }
 
+    // TEST 3: Testing so that the correct item is dropped based on mocked Random values. (SWORD)
     @Test
     void testSwordDrop() {
 
@@ -84,6 +85,7 @@ class LootServiceTest {
         assertEquals(1, player.getInventory().size()); // Assert that the player's inventory now has 1 item
     }
 
+    // TEST 4: Testing so that the correct item is dropped based on mocked Random values. (HELMET)
     @Test
     void testHelmetDrop() {
 
@@ -104,6 +106,7 @@ class LootServiceTest {
         assertEquals(1, player.getInventory().size()); // Assert that the player's inventory now has 1 item
     }
 
+    // TEST 5: Testing so that the correct item is dropped based on mocked Random values. (CHESTPLATE)
     @Test
     void testChestplateDrop() {
 
@@ -124,6 +127,7 @@ class LootServiceTest {
         assertEquals(1, player.getInventory().size()); // Assert that the player's inventory now has 1 item
     }
 
+    // TEST 6: Testing so that the correct item is dropped based on mocked Random values. (BOOTS)
     @Test
     void testBootsDrop() {
 

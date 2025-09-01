@@ -35,15 +35,18 @@ public class RandomGenerator {
         return null; // Return null if no floor position is found after max attempts
     }
 
-    public List<Position> getRandomFloorPositions(int count, Dungeon dungeon) { // Get multiple random floor positions
-        List<Position> positions = new ArrayList<>(); // List to hold the positions
-        for (int i = 0; i < count; i++) { // Loop to find the required number of positions
-            Position pos = findRandomFloorPosition(dungeon); // find a position
-            if (pos != null) { // Check if a valid position was found
-                positions.add(pos); // Add position x,y to the list
+    public List<Position> getRandomFloorPositions(int count, Dungeon dungeon) {
+        List<Position> positions = new ArrayList<>();
+        int attempts = 0;
+
+        while (positions.size() < count && attempts < 100) {
+            Position pos = findRandomFloorPosition(dungeon);
+            if (pos != null && !positions.contains(pos)) { // Ensure no duplicates on the same position
+                positions.add(pos);
             }
+            attempts++;
         }
-        return positions; // Return the list of positions
+        return positions;
     }
 
     public boolean nextBoolean() {

@@ -3,18 +3,10 @@ package org.example.map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.example.map.DungeonMap;
-import org.example.map.Room;
-import org.example.map.TileType;
 
-/**
- * Seeded RNG dungeon generator. Current step: place non-overlapping rooms.
- * Future steps: connect rooms with corridors, boss placement, items, enemies.
- */
+/** Next steps (later): boss placement, items, enemies. */
 public final class MapGenerator {
     private final Random random;
-
-    // Tunable parameters with descriptive names
     private final int minRoomSize;
     private final int maxRoomSize;
     private final int desiredRoomCount;
@@ -41,9 +33,25 @@ public final class MapGenerator {
         this.maxPlacementAttempts = maxPlacementAttempts;
     }
 
-    /** Builds a map by carving randomly-placed, non-overlapping rooms into an all-wall grid. */
+    /** Builds a map: rooms + corridors; marks SPAWN in the first room. */
     public DungeonMap generate(int mapWidth, int mapHeight) {
         DungeonMap map = new DungeonMap(mapWidth, mapHeight);
+        List<Room> placedRooms = placeRooms(map, mapWidth, mapHeight);
+
+        if (placedRooms.size() >= 2) {
+            connectRoomsWithCorridors(map, placedRooms);
+        }
+
+        // Mark SPAWN in the first room for now
+        if (!placedRooms.isEmpty()) {
+            Room firstRoom = placedRooms.getFirst();
+            map.tileAt(firstRoom.left() + 1, firstRoom.top() + 1).setType(TileType.SPAWN);
+        }
+
+        return map;
+    }
+
+    private List<Room> placeRooms(DungeonMap map, int mapWidth, int mapHeight) {
         List<Room> placedRooms = new ArrayList<>();
 
         int attemptsMade = 0;
@@ -54,8 +62,8 @@ public final class MapGenerator {
             int roomHeight = randomBetween(minRoomSize, maxRoomSize);
 
             // Keep a 1-tile border so rooms don’t touch the map edge.
-            int left = randomBetween(1, mapWidth  - roomWidth  - 2);
-            int top  = randomBetween(1, mapHeight - roomHeight - 2);
+            int left = randomBetween(1, Math.max(1, mapWidth  - roomWidth  - 2));
+            int top  = randomBetween(1, Math.max(1, mapHeight - roomHeight - 2));
 
             Room candidate = new Room(left, top, roomWidth, roomHeight);
 
@@ -71,14 +79,7 @@ public final class MapGenerator {
             carveRoom(map, candidate);
             placedRooms.add(candidate);
         }
-
-        // Mark SPAWN in the first room for now (we'll improve later)
-        if (!placedRooms.isEmpty()) {
-            Room firstRoom = placedRooms.getFirst();
-            map.tileAt(firstRoom.left() + 1, firstRoom.top() + 1).setType(TileType.SPAWN);
-        }
-
-        return map;
+        return placedRooms;
     }
 
     private void carveRoom(DungeonMap map, Room room) {
@@ -89,7 +90,86 @@ public final class MapGenerator {
         }
     }
 
+    /** Connect each room to the nearest already-placed room with an L-shaped corridor. */
+    private void connectRoomsWithCorridors(DungeonMap map, List<Room> roomsInPlacementOrder) {
+        for (int index = 1; index < roomsInPlacementOrder.size(); index++) {
+            Room current = roomsInPlacementOrder.get(index);
+            Room nearest = findNearestRoom(current, roomsInPlacementOrder, index); // search among [0, index-1]
+
+            int startX = roomCenterX(current);
+            int startY = roomCenterY(current);
+            int targetX = roomCenterX(nearest);
+            int targetY = roomCenterY(nearest);
+
+            // Randomize whether we go horizontal-then-vertical or vertical-then-horizontal
+            boolean carveHorizontalFirst = random.nextBoolean();
+            if (carveHorizontalFirst) {
+                carveHorizontalCorridor(map, startX, targetX, startY);
+                carveVerticalCorridor(map, startY, targetY, targetX);
+            } else {
+                carveVerticalCorridor(map, startY, targetY, startX);
+                carveHorizontalCorridor(map, startX, targetX, targetY);
+            }
+        }
+    }
+
+    private Room findNearestRoom(Room reference, List<Room> placed, int searchExclusiveEnd) {
+        Room nearest = placed.getFirst();
+        int bestDistance = gridStepsBetween(
+                roomCenterX(reference), roomCenterY(reference),
+                roomCenterX(nearest), roomCenterY(nearest));
+
+        for (int i = 1; i < searchExclusiveEnd; i++) {
+            Room candidate = placed.get(i);
+            int distance = gridStepsBetween(
+                    roomCenterX(reference), roomCenterY(reference),
+                    roomCenterX(candidate), roomCenterY(candidate));
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                nearest = candidate;
+            }
+        }
+        return nearest;
+    }
+
+    private int roomCenterX(Room room) {
+        return room.left() + room.width() / 2;
+    }
+
+    private int roomCenterY(Room room) {
+        return room.top() + room.height() / 2;
+    }
+
+    private int gridStepsBetween(int x1, int y1, int x2, int y2) {
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+    }
+
+    private void setFloorIfWall(DungeonMap map, int x, int y) {
+        if (!map.isInside(x, y)) return;
+        var tile = map.tileAt(x, y);
+        if (tile.getType() == TileType.WALL) {
+            tile.setType(TileType.FLOOR);
+        }
+    }
+
+    private void carveHorizontalCorridor(DungeonMap map, int fromX, int toX, int fixedY) {
+        int startColumn = Math.min(fromX, toX);
+        int endColumn   = Math.max(fromX, toX);
+        for (int column = startColumn; column <= endColumn; column++) {
+            setFloorIfWall(map, column, fixedY);
+        }
+    }
+
+    private void carveVerticalCorridor(DungeonMap map, int fromY, int toY, int fixedX) {
+        int startRow = Math.min(fromY, toY);
+        int endRow   = Math.max(fromY, toY);
+        for (int row = startRow; row <= endRow; row++) {
+            setFloorIfWall(map, fixedX, row);
+        }
+    }
+
     private int randomBetween(int inclusiveMin, int inclusiveMax) {
+        if (inclusiveMax < inclusiveMin) return inclusiveMin; // guard for tiny maps
         return inclusiveMin + random.nextInt(inclusiveMax - inclusiveMin + 1);
     }
 }

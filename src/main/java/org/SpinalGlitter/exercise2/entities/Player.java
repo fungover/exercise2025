@@ -19,7 +19,7 @@ public class Player {
         this.damage = 10;
         this.InventorySize = 20;
         this.currentHealth = maxHealth;
-        this.position = new Position(0, 0);
+        this.position = new Position(1, 1);
 
     }
 

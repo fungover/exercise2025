@@ -2,25 +2,27 @@ package org.example.entities.characters;
 
 import org.example.entities.enemies.Enemy;
 import org.example.entities.enemies.Goblin;
+import org.example.entities.items.Inventory;
 import org.example.entities.items.Item;
 import org.example.entities.items.Weapon;
+import org.example.utils.RandomUtils;
 
-public abstract class Player {
+public class Player {
     private String name;
     private int health;
     private int maxHealth;
     private int x, y;
-    private int damage;
+    private Inventory inventory;
     private Weapon equippedWeapon;
 
-    public Player(int damage, int y, int x, int maxHealth, int health, String name, Weapon weapon) {
-        this.damage = damage;
-        this.y = y;
-        this.x = x;
-        this.maxHealth = maxHealth;
-        this.health = health;
+    public Player(String name, int health, int maxHealth, int x, int y, int damage, Weapon equippedWeapon) {
         this.name = name;
-        this.equippedWeapon = weapon;
+        this.health = health;
+        this.maxHealth = maxHealth;
+        this.x = x;
+        this.y = y;
+        this.inventory = new Inventory();
+        this.equippedWeapon = equippedWeapon;
     }
 
     //Getters
@@ -45,10 +47,18 @@ public abstract class Player {
     }
 
     public int getDamage() {
-        return damage;
+        if (equippedWeapon != null) {
+            return equippedWeapon.getDamage();
+        } else {
+            return RandomUtils.getRandomNumber(1, 4);
+        }
     }
 
     public Weapon getEquippedWeapon(){return equippedWeapon;}
+
+    public Inventory getInventory() {
+        return inventory;
+    }
 
     //Setters
     public void setName(String name) {
@@ -71,8 +81,8 @@ public abstract class Player {
         this.y = y;
     }
 
-    public void setDamage(int damage) {
-        this.damage = damage;
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     public String setEquippedWeapon(Weapon weapon){
@@ -86,15 +96,15 @@ public abstract class Player {
     }
 
     public String equipWeapon (Weapon weapon) {
-        return getName() + "equipped " + weapon.getName();
+        return getName() + " equipped " + weapon.getName();
     }
 
     public String getDeathMessage(Enemy enemy) {
-        return getName() + "dies after getting struck for" + enemy.getDamage() + " damage!";
+        return getName() + " dies after getting struck for " + enemy.getDamage() + " damage!";
     }
 
     public String getHealMessage() {
-        return getName() + "heals for 10 health!";
+        return getName() + " heals for 10 health!";
     }
 
     public String getLoseHealthMessage(int amount) {

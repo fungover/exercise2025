@@ -1,6 +1,5 @@
-package org.example.map;
 
-import org.example.entities.Item;
+package org.example.map;
 import org.example.entities.Position;
 
 public class Dungeon {

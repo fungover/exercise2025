@@ -8,12 +8,4 @@ public class RNG {
         return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 
-    public static boolean randomBool() {
-        return ThreadLocalRandom.current().nextBoolean();
-    }
-
-    public static <T> T randomCoice(T[] array) {
-        int index = randomInt(0, array.length -1);
-        return array[index];
-    }
 }

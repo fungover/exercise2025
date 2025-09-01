@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 
 public class App {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Ange elområde: SE1, SE2, SE3 eller SE4 ");

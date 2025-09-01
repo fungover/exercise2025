@@ -104,5 +104,25 @@ class LootServiceTest {
         assertEquals(1, player.getInventory().size()); // Assert that the player's inventory now has 1 item
     }
 
+    @Test
+    void testChestplateDrop() {
+
+        Random mockRandom = new Random() {
+            public int nextInt(int bound) {
+                if (bound == 100) return 0;
+                return 2; // Always return third item in list (CHESTPLATE)
+            }
+        };
+        RandomGenerator testGenerator = new RandomGenerator(mockRandom);
+        LootService testLootService = new LootService(testGenerator);
+
+        LootDropOutcome result = testLootService.tryDropRandomLoot(player);
+
+        assertTrue(result.isItemDropped()); // Assert that an item was dropped
+        assertTrue(result.getMessage().contains("Iron Chestplate")); // Assert that the message indicates a chestplate was dropped
+        assertTrue(testLootService.isChestplateDropped()); // Assert that the chestplate drop flag is set to true
+        assertEquals(1, player.getInventory().size()); // Assert that the player's inventory now has 1 item
+    }
+
 
 }

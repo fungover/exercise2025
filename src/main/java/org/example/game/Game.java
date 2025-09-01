@@ -30,7 +30,7 @@ public class Game {
 
         player = new Player(name, 100, 0, 0);
 
-        System.out.println("🌟 Welcome, " + name + "! The animals have sensed your arrival...");
+        System.out.println("Welcome, " + name + "! The animals have sensed your arrival...");
         System.out.println("You wake up in the middle of a chaotic farm where the animals have gone rogue.");
         System.out.println("Your goal: survive, explore, and uncover the mystery behind the madness.");
         System.out.println();

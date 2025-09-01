@@ -39,15 +39,10 @@ public final class Game {
 
             switch (input) {
                 case "help", "h":  CommandUtils.printHelp(); break;
-
                 case "quit", "q":  System.out.println("Exiting the game. Goodbye!"); return;
-
                 case "north", "n": newPos = player.getPosition().getAdjacent(0, 1); break;
-
                 case "south", "s": newPos = player.getPosition().getAdjacent(0, -1);  break;
-
                 case "east", "e": newPos = player.getPosition().getAdjacent(1, 0); break;
-
                 case "west", "w": newPos = player.getPosition().getAdjacent(-1, 0);  break;
 
                 default:  System.out.println("Unknown command. Type 'help' for a list of commands."); break;

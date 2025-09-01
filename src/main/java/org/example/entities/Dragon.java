@@ -7,6 +7,10 @@ public class Dragon {
         this.health = health;
     }
 
+    public int getDamage() {
+        return 30;
+    }
+
     public int getHealth() {
         return health;
     }

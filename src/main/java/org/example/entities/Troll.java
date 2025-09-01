@@ -7,6 +7,10 @@ public class Troll extends Enemy {
         this.health = health;
     }
 
+    public int getDamage() {
+        return 15;
+    }
+
     public int getHealth() {
         return health;
     }

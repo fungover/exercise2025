@@ -7,6 +7,10 @@ public class Goblin extends Enemy {
         this.health = health;
     }
 
+    public int getDamage() {
+        return 5;
+    }
+
     public int getHealth() {
         return health;
     }

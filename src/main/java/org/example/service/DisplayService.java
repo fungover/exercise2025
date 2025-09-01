@@ -20,9 +20,10 @@ public class DisplayService {
 
                 if (x == playerPos.getX() && y == playerPos.getY()) {
                     System.out.print(TileType.PLAYER.getSymbol());
+                } else if (enemyService.getBossAt(currentPos) != null) {
+                    System.out.print(TileType.BOSS.getSymbol());
                 } else if (enemyService.getEnemyAt(currentPos) != null) {
                     System.out.print(TileType.ENEMY.getSymbol());
-
                 } else if (itemService.getItemAt(currentPos) != null) {
                     System.out.print(TileType.ITEM.getSymbol());
                 } else {

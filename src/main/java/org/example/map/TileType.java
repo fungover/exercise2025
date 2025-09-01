@@ -6,7 +6,8 @@ public enum TileType {
     PLAYER('☺', true),
     ENEMY('☠', true),
     ITEM('◊', true),
-    DOOR('▓', true);
+    DOOR('▓', true),
+    BOSS('♛', true);
 
     private final char symbol;
     private final boolean walkable;

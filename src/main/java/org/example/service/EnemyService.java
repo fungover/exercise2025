@@ -1,8 +1,6 @@
 package org.example.service;
 
-import org.example.entities.Enemy;
-import org.example.entities.Goblin;
-import org.example.entities.Position;
+import org.example.entities.*;
 import org.example.map.Dungeon;
 import org.example.utils.RandomGenerator;
 
@@ -21,12 +19,9 @@ public class EnemyService {
 
     public void placeEnemiesForRoom(String roomName, Dungeon dungeon) {
         switch (roomName) {
-            case "Dungeon Entrance" -> {
-                placeRandomEnemies(dungeon, 2);
-            }
-            case "Treasure Room" -> {
-                placeRandomEnemies(dungeon, 3);
-            }
+            case "Dungeon Entrance" -> placeRandomEnemies(dungeon, 2);
+            case "Treasure Room" -> placeRandomEnemies(dungeon, 3);
+            case "Dragon's Lair" -> placeBoss(dungeon);
         }
     }
 
@@ -39,6 +34,14 @@ public class EnemyService {
         }
     }
 
+    private void placeBoss(Dungeon dungeon) {
+        Position bossPos = RandomGenerator.findRandomFloorPosition(dungeon);
+        if (bossPos != null) {
+            Dragon dragon = new Dragon(bossPos);
+            enemies.add(dragon);
+        }
+    }
+
     private Enemy createRandomEnemy(Position position) {
         return new Goblin(position); // For now, always create a Goblin. Can be extended to create different types.
     }
@@ -46,6 +49,13 @@ public class EnemyService {
     public Enemy getEnemyAt(Position position) {
         return enemies.stream()
                 .filter(enemy -> enemy.getPosition().equals(position))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Enemy getBossAt(Position position) {
+        return enemies.stream()
+                .filter(enemy -> enemy instanceof Boss && enemy.getPosition().equals(position))
                 .findFirst()
                 .orElse(null);
     }

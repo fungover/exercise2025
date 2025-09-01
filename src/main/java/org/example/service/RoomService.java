@@ -15,6 +15,7 @@ public class RoomService {
         this.rooms = new ArrayList<>();
         rooms.add(new Room("Dungeon Entrance", 8, 10));
         rooms.add(new Room("Treasure Room", 6, 8));
+        rooms.add(new Room("Dragon's Lair", 10, 12));
         this.currentRoomIndex = 0;
     }
 

@@ -1,4 +1,6 @@
-package org.example.entities;
+package org.example.entities.items.weapons;
+
+import org.example.entities.Position;
 
 public class IronSword extends Weapon {
     public IronSword(Position position) {

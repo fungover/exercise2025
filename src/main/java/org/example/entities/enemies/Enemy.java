@@ -1,5 +1,7 @@
-package org.example.entities;
+package org.example.entities.enemies;
 
+import org.example.entities.Player;
+import org.example.entities.Position;
 import org.example.service.LootService;
 
 public abstract class Enemy {

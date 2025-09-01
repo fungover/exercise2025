@@ -1,4 +1,7 @@
-package org.example.entities;
+package org.example.entities.items.armor;
+
+import org.example.entities.equipment.EquipmentSlot;
+import org.example.entities.Position;
 
 public class IronChestplate extends Armor {
     public IronChestplate(Position position) {

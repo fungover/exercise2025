@@ -1,5 +1,7 @@
-package org.example.entities;
+package org.example.entities.enemies;
 
+import org.example.entities.Player;
+import org.example.entities.Position;
 import org.example.service.LootService;
 
 public class Goblin extends Enemy {
@@ -15,7 +17,7 @@ public class Goblin extends Enemy {
         player.takeDamage(actualDamage, getDamage());
         System.out.println(getAttackMessage(actualDamage, getDamage()));
     }
-    
+
     @Override
     public String getAttackMessage(int actualDamage, int originalDamage) {
         if (actualDamage < originalDamage) {

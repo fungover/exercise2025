@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.entities.*;
+import org.example.entities.enemies.*;
 import org.example.map.Dungeon;
 import org.example.utils.RandomGenerator;
 
@@ -19,7 +20,7 @@ public class EnemyService {
 
     public void placeEnemiesForRoom(String roomName, Dungeon dungeon) {
         switch (roomName) {
-            case "Dungeon Entrance" -> placeRandomEnemies(dungeon, 2);
+            case "Dungeon Entrance" -> placeRandomEnemies(dungeon, 4);
             case "Treasure Room" -> placeRandomEnemies(dungeon, 3);
             case "Dragon's Lair" -> placeBoss(dungeon);
         }
@@ -43,7 +44,8 @@ public class EnemyService {
     }
 
     private Enemy createRandomEnemy(Position position) {
-        return new Goblin(position); // For now, always create a Goblin. Can be extended to create different types.
+        Random random = new Random();
+        return random.nextBoolean() ? new Goblin(position) : new Orc(position);
     }
 
     public Enemy getEnemyAt(Position position) {

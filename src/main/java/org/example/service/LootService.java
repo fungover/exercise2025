@@ -1,6 +1,10 @@
 package org.example.service;
 
 import org.example.entities.*;
+import org.example.entities.items.armor.IronBoots;
+import org.example.entities.items.armor.IronChestplate;
+import org.example.entities.items.armor.IronHelm;
+import org.example.entities.items.weapons.IronSword;
 
 import java.util.ArrayList;
 import java.util.List;

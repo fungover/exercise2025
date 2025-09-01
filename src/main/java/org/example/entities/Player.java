@@ -1,5 +1,10 @@
 package org.example.entities;
 
+import org.example.entities.enemies.Enemy;
+import org.example.entities.equipment.EquipmentSlot;
+import org.example.entities.equipment.Equippable;
+import org.example.entities.equipment.Usable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

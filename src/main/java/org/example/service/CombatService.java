@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.entities.Enemy;
+import org.example.entities.enemies.Enemy;
 import org.example.entities.Player;
 
 import java.util.Scanner;

@@ -1,6 +1,8 @@
 package org.example.service;
 
 import org.example.entities.*;
+import org.example.entities.equipment.Equippable;
+import org.example.entities.items.consumables.HealthPotion;
 import org.example.map.Dungeon;
 import org.example.utils.RandomGenerator;
 

@@ -1,4 +1,8 @@
-package org.example.entities;
+package org.example.entities.items.weapons;
+
+import org.example.entities.*;
+import org.example.entities.equipment.EquipmentSlot;
+import org.example.entities.equipment.Equippable;
 
 public abstract class Weapon extends Item implements Equippable {
     private final int damageBonus;

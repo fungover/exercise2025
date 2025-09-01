@@ -1,5 +1,7 @@
-package org.example.entities;
+package org.example.entities.enemies;
 
+import org.example.entities.Player;
+import org.example.entities.Position;
 import org.example.service.LootService;
 
 public class Dragon extends Enemy implements Boss {
@@ -23,7 +25,7 @@ public class Dragon extends Enemy implements Boss {
     @Override
     public void performSpecialAttack(Player player) {
         System.out.println("The Ancient Dragon breathes scorching fire!");
-        player.takeDamage(25, 25);
+        player.takeDamage(50, 50);
         hasUsedSpecialAttack = true;
     }
 

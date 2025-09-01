@@ -1,4 +1,9 @@
-package org.example.entities;
+package org.example.entities.items.consumables;
+
+import org.example.entities.Item;
+import org.example.entities.Player;
+import org.example.entities.Position;
+import org.example.entities.equipment.Usable;
 
 public class HealthPotion extends Item implements Usable {
 

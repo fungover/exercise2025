@@ -2,20 +2,15 @@ package org.example.game;
 
 import org.example.entities.Player;
 import org.example.map.FarmageddonMap;
-import org.example.map.Tile;
 import org.example.service.MapService;
 import org.example.service.CombatService;
 import org.example.service.MovementService;
-
-import static org.example.service.MovementService.move;
 
 public class Game {
     private Player player;
     private final FarmageddonMap map;
     private final MapService mapService = new MapService();
     private final CombatService combatService = new CombatService();
-    private final MovementService movementService = new MovementService();
-
 
     public Game() {
         map = new FarmageddonMap(10, 10);
@@ -88,7 +83,6 @@ public class Game {
 
     private void showInventory() {
         System.out.println("Inventory:");
-      player.getInventory().forEach(item -> System.out.println("- " + item.getName()));
-   }
-
+        player.getInventory().forEach(item -> System.out.println("- " + item.getName()));
+    }
 }

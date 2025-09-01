@@ -3,7 +3,7 @@ package org.example.entities;
 import org.example.map.Tile;
 
 public abstract class Enemy {
-    //Fields that my subclasses will have access to
+    // Fields accessible to subclasses
     protected String name;
     protected int health;
     protected int maxHealth;
@@ -11,8 +11,8 @@ public abstract class Enemy {
     protected int x;
     protected int y;
 
-    //Constructor
-    public Enemy(String name, int maxHealth, int damage, int startX, int startY)    {
+    // Constructor
+    public Enemy(String name, int maxHealth, int damage, int startX, int startY) {
         this.name = name;
         this.health = maxHealth;
         this.maxHealth = maxHealth;
@@ -26,7 +26,7 @@ public abstract class Enemy {
     public int getHealth() { return health; }
     public int getMaxHealth() { return maxHealth; }
 
-    //Methods
+    // Methods
     public void takeDamage(int amount) {
         health -= amount;
         if (health < 0) health = 0;
@@ -46,7 +46,7 @@ public abstract class Enemy {
     public void defeat(Tile tile) {
         System.out.println(name + " has been defeated!");
         tile.setType(Tile.Type.PATH); // Tile becomes empty
-        tile.setEnemy(null);          // Enamy is removes after defeated
+        tile.setEnemy(null);          // Enemy is removed after defeat
     }
 
 

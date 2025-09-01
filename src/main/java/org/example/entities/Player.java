@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    //Fields
+    // Fields
     private final String name;
-    private  int health;
+    private int health;
     private final int maxHealth;
-    private  int x;
+    private int x;
     private int y;
     private final List<Item> inventory;
 
-    //Constructor
+    // Constructor
     public Player(String name, int maxHealth, int startX, int startY) {
         this.name = name;
         this.health = maxHealth;

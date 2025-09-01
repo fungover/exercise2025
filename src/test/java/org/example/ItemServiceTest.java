@@ -2,7 +2,10 @@ package org.example;
 
 import org.example.entities.Player;
 import org.example.entities.Position;
+import org.example.entities.equipment.EquipmentSlot;
 import org.example.entities.items.consumables.HealthPotion;
+import org.example.entities.items.weapons.IronSword;
+import org.example.service.EquipmentOutcome;
 import org.example.service.ItemService;
 import org.example.service.ItemUseOutcome;
 import org.example.utils.RandomGenerator;
@@ -61,5 +64,20 @@ class ItemServiceTest {
         assertFalse(result.isSuccess()); // Should fail
         assertEquals("Invalid choice.", result.getMessage()); // Check failure message
         assertEquals(1, player.getInventory().size()); // Inventory should remain unchanged
+    }
+
+    @Test
+    void testEquipSword() {
+        int originalDamage = player.getDamage();
+        IronSword sword = new IronSword((new Position(1, 1)));
+        player.addToInventory(sword);
+
+        EquipmentOutcome result = itemService.equipItem(player, 0); // Equip the sword
+
+        assertTrue(result.isSuccess()); // Check if equip was successful
+        assertEquals("Equipped: Iron Sword", result.getMessage()); // Check success message
+        assertEquals(originalDamage + 20, player.getDamage()); // Damage should increase by 20
+        assertEquals(0, player.getInventory().size()); // Inventory should be empty after equipping
+        assertNotNull(player.getEquippedItem(EquipmentSlot.WEAPON)); // Sword should be equipped
     }
 }

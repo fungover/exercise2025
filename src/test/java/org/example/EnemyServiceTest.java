@@ -83,4 +83,25 @@ class EnemyServiceTest {
         assertEquals(positions.size(), uniquePositions.size(),
                 "Enemies should not spawn on the same position"); // Ensure all positions are unique
     }
+
+    //TEST 5: Testing that getEnemyAt returns the correct enemy for a given position, and null if none exists.
+    @Test
+    void testGetEnemyAtPosition() {
+
+        Dungeon dungeon = new Dungeon(8, 10);
+        Random mockRandom = new Random(12345);
+        RandomGenerator testGenerator = new RandomGenerator(mockRandom);
+        EnemyService enemyService = new EnemyService(testGenerator);
+        enemyService.placeEnemiesForRoom("Dungeon Entrance", dungeon);
+
+        Enemy firstEnemy = enemyService.getEnemies().get(0); // Get the first enemy placed
+        Position enemyPos = firstEnemy.getPosition(); // Get its position
+        Enemy foundEnemy = enemyService.getEnemyAt(enemyPos); // Try to find enemy at that position
+
+        assertNotNull(foundEnemy); // Ensure we found an enemy at that position
+        assertEquals(firstEnemy, foundEnemy); // Ensure it's the same enemy
+
+        Enemy notFound = enemyService.getEnemyAt(new Position(999, 999)); // Try to find enemy at a position where none exists
+        assertNull(notFound); // Should return null
+    }
 }

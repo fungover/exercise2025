@@ -1,6 +1,6 @@
 package org.example.entities;
 
-public class Enemy {
+public abstract class Enemy {
     //Fields that my subclasses will have access to
     protected String name;
     protected int health;

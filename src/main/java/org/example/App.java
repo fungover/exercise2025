@@ -1,12 +1,14 @@
 package org.example;
 
 import org.example.entities.characters.Player;
+import org.example.entities.enemies.Goblin;
 import org.example.entities.items.Inventory;
 import org.example.entities.items.Item;
 import org.example.entities.items.Weapon;
 import org.example.entities.items.potions.HealthPotion;
 import org.example.map.DungeonGrid;
 import org.example.map.Tile;
+import org.example.service.SpawnService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ public class App {
         starterItems.add(new Weapon("The Spork of Indecision", "It can't decide if it wants to stab or scoop, so it does a little of both, poorly.", 3, 20));
 
         Inventory inventory = new Inventory(starterItems);
-
+        SpawnService spawnService = new SpawnService();
+        DungeonGrid grid = new DungeonGrid(10, 10);
+        spawnService.spawnEnemies(grid, 10, () -> new Goblin());
     }
 }

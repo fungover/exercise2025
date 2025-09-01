@@ -57,15 +57,10 @@ public class DungeonGrid {
         }
 
         int[] doorPosition = placeOnPerimeter(grid, width, height, Tile.TileType.DOOR);
-
-        for (int attempts = 0; attempts < 100; attempts++) {
-            int[] exitPosition = placeOnPerimeter(grid, width, height, Tile.TileType.EXIT);
-
-            if (doorPosition[0] != exitPosition[0] || doorPosition[1] != exitPosition[1]) {
-                break;
-            }
-
-        }
+        int[] exitPosition;
+        do {
+            exitPosition = placeOnPerimeter(grid, width, height, Tile.TileType.EXIT);
+        } while (doorPosition[0] == exitPosition[0] && doorPosition[1] == exitPosition[1]);
 
         return grid;
     }
@@ -75,7 +70,7 @@ public class DungeonGrid {
         // 0 = Top, 1 = Right, 2 = Bottom, 3 = Left
         int side = RandomUtils.getRandomNumber(0, 3);
 
-        switch(side) {
+        switch (side) {
             case 0:
                 x = RandomUtils.getRandomNumber(1, width - 2);
                 y = 0;
@@ -93,10 +88,11 @@ public class DungeonGrid {
                 y = RandomUtils.getRandomNumber(1, height - 2);
                 break;
             default:
-                x = 1; y = 0;
+                x = 1;
+                y = 0;
         }
 
-        grid.tiles[x][y] = new Tile(tileType);
+        grid.tiles[x][y].setType(tileType);
         return new int[]{x, y};
     }
 

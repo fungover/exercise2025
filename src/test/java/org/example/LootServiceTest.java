@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LootServiceTest {
 
@@ -42,5 +41,26 @@ class LootServiceTest {
         assertTrue(result.isItemDropped()); // Assert that an item was dropped
         assertEquals(1, player.getInventory().size()); // Assert that the player's inventory now has 1 item
         assertTrue(result.getMessage().contains("dropped")); // Assert that the message indicates an item was dropped
+    }
+
+    // TEST 2: Testing when loot does not drop.
+    @Test
+    void testNoLootDrop() {
+
+        Random mockRandom = new Random() {
+            @Override
+            public int nextInt(int bound) {
+                return 50; // Ensure no loot drop (50 >= 50)
+            }
+        };
+        RandomGenerator testGenerator = new RandomGenerator(mockRandom);
+        lootService = new LootService(testGenerator);
+
+        LootDropOutcome result = lootService.tryDropRandomLoot(player); //Run the loot-logic, trying to randomly drop loot
+
+        assertFalse(result.isItemDropped()); // Assert that no item was dropped
+        assertEquals("No loot dropped.", result.getMessage()); // Assert that the message indicates no loot was dropped
+        assertEquals(0, player.getInventory().size()); // Assert that the player's inventory is still empty
+
     }
 }

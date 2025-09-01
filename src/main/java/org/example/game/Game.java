@@ -1,7 +1,6 @@
 package org.example.game;
 
 import org.example.entities.Enemy;
-import org.example.entities.Pitchfork;
 import org.example.entities.Player;
 import org.example.map.FarmageddonMap;
 import org.example.map.Tile;

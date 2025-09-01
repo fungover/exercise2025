@@ -35,7 +35,7 @@ class Fetch {
             return gson.fromJson(response.body(), PricePerHour[].class);
         }
         else{
-            System.out.println("Ingen data tillgänglig för " + date + " i " + priceBracket);
+            System.out.println("\nIngen data tillgänglig för " + date + " i " + priceBracket);
             return new PricePerHour[0]; // return empty array instead of crashing if there is no available prices.
         }
 

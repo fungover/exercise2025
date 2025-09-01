@@ -30,4 +30,18 @@ class CombatIntegrationTest {
 
         assertEquals(originalHealth - playerDamage, goblin.getHealth()); // Enemy health should be reduced by player's damage
     }
+
+    // TEST 2: Testing that when the goblin attacks the player, the player's health is reduced by the goblin's damage amount minus player's defense (armor).
+    @Test
+    void testEnemyAttackWithArmor() {
+
+        player.setDefense(3); // Set player's defense to 3 (-3 damage reduction)
+        int originalHealth = player.getHealth(); // Store original health of the player (100)
+        int goblinDamage = goblin.getDamage(); // Store goblin's damage value (8)
+        int expectedDamage = Math.max(1, goblinDamage - player.getDefense()); // Calculate expected damage after armor reduction (should be 5)
+
+        goblin.attack(player); // Goblin attacks the player
+
+        assertEquals(originalHealth - expectedDamage, player.getHealth()); // Player health should be reduced by expected damage (100 - 5 = 95)
+    }
 }

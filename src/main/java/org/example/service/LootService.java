@@ -26,7 +26,7 @@ public class LootService {
     }
 
     public LootDropOutcome tryDropRandomLoot(Player player) {
-        if (randomGenerator.nextInt(100) > 100) { // 33% chance to drop loot
+        if (randomGenerator.nextInt(100) >= 50) { // 50% chance to drop loot
             return new LootDropOutcome(false, "No loot dropped.");
         }
 

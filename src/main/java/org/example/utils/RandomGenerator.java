@@ -11,9 +11,14 @@ import java.util.Random;
 public class RandomGenerator {
     private final Random random;
 
-    //Constructor for testing purposes
+
     public RandomGenerator() {
         this.random = new Random();
+    }
+
+    //Constructor used for Junit testing.
+    public RandomGenerator(Random random) {
+        this.random = random;
     }
 
     public Position findRandomFloorPosition(Dungeon dungeon) { // Find a random floor position in the dungeon

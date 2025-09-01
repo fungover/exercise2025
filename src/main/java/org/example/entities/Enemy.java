@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import org.example.map.Tile;
+
 public abstract class Enemy {
     //Fields that my subclasses will have access to
     protected String name;
@@ -30,7 +32,7 @@ public abstract class Enemy {
         if (health < 0) health = 0;
     }
 
-    public boolean stillAlive() {
+    public boolean isAlive() {
         return health > 0;
     }
 
@@ -41,6 +43,12 @@ public abstract class Enemy {
     public String getName() {
         return name;
     }
+    public void defeat(Tile tile) {
+        System.out.println(name + " has been defeated!");
+        tile.setType(Tile.Type.PATH); // Tile becomes empty
+        tile.setEnemy(null);          // Enamy is removes after defeated
+    }
+
 
     // Can be overridden in subclasses
     public void attack(Player player) {

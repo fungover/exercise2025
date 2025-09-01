@@ -50,7 +50,7 @@ public class Player {
         inventory.add(item);
     }
 
-    public boolean stillAlive() {
+    public boolean isAlive() {
         return health > 0;
     }
 }

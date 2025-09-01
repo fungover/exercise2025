@@ -6,7 +6,7 @@ import org.example.entities.enemies.Goblin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CombatIntegrationTest {
 
@@ -43,5 +43,17 @@ class CombatIntegrationTest {
         goblin.attack(player); // Goblin attacks the player
 
         assertEquals(originalHealth - expectedDamage, player.getHealth()); // Player health should be reduced by expected damage (100 - 5 = 95)
+    }
+
+    // TEST 3: Testing that when the goblin attacks a player with low health, the player's health reaches zero and the player is marked as dead.
+    @Test
+    void testPlayerDeath() {
+        player.takeDamage(95, 95); // Reduce player health to 5
+        assertFalse(player.isDead());
+
+        goblin.attack(player);
+
+        assertTrue(player.isDead());
+        assertEquals(0, player.getHealth());
     }
 }

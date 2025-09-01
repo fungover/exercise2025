@@ -63,4 +63,26 @@ class LootServiceTest {
         assertEquals(0, player.getInventory().size()); // Assert that the player's inventory is still empty
 
     }
+
+    @Test
+    void testSwordDrop() {
+
+        Random mockRandom = new Random() {
+            public int nextInt(int bound) {
+                if (bound == 100) return 0;
+                return 0; // Always return first item in list (SWORD)
+            }
+        };
+        RandomGenerator testGenerator = new RandomGenerator(mockRandom);
+        LootService testLootService = new LootService(testGenerator);
+
+        LootDropOutcome result = testLootService.tryDropRandomLoot(player);
+
+        assertTrue(result.isItemDropped()); // Assert that an item was dropped
+        assertTrue(result.getMessage().contains("Iron Sword")); // Assert that the message indicates a sword was dropped
+        assertTrue(testLootService.isSwordDropped()); // Assert that the sword drop flag is set to true
+        assertEquals(1, player.getInventory().size()); // Assert that the player's inventory now has 1 item
+    }
+
+
 }

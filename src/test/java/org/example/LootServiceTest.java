@@ -124,5 +124,24 @@ class LootServiceTest {
         assertEquals(1, player.getInventory().size()); // Assert that the player's inventory now has 1 item
     }
 
+    @Test
+    void testBootsDrop() {
+
+        Random mockRandom = new Random() {
+            public int nextInt(int bound) {
+                if (bound == 100) return 0;
+                return 3; // Always return fourth item in list (BOOTS)
+            }
+        };
+        RandomGenerator testGenerator = new RandomGenerator(mockRandom);
+        LootService testLootService = new LootService(testGenerator);
+
+        LootDropOutcome result = testLootService.tryDropRandomLoot(player);
+
+        assertTrue(result.isItemDropped()); // Assert that an item was dropped
+        assertTrue(result.getMessage().contains("Iron Boots")); // Assert that the message indicates boots were dropped
+        assertTrue(testLootService.isBootsDropped()); // Assert that the boots drop flag is set to true
+        assertEquals(1, player.getInventory().size()); // Assert that the player's inventory now has 1 item
+    }
 
 }

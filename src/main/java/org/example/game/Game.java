@@ -6,16 +6,31 @@ import org.example.map.FarmageddonMap;
 import org.example.map.Tile;
 
 public class Game {
-    private final Player player;
+    private Player player;
     private final FarmageddonMap map;
 
     public Game() {
         map = new FarmageddonMap(10, 10);
-        player = new Player("Emily", 100, 0, 0); // Startposition matching map
     }
 
     public void start() {
+        var console = System.console();
+        if (console == null) {
+            System.err.println("Console not available. Try running from terminal.");
+            return;
+        }
+
         System.out.println("WELCOME TO FARMAGEDDON");
+        System.out.print("👤 What's your name, brave farmer? ");
+        String name = console.readLine().trim();
+
+        if (name.isEmpty()) {
+            name = "Farmer Doe";
+        }
+
+        player = new Player(name, 100, 0, 0);
+
+        System.out.println("Hello " + name + "! Your adventure begins now...");
         System.out.println("--------------------------------------------------");
         System.out.println("You wake up in the middle of a chaotic farm where the animals have gone rogue.");
         System.out.println("Your goal: survive, explore, and uncover the mystery behind the madness.");
@@ -43,18 +58,12 @@ public class Game {
         System.out.println("--------------------------------------------------");
 
 
-    var console = System.console();
-        if (console == null) {
-            System.err.println("Console not available. Try running from terminal.");
-            return;
-        }
-
         while (player.isAlive()) {
             String input = console.readLine("> ").trim().toLowerCase();
             handleCommand(input);
         }
 
-        System.out.println("Oh no! You died! Game over.");
+        System.out.println("Oh no! You died! Game over. Better luck next time " + name + "!");
     }
 
     private void handleCommand(String input) {

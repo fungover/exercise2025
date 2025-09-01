@@ -1,13 +1,21 @@
 package org.example.game;
 
-import org.example.entities.Enemy;
 import org.example.entities.Player;
 import org.example.map.FarmageddonMap;
 import org.example.map.Tile;
+import org.example.service.MapService;
+import org.example.service.CombatService;
+import org.example.service.MovementService;
+
+import static org.example.service.MovementService.move;
 
 public class Game {
     private Player player;
     private final FarmageddonMap map;
+    private final MapService mapService = new MapService();
+    private final CombatService combatService = new CombatService();
+    private final MovementService movementService = new MovementService();
+
 
     public Game() {
         map = new FarmageddonMap(10, 10);
@@ -67,74 +75,20 @@ public class Game {
 
     private void handleCommand(String input) {
         switch (input) {
-            case "move north" -> move(0, -1);
-            case "move south" -> move(0, 1);
-            case "move east" -> move(1, 0);
-            case "move west" -> move(-1, 0);
-            case "look" -> look();
+            case "move north" -> MovementService.move(player, map, 0, -1);
+            case "move south" -> MovementService.move(player, map, 0, 1);
+            case "move east"  -> MovementService.move(player, map, 1, 0);
+            case "move west"  -> MovementService.move(player, map, -1, 0);
+            case "look" -> mapService.look(player, map);
             case "inventory" -> showInventory();
-            case "attack" -> attack();
+            case "attack" -> combatService.attack(player, map);
             default -> System.out.println("Unknown command. Try again");
         }
-    }
-
-    private void move(int dx, int dy) {
-        int newX = player.getX() + dx;
-        int newY = player.getY() + dy;
-
-        // Controlls that the player can't move outside the farm
-        if (newX < 0 || newX >= map.getWidth() || newY < 0 || newY >= map.getHeight()) {
-            System.out.println("You can't move outside the farm!");
-            return;
-        }
-
-        Tile tile = map.getTile(newX, newY);
-        if (tile.getType() == Tile.Type.WALL) {
-            System.out.println("Ooops! You bump into a wall!");
-            return;
-        }
-
-        player.move(dx, dy);
-        System.out.println("You moved to (" + newX + ", " + newY + ")");
-
-        if (tile.getType() == Tile.Type.ENEMY) {
-            System.out.println("Oh no! There's an enemy here!");
-        } else if (tile.getType() == Tile.Type.ITEM) {
-            System.out.println("Jipiii! You found an item!");
-        }
-    }
-
-
-    private void look() {
-        Tile tile = map.getTile(player.getX(), player.getY());
-        System.out.println("You are standing on a " + tile.getType());
     }
 
     private void showInventory() {
         System.out.println("Inventory:");
       player.getInventory().forEach(item -> System.out.println("- " + item.getName()));
    }
-
-    private void attack() {
-        Tile tile = map.getTile(player.getX(), player.getY());
-        Enemy enemy = tile.getEnemy();
-
-        if (tile.getType() == Tile.Type.ENEMY && enemy != null) {
-            enemy.attack(player);
-
-            if (!player.isAlive()) return;
-
-            System.out.println("You fight back!");
-            enemy.takeDamage(10); //TODO Fix to item damage
-
-            if (!enemy.isAlive()) {
-                enemy.defeat(tile);
-            } else {
-                System.out.println("Enemy HP: " + enemy.getHealth());
-            }
-        } else {
-            System.out.println("There's nothing to attack here.");
-        }
-    }
 
 }

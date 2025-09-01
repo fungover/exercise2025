@@ -50,6 +50,10 @@ public class Player {
             this.position = position.getAdjacent(dx, dy);
         }
 
+    public void heal(int amount) {
+        currentHealth = Math.min(maxHealth, currentHealth + amount);
+    }
+
 
     // take damage method
     // heal method

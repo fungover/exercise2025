@@ -50,4 +50,16 @@ class ItemServiceTest {
         assertFalse(result.isSuccess()); // Should fail
         assertEquals("Your inventory is empty.", result.getMessage()); // Check failure message
     }
+
+    //TEST 3: Testing using an item with an invalid index, and ensuring inventory remains unchanged.
+    @Test
+    void testUseItemWithInvalidIndex() {
+        player.addToInventory(new HealthPotion(new Position(1, 1)));
+
+        ItemUseOutcome result = itemService.useItem(player, 5); // Invalid index
+
+        assertFalse(result.isSuccess()); // Should fail
+        assertEquals("Invalid choice.", result.getMessage()); // Check failure message
+        assertEquals(1, player.getInventory().size()); // Inventory should remain unchanged
+    }
 }

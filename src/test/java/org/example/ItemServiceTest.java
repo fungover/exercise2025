@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ItemServiceTest {
 
@@ -41,5 +40,14 @@ class ItemServiceTest {
         assertEquals("Used: Health Potion", result.getMessage()); // Check success message
         assertEquals(80, player.getHealth()); // Health should increase by 30 (from 50 to 80)
         assertEquals(0, player.getInventory().size()); // Inventory should be empty after use
+    }
+
+    // TEST 2: Testing using an item with empty inventory.
+    @Test
+    void testUseFromEmptyInventory() {
+        ItemUseOutcome result = itemService.useItem(player, 0); // Try to use an item from an empty inventory
+
+        assertFalse(result.isSuccess()); // Should fail
+        assertEquals("Your inventory is empty.", result.getMessage()); // Check failure message
     }
 }

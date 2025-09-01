@@ -66,6 +66,7 @@ class ItemServiceTest {
         assertEquals(1, player.getInventory().size()); // Inventory should remain unchanged
     }
 
+    // TEST 4: Testing equipping a sword from the player's inventory and confirming damage increase.
     @Test
     void testEquipSword() {
         int originalDamage = player.getDamage();
@@ -79,5 +80,17 @@ class ItemServiceTest {
         assertEquals(originalDamage + 20, player.getDamage()); // Damage should increase by 20
         assertEquals(0, player.getInventory().size()); // Inventory should be empty after equipping
         assertNotNull(player.getEquippedItem(EquipmentSlot.WEAPON)); // Sword should be equipped
+    }
+
+    // TEST 5: Testing equipping an item when no equipment is present in inventory.
+    @Test
+    void testEquipWithNoEquipment() {
+
+        player.addToInventory(new HealthPotion(new Position(1, 1))); // Add a non-equipment item to inventory
+
+        EquipmentOutcome result = itemService.equipItem(player, 0);
+
+        assertFalse(result.isSuccess()); // Should fail
+        assertEquals("You have no equipment to equip.", result.getMessage()); // Check failure message
     }
 }

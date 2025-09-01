@@ -75,7 +75,10 @@ public class GameController {
     }
 
     private void handleFight() {
-        gameService.handleFight(player, scanner);
+        boolean survived = gameService.handleFight(player, scanner);
+        if (!survived) {
+            gameRunning = false; // Closes game loop.
+        }
     }
 
     private void handleEquip() {

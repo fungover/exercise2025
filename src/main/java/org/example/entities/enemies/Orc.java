@@ -2,6 +2,7 @@ package org.example.entities.enemies;
 
 import org.example.entities.Player;
 import org.example.entities.Position;
+import org.example.service.LootDropOutcome;
 import org.example.service.LootService;
 
 public class Orc extends Enemy {
@@ -28,6 +29,7 @@ public class Orc extends Enemy {
 
     @Override
     public void dropLoot(Player player, LootService lootService) {
-        lootService.tryDropRandomLoot(player);
+        LootDropOutcome outcome = lootService.tryDropRandomLoot(player);
+        System.out.println(outcome.getMessage());
     }
 }

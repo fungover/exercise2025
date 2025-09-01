@@ -12,13 +12,20 @@ import java.util.Scanner;
 
 public class ItemService {
     private final List<Item> items;
+    private final RandomGenerator randomGenerator;
 
     public ItemService() {
         this.items = new ArrayList<>();
+        this.randomGenerator = new RandomGenerator();
+    }
+
+    public ItemService(RandomGenerator randomGenerator) {
+        this.items = new ArrayList<>();
+        this.randomGenerator = randomGenerator;
     }
 
     public void placeRandomItems(Dungeon dungeon) { // Method to place random items in the dungeon
-        List<Position> positions = RandomGenerator.getRandomFloorPositions(3, dungeon); // Calls random generator to get 3 random floor positions
+        List<Position> positions = randomGenerator.getRandomFloorPositions(3, dungeon); // Calls random generator to get 3 random floor positions
 
         for (Position pos : positions) { // For each position, create a health potion and add it to the items list
             HealthPotion potion = new HealthPotion(pos);
@@ -37,6 +44,24 @@ public class ItemService {
         items.remove(item);
     }
 
+    // Method for item usage outcome. Will be tested and used everywhere else.
+    public ItemUseOutcome useItem(Player player, int itemIndex) {
+        List<Item> inventory = player.getInventory();
+
+        if (inventory.isEmpty()) {
+            return new ItemUseOutcome(false, "Your inventory is empty.");
+        }
+
+        if (itemIndex < 0 || itemIndex > inventory.size()) {
+            return new ItemUseOutcome(false, "Invalid choice.");
+        }
+
+        Item item = inventory.get(itemIndex);
+        player.useItem(item.getName());
+        return new ItemUseOutcome(true, "Used: " + item.getName());
+    }
+
+    // UI-Wrapper that delegate the responsibility to useItem.
     public boolean useItemFromInventory(Player player, Scanner scanner, DisplayService displayService) {
         List<Item> inventory = player.getInventory();
 
@@ -55,18 +80,36 @@ public class ItemService {
                 return false;
             }
 
-            if (choice > 0 && choice <= inventory.size()) {
-                Item item = inventory.get(choice - 1);
-                player.useItem(item.getName());
-                return true;
-            } else {
-                System.out.println("invalid choice.");
-                return false;
-            }
+            ItemUseOutcome outcome = useItem(player, choice - 1);
+            System.out.println(outcome.getMessage());
+            return outcome.isSuccess();
+
         } catch (NumberFormatException e) {
             System.out.println("invalid input.");
             return false;
         }
+    }
+
+    public EquipmentOutcome equipItem(Player player, int equipmentIndex) {
+        List<Item> inventory = player.getInventory();
+
+        List<Equippable> equippableItems = inventory.stream()
+                .filter(item -> item instanceof Equippable)
+                .map(item -> (Equippable) item)
+                .toList();
+
+        if (equippableItems.isEmpty()) {
+            return new EquipmentOutcome(false, "You have no equipment to equip.");
+        }
+
+        if (equipmentIndex < 0 || equipmentIndex > equippableItems.size()) {
+            return new EquipmentOutcome(false, "Invalid choice.");
+        }
+
+        Equippable equipment = equippableItems.get(equipmentIndex);
+        player.equipItem(equipment);
+        player.removeFromInventory((Item) equipment);
+        return new EquipmentOutcome(true, "Equipped: " + ((Item) equipment).getName());
     }
 
     public boolean equipItemFromInventory(Player player, Scanner scanner, DisplayService displayService) {
@@ -98,15 +141,9 @@ public class ItemService {
                 return false;
             }
 
-            if (choice > 0 && choice <= equippableItems.size()) {
-                Equippable equipment = equippableItems.get(choice - 1);
-                player.equipItem(equipment);
-                player.removeFromInventory((Item) equipment);
-                return true;
-            } else {
-                System.out.println("Invalid choice.");
-                return false;
-            }
+            EquipmentOutcome outcome = equipItem(player, choice - 1);
+            System.out.println(outcome.getMessage());
+            return outcome.isSuccess();
         } catch (NumberFormatException e) {
             System.out.println("Invalid input.");
             return false;

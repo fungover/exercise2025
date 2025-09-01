@@ -4,6 +4,7 @@ import org.example.entities.enemies.Enemy;
 import org.example.entities.Item;
 import org.example.entities.Player;
 import org.example.entities.Position;
+import org.example.utils.RandomGenerator;
 
 import java.util.Scanner;
 
@@ -15,15 +16,18 @@ public class GameService {
     private final DisplayService displayService;
     private final LootService lootService;
     private final CombatService combatService;
+    private final RandomGenerator randomGenerator;
 
     public GameService() {
+        this.randomGenerator = new RandomGenerator();
         this.roomService = new RoomService();
         this.movementService = new MovementService();
-        this.itemService = new ItemService();
-        this.enemyService = new EnemyService();
+        this.itemService = new ItemService(randomGenerator);
+        this.enemyService = new EnemyService(randomGenerator);
         this.displayService = new DisplayService();
-        this.lootService = new LootService();
+        this.lootService = new LootService(randomGenerator);
         this.combatService = new CombatService(displayService, itemService);
+
 
         itemService.placeRandomItems(roomService.getCurrentRoom().getDungeon());
 
@@ -31,15 +35,27 @@ public class GameService {
         enemyService.placeEnemiesForRoom(roomName, roomService.getCurrentRoom().getDungeon());
     }
 
+    //Constructor used for testing.
+    public GameService(RandomGenerator randomGenerator) {
+        this.randomGenerator = randomGenerator;
+        this.roomService = new RoomService();
+        this.movementService = new MovementService();
+        this.itemService = new ItemService(randomGenerator);
+        this.enemyService = new EnemyService(randomGenerator);
+        this.displayService = new DisplayService();
+        this.lootService = new LootService(randomGenerator);
+        this.combatService = new CombatService(displayService, itemService);
+    }
+
     public boolean handleMovement(Player player, Direction direction) {
         boolean moved = movementService.movePlayer(player, direction, roomService.getCurrentRoom().getDungeon());
 
         if (moved) {
-            System.out.println("Moving " + direction.toString().toLowerCase() + "...");
+            System.out.println(">Moving " + direction.toString().toLowerCase() + "...");
             checkForRoomTransition(player);
             return true;
         } else {
-            System.out.println("Can't move " + direction.toString().toLowerCase() + " - obstacle in the way!");
+            System.out.println(">Can't move " + direction.toString().toLowerCase() + " - obstacle in the way!");
             return false;
         }
     }
@@ -78,18 +94,24 @@ public class GameService {
         itemService.equipItemFromInventory(player, scanner, displayService);
     }
 
-    public void handleFight(Player player, Scanner scanner) {
+    public boolean handleFight(Player player, Scanner scanner) {
         Position playerPos = player.getPosition();
         Enemy enemy = enemyService.getEnemyAt(playerPos);
 
         if (enemy != null) {
-            combatService.startCombat(player, enemy, scanner);
+            boolean playerSurvived = combatService.startCombat(player, enemy, scanner);
+
+            if (!playerSurvived) {
+                return false; // Player died
+            }
 
             if (enemy.isDead()) {
                 enemyService.removeEnemy(enemy);
             }
+            return true;
         } else {
             System.out.println("No enemy to fight here.");
+            return true;
         }
     }
 
@@ -117,5 +139,13 @@ public class GameService {
 
     public EnemyService getEnemyService() {
         return enemyService;
+    }
+
+    public MovementService getMovementService() {
+        return movementService;
+    }
+
+    public LootService getLootService() {
+        return lootService;
     }
 }

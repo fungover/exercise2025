@@ -1,64 +1,96 @@
 package org.example.service;
 
-import org.example.entities.*;
+import org.example.entities.Player;
 import org.example.entities.items.armor.IronBoots;
 import org.example.entities.items.armor.IronChestplate;
 import org.example.entities.items.armor.IronHelm;
 import org.example.entities.items.weapons.IronSword;
+import org.example.utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class LootService {
-    private static boolean swordDropped = false;
-    private static boolean helmetDropped = false;
-    private static boolean chestplateDropped = false;
-    private static boolean bootsDropped = false;
+    private boolean swordDropped = false;
+    private boolean helmetDropped = false;
+    private boolean chestplateDropped = false;
+    private boolean bootsDropped = false;
+    private final RandomGenerator randomGenerator;
 
-    public void tryDropRandomLoot(Player player) {
-        Random random = new Random();
-        if (random.nextInt(100) < 33) {
-
-            List<String> availableItems = new ArrayList<>();
-            if (!swordDropped) availableItems.add("SWORD");
-            if (!helmetDropped) availableItems.add("HELMET");
-            if (!chestplateDropped) availableItems.add("CHESTPLATE");
-            if (!bootsDropped) availableItems.add("BOOTS");
-
-            if (!availableItems.isEmpty()) {
-                String randomItem = availableItems.get(random.nextInt(availableItems.size()));
-                dropItem(randomItem, player);
-            } else {
-                System.out.println("No loot dropped - all items have already been found.");
-            }
-        } else {
-            System.out.println("No loot dropped.");
-        }
+    public LootService() {
+        this.randomGenerator = new RandomGenerator();
     }
 
-    public void dropItem(String itemType, Player player) {
+    public LootService(RandomGenerator randomGenerator) {
+        this.randomGenerator = randomGenerator;
+    }
+
+    public LootDropOutcome tryDropRandomLoot(Player player) {
+        if (randomGenerator.nextInt(100) > 100) { // 33% chance to drop loot
+            return new LootDropOutcome(false, "No loot dropped.");
+        }
+
+        List<String> availableItems = getAvailableItems();
+
+        if (availableItems.isEmpty()) {
+            return new LootDropOutcome(false, "No loot dropped - all items have already been found.");
+        }
+
+        String randomItem = availableItems.get(randomGenerator.nextInt(availableItems.size()));
+        return dropItem(randomItem, player);
+    }
+
+    private List<String> getAvailableItems() {
+        List<String> availableItems = new ArrayList<>();
+        if (!swordDropped) availableItems.add("SWORD");
+        if (!helmetDropped) availableItems.add("HELMET");
+        if (!chestplateDropped) availableItems.add("CHESTPLATE");
+        if (!bootsDropped) availableItems.add("BOOTS");
+        return availableItems;
+    }
+
+    public LootDropOutcome dropItem(String itemType, Player player) {
         switch (itemType) {
             case "SWORD" -> {
                 swordDropped = true;
                 player.addToInventory(new IronSword(player.getPosition()));
-                System.out.println("An Iron Sword was dropped!");
+                return new LootDropOutcome(true, "An Iron Sword was dropped!");
             }
             case "HELMET" -> {
                 helmetDropped = true;
                 player.addToInventory(new IronHelm(player.getPosition()));
-                System.out.println("An Iron Helm was dropped!");
+                return new LootDropOutcome(true, "An Iron Helm was dropped!");
             }
             case "CHESTPLATE" -> {
                 chestplateDropped = true;
                 player.addToInventory(new IronChestplate(player.getPosition()));
-                System.out.println("An Iron Chestplate was dropped!");
+                return new LootDropOutcome(true, "An Iron Chestplate was dropped!");
             }
             case "BOOTS" -> {
                 bootsDropped = true;
                 player.addToInventory(new IronBoots(player.getPosition()));
-                System.out.println("A pair of Iron Boots was dropped!");
+                return new LootDropOutcome(true, "A pair of Iron Boots was dropped!");
+            }
+            default -> {
+                return new LootDropOutcome(false, "Unknown item type.");
             }
         }
+    }
+
+    // Getters for testing purposes
+    public boolean isSwordDropped() {
+        return swordDropped;
+    }
+
+    public boolean isHelmetDropped() {
+        return helmetDropped;
+    }
+
+    public boolean isChestplateDropped() {
+        return chestplateDropped;
+    }
+
+    public boolean isBootsDropped() {
+        return bootsDropped;
     }
 }

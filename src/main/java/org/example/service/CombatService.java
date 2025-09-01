@@ -16,28 +16,29 @@ public class CombatService {
         this.lootService = new LootService();
     }
 
-    public void startCombat(Player player, Enemy enemy, Scanner scanner) {
+    public boolean startCombat(Player player, Enemy enemy, Scanner scanner) {
 
         while (!player.isDead() && !enemy.isDead()) {
-
             displayService.displayCombatStatus(player, enemy);
             if (!playerTurn(player, enemy, scanner)) {
                 System.out.println("You fled from combat!");
-                return;
+                return true;
             }
 
             if (enemy.isDead()) {
                 enemy.dropLoot(player, lootService);
-                return;
+                return true;
             }
 
             enemyTurn(player, enemy);
 
             if (player.isDead()) {
                 System.out.println("You have been defeated by " + enemy.getName());
-                return;
+                System.out.println("===GAME OVER===");
+                return false;
             }
         }
+        return true;
     }
 
     private boolean playerTurn(Player player, Enemy enemy, Scanner scanner) {

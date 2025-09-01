@@ -1,21 +1,26 @@
 package org.example.service;
 
-import org.example.entities.*;
+import org.example.entities.Position;
 import org.example.entities.enemies.*;
 import org.example.map.Dungeon;
 import org.example.utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class EnemyService {
     private final List<Enemy> enemies;
-    private final Random random;
+    private final RandomGenerator randomGenerator;
 
     public EnemyService() {
         this.enemies = new ArrayList<>();
-        this.random = new Random();
+        this.randomGenerator = new RandomGenerator();
+    }
+
+    //Constructor for testing.
+    public EnemyService(RandomGenerator randomGenerator) {
+        this.enemies = new ArrayList<>();
+        this.randomGenerator = randomGenerator;
     }
 
     public void placeEnemiesForRoom(String roomName, Dungeon dungeon) {
@@ -27,7 +32,7 @@ public class EnemyService {
     }
 
     private void placeRandomEnemies(Dungeon dungeon, int count) {
-        List<Position> positions = RandomGenerator.getRandomFloorPositions(count, dungeon);
+        List<Position> positions = randomGenerator.getRandomFloorPositions(count, dungeon);
 
         for (Position pos : positions) {
             Enemy enemy = createRandomEnemy(pos);
@@ -36,7 +41,7 @@ public class EnemyService {
     }
 
     private void placeBoss(Dungeon dungeon) {
-        Position bossPos = RandomGenerator.findRandomFloorPosition(dungeon);
+        Position bossPos = randomGenerator.findRandomFloorPosition(dungeon);
         if (bossPos != null) {
             Dragon dragon = new Dragon(bossPos);
             enemies.add(dragon);
@@ -44,8 +49,7 @@ public class EnemyService {
     }
 
     private Enemy createRandomEnemy(Position position) {
-        Random random = new Random();
-        return random.nextBoolean() ? new Goblin(position) : new Orc(position);
+        return randomGenerator.nextBoolean() ? new Goblin(position) : new Orc(position);
     }
 
     public Enemy getEnemyAt(Position position) {

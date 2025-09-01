@@ -9,9 +9,14 @@ import java.util.List;
 import java.util.Random;
 
 public class RandomGenerator {
-    private static final Random random = new Random();
+    private final Random random;
 
-    public static Position findRandomFloorPosition(Dungeon dungeon) { // Find a random floor position in the dungeon
+    //Constructor for testing purposes
+    public RandomGenerator() {
+        this.random = new Random();
+    }
+
+    public Position findRandomFloorPosition(Dungeon dungeon) { // Find a random floor position in the dungeon
         int attempts = 0; // Limit attempts to avoid infinite loops
         while (attempts < 100) { // Setting a limit to prevent infinite loops
             int x = random.nextInt(dungeon.getColumns()); // Random x coordinate
@@ -25,7 +30,7 @@ public class RandomGenerator {
         return null; // Return null if no floor position is found after max attempts
     }
 
-    public static List<Position> getRandomFloorPositions(int count, Dungeon dungeon) { // Get multiple random floor positions
+    public List<Position> getRandomFloorPositions(int count, Dungeon dungeon) { // Get multiple random floor positions
         List<Position> positions = new ArrayList<>(); // List to hold the positions
         for (int i = 0; i < count; i++) { // Loop to find the required number of positions
             Position pos = findRandomFloorPosition(dungeon); // find a position
@@ -34,5 +39,13 @@ public class RandomGenerator {
             }
         }
         return positions; // Return the list of positions
+    }
+
+    public boolean nextBoolean() {
+        return random.nextBoolean();
+    }
+
+    public int nextInt(int bound) {
+        return random.nextInt(bound);
     }
 }

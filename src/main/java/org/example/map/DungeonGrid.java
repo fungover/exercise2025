@@ -1,5 +1,7 @@
 package org.example.map;
 
+import org.example.utils.RandomUtils;
+
 public class DungeonGrid {
     private int width;
     private int height;
@@ -42,22 +44,60 @@ public class DungeonGrid {
         DungeonGrid grid = new DungeonGrid(width, height);
 
         for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    //Generate Walls
-                    if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
-                        grid.tiles[x][y] = new Tile(Tile.TileType.WALL);
-                    }
-                    //Generate Floors
-                    else {
-                        grid.tiles[x][y] = new Tile(Tile.TileType.FLOOR);
-                    }
+            for (int y = 0; y < height; y++) {
+                //Generate Walls
+                if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
+                    grid.tiles[x][y] = new Tile(Tile.TileType.WALL);
+                }
+                //Generate Floors
+                else {
+                    grid.tiles[x][y] = new Tile(Tile.TileType.FLOOR);
                 }
             }
+        }
 
-        grid.tiles[1][0].setType(Tile.TileType.DOOR);
-        grid.tiles[width - 1][height - 1].setType(Tile.TileType.EXIT);
+        int[] doorPosition = placeOnPerimeter(grid, width, height, Tile.TileType.DOOR);
+
+        for (int attempts = 0; attempts < 100; attempts++) {
+            int[] exitPosition = placeOnPerimeter(grid, width, height, Tile.TileType.EXIT);
+
+            if (doorPosition[0] != exitPosition[0] || doorPosition[1] != exitPosition[1]) {
+                break;
+            }
+
+        }
 
         return grid;
+    }
+
+    private static int[] placeOnPerimeter(DungeonGrid grid, int width, int height, Tile.TileType tileType) {
+        int x, y;
+        // 0 = Top, 1 = Right, 2 = Bottom, 3 = Left
+        int side = RandomUtils.getRandomNumber(0, 3);
+
+        switch(side) {
+            case 0:
+                x = RandomUtils.getRandomNumber(1, width - 2);
+                y = 0;
+                break;
+            case 1:
+                x = width - 1;
+                y = RandomUtils.getRandomNumber(1, height - 2);
+                break;
+            case 2:
+                x = RandomUtils.getRandomNumber(1, width - 2);
+                y = height - 1;
+                break;
+            case 3:
+                x = 0;
+                y = RandomUtils.getRandomNumber(1, height - 2);
+                break;
+            default:
+                x = 1; y = 0;
+        }
+
+        grid.tiles[x][y] = new Tile(tileType);
+        return new int[]{x, y};
     }
 
 }

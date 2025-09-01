@@ -5,12 +5,11 @@ import org.example.map.FarmageddonMap;
 import org.example.service.MapService;
 import org.example.service.CombatService;
 import org.example.service.MovementService;
+import org.example.service.InventoryService;
 
 public class Game {
     private Player player;
     private final FarmageddonMap map;
-    private final MapService mapService = new MapService();
-    private final CombatService combatService = new CombatService();
 
     public Game() {
         map = new FarmageddonMap(10, 10);
@@ -74,15 +73,10 @@ public class Game {
             case "move south" -> MovementService.move(player, map, 0, 1);
             case "move east"  -> MovementService.move(player, map, 1, 0);
             case "move west"  -> MovementService.move(player, map, -1, 0);
-            case "look" -> mapService.look(player, map);
-            case "inventory" -> showInventory();
-            case "attack" -> combatService.attack(player, map);
+            case "look" -> MapService.look(player, map);
+            case "inventory" -> InventoryService.showInventory(player);
+            case "attack" -> CombatService.attack(player, map);
             default -> System.out.println("Unknown command. Try again");
         }
-    }
-
-    private void showInventory() {
-        System.out.println("Inventory:");
-        player.getInventory().forEach(item -> System.out.println("- " + item.getName()));
     }
 }

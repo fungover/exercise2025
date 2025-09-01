@@ -35,6 +35,7 @@ class MovementServiceTest {
         assertNotEquals(originalPos, player.getPosition()); //Player's position should have changed.
     }
 
+    // TEST 2: Testing movement that will fail by going north from (1,1) into a wall.
     @Test
     void testMovementIntoWall() {
         player.setPosition(new Position(1, 1)); // Ensure player starts at (1,1)
@@ -44,6 +45,23 @@ class MovementServiceTest {
 
         assertFalse(moved); // Movement should fail (return false).
         assertEquals(originalPos, player.getPosition()); // Player's position should remain unchanged at (1,1).
+    }
 
+    // TEST 3: Testing movement in all four directions from (6,2) to ensure correct position updates.
+    @Test
+    void testAllDirection() {
+        player.setPosition(new Position(6, 2)); //Ensure player starts at (6,2)
+
+        assertTrue(movementService.movePlayer(player, Direction.NORTH, dungeon)); //Move north to (6,1)
+        assertEquals(new Position(6, 1), player.getPosition());
+
+        assertTrue(movementService.movePlayer(player, Direction.SOUTH, dungeon)); //Move south back to (6,2)
+        assertEquals(new Position(6, 2), player.getPosition());
+
+        assertTrue(movementService.movePlayer(player, Direction.WEST, dungeon)); //Move west to (5,2)
+        assertEquals(new Position(5, 2), player.getPosition());
+
+        assertTrue(movementService.movePlayer(player, Direction.EAST, dungeon)); //Move east back to (6,2)
+        assertEquals(new Position(6, 2), player.getPosition());
     }
 }

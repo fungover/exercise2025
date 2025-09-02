@@ -108,7 +108,20 @@ public class DungeonGenerator {
                 x = RandomGenerator.nextInt(1, width - 2);
                 y = RandomGenerator.nextInt(1, height - 2);
             } while (!grid[y][x].isEmpty() || (x == playerStartX && y == playerStartY));
-            Item item = RandomGenerator.nextInt(0, 2) == 0 ? new HealthPotion() : new Sword();
+
+            Item item;
+            int itemType = RandomGenerator.nextInt(0, 3);
+            switch (itemType) {
+                case 0:
+                    item = new HealthPotion();
+                    break;
+                case 1:
+                    item = new Sword();
+                    break;
+                default:
+                    item = new Dagger();
+                    break;
+            }
             grid[y][x].setItem(item);
         }
     }

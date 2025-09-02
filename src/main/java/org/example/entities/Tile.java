@@ -28,31 +28,19 @@ public class Tile {
 
     // getters
 
-    public boolean isWall() {
-        return isWall;
-    }
+    public boolean isWall() {return isWall;}
 
-    public boolean hasPlayer() {
-        return hasPlayer;
-    }
+    public boolean hasPlayer() {return hasPlayer;}
 
-    public Enemy getEnemy() {
-        return enemy;
-    }
+    public Enemy getEnemy() {return enemy;}
 
-    public Item getItem() {
-        return item;
-    }
+    public Item getItem() {return item;}
 
     // setters
 
-    public void setWall(boolean wall) {
-        this.isWall = wall;
-    }
+    public void setWall(boolean wall) {this.isWall = wall;}
 
-    public void setHasPlayer(boolean hasPlayer) {
-        this.hasPlayer = hasPlayer;
-    }
+    public void setHasPlayer(boolean hasPlayer) {this.hasPlayer = hasPlayer;}
 
     public void setEnemy(Enemy enemy) {this.enemy = enemy;}
 

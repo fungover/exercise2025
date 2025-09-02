@@ -6,7 +6,6 @@ import org.example.service.LootDropOutcome;
 import org.example.service.LootService;
 
 public class Goblin extends Enemy {
-    private static boolean swordDropped = false;
 
     public Goblin(Position position) {
         super("Goblin", 25, 8, position);

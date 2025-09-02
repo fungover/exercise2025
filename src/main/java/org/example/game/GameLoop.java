@@ -4,6 +4,7 @@ import org.example.entities.Player;
 import org.example.entities.Enemy;
 import org.example.entities.Character;
 import org.example.map.DungeonGrid;
+import org.example.service.GameLogic;
 
 import java.util.Scanner;
 
@@ -17,57 +18,28 @@ public class GameLoop {
         player.takeTurn();
         dragon.takeTurn();
 
-        DungeonGrid grid = new DungeonGrid(5, 5);
+        DungeonGrid grid = new DungeonGrid(10, 5);
 
         // Starting position
-        int playerX = 2;
-        int playerY = 2;
+        //From Character abstract class
+        //int[] playerPos = {2, 2};
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
         while (running) {
-            grid.printMap(playerX, playerY);
+            grid.printMap(player.getX(), player.getY());
             System.out.print("Where are you headed?: (north/south/east/west/quit): ");
             String command = scanner.nextLine().toLowerCase().trim();
 
-            switch (command) {
-                case "north":
-                    if (!grid.getTiles(playerX, playerY - 1).isWall()) {
-                        playerY--;
-                    } else {
-                        System.out.println("You can't go that way!");
-                    }
-                    break;
-                    case "south":
-                    if (!grid.getTiles(playerX, playerY + 1).isWall()) {
-                        playerY++;
-                    } else {
-                        System.out.println("You can't go that way!");
-                    }
-                    break;
-                    case "east":
-                    if (!grid.getTiles(playerX + 1, playerY).isWall()) {
-                        playerX++;
-                    } else {
-                        System.out.println("You can't go that way!");
-                    }
-                    break;
-                    case "west":
-                        if (!grid.getTiles(playerX - 1, playerY).isWall()) {
-                            playerX--;
-                        } else {
-                            System.out.println("You can't go that way!");
-                        }
-                        break;
-                        case "quit":
-                            running = false;
-                            break;
-                default:
-                    System.out.println("Invalid command!");
+            if (command.equals("quit")) {
+                running = false;
+            } else {
+                GameLogic.handleCommand(command, grid, player);
             }
         }
+
     scanner.close();
 
-    }
+        }
     }

@@ -12,6 +12,19 @@ public abstract class  Character {
         this.x = x;
         this.y = y;
     }
+    // Getter & setter for position
+    public int getX() {
+        return x;
+    }
+    public void setX(int x) {
+        this.x = x;
+    }
+    public int getY() {
+        return y;
+    }
+    public void setY(int y) {
+        this.y = y;
+    }
     public abstract void takeTurn();
-    // Getters & setters
+
 }

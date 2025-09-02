@@ -10,9 +10,16 @@ import org.example.service.InventoryService;
 public class Game {
     private Player player;
     private final FarmageddonMap map;
+    private final MovementService movementService;
+    private final CombatService combatService;
+    private final InventoryService inventoryService;
+
 
     public Game() {
         map = new FarmageddonMap(10, 10);
+        movementService = new MovementService();
+        combatService = new CombatService();
+        inventoryService = new InventoryService();
     }
 
     public void start() {
@@ -69,13 +76,13 @@ public class Game {
 
     private void handleCommand(String input) {
         switch (input) {
-            case "move north" -> MovementService.move(player, map, 0, -1);
-            case "move south" -> MovementService.move(player, map, 0, 1);
-            case "move east"  -> MovementService.move(player, map, 1, 0);
-            case "move west"  -> MovementService.move(player, map, -1, 0);
+            case "move north" -> movementService.move(player, map, 0, -1);
+            case "move south" -> movementService.move(player, map, 0, 1);
+            case "move east"  -> movementService.move(player, map, 1, 0);
+            case "move west"  -> movementService.move(player, map, -1, 0);
             case "look" -> MapService.look(player, map);
-            case "inventory" -> InventoryService.showInventory(player);
-            case "attack" -> CombatService.attack(player, map);
+            case "inventory" -> inventoryService.showInventory(player);
+            case "attack" -> combatService.attack(player, map);
             default -> System.out.println("Unknown command. Try again");
         }
     }

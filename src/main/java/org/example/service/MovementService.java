@@ -5,7 +5,7 @@ import org.example.map.FarmageddonMap;
 import org.example.map.Tile;
 
 public class MovementService {
-    public static void move(Player player, FarmageddonMap map, int dx, int dy) {
+    public void move(Player player, FarmageddonMap map, int dx, int dy) {
         int newX = player.getX() + dx;
         int newY = player.getY() + dy;
 

@@ -1,0 +1,40 @@
+package org.example.service;
+
+import org.example.entities.characters.Player;
+import org.example.entities.enemies.Enemy;
+
+public class CombatService {
+    public void battleEnemy(Player player, Enemy enemy){
+        InputService inputservice = new InputService();
+        System.out.println("You are now fighting " + enemy.getName() + "!");
+
+        while (player.getHealth() > 0 && enemy.getHealth() > 0) {
+            int playerDamage = player.getDamage();
+
+            System.out.println("\nYour HP: " + player.getHealth() + " | Enemy HP: " + enemy.getHealth());
+            System.out.println("Choose action:");
+            System.out.println("1. Attack");
+            System.out.println("2. Use Health Potion");
+
+            String input = inputservice.readLine();
+
+            if (!input.equals("1")  && !input.equals("2")) {
+                System.out.println("Invalid input. Please try again.");
+                continue;
+            }
+
+            int choice = Integer.parseInt(input);
+
+            switch (choice) {
+                case 1:
+                    enemy.takeDamage(playerDamage);
+                    System.out.println(player.getAttackMessage(enemy));
+                    break;
+
+                case 2:
+                    player.usePotion();
+                    break;
+            }
+        }
+    }
+}

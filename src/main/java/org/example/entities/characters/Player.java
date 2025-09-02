@@ -4,6 +4,7 @@ import org.example.entities.enemies.Enemy;
 import org.example.entities.enemies.Goblin;
 import org.example.entities.items.Inventory;
 import org.example.entities.items.Item;
+import org.example.entities.items.Potion;
 import org.example.entities.items.Weapon;
 import org.example.utils.RandomUtils;
 
@@ -91,6 +92,25 @@ public class Player {
     }
 
     //Methods
+    public void takeDamage(int damage){
+        this.health -= damage;
+        if (this.health <= 0) {
+            this.health = 0;
+        }
+    }
+
+    public void usePotion(Potion potion){
+        if (potion != null) {
+            int healAmount = potion.getValue();
+            this.health += healAmount;
+            if (this.health > this.maxHealth) {
+                this.health = this.maxHealth;
+            }
+            System.out.println(potion.getUseMessage());
+            inventory.removeItem(potion);
+        }
+    }
+
     public String getAttackMessage(Enemy enemy) {
         return getName() + " attacks " + enemy.getName() + " for " + getDamage() + " damage!";
     }
@@ -103,11 +123,4 @@ public class Player {
         return getName() + " dies after getting struck for " + enemy.getDamage() + " damage!";
     }
 
-    public String getHealMessage() {
-        return getName() + " heals for 10 health!";
-    }
-
-    public String getLoseHealthMessage(int amount) {
-        return getName() + " loses " + amount + " health!";
-    }
 }

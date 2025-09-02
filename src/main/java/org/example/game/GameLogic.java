@@ -4,11 +4,7 @@ import org.example.entities.characters.Player;
 import org.example.entities.enemies.Goblin;
 import org.example.map.DungeonGrid;
 import org.example.map.Tile;
-import org.example.service.ConfigService;
-import org.example.service.DifficultyConfig;
-import org.example.service.InputService;
-import org.example.service.MovementService;
-import org.example.service.SpawnService;
+import org.example.service.*;
 import org.example.utils.Utils;
 
 import java.util.logging.Level;
@@ -70,6 +66,7 @@ public class GameLogic {
                 state.health = config.health;
                 state.maxHealth = config.maxHealth;
                 state.weapon = config.startingWeapon;
+                state.potion = config.startingPotion;
 
                 validChoice = true;
                 System.out.println("You have chosen the " + state.difficulty + " difficulty.");
@@ -127,6 +124,8 @@ public class GameLogic {
         Player player = new Player(state.name, state.health, state.maxHealth,
                 optimalStartPosition[0], optimalStartPosition[1], state.weapon);
 
+        player.getInventory().addItem((state.potion));
+
         while (!state.gameOver) {
             movementService.availableMoves(player, state.grid);
             String input = inputService.readLine();
@@ -154,7 +153,10 @@ public class GameLogic {
             Tile currentTile = state.grid.getTiles()[x][y];
 
             if (currentTile.getEnemy() != null) {
+                CombatService combatService = new CombatService();
                 System.out.println("Boo, there is an enemy here");
+
+                combatService.battleEnemy(player, currentTile.getEnemy());
             }
 
         }

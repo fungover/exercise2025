@@ -53,6 +53,13 @@ public abstract class Enemy {
     }
 
     //Methods
+    public void takeDamage(int damage){
+        this.health -= damage;
+        if (this.health <= 0) {
+            this.health = 0;
+        }
+    }
+
     public abstract String getAttackMessage();
 
     public abstract String getDeathMessage();

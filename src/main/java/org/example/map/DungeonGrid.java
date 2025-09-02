@@ -64,21 +64,21 @@ public class DungeonGrid {
                 x = width - 1;
                 y = RandomUtils.getRandomNumber(1, height - 2);
                 if (tileType == Tile.TileType.DOOR) {
-                    optimalStartPosition = new int[]{x - 2, y};
+                    optimalStartPosition = new int[]{x - 1, y};
                 }
                 break;
             case 2:
                 x = RandomUtils.getRandomNumber(1, width - 2);
                 y = height - 1;
                 if (tileType == Tile.TileType.DOOR) {
-                    optimalStartPosition = new int[]{x, y - 2};
+                    optimalStartPosition = new int[]{x, y - 1};
                 }
                 break;
             case 3:
                 x = 0;
                 y = RandomUtils.getRandomNumber(1, height - 2);
                 if (tileType == Tile.TileType.DOOR) {
-                    optimalStartPosition = new int[]{x + 2, y};
+                    optimalStartPosition = new int[]{x + 1, y};
                 }
                 break;
             default:

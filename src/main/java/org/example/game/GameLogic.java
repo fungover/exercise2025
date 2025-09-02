@@ -5,6 +5,7 @@ import org.example.entities.enemies.Goblin;
 import org.example.entities.items.Item;
 import org.example.entities.items.Weapon;
 import org.example.map.DungeonGrid;
+import org.example.service.MovementService;
 import org.example.service.SpawnService;
 import org.example.utils.Utils;
 
@@ -94,7 +95,7 @@ public class GameLogic {
                         difficulty = "hard";
                         health = 50;
                         maxHealth = 50;
-                        startingWeapon = new Weapon ("The Pebble of Regret", "A simple rock. You've clearly made some poor life choices.", 1, 5);
+                        startingWeapon = new Weapon("The Pebble of Regret", "A simple rock. You've clearly made some poor life choices.", 1, 5);
                         break;
                     default:
                 }
@@ -162,13 +163,38 @@ public class GameLogic {
         int x = optimalStartPosition[0];
         int y = optimalStartPosition[1];
 
-        Player player = new Player(name, health, maxHealth, x, y, startingWeapon );
+        Player player = new Player(name, health, maxHealth, x, y, startingWeapon);
+        MovementService movementService = new MovementService();
 
-        while ( !gameOver) {
+        while (!gameOver) {
+            movementService.availableMoves(player, grid);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String input = "";
+            try {
+                input = reader.readLine();
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, "Error reading input", ex);
+            }
 
-                System.out.println("You are in the dungeon. Type 'help' for a list of commands.");
+            switch (input.toUpperCase()) {
+                case "N":
+                    movementService.movePlayer(player, grid, 0, -1);
+                    break;
+                case "E":
+                    movementService.movePlayer(player, grid, 1, 0);
+                    break;
+                case "S":
+                    movementService.movePlayer(player, grid, 0, 1);
+                    break;
+                case "W":
+                    movementService.movePlayer(player, grid, -1, 0);
+                    break;
+                default:
+                    System.out.println("Invalid input. Please try again.");
+                    break;
+            }
 
-                gameOver = true;
+            gameOver = true;
 
         }
         endGame();

@@ -9,8 +9,6 @@ import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.net.http.HttpClient;
@@ -21,6 +19,8 @@ public class electriCheck {
     static Scanner scanner = new Scanner(System.in);
     public static String zone = "";
     public static String date = formatedDate();
+    public static DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm");
+    public static DateTimeFormatter apiDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     static void main() {
 
@@ -44,8 +44,7 @@ public class electriCheck {
         ArrayList<priceObject> lowHighPrices = getLowHighPrices(prices);
 
         System.out.println("The time and price of the cheapest hours:\n");
-        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm");
-        DateTimeFormatter apiDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
+
         int counter = 0;
         for (int i = 0; i <= 2; i++) {
             priceObject currentObject = lowHighPrices.get(i);
@@ -73,8 +72,21 @@ public class electriCheck {
         }
 
 
-        System.out.println("\nAverage price for 24 hour period: " + medianPrice + " SEK");
+        System.out.println("\nAverage price for 24 hour period: " + medianPrice + " SEK\n");
 
+        System.out.println("Cheapest time to start charging electric vehicle for a given period:");
+
+        System.out.println("\nCharging for 2 hours:");
+        String chargeTwoHours = carCharge(prices, 2);
+        System.out.println("Start charging at: " + chargeTwoHours + " o'clock");
+
+        System.out.println("\nCharging for 4 hours:");
+        String chargeFourHours = carCharge(prices, 4);
+        System.out.println("Start charging at: " + chargeFourHours + " o'clock");
+
+        System.out.println("\nCharging for 8 hours:");
+        String chargeEightHours = carCharge(prices, 8);
+        System.out.println("Start charging at: " + chargeEightHours + " o'clock");
     }
 
     public static String formatedDate() {
@@ -146,4 +158,29 @@ public class electriCheck {
         return lowHighPrices;
     }
 
+    public static String carCharge(ArrayList<priceObject> prices, int chargeInterval) {
+        double lowestPrice = Double.MAX_VALUE;
+        int startIndex = 0;
+        double currentWindowPrice = 0;
+        String startTime = "";
+
+        for(int i = startIndex; i < chargeInterval; i++){
+            currentWindowPrice += prices.get(i).SEK_per_kWh;
+        }
+
+        if(currentWindowPrice < lowestPrice) {
+            lowestPrice = currentWindowPrice;
+            startIndex = 0;
+        }
+
+        for(int i = chargeInterval; i < prices.size(); i++){
+            currentWindowPrice += prices.get(i).SEK_per_kWh;
+            currentWindowPrice -= prices.get(i-chargeInterval).SEK_per_kWh;
+            if(currentWindowPrice < lowestPrice) {
+                lowestPrice = currentWindowPrice;
+                startIndex = i - chargeInterval + 1;
+            }
+        }
+        return LocalDateTime.parse(prices.get(startIndex).time_start, apiDateTimeFormatter).format(time);
+    }
 }

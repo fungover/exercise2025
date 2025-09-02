@@ -1,35 +1,34 @@
 package org.example;
-import java.io.IOException;
-import java.time.LocalDate;
+
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Printer {
 
-    public static void printer() {
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
-        Fetch fetch = new Fetch();
-        String priceBracket = "SE3";
-
-        // Today's prices
-        try{
-            PricePerHour[] today = fetch.fetch(LocalDate.now(), priceBracket);
-            System.out.println("Dagens priser i " + priceBracket + ": ");
-            for (PricePerHour p : today) {
-                System.out.println(p.time_start() + " -- " + p.SEK_per_kWh() + " kr/kWh");
-            }
-
-            // Tomorrow's prices
-            PricePerHour[] tomorrow = fetch.fetch(LocalDate.now().plusDays(1), priceBracket);
-            System.out.println("\nMorgondagens priser i " + priceBracket + ": ");
-            for (PricePerHour p : tomorrow) {
-                System.out.println(p.time_start() + " -- " + p.SEK_per_kWh() + " kr/kWh");
-            }
-        }
-        catch (IOException e) {
-            System.err.println("Fel vid nätverks- eller filåtkomst: " + e.getMessage());
-        } catch (InterruptedException e) {
-            System.err.println("Programmet avbröts: " + e.getMessage());
-        }
-
+    private static String formatHourRange(PricePerHour p){
+        OffsetDateTime start = OffsetDateTime.parse(p.time_start());
+        OffsetDateTime end = OffsetDateTime.parse(p.time_end());
+        return start.format(TIME_FORMATTER) + " - " + end.format(TIME_FORMATTER);
     }
 
+    public static void printAllPrices(PricePerHour[] prices){
+        for (PricePerHour p : prices){
+            System.out.println(formatHourRange(p) + " : " + p.SEK_per_kWh() + " kr/kWh");
+        }
+    }
+
+    public static void printCalculatedPrices(PricePerHour[] prices){
+        System.out.println("\nMedelpris: " + Calculate.calculateMean(prices) + " kr/kWh");
+
+        PricePerHour expensive = Calculate.findMostExpensiveHour(prices);
+        PricePerHour cheap = Calculate.findCheapestHour(prices);
+
+        System.out.println("Dyraste timmen: " + formatHourRange(expensive) + " (" + expensive.SEK_per_kWh() + " kr/kWh)");
+        System.out.println("Billigaste timmen: " + formatHourRange(cheap) + " (" + cheap.SEK_per_kWh() + " kr/kWh)");
+    }
 }
+
+
+

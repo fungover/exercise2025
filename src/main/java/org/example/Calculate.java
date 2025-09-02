@@ -14,32 +14,21 @@ public class Calculate {
     }
 
 
-    public static String findMostExpensiveHour(PricePerHour[] prices){
-        double max = 0;
-        String mostExpensiveHour = "";
-
-        for (PricePerHour p : prices) {
-            if (p.SEK_per_kWh() > max) {
-                max = p.SEK_per_kWh();
-                mostExpensiveHour = p.time_start() + " till " + p.time_end();
-            }
-        }
-        return mostExpensiveHour;
+    public static PricePerHour findMostExpensiveHour(PricePerHour[] prices){
+        PricePerHour maxHour = prices[0];
+        for (PricePerHour p : prices)
+            if (p.SEK_per_kWh() > maxHour.SEK_per_kWh())
+                maxHour = p;
+        return maxHour;
     }
 
 
-    public static String findCheapestHour(PricePerHour[] prices) {
-        double min = Double.MAX_VALUE;
-        double max = 0;
-        String cheapestHour = "";
-
-        for (PricePerHour p : prices) {
-            if (p.SEK_per_kWh() < max && p.SEK_per_kWh() < min) {
-                min = p.SEK_per_kWh();
-                cheapestHour = p.time_start() + " till " + p.time_end();
-            }
-        }
-        return cheapestHour;
+    public static PricePerHour findCheapestHour(PricePerHour[] prices){
+        PricePerHour minHour = prices[0];
+        for (PricePerHour p : prices)
+            if (p.SEK_per_kWh() < minHour.SEK_per_kWh())
+                minHour = p;
+        return minHour;
     }
 
 }

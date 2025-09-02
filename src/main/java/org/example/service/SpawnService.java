@@ -20,9 +20,7 @@ public class SpawnService {
                 x = RandomUtils.getRandomNumber(0, grid.getWidth() - 1);
                 y = RandomUtils.getRandomNumber(0, grid.getHeight() - 1);
             } while (grid.getTiles()[x][y].getType() != Tile.TileType.FLOOR
-                    || grid.getTiles()[x][y].getEnemy() != null
-                    || grid.getTiles()[x][y].getType() != Tile.TileType.DOOR
-                    || grid.getTiles()[x][y].getType() != Tile.TileType.EXIT);
+                    || grid.getTiles()[x][y].getEnemy() != null);
 
             grid.getTiles()[x][y].setEnemy(enemy);
         }
@@ -38,9 +36,7 @@ public class SpawnService {
                 y = RandomUtils.getRandomNumber(0, grid.getHeight() - 1);
             } while (grid.getTiles()[x][y].getType() != Tile.TileType.FLOOR
                     || !grid.getTiles()[x][y].getItems().isEmpty()
-                    || grid.getTiles()[x][y].getEnemy() != null
-                    || grid.getTiles()[x][y].getType() != Tile.TileType.DOOR
-                    || grid.getTiles()[x][y].getType() != Tile.TileType.EXIT);
+                    || grid.getTiles()[x][y].getEnemy() != null);
 
             grid.getTiles()[x][y].addItem(weapon);
         }

@@ -35,6 +35,18 @@ public class Inventory {
         return false;
     }
 
+    public void removeWeapon() {
+
+        System.out.println("You threw away your weapon...");
+        for (int i = 0; i < items.size(); i++) {
+            ItemObject it = items.get(i);
+            if (it instanceof Sword) {
+                items.remove(i);
+                return;
+            }
+        }
+    }
+
     public boolean consumeFirstPotion() {
     for (int i = 0; i < items.size(); i++) {
         ItemObject it = items.get(i);
@@ -78,41 +90,5 @@ public class Inventory {
     // implemnetera ItemObject interface i potion och weapons
 
     // method addItem
-
-
-
-    // method removeItem
-    // method listItems
-    // method isFull
     // method useItem
 }
-
-// TODO: Inventory
-// 1. Create a class Inventory to manage items.
-// List of items
-   /* interface Foo {
-        String bar();
-    }
-
-    class Impl1 implements Foo {
-        String bar() {
-            return "This is implementation 1";
-        }
-    }
-
-    class Impl2 implements Foo {
-        String bar() {
-            return "This is implementation 2";
-        }
-    }
-
-    public class Main {
-        public static void main(String[] args) {
-            Foo[] myArray = new Foo[2];
-            myArray[0] = new Impl1();
-            myArray[1] = new Impl2();
-            for (int i = 0; i < myArray.length; i++) {
-                System.out.println(myArray[i].bar());
-            }
-        }
-    }*/

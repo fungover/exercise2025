@@ -2,15 +2,13 @@ package org.SpinalGlitter.exercise2.utils;
 
 import org.SpinalGlitter.exercise2.entities.*;
 import org.SpinalGlitter.exercise2.map.DungeonMap;
-import org.SpinalGlitter.exercise2.entities.Sword;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public final class RandomGeneration {
     private RandomGeneration() {
     }
+
 
     public static Map<Position, Potion> placePotions(DungeonMap map, int count, Position avoid, Random rng) {
         Map<Position, Potion> out = new HashMap<>();
@@ -70,7 +68,13 @@ public final class RandomGeneration {
     }
 
     // NYTT: placera svärd
-    public static Map<Position, Sword> placeSwords(DungeonMap map, int count, Position avoid, Random rng) {
+    public static Map<Position, Sword> placeSwords(
+            DungeonMap map,
+            int count,
+            Position avoid,
+            Random rng,
+            java.util.Set<Position> occupied) {
+
         Map<Position, Sword> out = new HashMap<>();
         int W = map.getWidth(), H = map.getHeight();
         int tries = 0;
@@ -81,8 +85,12 @@ public final class RandomGeneration {
             int y = 1 + rng.nextInt(Math.max(1, H - 2));
             Position p = new Position(x, y);
 
-            if (!p.equals(avoid) && map.canMoveTo(p) && !out.containsKey(p)) {
+            if (!p.equals(avoid)
+                    && map.canMoveTo(p)
+                    && !out.containsKey(p)
+                    && !occupied.contains(p)) {
                 out.put(p, new Sword(p));
+                occupied.add(p); // markera rutan som upptagen
             }
         }
         return out;

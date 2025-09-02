@@ -15,6 +15,7 @@ public class CommandUtils {
         System.out.println(" attack / a - attack enemy");
         System.out.println(" inventory / i - show inventory");
         System.out.println(" heal / h - use a potion to heal");
+        System.out.println(" throw / t - throw away your weapon");
     }
 
     public static String normalize(String input) {
@@ -28,6 +29,7 @@ public class CommandUtils {
             case "a" -> "attack";
             case "i" -> "inventory";
             case "h" -> "heal";
+            case "t" -> "throw";
             default -> input;
         };
     }

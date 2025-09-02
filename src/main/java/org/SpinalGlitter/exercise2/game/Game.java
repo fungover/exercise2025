@@ -6,9 +6,7 @@ import org.SpinalGlitter.exercise2.map.DungeonMap;
 import org.SpinalGlitter.exercise2.utils.CommandUtils;
 import org.SpinalGlitter.exercise2.utils.RandomGeneration;
 
-import java.util.Map;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 import static org.SpinalGlitter.exercise2.service.PickupService.tryPickup;
 
@@ -20,19 +18,27 @@ public final class Game {
         DungeonMap map = new DungeonMap(10, 10);
         Random rng = new Random();
 
+        // Startitems för test
         player.getInventory().addItem(new Potion(null));
         player.getInventory().addItem(new Potion(null));
-
         player.getInventory().printItems();
 
-
-        // 1) Lägg ut slumpmässiga väggar (t.ex. 10 hinder – justera efter smak)
+        // 1) Väggar först
         RandomGeneration.placeWalls(map, 10, player.getPosition(), rng);
 
-        // 2) Lägg ut potions och fiender
+        // 2) Placera potions & enemies (utan occupied-argument)
         Map<Position, Potion> potions = RandomGeneration.placePotions(map, 5, player.getPosition(), rng);
-        Map<Position, Enemy> enemies = RandomGeneration.placeEnemies(map, 4, player.getPosition(), rng);
-        Map<Position, Sword> sword = RandomGeneration.placeSwords(map, 1, player.getPosition(), rng);
+        Map<Position, Enemy>  enemies = RandomGeneration.placeEnemies(map, 4, player.getPosition(), rng);
+
+        // 3) Bygg occupied EFTER att potions/enemies är kända
+        Set<Position> occupied = new HashSet<>();
+        occupied.add(player.getPosition());
+        occupied.addAll(potions.keySet());
+        occupied.addAll(enemies.keySet());
+
+        // 4) Placera svärd med occupied
+        Map<Position, Sword> swords = RandomGeneration.placeSwords(map, 1, player.getPosition(), rng, occupied);
+
 
         System.out.println("Dungeon Crawler Game Started!");
         System.out.println("You are at " + player.getPosition() + " with health " + player.getCurrentHealth() + "HP.");
@@ -41,10 +47,17 @@ public final class Game {
         Scanner scanner = new Scanner(System.in);
 
         while (player.isAlive()) {
-            map.printMap(player.getPosition(), potions, enemies, sword);
+            map.printMap(player.getPosition(), potions, enemies, swords);
+
+            // add damage if player have weapon else remove extra damage
             if (player.haveWeapon()) {
-                player.setDamage(10);
+                if (player.getDamage() == 10) {
+                    player.setDamage(10);
+                }
+            } else if (player.getDamage() == 20 && !player.haveWeapon()) {
+                player.setDamage(-10);
             }
+
             System.out.println("You are at " + player.getPosition() + " with health " + player.getCurrentHealth() + "HP." + " " + player.getDamage() + "DMG");
             System.out.print("> ");
             String input = CommandUtils.normalize(scanner.nextLine().trim().toLowerCase());
@@ -63,6 +76,7 @@ public final class Game {
                 case "west" -> newPos = player.getPosition().getAdjacent(-1, 0);
                 case "inventory" -> player.getInventory().printItems();
                 case "heal" -> player.heal(20);
+                case "throw" -> player.getInventory().removeWeapon();
                 default -> System.out.println("Unknown command. Type 'help' for a list of commands.");
             }
 
@@ -87,12 +101,12 @@ public final class Game {
 
 
             tryPickup(potions, player.getPosition(), player);
-            tryPickup(sword, player.getPosition(), player);
+            tryPickup(swords, player.getPosition(), player);
 
         }
     }
 }
 
 // TODO: implementera combat, inventory, och andra funktioner enligt behov
-// TODO: 1 Implement pick up item.
+
 

@@ -7,4 +7,5 @@ public record PricePerHour(
         String time_start,
         String time_end
 
-) { }
+) {
+}

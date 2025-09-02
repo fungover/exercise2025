@@ -1,4 +1,5 @@
 package org.example;
+
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -9,19 +10,17 @@ public class App {
         String priceBracket = "SE3";
 
         try {
-           PricePerHour[] today = Fetch.fetch(LocalDate.now(), priceBracket);
-           PricePerHour[] tomorrow = Fetch.fetch(LocalDate.now().plusDays(1), priceBracket);
+            PricePerHour[] today = Fetch.fetch(LocalDate.now(), priceBracket);
+            PricePerHour[] tomorrow = Fetch.fetch(LocalDate.now().plusDays(1), priceBracket);
             System.out.print("\n---- Dagens priser ---- ");
-           Printer.printCalculatedPrices(today);
-           System.out.println();
+            Printer.printCalculatedPrices(today);
+            System.out.println();
             System.out.print("---- Morgondagens priser ----");
-           Printer.printCalculatedPrices(tomorrow);
+            Printer.printCalculatedPrices(tomorrow);
 
         } catch (IOException | InterruptedException e) {
             System.err.println("Fel: " + e.getMessage());
         }
     }
-
-
 }
 

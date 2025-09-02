@@ -1,4 +1,5 @@
 package org.example;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -6,6 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 import com.google.gson.Gson;
 
 
@@ -25,10 +27,9 @@ class Fetch {
         String body = response.body();
 
         Gson gson = new Gson();
-        if(body.trim().startsWith("[")){
+        if (body.trim().startsWith("[")) {
             return gson.fromJson(response.body(), PricePerHour[].class);
-        }
-        else{
+        } else {
             System.out.println("\nIngen data tillgänglig för " + date + " i " + priceBracket + "\n");
             return new PricePerHour[0]; // return empty array instead of crashing if there is no available prices.
         }

@@ -7,19 +7,19 @@ public class Printer {
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
-    private static String formatHourRange(PricePerHour p){
+    private static String formatHourRange(PricePerHour p) {
         OffsetDateTime start = OffsetDateTime.parse(p.time_start());
         OffsetDateTime end = OffsetDateTime.parse(p.time_end());
         return start.format(TIME_FORMATTER) + " - " + end.format(TIME_FORMATTER);
     }
 
-    public static void printAllPrices(PricePerHour[] prices){
-        for (PricePerHour p : prices){
+    public static void printAllPrices(PricePerHour[] prices) {
+        for (PricePerHour p : prices) {
             System.out.println(formatHourRange(p) + " : " + p.SEK_per_kWh() + " kr/kWh");
         }
     }
 
-    public static void printCalculatedPrices(PricePerHour[] prices){
+    public static void printCalculatedPrices(PricePerHour[] prices) {
         System.out.println("\nMedelpris: " + String.format("%.2f", Calculate.calculateMean(prices)) + " kr/kWh");
 
         PricePerHour expensive = Calculate.findMostExpensiveHour(prices);

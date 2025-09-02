@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.entities.Item;
 import org.example.entities.Player;
 import org.example.map.FarmageddonMap;
 import org.example.map.Tile;
@@ -26,7 +27,18 @@ public class MovementService {
         if (tile.getType() == Tile.Type.ENEMY) {
             System.out.println("Oh no! There's an enemy here!");
         } else if (tile.getType() == Tile.Type.ITEM) {
-            System.out.println("Jipiii! You found an item!");
+            Item item = tile.getItem();
+            if (item != null) {
+                player.addItem(item);
+                System.out.println("You picked up: " + item.getName() + "!");
+
+                tile.removeItem();
+                System.out.println("The item has been added to your inventory.");
+            } else {
+                System.out.println("You found an item, but couldn't pick it up.");
+            }
+        } else {
+            System.out.println("Nothing special here.");
         }
     }
 }

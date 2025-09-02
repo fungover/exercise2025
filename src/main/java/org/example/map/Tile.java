@@ -5,6 +5,7 @@ import org.example.entities.Item;
 
 public class Tile {
     private Enemy enemy;
+    private Item item;
 
     public Enemy getEnemy() {
         return enemy;
@@ -14,10 +15,17 @@ public class Tile {
         this.enemy = enemy;
     }
 
-    private Item item;
 
-    public void setItem(Item item) { this.item = item; }
+    public void setItem(Item item) {
+        this.item = item;
+        this.type = Type.ITEM;
+    }
     public Item getItem() { return item; }
+
+    public void removeItem() {
+        this.item = null;
+        this.type = Type.PATH;
+    }
 
 
     public enum Type { WALL, PATH, ENEMY, ITEM, PLAYER_START }

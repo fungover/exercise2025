@@ -18,6 +18,17 @@ public class Player {
 
     }
 
+    public void setDamage(int damage) {
+        this.damage += damage;
+    }
+    public int getDamage() {
+        return this.damage;
+    }
+
+    public boolean haveWeapon() {
+        return inventory.hasWeapon();
+    }
+
     public Inventory getInventory() {
         return inventory;
     }

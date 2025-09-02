@@ -1,9 +1,6 @@
 package org.SpinalGlitter.exercise2.map;
 
-import org.SpinalGlitter.exercise2.entities.Enemy;
-import org.SpinalGlitter.exercise2.entities.Position;
-import org.SpinalGlitter.exercise2.entities.Potion;
-import org.SpinalGlitter.exercise2.entities.Tile;
+import org.SpinalGlitter.exercise2.entities.*;
 
 import java.util.Map;
 
@@ -57,12 +54,7 @@ public class DungeonMap {
         return grid[pos.y()][pos.x()].isWalkable();
     }
 
-    // Befintlig variant (endast potions)
-    public void printMap(Position playerPos, Map<Position, Potion> potions) {
-        printMap(playerPos, potions, null);  // skickar null som enemies-map
-    }
-
-    public void printMap(Position playerPos, Map<Position, Potion> potions, Map<Position, Enemy> enemies) {
+    public void printMap(Position playerPos, Map<Position, Potion> potions, Map<Position, Enemy> enemies, Map<Position, Sword> sword) {
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
                 Position pos = new Position(x, y);
@@ -80,7 +72,10 @@ public class DungeonMap {
                     System.out.print(s);
                 } else if (potions != null && potions.containsKey(pos)) {
                     System.out.print("💗");
-                } else {
+                } else if (sword != null && sword.containsKey(pos)) {
+                    System.out.print("🗡️");
+                }
+                else {
                     System.out.print(grid[y][x].getSymbol());
                 }
             }

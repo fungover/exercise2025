@@ -28,6 +28,12 @@ public class Inventory {
             return items.remove(item);
         }
     }*/
+    public  boolean hasWeapon() {
+        for (ItemObject it : items) {
+            if (it instanceof Sword) return true;
+        }
+        return false;
+    }
 
     public boolean consumeFirstPotion() {
     for (int i = 0; i < items.size(); i++) {

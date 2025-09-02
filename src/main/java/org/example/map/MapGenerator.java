@@ -1,24 +1,22 @@
 package org.example.map;
 
-import org.example.entities.items.Item;
-import org.example.service.loot.DefaultLootFactory;
-import org.example.service.loot.LootFactory;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
+import org.example.service.loot.DefaultLootTable;
+import org.example.service.loot.LootService;
 
 /** Next steps (later): boss placement, enemies. */
 public final class MapGenerator {
     private final Random random;
-    private final LootFactory lootFactory;
+    private final LootService lootService;
     private final int minRoomSize;
     private final int maxRoomSize;
     private final int desiredRoomCount;
     private final int roomPadding;
     private final int maxPlacementAttempts;
 
-    // Builds a default loot table from the same seed
+    /** Builds a default LootService wired to DefaultLootTable (seeded). */
     public MapGenerator(long seed,
                         int minRoomSize,
                         int maxRoomSize,
@@ -26,17 +24,17 @@ public final class MapGenerator {
                         int roomPadding,
                         int maxPlacementAttempts) {
         this(seed, minRoomSize, maxRoomSize, desiredRoomCount, roomPadding, maxPlacementAttempts,
-                new DefaultLootFactory(seed));
+                new LootService(seed, new DefaultLootTable(seed)));
     }
 
-    // Pass any LootFactory (great for tests or custom tables)
+    /** Pass any LootService (great for tests or custom tables). */
     public MapGenerator(long seed,
                         int minRoomSize,
                         int maxRoomSize,
                         int desiredRoomCount,
                         int roomPadding,
                         int maxPlacementAttempts,
-                        LootFactory lootFactory) {
+                        LootService lootService) {
         if (minRoomSize <= 1) throw new IllegalArgumentException("minRoomSize must be > 1");
         if (maxRoomSize < minRoomSize) throw new IllegalArgumentException("maxRoomSize must be >= minRoomSize");
         if (desiredRoomCount <= 0) throw new IllegalArgumentException("desiredRoomCount must be > 0");
@@ -44,7 +42,8 @@ public final class MapGenerator {
         if (maxPlacementAttempts <= 0) throw new IllegalArgumentException("maxPlacementAttempts must be > 0");
 
         this.random = new Random(seed);
-        this.lootFactory = lootFactory;
+        this.lootService = lootService;
+
         this.minRoomSize = minRoomSize;
         this.maxRoomSize = maxRoomSize;
         this.desiredRoomCount = desiredRoomCount;
@@ -67,9 +66,8 @@ public final class MapGenerator {
             int spawnY = firstRoom.top() + 1;
             map.tileAt(spawnX, spawnY).setType(TileType.SPAWN);
 
-            scatterLoot(map, placedRooms, spawnX, spawnY);
+            lootService.scatter(map, placedRooms, spawnX, spawnY);
         }
-
         return map;
     }
 
@@ -153,34 +151,12 @@ public final class MapGenerator {
         return nearest;
     }
 
-    /** Drop 0..2 items per room at random floor tiles, avoiding SPAWN. */
-    private void scatterLoot(DungeonMap map, List<Room> rooms, int spawnX, int spawnY) {
-        for (Room room : rooms) {
-            int drops = randomBetween(0, 2);
-            for (int i = 0; i < drops; i++) {
-                Optional<Item> maybe = lootFactory.roll();
-                if (maybe.isEmpty()) continue;
-
-                // Try a few random tiles inside the room until we find a safe spot
-                for (int attempts = 0; attempts < 10; attempts++) {
-                    int x = randomBetween(room.left(), room.right());
-                    int y = randomBetween(room.top(), room.bottom());
-                    var tile = map.tileAt(x, y);
-                    if (tile.getType() != TileType.FLOOR) continue;
-                    if (x == spawnX && y == spawnY) continue; // don't cover spawn
-                    tile.addItem(maybe.get());
-                    break;
-                }
-            }
-        }
-    }
-
     private int roomCenterX(Room room) {
         return room.left() + room.width() / 2;
     }
 
     private int roomCenterY(Room room) {
-        return room.top() + room.height() / 2;
+        return room.top()  + room.height() / 2;
     }
 
     private int gridStepsBetween(int x1, int y1, int x2, int y2) {

@@ -1,21 +1,21 @@
 package ExerciseTwo.Map;
 
-public class Hallway extends Dungeon{
+public class Cave extends Dungeon{
 
     private int playerCol;
     private int playerRow;
 
-    public Hallway(int playerCol, int playerRow) {
+    public Cave(int playerCol, int playerRow) {
         super(playerCol, playerRow);
     }
 
-    public Hallway(){
+    public Cave(){
         super(new String[][]{
                 {"#", "#", "#", "#", "#"},
                 {"#", "@", " ", " ", "#"},
                 {"#", " ", "G", " ", "#"},
                 {"#", " ", " ", "E", "#"},
-                {"#", "#", "#", "D", "#"}}, "Hallway");
+                {"#", "#", "#", "D", "#"}}, "Cave");
     }
 
     public void setPlayerCol(int playerCol) {
@@ -36,7 +36,6 @@ public class Hallway extends Dungeon{
 
     @Override
     public void description() {
-        System.out.println("You have entered the hallway");
+        System.out.println("You have entered the cave");
     }
-
 }

@@ -13,6 +13,7 @@ public class Game {
     private final MovementService movementService;
     private final CombatService combatService;
     private final InventoryService inventoryService;
+    private final MapService mapService;
 
 
     public Game() {
@@ -20,6 +21,7 @@ public class Game {
         movementService = new MovementService();
         combatService = new CombatService();
         inventoryService = new InventoryService();
+        mapService = new MapService();
     }
 
     public void start() {
@@ -80,7 +82,7 @@ public class Game {
             case "move south" -> movementService.move(player, map, 0, 1);
             case "move east"  -> movementService.move(player, map, 1, 0);
             case "move west"  -> movementService.move(player, map, -1, 0);
-            case "look" -> MapService.look(player, map);
+            case "look" -> mapService.look(player, map);
             case "inventory" -> inventoryService.showInventory(player);
             case "attack" -> combatService.attack(player, map);
             default -> System.out.println("Unknown command. Try again");

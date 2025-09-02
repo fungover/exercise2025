@@ -3,6 +3,7 @@ package org.SpinalGlitter.exercise2.game;
 
 import org.SpinalGlitter.exercise2.entities.*;
 import org.SpinalGlitter.exercise2.map.DungeonMap;
+import org.SpinalGlitter.exercise2.service.CombatService;
 import org.SpinalGlitter.exercise2.utils.CommandUtils;
 import org.SpinalGlitter.exercise2.utils.RandomGeneration;
 
@@ -15,6 +16,7 @@ public final class Game {
     static void main() {
 
         Player player = new Player("Hero");
+        CombatService combatService = new CombatService();
         DungeonMap map = new DungeonMap(10, 10);
         Random rng = new Random();
 
@@ -89,8 +91,14 @@ public final class Game {
             }
             if (enemies.containsKey(newPos)) {
                 Enemy e = enemies.get(newPos);
+
+
                 System.out.println("An enemy blocks your path: " + e.getName() + " at " + newPos + ".");
                 // Här kan du senare trigga combat i stället för att blockera
+/*
+                combat.startCombat(player, new Enemy());
+*/
+
                 continue;
             }
 

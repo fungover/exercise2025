@@ -8,6 +8,7 @@ public class DungeonGrid {
     private Tile[][] tiles;
     private int[] doorPosition;
     private int[] exitPosition;
+    private int[] optimalStartPosition;
 
     public DungeonGrid(int width, int height) {
         this.width = width;
@@ -21,6 +22,7 @@ public class DungeonGrid {
     public Tile[][] getTiles() { return tiles; }
     public int[] getDoorPosition() { return doorPosition; }
     public int[] getExitPosition() { return exitPosition; }
+    public int[] getOptimalStartPosition() { return optimalStartPosition; }
 
     // Methods
     public static DungeonGrid createDungeonGrid(int width, int height) {
@@ -53,18 +55,31 @@ public class DungeonGrid {
             case 0:
                 x = RandomUtils.getRandomNumber(1, width - 2);
                 y = 0;
+                if (tileType == Tile.TileType.DOOR) {
+                    optimalStartPosition = new int[]{x, y + 1};
+                }
+
                 break;
             case 1:
                 x = width - 1;
                 y = RandomUtils.getRandomNumber(1, height - 2);
+                if (tileType == Tile.TileType.DOOR) {
+                    optimalStartPosition = new int[]{x - 2, y};
+                }
                 break;
             case 2:
                 x = RandomUtils.getRandomNumber(1, width - 2);
                 y = height - 1;
+                if (tileType == Tile.TileType.DOOR) {
+                    optimalStartPosition = new int[]{x, y - 2};
+                }
                 break;
             case 3:
                 x = 0;
                 y = RandomUtils.getRandomNumber(1, height - 2);
+                if (tileType == Tile.TileType.DOOR) {
+                    optimalStartPosition = new int[]{x + 2, y};
+                }
                 break;
             default:
                 x = 1; y = 0;

@@ -154,13 +154,13 @@ public class GameLogic {
 
     public void startGame() {
         grid = DungeonGrid.createDungeonGrid(grid.getWidth(), grid.getHeight());
-        int[] doorPosition = grid.getDoorPosition();
+        int[] optimalStartPosition = grid.getOptimalStartPosition();
 
         spawnService = new SpawnService();
         spawnService.spawnEnemies(grid, 10, () -> new Goblin());
 
-        int x = doorPosition[0];
-        int y = doorPosition[1];
+        int x = optimalStartPosition[0];
+        int y = optimalStartPosition[1];
 
         Player player = new Player(name, health, maxHealth, x, y, startingWeapon );
 

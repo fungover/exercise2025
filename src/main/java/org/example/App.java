@@ -19,7 +19,7 @@ public class App {
 		ElectricityPriceService service = new ElectricityPriceService(zone);
 
 		while (menuOn) {
-			System.out.println("[1] Today");
+			System.out.println("\n[1] Today");
 			System.out.println("[2] Tomorrow");
 			System.out.println("[3] Quit");
 			System.out.print("Your choice: ");
@@ -31,7 +31,8 @@ public class App {
 					List<Hour> prices = service.getElectricityPrices(0);
 					System.out.println("[1] Print lowest price");
 					System.out.println("[2] Print highest price");
-					System.out.println("[3] Calculate best charging period");
+					System.out.println("[3] Print mean price");
+					System.out.println("[4] Calculate best charging period");
 					String tdyInput = System.console().readLine();
 					switch (tdyInput) {
 						case "1":
@@ -41,6 +42,9 @@ public class App {
 							service.printHighestPrice(prices, 0);
 							break;
 						case "3":
+							service.printMeanPrice(prices, 0);
+							break;
+						case "4":
 							try {
 								System.out.print("Charge time (hours): ");
 								String chargeInput = System.console().readLine();
@@ -61,7 +65,8 @@ public class App {
 					System.out.println("\nTomorrow: ");
 					System.out.println("[1] Print lowest price");
 					System.out.println("[2] Print highest price");
-					System.out.println("[3] Calculate best charging period");
+					System.out.println("[3] Print mean price");
+					System.out.println("[4] Calculate best charging period");
 					String tmrInput = System.console().readLine();
 					switch (tmrInput) {
 						case "1":
@@ -71,6 +76,9 @@ public class App {
 							service.printHighestPrice(tomorrow, 1);
 							break;
 						case "3":
+							service.printMeanPrice(tomorrow, 1);
+							break;
+						case "4":
 							try {
 								System.out.print("Charge time (hours): ");
 								String chargeInput = System.console().readLine();

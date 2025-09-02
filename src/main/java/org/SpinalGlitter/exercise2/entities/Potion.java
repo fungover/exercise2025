@@ -1,8 +1,6 @@
 package org.SpinalGlitter.exercise2.entities;
 
-import org.SpinalGlitter.exercise2.utils.WorldObject;
-
-public class Potion implements WorldObject {
+public class Potion implements ItemObject{
     private final String name = "Potion";
     private final int heal = 20;
     private final Position position;
@@ -13,5 +11,13 @@ public class Potion implements WorldObject {
     public int getHeal() { return heal; }
     public Position getPosition() { return position; }
 
-    public String getSymbol() {return "💗";}
+    @Override
+    public String printItem() {
+        return name + " (+" + heal + " HP)";
+    }
+
+    @Override
+    public String toString() {
+        return printItem();
+    }
 }

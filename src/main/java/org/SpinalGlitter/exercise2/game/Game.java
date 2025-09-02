@@ -17,6 +17,12 @@ public final class Game {
         Player player = new Player("Hero");
         DungeonMap map = new DungeonMap(10, 10);
         Random rng = new Random();
+        Inventory inventory = new Inventory(20);
+        inventory.addItem(new Potion(null));
+        inventory.addItem(new Potion(null));
+
+        inventory.printItems();
+
 
         // 1) Lägg ut slumpmässiga väggar (t.ex. 10 hinder – justera efter smak)
         RandomGeneration.placeWalls(map, 10, player.getPosition(), rng);
@@ -45,6 +51,7 @@ public final class Game {
                 case "south" -> newPos = player.getPosition().getAdjacent(0, -1);
                 case "east"  -> newPos = player.getPosition().getAdjacent(1, 0);
                 case "west"  -> newPos = player.getPosition().getAdjacent(-1, 0);
+                case "inventory"-> inventory.printItems();
                 default -> System.out.println("Unknown command. Type 'help' for a list of commands.");
             }
 
@@ -70,9 +77,13 @@ public final class Game {
             // 5) Plocka upp potion om du klev på en
             Potion found = potions.remove(newPos);
             if (found != null) {
-                player.heal(found.getHeal());
-                System.out.println("You found a " + found.getName() +
-                        " (+ " + found.getHeal() + " HP). Current HP: " + player.getCurrentHealth());
+                boolean added = inventory.addItem(found);
+                if(added) {
+                    System.out.println("You found a potion and added it to your inventory.");
+                } else {
+                    System.out.println("You found a potion but your inventory is full. You leave it behind.");
+                    potions.put(newPos, found); // Lägg tillbaka potions om inte plats
+                }
             }
         }
     }

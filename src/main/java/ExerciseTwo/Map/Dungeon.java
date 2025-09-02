@@ -2,25 +2,18 @@ package ExerciseTwo.Map;
 
 import ExerciseTwo.Service.Emojis;
 
-public class Dungeon {
+public abstract class Dungeon {
 
     private String[][] dungeonMap;
-
-    public Dungeon(){
-
-        this.dungeonMap = new String[][]{
-                {"#","#","#","#","#"},
-                {"#","@"," "," ","#"},
-                {"#"," ","E"," ","#"},
-                {"#"," "," ","G","#"},
-                {"#"," "," "," ","#"},
-                {"#","#","#","D","#"}
-        };
-    }
 
     public Dungeon(String[][] dungeonMap) {
         this.dungeonMap = dungeonMap;
     }
+
+    public abstract void playerPosition();
+    public abstract void description();
+    //public abstract void content();
+
     public void printMap(){
 
         for (int i = 0; i < dungeonMap.length; i++) {

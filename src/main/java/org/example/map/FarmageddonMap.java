@@ -58,6 +58,7 @@ public class FarmageddonMap {
         int y = enemy.getY();
         if (isValidTile(x, y)) {
             grid[y][x].setType(Tile.Type.ENEMY);
+            grid[y][x].setEnemy(enemy);
         }
     }
 

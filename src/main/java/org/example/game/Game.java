@@ -56,6 +56,7 @@ public class Game {
         System.out.println("• attack → Attack an enemy if one is present");
         System.out.println("• inventory → View your current items");
         System.out.println("• use [item name] → Use an item from your inventory (e.g. potion)");
+        System.out.println("• health → Check your health status");
         System.out.println("• help → Show this help menu again");
         System.out.println();
         System.out.println("TIPS:");
@@ -85,6 +86,7 @@ public class Game {
             case "look" -> mapService.look(player, map);
             case "inventory" -> inventoryService.showInventory(player);
             case "attack" -> combatService.attack(player, map);
+            case "health" -> System.out.println("Health: " + player.getHealth() + "/" + player.getMaxHealth());
             default -> System.out.println("Unknown command. Try again");
         }
     }

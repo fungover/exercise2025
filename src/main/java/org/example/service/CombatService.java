@@ -17,6 +17,7 @@ public class CombatService {
             // Enemy attacks first
             System.out.println("\n--- Enemy's turn ---");
             hostile.attack(player);
+            System.out.println("Your current health: " + player.getHealth() + " HP");
 
             if (!player.isAlive()) {
                 System.out.println("You have been defeated!");

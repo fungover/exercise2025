@@ -25,6 +25,7 @@ public class Player {
     // Getters
     public String getName() { return name; }
     public int getHealth() { return health; }
+    public int getMaxHealth() { return maxHealth; }
     public int getX() { return x; }
     public int getY() { return y; }
     public List<Item> getInventory() { return inventory; }

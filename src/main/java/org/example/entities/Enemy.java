@@ -43,8 +43,8 @@ public abstract class Enemy implements Hostile {
     public String getName() {
         return name;
     }
+
     public void defeat(Tile tile) {
-        System.out.println(name + " has been defeated!");
         tile.setType(Tile.Type.PATH); // Tile becomes empty
         tile.setEnemy(null);          // Enemy is removed after defeat
     }

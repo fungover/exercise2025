@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.entities.characters.Player;
 import org.example.entities.enemies.Enemy;
+import org.example.entities.items.Potion;
 
 public class CombatService {
     public void battleEnemy(Player player, Enemy enemy){
@@ -32,7 +33,13 @@ public class CombatService {
                     break;
 
                 case 2:
-                    player.usePotion();
+                    Potion potion = player.getInventory().getFirstPotion();
+                    if (potion != null) {
+                        player.usePotion(potion);
+                    } else {
+                        System.out.println("You don't have any health potions.");
+                        continue;
+                    }
                     break;
             }
         }

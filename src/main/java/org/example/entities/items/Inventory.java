@@ -32,4 +32,13 @@ public class Inventory {
     public void removeItem(Item item){
         items.remove(item);
     }
+
+    public Potion getFirstPotion() {
+        for (Item item : items) {
+            if (item instanceof Potion) {
+                return (Potion) item;
+            }
+        }
+        return null;
+    }
 }

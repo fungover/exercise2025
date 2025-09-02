@@ -16,4 +16,7 @@ public class Tiles {
         this.isWall = isWall;
     }
     // Getters & setters
+    public boolean isWall() {
+        return isWall;
+    }
 }

@@ -61,21 +61,28 @@ public class ElectricityPriceService {
 		System.out.printf("Cheapest %dh charging period begins at %02d:00%n%n", hours,  bestHour);
 	}
 
-	public void printPrices(List<Hour> prices, int day) {
+	public void printLowestPrice(List<Hour> prices, int day) {
 		double lowest = prices.getFirst().SEK_per_kWh();
 		int lowestHour = 0;
-		double total = 0.0;
 		for (Hour h : prices) {
 			if (h.SEK_per_kWh() < lowest) {
 				lowest = h.SEK_per_kWh();
 				lowestHour = h.formatHour(h.time_start());
 			}
-			total += h.SEK_per_kWh();
 		}
 
-		double avg = total / prices.size();
-		System.out.println(day == 0 ? "\nToday:" : "\nTomorrow:");
 		System.out.printf("Lowest price: %.2f kr/kWh at %02d:00%n", lowest, lowestHour);
-		System.out.printf("Mean price: %.2f kr/kWh%n", avg);
+	}
+
+	public void printHighestPrice(List<Hour> prices, int day) {
+		double highest = prices.getFirst().SEK_per_kWh();
+		int highestHour = 0;
+		for (Hour h : prices) {
+			if (h.SEK_per_kWh() > highest) {
+				highest = h.SEK_per_kWh();
+				highestHour = h.formatHour(h.time_start());
+			}
+		}
+		System.out.printf("Highest price: %.2f kr/kWh at %02d:00%n", highest, highestHour);
 	}
 }

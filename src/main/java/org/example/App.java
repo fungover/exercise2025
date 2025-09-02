@@ -12,7 +12,7 @@ public class App {
 		System.out.print("Electricity zone: SE");
 		String input = System.console().readLine().trim().toUpperCase();
 		String zone = "SE" + input;
-		if (!zone.matches("SE[1234]")) {
+		if (!zone.matches("SE[1-4]")) {
 			System.out.println("Invalid input");
 			menuOn = false;
 		}
@@ -27,31 +27,62 @@ public class App {
 
 			switch (dayInput) {
 				case "1":
+					System.out.println("\nToday: ");
 					List<Hour> prices = service.getElectricityPrices(0);
-					service.printPrices(prices, 0);
-					try	{
-						System.out.print("Charge time (hours): ");
-						String chargeInput = System.console().readLine();
-						int chargeHours = Integer.parseInt(chargeInput);
-						service.chargingHours(prices, chargeHours);
-					}  catch (NumberFormatException e) {
-						System.out.println("Enter a number");
+					System.out.println("[1] Print lowest price");
+					System.out.println("[2] Print highest price");
+					System.out.println("[3] Calculate best charging period");
+					String tdyInput = System.console().readLine();
+					switch (tdyInput) {
+						case "1":
+							service.printLowestPrice(prices, 0);
+							break;
+						case "2":
+							service.printHighestPrice(prices, 0);
+							break;
+						case "3":
+							try {
+								System.out.print("Charge time (hours): ");
+								String chargeInput = System.console().readLine();
+								int chargeHours = Integer.parseInt(chargeInput);
+								service.chargingHours(prices, chargeHours);
+							} catch (NumberFormatException e) {
+								System.out.println("Enter a number");
+							}
+							break;
+						default:
+							System.out.println("Invalid input");
+							break;
+
 					}
 					break;
 				case "2":
 					List<Hour> tomorrow = service.getElectricityPrices(1);
-					try {
-						service.printPrices(tomorrow, 1);
-						try	{
-							System.out.print("Charge time (hours): ");
-							String chargeInput = System.console().readLine();
-							int chargeHours = Integer.parseInt(chargeInput);
-							service.chargingHours(tomorrow, chargeHours);
-						}  catch (NumberFormatException e) {
-							System.out.println("Enter a number");
-						}
-					} catch (Exception e) {
-						System.out.println("Tomorrows prices unavailable");
+					System.out.println("\nTomorrow: ");
+					System.out.println("[1] Print lowest price");
+					System.out.println("[2] Print highest price");
+					System.out.println("[3] Calculate best charging period");
+					String tmrInput = System.console().readLine();
+					switch (tmrInput) {
+						case "1":
+							service.printLowestPrice(tomorrow, 1);
+							break;
+						case "2":
+							service.printHighestPrice(tomorrow, 1);
+							break;
+						case "3":
+							try {
+								System.out.print("Charge time (hours): ");
+								String chargeInput = System.console().readLine();
+								int chargeHours = Integer.parseInt(chargeInput);
+								service.chargingHours(tomorrow, chargeHours);
+							} catch (NumberFormatException e) {
+								System.out.println("Enter a number");
+							}
+							break;
+						default:
+							System.out.println("Invalid input");
+							break;
 					}
 					break;
 				case "3":

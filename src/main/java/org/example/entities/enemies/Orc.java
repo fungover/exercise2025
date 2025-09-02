@@ -21,9 +21,9 @@ public class Orc extends Enemy {
     @Override
     public String getAttackMessage(int actualDamage, int originalDamage) {
         if (actualDamage < originalDamage) {
-            return "The Orc Warrior swings its axe at you from " + actualDamage + " damage! (reduced from " + originalDamage + " by armor)";
+            return ">The Orc Warrior swings its axe at you from " + actualDamage + " damage! (reduced from " + originalDamage + " by armor)";
         } else {
-            return "The Orc Warrior swings its axe at you for " + actualDamage + " damage!";
+            return ">The Orc Warrior swings its axe at you for " + actualDamage + " damage!";
         }
     }
 

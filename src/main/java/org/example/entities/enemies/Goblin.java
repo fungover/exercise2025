@@ -22,9 +22,9 @@ public class Goblin extends Enemy {
     @Override
     public String getAttackMessage(int actualDamage, int originalDamage) {
         if (actualDamage < originalDamage) {
-            return "The Goblin stabs you for " + actualDamage + " damage! (reduced from " + originalDamage + " by armor)";
+            return ">The Goblin stabs you for " + actualDamage + " damage! (reduced from " + originalDamage + " by armor)";
         } else {
-            return "The Goblin stabs you for " + actualDamage + " damage!";
+            return ">The Goblin stabs you for " + actualDamage + " damage!";
         }
     }
 

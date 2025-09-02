@@ -25,7 +25,7 @@ public class Dragon extends Enemy implements Boss {
 
     @Override
     public void performSpecialAttack(Player player) {
-        System.out.println("The Ancient Dragon breathes scorching fire!");
+        System.out.println(">The Ancient Dragon breathes scorching fire!");
         player.takeDamage(50, 50);
         hasUsedSpecialAttack = true;
     }
@@ -37,15 +37,15 @@ public class Dragon extends Enemy implements Boss {
 
     @Override
     public String getDefeatMessage() {
-        return "The might Ancient Dragon has fallen! You have conquered the dungeon!";
+        return ">The mighty Ancient Dragon has fallen! You have conquered the dungeon!";
     }
 
     @Override
     public String getAttackMessage(int actualDamage, int originalDamage) {
         if (actualDamage < originalDamage) {
-            return "The Dragon slashes you with its claws for " + actualDamage + " damage! (reduced from " + originalDamage + " by armor)";
+            return ">The Dragon slashes you with its claws for " + actualDamage + " damage! (reduced from " + originalDamage + " by armor)";
         } else {
-            return "The Dragon slahes you with its claws for " + actualDamage + " damage!";
+            return ">The Dragon slashes you with its claws for " + actualDamage + " damage!";
         }
     }
 

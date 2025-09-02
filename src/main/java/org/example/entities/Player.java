@@ -2,8 +2,6 @@ package org.example.entities;
 
 import org.example.utils.Inventory;
 
-import java.util.ArrayList;
-
 public class Player {
     private String name;
     private int health;

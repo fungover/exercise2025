@@ -1,8 +1,9 @@
 package org.example;
 
 import org.example.entities.Enemy;
-import org.example.entities.Item;
+import org.example.entities.Healing;
 import org.example.entities.Player;
+import org.example.entities.Weapon;
 import org.example.game.Combat;
 
 public class App {
@@ -11,17 +12,28 @@ public class App {
         Player player = new Player("Hero");
 
         //Create items and give to player
-        Item sword = new Item("Sword", "A shiny sword", Item.ItemType.WEAPON, 5);
-        Item potion = new Item("Healing potion", "Drink to get +30 hp", Item.ItemType.CONSUMABLE, 30);
+        Weapon sword = new Weapon("Sword", "A shiny sharp sword", "Weapon", 1, 20);
+        Weapon sword2 = new Weapon("Sword", "A shiny sharp sword", "Weapon", 1, 20);
+        Healing smallPotion = new Healing("Potion", "Heals 10 hp", "Healing", 4, 10);
+        Weapon sword3 = new Weapon("Sword", "A shiny sharp sword", "Weapon", 1, 20);
+        Healing smallPotion1 = new Healing("Potion", "Heals 10 hp", "Healing", 4, 10);
         player.addItem(sword);
-        player.addItem(potion);
+        player.addItem(sword2);
+        player.addItem(smallPotion);
+        player.addItem(smallPotion1);
+        player.addItem(sword3);
 
         //Show player inventory and stats
         player.showInventory();
         player.showStats();
+        sword.displayInfo();
+        sword2.displayInfo();
+        smallPotion.displayInfo();
+
+
 
         //Create enemy
-        Enemy goblin = new Enemy("Goblin", "Nasty goblin", 225, 50);
+        Enemy goblin = new Enemy("Goblin", "Nasty goblin", 225, 5);
 
         //Start combat
         Combat combat = new Combat();
@@ -30,6 +42,7 @@ public class App {
         //Show result after combat
         System.out.println("\n=== AFTER COMBAT ===");
         player.showStats();
+        player.showInventory();
     }
 
 }

@@ -69,13 +69,19 @@ public class Inventory {
 
     // Display methods
     public void display() {
-        System.out.println("=== Inventory (" + items.size() + "/" + maxCapacity + ") ===");
+        System.out.println("\n========================= Inventory (" + items.size() + "/" + maxCapacity +
+                ") =========================");
         if (items.isEmpty()) {
-            System.out.println("Your inventory is empty.");
+            System.out.println("\nYour inventory is empty.");
         } else {
             for (int i = 0; i < items.size(); i++) {
-                System.out.println((i + 1) + ". " + items.get(i));
+                System.out.print("| " + (i + 1) + ". ");
+                items.get(i).displayInfo();
             }
+        }
+        System.out.println("====================================================================");
+        if (items.size() == maxCapacity) {
+            System.out.println("\nYour inventory is full!");
         }
     }
 

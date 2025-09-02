@@ -1,41 +1,18 @@
 package org.example.entities;
 
-public class Item {
+public abstract class Item {
     private String name;
     private String description;
-    private ItemType type;
-    private int value; // healing amount or damage bonus
+    private String type;
+    private int quantity;
 
-    public enum ItemType {
-        WEAPON,
-        CONSUMABLE,
-        KEY
-    }
 
     // Constructor
-    public Item(String name, String description, ItemType type, int value) {
+    public Item(String name, String description, String type, int quantity) {
         this.name = name;
         this.description = description;
         this.type = type;
-        this.value = value;
-    }
-    // Convenience constructor
-    public Item(String name, String description, ItemType type) {
-        this(name, description, type, 0);
-    }
-
-    // Use item method - returns the effect value
-    public int use() {
-        if (type == ItemType.CONSUMABLE) {
-            return value;
-        } else if (type == ItemType.WEAPON) {
-            return value;
-        }
-        return 0;
-    }
-
-    public boolean isUsable() {
-        return type == ItemType.CONSUMABLE;
+        this.quantity = quantity;
     }
 
     // Getters
@@ -45,16 +22,15 @@ public class Item {
     public String getDescription() {
         return description;
     }
-    public ItemType getType() {
+    public String getType() {
         return type;
     }
-    public int getValue() {
-        return value;
+
+    public int getQuantity() {
+        return quantity;
     }
 
-    @Override
-    public String toString() {
-        return name + "-" + description;
-    }
+    public abstract void displayInfo();
+
 }
 

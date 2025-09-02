@@ -43,6 +43,4 @@ public class Dungeon {
         }
     }
 
-    public void placeEnemy(){}
-
 }

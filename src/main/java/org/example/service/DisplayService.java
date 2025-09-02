@@ -1,0 +1,65 @@
+package org.example.service;
+
+import org.example.entities.enemies.Enemy;
+import org.example.entities.Item;
+import org.example.entities.Player;
+import org.example.entities.Position;
+import org.example.map.Room;
+import org.example.map.TileType;
+
+import java.util.List;
+
+public class DisplayService {
+
+    public void printMapWithPlayer(Room room, Player player, ItemService itemService, EnemyService enemyService) {
+        Position playerPos = player.getPosition();
+
+        for (int y = 0; y < room.getDungeon().getRows(); y++) {
+            for (int x = 0; x < room.getDungeon().getColumns(); x++) {
+                Position currentPos = new Position(x, y);
+
+                if (x == playerPos.getX() && y == playerPos.getY()) {
+                    System.out.print(TileType.PLAYER.getSymbol());
+                } else if (enemyService.getBossAt(currentPos) != null) {
+                    System.out.print(TileType.BOSS.getSymbol());
+                } else if (enemyService.getEnemyAt(currentPos) != null) {
+                    System.out.print(TileType.ENEMY.getSymbol());
+                } else if (itemService.getItemAt(currentPos) != null) {
+                    System.out.print(TileType.ITEM.getSymbol());
+                } else {
+                    System.out.print(room.getDungeon().getTile(x, y).getSymbol());
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public void showGameState(Player player, Room room) {
+        System.out.println("Current Room: " + room.getName());
+        System.out.println(player);
+        System.out.println("Movement: North (N), South (S), East (E), West (W), Quit (Q)");
+        System.out.println("Actions: Pickup (P), Inventory (I), Use (U), Equip (EQ), Fight (F)");
+    }
+
+    public void showInventory(Player player) {
+        List<Item> playerInventory = player.getInventory();
+        if (playerInventory.isEmpty()) {
+            System.out.println("Your inventory is empty.");
+        } else {
+            System.out.println("Inventory: ");
+            for (int i = 0; i < playerInventory.size(); i++) {
+                System.out.println((i + 1) + ". " + playerInventory.get(i).getName());
+            }
+        }
+    }
+
+    public void displayCombatStatus(Player player, Enemy enemy) {
+        System.out.println("\n=== COMBAT: " + enemy.getName() + " Health: " + enemy.getHealth() + " ===");
+        System.out.println("=== YOUR HEALTH: " + player.getHealth() + "/" + player.getMaxHealth() + " ===");
+        System.out.println();
+        System.out.println("1. Attack - Strike the enemy with a normal attack.");
+        System.out.println("2. Use items");
+        System.out.println("3. Flee - Escape from combat.");
+        System.out.print("Enter choice: ");
+    }
+}

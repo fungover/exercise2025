@@ -7,7 +7,7 @@ import org.example.map.Tile;
 import java.io.BufferedReader;
 
 public class MovementService {
-    public void movePlayer(Player player, DungeonGrid grid, int dx, int dy) {
+    public boolean movePlayer(Player player, DungeonGrid grid, int dx, int dy) {
         int oldX = player.getX();
         int oldY = player.getY();
 
@@ -22,8 +22,13 @@ public class MovementService {
             grid.getTiles()[newX][newY].setHasPlayer(true);
 
             System.out.println("> You moved.");
+            return false;
+        } else if (grid.getTiles()[newX][newY].getType() == Tile.TileType.DOOR){
+            System.out.println("You left the dungeon");
+            return true;
         } else {
             System.out.println("You cannot move there, it's a wall");
+            return false;
         }
     }
 

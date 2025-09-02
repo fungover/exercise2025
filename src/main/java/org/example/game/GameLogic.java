@@ -2,36 +2,33 @@ package org.example.game;
 
 import org.example.entities.characters.Player;
 import org.example.entities.enemies.Goblin;
-import org.example.entities.items.Item;
-import org.example.entities.items.Weapon;
 import org.example.map.DungeonGrid;
+import org.example.service.ConfigService;
+import org.example.service.DifficultyConfig;
+import org.example.service.InputService;
 import org.example.service.MovementService;
 import org.example.service.SpawnService;
 import org.example.utils.Utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GameLogic {
     private static final Logger LOGGER = Logger.getLogger(GameLogic.class.getName());
 
-    private DungeonGrid grid;
-    private SpawnService spawnService;
-    private boolean gameOver;
-    private String difficulty;
-    private int health;
-    private int maxHealth;
-    private Weapon startingWeapon;
-    private String name;
-
+    private final InputService inputService = new InputService();
+    private final ConfigService configService = new ConfigService();
+    private final SpawnService spawnService = new SpawnService();
+    private final MovementService movementService = new MovementService();
+    private final GameState state = new GameState();
 
     public void initializeGame() {
         System.out.println("=== Welcome to the dungeon!===");
         Utils.newRow();
-        name = getName();
+
+        System.out.println("Please enter a name for your player");
+        state.name = inputService.readLine();
+        System.out.println("Your name is " + state.name);
 
         Utils.newRow();
         chooseDifficulty();
@@ -43,25 +40,9 @@ public class GameLogic {
         startGame();
     }
 
-    public String getName() {
-        System.out.println("Please enter a name for your player");
-        String name = "";
-
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            name = reader.readLine();
-            System.out.println("Your name is " + name);
-
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, "Error storing name", ex);
-        }
-
-        return name;
-    }
-
-    public void chooseDifficulty() {
+    private void chooseDifficulty() {
         boolean validChoice = false;
-        System.out.println("Please choose a dififculty level:");
+        System.out.println("Please choose a difficulty level:");
 
         do {
             System.out.println("1. Easy");
@@ -69,41 +50,30 @@ public class GameLogic {
             System.out.println("3. Hard");
 
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                String input = reader.readLine();
-                int choice = Integer.parseInt(input);
+                String input = inputService.readLine();
 
-                if (choice < 1 || choice > 3) {
+                if (!input.equals("1")  && !input.equals("2")  && !input.equals("3") ) {
                     System.out.println("Invalid input. Please try again.");
                     continue;
                 }
 
-                switch (choice) {
-                    case 1:
-                        difficulty = "easy";
-                        health = 150;
-                        maxHealth = 150;
-                        startingWeapon = new Weapon("The Unlikely Mop", "Turns out this mop can clean up more than just floors.", 20, 30);
-                        break;
-                    case 2:
-                        difficulty = "medium";
-                        health = 100;
-                        maxHealth = 100;
-                        startingWeapon = new Weapon("The Rusty Spoon of Destiny", "It's not what you'd expect, but it's what you've got.", 10, 20);
-                        break;
-                    case 3:
-                        difficulty = "hard";
-                        health = 50;
-                        maxHealth = 50;
-                        startingWeapon = new Weapon("The Pebble of Regret", "A simple rock. You've clearly made some poor life choices.", 1, 5);
-                        break;
-                    default:
+                int choice = Integer.parseInt(input);
+                DifficultyConfig config = configService.chooseDifficulty(choice);
+
+                if (config == null) {
+                    System.out.println("Invalid input. Please try again.");
+                    continue;
                 }
 
-                validChoice = true;
-                System.out.println("You have chosen the " + difficulty + " difficulty.");
+                state.difficulty = config.difficulty;
+                state.health = config.health;
+                state.maxHealth = config.maxHealth;
+                state.startingWeapon = config.startingWeapon;
 
-            } catch (IOException | NumberFormatException ex) {
+                validChoice = true;
+                System.out.println("You have chosen the " + state.difficulty + " difficulty.");
+
+            } catch (NumberFormatException ex) {
                 LOGGER.log(Level.SEVERE, "Error choosing a difficulty", ex);
             }
 
@@ -120,33 +90,26 @@ public class GameLogic {
             System.out.println("3. Large (20x20)");
 
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                String input = reader.readLine();
-                int choice = Integer.parseInt(input);
+                String input = inputService.readLine();
 
-                if (choice < 1 || choice > 3) {
+                if (!input.equals("1")  && !input.equals("2")  && !input.equals("3") ) {
                     System.out.println("Invalid input. Please try again.");
                     continue;
                 }
 
-                switch (choice) {
-                    case 1:
-                        grid = new DungeonGrid(10, 10);
-                        break;
+                int choice = Integer.parseInt(input);
+                DungeonGrid grid = configService.chooseMapSize(choice);
 
-                    case 2:
-                        grid = new DungeonGrid(15, 15);
-                        break;
-
-                    case 3:
-                        grid = new DungeonGrid(20, 20);
-                        break;
+                if (grid == null) {
+                    System.out.println("Invalid input. Please try again.");
+                    continue;
                 }
 
+                state.grid = grid;
                 validChoice = true;
                 System.out.println("You have chosen a " + grid.getWidth() + "x" + grid.getHeight() + " map.");
 
-            } catch (IOException | NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 LOGGER.log(Level.SEVERE, "Error choosing a map", ex);
             }
 
@@ -154,58 +117,41 @@ public class GameLogic {
     }
 
     public void startGame() {
-        grid = DungeonGrid.createDungeonGrid(grid.getWidth(), grid.getHeight());
-        int[] optimalStartPosition = grid.getOptimalStartPosition();
+        state.grid = DungeonGrid.createDungeonGrid(state.grid.getWidth(), state.grid.getHeight());
+        int[] optimalStartPosition = state.grid.getOptimalStartPosition();
 
-        spawnService = new SpawnService();
-        spawnService.spawnEnemies(grid, 10, () -> new Goblin());
+        spawnService.spawnEnemies(state.grid, 10, () -> new Goblin());
 
-        int x = optimalStartPosition[0];
-        int y = optimalStartPosition[1];
+        Player player = new Player(state.name, state.health, state.maxHealth,
+                optimalStartPosition[0], optimalStartPosition[1], state.startingWeapon);
 
-        Player player = new Player(name, health, maxHealth, x, y, startingWeapon);
-        MovementService movementService = new MovementService();
-
-        while (!gameOver) {
-            movementService.availableMoves(player, grid);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            String input = "";
-            try {
-                input = reader.readLine();
-            } catch (IOException ex) {
-                LOGGER.log(Level.SEVERE, "Error reading input", ex);
-            }
+        while (!state.gameOver) {
+            movementService.availableMoves(player, state.grid);
+            String input = inputService.readLine();
 
             switch (input.toUpperCase()) {
                 case "N":
-                    movementService.movePlayer(player, grid, 0, -1);
+                    if (movementService.movePlayer(player, state.grid, 0, -1)) state.gameOver = true;
                     break;
                 case "E":
-                    movementService.movePlayer(player, grid, 1, 0);
+                    if (movementService.movePlayer(player, state.grid, 1, 0)) state.gameOver = true;
                     break;
                 case "S":
-                    movementService.movePlayer(player, grid, 0, 1);
+                    if (movementService.movePlayer(player, state.grid, 0, 1)) state.gameOver = true;
                     break;
                 case "W":
-                    movementService.movePlayer(player, grid, -1, 0);
+                    if (movementService.movePlayer(player, state.grid, -1, 0)) state.gameOver = true;
                     break;
                 default:
                     System.out.println("Invalid input. Please try again.");
                     break;
             }
-
-            gameOver = true;
-
         }
+
         endGame();
     }
 
     public void endGame() {
         System.out.println("=== Game Over ===");
-        /* if () {
-            System.out.println("Congratulations! You cleared the dungeon.");
-        } else {
-            System.out.println("You have died. Better luck next time!");
-        } */
     }
 }

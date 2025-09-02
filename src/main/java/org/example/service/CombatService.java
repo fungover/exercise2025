@@ -11,6 +11,7 @@ public class CombatService {
 
         while (player.getHealth() > 0 && enemy.getHealth() > 0) {
             int playerDamage = player.getDamage();
+            int enemyDamge = enemy.getDamage();
 
             System.out.println("\nYour HP: " + player.getHealth() + " | Enemy HP: " + enemy.getHealth());
             System.out.println("Choose action:");
@@ -42,6 +43,10 @@ public class CombatService {
                     }
                     break;
             }
+
+            player.takeDamage(enemyDamge);
+            System.out.println(enemy.getAttackMessage());
+
         }
     }
 }

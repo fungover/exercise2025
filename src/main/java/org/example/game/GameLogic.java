@@ -155,8 +155,16 @@ public class GameLogic {
             if (currentTile.getEnemy() != null) {
                 CombatService combatService = new CombatService();
                 System.out.println("Boo, there is an enemy here");
-
                 combatService.battleEnemy(player, currentTile.getEnemy());
+
+                if (player.getHealth() <= 0) {
+                    System.out.println("You have been defeated!");
+                    state.gameOver = true;
+                }
+
+                if (currentTile.getEnemy().getHealth() <= 0) {
+                    currentTile.removeEnemy();
+                }
             }
 
         }

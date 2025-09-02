@@ -78,6 +78,7 @@ public class Tile {
         this.items = items;
     }
 
+    //Methods
     public void addItem(Weapon weapon) {
         if (weapon != null) {
             items.add(weapon);
@@ -91,4 +92,10 @@ public class Tile {
     }
 
     public void removeItem(Item item){items.remove(item);}
+
+    public void removeEnemy() {
+        this.enemy = null;
+    }
+
+
 }

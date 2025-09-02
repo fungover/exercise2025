@@ -1,13 +1,18 @@
 package org.example;
 
-//System.console().readLine()
-
 import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
         String zone = zoneSelection();
         System.out.println("Selected zone: " + zone);
+
+        String apiResponse = API.fetchPrices(zone);
+
+        if (apiResponse != null) {
+            System.out.println("Api response:");
+            System.out.println(apiResponse);
+        }
     }
 
     public static String zoneSelection() {

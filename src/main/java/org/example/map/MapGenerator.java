@@ -1,24 +1,42 @@
 package org.example.map;
 
+import org.example.entities.items.Item;
+import org.example.service.loot.DefaultLootFactory;
+import org.example.service.loot.LootFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
-/** Next steps (later): boss placement, items, enemies. */
+/** Next steps (later): boss placement, enemies. */
 public final class MapGenerator {
     private final Random random;
+    private final LootFactory lootFactory;
     private final int minRoomSize;
     private final int maxRoomSize;
     private final int desiredRoomCount;
     private final int roomPadding;
     private final int maxPlacementAttempts;
 
+    // Builds a default loot table from the same seed
     public MapGenerator(long seed,
                         int minRoomSize,
                         int maxRoomSize,
                         int desiredRoomCount,
                         int roomPadding,
                         int maxPlacementAttempts) {
+        this(seed, minRoomSize, maxRoomSize, desiredRoomCount, roomPadding, maxPlacementAttempts,
+                new DefaultLootFactory(seed));
+    }
+
+    // Pass any LootFactory (great for tests or custom tables)
+    public MapGenerator(long seed,
+                        int minRoomSize,
+                        int maxRoomSize,
+                        int desiredRoomCount,
+                        int roomPadding,
+                        int maxPlacementAttempts,
+                        LootFactory lootFactory) {
         if (minRoomSize <= 1) throw new IllegalArgumentException("minRoomSize must be > 1");
         if (maxRoomSize < minRoomSize) throw new IllegalArgumentException("maxRoomSize must be >= minRoomSize");
         if (desiredRoomCount <= 0) throw new IllegalArgumentException("desiredRoomCount must be > 0");
@@ -26,6 +44,7 @@ public final class MapGenerator {
         if (maxPlacementAttempts <= 0) throw new IllegalArgumentException("maxPlacementAttempts must be > 0");
 
         this.random = new Random(seed);
+        this.lootFactory = lootFactory;
         this.minRoomSize = minRoomSize;
         this.maxRoomSize = maxRoomSize;
         this.desiredRoomCount = desiredRoomCount;
@@ -33,7 +52,7 @@ public final class MapGenerator {
         this.maxPlacementAttempts = maxPlacementAttempts;
     }
 
-    /** Builds a map: rooms + corridors; marks SPAWN in the first room. */
+    /** Builds a map: rooms + corridors; marks SPAWN; scatters loot. */
     public DungeonMap generate(int mapWidth, int mapHeight) {
         DungeonMap map = new DungeonMap(mapWidth, mapHeight);
         List<Room> placedRooms = placeRooms(map, mapWidth, mapHeight);
@@ -42,10 +61,13 @@ public final class MapGenerator {
             connectRoomsWithCorridors(map, placedRooms);
         }
 
-        // Mark SPAWN in the first room for now
         if (!placedRooms.isEmpty()) {
             Room firstRoom = placedRooms.getFirst();
-            map.tileAt(firstRoom.left() + 1, firstRoom.top() + 1).setType(TileType.SPAWN);
+            int spawnX = firstRoom.left() + 1;
+            int spawnY = firstRoom.top() + 1;
+            map.tileAt(spawnX, spawnY).setType(TileType.SPAWN);
+
+            scatterLoot(map, placedRooms, spawnX, spawnY);
         }
 
         return map;
@@ -94,14 +116,13 @@ public final class MapGenerator {
     private void connectRoomsWithCorridors(DungeonMap map, List<Room> roomsInPlacementOrder) {
         for (int index = 1; index < roomsInPlacementOrder.size(); index++) {
             Room current = roomsInPlacementOrder.get(index);
-            Room nearest = findNearestRoom(current, roomsInPlacementOrder, index); // search among [0, index-1]
+            Room nearest = findNearestRoom(current, roomsInPlacementOrder, index);
 
             int startX = roomCenterX(current);
             int startY = roomCenterY(current);
             int targetX = roomCenterX(nearest);
             int targetY = roomCenterY(nearest);
 
-            // Randomize whether we go horizontal-then-vertical or vertical-then-horizontal
             boolean carveHorizontalFirst = random.nextBoolean();
             if (carveHorizontalFirst) {
                 carveHorizontalCorridor(map, startX, targetX, startY);
@@ -132,6 +153,28 @@ public final class MapGenerator {
         return nearest;
     }
 
+    /** Drop 0..2 items per room at random floor tiles, avoiding SPAWN. */
+    private void scatterLoot(DungeonMap map, List<Room> rooms, int spawnX, int spawnY) {
+        for (Room room : rooms) {
+            int drops = randomBetween(0, 2);
+            for (int i = 0; i < drops; i++) {
+                Optional<Item> maybe = lootFactory.roll();
+                if (maybe.isEmpty()) continue;
+
+                // Try a few random tiles inside the room until we find a safe spot
+                for (int attempts = 0; attempts < 10; attempts++) {
+                    int x = randomBetween(room.left(), room.right());
+                    int y = randomBetween(room.top(), room.bottom());
+                    var tile = map.tileAt(x, y);
+                    if (tile.getType() != TileType.FLOOR) continue;
+                    if (x == spawnX && y == spawnY) continue; // don't cover spawn
+                    tile.addItem(maybe.get());
+                    break;
+                }
+            }
+        }
+    }
+
     private int roomCenterX(Room room) {
         return room.left() + room.width() / 2;
     }
@@ -147,9 +190,7 @@ public final class MapGenerator {
     private void setFloorIfWall(DungeonMap map, int x, int y) {
         if (!map.isInside(x, y)) return;
         var tile = map.tileAt(x, y);
-        if (tile.getType() == TileType.WALL) {
-            tile.setType(TileType.FLOOR);
-        }
+        if (tile.getType() == TileType.WALL) tile.setType(TileType.FLOOR);
     }
 
     private void carveHorizontalCorridor(DungeonMap map, int fromX, int toX, int fixedY) {

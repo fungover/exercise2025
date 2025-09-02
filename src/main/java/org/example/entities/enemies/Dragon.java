@@ -2,7 +2,6 @@ package org.example.entities.enemies;
 
 import org.example.entities.Player;
 import org.example.entities.Position;
-import org.example.service.LootDropOutcome;
 import org.example.service.LootService;
 
 public class Dragon extends Enemy implements Boss {
@@ -52,7 +51,6 @@ public class Dragon extends Enemy implements Boss {
     @Override
     public void dropLoot(Player player, LootService lootService) {
         System.out.println(getDefeatMessage());
-        LootDropOutcome outcome = lootService.tryDropRandomLoot(player);
-        System.out.println(outcome.getMessage());
+        System.out.println("No loot dropped - this feature is not yet implemented.");
     }
 }

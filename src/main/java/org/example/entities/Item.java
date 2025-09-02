@@ -13,22 +13,20 @@ public abstract class Item {
     }
 
     public Item(String name, String description, ItemType type) {
-        this.name = name; this.description = description; this.type = type;
+        this.name = name;
+        this.description = description;
+        this.type = type;
     }
 
     //getters
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
 
-    public String getDescription() {
-        return description;
-    }
+    public String getDescription() {return description;}
 
-    public ItemType getType() {
-        return type;
-    }
+    public ItemType getType() {return type;}
 
     //abstract method
     public abstract void use(Player player);
+
+
 }

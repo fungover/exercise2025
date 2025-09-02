@@ -8,14 +8,16 @@ public class Player {
     private int health;
     private int maxHealth;
     private int x, y; //position
-    private int damage;
+    private int baseDamage;
+    private int weaponDamage;
     private List<Item> inventory;
 
     public Player(String name) {
         this.name = name;
         this.maxHealth = 100;
         this.health = maxHealth;
-        this.damage = 10;
+        this.baseDamage = 10;
+        this.weaponDamage = 0;
         this.inventory = new ArrayList<>();
 
     }
@@ -32,7 +34,11 @@ public class Player {
 
     public int getY() {return y;}
 
-    public int getDamage() {return damage;}
+    public int getBaseDamage() {return baseDamage;}
+
+    public int getWeaponDamage() {return weaponDamage;}
+
+    public int getDamage() {return baseDamage + weaponDamage;}
 
     public List<Item> getInventory() {return inventory;}
 
@@ -43,7 +49,7 @@ public class Player {
     }
 
     public void setHealth(int health) {
-        this.health = Math.max(0, this.health - damage);
+        this.health = Math.max(0, this.health - baseDamage);
     }
 
     public void takeDamage(int damage) {
@@ -59,6 +65,15 @@ public class Player {
 
     public void addItem(Item item) {
         inventory.add(item);
+        //if it's a weapon, equip straight away
+        if (item instanceof Weapon) {
+            Weapon weapon = (Weapon) item;
+            weaponDamage += weapon.getDamageBonus();
+            System.out.println(
+              "You equipped the " + weapon.getName() + "! Your baseDamage increased by " + weapon.getDamageBonus() +
+                "!");
+
+        }
     }
 
     public boolean removeItem(Item item) {
@@ -72,7 +87,11 @@ public class Player {
     public void displayStats() {
         System.out.println("=== " + name + " ===");
         System.out.println("Health: " + health + "/" + maxHealth);
-        System.out.println("Damage:  " + damage);
+        System.out.println("Damage:  " + baseDamage);
+        if (weaponDamage > 0) {
+            System.out.println("Weapon Damage: +" + weaponDamage);
+            System.out.println("Total Damage: " + getDamage());
+        }
         System.out.println("Position: (" + x + ", " + y + ")");
     }
 
@@ -82,8 +101,8 @@ public class Player {
             System.out.println("Empty");
         } else {
             for (int i = 0; i < inventory.size(); i++) {
-                System.out.println((i + 1) + ", " + inventory.get(i).getName() + " - " +
-                  inventory.get(i).getDescription());
+                System.out.println(
+                  (i + 1) + ", " + inventory.get(i).getName() + " - " + inventory.get(i).getDescription());
             }
         }
     }

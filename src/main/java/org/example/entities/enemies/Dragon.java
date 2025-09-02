@@ -32,7 +32,7 @@ public class Dragon extends Enemy implements Boss {
 
     @Override
     public boolean hasSpecialAttack() {
-        return !hasUsedSpecialAttack && getHealth() < (getMaxHealth() / 2);
+        return !hasUsedSpecialAttack && getHealth() <= (getMaxHealth() / 2);
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.entities.Position;
 import org.example.map.Room;
+import org.example.map.Tile;
 import org.example.map.TileType;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class RoomService {
     }
 
     public boolean isPlayerOnDoor(Position playerPos) {
-        TileType currentTile = getCurrentRoom().getDungeon().getTile(playerPos.getX(), playerPos.getY()).getType();
-        return currentTile == TileType.DOOR;
+        Tile tile = getCurrentRoom().getDungeon().getTile(playerPos.getX(), playerPos.getY());
+        return tile != null && tile.getType() == TileType.DOOR;
     }
 
     public String switchToNextRoom() {

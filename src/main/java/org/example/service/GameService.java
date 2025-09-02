@@ -15,7 +15,7 @@ public class GameService {
     private EnemyService enemyService;
     private final DisplayService displayService;
     private final LootService lootService;
-    private final CombatService combatService;
+    private CombatService combatService;
     private final RandomGenerator randomGenerator;
 
     public GameService() {
@@ -65,11 +65,13 @@ public class GameService {
             String newRoomName = roomService.switchToNextRoom();
             player.setPosition(roomService.getStartingPosition());
 
-            itemService = new ItemService();
+            itemService = new ItemService(randomGenerator);
             itemService.placeRandomItems(roomService.getCurrentRoom().getDungeon());
 
-            enemyService = new EnemyService();
+            enemyService = new EnemyService(randomGenerator);
             enemyService.placeEnemiesForRoom(newRoomName, roomService.getCurrentRoom().getDungeon());
+
+            combatService = new CombatService(displayService, itemService);
 
             System.out.println("You entered: " + newRoomName);
         }

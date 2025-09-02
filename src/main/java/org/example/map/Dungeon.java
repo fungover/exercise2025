@@ -6,6 +6,9 @@ public class Dungeon {
     private final Tile[][] grid;
 
     public Dungeon(int rows, int columns) { // constructor to initialize the dungeon with given rows and columns
+        if (rows < 3 || columns < 3) {
+            throw new IllegalArgumentException("rows and columns must be >= 3"); // minimum size to create a valid dungeon
+        }
         this.rows = rows; //the number of rows in the dungeon
         this.columns = columns; //the number of columns in the dungeon
         this.grid = new Tile[rows][columns]; //2D array of Tile objects

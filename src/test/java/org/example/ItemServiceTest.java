@@ -93,4 +93,15 @@ class ItemServiceTest {
         assertFalse(result.isSuccess()); // Should fail
         assertEquals("You have no equipment to equip.", result.getMessage()); // Check failure message
     }
+
+    // TEST 6: Edge case where index equals inventory size, ensuring it's handled as invalid. (Suggestion from codeRabbit).
+    @Test
+    void testUseItemIndexEqualsSizeIsInvalid() {
+        player.addToInventory(new HealthPotion(new Position(1, 1))); // Inventory size is now 1
+        int size = player.getInventory().size(); // size == 1
+        ItemUseOutcome result = itemService.useItem(player, size); // Using index equal to size (1) which is invalid
+        assertFalse(result.isSuccess()); // Should fail
+        assertEquals("Invalid choice.", result.getMessage()); // Check failure message
+        assertEquals(1, player.getInventory().size()); // Inventory should remain unchanged
+    }
 }

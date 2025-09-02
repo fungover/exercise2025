@@ -11,9 +11,13 @@ public class CombatService {
     private final LootService lootService;
 
     public CombatService(DisplayService displayService, ItemService itemService) {
+        this(displayService, itemService, new LootService());
+    }
+
+    public CombatService(DisplayService displayService, ItemService itemService, LootService lootService) {
         this.displayService = displayService;
         this.itemService = itemService;
-        this.lootService = new LootService();
+        this.lootService = lootService;
     }
 
     public boolean startCombat(Player player, Enemy enemy, Scanner scanner) {

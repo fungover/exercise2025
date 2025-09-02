@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.entities.*;
 import org.example.entities.equipment.Equippable;
+import org.example.entities.equipment.Usable;
 import org.example.entities.items.consumables.HealthPotion;
 import org.example.map.Dungeon;
 import org.example.utils.RandomGenerator;
@@ -52,12 +53,16 @@ public class ItemService {
             return new ItemUseOutcome(false, "Your inventory is empty.");
         }
 
-        if (itemIndex < 0 || itemIndex > inventory.size()) {
+        if (itemIndex < 0 || itemIndex >= inventory.size()) {
             return new ItemUseOutcome(false, "Invalid choice.");
         }
 
         Item item = inventory.get(itemIndex);
-        player.useItem(item.getName());
+        if (!(item instanceof Usable usable)) {
+            return new ItemUseOutcome(false, "Selected item is not usable.");
+        }
+        usable.use(player);
+        player.removeFromInventory(item);
         return new ItemUseOutcome(true, "Used: " + item.getName());
     }
 
@@ -102,7 +107,7 @@ public class ItemService {
             return new EquipmentOutcome(false, "You have no equipment to equip.");
         }
 
-        if (equipmentIndex < 0 || equipmentIndex > equippableItems.size()) {
+        if (equipmentIndex < 0 || equipmentIndex >= equippableItems.size()) {
             return new EquipmentOutcome(false, "Invalid choice.");
         }
 

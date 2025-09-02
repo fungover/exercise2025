@@ -1,9 +1,12 @@
 package org.example.game;
 
 import org.example.entities.characters.Player;
+import org.example.entities.enemies.Goblin;
 import org.example.entities.items.Item;
+import org.example.entities.items.Weapon;
 import org.example.map.DungeonGrid;
 import org.example.service.SpawnService;
+import org.example.utils.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,27 +18,39 @@ public class GameLogic {
     private static final Logger LOGGER = Logger.getLogger(GameLogic.class.getName());
 
     private DungeonGrid grid;
-    private Player player;
     private SpawnService spawnService;
     private boolean gameOver;
     private String difficulty;
+    private int health;
+    private int maxHealth;
+    private Weapon startingWeapon;
+    private String name;
 
 
     public void initializeGame() {
         System.out.println("=== Welcome to the dungeon!===");
+        Utils.newRow();
+        name = getName();
+
+        Utils.newRow();
         chooseDifficulty();
+
+        Utils.newRow();
         chooseMapSize();
 
-
+        Utils.newRow();
+        startGame();
     }
 
     public String getName() {
-        System.out.println("Please enter you name");
+        System.out.println("Please enter a name for your player");
         String name = "";
 
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             name = reader.readLine();
+            System.out.println("Your name is " + name);
+
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error storing name", ex);
         }
@@ -65,12 +80,21 @@ public class GameLogic {
                 switch (choice) {
                     case 1:
                         difficulty = "easy";
+                        health = 150;
+                        maxHealth = 150;
+                        startingWeapon = new Weapon("The Unlikely Mop", "Turns out this mop can clean up more than just floors.", 20, 30);
                         break;
                     case 2:
                         difficulty = "medium";
+                        health = 100;
+                        maxHealth = 100;
+                        startingWeapon = new Weapon("The Rusty Spoon of Destiny", "It's not what you'd expect, but it's what you've got.", 10, 20);
                         break;
                     case 3:
                         difficulty = "hard";
+                        health = 50;
+                        maxHealth = 50;
+                        startingWeapon = new Weapon ("The Pebble of Regret", "A simple rock. You've clearly made some poor life choices.", 1, 5);
                         break;
                     default:
                 }
@@ -87,7 +111,7 @@ public class GameLogic {
 
     private void chooseMapSize() {
         boolean validChoice = false;
-        System.out.println("\nPlease choose a map size:");
+        System.out.println("Please choose a map size:");
 
         do {
             System.out.println("1. Small (10x10)");
@@ -129,7 +153,22 @@ public class GameLogic {
     }
 
     public void startGame() {
+        grid = DungeonGrid.createDungeonGrid(grid.getWidth(), grid.getHeight());
+        int[] doorPosition = grid.getDoorPosition();
+
+        spawnService = new SpawnService();
+        spawnService.spawnEnemies(grid, 10, () -> new Goblin());
+
+        int x = doorPosition[0];
+        int y = doorPosition[1];
+
+        Player player = new Player(name, health, maxHealth, x, y, startingWeapon );
+
         while ( !gameOver) {
+
+                System.out.println("You are in the dungeon. Type 'help' for a list of commands.");
+
+                gameOver = true;
 
         }
         endGame();
@@ -137,10 +176,10 @@ public class GameLogic {
 
     public void endGame() {
         System.out.println("=== Game Over ===");
-        if (/* player won */) {
+        /* if () {
             System.out.println("Congratulations! You cleared the dungeon.");
         } else {
             System.out.println("You have died. Better luck next time!");
-        }
+        } */
     }
 }

@@ -15,7 +15,7 @@ public class Player {
     private Inventory inventory;
     private Weapon equippedWeapon;
 
-    public Player(String name, int health, int maxHealth, int x, int y, int damage, Weapon equippedWeapon) {
+    public Player(String name, int health, int maxHealth, int x, int y, Weapon equippedWeapon) {
         this.name = name;
         this.health = health;
         this.maxHealth = maxHealth;

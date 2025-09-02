@@ -4,6 +4,7 @@ import org.SpinalGlitter.exercise2.entities.Position;
 import org.SpinalGlitter.exercise2.entities.Potion;
 import org.SpinalGlitter.exercise2.entities.Tile;
 import org.SpinalGlitter.exercise2.utils.RandomGeneration;
+import org.SpinalGlitter.exercise2.utils.WorldObject;
 
 import java.util.Map;
 import java.util.Random;
@@ -44,15 +45,16 @@ public class DungeonMap {
         return grid[pos.y()][pos.x()].isWalkable();
     }
 
-    public void printMap(Position playerPos, Map<Position, Potion> potions) {
+    public void printMap(Position playerPos, Map<Position, WorldObject> items) {
         for (int y = height - 1; y >= 0; y--) {
             for (int x = 0; x < width; x++) {
                 Position pos = new Position(x, y);
 
                 if (playerPos.equals(pos)) {
                     System.out.print("🧑"); // Player
-                } else if (potions.containsKey(pos)) {
-                    System.out.print("💗"); // Potion
+                } else if (items.containsKey(pos)) { // replace with items (org was potions)
+                    /*System.out.print("💗"); // Potion*/
+                    System.out.print(items.get(pos).getSymbol());
                 } else {
                     System.out.print(grid[y][x].getSymbol());
                 }

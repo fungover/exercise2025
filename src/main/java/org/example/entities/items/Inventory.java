@@ -1,61 +1,32 @@
 package org.example.entities.items;
 
+import java.util.ArrayList;
+
 public class Inventory {
-    private int coins;
-    private Weapon weapon;
-    private HealthPotion healthPotion;
+    private ArrayList<Item> items = new ArrayList<>();
 
-    public Inventory(int coinAmount, String weaponName, int potionAmount) {
-        this.coins = coinAmount;
-        this.weapon = weaponConstructor(weaponName);
-        this.healthPotion = potionConstructor(potionAmount);
-    }
-
-    private Weapon weaponConstructor(String weaponName) {
-        if (weaponName.equals("Sword")) {
-            return new Sword();
-        } else if (weaponName.equals("Dagger")) {
-            return new Dagger();
+    public void addItem(Item item) {
+        if (items.contains(item)) {
+            item.addQuantity();
         } else {
-            System.out.println("Error: No weapon of that name, returning null!");
-            return null;
+            items.add(item);
         }
     }
 
-    private HealthPotion potionConstructor(int potionAmount) {
-        return new HealthPotion(potionAmount);
+    public void removeItem(Item item) {
+        if (items.contains(item)) {
+            item.removeQuantity();
+        } else {
+            items.add(item);
+        }
     }
 
-    public void setCoins(int amount) {
-        this.coins = amount;
-    }
-
-    public void setWeapon(String name) {
-        this.weapon = weaponConstructor(name);
-    }
-
-    public void setHealthPotion(int amount) {
-        this.healthPotion.setAmount(amount);
-    }
-
-    public int getCoins() {
-        return coins;
-    }
-
-    public String getWeaponName() {
-        return weapon.getName();
-    }
-
-    public int getWeaponDamage() {
-        return weapon.getDamage();
-    }
-
-    public int getHealthPotions() {
-        return healthPotion.getAmount();
-    }
-
-    public int useHealthPotion() {
-        return healthPotion.getHealthRestored();
+    public void displayInventory() {
+        for (Item item : items) {
+            System.out.println("-----------------------------");
+            System.out.println(item.displayInfo());
+        }
+        System.out.println("-----------------------------");
     }
 
 }

@@ -1,21 +1,12 @@
 package org.example.entities.items;
 
-class HealthPotion {
-    private int amount;
+public class HealthPotion extends Item {
 
-    public HealthPotion(int amount) {
-        this.amount = amount;
+    public HealthPotion(String name, int quantity) {
+        super(name, quantity);
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public int getHealthRestored() {
+    public int restoreHealth() {
         return 20;
-    }
-
-    public int getAmount() {
-        return amount;
     }
 }

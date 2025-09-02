@@ -1,6 +1,6 @@
 package org.example.entities;
 
-public class Enemy implements Health {
+public abstract class Enemy implements Health {
     private int health;
     private int damage;
 

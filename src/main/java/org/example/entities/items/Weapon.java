@@ -1,6 +1,6 @@
 package org.example.entities.items;
 
-class Weapon {
+abstract class Weapon {
     private String name;
     private int damage;
 

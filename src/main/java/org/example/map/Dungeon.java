@@ -42,6 +42,11 @@ public class Dungeon {
         return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT;
     }
 
+    // kollar om en ruta går att gå på (inom kartan och inte är vägg)
+    public boolean isWalkable(int x, int y) {
+        return inBounds(x, y) && grid[y][x].getType() != TileType.WALL;
+    }
+
     // Hämtar rutan på koodinat (x=kolumn, y=rad)
     public Tile get(int x, int y) {
         return grid[y][x];

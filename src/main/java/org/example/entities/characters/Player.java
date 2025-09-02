@@ -8,7 +8,7 @@ public abstract class Player {
     private final String name;
     private final Inventory inventory = new Inventory();
     private int health;
-    private int maxHealth;
+    private final int maxHealth;
     private int x, y; // map coordinates (tile-based)
 
     protected Player(String name, int maxHealth, int startX, int startY) {
@@ -20,38 +20,56 @@ public abstract class Player {
         this.y = startY;
     }
 
-    public String getName() { return name; }
-    public Inventory getInventory() { return inventory; }
-    public int getHealth() { return health; }
-    public int getMaxHealth() { return maxHealth; }
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public boolean isDead() { return health <= 0; }
-    public Weapon getWeapon() { return inventory.weapon(); }
-    public Armor getArmor()   { return inventory.armor(); }
-    public int getDefense()   { return (inventory.armor() != null) ? inventory.armor().damageReduction() : 0; }
+    public String getName() {
+        return name;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public boolean isDead() {
+        return health <= 0;
+    }
+
+    public Weapon getWeapon() {
+        return inventory.weapon();
+    }
+
+    public Armor getArmor() {
+        return inventory.armor();
+    }
+
+    public int getDefense() {
+        return (inventory.armor() != null) ? inventory.armor().damageReduction() : 0;
+    }
 
     public void heal(int amount) {
-        if (amount > 0)
-            //Implement later
-            System.out.println("health + amount");
-            System.out.println("MaxHealth is cap (no overhealing)");
+        if (amount <= 0) return;
+        health = Math.min(maxHealth, health + amount);
     }
 
     // Damage Taken
-    public void takeDamage(int amount) {
-        if (amount <= 0) return;
-        //Implement later
-        System.out.println("netDamage = incomingDamage - defence");
-        System.out.println("health - netDamage");
-    }
-
-    //Max Health increase
-    public void increaseMaxHealth(int increment) {
-        if (increment > 0) {
-            //Implement later
-            System.out.println("maxHealth + increment");
-        }
+    public void takeDamage(int incomingDamage) {
+        if (incomingDamage <= 0) return;
+        int net = Math.max(0, incomingDamage - getDefense());
+        health = Math.max(0, health - net);
     }
 
     //Movement
@@ -64,9 +82,10 @@ public abstract class Player {
     }
 
     //Attack Damage
-    public void attackDamage() {
-        //Implement later
-        System.out.println("baseDamage + weaponDamage");
+    public int attackDamage() {
+        int base = baseDamage();
+        Weapon w = getWeapon();
+        return base + ((w != null) ? w.bonusDamage() : 0);
     }
 
     protected abstract int baseDamage();

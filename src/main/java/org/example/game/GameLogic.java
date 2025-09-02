@@ -68,7 +68,7 @@ public class GameLogic {
                 state.difficulty = config.difficulty;
                 state.health = config.health;
                 state.maxHealth = config.maxHealth;
-                state.startingWeapon = config.startingWeapon;
+                state.weapon = config.startingWeapon;
 
                 validChoice = true;
                 System.out.println("You have chosen the " + state.difficulty + " difficulty.");
@@ -121,9 +121,10 @@ public class GameLogic {
         int[] optimalStartPosition = state.grid.getOptimalStartPosition();
 
         spawnService.spawnEnemies(state.grid, 10, () -> new Goblin());
+        spawnService.spawnWeapons(state.grid, 10);
 
         Player player = new Player(state.name, state.health, state.maxHealth,
-                optimalStartPosition[0], optimalStartPosition[1], state.startingWeapon);
+                optimalStartPosition[0], optimalStartPosition[1], state.weapon);
 
         while (!state.gameOver) {
             movementService.availableMoves(player, state.grid);

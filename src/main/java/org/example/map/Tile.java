@@ -2,6 +2,7 @@ package org.example.map;
 
 import org.example.entities.enemies.Enemy;
 import org.example.entities.items.Item;
+import org.example.entities.items.Weapon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,4 +77,18 @@ public class Tile {
     public void setItems(List<Item> items) {
         this.items = items;
     }
+
+    public void addItem(Weapon weapon) {
+        if (weapon != null) {
+            items.add(weapon);
+        }
+    }
+
+    public void addItem(Item item) {
+        if (item != null) {
+            items.add(item);
+        }
+    }
+
+    public void removeItem(Item item){items.remove(item);}
 }

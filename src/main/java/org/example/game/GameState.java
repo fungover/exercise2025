@@ -8,7 +8,7 @@ public class GameState {
     public String difficulty;
     public int health;
     public int maxHealth;
-    public Weapon startingWeapon;
+    public Weapon weapon;
     public DungeonGrid grid;
     public boolean gameOver;
 }

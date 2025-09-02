@@ -1,12 +1,10 @@
 package org.SpinalGlitter.exercise2.entities;
 
-import org.SpinalGlitter.exercise2.utils.WorldObject;
-
-public class Enemy implements WorldObject {
-    private final String name;
+public class Enemy {
+    private String name;
     private int hp;
     private int damage;
-    private final Position position;
+    private Position position;
 
     public Enemy(String name, int hp, int damage, Position position) {
         this.name = name;
@@ -30,19 +28,8 @@ public class Enemy implements WorldObject {
     public boolean isAlive() {
         return hp > 0;
     }
-
-    @Override
     public Position getPosition() {
         return position;
-    }
-
-    @Override
-    public String getSymbol() {
-        return switch (name) {
-            case "Goblin" -> "👺";
-            case "Skeleton" -> "💀";
-            default -> "❓";
-        };
     }
 }
 

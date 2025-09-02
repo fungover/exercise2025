@@ -1,13 +1,10 @@
+// Game.java
 package org.SpinalGlitter.exercise2.game;
 
-import org.SpinalGlitter.exercise2.entities.Player;
-import org.SpinalGlitter.exercise2.entities.Potion;
-import org.SpinalGlitter.exercise2.entities.Skeleton;
+import org.SpinalGlitter.exercise2.entities.*;
 import org.SpinalGlitter.exercise2.map.DungeonMap;
-import org.SpinalGlitter.exercise2.entities.Position;
 import org.SpinalGlitter.exercise2.utils.CommandUtils;
 import org.SpinalGlitter.exercise2.utils.RandomGeneration;
-import org.SpinalGlitter.exercise2.utils.WorldObject;
 
 import java.util.Map;
 import java.util.Random;
@@ -19,73 +16,68 @@ public final class Game {
 
         Player player = new Player("Hero");
         DungeonMap map = new DungeonMap(10, 10);
-        Position newPos = null;
-        Position posAvoid = new Position(1, 1);
         Random rng = new Random();
 
-        // generate a map object that contains skeletons, goblins, potions and weapons.
-        //TODO: Update printMap to take the worldObjectMap as an argument. and print out from the function getSymbol.
+        // 1) Lägg ut slumpmässiga väggar (t.ex. 10 hinder – justera efter smak)
+        RandomGeneration.placeWalls(map, 10, player.getPosition(), rng);
 
-        Map<Position, WorldObject> worldObjectMap = RandomGeneration.generateObjects(map, posAvoid, rng, 5, 5, 5, 2);
-        /*Map<Position, Potion> potions = RandomGeneration.placePotions(map, 5, player.getPosition(), rng);*/
-        for (WorldObject obj : worldObjectMap.values()) {
-            System.out.println("Value: " + obj.getPosition() + " " + obj.getSymbol());
-        }
-        // Potions
-        /*var potions = RandomGeneration.placeObjects(map, 3, posAvoid, rng, Potion::new);*/
-        /*var skeletons = RandomGeneration.placeObjects(map, 3, posAvoid, rng, Skeleton::new);*/
-        /*for (Position p : potions.keySet()) {
-            System.out.println("Key (position): " + p);
-        }*/
+        // 2) Lägg ut potions och fiender
+        Map<Position, Potion> potions = RandomGeneration.placePotions(map, 5, player.getPosition(), rng);
+        Map<Position, Enemy> enemies = RandomGeneration.placeEnemies(map, 4, player.getPosition(), rng);
 
         System.out.println("Dungeon Crawler Game Started!");
         System.out.println("You are at " + player.getPosition() + " with health " + player.getCurrentHealth() + "HP.");
         CommandUtils.printHelp();
 
-
         Scanner scanner = new Scanner(System.in);
 
-
-        do {
-            newPos = null;
-            map.printMap(player.getPosition(), worldObjectMap);
+        while (player.isAlive()) {
+            map.printMap(player.getPosition(), potions, enemies);
             System.out.println("You are at " + player.getPosition() + " with health " + player.getCurrentHealth() + "HP.");
             System.out.print("> ");
             String input = CommandUtils.normalize(scanner.nextLine().trim().toLowerCase());
 
+            Position newPos = null;
             switch (input) {
-                case "help", "h":  CommandUtils.printHelp(); break;
-                case "quit", "q":  System.out.println("Exiting the game. Goodbye!"); return;
-                case "north", "n": newPos = player.getPosition().getAdjacent(0, 1); break;
-                case "south", "s": newPos = player.getPosition().getAdjacent(0, -1);  break;
-                case "east", "e": newPos = player.getPosition().getAdjacent(1, 0); break;
-                case "west", "w": newPos = player.getPosition().getAdjacent(-1, 0);  break;
-
-                default:  System.out.println("Unknown command. Type 'help' for a list of commands."); break;
+                case "help" -> CommandUtils.printHelp();
+                case "quit" -> { System.out.println("Exiting the game. Goodbye!"); return; }
+                case "north" -> newPos = player.getPosition().getAdjacent(0, 1);
+                case "south" -> newPos = player.getPosition().getAdjacent(0, -1);
+                case "east"  -> newPos = player.getPosition().getAdjacent(1, 0);
+                case "west"  -> newPos = player.getPosition().getAdjacent(-1, 0);
+                default -> System.out.println("Unknown command. Type 'help' for a list of commands.");
             }
 
-            if (newPos != null && map.canMoveTo(newPos)) {
-                int dx = newPos.x() - player.getPosition().x();
-                int dy = newPos.y() - player.getPosition().y();
-                player.move(dx, dy);
-                /*Potion found = potions.remove(newPos);*/
-                /*if (found != null) {
-                    player.heal(found.getHeal());
-                    System.out.println("You found a " + found.getName() +
-                            " (+ " + found.getHeal() + " HP). Current HP: " + player.getCurrentHealth());
-                }*/
-            }
+            if (newPos == null) continue;
 
-
-            if (newPos != null && map.canMoveTo(newPos)) {
-                int dx = newPos.x() - player.getPosition().x();
-                int dy = newPos.y() - player.getPosition().y();
-                player.move(dx, dy);
-            } else if (newPos != null) {
+            // 3) Tillåt inte att gå in i vägg eller fiende (fiender som hinder tills combat finns)
+            if (!map.canMoveTo(newPos)) {
                 System.out.println("You hit a wall!");
+                continue;
+            }
+            if (enemies.containsKey(newPos)) {
+                Enemy e = enemies.get(newPos);
+                System.out.println("An enemy blocks your path: " + e.getName() + " at " + newPos + ".");
+                // Här kan du senare trigga combat i stället för att blockera
+                continue;
             }
 
+            // 4) Flytta spelaren
+            int dx = newPos.x() - player.getPosition().x();
+            int dy = newPos.y() - player.getPosition().y();
+            player.move(dx, dy);
 
-        } while (player.isAlive());
+            // 5) Plocka upp potion om du klev på en
+            Potion found = potions.remove(newPos);
+            if (found != null) {
+                player.heal(found.getHeal());
+                System.out.println("You found a " + found.getName() +
+                        " (+ " + found.getHeal() + " HP). Current HP: " + player.getCurrentHealth());
+            }
+        }
     }
 }
+
+// TODO: implementera combat, inventory, och andra funktioner enligt behov
+// TODO: 1 Implement pick up item.
+

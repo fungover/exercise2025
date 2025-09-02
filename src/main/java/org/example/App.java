@@ -17,10 +17,11 @@ public class App {
             System.out.print("---- Morgondagens priser ----");
            Printer.printCalculatedPrices(tomorrow);
 
-    } catch (IOException | InterruptedException e) {
-        System.err.println("Fel: " + e.getMessage());
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Fel: " + e.getMessage());
+        }
     }
 
-    }
-    }
+
+}
 

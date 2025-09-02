@@ -20,7 +20,7 @@ public class Printer {
     }
 
     public static void printCalculatedPrices(PricePerHour[] prices){
-        System.out.println("\nMedelpris: " + Calculate.calculateMean(prices) + " kr/kWh");
+        System.out.println("\nMedelpris: " + String.format("%.2f", Calculate.calculateMean(prices)) + " kr/kWh");
 
         PricePerHour expensive = Calculate.findMostExpensiveHour(prices);
         PricePerHour cheap = Calculate.findCheapestHour(prices);

@@ -50,5 +50,11 @@ public class Tile {
         return type != TileType.WALL;
     }
 
+    // Implement setter for enemy
+
+    // Implement setter for item
+
+    // Implement clearing mechanism
+
 }
 

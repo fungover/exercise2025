@@ -48,8 +48,8 @@ public class Player {
         this.y = y;
     }
 
-    public void setHealth(int health) {
-        this.health = Math.max(0, this.health - baseDamage);
+    public void setHealth(int amount) {
+        this.health = amount;
     }
 
     public void takeDamage(int damage) {

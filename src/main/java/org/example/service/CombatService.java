@@ -85,7 +85,7 @@ public class CombatService {
 
     }
 
-    private static void playerAttack(Player player, Enemy enemy) {
+    static void playerAttack(Player player, Enemy enemy) {
         int damage = player.getDamage() + RandomGenerator.nextInt(-2, 3);//gives us some random dmg
         damage = Math.max(1, damage); //sets min dmg to 1
 
@@ -97,7 +97,7 @@ public class CombatService {
         }
     }
 
-    private static void enemyAttack(Player player, Enemy enemy) {
+    static void enemyAttack(Player player, Enemy enemy) {
         int damage = enemy.getDamage() + RandomGenerator.nextInt(-2, 3);
         damage = Math.max(1, damage);
 

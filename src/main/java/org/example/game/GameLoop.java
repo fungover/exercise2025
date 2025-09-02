@@ -136,7 +136,7 @@ public class GameLoop {
         }
     }
 
-    private void useItem(String itemNumber) {
+    public void useItem(String itemNumber) {
         try {
             int index = Integer.parseInt(itemNumber) - 1;
             if (index >= 0 && index < player.getInventory().size()) {
@@ -210,5 +210,9 @@ public class GameLoop {
         System.out.println("- Choose to Attack, Use item, or Flee");
         System.out.println("- Weapons automatically increase your damage when picked up");
         System.out.println("- Health potions can be used in/out of combat to restore HP");
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

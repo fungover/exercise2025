@@ -3,6 +3,7 @@ package org.example.game;
 import org.example.entities.characters.Player;
 import org.example.entities.enemies.Goblin;
 import org.example.map.DungeonGrid;
+import org.example.map.Tile;
 import org.example.service.ConfigService;
 import org.example.service.DifficultyConfig;
 import org.example.service.InputService;
@@ -120,7 +121,7 @@ public class GameLogic {
         state.grid = DungeonGrid.createDungeonGrid(state.grid.getWidth(), state.grid.getHeight());
         int[] optimalStartPosition = state.grid.getOptimalStartPosition();
 
-        spawnService.spawnEnemies(state.grid, 10, () -> new Goblin());
+        spawnService.spawnEnemies(state.grid, 50, () -> new Goblin());
         spawnService.spawnWeapons(state.grid, 10);
 
         Player player = new Player(state.name, state.health, state.maxHealth,
@@ -147,6 +148,15 @@ public class GameLogic {
                     System.out.println("Invalid input. Please try again.");
                     break;
             }
+
+            int x = player.getX();
+            int y = player.getY();
+            Tile currentTile = state.grid.getTiles()[x][y];
+
+            if (currentTile.getEnemy() != null) {
+                System.out.println("Boo, there is an enemy here");
+            }
+
         }
 
         endGame();

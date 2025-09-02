@@ -18,16 +18,5 @@ public class App {
     public static void main(String[] args) {
         GameLogic gameLogic = new GameLogic();
         gameLogic.initializeGame();
-
-
-
-       /* List<Item> starterItems = new ArrayList<>();
-        starterItems.add(new HealthPotion("Minor Health Potion", "Restores health", 10, 20));
-        starterItems.add(new Weapon("The Spork of Indecision", "It can't decide if it wants to stab or scoop, so it does a little of both, poorly.", 3, 20));
-
-        Inventory inventory = new Inventory(starterItems);
-        SpawnService spawnService = new SpawnService();
-        DungeonGrid grid = new DungeonGrid(10, 10);
-        spawnService.spawnEnemies(grid, 10, () -> new Goblin());*/
     }
 }

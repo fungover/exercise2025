@@ -11,6 +11,10 @@ public class Dungeon {
     private static final int WIDTH = 10;
     private static final int HEIGHT = 10;
 
+    // EXIT placeras längst ner till höger i spelområdet (8,8)
+    private static final int EXIT_X = WIDTH - 2;
+    private static final int EXIT_Y = HEIGHT - 2;
+
     // 2D array med Tile objekt [rad][kolumn] = [y][x]
     private final Tile[][] grid;
 
@@ -32,9 +36,11 @@ public class Dungeon {
                 }
 
                 grid[row][col] = new Tile(type);
-
             }
         }
+
+        // Placerar EXIT längst ner till höger på kartan
+        grid[EXIT_Y][EXIT_X] = new Tile(TileType.EXIT);
     }
 
     // Kollar om en koordinat (x=kolumn, y=rad) ligger inom kartan

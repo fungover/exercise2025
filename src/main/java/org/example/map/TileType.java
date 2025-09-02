@@ -4,5 +4,6 @@ public enum TileType {
     EMPTY,
     WALL,
     ENEMY,
-    ITEM
+    ITEM,
+    EXIT
 }

@@ -5,6 +5,7 @@ import org.example.entities.Player;
 import org.example.map.Dungeon;
 import org.example.map.TileType;
 import org.example.service.MovementService;
+import org.example.service.FloorService;
 
 import java.util.Locale;
 import java.util.Scanner;
@@ -18,7 +19,9 @@ import java.util.Scanner;
 public class Game {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final Dungeon dungeon = new Dungeon();
+    private Dungeon dungeon = new Dungeon();
+    private final FloorService floors = new FloorService(2);
+    private boolean gameOver = false;
     private final Player player;
     private final MovementService movement = new MovementService();
 
@@ -34,7 +37,7 @@ public class Game {
         System.out.println();
         map();
 
-        while (true) {
+        while (!gameOver) {
             System.out.print("\nCommand > ");
             String line = scanner.nextLine();
 
@@ -84,17 +87,35 @@ public class Game {
     private void handleMove(String direction) {
         boolean moved = movement.movePlayer(player, dungeon, direction);
 
-        if (moved) {
-            System.out.println("You moved " + direction + ".");
-            map();
-        } else {
+        if (!moved) {
             System.out.println("You can't move in that direction.");
+            return;
         }
+
+        var tileType = dungeon.get(player.getX(), player.getY()).getType();
+
+        if (tileType == TileType.EXIT) {
+            if (!floors.isFinalFloor()) {
+                System.out.println("You found the stairs! Decending to floor "
+                        + (floors.getCurrentFloor() + 1) + "...");
+                dungeon = floors.advance();
+                player.moveTo(1, 1);
+                map();
+            } else {
+                System.out.println("You found the EXIT on floor 2 and escaped the dungeon!");
+                gameOver = true;
+            }
+            return;
+        }
+
+        System.out.println("You moved to " + direction + ".");
+        map();
     }
 
     // Beskriver var spelaren står och visar en ASCII karta:
     // 'p' markerar spelaren. '#' är vägg. '.' är en tom ruta.
     private void map() {
+        System.out.println("=== Floor " + floors.getCurrentFloor() + " ===");
         System.out.println("Your current location is at marker: p");
         printMapWithPlayer();
         printAvailableDirections();
@@ -133,6 +154,7 @@ public class Game {
             case EMPTY -> ".";
             case ENEMY -> "E";
             case ITEM -> "I";
+            case EXIT -> "X";
         };
     }
 

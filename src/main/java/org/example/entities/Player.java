@@ -1,7 +1,5 @@
 package org.example.entities;
 
-import org.example.map.Dungeon;
-
 // Player som har namn, hp och en position på kartan (x, y)
 public class Player {
     private String name;

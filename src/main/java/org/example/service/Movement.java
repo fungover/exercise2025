@@ -5,39 +5,18 @@ import org.example.entities.Character;
 
 public class Movement {
 
-    public static void moveNorth(DungeonGrid grid, Character character) {
-        int newY = character.getY() - 1;
-        if (!grid.getTiles(character.getX(), newY).isWall()) {
-            character.setY(newY);
+    public static void move(DungeonGrid grid, Character character, int dx, int dy) {
+        int newX = character.getX() + dx; // delta - x
+        int newY = character.getY() + dy; // delta - y
+        if (newX >= 0 && newX < grid.getWidth() && newY >= 0 && newY < grid.getHeight()) {
+            if (!grid.getTiles(newX, newY).isWall()) {
+                character.setX(newX);
+                character.setY(newY);
+            } else {
+                System.out.println("You can't go that way!");
+            }
         } else {
-            System.out.println("You can't go that way!");
-        }
-    }
-
-    public static void moveSouth(DungeonGrid grid, Character character) {
-        int newY = character.getY() + 1;
-        if (!grid.getTiles(character.getX(), newY).isWall()) {
-            character.setY(newY);
-        } else {
-            System.out.println("You can't go that way!");
-        }
-    }
-
-    public static void moveEast(DungeonGrid grid, Character character) {
-        int newX = character.getX() + 1;
-        if (!grid.getTiles(newX, character.getY()).isWall()) {
-            character.setX(newX);
-        } else {
-            System.out.println("You can't go that way!");
-        }
-    }
-
-    public static void moveWest(DungeonGrid grid, Character character) {
-        int newX = character.getX() - 1;
-        if (!grid.getTiles(newX, character.getY()).isWall()) {
-            character.setX(newX);
-        } else {
-            System.out.println("You can't go that way!");
+            System.out.println("You can't go outside the map!");
         }
     }
 }

@@ -7,19 +7,19 @@ public class GameLogic {
     public static void handleCommand(String command, DungeonGrid grid, Character player) {
         switch (command) {
             case "north":
-                Movement.moveNorth(grid, player); {
+                Movement.move(grid, player, 0, -1); {
                 }
                 break;
                 case "south":
-                 Movement.moveSouth(grid, player); {
+                 Movement.move(grid, player, 0, 1); {
                 }
                 break;
                 case "east":
-                 Movement.moveEast(grid, player); {
+                 Movement.move(grid, player, 1,0); {
                 }
                 break;
                 case "west":
-                 Movement.moveWest(grid, player); {
+                 Movement.move(grid, player, -1,0); {
                 }
                 break;
             default:

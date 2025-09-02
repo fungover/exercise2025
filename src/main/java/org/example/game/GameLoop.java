@@ -12,7 +12,7 @@ public class GameLoop {
     public void start() {
         System.out.println("Game starting!");
 
-        Character player = new Player("Dragon Slayer", 100, 0, 0);
+        Character player = new Player("Dragon Slayer", 100, 2, 2);
         Character dragon = new Enemy("Dragon", 100, 0, 0, 10);
 
         player.takeTurn();

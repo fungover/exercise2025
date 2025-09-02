@@ -18,6 +18,12 @@ public class DungeonGrid {
 
         return tiles[x][y];
     }
+    public int getWidth() {
+        return tiles.length;
+    }
+    public int getHeight() {
+        return tiles[0].length;
+    }
     public void printMap(int playerX, int playerY) {
         for (int y = 0; y < tiles[0].length; y++) {
             for (int x = 0; x < tiles.length; x++) {
@@ -27,7 +33,9 @@ public class DungeonGrid {
                     System.out.print("#");
                 } else {
                     System.out.print(".");
+
                 }
+
             }
             System.out.println();
         }

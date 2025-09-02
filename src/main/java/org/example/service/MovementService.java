@@ -26,6 +26,8 @@ public class MovementService {
 
         if (tile.getType() == Tile.Type.ENEMY) {
             System.out.println("Oh no! There's an enemy here!");
+            CombatService combatService = new CombatService();
+            combatService.attack(player, map);
         } else if (tile.getType() == Tile.Type.ITEM) {
             Item item = tile.getItem();
             if (item != null) {

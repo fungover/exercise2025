@@ -17,11 +17,11 @@ public final class Game {
         Player player = new Player("Hero");
         DungeonMap map = new DungeonMap(10, 10);
         Random rng = new Random();
-        Inventory inventory = new Inventory(20);
-        inventory.addItem(new Potion(null));
-        inventory.addItem(new Potion(null));
 
-        inventory.printItems();
+        player.getInventory().addItem(new Potion(null));
+        player.getInventory().addItem(new Potion(null));
+
+        player.getInventory().printItems();
 
 
         // 1) Lägg ut slumpmässiga väggar (t.ex. 10 hinder – justera efter smak)
@@ -45,13 +45,15 @@ public final class Game {
 
             Position newPos = null;
             switch (input) {
-                case "help" -> CommandUtils.printHelp();
+                case "options" -> CommandUtils.printHelp();
+
                 case "quit" -> { System.out.println("Exiting the game. Goodbye!"); return; }
                 case "north" -> newPos = player.getPosition().getAdjacent(0, 1);
                 case "south" -> newPos = player.getPosition().getAdjacent(0, -1);
                 case "east"  -> newPos = player.getPosition().getAdjacent(1, 0);
                 case "west"  -> newPos = player.getPosition().getAdjacent(-1, 0);
-                case "inventory"-> inventory.printItems();
+                case "inventory"-> player.getInventory().printItems();
+                case "heal"-> player.heal(20);
                 default -> System.out.println("Unknown command. Type 'help' for a list of commands.");
             }
 
@@ -77,7 +79,7 @@ public final class Game {
             // 5) Plocka upp potion om du klev på en
             Potion found = potions.remove(newPos);
             if (found != null) {
-                boolean added = inventory.addItem(found);
+                boolean added = player.getInventory().addItem(found);
                 if(added) {
                     System.out.println("You found a potion and added it to your inventory.");
                 } else {

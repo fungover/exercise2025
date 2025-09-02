@@ -1,26 +1,25 @@
 package org.SpinalGlitter.exercise2.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Player {
 
     private String name;
     private int maxHealth;
     private int currentHealth;
     private int damage;
-    private List<ArrayList> inventory;
-    private int InventorySize;
     private Position position = new Position(0, 0);
+    private Inventory inventory = new Inventory(20);
 
     public Player (String name) {
         this.name = name;
         this.maxHealth = 100;
         this.damage = 10;
-        this.InventorySize = 20;
-        this.currentHealth = maxHealth;
+        this.currentHealth = 90;
         this.position = new Position(1, 1);
 
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
     public String getName() {
@@ -50,9 +49,23 @@ public class Player {
             this.position = position.getAdjacent(dx, dy);
         }
 
-    public void heal(int amount) {
-        currentHealth = Math.min(maxHealth, currentHealth + amount);
-    }
+         public void heal(int amount) {
+            if(!inventory.hasPotion()) {
+                System.out.println("No items in inventory to heal.");
+                return;
+            } else if (currentHealth == maxHealth) {
+                    System.out.println("Health is already full.");
+                    return;
+                } else  {
+                    inventory.consumeFirstPotion();
+                    currentHealth += amount;
+                    if (currentHealth > maxHealth) {
+                        currentHealth = maxHealth;
+                    }
+                }
+             }
+         }
+
 
 
     // take damage method
@@ -65,4 +78,4 @@ public class Player {
     // move location method
     // take damage method
     //
-}
+

@@ -34,7 +34,21 @@ public class Tile {
         this.item = item;
     }
 
-    // Get the tiles
+    public TileType getType() {
+        return type;
+    }
+
+    public Enemy getEnemy() {
+        return enemy;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public boolean isPassable() {
+        return type != TileType.WALL;
+    }
 
 }
 

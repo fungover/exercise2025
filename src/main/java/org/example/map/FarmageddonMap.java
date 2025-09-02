@@ -1,14 +1,12 @@
 package org.example.map;
 
 import org.example.entities.*;
-
-import java.util.Random;
+import org.example.utils.RandomUtils;
 
 public class FarmageddonMap {
     private Tile[][] grid;
     private int width;
     private int height;
-    private final Random rand = new Random();
 
     public FarmageddonMap(int width, int height) {
         this.width = width;
@@ -25,12 +23,11 @@ public class FarmageddonMap {
         return height;
     }
 
-
     private void generateMap() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 grid[y][x] = new Tile(Tile.Type.PATH); // Default to PATH
-                if (rand.nextDouble() < 0.2) {
+                if (RandomUtils.chance(0.2)) {
                     grid[y][x].setType(Tile.Type.WALL);
                 }
             }

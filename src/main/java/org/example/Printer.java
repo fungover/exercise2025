@@ -18,20 +18,26 @@ public class Printer {
 
         PricePerHour expensive = Calculate.findMostExpensiveHour(prices);
         PricePerHour cheap = Calculate.findCheapestHour(prices);
-        PricePerHour[] cheapestChargingHours = Calculate.findBestChargingPeriod(prices, 2);
 
         System.out.println("\nMedelpris: " + String.format("%.2f", Calculate.calculateMean(prices)) + " kr/kWh");
         System.out.println("Dyraste timmen: " + formatHourRange(expensive) + " (" + expensive.SEK_per_kWh() + " kr/kWh)");
         System.out.println("Billigaste timmen: " + formatHourRange(cheap) + " (" + cheap.SEK_per_kWh() + " kr/kWh)");
 
-        for(PricePerHour p : cheapestChargingHours){
-            System.out.println("Billigaste intervallet att ladda bilen: " + formatHourRange(p));
-        }
+
     }
 
     public static void printAllPrices(PricePerHour[] prices) {
         for (PricePerHour p : prices) {
             System.out.println(formatHourRange(p) + " : " + p.SEK_per_kWh() + " kr/kWh");
+        }
+    }
+
+    public static void printBestChargingPeriod(PricePerHour[] prices, int hours) {
+        PricePerHour[] bestPeriod = Calculate.findBestChargingPeriod(prices, hours);
+
+        System.out.println("\nBilligaste perioden för laddning (" + hours + " timmar):");
+        for (PricePerHour p : bestPeriod) {
+            System.out.println(p.time_start() + " -- " + p.SEK_per_kWh() + " kr/kWh");
         }
     }
 }

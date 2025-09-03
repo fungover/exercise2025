@@ -20,6 +20,7 @@ public class App {
             System.out.println();
             System.out.print("---- Morgondagens priser ----");
             Printer.printCalculatedPrices(tomorrow);
+            Printer.printBestChargingPeriod(today, 4);
 
         } catch (IOException | InterruptedException e) {
             System.err.println("Fel: " + e.getMessage());

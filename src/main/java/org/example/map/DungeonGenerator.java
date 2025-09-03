@@ -93,7 +93,17 @@ public class DungeonGenerator {
                 y = RandomGenerator.nextInt(1, height - 2);
             } while (!grid[y][x].isEmpty() || (x == playerStartX && y == playerStartY));
 
-            Enemy enemy = RandomGenerator.nextInt(0, 2) == 0 ? new Goblin() : new Orc();
+            int roll = RandomGenerator.nextInt(0, 3);
+            Enemy enemy;
+
+            switch (roll) {
+                case 0 -> enemy = new Goblin();
+                case 1 -> enemy = new Orc();
+                case 2 -> enemy = new cowKing();
+                default -> throw new IllegalStateException("Invalid roll " + roll);
+            }
+
+            // Enemy enemy = RandomGenerator.nextInt(0, 2) == 0 ? new Goblin() : new Orc();
             enemy.setPosition(x, y);
             grid[y][x].setEnemy(enemy);
 

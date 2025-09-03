@@ -123,7 +123,7 @@ public class GameLoop {
             boolean enemyDefeated = CombatService.combat(player, enemy, scanner);
 
             if (enemyDefeated) {
-                currentTile.setEnemy(null);//this removes the defeated enemey
+                currentTile.setEnemy(null);//this removes the defeated enemy
             }//if player flees the enemy stays on the tile
 
 
@@ -153,7 +153,7 @@ public class GameLoop {
                 System.out.println("Invalid item number.");
             }
         } catch (NumberFormatException e) {
-            System.out.println("Please enter a vlid item number.");
+            System.out.println("Please enter a valid item number.");
         }
     }
 

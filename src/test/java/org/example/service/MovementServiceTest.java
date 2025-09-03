@@ -47,7 +47,7 @@ public class MovementServiceTest {
 
     @Test
     void player_reaches_exit_tile() {
-        Dungeon dungeon = new Dungeon(1);
+        Dungeon dungeon = new Dungeon(2);
         Player player = new Player("Player");
 
         // Flytta spelaren direkt till EXIT

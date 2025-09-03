@@ -120,17 +120,18 @@ public class Game {
         }
 
         // Exit-ruta
+        if (currentTile.getType() == TileType.STAIRS) {
+            System.out.println("You found the stairs! Descending to floor "
+                    + (floors.getCurrentFloor() + 1) + "...");
+            dungeon = floors.advance();
+            player.moveTo(1, 1);
+            map();
+            return;
+        }
+
         if (currentTile.getType() == TileType.EXIT) {
-            if (!floors.isFinalFloor()) {
-                System.out.println("You found the stairs! Descending to floor "
-                        + (floors.getCurrentFloor() + 1) + "...");
-                dungeon = floors.advance();
-                player.moveTo(1, 1);
-                map();
-            } else {
-                System.out.println("🎉 You found the EXIT on floor 2 and escaped the dungeon!");
-                gameOver = true;
-            }
+            System.out.println("🎉 You found the EXIT and escaped the dungeon!");
+            gameOver = true;
             return;
         }
 
@@ -158,10 +159,12 @@ public class Game {
                 case "attack":
                     result = combat.attack(player, enemy);
                     System.out.println("You attack the enemy!");
+                    System.out.println(enemy.getName() + " has " + enemy.getHp() + " HP left.");
                     break;
                 case "defend":
                     result = combat.defend(player, enemy);
                     System.out.println("You defended against the attack and only took half damage!");
+                    System.out.println(enemy.getName() + " still has " + enemy.getHp() + " HP left.");
                     break;
                 case "retreat":
                     combat.retreat(player, previousX, previousY);
@@ -281,6 +284,7 @@ public class Game {
             case EMPTY -> ".";
             case ENEMY -> "E";
             case ITEM -> "I";
+            case STAIRS -> "S";
             case EXIT -> "X";
         };
     }

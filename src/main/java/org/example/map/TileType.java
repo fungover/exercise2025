@@ -5,5 +5,6 @@ public enum TileType {
     WALL,
     ENEMY,
     ITEM,
+    STAIRS,
     EXIT
 }

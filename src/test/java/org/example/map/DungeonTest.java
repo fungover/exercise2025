@@ -7,17 +7,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DungeonTest {
 
     @Test
-    void border_is_wall_and_exit_is_correct_and_start_walkable() {
-        Dungeon dungeon = new Dungeon(1);
+    void border_is_wall_and_start_walkable() {
+        Dungeon dungeon = new Dungeon(2);
 
         // Hörn = WALL
         assertEquals(TileType.WALL, dungeon.get(0,0).getType());
         assertEquals(TileType.WALL, dungeon.get(0,9).getType());
         assertEquals(TileType.WALL, dungeon.get(9,0).getType());
         assertEquals(TileType.WALL, dungeon.get(9,9).getType());
-
-        // Exit på (8,8)
-        assertEquals(TileType.EXIT, dungeon.get(8,8).getType());
 
         // Start (1,1) ska vara innanför kartan och inte WALL
         assertTrue(dungeon.inBounds(1,1));
@@ -92,5 +89,19 @@ public class DungeonTest {
         }
 
         assertTrue(differenceFound, "Two dungeons of the same floor should differ due to randomness");
+    }
+
+    @Test
+    void floor1_has_stairs_and_floor2_has_exit() {
+        Dungeon floor1 = new Dungeon(1);
+        Dungeon floor2 = new Dungeon(2);
+
+        // På floor 1 ska rutan (8,8) vara STAIRS
+        assertEquals(TileType.STAIRS, floor1.get(8,8).getType(),
+                "Floor 1 should have stairs at (8,8)");
+
+        // På floor 2 ska rutan (8,8) vara EXIT
+        assertEquals(TileType.EXIT, floor2.get(8,8).getType(),
+                "Floor 2 should have exit at (8,8)");
     }
 }

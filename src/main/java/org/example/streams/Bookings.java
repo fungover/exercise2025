@@ -36,8 +36,14 @@ public class Bookings {
         guestNames.forEach(System.out::println);
 
         // All bookings longer than 3 nights
+        var longStays = bookings.stream()
+                .filter(param-> param.checkInDate().datesUntil(param.checkOutDate()).count() > 3)
+                .toList();
+        System.out.println("Long stay bookings: ");
+        longStays.forEach(System.out::println);
 
         // Number of bookings for each room type
+
 
         // Find the quest with the longest stay
 

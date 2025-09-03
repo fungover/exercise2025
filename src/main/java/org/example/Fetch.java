@@ -12,11 +12,11 @@ import com.google.gson.Gson;
 
 
 class Fetch {
-    public static PricePerHour[] fetch(LocalDate date, String priceBracket) throws IOException, InterruptedException {
+    public static PricePerHour[] fetch(LocalDate date, String priceZone) throws IOException, InterruptedException {
 
         String baseUrl = "https://www.elprisetjustnu.se/api/v1/prices/";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM-dd");
-        String dateString = date.format(formatter) + "_" + priceBracket + ".json";
+        String dateString = date.format(formatter) + "_" + priceZone + ".json";
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -30,7 +30,7 @@ class Fetch {
         if (body.trim().startsWith("[")) {
             return gson.fromJson(response.body(), PricePerHour[].class);
         } else {
-            System.out.println("\nIngen data tillgänglig för " + date + " i " + priceBracket + "\n");
+            System.out.println("\nIngen data tillgänglig för " + date + " i " + priceZone + "\n");
             return new PricePerHour[0]; // return empty array instead of crashing if there is no available prices.
         }
 

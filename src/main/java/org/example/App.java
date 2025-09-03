@@ -9,6 +9,7 @@ public class App {
 
     static void main(String[] args) throws IOException, InterruptedException {
 
+
         String priceZone = Area.chooseArea();
 
         try {
@@ -23,6 +24,8 @@ public class App {
         } catch (IOException | InterruptedException e) {
             System.err.println("Fel: " + e.getMessage());
         }
+
+
     }
 }
 

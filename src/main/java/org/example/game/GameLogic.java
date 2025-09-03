@@ -180,9 +180,6 @@ public class GameLogic {
 
             if (currentTile.getItems().size() > 0) {
                 ItemService itemService = new ItemService();
-                for (int i = 0; i < currentTile.getItems().size(); i++) {
-                    System.out.println(i + 1 + ". " + currentTile.getItems().get(i).getName());
-                }
                 itemService.interactWithItems(player, currentTile.getItems(), inputService);
                 currentTile.getItems().clear();
             }

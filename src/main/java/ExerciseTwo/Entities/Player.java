@@ -15,10 +15,6 @@ public final class Player {
     }
     public Player(){}
 
-    public String getPlayerName() {
-        return playerName;
-    }
-
     public void setHealth(int health) {
         this.health += health;
 

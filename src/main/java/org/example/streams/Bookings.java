@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Bookings {
@@ -69,8 +70,15 @@ public class Bookings {
                 .findAny();
         anySuite.ifPresent(System.out::println);
 
-        // Find the max number of bookings the same day... so we have enough rooms... b.getStartDate().datesUntil(b.getEndDate())
+        // Find the max number of quests staying at the hotel on the same day... so we have enough rooms... b.getStartDate().datesUntil(b.getEndDate())
+        var numberOfGuestsEachDay = bookings.stream()
+                .flatMap(b->b.checkInDate().datesUntil(b.checkOutDate()))
+                .collect(Collectors.groupingBy(d -> d, Collectors.counting()));
 
+
+        numberOfGuestsEachDay.entrySet().stream()
+                .sorted(Comparator.comparing(Map.Entry::getKey))
+                .forEach(entry -> System.out.println(entry.getKey() + ": " + entry.getValue()));
     }
 
     private static List<HotelBooking> getHotelBookings() {
@@ -78,7 +86,7 @@ public class Bookings {
 
         // Add some bookings to the list
         bookings.add(new HotelBooking(new Guest("Alice", "Smith"), "Single", LocalDate.of(2025, 10, 1), LocalDate.of(2025, 10, 4), BigDecimal.valueOf(100.0)));
-        bookings.add(new HotelBooking(new Guest("Bob", "Johnson"), "Double", LocalDate.of(2025, 10, 5), LocalDate.of(2025, 10, 7), BigDecimal.valueOf(150.0)));
+        bookings.add(new HotelBooking(new Guest("Bob", "Johnson"), "Double", LocalDate.of(2025, 10, 3), LocalDate.of(2025, 10, 7), BigDecimal.valueOf(150.0)));
         bookings.add(new HotelBooking(new Guest("Carol", "White"), "Suite", LocalDate.of(2025, 10, 8), LocalDate.of(2025, 10, 13), BigDecimal.valueOf(300.0)));
         bookings.add(new HotelBooking(new Guest("David", "Brown"), "Single", LocalDate.of(2025, 10, 14), LocalDate.of(2025, 10, 16), BigDecimal.valueOf(100.0)));
         bookings.add(new HotelBooking(new Guest("Eve", "Davis"), "Double", LocalDate.of(2025, 10, 17), LocalDate.of(2025, 10, 19), BigDecimal.valueOf(150.0)));
@@ -86,7 +94,7 @@ public class Bookings {
         bookings.add(new HotelBooking(new Guest("Grace", "Wilson"), "Single", LocalDate.of(2025, 10, 26), LocalDate.of(2025, 10, 28), BigDecimal.valueOf(100.0)));
         bookings.add(new HotelBooking(new Guest("Hank", "Moore"), "Double", LocalDate.of(2025, 10, 29), LocalDate.of(2025, 10, 31), BigDecimal.valueOf(150.0)));
         bookings.add(new HotelBooking(new Guest("Ivy", "Taylor"), "Suite", LocalDate.of(2025, 11, 1), LocalDate.of(2025, 11, 6), BigDecimal.valueOf(300.0)));
-        bookings.add(new HotelBooking(new Guest("Jack", "Anderson"), "Single", LocalDate.of(2025, 11, 7), LocalDate.of(2025, 11, 9), BigDecimal.valueOf(100.0)));
+        bookings.add(new HotelBooking(new Guest("Jack", "Anderson"), "Single", LocalDate.of(2025, 11, 2), LocalDate.of(2025, 11, 9), BigDecimal.valueOf(100.0)));
         return bookings;
     }
 }

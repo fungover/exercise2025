@@ -3,7 +3,6 @@ package org.example.streams;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Bookings {
@@ -30,7 +29,11 @@ public class Bookings {
                 .sum();
         System.out.println("Total number of nights for Anderson: " + totalNights);
         // List all guest names
-
+        var guestNames = bookings.stream()
+                .map(HotelBooking::guest)
+                .map(Guest::fullName)
+                .toList();
+        guestNames.forEach(System.out::println);
 
         // All bookings longer than 3 nights
 

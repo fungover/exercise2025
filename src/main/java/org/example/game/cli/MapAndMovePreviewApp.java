@@ -54,11 +54,15 @@ public final class MapAndMovePreviewApp {
             // Build the player via factory (spawns at SPAWN)
             Player player = PlayerFactory.create(choice, name, spawn.x(), spawn.y());
 
-            System.out.println("Welcome " + player.archetype() + " " + player.getName() + ". Press Enter to start adventure!");
+            System.out.println("Welcome " + player.archetype() + " " + player.getName() + "!\n " +
+                    "You mission is to navigate a very old and dark mineshaft, and find the source of the evil that lurks down there!\n " +
+                    "Press Enter to start the adventure!");
             in.nextLine();
 
             // Hand off to controller (movement + feedback already implemented there)
-            var controller = new GameController();
+            var controller = new GameController(
+                    "Hint: type 'help' for commands.",
+                    "This is dark... I need to be careful of enemies hiding in the shadows.");
             controller.run(new GameContext(map, player), in);
         }
     }

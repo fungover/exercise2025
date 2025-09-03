@@ -14,7 +14,7 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class SpawnService {
-    public void spawnEnemies(DungeonGrid grid, int count, Supplier<Enemy> enemySupplier) {
+    public void spawnEnemies(int[] startPos, DungeonGrid grid, int count, Supplier<Enemy> enemySupplier) {
         for (int i = 0; i < count; i++) {
             Enemy enemy = enemySupplier.get();
             int x, y;
@@ -22,13 +22,14 @@ public class SpawnService {
                 x = RandomUtils.getRandomNumber(0, grid.getWidth() - 1);
                 y = RandomUtils.getRandomNumber(0, grid.getHeight() - 1);
             } while (grid.getTiles()[x][y].getType() != Tile.TileType.FLOOR
-                    || grid.getTiles()[x][y].getEnemy() != null);
+                    || grid.getTiles()[x][y].getEnemy() != null
+                    || (x == startPos[0] && y == startPos[1]));
 
             grid.getTiles()[x][y].setEnemy(enemy);
         }
     }
 
-    public void spawnWeapons(DungeonGrid grid, int count) {
+    public void spawnWeapons(int[] startPos, DungeonGrid grid, int count) {
         for (int i = 0; i < count; i++) {
             Weapon weapon = WeaponLibrary.weapons.get(RandomUtils.getRandomNumber(0, WeaponLibrary.weapons.size() - 1));
 
@@ -38,7 +39,8 @@ public class SpawnService {
                 y = RandomUtils.getRandomNumber(0, grid.getHeight() - 1);
             } while (grid.getTiles()[x][y].getType() != Tile.TileType.FLOOR
                     || !grid.getTiles()[x][y].getItems().isEmpty()
-                    || grid.getTiles()[x][y].getEnemy() != null);
+                    || grid.getTiles()[x][y].getEnemy() != null
+                    || (x == startPos[0] && y == startPos[1]));
 
             grid.getTiles()[x][y].addItem(weapon);
         }

@@ -119,8 +119,8 @@ public class GameLogic {
         state.grid = DungeonGrid.createDungeonGrid(state.grid.getWidth(), state.grid.getHeight());
         int[] optimalStartPosition = state.grid.getOptimalStartPosition();
 
-        spawnService.spawnEnemies(state.grid, 50, () -> new Goblin());
-        spawnService.spawnWeapons(state.grid, 10);
+        spawnService.spawnEnemies(optimalStartPosition, state.grid, 50, () -> new Goblin());
+        spawnService.spawnWeapons(optimalStartPosition, state.grid, 10);
 
         Player player = new Player(state.name, state.health, state.maxHealth,
                 optimalStartPosition[0], optimalStartPosition[1], state.weapon);
@@ -148,6 +148,11 @@ public class GameLogic {
                 ItemService itemService = new ItemService();
                 itemService.openInventoryMenu(player, inputService);
                 break;
+
+                case "T":
+                    //Print out the equipped weapon and it's damage
+                    System.out.println(player.getEquippedWeapon().getName() + "Damage " + player.getDamage());
+                    break;
 
                 default:
                     System.out.println("Invalid input. Please try again.");

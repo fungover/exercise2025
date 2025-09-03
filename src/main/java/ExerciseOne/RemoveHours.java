@@ -4,14 +4,16 @@ import java.util.List;
 
 public class RemoveHours {
 
-    public List<Pricing> removePastTime(List<Pricing> priceList) {
+    private final GetDateAndTime getDateAndTime = new GetDateAndTime();
 
-        GetDateAndTime getDateAndTime = new GetDateAndTime();
+    public List<Pricing> removePastTime(List<Pricing> priceList) {
+        if(priceList == null) return List.of();
+
         int time = getDateAndTime.getHour();
 
-        for(int i = 0; i < time; i++){
-            priceList.removeFirst();
-        }
-    return priceList;
+        int hoursToRemove = Math.min(Math.max(0, time), priceList.size());
+        priceList.subList(0, hoursToRemove).clear();
+
+        return priceList;
     }
 }

@@ -39,8 +39,13 @@ public class Main {
         calc.calculateCheapest(listHoursRemoved, 4);
         calc.calculateCheapest(listHoursRemoved, 8);
 
-        ReadFile rf = new ReadFile();
-        calc.costOfConsumption(rf.readFile(), listHoursRemoved);
+        boolean check = input.calculate();
+
+        if(check){
+            ReadFile rf = new ReadFile();
+            String pathFile = input.pathToFile();
+            calc.costOfConsumption(rf.readFile(pathFile), listHoursRemoved);
+        }
     }
 }
 

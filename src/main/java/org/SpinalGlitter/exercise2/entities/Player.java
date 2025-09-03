@@ -2,16 +2,16 @@ package org.SpinalGlitter.exercise2.entities;
 
 public class Player {
 
-    private String name;
-    private int maxHealth;
+    private final String name;
+    private final int maxHealth;
     private int currentHealth;
     private int damage;
-    private Position position = new Position(0, 0);
-    private Inventory inventory = new Inventory(20);
+    private Position position;
+    private final Inventory inventory = new Inventory(20);
 
     public Player (String name) {
         this.name = name;
-        this.maxHealth = 20;
+        this.maxHealth = 100;
         this.damage = 10;
         this.currentHealth = maxHealth;
         this.position = new Position(1, 1);
@@ -63,10 +63,9 @@ public class Player {
          public void heal(int amount) {
             if(!inventory.hasPotion()) {
                 System.out.println("No items in inventory to heal.");
-                return;
+
             } else if (currentHealth == maxHealth) {
                     System.out.println("Health is already full.");
-                    return;
                 } else  {
                     inventory.consumeFirstPotion();
                     currentHealth += amount;
@@ -76,17 +75,3 @@ public class Player {
                 }
              }
          }
-
-
-
-    // take damage method
-    // heal method
-    //pick up item method
-    // drop item method
-    // use item method
-    // get inventory method
-    // attack method
-    // move location method
-    // take damage method
-    //
-

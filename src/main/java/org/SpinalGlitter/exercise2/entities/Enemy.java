@@ -1,12 +1,11 @@
 package org.SpinalGlitter.exercise2.entities;
-import org.SpinalGlitter.exercise2.entities.Player;
 
 
 public class Enemy {
-    private String name;
+    private final String name;
     private int hp;
-    private int damage;
-    private Position position;
+    private final int damage;
+    private final Position position;
 
     public Enemy(String name, int hp, int damage, Position position) {
         this.name = name;
@@ -42,11 +41,3 @@ public class Enemy {
     }
 }
 
-/*public void enemyAttack(Player player, Enemy enemy) {
-    System.out.println(enemy.getName() + " attacks you for " + enemy.getDamage() + " damage!");
-    player.setHp(player.getHp() - enemy.getDamage());
-    System.out.println("You now have " + player.getHp() + " HP left.");
-}*/
-
-
-// Type

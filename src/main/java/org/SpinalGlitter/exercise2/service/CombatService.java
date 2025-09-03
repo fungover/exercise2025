@@ -3,22 +3,20 @@ package org.SpinalGlitter.exercise2.service;
 import org.SpinalGlitter.exercise2.entities.Enemy;
 import org.SpinalGlitter.exercise2.entities.Player;
 import org.SpinalGlitter.exercise2.entities.Position;
-import org.SpinalGlitter.exercise2.map.DungeonMap;
 
 import java.util.Map;
 import java.util.Scanner;
 
 public class CombatService {
     private int battleCount = 0;
-    private Map<Position, Enemy> enemies;
+    private final Map<Position, Enemy> enemies;
     private final Scanner scanner = new Scanner(System.in);
 
     public CombatService(Map<Position, Enemy> enemies) {
         this.enemies = enemies;
     }
 
-    public boolean startCombat(Player player, Enemy enemy) {
-        battleCount++;
+    public void startCombat(Player player, Enemy enemy) {
         System.out.println("⚔️ You have entered combat with " + enemy.getName() + "!");
 
         while (player.isAlive() && enemy.isAlive()) {
@@ -34,20 +32,32 @@ public class CombatService {
                 player.heal(20);
             } else {
                 System.out.println("❌ Invalid choice, try again.");
-                continue; // hoppa över till nästa runda
+                continue; // jump to the next iteration
             }
 
-            // Check if enemy died
+
+            // Check if the enemy died
             if (!enemy.isAlive()) {
+                this.battleCount++;
                 System.out.println("🎉 You defeated " + enemy.getName() + "!");
+                System.out.println("You have defeated " + battleCount + " enemies so far.");
                 enemies.remove(enemy.getPosition());
+
+                // Check if the player has won
+                if (haveWon()) {
+                    System.out.println("🏆 You have defeated all enemies! You win! 🏆");
+                    System.out.println("Press Q to quit or press any other key to continue playing.");
+                }
                 break;
             }
+
 
             // Enemy turn
             System.out.println("⚡ " + enemy.getName() + " attacks you for " + enemy.getDamage() + " damage!");
             player.takeDamage(enemy.getDamage());
 
+
+            // Check if the player has lost
             if (!player.isAlive()) {
                 System.out.println("💀 You were slain by " + enemy.getName() + "...");
                 break;
@@ -57,26 +67,10 @@ public class CombatService {
             System.out.println("📊 Status: " + player.getName() + " HP=" + player.getCurrentHealth() +
                     " | " + enemy.getName() + " HP=" + enemy.getHp());
         }
+    }
 
-        return player.isAlive(); // true om spelaren vann, false annars
+    public boolean haveWon() {
+        System.out.println("Enemies remaining: " + enemies.size());
+        return enemies.isEmpty();
     }
 }
-
-
-
-
-/*    public void enemyAttacks() {
-      System.out.println(enemy.getName() + " attacks you for " + enemy.getDamage() + " damage!");
-      player.setHp(player.getHp() - enemy.getDamage());
-      System.out.println("You now have " + player.getHp() + " HP left.");
-}*/
-
-
-    /**
-     * startCombat
-     * player turn
-     * enemy turn
-     * check if player or enemy is dead
-     *
-     * Display status for enemy and player
-     */

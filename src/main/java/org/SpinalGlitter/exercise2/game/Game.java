@@ -12,38 +12,61 @@ import java.util.*;
 import static org.SpinalGlitter.exercise2.service.PickupService.tryPickup;
 
 public final class Game {
+    Player player;
+    DungeonMap map;
+    public int enemies;
+    public int potions = 5;
 
-    static void main() {
+    public Game(String name, String difficulty) {
+        this.player = new Player(name);
+        switch (difficulty) {
+            case "medium":
+                this.map = new DungeonMap(20, 20);
+                this.enemies = 10;
+                break;
+            case "hard":
+                this.map = new DungeonMap(20, 20);
+                this.enemies = 20;
+                break;
+            default: // easy
+                this.map = new DungeonMap(10, 10);
+                this.enemies = 4;
+                break;
+        }
+    }
 
-        Player player = new Player("Hero");
-        DungeonMap map = new DungeonMap(10, 10);
+    public void startGame() {
+
+        Player player = this.player;
+        DungeonMap map = this.map;
         Random rng = new Random();
 
-        // Startitems för test
+        // Giving items to inventory
         player.getInventory().addItem(new Potion(null));
         player.getInventory().addItem(new Potion(null));
         player.getInventory().printItems();
 
-        // 1) Väggar först
+        // 1) Place walls first
         RandomGeneration.placeWalls(map, 10, player.getPosition(), rng);
 
-        // 2) Placera potions & enemies (utan occupied-argument)
-        Map<Position, Potion> potions = RandomGeneration.placePotions(map, 5, player.getPosition(), rng);
-        Map<Position, Enemy> enemies = RandomGeneration.placeEnemies(map, 4, player.getPosition(), rng);
+        // 2) Place potions and enemies
+        Map<Position, Potion> potions = RandomGeneration.placePotions(map, this.potions, player.getPosition(), rng);
+        Map<Position, Enemy> enemies = RandomGeneration.placeEnemies(map, this.enemies, player.getPosition(), rng);
 
-        CombatService combatService = new CombatService(enemies);
-
-        // 3) Bygg occupied EFTER att potions/enemies är kända
+        // 3) Build occupied after potions and enemies are placed
         Set<Position> occupied = new HashSet<>();
         occupied.add(player.getPosition());
         occupied.addAll(potions.keySet());
         occupied.addAll(enemies.keySet());
 
-        // 4) Placera svärd med occupied
+        // 4) Place swords
         Map<Position, Sword> swords = RandomGeneration.placeSwords(map, 1, player.getPosition(), rng, occupied);
+
+        CombatService combatService = new CombatService(enemies);
 
 
         System.out.println("Dungeon Crawler Game Started!");
+        System.out.println("Welcome " + player.getName() + "!");
         System.out.println("You are at " + player.getPosition() + " with health " + player.getCurrentHealth() + "HP.");
         CommandUtils.printHelp();
 
@@ -52,7 +75,7 @@ public final class Game {
         while (player.isAlive()) {
             map.printMap(player.getPosition(), potions, enemies, swords);
 
-            // add damage if player have weapon else remove extra damage
+            // add damage if the player has a weapon else remove extra damage
             if (player.haveWeapon()) {
                 if (player.getDamage() == 10) {
                     player.setDamage(10);
@@ -85,7 +108,7 @@ public final class Game {
 
             if (newPos == null) continue;
 
-            // 3) Tillåt inte att gå in i vägg eller fiende (fiender som hinder tills combat finns)
+            // 3) don't allow player to walk in to an enemy or wall.
             if (!map.canMoveTo(newPos)) {
                 System.out.println("You hit a wall!");
                 continue;
@@ -99,21 +122,16 @@ public final class Game {
                 combatService.startCombat(player, e);
             }
 
-            // 4) Flytta spelaren
+            // 4) move player
             int dx = newPos.x() - player.getPosition().x();
             int dy = newPos.y() - player.getPosition().y();
             player.move(dx, dy);
 
-
             tryPickup(potions, player.getPosition(), player);
             tryPickup(swords, player.getPosition(), player);
-            continue;
         }
-
-
     }
 }
 
-// TODO: implementera combat, inventory, och andra funktioner enligt behov
 
 

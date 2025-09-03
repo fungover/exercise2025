@@ -21,13 +21,13 @@ public class DungeonMap {
     }
 
     private void generateMap() {
-        // Allt golv förutom väggar runt kanten
+        // Everything except walls the floor
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
-                    grid[y][x] = new Tile(false, "🧱"); // vägg
+                    grid[y][x] = new Tile(false, "🧱"); // wall
                 } else {
-                    grid[y][x] = new Tile(true, "⬜");  // golv
+                    grid[y][x] = new Tile(true, "⬜");  // floor
                 }
             }
         }
@@ -42,7 +42,7 @@ public class DungeonMap {
 
     public void setWall(Position pos) {
         if (pos.x() <= 0 || pos.y() <= 0 || pos.x() >= width - 1 || pos.y() >= height - 1) {
-            return; // undvik att sätta väggar på kanten
+            return; // avoid walls around the map
         }
         grid[pos.y()][pos.x()] = new Tile(false, "🧱");
     }

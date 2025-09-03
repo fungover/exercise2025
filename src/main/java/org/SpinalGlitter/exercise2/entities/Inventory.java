@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory {
-    private List<ItemObject> items;
+    private final List<ItemObject> items;
     // TODO: create a object interface to store items in. Should be declared List<interface> items
-    private int capacity;
+    private final int capacity;
 
     public Inventory(int capacity) {
         this.capacity = capacity;
@@ -22,12 +22,6 @@ public class Inventory {
         return true;
     }
 
-    /*public boolean removeItem(ItemObject item) {
-        Potion potion = items.stream().filter(items -> items instanceof Potion).findFirst().orElse(null);
-        if (potion != null) {
-            return items.remove(item);
-        }
-    }*/
     public  boolean hasWeapon() {
         for (ItemObject it : items) {
             if (it instanceof Sword) return true;
@@ -47,24 +41,18 @@ public class Inventory {
         }
     }
 
-    public boolean consumeFirstPotion() {
+    public void consumeFirstPotion() {
     for (int i = 0; i < items.size(); i++) {
         ItemObject it = items.get(i);
         if (it instanceof Potion) {
             items.remove(i);
-            return true;
+            break;
         }
     }
-    return false;
 }
-
 
     public boolean isFull() {
         return items.size() >= capacity;
-    }
-
-    public boolean emptyInventory() {
-        return items.isEmpty();
     }
 
     // show inventory items
@@ -85,10 +73,4 @@ public class Inventory {
         }
         return false;
     }
-
-    // lagra allting i en arraylist
-    // implemnetera ItemObject interface i potion och weapons
-
-    // method addItem
-    // method useItem
 }

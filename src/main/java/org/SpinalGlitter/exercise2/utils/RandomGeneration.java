@@ -17,7 +17,7 @@ public final class RandomGeneration {
         int maxTries = Math.max(1, count) * 200;
 
         while (out.size() < count && tries++ < maxTries) {
-            int x = 1 + rng.nextInt(Math.max(1, W - 2)); // undvik ytterväggar
+            int x = 1 + rng.nextInt(Math.max(1, W - 2));
             int y = 1 + rng.nextInt(Math.max(1, H - 2));
             Position p = new Position(x, y);
 
@@ -28,7 +28,7 @@ public final class RandomGeneration {
         return out;
     }
 
-    // NYTT: slumpmässiga väggar som hinder (muterar kartan)
+    // Random placing of walls
     public static void placeWalls(DungeonMap map, int count, Position avoid, Random rng) {
         int W = map.getWidth(), H = map.getHeight();
         int placed = 0, tries = 0, maxTries = Math.max(1, count) * 400;
@@ -38,7 +38,7 @@ public final class RandomGeneration {
             int y = 1 + rng.nextInt(Math.max(1, H - 2));
             Position p = new Position(x, y);
 
-            // lägg endast vägg på golv, ej start, och lämna kvar walkability runt start hyfsat
+            // put only walls on empty spaces and not on the player start position
             if (!p.equals(avoid) && map.isFloor(p)) {
                 map.setWall(p);
                 placed++;
@@ -46,7 +46,7 @@ public final class RandomGeneration {
         }
     }
 
-    // NYTT: slumpmässiga fiender
+    // Random placing of enemies
     public static Map<Position, Enemy> placeEnemies(DungeonMap map, int count, Position avoid, Random rng) {
         Map<Position, Enemy> out = new HashMap<>();
         int W = map.getWidth(), H = map.getHeight();
@@ -59,7 +59,7 @@ public final class RandomGeneration {
             Position p = new Position(x, y);
 
             if (!p.equals(avoid) && map.canMoveTo(p) && !out.containsKey(p)) {
-                // 50/50 Goblin eller Skeleton
+                // 50/50 Goblin or Skeleton
                 Enemy e = (rng.nextBoolean()) ? new Goblin(p) : new Skeleton(p);
                 out.put(p, e);
             }
@@ -67,13 +67,13 @@ public final class RandomGeneration {
         return out;
     }
 
-    // NYTT: placera svärd
+    // Place sword
     public static Map<Position, Sword> placeSwords(
             DungeonMap map,
             int count,
             Position avoid,
             Random rng,
-            java.util.Set<Position> occupied) {
+            Set<Position> occupied) {
 
         Map<Position, Sword> out = new HashMap<>();
         int W = map.getWidth(), H = map.getHeight();
@@ -90,7 +90,7 @@ public final class RandomGeneration {
                     && !out.containsKey(p)
                     && !occupied.contains(p)) {
                 out.put(p, new Sword(p));
-                occupied.add(p); // markera rutan som upptagen
+                occupied.add(p);
             }
         }
         return out;

@@ -47,9 +47,11 @@ public class CombatService {
                     break;
             }
 
-            player.takeDamage(enemyDamge);
-            System.out.println(enemy.getAttackMessage());
-            Utils.newRow();
+            if (enemy.getHealth() > 0) {
+                player.takeDamage(enemyDamge);
+                System.out.println(enemy.getAttackMessage());
+                Utils.newRow();
+            }
 
         }
     }

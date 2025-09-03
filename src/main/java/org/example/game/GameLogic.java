@@ -133,17 +133,22 @@ public class GameLogic {
 
             switch (input.toUpperCase()) {
                 case "N":
-                    if (movementService.movePlayer(player, state.grid, 0, -1)) state.gameOver = true;
+                    state.gameOver = movementService.movePlayer(player, state.grid, 0, -1);
                     break;
                 case "E":
-                    if (movementService.movePlayer(player, state.grid, 1, 0)) state.gameOver = true;
+                    state.gameOver = movementService.movePlayer(player, state.grid, 1, 0);
                     break;
                 case "S":
-                    if (movementService.movePlayer(player, state.grid, 0, 1)) state.gameOver = true;
+                    state.gameOver = movementService.movePlayer(player, state.grid, 0, 1);
                     break;
                 case "W":
-                    if (movementService.movePlayer(player, state.grid, -1, 0)) state.gameOver = true;
+                    state.gameOver = movementService.movePlayer(player, state.grid, -1, 0);
                     break;
+                case "I":
+                ItemService itemService = new ItemService();
+                itemService.openInventoryMenu(player, inputService);
+                break;
+
                 default:
                     System.out.println("Invalid input. Please try again.");
                     break;

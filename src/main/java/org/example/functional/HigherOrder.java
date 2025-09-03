@@ -22,10 +22,18 @@ public class HigherOrder {
         }
         //Functional style with streams
         Predicate<String> predicate = name -> name.startsWith("M");
-
+        String anM = "M";
         names.stream()
-                .filter(name -> name.startsWith("M")) //Lambda expression
+                .filter(name -> name.startsWith(anM)) //Lambda expression
                 .forEach(System.out::println);  //Method reference
+
+        var namesStartingWithM = keepNamesStartingWithM(names);
+    }
+
+    public static List<String> keepNamesStartingWithM(List<String> names) {
+        return names.stream()
+                .filter(name -> name.startsWith("M"))
+                .toList();
     }
 
 

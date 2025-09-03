@@ -50,11 +50,36 @@ public class Tile {
         return type != TileType.WALL;
     }
 
-    // Implement setter for enemy
+    public void setEnemy(Enemy enemy) {
+        if (enemy == null) {
+            this.enemy = null;
+            if (this.item == null) {
+                this.type = TileType.EMPTY;
+            }
+        } else {
+            this.enemy = enemy;
+            this.item = null;
+            this.type = TileType.ENEMY;
+        }
+    }
 
-    // Implement setter for item
+    public void setItem(Item item) {
+        if (item == null) {
+            this.item = null;
+            if (this.enemy == null) {
+                this.type = TileType.EMPTY;
+            }
+        } else {
+            this.item = item;
+            this.enemy = null;
+            this.type = TileType.ITEM;
+        }
+    }
 
-    // Implement clearing mechanism
-
+    public void clearContents() {
+        this.enemy = null;
+        this.item = null;
+        this.type = TileType.EMPTY;
+    }
 }
 

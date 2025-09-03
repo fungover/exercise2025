@@ -52,4 +52,18 @@ public class CombatServiceTest {
         assertEquals(3, player.getY());
         assertEquals("Retreated", result);
     }
+
+    @Test
+    void defend_reduces_incoming_damage() {
+        Player player = new Player("Player");
+        Enemy enemy = new Enemy("Enemy", 50, 20);
+
+        int initialHp = player.getHp();
+
+        String result = combat.defend(player, enemy);
+
+        assertEquals(initialHp - 10, player.getHp(),
+                "Player should only take half damage when defending");
+        assertEquals("Ongoing", result, "Combat should be ongoing after defending");
+    }
 }

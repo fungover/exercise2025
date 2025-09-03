@@ -22,7 +22,7 @@ import java.util.Scanner;
 public class Game {
 
     private final Scanner scanner = new Scanner(System.in);
-    private Dungeon dungeon = new Dungeon();
+    private Dungeon dungeon = new Dungeon(1);
     private final FloorService floors = new FloorService(2);
     private boolean gameOver = false;
     private final Player player;
@@ -257,6 +257,7 @@ public class Game {
         System.out.println("  stats - Show your current stats (name, HP, Attack, Defense)");
         System.out.println("  inventory - Show your items");
         System.out.println("  use <itemName> - Use or equip an item from your inventory");
+        System.out.println("  look - Inspect nearby tiles");
         System.out.println("  quit|exit - Quit the game");
     }
 
@@ -264,7 +265,7 @@ public class Game {
         for (int y = 0; y < dungeon.getHeight(); y++) {
             for (int x = 0; x < dungeon.getWidth(); x++) {
                 if (x == player.getX() && y == player.getY()) {
-                    System.out.print("p ");
+                    System.out.print("P ");
                 } else {
                     TileType type = dungeon.get(x, y).getType();
                     System.out.print(symbolFor(type) + " ");

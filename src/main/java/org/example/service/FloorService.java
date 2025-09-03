@@ -3,11 +3,12 @@ package org.example.service;
 import org.example.map.Dungeon;
 
 public class FloorService {
-    private final int maxFloors;
-    private int currentFloor = 1;
+    private final int totalFloors;
+    private int currentFloor;
 
-    public FloorService(int maxFloors) {
-        this.maxFloors = maxFloors;
+    public FloorService(int totalFloors) {
+        this.totalFloors = totalFloors;
+        this.currentFloor = 1; // start på våning 1
     }
 
     public int getCurrentFloor() {
@@ -15,14 +16,14 @@ public class FloorService {
     }
 
     public boolean isFinalFloor() {
-        return currentFloor >= maxFloors;
+        return currentFloor == totalFloors;
     }
 
     public Dungeon advance() {
-        if (isFinalFloor()) {
-            throw new IllegalStateException("Already on final floor.");
+        if (currentFloor >= totalFloors) {
+            throw new IllegalStateException("Already on final floor");
         }
         currentFloor++;
-        return new Dungeon();
+        return new Dungeon(currentFloor);
     }
 }

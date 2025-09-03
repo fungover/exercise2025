@@ -80,6 +80,8 @@ public class Game {
             } else if (cmd.startsWith("use ")) {
                 String itemName = cmd.substring("use ".length()).trim();
                 handleUseItem(itemName);
+            } else if (cmd.equals("look")) {
+                look();
             } else {
                 System.out.println("Unknown command. Write 'help' for a list of commands.");
             }
@@ -162,7 +164,7 @@ public class Game {
                     System.out.println("You defended against the attack and only took half damage!");
                     break;
                 case "retreat":
-                    result = combat.retreat(player, previousX, previousY);
+                    combat.retreat(player, previousX, previousY);
                     System.out.println("You retreated back to your previous position.");
                     inCombat = false;
                     map();
@@ -210,6 +212,30 @@ public class Game {
         System.out.println("Your current location is at marker: p");
         printMapWithPlayer();
         printAvailableDirections();
+    }
+    private void look() {
+        System.out.println("You look around...");
+
+        checkTile("north", player.getX(), player.getY() - 1);
+        checkTile("east",   player.getX() + 1, player.getY());
+        checkTile("south", player.getX(), player.getY() + 1);
+        checkTile("west",  player.getX() - 1, player.getY());
+    }
+
+    private void checkTile(String direction, int x, int y) {
+        if (!dungeon.inBounds(x, y)) {
+            System.out.println("To the " + direction + ": Out of bounds");
+            return;
+        }
+
+        Tile tile = dungeon.get(x, y);
+        switch (tile.getType()) {
+            case WALL -> System.out.println("To the " + direction + ": Wall");
+            case EMPTY -> System.out.println("To the " + direction + ": Empty");
+            case ENEMY -> System.out.println("To the " + direction + ": Enemy (" + tile.getEnemy().getName() + ")");
+            case ITEM -> System.out.println("To the " + direction + ": Item (" + tile.getItem().getName() + ")");
+            case EXIT -> System.out.println("To the " + direction + ": Exit");
+        }
     }
 
     private void printStats() {

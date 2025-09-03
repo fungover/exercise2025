@@ -3,8 +3,6 @@ package ExerciseTwo.Map;
 import ExerciseTwo.Service.Emojis;
 
 public abstract class Dungeon {
-    private int playerCol;
-    private int playerRow;
     private String nameOfRoom;
     private String[][] dungeonMap;
 
@@ -13,14 +11,12 @@ public abstract class Dungeon {
         this.dungeonMap = dungeonMap;
     }
 
-    public Dungeon(int playerCol, int playerRow) {
-        this.playerCol = playerCol;
-        this.playerRow = playerRow;
+    public String[][] getDungeonMap() {
+        return dungeonMap;
     }
 
     public abstract void description();
-    //public abstract void content();
-    //public abstract void playerPosition(int col, int row);
+    public abstract void content();
 
     public void printMap(){
 

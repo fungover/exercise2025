@@ -2,13 +2,6 @@ package ExerciseTwo.Map;
 
 public class Hallway extends Dungeon{
 
-    private int playerCol;
-    private int playerRow;
-
-    public Hallway(int playerCol, int playerRow) {
-        super(playerCol, playerRow);
-    }
-
     public Hallway(){
         super(new String[][]{
                 {"#", "#", "#", "#", "#"},
@@ -18,25 +11,15 @@ public class Hallway extends Dungeon{
                 {"#", "#", "#", "D", "#"}}, "Hallway");
     }
 
-    public void setPlayerCol(int playerCol) {
-        this.playerCol = playerCol;
-    }
-
-    public void setPlayerRow(int playerRow) {
-        this.playerRow = playerRow;
-    }
-
-    public void content(int col, int row){
-        if(col == 2 && row == 2){
+    public void content(){
             System.out.println("You found a healing potion");
-        }
-
         //inventory.add(content)
     }
 
     @Override
     public void description() {
-        System.out.println("You have entered the hallway");
+        System.out.println("You have entered a dark hallway");
+        System.out.println("Defeat the enemy to proceed your journey");
     }
 
 }

@@ -8,28 +8,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
-// Record för att lagra elpris-data
-record ElPris(double sekPerKwh, int timme, String tid) {
-    @Override
-    public String toString() {
-        return String.format("Timme %02d: %.4f SEK/kWh (%s)", timme, sekPerKwh, tid);
-    }
-}
-
-public class ElprisClient {
+public class ElectricityPriceClient {
 
     static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         HttpClient client = HttpClient.newHttpClient();
 
-        // Lista för att lagra alla dagens priser (nu med List istället för ArrayList)
-        List<ElPris> dagensPriser;
+        // Lista för att lagra alla dagens priser
+        List<ElectricityPrice> dagensPriser;
 
         LocalDate today = LocalDate.now();
         String year = today.format(DateTimeFormatter.ofPattern("yyyy"));
         String monthDay = today.format(DateTimeFormatter.ofPattern("MM-dd"));
 
-        System.out.println("I vilken elprisområde bor du? Ange en siffra mellan 1 och 4:");
+        System.out.println("I vilken Elprisområde bor du? Ange en siffra mellan 1 och 4:");
         System.out.println("1 = Luleå / Norra Sverige");
         System.out.println("2 = Sundsvall / Norra mellansverige");
         System.out.println("3 = Stockholm / Södra mellansverige");
@@ -37,6 +29,9 @@ public class ElprisClient {
 
         int area = getUserAreaChoice(scanner);
         displayAreaChoice(area);
+
+        // Fråga om laddningstid för elbil
+        int laddningstimmar = getChargingHoursChoice(scanner);
 
         String url = "https://www.elprisetjustnu.se/api/v1/prices/" + year + "/" + monthDay + "_SE" + area + ".json";
 
@@ -50,12 +45,15 @@ public class ElprisClient {
                     HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                // Använd den nya ElPrisParser-klassen
-                dagensPriser = ElPrisParser.parseJsonToElPris(response.body());
+
+                dagensPriser = ElectricityPriceParser.parseJsonToElectricityPrice(response.body());
 
                 if (!dagensPriser.isEmpty()) {
                     System.out.println("\n=== PRISANALYS ===");
-                    ElPrisParser.analyzeElectricityPrices(dagensPriser);
+                    ElectricityPriceParser.analyzeElectricityPrices(dagensPriser);
+
+                    // Visa bästa laddningstid för elbil
+                    ElectricityPriceParser.findBestChargingTime(dagensPriser, laddningstimmar);
                 } else {
                     System.out.println("Kunde inte parsa prisdata!");
                 }
@@ -73,9 +71,6 @@ public class ElprisClient {
         scanner.close();
     }
 
-    /**
-     * Hanterar användarens val av elprisområde med förbättrad validering
-     */
     private static int getUserAreaChoice(Scanner scanner) {
         int area = 0;
         boolean validInput = false;
@@ -97,16 +92,47 @@ public class ElprisClient {
     }
 
     /**
-     * Visar användarens valda elprisområde
+     * Hanterar användarens val av laddningstid för elbil
      */
+    private static int getChargingHoursChoice(Scanner scanner) {
+        System.out.println("\nHur många timmar vill du ladda din elbil?");
+        System.out.println("1 = 2 timmar");
+        System.out.println("2 = 4 timmar");
+        System.out.println("3 = 8 timmar");
+
+        int choice = 0;
+        boolean validInput = false;
+
+        while (!validInput) {
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                if (choice >= 1 && choice <= 3) {
+                    validInput = true;
+                } else {
+                    System.out.println("Fel inmatning! Välj 1, 2 eller 3. Försök igen");
+                }
+            } else {
+                System.out.println("Fel inmatning! Skriv bara siffror. Försök igen");
+                scanner.next();
+            }
+        }
+
+        // Konvertera val till timmar
+        int[] hours = {0, 2, 4, 8}; // Index 0 används inte
+        int chosenHours = hours[choice];
+        System.out.printf("Du valde att ladda i %d timmar\n", chosenHours);
+
+        return chosenHours;
+    }
+
     private static void displayAreaChoice(int area) {
         String[] areas = {
-                "", // Index 0 används inte
+                "",
                 "Norra Sverige",
                 "Norra mellansverige",
                 "Södra mellansverige",
                 "Södra Sverige"
         };
-        System.out.println("Du valde elprisområde: " + areas[area]);
+        System.out.println("Du valde Elprisområde: " + areas[area]);
     }
 }

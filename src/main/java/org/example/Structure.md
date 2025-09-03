@@ -36,7 +36,7 @@
 
 ## Testing
 
-### Use JUnit 5 to write unit tests for:
+### Use JUnit 5 to write unit tests for
 
 - [x] Movement logic
 - [x] Combat calculations
@@ -59,20 +59,14 @@
 
 ### Creating new enemies
 
-- > To create a new enemy Create a class with the enemy name inside
-  package entities such as ex Goblin
-  >- The new enemy need to extend Enemy and have a constructor
-     with super("enemyName",int health,int damage) ex. super("Goblin"
-     ,30,5)
+- To create a new enemy, create a class in `org.example.entities`, e.g., `Goblin`.
+- The new enemy must extend `Enemy` and provide a constructor like:
+  `super("Goblin",30,5)`
 
-- > inside DungeonGenerator find method addEnemies()
-- > Inside addEnemies() we can add our new Enemy to the list like this:
-  > - case 3 -> enemy = new newEnemy();
-- > Make sure that: int roll = RandomGenerator.nextInt(0, 3);
-  > - 3 = the amount of
-      enemy's you have, this will make it roll between 0 and 2 with 3
-      enemys
-      you should have 0 - 2 cases
+- Inside `addEnemies()`, add a new case:
+  `case 3 -> enemy = new NewEnemy();`
+- Ensure `int roll = RandomGenerator.nextInt(0, 3);` uses an exclusive upper bound.
+  If you have 3 enemies, valid cases are 0, 1, and 2.
 
 ### Creating new Items
 

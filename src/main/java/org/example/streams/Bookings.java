@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Bookings {
@@ -27,7 +26,7 @@ public class Bookings {
         System.out.println("Total number of bookings for single rooms: " + singleRooms);
         // How many nights has Anderson booked?
         long totalNights = bookings.stream()
-                .filter(booking-> booking.guest().lastName().equals("Anderson"))
+                .filter(booking -> booking.guest().lastName().equals("Anderson"))
                 .mapToLong(param -> param.checkInDate().datesUntil(param.checkOutDate()).count())
                 .sum();
         System.out.println("Total number of nights for Anderson: " + totalNights);
@@ -40,27 +39,35 @@ public class Bookings {
 
         // All bookings longer than 3 nights
         var longStays = bookings.stream()
-                .filter(param-> param.checkInDate().datesUntil(param.checkOutDate()).count() > 3)
+                .filter(param -> param.checkInDate().datesUntil(param.checkOutDate()).count() > 3)
                 .toList();
         System.out.println("Long stay bookings: ");
         longStays.forEach(System.out::println);
 
         // Number of bookings for each room type
         var roomTypeCount = bookings.stream()
-                .collect( Collectors.groupingBy(HotelBooking::roomType, Collectors.counting()));
+                .collect(Collectors.groupingBy(HotelBooking::roomType, Collectors.counting()));
         roomTypeCount.forEach((key, value) -> System.out.println(key + ": " + value));
 
         // Find the quest with the longest stay
         var longestStay = bookings.stream()
-                .max(Comparator.comparing(b->b.checkInDate().datesUntil(b.checkOutDate()).count()));
+                .max(Comparator.comparing(b -> b.checkInDate().datesUntil(b.checkOutDate()).count()));
         longestStay.ifPresent(System.out::println);
 
         // Sort bookings by arrival date
-
+        var sortedByArrivalDate = bookings.stream().sorted(Comparator.comparing(HotelBooking::checkInDate)).toList();
+        sortedByArrivalDate.forEach(System.out::println);
 
         // Do we have any bookings in November? true/false
+        System.out.println(bookings.stream()
+                .anyMatch(b -> b.checkInDate().getMonthValue() == 11));
 
         // Return any suit booking if available
+        var anySuite = bookings.stream()
+                .parallel()
+                .filter(b -> b.roomType().equalsIgnoreCase("Suite"))
+                .findAny();
+        anySuite.ifPresent(System.out::println);
 
         // Find the max number of bookings the same day... so we have enough rooms... b.getStartDate().datesUntil(b.getEndDate())
 

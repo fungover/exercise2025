@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Bookings {
     public static void main(String[] args) {
@@ -43,7 +44,9 @@ public class Bookings {
         longStays.forEach(System.out::println);
 
         // Number of bookings for each room type
-
+        var roomTypeCount = bookings.stream()
+                .collect( Collectors.groupingBy(HotelBooking::roomType, Collectors.counting()));
+        roomTypeCount.forEach((key, value) -> System.out.println(key + ": " + value));
 
         // Find the quest with the longest stay
 

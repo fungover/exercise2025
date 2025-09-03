@@ -1,17 +1,24 @@
 package org.example;
 
 import java.util.Scanner;
+import java.util.List;
+import java.io.IOException;
 
 public class App {
-    public static void main(String[] args) {
+    static void main() {
         String zone = zoneSelection();
         System.out.println("Selected zone: " + zone);
 
-        String apiResponse = API.fetchPrices(zone);
+        API api = new API();
 
-        if (apiResponse != null) {
-            System.out.println("Api response:");
-            System.out.println(apiResponse);
+        try {
+            List<ElectricityPrice> prices = api.fetchPrices(zone);
+            System.out.println("API response:");
+            for (ElectricityPrice price : prices) {
+                System.out.println(price.time_start + " " + price.time_end + " — " + price.SEK_per_kWh + "(SEK/kWh) - " + price.EUR_per_kWh + "(EUR/kWh) - " + price.EXR);
+            }
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Error fetching prices: " + e.getMessage());
         }
     }
 

@@ -15,7 +15,13 @@ public class CombatService {
                 .append(" damage. (").append(enemy.getHp()).append(" HP left)\n");
 
         if (enemy.getHp() <= 0) {
-            log.append(enemy.getName()).append(" is defeated!");
+            log.append(enemy.getName()).append(" is defeated!\n");
+
+            // Ge spelaren XP
+            int xpGained = enemy.getXpReward();
+            player.gainXp(xpGained);
+            log.append("You gained ").append(xpGained).append(" XP!");
+
             return new CombatResult("EnemyDefeated", log.toString());
         }
 

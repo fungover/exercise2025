@@ -7,11 +7,14 @@ import java.util.List;
 public class Player {
     private final String name;
     private int hp;
+    private int maxHp;
     private int x;
     private int y;
     private int level;
     private int attackDamage;
     private int defense;
+    private int xp;
+    private int xpToLevelUp;
 
     private Item equippedWeapon;
     private Item equippedArmor;
@@ -20,12 +23,15 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
-        this.hp = 100;
+        this.maxHp = 100;
+        this.hp = maxHp;
         this.x = 1;
         this.y = 1;
         this.level = 1;
         this.attackDamage = 20;
         this.defense = 0;
+        this.xp = 0;
+        this.xpToLevelUp = 100;
         this.equippedWeapon = new Item("Bare Hands", Item.ItemType.WEAPON, 0);
         this.equippedArmor = new Item("Cloth Armor", Item.ItemType.ARMOR, 0);
     }
@@ -94,8 +100,12 @@ public class Player {
         return hp;
     }
 
+    public int getMaxHp() {
+        return maxHp;
+    }
+
     public void setHp(int hp) {
-        this.hp = Math.min(hp, 100); // HP kan inte gå över 100
+        this.hp = Math.min(hp, maxHp);
     }
 
     public int getLevel() {
@@ -152,5 +162,34 @@ public class Player {
 
     public Item getEquippedArmor() {
         return equippedArmor;
+    }
+
+    // === XP ===
+    public void gainXp(int amount) {
+        xp += amount;
+        System.out.println(getName() + " gained " + amount + " XP!");
+        if (xp >= xpToLevelUp) {
+            levelUp();
+        }
+    }
+
+    private void levelUp() {
+        xp -= xpToLevelUp;
+        level++;
+        xpToLevelUp += 50;
+        attackDamage += 5;
+        defense += 2;
+        maxHp += 20;
+        hp = maxHp;
+        System.out.println("🎉 " + getName() + " leveled up to level " + level + "!");
+        System.out.println("HP increased to " + maxHp + ", Attack +5, Defense +2");
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public int getXpToNextLevel() {
+        return xpToLevelUp;
     }
 }

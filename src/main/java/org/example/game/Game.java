@@ -244,7 +244,8 @@ public class Game {
         System.out.println("=== Player Stats ===");
         System.out.println("Name    : " + player.getName());
         System.out.println("Level   : " + player.getLevel());
-        System.out.println("HP      : " + player.getHp());
+        System.out.println("XP      : " + player.getXp() + " / " + player.getXpToNextLevel());
+        System.out.println("HP      : " + player.getHp() + " / " + player.getMaxHp());
         System.out.println("Attack  : " + player.getAttackDamage() + " (Weapon: " + player.getEquippedWeapon().getName() + ")");
         System.out.println("Defense : " + player.getDefense() + " (Armor: " + player.getEquippedArmor().getName() + ")");
         System.out.println("====================");

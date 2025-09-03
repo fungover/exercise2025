@@ -13,7 +13,7 @@ public class CombatServiceTest {
     @Test
     void attack_reduces_enemy_hp() {
         Player player = new Player("Player");
-        Enemy enemy = new Enemy("Enemy", 100, 20);
+        Enemy enemy = new Enemy("Enemy", 100, 20, 50);
 
         CombatResult result = combat.attack(player, enemy);
 
@@ -24,7 +24,7 @@ public class CombatServiceTest {
     @Test
     void attack_kills_enemy () {
         Player player = new Player("Player");
-        Enemy enemy = new Enemy("Enemy", 15, 10);
+        Enemy enemy = new Enemy("Enemy", 15, 10, 10);
         CombatResult result = combat.attack(player, enemy);
 
         assertEquals(0, enemy.getHp(), "Enemy HP should not go below 0");
@@ -34,7 +34,7 @@ public class CombatServiceTest {
     @Test
     void attack_kills_player () {
         Player player = new Player("Player");
-        Enemy enemy = new Enemy("Enemy", 100, 100);
+        Enemy enemy = new Enemy("Enemy", 100, 100, 50);
         CombatResult result = combat.attack(player, enemy);
 
         assertEquals(0, player.getHp(), "Player should be defeated");
@@ -56,7 +56,7 @@ public class CombatServiceTest {
     @Test
     void defend_reduces_incoming_damage() {
         Player player = new Player("Player");
-        Enemy enemy = new Enemy("Enemy", 50, 20);
+        Enemy enemy = new Enemy("Enemy", 50, 20, 30);
 
         int initialHp = player.getHp();
 

@@ -28,4 +28,15 @@ public class PlayerTest {
         player.setHp(0);
         assertEquals(0, player.getHp());
     }
+
+    @Test
+    void player_levels_up_when_gaining_enough_xp() {
+        Player player = new Player("Player");
+
+        player.gainXp(100);
+
+        assertEquals(2, player.getLevel(), "Player should level up to level 2");
+        assertEquals(120, player.getMaxHp(), "Max HP should increase on level up");
+        assertEquals(120, player.getHp(), "HP should be restored to new max HP");
+    }
 }

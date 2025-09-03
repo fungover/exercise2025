@@ -47,11 +47,18 @@ public class CombatService {
                     break;
             }
 
-            if (enemy.getHealth() > 0) {
-                player.takeDamage(enemyDamge);
-                System.out.println(enemy.getAttackMessage());
+            if (enemy.getHealth() <= 0) {
+                System.out.println(enemy.getDeathMessage());
                 Utils.newRow();
+                break;
             }
+
+            // Enemy attacks if still alive
+            player.takeDamage(enemyDamge);
+            System.out.println(enemy.getAttackMessage());
+            Utils.newRow();
+
+
         }
     }
 }

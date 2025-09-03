@@ -2,6 +2,7 @@ package org.example.game;
 
 import org.example.entities.characters.Player;
 import org.example.entities.enemies.Goblin;
+import org.example.entities.enemies.GoblinKing;
 import org.example.entities.items.Item;
 import org.example.map.DungeonGrid;
 import org.example.map.Tile;
@@ -120,6 +121,7 @@ public class GameLogic {
         int[] optimalStartPosition = state.grid.getOptimalStartPosition();
 
         spawnService.spawnEnemies(optimalStartPosition, state.grid, 10, () -> new Goblin());
+        spawnService.spawnEnemies(optimalStartPosition, state.grid, 1, () -> new GoblinKing());
         spawnService.spawnWeapons(optimalStartPosition, state.grid, 10);
         spawnService.spawnPotions(optimalStartPosition, state.grid, 10);
 

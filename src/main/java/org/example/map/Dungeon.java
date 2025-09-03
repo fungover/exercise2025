@@ -5,6 +5,8 @@ package org.example.map;
  * Använder grid[row][col] = grid[y][x]
  */
 
+import org.example.entities.Enemy;
+
 public class Dungeon {
     // 10 x 10 karta där ytterkanten är vägg
     // Spelbara rutor är 8 x 8
@@ -38,6 +40,10 @@ public class Dungeon {
                 grid[row][col] = new Tile(type);
             }
         }
+
+        // Lägg till en test fiende på ruta (4,4)
+        Enemy enemy = new Enemy("Enemy", 20, 5);
+        grid[4][4].setEnemy(enemy);
 
         // Placerar EXIT längst ner till höger på kartan
         grid[EXIT_Y][EXIT_X] = new Tile(TileType.EXIT);

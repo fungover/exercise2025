@@ -1,8 +1,10 @@
 package org.example.game;
 
 
+import org.example.entities.Enemy;
 import org.example.entities.Player;
 import org.example.map.Dungeon;
+import org.example.map.Tile;
 import org.example.map.TileType;
 import org.example.service.MovementService;
 import org.example.service.FloorService;
@@ -92,23 +94,35 @@ public class Game {
             return;
         }
 
-        var tileType = dungeon.get(player.getX(), player.getY()).getType();
+        Tile currentTile = dungeon.get(player.getX(), player.getY());
 
-        if (tileType == TileType.EXIT) {
+        // Fiende-möte
+        if (currentTile.hasEnemy()) {
+            Enemy enemy = currentTile.getEnemy();
+            System.out.println("\n=== ENEMY ENCOUNTER ===");
+            System.out.println(enemy.getName());
+            System.out.println("HP: " + enemy.getHp() + " | Damage: " + enemy.getDamage());
+            System.out.println("=======================\n");
+            return;
+        }
+
+        // Exit-ruta
+        if (currentTile.getType() == TileType.EXIT) {
             if (!floors.isFinalFloor()) {
-                System.out.println("You found the stairs! Decending to floor "
+                System.out.println("You found the stairs! Descending to floor "
                         + (floors.getCurrentFloor() + 1) + "...");
                 dungeon = floors.advance();
                 player.moveTo(1, 1);
                 map();
             } else {
-                System.out.println("You found the EXIT on floor 2 and escaped the dungeon!");
+                System.out.println("🎉 You found the EXIT on floor 2 and escaped the dungeon!");
                 gameOver = true;
             }
             return;
         }
 
-        System.out.println("You moved to " + direction + ".");
+        // Vanlig flytt
+        System.out.println("You moved " + direction + ".");
         map();
     }
 

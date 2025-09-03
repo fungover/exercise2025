@@ -49,7 +49,7 @@ public class Player {
     }
 
     public void setHealth(int amount) {
-        this.health = amount;
+        this.health = Math.max(0, Math.min(maxHealth, amount));
     }
 
     public void takeDamage(int damage) {
@@ -69,9 +69,8 @@ public class Player {
         if (item instanceof Weapon) {
             Weapon weapon = (Weapon) item;
             weaponDamage += weapon.getDamageBonus();
-            System.out.println(
-              "You equipped the " + weapon.getName() + "! Your baseDamage increased by " + weapon.getDamageBonus() +
-                "!");
+            System.out.println("You equipped the " + weapon.getName() +
+              "! Your baseDamage increased by " + weapon.getDamageBonus() + "!");
 
         }
     }
@@ -101,8 +100,10 @@ public class Player {
             System.out.println("Empty");
         } else {
             for (int i = 0; i < inventory.size(); i++) {
-                System.out.println(
-                  (i + 1) + ", " + inventory.get(i).getName() + " - " + inventory.get(i).getDescription());
+                System.out.println((i + 1) + ", " + inventory.get(i)
+                                                             .getName() + " - " +
+                  inventory.get(i)
+                           .getDescription());
             }
         }
     }

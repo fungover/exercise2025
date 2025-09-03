@@ -32,4 +32,15 @@ public final class Tile {
     public List<Item> items() {
         return List.copyOf(items);
     }
+
+    public Item takeAt(int zeroBasedIndex) {
+        if (zeroBasedIndex < 0 || zeroBasedIndex >= items.size()) return null;
+        return items.remove(zeroBasedIndex);
+    }
+
+    public List<Item> takeAll() {
+        List<Item> out = new ArrayList<>(items);
+        items.clear();
+        return out;
+    }
 }

@@ -21,8 +21,6 @@ public class Movement {
                     w - west
                 """);
 
-            //sc.nextLine();
-
             switch (sc.nextLine().toLowerCase()){
                 case "n": return "north";
                 case "s": return "south";
@@ -40,10 +38,10 @@ public class Movement {
         int playerCol = position.getCol();
 
         if(move.equals("north")){
-            playerRow++;
+            playerRow--;
         }
         if(move.equals("south")){
-            playerRow--;
+            playerRow++;
         }
         if(move.equals("east")){
             playerCol++;

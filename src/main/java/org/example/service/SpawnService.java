@@ -46,7 +46,7 @@ public class SpawnService {
         }
     }
 
-    public void spawnPotions(DungeonGrid grid, int count) {
+    public void spawnPotions(int[] startPos, DungeonGrid grid, int count) {
         for (int i = 0; i < count; i++) {
             Potion potion = PotionLibrary.potions.get(
                     RandomUtils.getRandomNumber(0, PotionLibrary.potions.size() - 1)
@@ -58,7 +58,7 @@ public class SpawnService {
                 y = RandomUtils.getRandomNumber(0, grid.getHeight() - 1);
             } while (grid.getTiles()[x][y].getType() != Tile.TileType.FLOOR
                     || !grid.getTiles()[x][y].getItems().isEmpty()
-                    || grid.getTiles()[x][y].getEnemy() != null);
+                    || (x == startPos[0] && y == startPos[1]));
 
             grid.getTiles()[x][y].addItem(potion);
         }

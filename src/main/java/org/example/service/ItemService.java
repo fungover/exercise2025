@@ -1,7 +1,6 @@
 package org.example.service;
 
 import org.example.entities.characters.Player;
-import org.example.entities.items.Inventory;
 import org.example.entities.items.Item;
 import org.example.entities.items.Potion;
 import org.example.entities.items.Weapon;
@@ -19,14 +18,18 @@ public class ItemService {
             boolean validInput = false;
 
             while (!validInput) {
-                if (item instanceof Weapon){
+                if (item instanceof Weapon) {
                     System.out.println("Name: " + item.getName());
                     System.out.println("Description: " + item.getDescription());
                     System.out.println("Damage: " + ((Weapon) item).getMinDamage() + " - " + ((Weapon) item).getMaxDamage());
                 }
 
                 System.out.println("What would you like to do with " + item.getName() + "?");
-                System.out.println("1. Equip item");
+                if (item instanceof Weapon) {
+                    System.out.println("1. Equip item");
+                } else {
+                    System.out.println("1. Use item");
+                }
                 System.out.println("2. Add item to inventory");
 
                 String input = inputService.readLine();
@@ -47,11 +50,11 @@ public class ItemService {
                             player.setEquippedWeapon(weapon);
                             System.out.println("You equipped " + weapon.getName() + " and added " + oldWeapon.getName() + " to your inventory.");
 
-                        } else {
-                            System.out.println("You can't equip that item!");
                         }
 
-                        //Add potion logic here
+                        if (item instanceof Potion) {
+                            player.usePotion((Potion) item);
+                        }
 
                         validInput = true;
                         break;
@@ -129,7 +132,7 @@ public class ItemService {
             for (int i = 0; i < weapons.size(); i++) {
                 System.out.println((i + 1) + ". " + weapons.get(i).getName());
                 System.out.println("Description: " + weapons.get(i).getDescription());
-                System.out.println("Damage: " + weapons.get(i).getMinDamage() + " - " + weapons.get(i).getMaxDamage());
+                System.out.println("Damage: " + weapons.get(i).getMinDamage() + " - " + weapons.get(i).getMaxDamage()  + "\n");
 
             }
 

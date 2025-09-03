@@ -4,8 +4,6 @@ import org.example.entities.characters.Player;
 import org.example.map.DungeonGrid;
 import org.example.map.Tile;
 
-import java.io.BufferedReader;
-
 public class MovementService {
     public boolean movePlayer(Player player, DungeonGrid grid, int dx, int dy) {
         int oldX = player.getX();
@@ -14,7 +12,9 @@ public class MovementService {
         int newX = oldX + dx;
         int newY = oldY + dy;
 
-        if (grid.getTiles()[newX][newY].getType() == Tile.TileType.FLOOR) {
+        Tile.TileType nextTileType = grid.getTiles()[newX][newY].getType();
+
+        if (nextTileType == Tile.TileType.FLOOR) {
             grid.getTiles()[oldX][oldY].setHasPlayer(false);
 
             player.setX(newX);
@@ -23,8 +23,11 @@ public class MovementService {
 
             System.out.println("> You moved.");
             return false;
-        } else if (grid.getTiles()[newX][newY].getType() == Tile.TileType.DOOR){
+        } else if (nextTileType == Tile.TileType.DOOR) {
             System.out.println("You left the dungeon");
+            return true;
+        } else if (nextTileType == Tile.TileType.EXIT) {
+            System.out.println("You found the exit!");
             return true;
         } else {
             System.out.println("You cannot move there, it's a wall");
@@ -36,36 +39,48 @@ public class MovementService {
         int oldX = player.getX();
         int oldY = player.getY();
 
-        String north;
-
         System.out.println("Where would you like to move?");
 
-        //North
-        if (grid.getTiles()[oldX][oldY - 1].getType() == Tile.TileType.DOOR) {
+        // North
+        Tile.TileType northTile = grid.getTiles()[oldX][oldY - 1].getType();
+        if (northTile == Tile.TileType.DOOR) {
             System.out.println("N (Door) ");
-        } else if (grid.getTiles()[oldX][oldY - 1].getType() == Tile.TileType.FLOOR) {
+        } else if (northTile == Tile.TileType.EXIT) {
+            System.out.println("N (Exit) ");
+        } else if (northTile == Tile.TileType.FLOOR) {
             System.out.println("N ");
         }
 
-        //East
-        if (grid.getTiles()[oldX + 1][oldY].getType() == Tile.TileType.DOOR) {
+        // East
+        Tile.TileType eastTile = grid.getTiles()[oldX + 1][oldY].getType();
+        if (eastTile == Tile.TileType.DOOR) {
             System.out.println("E (Door) ");
-        } else if (grid.getTiles()[oldX + 1][oldY].getType() == Tile.TileType.FLOOR) {
+        } else if (eastTile == Tile.TileType.EXIT) {
+            System.out.println("E (Exit) ");
+        } else if (eastTile == Tile.TileType.FLOOR) {
             System.out.println("E ");
         }
 
-        //South
-        if (grid.getTiles()[oldX][oldY + 1].getType() == Tile.TileType.DOOR) {
+        // South
+        Tile.TileType southTile = grid.getTiles()[oldX][oldY + 1].getType();
+        if (southTile == Tile.TileType.DOOR) {
             System.out.println("S (Door) ");
-        } else if (grid.getTiles()[oldX][oldY + 1].getType() == Tile.TileType.FLOOR) {
+        } else if (southTile == Tile.TileType.EXIT) {
+            System.out.println("S (Exit) ");
+        } else if (southTile == Tile.TileType.FLOOR) {
             System.out.println("S ");
         }
 
-        //West
-        if (grid.getTiles()[oldX - 1][oldY].getType() == Tile.TileType.DOOR) {
+        // West
+        Tile.TileType westTile = grid.getTiles()[oldX - 1][oldY].getType();
+        if (westTile == Tile.TileType.DOOR) {
             System.out.println("W (Door) ");
-        } else if (grid.getTiles()[oldX - 1][oldY].getType() == Tile.TileType.FLOOR) {
+        } else if (westTile == Tile.TileType.EXIT) {
+            System.out.println("W (Exit) ");
+        } else if (westTile == Tile.TileType.FLOOR) {
             System.out.println("W ");
         }
+
+        System.out.println("Press I to open inventory");
     }
 }

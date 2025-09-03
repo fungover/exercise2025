@@ -52,7 +52,6 @@ public class CombatService {
                 System.out.println(enemy.getAttackMessage());
                 Utils.newRow();
             }
-
         }
     }
 }

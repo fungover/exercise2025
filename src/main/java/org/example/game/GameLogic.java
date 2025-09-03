@@ -119,8 +119,9 @@ public class GameLogic {
         state.grid = DungeonGrid.createDungeonGrid(state.grid.getWidth(), state.grid.getHeight());
         int[] optimalStartPosition = state.grid.getOptimalStartPosition();
 
-        spawnService.spawnEnemies(optimalStartPosition, state.grid, 50, () -> new Goblin());
+        spawnService.spawnEnemies(optimalStartPosition, state.grid, 10, () -> new Goblin());
         spawnService.spawnWeapons(optimalStartPosition, state.grid, 10);
+        spawnService.spawnPotions(optimalStartPosition, state.grid, 10);
 
         Player player = new Player(state.name, state.health, state.maxHealth,
                 optimalStartPosition[0], optimalStartPosition[1], state.weapon);

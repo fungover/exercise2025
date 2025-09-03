@@ -76,6 +76,11 @@
 
 ### Creating new Items
 
-- > To create new Items 
+- > To create new Items its mostly the same as with new enemies
+  first add your new items type to ItemType inside class Item
+
+  > - the new item need to extend Item and have a constructor as such
+  > - super("itemName","description",ItemType.newItemType)
+  > - make sure to fill out the use method on your item.
 
   

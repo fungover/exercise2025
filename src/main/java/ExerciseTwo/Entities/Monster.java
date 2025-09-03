@@ -3,7 +3,7 @@ package ExerciseTwo.Entities;
 public class Monster extends Enemy{
 
     public Monster() {
-        super("monster", 15, 5);
+        super("monster", 15, -5);
     }
 
     @Override

@@ -11,11 +11,14 @@ public abstract class Enemy {
         this.attack = attack;
     }
 
-    //public void position();
     public abstract void description();
 
-    public  void damage(int damage) {
-        health -= damage;
+    public  void setHealth(int damage) {
+        health += damage;
+    }
+
+    public int getHealth() {
+        return health;
     }
 
     public int getAttack(){

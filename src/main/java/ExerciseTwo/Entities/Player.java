@@ -4,20 +4,24 @@ import ExerciseTwo.Service.PrintText;
 
 public final class Player {
     
-    private final String playerName;
+    private String playerName;
+    private int attack;
     private int health;
 
     public Player(String playerName) {
         this.playerName = playerName;
+        this.attack = -10;
         this.health = 100;
     }
+    public Player(){}
 
     public String getPlayerName() {
         return playerName;
     }
 
     public void setHealth(int health) {
-       this.health += health;
+        this.health += health;
+
 
        if (this.health > 100) {
            this.health = 100;
@@ -25,13 +29,15 @@ public final class Player {
 
        if (this.health <= 0) {
            this.health = 0;
-           System.out.println("You have been defeated!");
-           System.exit(0);
        }
     }
 
     public int getHealth() {
         return health;
+    }
+
+    public int getPlayerAttack(){
+        return attack;
     }
 
     public void presentPlayer(){

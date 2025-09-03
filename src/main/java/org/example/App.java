@@ -1,6 +1,7 @@
 package org.example;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.List;
@@ -28,6 +29,12 @@ public class App {
             double meanPriceTomorrow = CalculateMeanPrice(pricesTomorrow);
 
             System.out.println("Mean price on the electricity for today: " + meanPrice + "(SEK/kWh)\nMean price on the electricity for tomorrow: " + meanPriceTomorrow + "(SEK/kWh)");
+
+            ElectricityPrice cheapest = getPrice(pricesToday, false);
+            ElectricityPrice mostExpensive = getPrice(pricesToday, true);
+
+            System.out.println("Cheapest price is " + OffsetDateTime.parse(cheapest.time_start).format(DateTimeFormatter.ofPattern("HH:mm")) + " for " + cheapest.SEK_per_kWh + "(SEK/kWh)");
+            System.out.println("The most expensive price is " + OffsetDateTime.parse(mostExpensive.time_start).format(DateTimeFormatter.ofPattern("HH:mm")) + " for " + mostExpensive.SEK_per_kWh + "(SEK/kWh)");
 
         } catch (IOException | InterruptedException e) {
             System.out.println("Error fetching prices: " + e.getMessage());
@@ -58,5 +65,33 @@ public class App {
         meanP /= prices.size();
 
         return meanP;
+    }
+
+    public static ElectricityPrice getPrice(List<ElectricityPrice> prices, boolean expensive) {
+        ElectricityPrice best = prices.getFirst();
+
+        for (int i = 1; i < prices.size(); i++) {
+            ElectricityPrice p = prices.get(i);
+
+            boolean moreExpensive = p.SEK_per_kWh > best.SEK_per_kWh;
+
+            boolean cheaper = p.SEK_per_kWh < best.SEK_per_kWh;
+
+            boolean samePriceEarlier =
+                    p.SEK_per_kWh == best.SEK_per_kWh &&
+                            p.time_start.compareTo(best.time_start) < 0;
+
+            if (expensive) {
+                if (moreExpensive || samePriceEarlier) {
+                    best = p;
+                }
+            } else {
+                if (cheaper || samePriceEarlier) {
+                    best = p;
+                }
+            }
+        }
+
+        return best;
     }
 }

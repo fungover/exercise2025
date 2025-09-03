@@ -25,9 +25,16 @@ public class Enemy {
 
     public void takeDamage(int amount) {
         hp -= amount;
+        if (hp < 0) {
+            hp = 0;
+        }
     }
 
     public boolean isAlive() {
         return hp > 0;
+    }
+
+    public boolean isDead() {
+        return hp <= 0;
     }
 }

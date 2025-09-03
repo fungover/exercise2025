@@ -42,8 +42,17 @@ public class Dungeon {
         }
 
         // Lägg till en test fiende på ruta (4,4)
-        Enemy enemy = new Enemy("Enemy", 20, 5);
-        grid[4][4].setEnemy(enemy);
+        Enemy enemy1 = new Enemy("Enemy", 40, 10);
+        grid[4][4].setEnemy(enemy1);
+
+        Enemy enemy2 = new Enemy("Enemy", 40, 10);
+        grid[2][6].setEnemy(enemy2);
+
+        Enemy enemy3 = new Enemy("Enemy", 40, 10);
+        grid[8][2].setEnemy(enemy3);
+
+        Enemy enemy4 = new Enemy("Enemy", 40, 10);
+        grid[6][7].setEnemy(enemy4);
 
         // Placerar EXIT längst ner till höger på kartan
         grid[EXIT_Y][EXIT_X] = new Tile(TileType.EXIT);

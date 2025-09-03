@@ -1,6 +1,5 @@
 package org.example.game;
 
-
 import org.example.entities.Enemy;
 import org.example.entities.Player;
 import org.example.map.Dungeon;
@@ -8,13 +7,14 @@ import org.example.map.Tile;
 import org.example.map.TileType;
 import org.example.service.MovementService;
 import org.example.service.FloorService;
+import org.example.service.CombatService;
 
 import java.util.Locale;
 import java.util.Scanner;
 
 /*
     - Ansvarar för huvudloop och spellogik
-    - Skapar Player, Dungeon, MovementService
+    - Skapar Player, Dungeon, MovementService, CombatService
     - Läser in kommandon av användaren
     - Anropar services och skriver feedback
  */
@@ -26,6 +26,9 @@ public class Game {
     private boolean gameOver = false;
     private final Player player;
     private final MovementService movement = new MovementService();
+    private final CombatService combat = new CombatService(); // <-- Ny service för strider
+    private int previousX;
+    private int previousY;
 
     public Game() {
         System.out.println("Welcome to Dungeon Crawler!");
@@ -87,6 +90,11 @@ public class Game {
 
     // Försöker flytta spelaren i angiven riktning
     private void handleMove(String direction) {
+        // Spara spelarens gamla position innan flytten
+        previousX = player.getX();
+        previousY = player.getY();
+
+        // Försök flytta
         boolean moved = movement.movePlayer(player, dungeon, direction);
 
         if (!moved) {
@@ -96,13 +104,9 @@ public class Game {
 
         Tile currentTile = dungeon.get(player.getX(), player.getY());
 
-        // Fiende-möte
+        // Fiende-möte → starta strid
         if (currentTile.hasEnemy()) {
-            Enemy enemy = currentTile.getEnemy();
-            System.out.println("\n=== ENEMY ENCOUNTER ===");
-            System.out.println(enemy.getName());
-            System.out.println("HP: " + enemy.getHp() + " | Damage: " + enemy.getDamage());
-            System.out.println("=======================\n");
+            startCombat(currentTile.getEnemy());
             return;
         }
 
@@ -126,8 +130,56 @@ public class Game {
         map();
     }
 
-    // Beskriver var spelaren står och visar en ASCII karta:
-    // 'p' markerar spelaren. '#' är vägg. '.' är en tom ruta.
+    // === STRIDSSYSTEM ===
+    private void startCombat(Enemy enemy) {
+        System.out.println("\n=== ENEMY ENCOUNTER ===");
+        System.out.println(enemy.getName());
+        System.out.println("HP: " + enemy.getHp() + " | Damage: " + enemy.getDamage());
+        System.out.println("=======================");
+        System.out.println("Type 'attack', 'defend', or 'retreat'.");
+
+        boolean inCombat = true;
+
+        while (inCombat && !gameOver) {
+            System.out.print("Combat > ");
+            String cmd = scanner.nextLine().toLowerCase();
+
+            String result;
+            switch (cmd) {
+                case "attack":
+                    result = combat.attack(player, enemy);
+                    System.out.println("You attack the enemy!");
+                    break;
+                case "defend":
+                    result = combat.defend(player, enemy);
+                    System.out.println("You defended against the attack and only took half damage!");
+                    break;
+                case "retreat":
+                    result = combat.retreat(player, previousX, previousY);
+                    System.out.println("You retreated back to your previous position.");
+                    inCombat = false;
+                    map();
+                    continue;
+                default:
+                    System.out.println("Unknown combat command.");
+                    continue;
+            }
+
+            // Kontrollera resultatet
+            if (result.equals("EnemyDefeated")) {
+                System.out.println("You defeated the enemy!");
+                dungeon.get(player.getX(), player.getY()).removeEnemy(); // ta bort fienden från kartan
+                inCombat = false;
+            } else if (result.equals("PlayerDefeated")) {
+                System.out.println("You have been slain... Game Over!");
+                gameOver = true;
+                return;
+            }
+        }
+    }
+
+    // === Kart- och hjälpfunktioner ===
+
     private void map() {
         System.out.println("=== Floor " + floors.getCurrentFloor() + " ===");
         System.out.println("Your current location is at marker: p");
@@ -135,7 +187,6 @@ public class Game {
         printAvailableDirections();
     }
 
-    // Skriver ut kort manual för kommandon
     private void printHelp() {
         System.out.println("Commands:");
         System.out.println("  help - Show this helppanel");
@@ -146,7 +197,6 @@ public class Game {
         System.out.println("  quit|exit - Quit the game");
     }
 
-    // Ritar en ASCII karta med spelaren inritad som 'p'.
     private void printMapWithPlayer() {
         for (int y = 0; y < dungeon.getHeight(); y++) {
             for (int x = 0; x < dungeon.getWidth(); x++) {
@@ -161,7 +211,6 @@ public class Game {
         }
     }
 
-    // Översätter en TileType till en enkel symbol
     private String symbolFor(TileType type) {
         return switch (type) {
             case WALL -> "#";
@@ -172,22 +221,18 @@ public class Game {
         };
     }
 
-    // Skriver ut vilka riktningar som är tillgängliga från spelarens position
     private void printAvailableDirections () {
         java.util.List<String> dirs = new java.util.ArrayList<>();
 
         if (dungeon.isWalkable(player.getX(), player.getY() - 1)) {
             dirs.add("north");
         }
-
         if (dungeon.isWalkable(player.getX(), player.getY() + 1)) {
             dirs.add("south");
         }
-
         if (dungeon.isWalkable(player.getX() - 1, player.getY())) {
             dirs.add("west");
         }
-
         if (dungeon.isWalkable(player.getX() + 1, player.getY())) {
             dirs.add("east");
         }
@@ -199,13 +244,10 @@ public class Game {
         }
     }
 
-    // Tillåt kortkommandon
     private boolean isShortDirection(String cmd) {
         return cmd.equals("n") || cmd.equals("e") || cmd.equals("s") || cmd.equals("w");
     }
 
-
-    // Översätter kortkommandon till fulla ord
     private String shortToLong(String cmd) {
         return switch (cmd) {
             case "n" -> "north";

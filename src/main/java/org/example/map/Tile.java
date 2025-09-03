@@ -33,4 +33,9 @@ public class Tile {
     public boolean hasEnemy() {
         return enemy != null && enemy.isAlive();
     }
+
+    public void removeEnemy() {
+        this.enemy = null;
+        this.type = TileType.EMPTY;
+    }
 }

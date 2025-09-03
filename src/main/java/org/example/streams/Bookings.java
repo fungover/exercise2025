@@ -3,6 +3,7 @@ package org.example.streams;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Bookings {
@@ -14,9 +15,14 @@ public class Bookings {
         bookings.forEach(System.out::println);
 
         // Print number of bookings in total
+        long bookingCount = bookings.stream().count();
+        System.out.println("Total number of bookings: " + bookingCount);
 
         // Print total number of bookings for single rooms
-
+        long singleRooms = bookings.stream()
+                .filter(booking -> booking.roomType().equalsIgnoreCase("Single"))
+                .count();
+        System.out.println("Total number of bookings for single rooms: " + singleRooms);
         // How many nights has Anderson booked?
 
         // List all guest names

@@ -32,12 +32,16 @@ public class Printer {
         }
     }
 
-    public static void printBestChargingPeriod(PricePerHour[] prices, int hours) {
-        PricePerHour[] bestPeriod = Calculate.findBestChargingPeriod(prices, hours);
+    public static void printBestChargingPeriods(PricePerHour[] prices) {
+        int[] durations = {2, 4, 8};
 
-        System.out.println("\nBilligaste perioden för laddning (" + hours + " timmar):");
-        for (PricePerHour p : bestPeriod) {
-            System.out.println(p.time_start() + " -- " + p.SEK_per_kWh() + " kr/kWh");
+        for (int hours : durations) {
+            PricePerHour[] bestPeriod = Calculate.findBestChargingPeriod(prices, hours);
+
+            System.out.println("\nBilligaste perioden för laddning (" + hours + " timmar):");
+            for (PricePerHour p : bestPeriod) {
+                System.out.println(p.time_start() + " -- " + p.SEK_per_kWh() + " kr/kWh");
+            }
         }
     }
 }

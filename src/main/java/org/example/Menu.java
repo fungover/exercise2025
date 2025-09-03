@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Area {
+public class Menu {
 
     public static String chooseArea() throws IOException {
 

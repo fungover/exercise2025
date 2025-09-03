@@ -1,5 +1,6 @@
 package org.example.functional;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -38,6 +39,21 @@ public class HigherOrder {
 
     public static int add(int a, int b) {
         return a + b;
+    }
+
+    public String greeting(String name) {
+        if( name == null || name.isEmpty()) {
+            return "Hello stranger";
+        }
+        else
+            return "Hello " + name;
+    }
+
+    public String greeting(LocalTime time) {
+        if (time.getHour() < 12) {
+            return "Good morning";
+        } else
+            return "Good afternoon";
     }
 
 

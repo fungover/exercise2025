@@ -12,11 +12,13 @@ public class App {
         API api = new API();
 
         try {
-            List<ElectricityPrice> prices = api.fetchPrices(zone);
-            System.out.println("API response:");
-            for (ElectricityPrice price : prices) {
+            List<ElectricityPrice> pricesToday = api.fetchPrices(zone);
+            /*for (ElectricityPrice price : prices) {
                 System.out.println(price.time_start + " " + price.time_end + " — " + price.SEK_per_kWh + "(SEK/kWh) - " + price.EUR_per_kWh + "(EUR/kWh) - " + price.EXR);
-            }
+            }*/
+            double meanPrice = CalculateMeanPrice(pricesToday);
+            System.out.println("Medelpriset på elen idag: " + meanPrice);
+
         } catch (IOException | InterruptedException e) {
             System.out.println("Error fetching prices: " + e.getMessage());
         }
@@ -34,5 +36,17 @@ public class App {
         String selection = scanner.nextLine();
 
         return "SE" + selection;
+    }
+
+    public static double CalculateMeanPrice(List<ElectricityPrice> prices) {
+        double meanP = 0;
+
+        for (ElectricityPrice price : prices) {
+            meanP += price.SEK_per_kWh;
+        }
+
+        meanP /= prices.size();
+
+        return meanP;
     }
 }

@@ -11,9 +11,9 @@ public class Player {
 
     public Player (String name) {
         this.name = name;
-        this.maxHealth = 100;
+        this.maxHealth = 20;
         this.damage = 10;
-        this.currentHealth = 90;
+        this.currentHealth = maxHealth;
         this.position = new Position(1, 1);
 
     }

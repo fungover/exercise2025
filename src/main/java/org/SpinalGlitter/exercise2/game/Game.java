@@ -16,7 +16,6 @@ public final class Game {
     static void main() {
 
         Player player = new Player("Hero");
-        CombatService combatService = new CombatService();
         DungeonMap map = new DungeonMap(10, 10);
         Random rng = new Random();
 
@@ -30,7 +29,9 @@ public final class Game {
 
         // 2) Placera potions & enemies (utan occupied-argument)
         Map<Position, Potion> potions = RandomGeneration.placePotions(map, 5, player.getPosition(), rng);
-        Map<Position, Enemy>  enemies = RandomGeneration.placeEnemies(map, 4, player.getPosition(), rng);
+        Map<Position, Enemy> enemies = RandomGeneration.placeEnemies(map, 4, player.getPosition(), rng);
+
+        CombatService combatService = new CombatService(enemies);
 
         // 3) Bygg occupied EFTER att potions/enemies är kända
         Set<Position> occupied = new HashSet<>();
@@ -92,14 +93,10 @@ public final class Game {
             if (enemies.containsKey(newPos)) {
                 Enemy e = enemies.get(newPos);
 
-
                 System.out.println("An enemy blocks your path: " + e.getName() + " at " + newPos + ".");
-                // Här kan du senare trigga combat i stället för att blockera
-/*
-                combat.startCombat(player, new Enemy());
-*/
 
-                continue;
+                // enter combat with either skeleton or goblin
+                combatService.startCombat(player, e);
             }
 
             // 4) Flytta spelaren
@@ -110,8 +107,10 @@ public final class Game {
 
             tryPickup(potions, player.getPosition(), player);
             tryPickup(swords, player.getPosition(), player);
-
+            continue;
         }
+
+
     }
 }
 

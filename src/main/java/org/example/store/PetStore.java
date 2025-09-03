@@ -3,7 +3,6 @@ package org.example.store;
 import org.example.store.animals.*;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class PetStore {

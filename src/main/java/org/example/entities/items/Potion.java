@@ -38,6 +38,6 @@ public class Potion extends Item{
     //Override Methods
     @Override
     public String getUseMessage() {
-        return "You use the " + getName() + " and restore " + getValue() + " health!";
+        return "> You use a " + getName() + " and restore " + getValue() + " health!";
     }
 }

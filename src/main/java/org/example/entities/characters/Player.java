@@ -111,16 +111,20 @@ public class Player {
         }
     }
 
+    public void addToInventory(Item item){
+        inventory.addItem(item);
+    }
+
     public String getAttackMessage(Enemy enemy) {
-        return getName() + " attacks " + enemy.getName() + " for " + getDamage() + " damage!";
+        return "> " + getName() + " attacks " + enemy.getName() + " for " + getDamage() + " damage!";
     }
 
     public String equipWeapon (Weapon weapon) {
-        return getName() + " equipped " + weapon.getName();
+        return "> " + getName() + " equipped " + weapon.getName();
     }
 
     public String getDeathMessage(Enemy enemy) {
-        return getName() + " dies after getting struck for " + enemy.getDamage() + " damage!";
+        return "> " + getName() + " dies after getting struck for " + enemy.getDamage() + " damage!";
     }
 
 }

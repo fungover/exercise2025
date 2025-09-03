@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.entities.characters.Player;
 import org.example.entities.enemies.Enemy;
 import org.example.entities.items.Potion;
+import org.example.utils.Utils;
 
 public class CombatService {
     public void battleEnemy(Player player, Enemy enemy){
@@ -12,7 +13,6 @@ public class CombatService {
         while (player.getHealth() > 0 && enemy.getHealth() > 0) {
             int playerDamage = player.getDamage();
             int enemyDamge = enemy.getDamage();
-
             System.out.println("\nYour HP: " + player.getHealth() + " | Enemy HP: " + enemy.getHealth());
             System.out.println("Choose action:");
             System.out.println("1. Attack");
@@ -31,14 +31,17 @@ public class CombatService {
                 case 1:
                     enemy.takeDamage(playerDamage);
                     System.out.println(player.getAttackMessage(enemy));
+                    Utils.newRow();
                     break;
 
                 case 2:
                     Potion potion = player.getInventory().getFirstPotion();
                     if (potion != null) {
                         player.usePotion(potion);
+                        Utils.newRow();
                     } else {
                         System.out.println("You don't have any health potions.");
+                        Utils.newRow();
                         continue;
                     }
                     break;
@@ -46,6 +49,7 @@ public class CombatService {
 
             player.takeDamage(enemyDamge);
             System.out.println(enemy.getAttackMessage());
+            Utils.newRow();
 
         }
     }

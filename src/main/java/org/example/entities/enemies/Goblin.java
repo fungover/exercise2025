@@ -9,7 +9,7 @@ public class Goblin extends Enemy {
 
     @Override
     public String getAttackMessage() {
-        return "The " + getName() + " attacks you for " + getDamage();
+        return "The " + getName() + " attacks you for " + getDamage() + " damage!";
     }
 
     @Override

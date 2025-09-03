@@ -2,6 +2,7 @@ package org.example.game;
 
 import org.example.entities.characters.Player;
 import org.example.entities.enemies.Goblin;
+import org.example.entities.items.Item;
 import org.example.map.DungeonGrid;
 import org.example.map.Tile;
 import org.example.service.*;
@@ -165,6 +166,15 @@ public class GameLogic {
                 if (currentTile.getEnemy().getHealth() <= 0) {
                     currentTile.removeEnemy();
                 }
+            }
+
+            if (currentTile.getItems().size() > 0) {
+                ItemService itemService = new ItemService();
+                for (int i = 0; i < currentTile.getItems().size(); i++) {
+                    System.out.println(i + 1 + ". " + currentTile.getItems().get(i).getName());
+                }
+                itemService.interactWithItems(player, currentTile.getItems(), inputService);
+                currentTile.getItems().clear();
             }
 
         }

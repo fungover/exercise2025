@@ -3,7 +3,9 @@ package org.example.streams;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Bookings {
@@ -49,8 +51,12 @@ public class Bookings {
         roomTypeCount.forEach((key, value) -> System.out.println(key + ": " + value));
 
         // Find the quest with the longest stay
+        var longestStay = bookings.stream()
+                .max(Comparator.comparing(b->b.checkInDate().datesUntil(b.checkOutDate()).count()));
+        longestStay.ifPresent(System.out::println);
 
         // Sort bookings by arrival date
+
 
         // Do we have any bookings in November? true/false
 

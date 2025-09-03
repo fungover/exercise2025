@@ -24,8 +24,13 @@ public class Bookings {
                 .count();
         System.out.println("Total number of bookings for single rooms: " + singleRooms);
         // How many nights has Anderson booked?
-
+        long totalNights = bookings.stream()
+                .filter(booking-> booking.guest().lastName().equals("Anderson"))
+                .mapToLong(param -> param.checkInDate().datesUntil(param.checkOutDate()).count())
+                .sum();
+        System.out.println("Total number of nights for Anderson: " + totalNights);
         // List all guest names
+
 
         // All bookings longer than 3 nights
 

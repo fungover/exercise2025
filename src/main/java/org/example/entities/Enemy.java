@@ -37,6 +37,9 @@ public abstract class Enemy {
     }
 
     public void takeDamage(int damage) {
+        if (damage < 0) {
+            throw new IllegalStateException("damage must be >= 0");
+        }
         this.health = Math.max(0, this.health - damage);
     }
 

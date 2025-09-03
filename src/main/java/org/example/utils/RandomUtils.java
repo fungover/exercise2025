@@ -1,8 +1,6 @@
 package org.example.utils;
 
 import org.example.entities.*;
-import org.example.map.Tile;
-import org.example.map.TileType;
 
 import java.util.Random;
 
@@ -36,8 +34,9 @@ public class RandomUtils {
 
     public static Item randomPotion() {
         return switch (random.nextInt(2)) {
-            case 0 -> new Item("Potion", Item.ItemType.CONSUMABLE, 50);
-            default -> new Item("Elixir", Item.ItemType.CONSUMABLE, 30);
+            case 0 -> new Item("Potion", Item.ItemType.CONSUMABLE, 30);
+            case 1 -> new Item("Hi Potion", Item.ItemType.CONSUMABLE, 60);
+            default -> new Item("Elixir", Item.ItemType.CONSUMABLE, 9999);
         };
     }
 

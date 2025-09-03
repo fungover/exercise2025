@@ -15,30 +15,30 @@ public class CombatServiceTest {
         Player player = new Player("Player");
         Enemy enemy = new Enemy("Enemy", 100, 20);
 
-        String result = combat.attack(player, enemy);
+        CombatResult result = combat.attack(player, enemy);
 
         assertEquals(80, enemy.getHp(), "Enemy should lose 20 HP");
-        assertEquals("Ongoing", result, "Combat should be ongoing");
+        assertEquals("Ongoing", result.getStatus(), "Combat should be ongoing");
     }
 
     @Test
     void attack_kills_enemy () {
         Player player = new Player("Player");
         Enemy enemy = new Enemy("Enemy", 15, 10);
-        String result = combat.attack(player, enemy);
+        CombatResult result = combat.attack(player, enemy);
 
         assertEquals(0, enemy.getHp(), "Enemy HP should not go below 0");
-        assertEquals("EnemyDefeated", result);
+        assertEquals("EnemyDefeated", result.getStatus());
     }
 
     @Test
     void attack_kills_player () {
         Player player = new Player("Player");
         Enemy enemy = new Enemy("Enemy", 100, 100);
-        String result = combat.attack(player, enemy);
+        CombatResult result = combat.attack(player, enemy);
 
         assertEquals(0, player.getHp(), "Player should be defeated");
-        assertEquals("PlayerDefeated", result);
+        assertEquals("PlayerDefeated", result.getStatus());
     }
 
     @Test
@@ -46,11 +46,11 @@ public class CombatServiceTest {
         Player player = new Player("Player");
         player.moveTo(4, 4);
 
-        String result = combat.retreat(player, 4, 3);
+        CombatResult result = combat.retreat(player, 4, 3);
 
         assertEquals(4, player.getX());
         assertEquals(3, player.getY());
-        assertEquals("Retreated", result);
+        assertEquals("Retreated", result.getStatus());
     }
 
     @Test
@@ -60,10 +60,10 @@ public class CombatServiceTest {
 
         int initialHp = player.getHp();
 
-        String result = combat.defend(player, enemy);
+        CombatResult result = combat.defend(player, enemy);
 
         assertEquals(initialHp - 10, player.getHp(),
                 "Player should only take half damage when defending");
-        assertEquals("Ongoing", result, "Combat should be ongoing after defending");
+        assertEquals("Ongoing", result.getStatus(), "Combat should be ongoing after defending");
     }
 }

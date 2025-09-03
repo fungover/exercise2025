@@ -6,6 +6,7 @@ import org.example.entities.Player;
 import org.example.map.Dungeon;
 import org.example.map.Tile;
 import org.example.map.TileType;
+import org.example.service.CombatResult;
 import org.example.service.MovementService;
 import org.example.service.FloorService;
 import org.example.service.CombatService;
@@ -154,41 +155,39 @@ public class Game {
             System.out.print("Combat > ");
             String cmd = scanner.nextLine().toLowerCase();
 
-            String result;
+            CombatResult result;
             switch (cmd) {
-                case "attack":
-                    result = combat.attack(player, enemy);
-                    System.out.println("You attack the enemy!");
-                    System.out.println(enemy.getName() + " has " + enemy.getHp() + " HP left.");
-                    break;
-                case "defend":
-                    result = combat.defend(player, enemy);
-                    System.out.println("You defended against the attack and only took half damage!");
-                    System.out.println(enemy.getName() + " still has " + enemy.getHp() + " HP left.");
-                    break;
-                case "retreat":
-                    combat.retreat(player, previousX, previousY);
-                    System.out.println("You retreated back to your previous position.");
+                case "attack" -> result = combat.attack(player, enemy);
+                case "defend" -> result = combat.defend(player, enemy);
+                case "retreat" -> {
+                    result = combat.retreat(player, previousX, previousY);
                     inCombat = false;
                     map();
+                    System.out.println(result.getLog());
                     continue;
-                default:
+                }
+                default -> {
                     System.out.println("Unknown combat command.");
                     continue;
+                }
             }
 
-            // Kontrollera resultatet
-            if (result.equals("EnemyDefeated")) {
-                System.out.println("You defeated the enemy!");
-                dungeon.get(player.getX(), player.getY()).removeEnemy();
-                inCombat = false;
-            } else if (result.equals("PlayerDefeated")) {
-                System.out.println("You have been slain... Game Over!");
-                gameOver = true;
-                return;
+            // Skriv alltid loggen från CombatService
+            System.out.println(result.getLog());
+
+            switch (result.getStatus()) {
+                case "EnemyDefeated" -> {
+                    dungeon.get(player.getX(), player.getY()).removeEnemy();
+                    inCombat = false;
+                }
+                case "PlayerDefeated" -> {
+                    gameOver = true;
+                    return;
+                }
             }
         }
     }
+
 
     // === Inventory-kommandon ===
     private void handleUseItem(String itemName) {

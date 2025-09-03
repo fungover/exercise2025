@@ -28,11 +28,11 @@
 
 ## Game Mechanics
 
-- **Combat:** automatic? maybe
-- **items**:are automatically picked up? maybe
-- **Health potions**: restore xx HP and are consumed when used
-- **Map symbols**: `@` = Player?, `E` = Enemy,`I`=Item,`█` = Wall (uniCode
-  U+2588), `.` = Empty
+- **Combat:** turn-based: you choose to Attack, Use item or Flee
+- **items:** are picked up automatically when you enter a tile
+- **Health potions**: restore HP and are consumed when used
+- **Map symbols:** `@` = Player?, `E` = Enemy,`I`=Item,`█` (U+2588) = Wall , `.` =
+  Empty
 
 ## Testing
 

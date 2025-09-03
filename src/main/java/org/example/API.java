@@ -11,8 +11,8 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 public class API {
-    public List<ElectricityPrice> fetchPrices(String zone) throws IOException, InterruptedException {
-        String apiUrl = "https://www.elprisetjustnu.se/api/v1/prices/2025/09-02_" + zone + ".json";
+    public List<ElectricityPrice> fetchPrices(String zone, String day, String month, String year) throws IOException, InterruptedException {
+        String apiUrl = "https://www.elprisetjustnu.se/api/v1/prices/" + year + "/"+ month +"-" + day + "_" + zone + ".json";
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()

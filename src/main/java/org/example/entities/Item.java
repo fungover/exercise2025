@@ -24,4 +24,19 @@ public abstract class Item {
         this.name = name;
         this.effect = effect;
     }
+    public String getName() {
+        return name;
+    }
+
+    public abstract ItemType getType();
+
+    public Effect getEffect() {
+        return effect;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + getType() + ", " + effect + ")";
+    }
+
 }

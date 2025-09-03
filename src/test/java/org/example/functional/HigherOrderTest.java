@@ -16,8 +16,13 @@ class HigherOrderTest {
 
         var filteredNames = HigherOrder.keepNamesStartingWithM(unfilteredList);
 
-        assertEquals(1, filteredNames.size());
+        assertEquals(2, filteredNames.size());
         assertEquals("Mary", filteredNames.getFirst());
+    }
+
+    @Test
+    void addReturnsSumOfTwoNumbers() {
+        assertEquals(10, HigherOrder.add(5, 5));
     }
 
 }

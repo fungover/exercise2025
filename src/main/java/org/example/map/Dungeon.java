@@ -6,6 +6,7 @@ package org.example.map;
  */
 
 import org.example.entities.Enemy;
+import org.example.entities.Item;
 
 public class Dungeon {
     // 10 x 10 karta där ytterkanten är vägg
@@ -53,6 +54,13 @@ public class Dungeon {
 
         Enemy enemy4 = new Enemy("Enemy", 40, 10);
         grid[6][7].setEnemy(enemy4);
+
+        // Lägg till en test-potion i början
+        grid[2][2].setItem(new Item("Potion", Item.ItemType.CONSUMABLE, 50));
+
+        // Lägg till två test vapen
+        grid[2][3].setItem(new Item("Iron Sword", Item.ItemType.WEAPON, 10));
+        grid[2][4].setItem(new Item("Battle Axe", Item.ItemType.WEAPON, 15));
 
         // Placerar EXIT längst ner till höger på kartan
         grid[EXIT_Y][EXIT_X] = new Tile(TileType.EXIT);

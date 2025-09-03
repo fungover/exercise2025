@@ -1,10 +1,12 @@
 package org.example.map;
 
 import org.example.entities.Enemy;
+import org.example.entities.Item;
 
 public class Tile {
     private TileType type;
     private Enemy enemy;
+    private Item item;
 
     public Tile(TileType type) {
         this.type = type;
@@ -18,6 +20,8 @@ public class Tile {
     public void setType(TileType type) {
         this.type = type;
     }
+
+    // ==== ENEMY ====
 
     public Enemy getEnemy() {
         return enemy;
@@ -38,4 +42,27 @@ public class Tile {
         this.enemy = null;
         this.type = TileType.EMPTY;
     }
+
+    // ==== ITEM ====
+
+    public boolean hasItem() {
+        return item != null;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+        if (item != null) {
+            this.type = TileType.ITEM;
+        } else {
+            this.type = TileType.EMPTY;
+        }
+    }
+
+
+
+
 }

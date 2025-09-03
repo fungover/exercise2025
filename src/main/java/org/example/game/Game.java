@@ -1,6 +1,7 @@
 package org.example.game;
 
 import org.example.entities.Enemy;
+import org.example.entities.Item;
 import org.example.entities.Player;
 import org.example.map.Dungeon;
 import org.example.map.Tile;
@@ -74,18 +75,15 @@ public class Game {
                 handleMove(shortToLong(cmd));
             } else if (cmd.equals("stats")) {
                 printStats();
+            } else if (cmd.equals("inventory")) {
+                player.printInventory();
+            } else if (cmd.startsWith("use ")) {
+                String itemName = cmd.substring("use ".length()).trim();
+                handleUseItem(itemName);
             } else {
                 System.out.println("Unknown command. Write 'help' for a list of commands.");
             }
         }
-    }
-
-    private void printStats() {
-        System.out.println("=== Player Stats ===");
-        System.out.println("Name : " + player.getName());
-        System.out.println("Level : " + player.getLevel());
-        System.out.println("HP : " + player.getHp());
-        System.out.println("====================");
     }
 
     // Försöker flytta spelaren i angiven riktning
@@ -108,6 +106,15 @@ public class Game {
         if (currentTile.hasEnemy()) {
             startCombat(currentTile.getEnemy());
             return;
+        }
+
+        // Item-ruta
+        if (currentTile.hasItem()) {
+            Item item = currentTile.getItem();
+            player.addToInventory(item);
+            System.out.println("You picked up: " + item.getName() + " (" + item.getType() + ")");
+
+            currentTile.setItem(null);
         }
 
         // Exit-ruta
@@ -168,7 +175,7 @@ public class Game {
             // Kontrollera resultatet
             if (result.equals("EnemyDefeated")) {
                 System.out.println("You defeated the enemy!");
-                dungeon.get(player.getX(), player.getY()).removeEnemy(); // ta bort fienden från kartan
+                dungeon.get(player.getX(), player.getY()).removeEnemy();
                 inCombat = false;
             } else if (result.equals("PlayerDefeated")) {
                 System.out.println("You have been slain... Game Over!");
@@ -178,7 +185,25 @@ public class Game {
         }
     }
 
-    // === Kart- och hjälpfunktioner ===
+    // === Inventory-kommandon ===
+    private void handleUseItem(String itemName) {
+        Item found = null;
+        for (Item item : player.getInventory()) {
+            if (item.getName().equalsIgnoreCase(itemName)) {
+                found = item;
+                break;
+            }
+        }
+
+        if (found == null) {
+            System.out.println("No such item in your inventory: " + itemName);
+            return;
+        }
+
+        player.useItem(found);
+    }
+
+    // === Kart och hjälpfunktioner ===
 
     private void map() {
         System.out.println("=== Floor " + floors.getCurrentFloor() + " ===");
@@ -187,13 +212,25 @@ public class Game {
         printAvailableDirections();
     }
 
+    private void printStats() {
+        System.out.println("=== Player Stats ===");
+        System.out.println("Name    : " + player.getName());
+        System.out.println("Level   : " + player.getLevel());
+        System.out.println("HP      : " + player.getHp());
+        System.out.println("Attack  : " + player.getAttackDamage() + " (Weapon: " + player.getEquippedWeapon().getName() + ")");
+        System.out.println("Defense : " + player.getDefense() + " (Armor: " + player.getEquippedArmor().getName() + ")");
+        System.out.println("====================");
+    }
+
     private void printHelp() {
         System.out.println("Commands:");
         System.out.println("  help - Show this helppanel");
         System.out.println("  map - Show the map");
         System.out.println("  move north|south|east|west - Try to move in direction");
         System.out.println("  n|s|e|w - Short version of 'move <direction>'");
-        System.out.println("  stats - Show your current stats (name, HP)");
+        System.out.println("  stats - Show your current stats (name, HP, Attack, Defense)");
+        System.out.println("  inventory - Show your items");
+        System.out.println("  use <itemName> - Use or equip an item from your inventory");
         System.out.println("  quit|exit - Quit the game");
     }
 

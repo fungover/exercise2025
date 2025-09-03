@@ -28,7 +28,7 @@ public class CombatServiceTest {
         String result = combat.attack(player, enemy);
 
         assertEquals(0, enemy.getHp(), "Enemy HP should not go below 0");
-        assertEquals("Enemy has been killed!", result);
+        assertEquals("EnemyDefeated", result);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class CombatServiceTest {
         String result = combat.attack(player, enemy);
 
         assertEquals(0, player.getHp(), "Player should be defeated");
-        assertEquals("You have been defeated!", result);
+        assertEquals("PlayerDefeated", result);
     }
 
     @Test
@@ -50,6 +50,6 @@ public class CombatServiceTest {
 
         assertEquals(4, player.getX());
         assertEquals(3, player.getY());
-        assertEquals("You have retreated!", result);
+        assertEquals("Retreated", result);
     }
 }

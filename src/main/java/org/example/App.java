@@ -12,24 +12,37 @@ public class App {
 
         Warehouse warehouse = new Warehouse();
 
+        // New products (created today)
         warehouse.addProduct(Warehouse.createProduct("1", "Gaming Laptop", Category.ELECTRONICS, 9));
-        warehouse.addProduct(Warehouse.createProduct("2", "Running Shoes", Category.SPORTS, 8));
-        warehouse.addProduct(Warehouse.createProduct("3", "Java Book", Category.BOOKS, 7));
-        warehouse.addProduct(Warehouse.createProduct("4", "Javascript Book", Category.BOOKS, 10));
-        warehouse.addProduct(Warehouse.createProduct("5", "Gaming Mouse", Category.ELECTRONICS, 8));
+        warehouse.addProduct(Warehouse.createProduct("2", "New Running Shoes", Category.SPORTS, 8));
+
+        // Older products (3 days ago)
+        warehouse.addProduct(Warehouse.createOldProduct("3", "Java Book", Category.BOOKS, 7, 3));
+        warehouse.addProduct(Warehouse.createOldProduct("4", "Gaming Mouse", Category.ELECTRONICS, 8, 3));
+
+        // older products (7 days ago)
+        warehouse.addProduct(Warehouse.createOldProduct("5", "JavaScript Book", Category.BOOKS, 6, 7));
+        warehouse.addProduct(Warehouse.createOldProduct("6", "Old T-shirt", Category.CLOTHING, 5, 7));
+
+        // older products (30 days ago)
+        warehouse.addProduct(Warehouse.createOldProduct("7", "Ancient Furniture", Category.FURNITURE, 4, 30));
+
+        // specific date product (Christmas Toy, created on Dec 24, 2024)
+        warehouse.addProduct(Warehouse.createProductWithDate("8", "Christmas Toy", Category.TOYS, 10,
+                LocalDate.of(2024, 12, 24)));
 
         System.out.println("=== ALL PRODUCTS ===");
         warehouse.getAllProducts().forEach(System.out::println);
 
         System.out.println("\n=== ELECTRONICS (SORTED BY NAME) ===");
-        List<Product> electronics = warehouse.getProductsByCategorySorted(Category.BOOKS);
+        List<Product> electronics = warehouse.getProductsByCategorySorted(Category.ELECTRONICS);
         electronics.forEach(System.out::println);
 
         System.out.println("\n=== PRODUCTS CREATED AFTER YESTERDAY ===");
         List<Product> recentProducts = warehouse.getProductsCreatedAfter(LocalDate.now().minusDays(1));
         recentProducts.forEach(System.out::println);
 
-        warehouse.updateProduct("1", "Updated Gaming Laptop", Category.ELECTRONICS, 10);
+        warehouse.updateProduct("3", "Updated Java Book", Category.BOOKS, 10);
 
         System.out.println("\n=== MODIFIED PRODUCTS ===");
         List<Product> modified = warehouse.getModifiedProducts();

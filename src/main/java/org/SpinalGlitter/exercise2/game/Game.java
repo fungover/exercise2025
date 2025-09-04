@@ -12,10 +12,10 @@ import java.util.*;
 import static org.SpinalGlitter.exercise2.service.PickupService.tryPickup;
 
 public final class Game {
-    private Player player;
-    private DungeonMap map;
-    private int enemies;
-    private int potions = 5;
+    private final Player player;
+    private final DungeonMap map;
+    private final int enemies;
+    private final int potions = 5;
     private final Scanner scanner = new Scanner(System.in);
 
     public Game(String name, String difficulty) {
@@ -47,46 +47,40 @@ public final class Game {
         player.getInventory().addItem(new Potion(null));
         player.getInventory().printItems();
 
-        // 1) Place walls first
 
         Set<Position> occupied = new HashSet<>();
         occupied.add(player.getPosition());
 
-        // 2) Place potions and enemies
+        //Place potions and enemies and add to occupied
         Map<Position, Potion> potions = RandomGeneration.placePotions(map, this.potions, player.getPosition(), rng);
         occupied.addAll(potions.keySet());
         Map<Position, Enemy> enemies = RandomGeneration.placeEnemies(map, this.enemies, player.getPosition(), rng);
         occupied.addAll(enemies.keySet());
 
-        RandomGeneration.placeWalls(map, occupied, 4, player.getPosition(), rng);
-        // 3) Build occupied after potions and enemies are placed
-
-        // 4) Place swords
+        //Place sword and add to occupied
         Map<Position, Sword> swords = RandomGeneration.placeSwords(map, 1, player.getPosition(), rng, occupied);
 
-        /*Scanner scanner = new Scanner(System.in);*/
+        // add walls where no items are placed
+        RandomGeneration.placeWalls(map, occupied, 4, player.getPosition(), rng);
 
+        // Logic to handle combat
         CombatService combatService = new CombatService(enemies, scanner);
-
 
         System.out.println("Dungeon Crawler Game Started!");
         System.out.println("Welcome " + player.getName() + "!");
         System.out.println("You are at " + player.getPosition() + " with health " + player.getCurrentHealth() + "HP.");
         CommandUtils.printHelp();
 
-
         while (player.isAlive()) {
             map.printMap(player.getPosition(), potions, enemies, swords);
 
             // add damage if the player has a weapon else remove extra damage
-            //player.setDamage(player.getDamage());
             if (player.haveWeapon()) {
                 player.setDamage();
 
             } else if (player.getDamage() == 20 && !player.haveWeapon()) {
                 player.setDamage();
             }
-
 
             System.out.println("You are at " + player.getPosition() + " with health " + player.getCurrentHealth() + "HP." + " " + player.getDamage() + "DMG");
             System.out.print("> ");
@@ -95,7 +89,6 @@ public final class Game {
             Position newPos = null;
             switch (input) {
                 case "options" -> CommandUtils.printHelp();
-
                 case "quit" -> {
                     System.out.println("Exiting the game. Goodbye!");
                     return;
@@ -136,6 +129,3 @@ public final class Game {
         }
     }
 }
-
-
-

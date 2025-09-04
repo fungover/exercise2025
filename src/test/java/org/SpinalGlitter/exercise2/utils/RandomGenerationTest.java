@@ -4,12 +4,9 @@ import org.SpinalGlitter.exercise2.entities.*;
 import org.SpinalGlitter.exercise2.map.DungeonMap;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RandomGenerationTest {
 
@@ -30,14 +27,16 @@ class RandomGenerationTest {
         occupied.addAll(walls);
 
 
+        Set<Position> occupiedBeforeSword = new HashSet<>(occupied);
         Map<Position, Sword> sword = RandomGeneration.placeSwords(map, 1, player.getPosition(), rng, occupied);
         occupied.addAll(sword.keySet());
 
-        assert potions.size() == 5 : "Expected 5 potions, and got " + potions.size();
-        assert enemies.size() == 5 : "Expected 5 enemies, and got " + enemies.size();
-        assert walls.size() == 10 : "Expected 10 walls, and got " + walls.size();
-        assert occupied.size() == 21 : "Expected 11 occupied positions, and got " + occupied.size();
-
+        assertEquals(5, potions.size(), "Expected 5 potions");
+        assertEquals(5, enemies.size(), "Expected 5 enemies");
+        assertEquals(10, walls.size(), "Expected 10 walls");
+        assertEquals(1, sword.size(), "Expected 1 sword");
+        assertTrue(Collections.disjoint(sword.keySet(), occupiedBeforeSword), "Sword must not overlap prior occupied");
+        assertEquals(occupiedBeforeSword.size() + sword.size(), occupied.size(), "Occupied should increase only by sword count");
     }
 
     @Test

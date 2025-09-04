@@ -14,17 +14,17 @@ public class App {
                 /_______  /____/|___|  /\\___  / \\___  >____/|___|  /  \\______  /|__|  (____  /\\/\\_/ |____/\\___  >__|     \\______  /_______ \\___|
                         \\/           \\//_____/      \\/           \\/          \\/            \\/                 \\/                \\/        \\/   \s
                 """;
-        Scanner inputScanner = new Scanner(System.in);
-        System.out.println(asciiArt);
-        System.out.println("What do you want to name your character?");
-        System.out.print("> ");
-        String name = inputScanner.nextLine();
-        System.out.println("What difficulty do you want to play (easy/medium/hard)? (default = easy)");
-        System.out.print("> ");
-        String difficulty = inputScanner.nextLine();
-        Game game = new Game(name, difficulty);
-        System.out.println();
-        game.startGame();
-        inputScanner.close();
+        try (Scanner inputScanner = new Scanner(System.in)) {
+            System.out.println(asciiArt);
+            System.out.println("What do you want to name your character?");
+            System.out.print("> ");
+            String name = inputScanner.nextLine();
+            System.out.println("What difficulty do you want to play (easy/medium/hard)? (default = easy)");
+            System.out.print("> ");
+            String difficulty = inputScanner.nextLine();
+            Game game = new Game(name, difficulty);
+            System.out.println();
+            game.startGame();
+        }
     }
 }

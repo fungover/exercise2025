@@ -3,10 +3,11 @@ package org.example.map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.example.service.enemy.DefaultEnemyTable;
+import org.example.service.enemy.EnemyService;
 import org.example.service.loot.DefaultLootTable;
 import org.example.service.loot.LootService;
 
-/** Next steps (later): boss placement, enemies. */
 public final class MapGenerator {
     private final Random random;
     private final LootService lootService;
@@ -15,7 +16,7 @@ public final class MapGenerator {
     private final int desiredRoomCount;
     private final int roomPadding;
     private final int maxPlacementAttempts;
-
+    private final EnemyService enemyService;
     /** Builds a default LootService wired to DefaultLootTable (seeded). */
     public MapGenerator(long seed,
                         int minRoomSize,
@@ -24,7 +25,7 @@ public final class MapGenerator {
                         int roomPadding,
                         int maxPlacementAttempts) {
         this(seed, minRoomSize, maxRoomSize, desiredRoomCount, roomPadding, maxPlacementAttempts,
-                new LootService(seed, new DefaultLootTable(seed)));
+                new LootService(seed, new DefaultLootTable(seed)), new EnemyService(seed, new DefaultEnemyTable(seed)));
     }
 
     /** Pass any LootService (great for tests or custom tables). */
@@ -34,7 +35,8 @@ public final class MapGenerator {
                         int desiredRoomCount,
                         int roomPadding,
                         int maxPlacementAttempts,
-                        LootService lootService) {
+                        LootService lootService,
+                        EnemyService enemyService) {
         if (minRoomSize <= 1) throw new IllegalArgumentException("minRoomSize must be > 1");
         if (maxRoomSize < minRoomSize) throw new IllegalArgumentException("maxRoomSize must be >= minRoomSize");
         if (desiredRoomCount <= 0) throw new IllegalArgumentException("desiredRoomCount must be > 0");
@@ -43,7 +45,7 @@ public final class MapGenerator {
 
         this.random = new Random(seed);
         this.lootService = lootService;
-
+        this.enemyService = enemyService;
         this.minRoomSize = minRoomSize;
         this.maxRoomSize = maxRoomSize;
         this.desiredRoomCount = desiredRoomCount;
@@ -67,7 +69,7 @@ public final class MapGenerator {
             map.tileAt(spawnX, spawnY).setType(TileType.SPAWN);
 
             lootService.scatter(map, placedRooms, spawnX, spawnY);
-        }
+            enemyService.scatter(map, placedRooms, spawnX, spawnY);        }
         return map;
     }
 

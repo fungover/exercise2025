@@ -21,7 +21,7 @@ public final class LootService {
     /** Drop 0..2 items per room at random floor tiles, avoiding SPAWN. */
     public void scatter(DungeonMap map, List<Room> rooms, int spawnX, int spawnY) {
         for (Room room : rooms) {
-            int drops = between(0, 2);
+            int drops = between(1, 2);
             for (int i = 0; i < drops; i++) {
                 Optional<Item> maybe = table.roll();
                 if (maybe.isEmpty()) continue;

@@ -1,0 +1,179 @@
+package org.example.map;
+
+import org.example.entities.*;
+import org.example.utils.RandomGenerator;
+
+public class DungeonGenerator {
+    /*
+    here we will create the map,
+    Tile[][] will give us a 2d array like
+    [0][0] ,[0][1] where [height][width]
+    [1][0] .[1][1]
+     */
+    private static final int MIN_WIDTH = 5;
+    private static final int MIN_HEIGHT = 5;
+    private static final int MAX_PLACEMENT_ATTEMPTS = 1000;
+
+    private Tile[][] grid;
+    private int width;
+    private int height;
+    private int playerStartX, playerStartY;
+
+    public DungeonGenerator(int width, int height) {
+        if (width < MIN_WIDTH || height < MIN_HEIGHT) {
+            throw new IllegalArgumentException(
+              "Dungeon too small. Min size is " + MIN_WIDTH + "x" + MIN_HEIGHT);
+        }
+        this.width = width;
+        this.height = height;
+        this.grid = new Tile[height][width];
+        //method to generate the map
+        generateDungeon();
+    }
+
+    // Getter
+    public int getWidth() {return width;}
+
+    public int getHeight() {return height;}
+
+    public int getPlayerStartX() {return playerStartX;}
+
+    public int getPlayerStartY() {return playerStartY;}
+
+    public Tile getTile(int x, int y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            return null;
+        }
+        return grid[y][x];
+    }
+
+    public boolean isValidPosition(int x, int y) {
+        return x >= 0 && x < width && y >= 0 && y < height && !grid[y][x].isWall();
+    }
+
+    // setter
+
+    // method
+
+    protected void generateDungeon() {
+        //creates empty tiles
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                grid[y][x] = new Tile();
+            }
+        }
+
+        //create walls around the border
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
+                    grid[y][x].setWall(true);
+                }
+            }
+        }
+
+        // random walls, so it feels less empty
+        for (int i = 0; i < (width * height) / 10; i++) {
+            int x = RandomGenerator.nextInt(1, width - 1);
+            int y = RandomGenerator.nextInt(1, height - 1);
+            grid[y][x].setWall(true);
+        }
+
+        //Set player start position
+        do {
+            playerStartX = RandomGenerator.nextInt(1, width - 1);
+            playerStartY = RandomGenerator.nextInt(1, height - 1);
+        } while (!grid[playerStartY][playerStartX].isEmpty());
+
+        // add enemies to the dungeon
+        addEnemies();
+        // add items to the dungeon
+        addItems();
+    }
+
+    private void addEnemies() {
+        //how many enemies we want to spawn between 3-7
+        int numEnemies = RandomGenerator.nextInt(3, 7);
+        for (int i = 0; i < numEnemies; i++) {
+            int x, y;
+            int attempts = 0;
+            do {
+                x = RandomGenerator.nextInt(1, width - 1);
+                y = RandomGenerator.nextInt(1, height - 1);
+            } while (
+              (!grid[y][x].isEmpty() || (x == playerStartX && y == playerStartY)) &&
+                ++attempts < MAX_PLACEMENT_ATTEMPTS);
+            if (attempts >= MAX_PLACEMENT_ATTEMPTS) break;
+
+            int roll = RandomGenerator.nextInt(0, 3);
+            Enemy enemy;
+
+            switch (roll) {
+                case 0 -> enemy = new Goblin();
+                case 1 -> enemy = new Orc();
+                case 2 -> enemy = new CowKing();
+                default -> throw new IllegalStateException("Invalid roll " + roll);
+            }
+
+            // Enemy enemy = RandomGenerator.nextInt(0, 2) == 0 ? new Goblin() :
+            // new Orc();
+            enemy.setPosition(x, y);
+            grid[y][x].setEnemy(enemy);
+
+        }
+    }
+
+    private void addItems() {
+        int numItems = RandomGenerator.nextInt(2, 6);
+        for (int i = 0; i < numItems; i++) {
+            int x, y;
+            int attempts = 0;
+            do {
+                x = RandomGenerator.nextInt(1, width - 1);
+                y = RandomGenerator.nextInt(1, height - 1);
+            } while (
+              (!grid[y][x].isEmpty() || (x == playerStartX && y == playerStartY)) &&
+                ++attempts < MAX_PLACEMENT_ATTEMPTS);
+            if (attempts >= MAX_PLACEMENT_ATTEMPTS) break;
+
+            Item item;
+            int itemType = RandomGenerator.nextInt(0, 3);
+            switch (itemType) {
+                case 0:
+                    item = new HealthPotion();
+                    break;
+                case 1:
+                    item = new Sword();
+                    break;
+                default:
+                    item = new Dagger();
+                    break;
+            }
+            grid[y][x].setItem(item);
+        }
+    }
+
+    public void display(Player player) {
+        System.out.println("\n=== Dungeon Map ===");
+
+        //Clear player marker
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                grid[y][x].setHasPlayer(false);
+            }
+        }
+
+        // set current player pos
+        grid[player.getY()][player.getX()].setHasPlayer(true);
+
+        // display the map
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                System.out.print(grid[y][x].describe() + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+}

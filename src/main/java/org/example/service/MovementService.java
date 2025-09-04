@@ -8,9 +8,16 @@ public class MovementService {
     public boolean movePlayer(Player player, DungeonGrid grid, int dx, int dy) {
         int oldX = player.getX();
         int oldY = player.getY();
-
         int newX = oldX + dx;
         int newY = oldY + dy;
+
+        int width = grid.getWidth();
+        int height = grid.getHeight();
+
+        if (newX < 0 || newX >= width || newY < 0 || newY >= height) {
+            System.out.println("You cannot move there");
+            return false;
+        }
 
         Tile.TileType nextTileType = grid.getTiles()[newX][newY].getType();
 

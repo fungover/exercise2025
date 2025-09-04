@@ -17,15 +17,26 @@ public class SpawnService {
     public void spawnEnemies(int[] startPos, DungeonGrid grid, int count, Supplier<Enemy> enemySupplier) {
         for (int i = 0; i < count; i++) {
             Enemy enemy = enemySupplier.get();
-            int x, y;
+            int x = -1, y = -1;
+
+            int attempts = 0;
+            final int MAX_ATTEMPTS = 1000;
+
             do {
+                if (attempts++ > MAX_ATTEMPTS) {
+                    System.err.println("Warning: Could not place enemy after " + MAX_ATTEMPTS + " attempts");
+                    break;
+                }
+
                 x = RandomUtils.getRandomNumber(0, grid.getWidth() - 1);
                 y = RandomUtils.getRandomNumber(0, grid.getHeight() - 1);
             } while (grid.getTiles()[x][y].getType() != Tile.TileType.FLOOR
                     || grid.getTiles()[x][y].getEnemy() != null
                     || (x == startPos[0] && y == startPos[1]));
 
-            grid.getTiles()[x][y].setEnemy(enemy);
+            if (attempts <= MAX_ATTEMPTS) {
+                grid.getTiles()[x][y].setEnemy(enemy);
+            }
         }
     }
 

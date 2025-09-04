@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +38,7 @@ public class CombatServiceTest {
 
         combatService.battleEnemy(player, enemy, mockInputService);
 
-        assert(enemy.getHealth() < initialEnemyHP);
+        assertTrue(enemy.getHealth() < initialEnemyHP);
     }
 
     @Test
@@ -49,7 +50,7 @@ public class CombatServiceTest {
 
         combatService.battleEnemy(player, enemy, mockInputService);
 
-        assert(player.getHealth() > initialPlayerHP);
+        assertTrue(player.getHealth() > initialPlayerHP);
     }
 
     @Test
@@ -60,6 +61,6 @@ public class CombatServiceTest {
 
         combatService.battleEnemy(player, enemy, mockInputService);
 
-        assert(player.getHealth() < initialPlayerHP);
+        assertTrue(player.getHealth() < initialPlayerHP);
     }
 }

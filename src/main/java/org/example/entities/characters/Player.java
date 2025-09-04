@@ -54,7 +54,9 @@ public class Player {
         }
     }
 
-    public Weapon getEquippedWeapon(){return equippedWeapon;}
+    public Weapon getEquippedWeapon() {
+        return equippedWeapon;
+    }
 
     public Inventory getInventory() {
         return inventory;
@@ -85,33 +87,32 @@ public class Player {
         this.inventory = inventory;
     }
 
-    public void setEquippedWeapon(Weapon newWeapon){
+    public void setEquippedWeapon(Weapon newWeapon) {
         inventory.addItem(equippedWeapon);
         System.out.println("You equipped " + newWeapon.getName() + "!");
         this.equippedWeapon = newWeapon;
     }
 
     //Methods
-    public void takeDamage(int damage){
+    public void takeDamage(int damage) {
         this.health -= damage;
         if (this.health <= 0) {
             this.health = 0;
         }
     }
 
-    public void usePotion(Potion potion){
+    public void usePotion(Potion potion) {
         if (potion != null) {
-            int healAmount = potion.getValue();
-            this.health += healAmount;
-            if (this.health > this.maxHealth) {
-                this.health = this.maxHealth;
-            }
-            System.out.println("> You use a " + potion.getName() + " and restore " + healAmount + " health!");
+            int rolled = potion.getValue();
+            int before = this.health;
+            this.health = Math.min(this.health + rolled, this.maxHealth);
+            int restored = this.health - before;
+            System.out.println("> You use a " + potion.getName() + " and restore " + restored + " health!");
             inventory.removeItem(potion);
         }
     }
 
-    public void addToInventory(Item item){
+    public void addToInventory(Item item) {
         inventory.addItem(item);
     }
 

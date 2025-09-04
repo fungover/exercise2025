@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemService {
     public void interactWithItems(Player player, List<Item> items, InputService inputService) {
-        System.out.println("You found " + items.size() + " item:");
+        System.out.println("You found " + items.size() + " item" + (items.size() == 1 ? "" : "s") + ":");
 
         for (int i = 0; i < items.size(); i++) {
             Item item = items.get(i);
@@ -73,7 +73,7 @@ public class ItemService {
 
             String input = inputService.readLine();
 
-            if (!input.equals("1") && !input.equals("2")) {
+            if (!input.equals("1") && !input.equals("2") && !input.equals("3")) {
                 System.out.println("Invalid input. Please try again.");
                 continue;
             }

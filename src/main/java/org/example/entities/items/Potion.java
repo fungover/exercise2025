@@ -35,9 +35,4 @@ public class Potion extends Item{
         return RandomUtils.getRandomNumber(minValue, maxValue);
     }
 
-    //Override Methods
-    @Override
-    public String getUseMessage() {
-        return "> You use a " + getName() + " and restore " + getValue() + " health!";
-    }
 }

@@ -26,6 +26,10 @@ public class DungeonGrid {
 
     // Methods
     public static DungeonGrid createDungeonGrid(int width, int height) {
+        if (width < 3 || height < 3) {
+            throw new IllegalArgumentException("Width and height must be at least 3x3");
+        }
+
         DungeonGrid grid = new DungeonGrid(width, height);
 
         for (int x = 0; x < width; x++) {
@@ -42,6 +46,9 @@ public class DungeonGrid {
 
         do {
             grid.exitPosition = grid.placeOnPerimeter(Tile.TileType.EXIT);
+            if (grid.doorPosition[0] == grid.exitPosition[0] && grid.doorPosition[1] == grid.exitPosition[1]) {
+                grid.tiles[grid.doorPosition[0]][grid.doorPosition[1]].setType(Tile.TileType.DOOR);
+            }
         } while (grid.doorPosition[0] == grid.exitPosition[0] && grid.doorPosition[1] == grid.exitPosition[1]);
 
         return grid;

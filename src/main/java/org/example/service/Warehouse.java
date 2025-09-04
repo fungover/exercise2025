@@ -95,6 +95,18 @@ public class Warehouse {
                 .count(); // Count the number of products in the filtered stream
     }
 
+    // Return a Map<Character, Integer> of the first letters in product names and their counts.
+    public Map<Character, Integer> getProductInitialsMap() {
+        return products.values().stream() // Taking all the product names with values.
+                .map(product -> Character.toUpperCase(product.name().charAt(0)))  // Mapping to the first character of each product name and converting it to uppercase.
+                .collect(Collectors.groupingBy(  // Grouping by the first character.
+                        character -> character,
+                        Collectors.collectingAndThen(
+                                Collectors.counting(),  // Collecting the number of counts for each character.
+                                Math::toIntExact  // Converting Long to Integer
+                        )
+                ));
+    }
 
     /*
     HELPER METHODS FOR CREATING PRODUCTS WITH DIFFERENT DATES FOR TESTING PURPOSES

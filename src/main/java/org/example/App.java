@@ -6,6 +6,7 @@ import org.example.service.Warehouse;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class App {
@@ -81,5 +82,8 @@ public class App {
 
         long electronicsCount = warehouse.countProductsInCategory(Category.ELECTRONICS);
         System.out.println("\n=== NUMBER OF PRODUCTS IN ELECTRONICS: " + electronicsCount + " ===");
+
+        Map<Character, Integer> initials = warehouse.getProductInitialsMap();
+        System.out.println("\n=== NUMBER OF FIRST CHARACTER OCCURENCES IN EACH PRODUCT: " + initials + " ===");
     }
 }

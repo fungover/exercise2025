@@ -66,6 +66,16 @@ public class Warehouse {
                 .collect(Collectors.toList()); // Collect the sorted products into a list and return it
     }
 
+    // Get products created after a given date.
+
+    public List<Product> getProductsCreatedAfter(LocalDate date) {
+        return products.values().stream()
+                .filter(product -> product.createdDate().isAfter(date)) // Filter products created after the specified date
+                .collect(Collectors.toList()); // Collect the filtered products into a list and return it
+    }
+
+
+    //Helper method to create a product with current dates
     public static Product createProduct(String id, String name, Category category, int rating) {
         LocalDate now = LocalDate.now();
         return new Product(id, name, category, rating, now, now);

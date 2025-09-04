@@ -4,6 +4,7 @@ import org.example.entities.Category;
 import org.example.entities.Product;
 import org.example.service.Warehouse;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class App {
@@ -20,5 +21,9 @@ public class App {
         System.out.println("\n=== ELECTRONICS (SORTED BY NAME) ===");
         List<Product> electronics = warehouse.getProductsByCategorySorted(Category.BOOKS);
         electronics.forEach(System.out::println);
+
+        System.out.println("\n=== PRODUCTS CREATED AFTER YESTERDAY ===");
+        List<Product> recentProducts = warehouse.getProductsCreatedAfter(LocalDate.now().minusDays(1));
+        recentProducts.forEach(System.out::println);
     }
 }

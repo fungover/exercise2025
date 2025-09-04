@@ -18,6 +18,9 @@ public class App {
         warehouse.addProduct(Warehouse.createProduct("4", "Javascript Book", Category.BOOKS, 10));
         warehouse.addProduct(Warehouse.createProduct("5", "Gaming Mouse", Category.ELECTRONICS, 8));
 
+        System.out.println("=== ALL PRODUCTS ===");
+        warehouse.getAllProducts().forEach(System.out::println);
+
         System.out.println("\n=== ELECTRONICS (SORTED BY NAME) ===");
         List<Product> electronics = warehouse.getProductsByCategorySorted(Category.BOOKS);
         electronics.forEach(System.out::println);
@@ -25,5 +28,11 @@ public class App {
         System.out.println("\n=== PRODUCTS CREATED AFTER YESTERDAY ===");
         List<Product> recentProducts = warehouse.getProductsCreatedAfter(LocalDate.now().minusDays(1));
         recentProducts.forEach(System.out::println);
+
+        warehouse.updateProduct("1", "Updated Gaming Laptop", Category.ELECTRONICS, 10);
+
+        System.out.println("\n=== MODIFIED PRODUCTS ===");
+        List<Product> modified = warehouse.getModifiedProducts();
+        modified.forEach(System.out::println);
     }
 }

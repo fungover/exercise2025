@@ -74,6 +74,13 @@ public class Warehouse {
                 .collect(Collectors.toList()); // Collect the filtered products into a list and return it
     }
 
+    // Get products where createdDate != modifiedDate
+    public List<Product> getModifiedProducts() {
+        return products.values().stream() // Convert the collection of products to a stream
+                .filter(product -> !product.createdDate().equals(product.modifiedDate())) // Filter products where the createdDate is not equal to the modifiedDate
+                .collect(Collectors.toList()); // Collect the filtered products into a list and return it
+    }
+
 
     //Helper method to create a product with current dates
     public static Product createProduct(String id, String name, Category category, int rating) {

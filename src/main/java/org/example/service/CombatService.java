@@ -36,7 +36,7 @@ public class CombatService {
                     enemy.defeat(tile);
                 } else {
                     System.out.println("You dealt " + playerDamage + " damage!");
-                    System.out.println(enemy.getName() + " has " + enemy.getHealth() + " HP left.");
+                    System.out.println(enemy.getName() + " has " + enemy.getHealth() + "/" + enemy.getMaxHealth() + " HP left.");
                 }
             }
 

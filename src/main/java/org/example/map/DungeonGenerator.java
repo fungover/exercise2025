@@ -10,12 +10,20 @@ public class DungeonGenerator {
     [0][0] ,[0][1] where [height][width]
     [1][0] .[1][1]
      */
+    private static final int MIN_WIDTH = 5;
+    private static final int MIN_HEIGHT = 5;
+    private static final int MAX_PLACEMENT_ATTEMPTS = 1000;
+
     private Tile[][] grid;
     private int width;
     private int height;
     private int playerStartX, playerStartY;
 
     public DungeonGenerator(int width, int height) {
+        if (width < MIN_WIDTH || height < MIN_HEIGHT) {
+            throw new IllegalArgumentException(
+              "Dungeon too small. Min size is " + MIN_WIDTH + "x" + MIN_HEIGHT);
+        }
         this.width = width;
         this.height = height;
         this.grid = new Tile[height][width];
@@ -91,7 +99,8 @@ public class DungeonGenerator {
             do {
                 x = RandomGenerator.nextInt(1, width - 2);
                 y = RandomGenerator.nextInt(1, height - 2);
-            } while (!grid[y][x].isEmpty() || (x == playerStartX && y == playerStartY));
+            } while (!grid[y][x].isEmpty() ||
+              (x == playerStartX && y == playerStartY));
 
             int roll = RandomGenerator.nextInt(0, 3);
             Enemy enemy;
@@ -103,7 +112,8 @@ public class DungeonGenerator {
                 default -> throw new IllegalStateException("Invalid roll " + roll);
             }
 
-            // Enemy enemy = RandomGenerator.nextInt(0, 2) == 0 ? new Goblin() : new Orc();
+            // Enemy enemy = RandomGenerator.nextInt(0, 2) == 0 ? new Goblin() :
+            // new Orc();
             enemy.setPosition(x, y);
             grid[y][x].setEnemy(enemy);
 
@@ -117,7 +127,8 @@ public class DungeonGenerator {
             do {
                 x = RandomGenerator.nextInt(1, width - 2);
                 y = RandomGenerator.nextInt(1, height - 2);
-            } while (!grid[y][x].isEmpty() || (x == playerStartX && y == playerStartY));
+            } while (!grid[y][x].isEmpty() ||
+              (x == playerStartX && y == playerStartY));
 
             Item item;
             int itemType = RandomGenerator.nextInt(0, 3);

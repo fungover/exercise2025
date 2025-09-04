@@ -2,22 +2,38 @@ package org.example.game;
 
 import org.example.entities.Player;
 import org.example.map.Room;
+import org.example.service.MovementInput;
 
 import java.util.Scanner;
 
 public class Game {
     // All game logic is executed here.
     public static void run() {
-        Scanner input = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in);
         System.out.println("--------------------------------");
         System.out.println("\uD83E\uDDD9Welcome to my Dungeon Crawler!");
         System.out.print("State your name, o' brave challenger: ");
-        String name = input.nextLine();
+        String name = scan.nextLine();
         System.out.println("Welcome, WELCOME " + name + "! Your adventure begins...");
         System.out.println("--------------------------------");
 
-        Room room = new Room();
         Player player = new Player(name);
-        room.printRoom();
+        Room room = new Room(player);
+
+        while (true) {
+            MovementInput input = new MovementInput();
+            room.printRoom();
+
+            System.out.print("Choose your direction: ");
+            String direction = scan.nextLine();
+            if (direction.equalsIgnoreCase("Q")) {
+                System.out.println("Exiting...");
+                break;
+            }
+
+            System.out.println();
+            input.moveInput(direction, player, room);
+            input.renderPlayerPos(room, player.getX(),  player.getY());
+        }
     }
 }

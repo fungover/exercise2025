@@ -1,5 +1,6 @@
 package org.example.map;
 
+import org.example.entities.enemies.Enemy;
 import org.example.entities.items.Item;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 public final class Tile {
     private TileType type;
     private final List<Item> items = new ArrayList<>();
+    private Enemy enemy;
 
     public Tile(TileType type) {
         this.type = type;
@@ -42,5 +44,21 @@ public final class Tile {
         List<Item> out = new ArrayList<>(items);
         items.clear();
         return out;
+    }
+
+    public boolean hasEnemy() {
+        return enemy != null && !enemy.isDead();
+    }
+
+    public Enemy enemy() {
+        return enemy;
+    }
+
+    public void setEnemy(Enemy enemy) {
+        this.enemy = enemy;
+    }
+
+    public void removeEnemy() {
+        Enemy e = enemy; enemy = null;
     }
 }

@@ -41,10 +41,4 @@ public class Weapon extends Item {
         return "You unequip the " + getName();
     }
 
-    //Override Methods
-    @Override
-    public String getUseMessage() {
-        return "You use the " + getName() + " for " + getDamage() + " damage";
-    }
-
 }

@@ -10,9 +10,17 @@ public abstract class Item {
     }
 
     public Item(String name, String description, ItemType type) {
-        this.name = name;
-        this.description = description;
-        this.type = type;
+        this.name = java.util.Objects.requireNonNull(name, "name");
+        if (this.name.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be blank");
+        }
+
+        this.description = java.util.Objects.requireNonNull(description, "description");
+        if (this.description.isBlank()) {
+            throw new IllegalArgumentException("Description cannot be blank");
+        }
+
+        this.type = java.util.Objects.requireNonNull(type, "type");
     }
 
     //Getters
@@ -40,8 +48,5 @@ public abstract class Item {
     public void setType(ItemType type) {
         this.type = type;
     }
-
-    //Method
-    public abstract String getUseMessage();
 
 }

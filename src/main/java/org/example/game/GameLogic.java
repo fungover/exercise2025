@@ -51,7 +51,7 @@ public class GameLogic {
             try {
                 String input = inputService.readLine();
 
-                if (!input.equals("1")  && !input.equals("2")  && !input.equals("3") ) {
+                if (!input.equals("1") && !input.equals("2") && !input.equals("3")) {
                     System.out.println("Invalid input. Please try again.");
                     continue;
                 }
@@ -92,7 +92,7 @@ public class GameLogic {
             try {
                 String input = inputService.readLine();
 
-                if (!input.equals("1")  && !input.equals("2")  && !input.equals("3") ) {
+                if (!input.equals("1") && !input.equals("2") && !input.equals("3")) {
                     System.out.println("Invalid input. Please try again.");
                     continue;
                 }
@@ -148,13 +148,8 @@ public class GameLogic {
                     state.gameOver = movementService.movePlayer(player, state.grid, -1, 0);
                     break;
                 case "I":
-                ItemService itemService = new ItemService();
-                itemService.openInventoryMenu(player, inputService);
-                break;
-
-                case "T":
-                    //Print out the equipped weapon and it's damage
-                    System.out.println(player.getEquippedWeapon().getName() + "Damage " + player.getDamage());
+                    ItemService itemService = new ItemService();
+                    itemService.openInventoryMenu(player, inputService);
                     break;
 
                 default:

@@ -10,8 +10,15 @@ public abstract class Enemy {
     private int maxDamage;
 
     public Enemy(String name, int health, int maxHealth, int minDamage, int maxDamage) {
+        if (maxHealth <= 0) {
+            throw new IllegalArgumentException("Max health must be greater than 0");
+        }
+        if (minDamage < 0 || maxDamage < minDamage) {
+            throw new IllegalArgumentException("Min damage must be greater than 0 and max damage must be greater than or equal to min damage");
+        }
+
         this.name = name;
-        this.health = health;
+        this.health = Math.max(0, Math.min(health, maxHealth));
         this.maxHealth = maxHealth;
         this.minDamage = minDamage;
         this.maxDamage = maxDamage;
@@ -40,14 +47,24 @@ public abstract class Enemy {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        this.health = Math.max(0, Math.min(health, maxHealth));;
     }
 
     public void setMaxHealth(int maxHealth) {
+        if (maxHealth <= 0) {
+            throw new IllegalArgumentException("Max health must be greater than 0");
+        }
         this.maxHealth = maxHealth;
+        if (this.health > maxHealth) {
+            this.health = maxHealth;
+        }
     }
 
     public void setDamage(int minDamage, int maxDamage) {
+        if (minDamage < 0 || maxDamage < minDamage) {
+            throw new IllegalArgumentException("Min damage must be greater than 0 and max damage must be greater than or equal to min damage");
+        }
+
         this.minDamage = minDamage;
         this.maxDamage = maxDamage;
     }

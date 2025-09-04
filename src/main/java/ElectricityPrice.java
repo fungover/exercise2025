@@ -21,3 +21,4 @@
             return String.format("Timme %02d: %.4f SEK/kWh (%s)", hour, sekPerKwh, tid);
         }
     }
+

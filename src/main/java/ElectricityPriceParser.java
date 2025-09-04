@@ -32,6 +32,7 @@ public class ElectricityPriceParser {
                 .findFirst()
                 .orElse(0.0);
 
+
         // Parse time_start
         String timeStart = Arrays.stream(objectString.split(","))
                 .filter(field -> field.contains("time_start"))

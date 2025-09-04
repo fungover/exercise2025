@@ -1,5 +1,6 @@
 package org.example.game;
 
+import org.example.entities.Manifesto;
 import org.example.entities.Player;
 import org.example.map.FarmageddonMap;
 import org.example.service.MapService;
@@ -42,7 +43,7 @@ public class Game {
         player = new Player(name, 100, 0, 0);
 
         System.out.println("Welcome, " + name + "! The animals have sensed your arrival...");
-        System.out.println("You wake up in the middle of a chaotic farm where the animals have gone rogue.");
+        System.out.println("You wake up in the middle of a chaotic barn where the animals have gone rogue.");
         System.out.println("Your goal: survive, explore, and uncover the mystery behind the madness.");
         System.out.println();
         System.out.println("HOW TO PLAY:");
@@ -77,6 +78,16 @@ public class Game {
         System.out.println("Oh no! You died! Game over. Better luck next time " + name + "!");
     }
 
+    private Manifesto getManifesto() {
+        return player.getInventory().stream()
+                .filter(item -> item instanceof Manifesto)
+                .map(item -> (Manifesto) item)
+                .findFirst()
+                .orElse(null);
+    }
+
+
+
     private void handleCommand(String input) {
         switch (input) {
             case "move north" -> movementService.move(player, map, 0, -1);
@@ -88,6 +99,13 @@ public class Game {
             case "attack" -> combatService.attack(player, map);
             case "health" -> System.out.println("Health: " + player.getHealth() + "/" + player.getMaxHealth());
             default -> System.out.println("Unknown command. Try again");
+        }
+
+        Manifesto manifesto = getManifesto();
+        if (manifesto != null) {
+            System.out.println("\n " + manifesto.getWinMessage());
+            System.out.println("Congratulations, " + player.getName() + "! You win!");
+            System.exit(0);
         }
     }
 }

@@ -47,6 +47,7 @@ public class FarmageddonMap {
         placeItem(new HealingMilk(5, 2));
         placeItem(new Pitchfork(1, 1));
         placeItem(new Pitchfork(7, 4));
+        placeItem(new Manifesto(3,3));
     }
 
 

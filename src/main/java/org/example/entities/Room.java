@@ -100,6 +100,10 @@ public class Room {
         visited = true;
     }
 
+    public boolean removeEnemy(Enemy enemy) {
+        return enemies.remove(enemy);
+    }
+
     public void shortDescription() {
         if (visited) {
             System.out.println(name);

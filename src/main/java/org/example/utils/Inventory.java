@@ -72,7 +72,7 @@ public class Inventory {
         System.out.println("\n========================= Inventory (" + items.size() + "/" + maxCapacity +
                 ") =========================");
         if (items.isEmpty()) {
-            System.out.println("\nYour inventory is empty.");
+            System.out.println("Your inventory is empty.");
         } else {
             for (int i = 0; i < items.size(); i++) {
                 System.out.print("| " + (i + 1) + ". ");

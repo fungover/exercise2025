@@ -14,8 +14,8 @@ public class Healing extends Item {
 
     @Override
     public void displayInfo() {
-        System.out.println("Healing: " + getName() + " - " + getDescription() + " - Healing: " +
-                getHealingValue() + " HP" + " - Quantity: " + getQuantity());
+        System.out.println(getName() + " - " + getDescription() + " (Heals for +" +
+                getHealingValue() + " HP)");
     }
 
     @Override

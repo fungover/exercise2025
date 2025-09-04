@@ -14,8 +14,8 @@ public class Weapon extends Item {
 
     @Override
     public void displayInfo() {
-        System.out.println("Weapon: " + getName() + " - " + getDescription() + " - Damage: " + getDamage() +
-                " - Quantity: " + getQuantity());
+        System.out.println(getName() + " - " + getDescription() + " (+" + getDamage() +
+                " damage)");
     }
 
     @Override

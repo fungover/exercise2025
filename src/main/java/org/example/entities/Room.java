@@ -68,7 +68,8 @@ public class Room {
 
     // Display methods
     public void look() {
-        System.out.println("\n=== " + name + " ===");
+        System.out.println("\nYou are here:");
+        System.out.println("=== " + name + " ===");
         System.out.println(description);
 
         //Show exits
@@ -82,6 +83,8 @@ public class Room {
             for (Item item : items) {
                 System.out.println("- " + item.getName());
             }
+        } else {
+            System.out.println("\nNo items in here.");
         }
 
         //Show enemies

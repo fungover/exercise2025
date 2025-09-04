@@ -196,7 +196,6 @@ public class Game {
             }
         } else {
             System.out.println("There's no " + itemName + " here!");
-            // DEBUG: Visa vad som finns
             System.out.println("Items in room:");
             for (Item roomItem : currentRoom.getItems()) {
                 System.out.println("- " + roomItem.getName());
@@ -228,12 +227,29 @@ public class Game {
     }
 
     private void attackEnemy() {
-        // TODO: Connect to Combat class
+        Enemy enemy = currentRoom.getAliveEnemy();
+        if (enemy != null) {
+            Combat combat = new Combat();
+            combat.startCombat(player, enemy);
+
+            //Remove dead enemies from the room
+            if (!enemy.isAlive()) {
+                currentRoom.removeEnemy(enemy);
+            }
+
+            //Check if the player died
+            if (!player.isAlive()) {
+                System.out.println("*** GAME OVER! ***");
+                gameRunning = false;
+            }
+        } else {
+            System.out.println("There are no enemies here to fight!");
+        }
     }
 
     private void showHelp() {
         System.out.println("\n=== Available Commands ===");
-        System.out.println("go <direction>  - Move (north, south, east, west)");
+        System.out.println("go <direction> - Move (north, south, east, west)");
         System.out.println("look           - Look around the room");
         System.out.println("take <item>    - Pick up an item");
         System.out.println("inventory      - Show your items");
@@ -254,6 +270,15 @@ public class Game {
         Room weaponChamber = new Room("Weapon Chamber",
                 "An old armory. Rusty weapons hang on the walls.");
 
+        Room prisonDungeon = new Room("Prison",
+                "Two prison cells, one with a red door (north) and one with a blue door (south).");
+
+        Room redPrisonCell = new Room("Red Prison Cell",
+                "This is someone's home..");
+
+        Room bluePrisonCell = new Room("Blue Prison Cell",
+                "It's spotless in here.. and a family photo on the wall.");
+
         Room corridor = new Room("Stone Corridor",
                 "A long, narrow corridor. You hear growling in the distance.");
 
@@ -265,6 +290,15 @@ public class Game {
         startCave.addExit("north", corridor);
 
         weaponChamber.addExit("west", startCave);
+        weaponChamber.addExit("east", prisonDungeon);
+
+        prisonDungeon.addExit("north", redPrisonCell);
+        prisonDungeon.addExit("south", bluePrisonCell);
+        prisonDungeon.addExit("west", weaponChamber);
+
+        redPrisonCell.addExit("south", prisonDungeon);
+
+        bluePrisonCell.addExit("north", prisonDungeon);
 
         corridor.addExit("south", startCave);
         corridor.addExit("north", trollLair);
@@ -279,11 +313,15 @@ public class Game {
         startCave.addItem(potion);
 
         // Add enemies
-        Enemy goblin = new Enemy("Cave Goblin", "A small but vicious creature", 20, 8);
-        Enemy troll = new Enemy("Giant Troll", "The massive guardian of the exit", 80, 20);
+        Enemy bat = new Enemy("Bat", "A small and aggressive creature", 10, 5);
+        Enemy goblin = new Enemy("Cave Goblin", "A small but vicious creature", 30, 10);
+        Enemy troll = new Enemy("Giant Troll", "The massive guardian of the exit", 80, 30);
+        Enemy thade = new Enemy("Thade", "Just a dark human shape", 50, 30);
 
+        weaponChamber.addEnemy(bat);
         corridor.addEnemy(goblin);
         trollLair.addEnemy(troll);
+        bluePrisonCell.addEnemy(thade);
 
         // Start in the cave
         currentRoom = startCave;

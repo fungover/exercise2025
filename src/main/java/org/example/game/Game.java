@@ -23,7 +23,7 @@ public class Game {
         continueStory();
         getPlayerAttention();
         GameInstructions();
-        initializeWorld();
+        currentRoom = WorldBuilder.createWorld();
         gameLoop();
     }
 
@@ -52,7 +52,8 @@ public class Game {
         System.out.println("\nYou need to find a the golden key that will unlock the door to the exit..");
         System.out.println("The key is hidden somewhere in the cave..");
         System.out.println("Be careful, there are dangerous monsters everywhere.. ");
-        System.out.println("You can't get passed them or run away if you don't fight for your life first..");
+        System.out.println("You can't get passed them or run away...");
+        System.out.println(".. you have to fight for your life first..");
         System.out.println("There are weapons and healing potions spread around here..");
         System.out.println("And " + player.getName() + ".. \nI suggest you find them first..");
         System.out.println("oh.. and watch out for THE TROLL, he is guarding the exit..");
@@ -168,15 +169,14 @@ public class Game {
             case "stuck":
             case "hint":
                 System.out.println("\nHere are a few tips:");
-                System.out.println("Items you see needs to be picked up before you can use/equip them");
-                System.out.println("You can pick up items by typing 'take <item>'");
-                System.out.println("You can use items by typing 'use <item>'");
-                System.out.println("You can equip items by typing 'equip <item>'");
-                System.out.println("Once you see an enemy you can't leave the room without fighting first");
-                System.out.println("You can use and equip items before fighting");
-                System.out.println("You can take items before fighting");
+                System.out.println("Items you see needs to be picked up before you can use/equip them.");
+                System.out.println("You can pick up items by typing 'take <item>'.");
+                System.out.println("You can use items by typing 'use <item>'.");
+                System.out.println("You can equip items by typing 'equip <item>'.");
+                System.out.println("Once you see an enemy you can't leave the room without fighting first.");
+                System.out.println("You can take, use/equip items before fighting.");
                 System.out.println("There is no compass, you need to keep track of where you are..");
-                System.out.println("For available commands, type 'help'");
+                System.out.println("For available commands, type 'help'.");
                 break;
 
 
@@ -309,77 +309,6 @@ public class Game {
         System.out.println("help           - Show this help");
         System.out.println("stuck or hint  - Get some tips..");
         System.out.println("quit           - Exit game");
-    }
-
-
-    private void initializeWorld() {
-        // Create rooms
-        Room startCave = new Room("Dark Cave",
-                "The cave where you woke up. Cold stone walls surround you. \nThade's voice still echoes here.");
-
-        Room weaponChamber = new Room("Weapon Chamber",
-                "An old armory. Rusty weapons hang on the walls.");
-
-        Room prisonDungeon = new Room("Prison",
-                "Two prison cells, one with a red door (north) and one with a blue door (south).");
-
-        Room redPrisonCell = new Room("Red Prison Cell",
-                "This is someone's home..");
-
-        Room bluePrisonCell = new Room("Blue Prison Cell",
-                "It's spotless in here.. and a family photo on the wall.");
-
-        Room corridor = new Room("Stone Corridor",
-                "A long, narrow corridor. You hear growling in the distance.");
-
-        Room trollLair = new Room("Troll's Lair",
-                "A massive chamber. The exit door is here! \nYou could try and unlock it..");
-
-        // Connect rooms
-        startCave.addExit("east", weaponChamber);
-        startCave.addExit("north", corridor);
-
-        weaponChamber.addExit("west", startCave);
-        weaponChamber.addExit("east", prisonDungeon);
-
-        prisonDungeon.addExit("north", redPrisonCell);
-        prisonDungeon.addExit("south", bluePrisonCell);
-        prisonDungeon.addExit("west", weaponChamber);
-
-        redPrisonCell.addExit("south", prisonDungeon);
-
-        bluePrisonCell.addExit("north", prisonDungeon);
-
-        corridor.addExit("south", startCave);
-        corridor.addExit("north", trollLair);
-
-        trollLair.addExit("south", corridor);
-
-        // Add items
-        Weapon sword = new Weapon("Sword", "An rusty old sword", "Weapon", 1, 15);
-        Healing potion = new Healing("Healing Potion", "A red liquid that smells of herbs", "Healing", 1, 30);
-        Healing herb = new Healing("Healing Herb", "A green leaf with a cross on it", "Healing", 1, 30);
-        Key goldenKey = new Key("Golden Key", "This golden key can open any locked door", "Key", 1);
-
-
-        weaponChamber.addItem(sword);
-        startCave.addItem(potion);
-        bluePrisonCell.addItem(herb);
-        bluePrisonCell.addItem(goldenKey);
-
-        // Add enemies
-        Enemy bat = new Enemy("Bat", "A small and aggressive creature", 20, 5);
-        Enemy goblin = new Enemy("Cave Goblin", "A small but vicious creature", 30, 10);
-        Enemy troll = new Enemy("Giant Troll", "The massive guardian of the exit", 60, 20);
-        Enemy thade = new Enemy("Thade", "Just a dark human shape", 50, 30);
-
-        weaponChamber.addEnemy(bat);
-        corridor.addEnemy(goblin);
-        trollLair.addEnemy(troll);
-        bluePrisonCell.addEnemy(thade);
-
-        // Start in the cave
-        currentRoom = startCave;
     }
 
 }

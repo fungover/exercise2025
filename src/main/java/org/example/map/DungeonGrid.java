@@ -35,9 +35,13 @@ public class DungeonGrid {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
-                    grid.tiles[x][y] = new Tile(Tile.TileType.WALL);
+                    Tile t = new Tile(Tile.TileType.WALL);
+                    t.setBlocked(true);
+                    grid.tiles[x][y] = t;
                 } else {
-                    grid.tiles[x][y] = new Tile(Tile.TileType.FLOOR);
+                    Tile t = new Tile(Tile.TileType.FLOOR);
+                    t.setBlocked(false);
+                    grid.tiles[x][y] = t;
                 }
             }
         }
@@ -93,6 +97,11 @@ public class DungeonGrid {
         }
 
         this.tiles[x][y].setType(tileType);
+        if (tileType == Tile.TileType.WALL) {
+            this.tiles[x][y].setBlocked(true);
+        } else {
+            this.tiles[x][y].setBlocked(false);
+        }
         return new int[]{x, y};
     }
 }

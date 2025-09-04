@@ -71,6 +71,10 @@ public abstract class Enemy {
 
     //Methods
     public void takeDamage(int damage){
+        if (damage < 0) {
+            throw new IllegalArgumentException("Damage must be greater than or equal to 0");
+        }
+
         this.health -= damage;
         if (this.health <= 0) {
             this.health = 0;

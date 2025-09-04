@@ -38,7 +38,7 @@ public class ItemServiceTest {
     @Test
     @DisplayName("Test that old weapon is added to inventory when equipping a new weapon")
     void testEquipWeaponFromInventory() {
-        axe = new Weapon("Test Axe", "Test Description", 15, 10);
+        axe = new Weapon("Test Axe", "Test Description", 10, 15);
         player.getInventory().addItem(axe);
 
         when(mockInputService.readLine()).thenReturn("1", "1");

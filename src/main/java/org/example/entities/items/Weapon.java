@@ -8,6 +8,11 @@ public class Weapon extends Item {
 
     public Weapon(String name, String description, int minDamage, int maxDamage) {
         super(name, description, ItemType.Weapon);
+
+        if (minDamage < 0 || maxDamage < minDamage) {
+            throw new IllegalArgumentException("Min damage must be greater than 0 and max damage must be greater than or equal to min damage");
+        }
+
         this.minDamage = minDamage;
         this.maxDamage = maxDamage;
     }
@@ -23,10 +28,16 @@ public class Weapon extends Item {
 
     //Setters
     public void setMinDamage(int minDamage) {
+        if (minDamage < 0 || maxDamage < minDamage) {
+            throw new IllegalArgumentException("Min damage must be greater than 0 and max damage must be greater than or equal to min damage");
+        }
         this.minDamage = minDamage;
     }
 
     public void setMaxDamage(int maxDamage) {
+        if(maxDamage < this.minDamage){
+            throw new IllegalArgumentException("Max damage must be greater than or equal to min damage");
+        }
         this.maxDamage = maxDamage;
     }
 

@@ -68,11 +68,17 @@ public class Player {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        this.health = Math.max(0, Math.min(health, this.maxHealth));
     }
 
     public void setMaxHealth(int maxHealth) {
+        if (maxHealth <= 0) {
+            throw new IllegalArgumentException("Max health must be greater than 0");
+        }
         this.maxHealth = maxHealth;
+        if (this.health > maxHealth) {
+            this.health = maxHealth;
+        }
     }
 
     public void setX(int x) {
@@ -88,13 +94,22 @@ public class Player {
     }
 
     public void setEquippedWeapon(Weapon newWeapon) {
-        inventory.addItem(equippedWeapon);
+        if (newWeapon == null) {
+            throw new IllegalArgumentException("newWeapon cannot be null");
+        }
+        if (equippedWeapon != null) {
+            inventory.addItem(equippedWeapon);
+        }
         System.out.println("You equipped " + newWeapon.getName() + "!");
         this.equippedWeapon = newWeapon;
     }
 
     //Methods
     public void takeDamage(int damage) {
+        if (damage < 0) {
+            throw new IllegalArgumentException("Damage must be greater than or equal to 0");
+        }
+
         this.health -= damage;
         if (this.health <= 0) {
             this.health = 0;

@@ -29,9 +29,11 @@ public final class RandomGeneration {
     }
 
     // Random placing of walls
-    public static void placeWalls(DungeonMap map, int count, Position avoid, Random rng) {
+    public static Set<Position> placeWalls(DungeonMap map, Set<Position> occupied, int count, Position avoid, Random rng) {
         int W = map.getWidth(), H = map.getHeight();
         int placed = 0, tries = 0, maxTries = Math.max(1, count) * 400;
+        // changes maybe delete
+        Set<Position> walls = new HashSet<>();
 
         while (placed < count && tries++ < maxTries) {
             int x = 1 + rng.nextInt(Math.max(1, W - 2));
@@ -39,11 +41,13 @@ public final class RandomGeneration {
             Position p = new Position(x, y);
 
             // put only walls on empty spaces and not on the player start position
-            if (!p.equals(avoid) && map.isFloor(p)) {
+            if (!p.equals(avoid) && !occupied.contains(p) && map.isFloor(p)) {
+                walls.add(p);
                 map.setWall(p);
                 placed++;
             }
         }
+        return walls; // return is just for testing purposes
     }
 
     // Random placing of enemies
@@ -78,7 +82,7 @@ public final class RandomGeneration {
         Map<Position, Sword> out = new HashMap<>();
         int W = map.getWidth(), H = map.getHeight();
         int tries = 0;
-        int maxTries = Math.max(1, count) * 200;
+        int maxTries = Math.max(1, count) * 400;
 
         while (out.size() < count && tries++ < maxTries) {
             int x = 1 + rng.nextInt(Math.max(1, W - 2));

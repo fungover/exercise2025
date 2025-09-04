@@ -48,17 +48,18 @@ public final class Game {
         player.getInventory().printItems();
 
         // 1) Place walls first
-        RandomGeneration.placeWalls(map, 10, player.getPosition(), rng);
+
+        Set<Position> occupied = new HashSet<>();
+        occupied.add(player.getPosition());
 
         // 2) Place potions and enemies
         Map<Position, Potion> potions = RandomGeneration.placePotions(map, this.potions, player.getPosition(), rng);
-        Map<Position, Enemy> enemies = RandomGeneration.placeEnemies(map, this.enemies, player.getPosition(), rng);
-
-        // 3) Build occupied after potions and enemies are placed
-        Set<Position> occupied = new HashSet<>();
-        occupied.add(player.getPosition());
         occupied.addAll(potions.keySet());
+        Map<Position, Enemy> enemies = RandomGeneration.placeEnemies(map, this.enemies, player.getPosition(), rng);
         occupied.addAll(enemies.keySet());
+
+        RandomGeneration.placeWalls(map, occupied, 4, player.getPosition(), rng);
+        // 3) Build occupied after potions and enemies are placed
 
         // 4) Place swords
         Map<Position, Sword> swords = RandomGeneration.placeSwords(map, 1, player.getPosition(), rng, occupied);

@@ -1,6 +1,6 @@
 package org.example;
 
-public class utils {
+public class RandomUtils {
     static void main() {
         System.out.println("Hello World");
     }

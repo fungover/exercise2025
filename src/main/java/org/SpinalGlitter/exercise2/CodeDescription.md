@@ -22,5 +22,4 @@ The project is organized into several classes that represent different parts of 
 * RandomGeneration – Utility class for randomly placing items, walls, and enemies on the map.
 
 ## Utilities
-* CommandParser – Normalizes and interprets player commands.
-* Utilities – Miscellaneous helper methods used across the game.
+* CommandUtils – Normalizes and interprets player commands.

@@ -6,8 +6,7 @@ import org.example.entities.items.Potion;
 import org.example.utils.Utils;
 
 public class CombatService {
-    public void battleEnemy(Player player, Enemy enemy){
-        InputService inputservice = new InputService();
+    public void battleEnemy(Player player, Enemy enemy, InputService inputservice){
         System.out.println("You are now fighting " + enemy.getName() + "!");
 
         while (player.getHealth() > 0 && enemy.getHealth() > 0) {

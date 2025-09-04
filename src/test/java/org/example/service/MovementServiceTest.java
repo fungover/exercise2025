@@ -17,7 +17,6 @@ public class MovementServiceTest {
     private Weapon testWeapon;
 
     @BeforeEach
-    @DisplayName("Set up")
     void setUp() {
         movementService = new MovementService();
         testWeapon = new Weapon("Test Sword", "A test weapon", 10, 15);
@@ -29,7 +28,7 @@ public class MovementServiceTest {
     }
 
     @Test
-    @DisplayName("Test valid move to floor")
+    @DisplayName("Test valid move to floor (Movement logic)")
     void testMovePlayerOntoFloor() {
         grid.getTiles()[3][2].setType(Tile.TileType.FLOOR);
 
@@ -43,7 +42,7 @@ public class MovementServiceTest {
     }
 
     @Test
-    @DisplayName("Test invalid move to wall")
+    @DisplayName("Test invalid move to wall (Movement logic)")
     void testMovePlayerOntoWall() {
         grid.getTiles()[3][2].setType(Tile.TileType.WALL);
 
@@ -58,7 +57,7 @@ public class MovementServiceTest {
     }
 
     @Test
-    @DisplayName("Game over when entering a door")
+    @DisplayName("Game over when entering a door (Movement logic)")
     void testGameOverWhenEnteringDoor() {
         grid.getTiles()[3][2].setType(Tile.TileType.DOOR);
 
@@ -66,7 +65,7 @@ public class MovementServiceTest {
     }
 
     @Test
-    @DisplayName("Game over when entering an exit")
+    @DisplayName("Game over when entering an exit (Movement logic)")
     void testGameOverWhenEnteringExit() {
         grid.getTiles()[3][2].setType(Tile.TileType.EXIT);
 

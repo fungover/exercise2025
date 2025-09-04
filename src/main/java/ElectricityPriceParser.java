@@ -12,8 +12,10 @@ public class ElectricityPriceParser {
                     .replaceFirst("^\\[", "")
                     .replaceFirst("\\]$", "");
 
-            return Arrays.stream(cleanJson.split("\\{"))
+        return Arrays.stream(cleanJson.split("\\{"))
                     .map(obj -> obj.replaceAll("[{}]", ""))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty() && s.contains("SEK_per_kWh"))
                     .map(ElectricityPriceParser::parseObjectString)
                     .collect(Collectors.toList());
 
@@ -27,7 +29,7 @@ public class ElectricityPriceParser {
         // Parse SEK_per_kWh
         double pris = Arrays.stream(objectString.split(","))
                 .filter(field -> field.contains("SEK_per_kWh"))
-                .map(field -> field.split(":")[1].trim())
+                .map(field -> field.split(":", 2)[1].trim().replace("\"", ""))
                 .mapToDouble(Double::parseDouble)
                 .findFirst()
                 .orElse(0.0);
@@ -36,12 +38,7 @@ public class ElectricityPriceParser {
         // Parse time_start
         String timeStart = Arrays.stream(objectString.split(","))
                 .filter(field -> field.contains("time_start"))
-                .map(field -> {
-                    String[] parts = field.split(":");
-                    // Rekonstruera tid-strängen: "2025-08-25T14:00:00+02:00"
-                    return parts[1].replace("\"", "").trim() + ":" +
-                            parts[2] + ":" + parts[3];
-                })
+                .map(field -> field.split(":", 2)[1].replace("\"", "").trim())
                 .findFirst()
                 .orElse("");
 
@@ -73,14 +70,21 @@ public class ElectricityPriceParser {
             return;
         }
 
-        // Find the lowest and highest price
+        // Find the lowest and highest price with tie-breaker on hour
         ElectricityPrice lowestPrice = prices.stream()
-                .min((p1, p2) -> Double.compare(p1.sekPerKwh(), p2.sekPerKwh()))
+                .min((p1, p2) -> {
+                    int comp = Double.compare(p1.sekPerKwh(), p2.sekPerKwh());
+                    return (comp != 0) ? comp : Integer.compare(p1.hour(), p2.hour());
+                })
                 .orElseThrow();
 
         ElectricityPrice highestPrice = prices.stream()
-                .max((p1, p2) -> Double.compare(p1.sekPerKwh(), p2.sekPerKwh()))
+                .max((p1, p2) -> {
+                    int comp = Double.compare(p1.sekPerKwh(), p2.sekPerKwh());
+                    return (comp != 0) ? comp : Integer.compare(p1.hour(), p2.hour());
+                })
                 .orElseThrow();
+
 
         // averagePrice
         double averagePrice = prices.stream()

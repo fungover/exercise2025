@@ -74,15 +74,15 @@ public class DungeonGenerator {
 
         // random walls, so it feels less empty
         for (int i = 0; i < (width * height) / 10; i++) {
-            int x = RandomGenerator.nextInt(1, width - 2);
-            int y = RandomGenerator.nextInt(1, height - 2);
+            int x = RandomGenerator.nextInt(1, width - 1);
+            int y = RandomGenerator.nextInt(1, height - 1);
             grid[y][x].setWall(true);
         }
 
         //Set player start position
         do {
-            playerStartX = RandomGenerator.nextInt(1, width - 2);
-            playerStartY = RandomGenerator.nextInt(1, height - 2);
+            playerStartX = RandomGenerator.nextInt(1, width - 1);
+            playerStartY = RandomGenerator.nextInt(1, height - 1);
         } while (!grid[playerStartY][playerStartX].isEmpty());
 
         // add enemies to the dungeon
@@ -93,12 +93,12 @@ public class DungeonGenerator {
 
     private void addEnemies() {
         //how many enemies we want to spawn between 3-6
-        int numEnemies = RandomGenerator.nextInt(3, 6);
+        int numEnemies = RandomGenerator.nextInt(3, 7);
         for (int i = 0; i < numEnemies; i++) {
             int x, y;
             do {
-                x = RandomGenerator.nextInt(1, width - 2);
-                y = RandomGenerator.nextInt(1, height - 2);
+                x = RandomGenerator.nextInt(1, width - 1);
+                y = RandomGenerator.nextInt(1, height - 1);
             } while (!grid[y][x].isEmpty() ||
               (x == playerStartX && y == playerStartY));
 
@@ -125,8 +125,8 @@ public class DungeonGenerator {
         for (int i = 0; i < numItems; i++) {
             int x, y;
             do {
-                x = RandomGenerator.nextInt(1, width - 2);
-                y = RandomGenerator.nextInt(1, height - 2);
+                x = RandomGenerator.nextInt(1, width - 1);
+                y = RandomGenerator.nextInt(1, height - 1);
             } while (!grid[y][x].isEmpty() ||
               (x == playerStartX && y == playerStartY));
 

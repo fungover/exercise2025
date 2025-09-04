@@ -2,9 +2,7 @@ package ExerciseTwo;
 
 import ExerciseTwo.Entities.*;
 import ExerciseTwo.Game.InputHandling;
-import ExerciseTwo.Map.Cave;
-import ExerciseTwo.Map.Dungeon;
-import ExerciseTwo.Map.Hallway;
+import ExerciseTwo.Map.*;
 import ExerciseTwo.Service.*;
 
 import java.util.Scanner;
@@ -23,10 +21,14 @@ public class Main {
 
         Dungeon hallway = new Hallway();
         Dungeon cave = new Cave();
+        Dungeon claustrophobic = new Claustrophobic();
+        Dungeon treasure = new Treasue();
 
         GameLogic gameLogic = new GameLogic();
         gameLogic.runGame(hallway, player);
         gameLogic.runGame(cave, player);
+        gameLogic.runGame(claustrophobic, player);
+        gameLogic.runGame(treasure, player);
 
     }
 }

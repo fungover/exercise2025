@@ -74,9 +74,12 @@ public class App {
         List<Product> modified = warehouse.getModifiedProducts();
         modified.forEach(System.out::println);
 
-        System.out.println("\n VG ASSIGNMENT TEST ===");
+        System.out.println("\n=== VG ASSIGNMENT TEST ===");
 
         Set<Category> categories = warehouse.getCategoriesWithProducts();
-        System.out.println("Categories with products: " + categories);
+        System.out.println("\n=== CATEGORIES WITH PRODUCT: " + categories + " ===");
+
+        long electronicsCount = warehouse.countProductsInCategory(Category.ELECTRONICS);
+        System.out.println("\n=== NUMBER OF PRODUCTS IN ELECTRONICS: " + electronicsCount + " ===");
     }
 }

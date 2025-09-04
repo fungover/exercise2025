@@ -81,10 +81,18 @@ public class Warehouse {
                 .collect(Collectors.toList()); // Collect the filtered products into a list and return it
     }
 
+    // Return all categories that have at least one product in the warehouse.
     public Set<Category> getCategoriesWithProducts() {
         return products.values().stream()
                 .map(Product::category) // Extract the category from each product
                 .collect(Collectors.toSet()); // Collect the categories into a set to ensure uniqueness.
+    }
+
+    // Return the number of products in a specific category.
+    public long countProductsInCategory(Category category) {
+        return products.values().stream()
+                .filter(product -> product.category() == category) // Filter products by the specified category
+                .count(); // Count the number of products in the filtered stream
     }
 
 

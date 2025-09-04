@@ -4,6 +4,8 @@ import org.example.entities.*;
 
 import java.util.Scanner;
 
+import static org.example.utils.Colors.*;
+
 public class Game {
     private Scanner scanner;
     private Player player;
@@ -28,43 +30,43 @@ public class Game {
     }
 
     private void showIntroduction() {
-        System.out.println("\n=== Welcome to 'Escape The Dark Cave' ===");
+        System.out.println(bold("\n=== Welcome to 'Escape The Dark Cave' ==="));
         System.out.println("\n* You find yourself waking up in a dark cave *");
         System.out.println("\nAn old crackly voice speaks to you: ");
-        System.out.println("-Hello friend.. I thought you were dead..");
+        System.out.println(purple("-Hello friend.. I thought you were dead.."));
         System.out.println("\n* You feel a cold shiver running down your spine *");
-        System.out.println("\n-Don't worry friend, I will get you out of here..");
-        System.out.println("..hehe..in one way or another...");
-        System.out.println("\nBut, before I help you, let's get to know each other a little bit..");
-        System.out.println("\nI'm Thade, I used to live here.. a long time ago..");
-        System.out.println("(whispers) ..before the monsters came..");
-        System.out.println("\n-What is your name, friend? ");
+        System.out.println(purple("\n-Don't worry friend, I will get you out of here.."));
+        System.out.println(purple("..hehe..in one way or another..."));
+        System.out.println(purple("\nBut, before I help you, let's get to know each other a little bit.."));
+        System.out.println(purple("\nI'm Thade, I used to live here.. a long time ago.."));
+        System.out.println(purple("(whispers) ..before the monsters came.."));
+        System.out.println(purple("\n-What is your name, friend? "));
     }
 
     private void continueStory() {
-        System.out.println("\n-Listen carefully now..");
-        System.out.println("Hey, " + player.getName() + "! Are you PAYING ATTENTION?");
+        System.out.println(purple("\n-Listen carefully now.."));
+        System.out.println(purple("Hey, " + player.getName() + "! Are you PAYING ATTENTION?"));
 
 
     }
 
     private void GameInstructions() {
-        System.out.println("\nYou need to find a the golden key that will unlock the door to the exit..");
-        System.out.println("The key is hidden somewhere in the cave..");
-        System.out.println("Be careful, there are dangerous monsters everywhere.. ");
-        System.out.println("You can't get passed them or run away...");
-        System.out.println(".. you have to fight for your life first..");
-        System.out.println("There are weapons and healing potions spread around here..");
-        System.out.println("And " + player.getName() + ".. \nI suggest you find them first..");
-        System.out.println("oh.. and watch out for THE TROLL, he is guarding the exit..");
-        System.out.println("\nGood luck frie.. hehe.. " + player.getName() + ".. you'll need it!");
+        System.out.println(purple("\nYou need to find a the golden key that will unlock the door to the exit.."));
+        System.out.println(purple("The key is hidden somewhere in the cave.."));
+        System.out.println(purple("Be careful, there are dangerous monsters everywhere.. "));
+        System.out.println(purple("You can't get passed them or run away..."));
+        System.out.println(purple(".. you have to fight for your life first.."));
+        System.out.println(purple("There are weapons and healing potions spread around here.."));
+        System.out.println(purple("And " + player.getName() + ".. \nI suggest you find them first.."));
+        System.out.println(purple("oh.. and watch out for THE TROLL, he is guarding the exit.."));
+        System.out.println(purple("\nGood luck frie.. hehe.. " + player.getName() + ".. you'll need it!"));
         System.out.println("\nYou can type 'help' to see available commands");
     }
 
     private String getPlayerName() {
         String name = scanner.nextLine();
-        System.out.println("\n-" + name + ".. interesting name..");
-        System.out.println("Okay, friend.. I mean " + name + "..");
+        System.out.println(purple("\n-" + name + ".. interesting name.."));
+        System.out.println(purple("Okay, friend.. I mean " + name + ".."));
         return name;
     }
 
@@ -74,9 +76,9 @@ public class Game {
             String answer = scanner.nextLine();
             if (answer.equalsIgnoreCase("yes") || answer.equalsIgnoreCase("y")) {
                 answerYes = true;
-                System.out.println("\nGood! Here is what you need to do, in order to get out of here..");
+                System.out.println(purple("\nGood! Here is what you need to do, in order to get out of here.."));
             } else {
-                System.out.println("Okay..It's like that huh? I can wait forever.. \nSay 'yes' when you want to continue..");
+                System.out.println(purple("Okay..It's like that huh? I can wait forever.. \nSay 'yes' when you want to continue.."));
             }
         }
     }
@@ -168,7 +170,7 @@ public class Game {
 
             case "stuck":
             case "hint":
-                System.out.println("\nHere are a few tips:");
+                System.out.println(yellow("\nHere are a few tips:"));
                 System.out.println("Items you see needs to be picked up before you can use/equip them.");
                 System.out.println("You can pick up items by typing 'take <item>'.");
                 System.out.println("You can use items by typing 'use <item>'.");
@@ -264,7 +266,7 @@ public class Game {
 
             //Check if the player died
             if (!player.isAlive()) {
-                System.out.println("*** GAME OVER! ***");
+                System.out.println(red("*** GAME OVER! ***"));
                 gameRunning = false;
             }
         } else {
@@ -276,13 +278,13 @@ public class Game {
         if (currentRoom.getName().equals("Troll's Lair")) {
             if (player.findItem("Golden Key") != null) {
                 if (!currentRoom.hasAliveEnemies()) {
-                    System.out.println("\n=== You insert the Golden Key into the massive door... ===");
+                    System.out.println(yellow("\n=== You insert the Golden Key into the massive door... ==="));
                     System.out.println("=== *CLICK* The door unlocks with a satisfying sound! ===");
                     System.out.println("\n=== The door swings open, revealing bright sunlight! ===");
                     System.out.println("=== You step outside and breathe fresh air for the first time in ages. ===");
-                    System.out.println("\n=== 🎉 CONGRATULATIONS! YOU HAVE ESCAPED THE DARK CAVE! 🎉 ===");
+                    System.out.println(bold(green("\n=== 🎉 CONGRATULATIONS! YOU HAVE ESCAPED THE DARK CAVE! 🎉 ===")));
                     System.out.println("\n=== Thade's corruption is broken, and you are finally free! ===");
-                    System.out.println("\n=== Thanks for playing " + player.getName() + "! ===");
+                    System.out.println(green("\n=== Thanks for playing " + player.getName() + "! ==="));
                     gameRunning = false;
                 } else {
                     System.out.println("You can't unlock the door while the troll is still alive!");
@@ -296,7 +298,7 @@ public class Game {
     }
 
     private void showHelp() {
-        System.out.println("\n=== Available Commands ===");
+        System.out.println(yellow("\n=== Available Commands ==="));
         System.out.println("go <direction> - Move (north, south, east, west)");
         System.out.println("look           - Look around the room");
         System.out.println("take <item>    - Pick up an item");

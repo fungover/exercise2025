@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.example.utils.Colors.cyan;
+import static org.example.utils.Colors.red;
+
 public class Room {
     private String name;
     private String description;
@@ -79,7 +82,7 @@ public class Room {
 
         //Show items
         if (!items.isEmpty()) {
-            System.out.println("\nItems here: ");
+            System.out.println(cyan("\nItems here: "));
             for (Item item : items) {
                 System.out.println("- " + item.getName() + " (" + item.getDescription() + ")");
             }
@@ -89,7 +92,7 @@ public class Room {
 
         //Show enemies
         if (!enemies.isEmpty()) {
-            System.out.println("\nEnemies here: ");
+            System.out.println(red("\nEnemies here: "));
             for (Enemy enemy : enemies) {
                 if (enemy.isAlive()) {
                     System.out.println("- " + enemy.getName() + " - " + enemy.getDescription() + " (" + enemy.getHealth() + " HP)");

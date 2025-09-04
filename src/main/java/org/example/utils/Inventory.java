@@ -5,6 +5,8 @@ import org.example.entities.Item;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.example.utils.Colors.green;
+
 public class Inventory {
     private List<Item> items;
     private int maxCapacity;
@@ -69,17 +71,17 @@ public class Inventory {
 
     // Display methods
     public void display() {
-        System.out.println("\n========================= Inventory (" + items.size() + "/" + maxCapacity +
-                ") =========================");
+        System.out.println(green("\n========================= Inventory (" + items.size() + "/" + maxCapacity +
+                ") ========================="));
         if (items.isEmpty()) {
             System.out.println("Your inventory is empty.");
         } else {
             for (int i = 0; i < items.size(); i++) {
-                System.out.print("| " + (i + 1) + ". ");
+                System.out.print(green("| " + (i + 1) + ". "));
                 items.get(i).displayInfo();
             }
         }
-        System.out.println("====================================================================");
+        System.out.println(green("===================================================================="));
         if (items.size() == maxCapacity) {
             System.out.println("\nYour inventory is full!");
         }

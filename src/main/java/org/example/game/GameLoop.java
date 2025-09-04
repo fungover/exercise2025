@@ -1,16 +1,14 @@
 package org.example.game;
 
 import java.util.Iterator;
-import org.example.service.Combat;
-import org.example.entities.Goblin;
-import org.example.entities.Ghost;
-import org.example.entities.Troll;
-import org.example.entities.Dragon;
-import org.example.entities.Player;
-import org.example.entities.Enemy;
+
+import org.example.entities.*;
 import org.example.entities.Character;
+import org.example.service.Combat;
 import org.example.map.DungeonGrid;
 import org.example.service.GameLogic;
+
+import org.example.utils.ItemOnMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +23,19 @@ public class GameLoop {
 
        // player.takeTurn(); Maybe implement this later
 
-        DungeonGrid grid = new DungeonGrid(10, 5);
+        DungeonGrid grid = new DungeonGrid(12, 8); // 5
 
         List<Character> enemies = new ArrayList<>();
         enemies.add(new Goblin(3,3));
         enemies.add(new Ghost(5,2));
         enemies.add(new Troll(7,4));
         enemies.add(new Dragon(9,1));
+
+        //Loot on map
+        List<ItemOnMap> itemsOnMap = new ArrayList<>();
+        itemsOnMap.add(new ItemOnMap(new HealthPotion("Small Potion", 20), 3, 2));
+        itemsOnMap.add(new ItemOnMap(new HealthPotion("Large Potion", 50), 4, 2));
+
 
         // Starting position
         //From Character abstract class
@@ -41,14 +45,44 @@ public class GameLoop {
         boolean running = true;
 
         while (running) {
-            grid.printMap(player.getX(), player.getY());
+            // Status update
+            System.out.println("HP: " + player.getHealth() +
+                    " | Items: " + ((Player) player).getInventoryCount());
+
+            grid.printMap(player.getX(), player.getY(), enemies, itemsOnMap);
             System.out.print("Where are you headed?: (north/south/east/west/quit): ");
             String command = scanner.nextLine().toLowerCase().trim();
+
+            //Inventory command
+            if (command.equals("inventory")) {
+                ((Player) player).showInventory();
+                continue;
+            } else if (command.startsWith("use ")) {
+                try {
+                    int index = Integer.parseInt(command.split(" ")[1]) - 1;
+                    ((Player) player).useItem(index);
+                } catch (Exception e) {
+                    System.out.println("Usage: use <item number>");
+                }
+                continue;
+            }
 
             if (command.equals("quit")) {
                 running = false;
             } else {
                 GameLogic.handleCommand(command, grid, player);
+
+                //Loot pickup
+                Iterator<ItemOnMap> itemIt = itemsOnMap.iterator();
+                while (itemIt.hasNext()) {
+                    ItemOnMap iom = itemIt.next();
+                    if (player.getX() == iom.x && player.getY() == iom.y) {
+                        System.out.println("You found a " + iom.item.getName() + "!");
+                        ((Player) player).addItem(iom.item);
+                        System.out.println("Type 'inventory' to view your items or 'use <number>' to use one.");
+                        itemIt.remove();
+                    }
+                }
 
                 // Enemy encounter check
                 Iterator<Character> it = enemies.iterator();

@@ -1,14 +1,16 @@
 package org.example.entities;
 
-public class Item {
-    private String name;
-    private String type;
-    private int value;
+public abstract class Item {
+    protected String name;
 
-    public Item(String name, String type, int value)   {
+    public Item(String name)   {
         this.name = name;
-        this.type = type;
-        this.value = value;
     }
-    // Getters & setters
+    public String getName() {
+        return name;
+    }
+
+    public abstract void use(Player player);
+
+
 }

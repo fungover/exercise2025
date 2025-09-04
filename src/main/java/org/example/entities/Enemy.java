@@ -1,15 +1,14 @@
-package org.example.enteties;
+package org.example.entities;
 
 public abstract class Enemy {
-	private final String[] loot = {"Talon Dagger", "Beak Helmet"};
+	private final String[] loot = {"Talon Dagger", "Beak Helmet", "Ashes", "Uncommon Feathers"};
 
 	public String[] getLoot() {
 		return loot;
 	}
 
 	public String getRareFeathers() {
-		String rareFeathers = "Phoenix Feathers";
-		return rareFeathers;
+		return "Phoenix Feathers";
 	}
 
 	abstract public int attack();

@@ -5,23 +5,24 @@ import java.util.Map;
 
 public class Leaf {
 	private String name;
+	private String description;
 	private Map<String, Leaf> nextLeaf;
 
-	public Leaf(String name) {
+	public Leaf(String name, String description) {
 		this.name = name;
-		this.nextLeaf = new HashMap<String, Leaf>();
+		this.description = description;
+		this.nextLeaf = new HashMap<>();
 	}
 
 	public void setNextLeaf(String direction, Leaf leafName) {
 		nextLeaf.put(direction, leafName);
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getName() {
 		return name;
+	}
+	public String getDescription() {
+		return description;
 	}
 
 	public Leaf getNextLeaf(String direction) {

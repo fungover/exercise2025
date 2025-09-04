@@ -14,8 +14,8 @@ public class ElectricityPriceClient {
         Scanner scanner = new Scanner(System.in);
         HttpClient client = HttpClient.newHttpClient();
 
-        // Lista för att lagra alla dagens priser
-        List<ElectricityPrice> dagensPriser;
+        // List to store all today's prices
+        List<ElectricityPrice> todaysPrice;
 
         LocalDate today = LocalDate.now();
         String year = today.format(DateTimeFormatter.ofPattern("yyyy"));
@@ -30,8 +30,8 @@ public class ElectricityPriceClient {
         int area = getUserAreaChoice(scanner);
         displayAreaChoice(area);
 
-        // Fråga om laddningstid för elbil
-        int laddningstimmar = getChargingHoursChoice(scanner);
+        // Ask about charging time for electric car
+        int chargingHours = getChargingHoursChoice(scanner);
 
         String url = "https://www.elprisetjustnu.se/api/v1/prices/" + year + "/" + monthDay + "_SE" + area + ".json";
 
@@ -46,14 +46,14 @@ public class ElectricityPriceClient {
 
             if (response.statusCode() == 200) {
 
-                dagensPriser = ElectricityPriceParser.parseJsonToElectricityPrice(response.body());
+                todaysPrice = ElectricityPriceParser.parseJsonToElectricityPrice(response.body());
 
-                if (!dagensPriser.isEmpty()) {
+                if (!todaysPrice.isEmpty()) {
                     System.out.println("\n=== PRISANALYS ===");
-                    ElectricityPriceParser.analyzeElectricityPrices(dagensPriser);
+                    ElectricityPriceParser.analyzeElectricityPrices(todaysPrice);
 
                     // Visa bästa laddningstid för elbil
-                    ElectricityPriceParser.findBestChargingTime(dagensPriser, laddningstimmar);
+                    ElectricityPriceParser.findBestChargingTime(todaysPrice, chargingHours);
                 } else {
                     System.out.println("Kunde inte parsa prisdata!");
                 }
@@ -91,9 +91,6 @@ public class ElectricityPriceClient {
         return area;
     }
 
-    /**
-     * Hanterar användarens val av laddningstid för elbil
-     */
     private static int getChargingHoursChoice(Scanner scanner) {
         System.out.println("\nHur många timmar vill du ladda din elbil?");
         System.out.println("1 = 2 timmar");
@@ -109,7 +106,7 @@ public class ElectricityPriceClient {
                 if (choice >= 1 && choice <= 3) {
                     validInput = true;
                 } else {
-                    System.out.println("Fel inmatning! Välj 1, 2 eller 3. Försök igen");
+                    System.out.println("Fel inmatning! Välj alternativ 1, 2 eller 3. Försök igen");
                 }
             } else {
                 System.out.println("Fel inmatning! Skriv bara siffror. Försök igen");
@@ -117,8 +114,8 @@ public class ElectricityPriceClient {
             }
         }
 
-        // Konvertera val till timmar
-        int[] hours = {0, 2, 4, 8}; // Index 0 används inte
+        // Convert selections to hours
+        int[] hours = {0, 2, 4, 8}; // Index 0 not in use
         int chosenHours = hours[choice];
         System.out.printf("Du valde att ladda i %d timmar\n", chosenHours);
 

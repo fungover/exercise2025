@@ -18,13 +18,13 @@ public class Player {
 
     }
 
-    public void setDamage(int damage) {
+    public void setDamage() {
         if (this.haveWeapon()) {
             if (this.getDamage() == 10) {
                 this.damage += 10;
             }
         } else {
-       this.damage += 10;
+            this.damage -= 10;
 
         }
     }

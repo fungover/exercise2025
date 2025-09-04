@@ -23,6 +23,7 @@ class CombatServiceTest {
         Map<Position, Enemy> enemies = new HashMap<>();
         enemies.put(pos, goblin);
 
+
         // Print 1 so the player attacks three times and defeats the goblin
         Scanner scanner = new Scanner("1\n1\n1\n");
 
@@ -112,9 +113,7 @@ class CombatServiceTest {
         goblin.takeDamage(10);
         Player player = new Player("Hero");
         player.getInventory().addItem(new Sword(null));
-/*
         player.setDamage();
-*/
 
         Map<Position, Enemy> enemies = new HashMap<>();
         enemies.put(pos, goblin);
@@ -127,5 +126,24 @@ class CombatServiceTest {
 
         assertTrue(combatService.haveWon() || !goblin.isAlive());
     }
+
+    @Test
+    void playerLosesDamageWithoutSword() {
+
+        Player player = new Player("Hero");
+        player.getInventory().addItem(new Sword(null));
+        player.setDamage();
+
+        assertEquals(20, player.getDamage(), "Damage should be 20 with sword");
+
+        player.getInventory().removeWeapon();
+        player.setDamage();
+
+        assertEquals(10, player.getDamage(), "Damage should be 10 after removing sword");
+
+
+
+    }
 }
+
 

@@ -71,4 +71,14 @@ class WarehouseTest {
         assertEquals(originalProduct.createdDate(), updated.get().createdDate()); // Verify that the created date remains unchanged
         assertNotEquals(originalProduct.modifiedDate(), updated.get().modifiedDate()); // Verify that the modified date has been updated
     }
+
+    @Test
+    @DisplayName("Should throw IllegalArgumentException when updating a non-existent product")
+    void updateProductThatDoesNotExist() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> warehouse.updateProduct("999", "New Name", Category.BOOKS, 8) // Attempt to update a product that doesn't exist
+        );
+        assertEquals("Product with id 999 not found", exception.getMessage()); // Verify the exception message
+    }
 }

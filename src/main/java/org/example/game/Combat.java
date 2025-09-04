@@ -36,7 +36,7 @@ public class Combat {
             System.out.println("\nYou won the fight!");
             if (enemy.getName().equals("Thade")) {
                 System.out.println("\nThade: -Well played, " + player.getName() + "!");
-                System.out.println("..well played.. *slowly dies*");
+                System.out.println("..well played..my friend.. *Thade slowly dies*");
             }
         } else {
             if (enemy.getName().equals("Thade")) {

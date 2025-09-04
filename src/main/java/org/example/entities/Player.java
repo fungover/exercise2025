@@ -48,9 +48,6 @@ public class Player {
     public boolean removeItem(Item item) {
         return inventory.removeItem(item);
     }
-    public boolean removeItem(String itemName) {
-        return inventory.removeItem(itemName);
-    }
     public Item findItem(String itemName) {
         return inventory.findItem(itemName);
     }

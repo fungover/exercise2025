@@ -1,4 +1,4 @@
-package ExerciseTwo.Entities;
+package ExerciseTwo.Entities.Inventory;
 
 public class Coin extends Item{
     public Coin() {

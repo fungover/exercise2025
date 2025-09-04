@@ -1,10 +1,10 @@
-package ExerciseTwo.Entities;
+package ExerciseTwo.Entities.Inventory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory {
-    List<Item> inventory = new ArrayList<Item>();
+    List<Item> inventory = new ArrayList<>();
 
     public void addItem(Item item) {
         inventory.add(item);

@@ -23,6 +23,7 @@ public class App {
 
 // Products created 1 day ago.
         warehouse.addProduct(Warehouse.createOldProduct("15", "Smartphone", Category.ELECTRONICS, 10, 1));
+        warehouse.addProduct(Warehouse.createOldProduct("16", "Ipad", Category.ELECTRONICS, 8, 1));
 
 // Products created 2 days ago.
         warehouse.addProduct(Warehouse.createOldProduct("14", "Chocolate Bar", Category.FOOD, 6, 2));
@@ -93,5 +94,15 @@ public class App {
 
         Map<Character, Integer> initials = warehouse.getProductInitialsMap();
         System.out.println("\n=== NUMBER OF FIRST CHARACTER OCCURENCES IN EACH PRODUCT: " + initials + " ===");
+
+        System.out.println("\n=== TOP RATED PRODUCTS THIS MONTH ===");
+        List<Product> topRated = warehouse.getTopRatedProductsThisMonth();
+
+        if (topRated.isEmpty()) {
+            System.out.println("No products found this month.");
+        } else {
+            topRated.forEach(product -> System.out.println(product.name() + " (Rating: " + product.rating() + ", Created: " + product.createdDate() + ")"));
+        }
+
     }
 }

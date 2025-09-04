@@ -108,6 +108,27 @@ public class Warehouse {
                 ));
     }
 
+    // Return products with max rating, created this month, sorted by newst first.
+    public List<Product> getTopRatedProductsThisMonth() {
+
+        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1); // Get the first day of the current month
+
+        OptionalInt maxRating = products.values().stream()
+                .filter(product -> !product.createdDate().isBefore(startOfMonth)) // Filter products created this month
+                .mapToInt(Product::rating) // Map to their ratings
+                .max(); // Find the maximum rating among the filtered products
+
+        if (maxRating.isEmpty()) { // If no products were created this month, return an empty list
+            return Collections.emptyList();
+        }
+        // Return products with max rating, created this month, sorted by newest first.
+        return products.values().stream()
+                .filter(product -> !product.createdDate().isBefore(startOfMonth)) // Filter products created this month
+                .filter(product -> product.rating() == maxRating.getAsInt()) // Filter products with the maximum rating
+                .sorted(Comparator.comparing(Product::createdDate).reversed()) // Sort by created date in descending order (newest first)
+                .collect(Collectors.toList());
+    }
+
     /*
     HELPER METHODS FOR CREATING PRODUCTS WITH DIFFERENT DATES FOR TESTING PURPOSES
      */

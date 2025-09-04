@@ -183,4 +183,24 @@ class WarehouseTest {
     // ========================================
     // TESTS FOR getProductsCreatedAfter()
     // ========================================
+
+    @Test
+    @DisplayName("Should return products created after a specified date")
+    void getProductsCreatedAfterSpecifiedDateSuccessfully() {
+
+        LocalDate baseDate = LocalDate.of(2025, 9, 2); // Fixed base date for testing
+
+        Product oldProduct = Warehouse.createProductWithDate("1", "Old Product", Category.BOOKS, 6,
+                baseDate.minusDays(2)); // Created 2 days before baseDate (2025-08-31)
+        Product newProduct = Warehouse.createProductWithDate("2", "New Product", Category.ELECTRONICS, 8,
+                baseDate.plusDays(2)); // Created 2 days after baseDate (2025-09-04)
+
+        warehouse.addProduct(oldProduct);
+        warehouse.addProduct(newProduct);
+
+        List<Product> recentProducts = warehouse.getProductsCreatedAfter(baseDate); // Retrieve products created after baseDate (2025-09-02)
+
+        assertEquals(1, recentProducts.size()); // Verify that there is 1 product created after the specified date
+        assertEquals("New Product", recentProducts.getFirst().name()); // Verify that the product is "New Product"
+    }
 }

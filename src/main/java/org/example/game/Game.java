@@ -91,18 +91,18 @@ public class Game {
             item.use(player);
             player.removeItem(item);
 
-            //win the game and shut it down
+            //win the and exit the game
             if (item instanceof Manifesto) {
                 Manifesto manifesto = (Manifesto) item;
                 System.out.println("\n" + manifesto.getWinMessage());
                 System.out.println("Congratulations, " + player.getName() + "! You win!");
-                player.removeItem(item);
                 System.exit(0);
             }
         }, () -> {
             System.out.println("You don't have an item called '" + itemName + "'.");
         });
     }
+
 
 
     private void handleCommand(String input) {

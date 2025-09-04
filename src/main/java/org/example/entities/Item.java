@@ -16,6 +16,7 @@ public abstract class Item {
     public int getY() { return y; }
 
     public abstract void use(Player player);
+
 }
 
 

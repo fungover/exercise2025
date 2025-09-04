@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,5 +48,27 @@ class WarehouseTest {
                 () -> new Product("2", "    ", Category.BOOKS, 5, LocalDate.now(), LocalDate.now())
         );
         assertEquals("Name cannot be empty", exception.getMessage());
+    }
+
+    // ========================================
+    // TESTS FOR updateProduct()
+    // ========================================
+
+    @Test
+    @DisplayName("Should update a product successfully")
+    void updateProductSuccessfully() {
+
+        Product originalProduct = Warehouse.createOldProduct("1", "Original Product", Category.ELECTRONICS, 8, 3); // Create a product with a created date 3 days ago
+        warehouse.addProduct(originalProduct);
+
+        warehouse.updateProduct("1", "Updated Product", Category.BOOKS, 9);
+
+        Optional<Product> updated = warehouse.getProductById("1"); // Retrieve the updated product
+        assertTrue(updated.isPresent()); // Check that the product is present
+        assertEquals("Updated Product", updated.get().name()); // Verify that the name has been updated
+        assertEquals(Category.BOOKS, updated.get().category()); // Verify that the category has been updated
+        assertEquals(9, updated.get().rating()); // Verify that the rating has been updated
+        assertEquals(originalProduct.createdDate(), updated.get().createdDate()); // Verify that the created date remains unchanged
+        assertNotEquals(originalProduct.modifiedDate(), updated.get().modifiedDate()); // Verify that the modified date has been updated
     }
 }

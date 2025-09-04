@@ -137,4 +137,11 @@ class WarehouseTest {
         assertTrue(result.isPresent()); // Verify that the product is found
         assertEquals(testProduct, result.get()); // Verify that the retrieved product matches the added product
     }
+
+    @Test
+    @DisplayName("Should return empty Optional when product ID does not exist")
+    void getProductByIdWhenIdDoesNotExist() {
+        Optional<Product> result = warehouse.getProductById("999"); // Attempt to retrieve a product with a non-existent ID
+        assertTrue(result.isEmpty()); // Verify that the result is an empty Optional
+    }
 }

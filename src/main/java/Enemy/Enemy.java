@@ -7,20 +7,22 @@ import java.util.UUID;
 
 public abstract class Enemy {
     private final UUID id;
-    protected String type;   // protected så subklasser kan komma åt
+    protected String type;
     protected int health;
     protected int attack;
-    protected String loot;
+    protected int x;
+    protected int y;
 
     private static final List<Enemy> ENEMIES = new ArrayList<>();
 
-    public Enemy(String type, int health, int attack, String loot){
+    public Enemy(String type, int health, int attack,int x,int y){
         this.id = UUID.randomUUID();
         this.type = type;
         this.health = health;
         this.attack = attack;
-        this.loot = loot;
-        ENEMIES.add(this); // läggs alltid till i listan
+        this.x = x;
+        this.y = y;
+        ENEMIES.add(this);
     }
 
     // Access to enemy list
@@ -33,7 +35,8 @@ public abstract class Enemy {
     public String getType() { return type; }
     public int getHealth() { return health; }
     public int getAttack() { return attack; }
-    public String getLoot() { return loot; }
+    public int getX() { return x; }
+    public int getY() { return y; }
 
 
 }

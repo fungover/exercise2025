@@ -15,7 +15,10 @@ public class Printer {
     }
 
     public static void printCalculatedPrices(PricePerHour[] prices) {
-
+        if (prices == null || prices.length == 0) {
+            System.out.println("Inga priser hittades. Kontrollera datakällan.");
+            return;
+        }
         PricePerHour expensive = Calculate.findMostExpensiveHour(prices);
         PricePerHour cheap = Calculate.findCheapestHour(prices);
 

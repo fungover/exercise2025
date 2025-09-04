@@ -3,6 +3,11 @@ package org.example;
 public class Calculate {
 
     public static double calculateMean(PricePerHour[] prices) {
+
+        if (prices == null || prices.length == 0) {
+            throw new IllegalArgumentException("Inga prisdata tillgängliga för medelvärde.");
+        }
+
         double sum = 0;
         double mean;
 
@@ -14,6 +19,7 @@ public class Calculate {
     }
 
     public static PricePerHour findMostExpensiveHour(PricePerHour[] prices) {
+
         PricePerHour best = prices[0];
         for (PricePerHour p : prices)
             if (p.SEK_per_kWh() > best.SEK_per_kWh() ||

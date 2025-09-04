@@ -6,6 +6,7 @@ import org.example.service.Warehouse;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public class App {
     public static void main(String[] args) {
@@ -72,5 +73,10 @@ public class App {
         System.out.println("\n=== MODIFIED PRODUCTS ===");
         List<Product> modified = warehouse.getModifiedProducts();
         modified.forEach(System.out::println);
+
+        System.out.println("\n VG ASSIGNMENT TEST ===");
+
+        Set<Category> categories = warehouse.getCategoriesWithProducts();
+        System.out.println("Categories with products: " + categories);
     }
 }

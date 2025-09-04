@@ -81,8 +81,16 @@ public class Warehouse {
                 .collect(Collectors.toList()); // Collect the filtered products into a list and return it
     }
 
+    public Set<Category> getCategoriesWithProducts() {
+        return products.values().stream()
+                .map(Product::category) // Extract the category from each product
+                .collect(Collectors.toSet()); // Collect the categories into a set to ensure uniqueness.
+    }
 
-    //Helper method to create a product with current dates
+
+    /*
+    HELPER METHODS FOR CREATING PRODUCTS WITH DIFFERENT DATES FOR TESTING PURPOSES
+     */
     public static Product createProduct(String id, String name, Category category, int rating) {
         LocalDate now = LocalDate.now();
         return new Product(id, name, category, rating, now, now);

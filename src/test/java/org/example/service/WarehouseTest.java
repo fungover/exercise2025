@@ -203,4 +203,19 @@ class WarehouseTest {
         assertEquals(1, recentProducts.size()); // Verify that there is 1 product created after the specified date
         assertEquals("New Product", recentProducts.getFirst().name()); // Verify that the product is "New Product"
     }
+
+    @Test
+    @DisplayName("Should return empty list when no products created after the specified date")
+    void getProductsCreatedAfterSpecifiedDateWhenThereIsNoProducts() {
+
+        LocalDate baseDate = LocalDate.of(2025, 9, 1); // Fixed base date for testing
+
+        Product oldProduct = Warehouse.createProductWithDate("1", "Old Product", Category.BOOKS, 7,
+                baseDate.minusDays(3)); // Created 5 days before baseDate (2025-08-27)
+        warehouse.addProduct(oldProduct);
+
+        List<Product> recentProducts = warehouse.getProductsCreatedAfter(baseDate); // Attempt to retrieve products created after baseDate (2025-09-01)
+
+        assertTrue(recentProducts.isEmpty()); // Verify that the result is an empty list
+    }
 }

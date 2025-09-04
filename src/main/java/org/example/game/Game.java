@@ -52,10 +52,10 @@ public class Game {
         System.out.println("\nYou need to find a the golden key that will unlock the door to the exit..");
         System.out.println("The key is hidden somewhere in the cave..");
         System.out.println("Be careful, there are dangerous monsters everywhere.. ");
-        System.out.println("You can't get passed them..if you don't fight for your life..");
+        System.out.println("You can't get passed them or run away if you don't fight for your life first..");
         System.out.println("There are weapons and healing potions spread around here..");
-        System.out.println("And " + player.getName() + ".. \nI really suggest you find them first..");
-        System.out.println("..and watch out for THE TROLL, he is guarding the exit..");
+        System.out.println("And " + player.getName() + ".. \nI suggest you find them first..");
+        System.out.println("oh.. and watch out for THE TROLL, he is guarding the exit..");
         System.out.println("\nGood luck frie.. hehe.. " + player.getName() + ".. you'll need it!");
         System.out.println("\nYou can type 'help' to see available commands");
     }
@@ -165,10 +165,19 @@ public class Game {
                 showHelp();
                 break;
 
-            case"stuck":
-                System.out.println("Here are a few tips:");
-                System.out.println("Items you see needs to be picked up first");
-                System.out.println("Healing potions can be used to heal your health");
+            case "stuck":
+            case "hint":
+                System.out.println("\nHere are a few tips:");
+                System.out.println("Items you see needs to be picked up before you can use/equip them");
+                System.out.println("You can pick up items by typing 'take <item>'");
+                System.out.println("You can use items by typing 'use <item>'");
+                System.out.println("You can equip items by typing 'equip <item>'");
+                System.out.println("Once you see an enemy you can't leave the room without fighting first");
+                System.out.println("You can use and equip items before fighting");
+                System.out.println("You can take items before fighting");
+                System.out.println("There is no compass, you need to keep track of where you are..");
+                System.out.println("For available commands, type 'help'");
+                break;
 
 
             case "quit":
@@ -298,7 +307,7 @@ public class Game {
         System.out.println("attack         - Fight enemies in the room");
         System.out.println("unlock         - Unlock door");
         System.out.println("help           - Show this help");
-        System.out.println("stuck          - Get some tips..");
+        System.out.println("stuck or hint  - Get some tips..");
         System.out.println("quit           - Exit game");
     }
 

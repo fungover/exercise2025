@@ -78,13 +78,14 @@ public final class Game {
             map.printMap(player.getPosition(), potions, enemies, swords);
 
             // add damage if the player has a weapon else remove extra damage
+            //player.setDamage(player.getDamage());
             if (player.haveWeapon()) {
-                if (player.getDamage() == 10) {
-                    player.setDamage(10);
-                }
+                player.setDamage();
+
             } else if (player.getDamage() == 20 && !player.haveWeapon()) {
-                player.setDamage(-10);
+                player.setDamage();
             }
+
 
             System.out.println("You are at " + player.getPosition() + " with health " + player.getCurrentHealth() + "HP." + " " + player.getDamage() + "DMG");
             System.out.print("> ");
@@ -105,7 +106,7 @@ public final class Game {
                 case "inventory" -> player.getInventory().printItems();
                 case "heal" -> player.heal(20);
                 case "throw" -> player.getInventory().removeWeapon();
-                default -> System.out.println("Unknown command. Type 'options' for a list of commands.");
+                default -> System.out.println("Unknown command. Type 'help' for a list of commands.");
             }
 
             if (newPos == null) continue;

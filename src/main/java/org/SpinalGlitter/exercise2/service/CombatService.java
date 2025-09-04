@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class CombatService {
     private int battleCount = 0;
     private final Map<Position, Enemy> enemies;
-    private Scanner scanner;
+    private final Scanner scanner;
 
     public CombatService(Map<Position, Enemy> enemies, Scanner scanner) {
         this.enemies = enemies;
@@ -61,7 +61,8 @@ public class CombatService {
 
                 // Check if the player has lost
                 if (!player.isAlive()) {
-                    System.out.println("💀 You were slain by " + enemy.getName() + "...");
+                    System.out.println("\n\n💀 You were slain by " + enemy.getName() + "...");
+                    System.out.println("Game Over. You defeated " + battleCount + " enemies.");
                     break;
                 }
 
@@ -74,5 +75,8 @@ public class CombatService {
         public boolean haveWon () {
             System.out.println("Enemies remaining: " + enemies.size());
             return enemies.isEmpty();
+        }
+        public int getBattleCount() {
+            return battleCount;
         }
     }

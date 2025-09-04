@@ -231,13 +231,12 @@ public class Game {
 
     private void useItem(String itemName) {
         Item item = player.findItem(itemName);
-        if (item != null && item instanceof Healing) {
-            Healing healingItem = (Healing) item;
-            player.heal(healingItem.getHealingValue());
-            player.removeItem(item);
-            System.out.println("You used " + item.getName() + " and healed " +
-                    healingItem.getHealingValue() + " HP!");
-            System.out.println("You now have " + player.getHealth() + " HP.");
+        if (item instanceof Usable) {
+            Usable usableItem = (Usable) item;
+            if (usableItem.canUse()) {
+                usableItem.use(player);
+                player.removeItem(item);
+            }
         } else {
             System.out.println("You can't use that item!");
         }

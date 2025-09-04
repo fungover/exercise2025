@@ -27,6 +27,7 @@ public class Inventory {
     //Methods
     public void addItem(Item item){
         items.add(item);
+        System.out.println("You added " + item.getName() + " to your inventory!");
     }
 
     public void removeItem(Item item){

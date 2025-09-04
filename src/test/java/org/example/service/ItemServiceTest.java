@@ -8,6 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -18,8 +21,10 @@ public class ItemServiceTest {
     private Player player;
     private Weapon sword;
     private Weapon axe;
+    private Weapon stick;
     private Potion potion;
     private InputService mockInputService;
+    private List<Item> items;
 
     @BeforeEach
     void setUp() {
@@ -40,11 +45,6 @@ public class ItemServiceTest {
 
         itemService.openInventoryMenu(player, mockInputService);
 
-        System.out.println("Inventory contains:");
-        for (Item item : player.getInventory().getItems()) {
-            System.out.println("- " + item.getName());
-        }
-
         assertEquals(axe, player.getEquippedWeapon());
         assertTrue(player.getInventory().getItems().contains(sword));
         assertEquals(1, player.getInventory().getItems().size());
@@ -62,5 +62,25 @@ public class ItemServiceTest {
         itemService.openInventoryMenu(player, mockInputService);
 
         assertEquals(0, player.getInventory().getItems().size());
+    }
+
+    @Test
+    @DisplayName("Test adding item found on tile to inventory")
+    void testinteractWithItems(){
+        items = new ArrayList<>();
+        stick = new Weapon("Test Weapon", "Test Description", 10, 15);
+        potion = new Potion("Test Potion", "Test Description", 10, 20);
+
+        items.add(potion);
+        items.add(stick);
+
+        when(mockInputService.readLine()).thenReturn("2", "1");
+
+        itemService.interactWithItems(player, items, mockInputService);
+
+        assertEquals(2, player.getInventory().getItems().size());
+        assertEquals(stick, player.getEquippedWeapon());
+        assertTrue(player.getInventory().getItems().contains(sword));
+        assertTrue(player.getInventory().getItems().contains(potion));
     }
 }

@@ -87,7 +87,7 @@ public class Player {
 
     public void setEquippedWeapon(Weapon newWeapon){
         inventory.addItem(equippedWeapon);
-        System.out.println("You equipped " + newWeapon.getName() + " and added " + equippedWeapon.getName() + " to your inventory.");
+        System.out.println("You equipped " + newWeapon.getName() + "!");
         this.equippedWeapon = newWeapon;
     }
 

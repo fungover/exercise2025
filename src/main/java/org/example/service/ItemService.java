@@ -55,7 +55,6 @@ public class ItemService {
                         break;
                     case 2:
                         player.getInventory().addItem(item);
-                        System.out.println(item.getName() + " added to inventory!");
                         validInput = true;
                         break;
                 }

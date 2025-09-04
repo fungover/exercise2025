@@ -95,4 +95,32 @@ class WarehouseTest {
         );
         assertEquals("Name cannot be empty", exception.getMessage()); // Verify the exception message
     }
+
+    // ========================================
+    // TESTS FOR getAllProducts()
+    // ========================================
+
+    @Test
+    @DisplayName("Should return all products")
+    void getAllProductsSuccessfully() {
+        Product product1 = Warehouse.createProduct("1", "Product 1", Category.ELECTRONICS, 8);
+        Product product2 = Warehouse.createOldProduct("2", "Product 2", Category.BOOKS, 6, 5);
+        warehouse.addProduct(product1);
+        warehouse.addProduct(product2);
+
+        List<Product> products = warehouse.getAllProducts();
+
+        assertEquals(2, products.size()); // Verify that there are 2 products in the list
+        assertTrue(products.contains(product1)); // Verify that product1 is in the list
+        assertTrue(products.contains(product2)); // Verify that product2 is in the list
+    }
+
+    @Test
+    @DisplayName("Should return empty list when no products exists")
+    void getAllProductsWhenThereIsNoProducts() {
+        List<Product> products = warehouse.getAllProducts(); // Retrieve all products from an empty warehouse
+        assertTrue(products.isEmpty()); // Verify that the product list is empty
+    }
+
+
 }

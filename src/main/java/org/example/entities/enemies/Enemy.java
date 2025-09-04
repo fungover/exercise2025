@@ -1,4 +1,32 @@
 package org.example.entities.enemies;
 
-public class Enemy {
+/** Base enemy type */
+public abstract class Enemy {
+    private final String name;
+    private final int maxHealth;
+    private int health;
+    private final int baseDamage;
+
+    protected Enemy(String name, int maxHealth, int baseDamage) {
+        if (maxHealth <= 0) throw new IllegalArgumentException("maxHealth must be > 0");
+        this.name = name;
+        this.maxHealth = maxHealth;
+        this.health = maxHealth;
+        this.baseDamage = baseDamage;
+    }
+
+    public String name() { return name; }
+    public int maxHealth() { return maxHealth; }
+    public int health() { return health; }
+    public boolean isDead() { return health <= 0; }
+
+    public int attackDamage() { return baseDamage; }
+
+    public void takeDamage(int amount) {
+        if (amount <= 0) return;
+        health = Math.max(0, health - amount);
+    }
+
+    /** Shown to the player when combat starts. */
+    public abstract String archetype();
 }

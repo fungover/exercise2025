@@ -2,6 +2,7 @@ package org.game;
 
 import org.game.entities.Item;
 import org.game.entities.Player;
+import org.game.entities.npcs.Goblin;
 import org.game.systems.InputHandler;
 
 
@@ -16,7 +17,7 @@ public class Game {
         boolean running = true;
 
         while (running && player.isAlive()) {
-            String input = InputHandler.getInput("valid commands [Move | look {not in yet} | inventory | quit]");
+            String input = InputHandler.getInput("Valid commands: move| look {not in yet} | inventory | quit]");
 
             switch (input) {
                 case "move":
@@ -55,6 +56,21 @@ public class Game {
                     String takeDamage = InputHandler.getInput("Enter damage amount: ");
                     player.TakeDamage(Integer.parseInt(takeDamage));
                     System.out.println("you have "+ player.getHealth() + " hp left");
+                    break;
+
+                case "spawnenemy":
+                    System.out.println("Spawning Goblin");
+                    Goblin testGoblin = new Goblin(0,0);
+                    testGoblin.setHealth(0);
+                    System.out.println("you have defeated the Goblin");
+
+                    Item loot = testGoblin.getLoot();
+                    if (loot != null) {
+                        System.out.println("The Goblin dropped " + loot.getName());
+                        player.addItem(loot);
+                    }else {
+                        System.out.println("The Goblin dropped nothing");
+                    }
                     break;
 
                 default:

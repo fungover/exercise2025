@@ -10,16 +10,16 @@ public class WorldBuilder {
                 "The cave where you woke up. Cold stone walls surround you. \nThade's voice still echoes here.");
 
         Room weaponChamber = new Room("Weapon Chamber",
-                "An old armory. Rusty weapons hang on the walls.");
+                "An old armory. Rusty broken weapons hang on the walls.");
 
         Room prisonDungeon = new Room("Prison",
                 "Two prison cells, one with a red door (north) and one with a blue door (south).");
 
         Room redPrisonCell = new Room("Red Prison Cell",
-                "This is someone's home..");
+                "This is someone's home.. I shouldn't be here.");
 
         Room bluePrisonCell = new Room("Blue Prison Cell",
-                "It's spotless in here.. and a family photo on the wall.");
+                "It's spotless in here.. and an old family photo on the wall.");
 
         Room corridor = new Room("Stone Corridor",
                 "A long, narrow corridor. You hear growling in the distance.");
@@ -74,10 +74,10 @@ public class WorldBuilder {
     }
 
     private static void addEnemiesToRooms(Room weaponChamber, Room corridor, Room trollLair, Room bluePrisonCell) {
-        Enemy bat = new Enemy("Bat", "A small and aggressive creature", 20, 5);
+        Enemy bat = new Enemy("Angry Bat", "A small and aggressive creature", 20, 5);
         Enemy goblin = new Enemy("Cave Goblin", "A small but vicious creature", 30, 10);
-        Enemy troll = new Enemy("Giant Troll", "The massive guardian of the exit", 60, 20);
-        Enemy thade = new Enemy("Thade", "Just a dark human shape", 50, 30);
+        Enemy troll = new Enemy("THE TROLL", "The massive guardian of the exit", 60, 20);
+        Enemy thade = new Enemy("Thade", "Just a dark silhouette, in the shape of a human", 50, 30);
 
         weaponChamber.addEnemy(bat);
         corridor.addEnemy(goblin);

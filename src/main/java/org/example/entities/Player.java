@@ -82,7 +82,7 @@ public class Player {
 
     // Display methods
     public void showStats() {
-        System.out.println("=== " + name + " Stats ===");
+        System.out.println("=== " + name + "'s Stats ===");
         System.out.println("Health: " + health + " / " + maxHealth);
         System.out.println("Base Attack: " + baseAttackDamage);
         if (equippedWeapon != null) {

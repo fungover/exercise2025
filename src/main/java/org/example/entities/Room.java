@@ -92,7 +92,7 @@ public class Room {
             System.out.println("\nEnemies here: ");
             for (Enemy enemy : enemies) {
                 if (enemy.isAlive()) {
-                    System.out.println("- " + enemy.getName() + " (" + enemy.getHealth() + " HP)");
+                    System.out.println("- " + enemy.getName() + " - " + enemy.getDescription() + " (" + enemy.getHealth() + " HP)");
                 }
             }
         }

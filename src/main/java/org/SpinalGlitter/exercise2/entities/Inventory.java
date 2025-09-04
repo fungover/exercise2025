@@ -29,17 +29,19 @@ public class Inventory {
         return false;
     }
 
-    public void removeWeapon() {
 
-        System.out.println("You threw away your weapon...");
-        for (int i = 0; i < items.size(); i++) {
-            ItemObject it = items.get(i);
-            if (it instanceof Sword) {
-                items.remove(i);
-                return;
+        public void removeWeapon() {
+            for (int i = 0; i < items.size(); i++) {
+                ItemObject it = items.get(i);
+                if (it instanceof Sword) {
+                    items.remove(i);
+                    System.out.println("You threw away your weapon...");
+                    return;
+                    }
+                }
+            System.out.println("You don't have a weapon to throw away.");
             }
-        }
-    }
+
 
     public void consumeFirstPotion() {
     for (int i = 0; i < items.size(); i++) {

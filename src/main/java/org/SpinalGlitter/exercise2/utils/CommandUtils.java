@@ -1,5 +1,7 @@
 package org.SpinalGlitter.exercise2.utils;
 
+import java.util.Locale;
+
 public class CommandUtils {
 
     private CommandUtils() {}
@@ -19,7 +21,10 @@ public class CommandUtils {
     }
 
     public static String normalize(String input) {
-        return switch (input) {
+
+        if(input == null) return "";
+        final String normalized = input.trim().toLowerCase(Locale.ROOT);
+        return switch (normalized) {
             case "o" -> "options";
             case "q" -> "quit";
             case "n" -> "north";
@@ -30,7 +35,7 @@ public class CommandUtils {
             case "i" -> "inventory";
             case "h" -> "heal";
             case "t" -> "throw";
-            default -> input;
+            default -> normalized;
         };
     }
 

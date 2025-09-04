@@ -12,10 +12,11 @@ import java.util.*;
 import static org.SpinalGlitter.exercise2.service.PickupService.tryPickup;
 
 public final class Game {
-    Player player;
-    DungeonMap map;
-    public int enemies;
-    public int potions = 5;
+    private Player player;
+    private DungeonMap map;
+    private int enemies;
+    private int potions = 5;
+    private final Scanner scanner = new Scanner(System.in);
 
     public Game(String name, String difficulty) {
         this.player = new Player(name);
@@ -62,7 +63,9 @@ public final class Game {
         // 4) Place swords
         Map<Position, Sword> swords = RandomGeneration.placeSwords(map, 1, player.getPosition(), rng, occupied);
 
-        CombatService combatService = new CombatService(enemies);
+        /*Scanner scanner = new Scanner(System.in);*/
+
+        CombatService combatService = new CombatService(enemies, scanner);
 
 
         System.out.println("Dungeon Crawler Game Started!");
@@ -70,7 +73,6 @@ public final class Game {
         System.out.println("You are at " + player.getPosition() + " with health " + player.getCurrentHealth() + "HP.");
         CommandUtils.printHelp();
 
-        Scanner scanner = new Scanner(System.in);
 
         while (player.isAlive()) {
             map.printMap(player.getPosition(), potions, enemies, swords);
@@ -103,7 +105,7 @@ public final class Game {
                 case "inventory" -> player.getInventory().printItems();
                 case "heal" -> player.heal(20);
                 case "throw" -> player.getInventory().removeWeapon();
-                default -> System.out.println("Unknown command. Type 'help' for a list of commands.");
+                default -> System.out.println("Unknown command. Type 'options' for a list of commands.");
             }
 
             if (newPos == null) continue;

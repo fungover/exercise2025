@@ -22,8 +22,9 @@ public class Enemy {
         return hp;
     }
 
-    public void setHp(int damage) {
-        this.hp -= damage;
+    public void takeDamage(int amount) {
+        if (amount <= 0) return;
+        this.hp = Math.max(0, this.hp - amount);
     }
 
     // enemies attack damage

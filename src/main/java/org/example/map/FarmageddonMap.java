@@ -1,6 +1,12 @@
 package org.example.map;
 
-import org.example.entities.*;
+import org.example.entities.DroolingDog;
+import org.example.entities.Enemy;
+import org.example.entities.GiantHeadlessChicken;
+import org.example.entities.HealingMilk;
+import org.example.entities.Item;
+import org.example.entities.Manifesto;
+import org.example.entities.Pitchfork;
 import org.example.utils.RandomUtils;
 
 public class FarmageddonMap {
@@ -43,13 +49,14 @@ public class FarmageddonMap {
         placeEnemy(new GiantHeadlessChicken(1, 5));
 
         // Place items
-        placeItem(new HealingMilk(3, 3));
+        placeItem(new HealingMilk(3, 4));
         placeItem(new HealingMilk(5, 2));
         placeItem(new Pitchfork(1, 1));
         placeItem(new Pitchfork(7, 4));
-        placeItem(new Manifesto(3,3));
-    }
 
+        int[] coords = getRandomValidCoordinates();
+        placeItem(new Manifesto(coords[0], coords[1]));
+    }
 
     private void placeEnemy(Enemy enemy) {
         int x = enemy.getX();
@@ -69,9 +76,21 @@ public class FarmageddonMap {
         }
     }
 
-
     private boolean isValidTile(int x, int y) {
-        return x >= 0 && x < width && y >= 0 && y < height && grid[y][x].getType() == Tile.Type.PATH;
+        return x >= 0 && x < width
+            && y >= 0 && y < height
+            && grid[y][x].getType() == Tile.Type.PATH;
+    }
+
+    private int[] getRandomValidCoordinates() {
+        for (int i = 0; i < 100; i++) { // Avoid infinite loop
+            int x = RandomUtils.randomInt(0, width);
+            int y = RandomUtils.randomInt(0, height);
+            if (isValidTile(x, y)) {
+                return new int[]{x, y};
+            }
+        }
+        throw new RuntimeException("No valid tile found for Manifesto placement.");
     }
 
     public Tile getTile(int x, int y) {

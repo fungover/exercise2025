@@ -1,17 +1,20 @@
 package ExerciseTwo.Service;
 
-import ExerciseTwo.Entities.Enemy;
+import ExerciseTwo.Entities.Enemy.Enemy;
 import ExerciseTwo.Entities.Player;
+import ExerciseTwo.Utils.GenerateMonster;
 
 import java.util.Scanner;
 
 public class Combat {
 
-    private final Enemy enemy;
+
+    GenerateMonster monster = new GenerateMonster();
+    Enemy enemy = monster.getEnemyToBattle();
+
     private final Player player;
 
-    public Combat(Enemy enemy, Player player) {
-        this.enemy = enemy;
+    public Combat(Player player) {
         this.player = player;
     }
 
@@ -31,7 +34,7 @@ public class Combat {
             switch (sc.nextLine().toLowerCase()) {
                 case "a":
                     return true;
-                case "f":
+                case "r":
                     return false;
                 default:
                     System.out.println("Wrong commando");
@@ -50,7 +53,7 @@ public class Combat {
     }
 
     public void enemyDefeated() {
-        System.out.println("You defeated the enemy!");
+        PrintText.printRed("You defeated the enemy!");
     }
 
     public int enemyAttack() {
@@ -59,7 +62,6 @@ public class Combat {
 
     public int playerDamage(int attackOfEnemy) {
         player.setHealth(attackOfEnemy);
-        System.out.println(player.getHealth());
         return player.getHealth();
     }
 

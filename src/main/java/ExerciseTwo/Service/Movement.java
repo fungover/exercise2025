@@ -58,6 +58,10 @@ public class Movement {
                 return "path";
                 //or update map for @
             }
+            case "P" -> {
+                position.setPosition(playerRow, playerCol);
+                return "potion";
+            }
             case "E" -> {
                 position.setPosition(playerRow, playerCol);
                 return "enemy";

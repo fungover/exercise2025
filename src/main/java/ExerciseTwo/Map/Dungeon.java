@@ -3,11 +3,9 @@ package ExerciseTwo.Map;
 import ExerciseTwo.Service.Emojis;
 
 public abstract class Dungeon {
-    private String nameOfRoom;
     private String[][] dungeonMap;
 
-    public Dungeon(String[][] dungeonMap, String nameOfRoom) {
-        this.nameOfRoom = nameOfRoom;
+    public Dungeon(String[][] dungeonMap) {
         this.dungeonMap = dungeonMap;
     }
 
@@ -16,7 +14,6 @@ public abstract class Dungeon {
     }
 
     public abstract void description();
-    public abstract void content();
 
     public void printMap(){
 
@@ -31,6 +28,7 @@ public abstract class Dungeon {
                     case "D": emoji = Emojis.door; break;
                     case "E": emoji = Emojis.enemy; break;
                     case "G": emoji = Emojis.gift; break;
+                    case "P": emoji = Emojis.potion; break;
                     default: emoji = Emojis.path; break;
                 }
 

@@ -1,4 +1,4 @@
-package ExerciseTwo.Entities;
+package ExerciseTwo.Entities.Enemy;
 
 public abstract class Enemy {
     protected String type;

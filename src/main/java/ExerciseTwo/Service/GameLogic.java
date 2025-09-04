@@ -15,8 +15,6 @@ public class GameLogic {
         Item potion = new Potion();
         Item coin = new Coin();
 
-        Enemy monster = new Monster();
-
         dungeon.printMap();
         dungeon.description();
         String[][] map = dungeon.getDungeonMap();
@@ -30,7 +28,7 @@ public class GameLogic {
 
             if(event.equals("enemy")){
 
-                Combat combat = new Combat(monster, player);
+                Combat combat = new Combat(player);
                 combat.description();
                 boolean choice = combat.makeAttack(sc);
                 if(choice){

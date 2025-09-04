@@ -1,6 +1,6 @@
-package ExerciseTwo.Entities;
+package ExerciseTwo.Entities.Enemy;
 
-public class Monster extends Enemy{
+public class Monster extends Enemy {
 
     public Monster() {
         super("monster", 15, -5);

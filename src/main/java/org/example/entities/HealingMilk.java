@@ -10,7 +10,14 @@ public class HealingMilk extends Item {
 
     @Override
     public void use(Player player) {
-        player.heal(healAmount);
-        System.out.println("You drink the " + name + ". Mmm... +"+ healAmount +" HP restored!");
+        if (player.getHealth() == player.getMaxHealth()) {
+            System.out.println("You're already at full health. No need to drink the Healing Milk.");
+            return;
+        }
+
+        int healed = Math.min(healAmount, player.getMaxHealth() - player.getHealth());
+        player.heal(healed);
+        System.out.println("🥛 You drink the Healing Milk and recover " + healed + " HP!");
+        System.out.println("Your current health: " + player.getHealth() + " HP");
     }
 }

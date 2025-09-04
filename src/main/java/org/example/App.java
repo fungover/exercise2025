@@ -23,13 +23,14 @@ public class App {
 
 // Products created 1 day ago.
         warehouse.addProduct(Warehouse.createOldProduct("15", "Smartphone", Category.ELECTRONICS, 10, 1));
-        warehouse.addProduct(Warehouse.createOldProduct("16", "Ipad", Category.ELECTRONICS, 8, 1));
+        warehouse.addProduct(Warehouse.createOldProduct("16", "Ipad", Category.ELECTRONICS, 10, 1));
 
 // Products created 2 days ago.
         warehouse.addProduct(Warehouse.createOldProduct("14", "Chocolate Bar", Category.FOOD, 6, 2));
+        warehouse.addProduct(Warehouse.createOldProduct("17", "Free Candy!", Category.FOOD, 10, 2));
 
 // Products created 3 days ago.
-        warehouse.addProduct(Warehouse.createOldProduct("3", "Java Book", Category.BOOKS, 7, 3));
+        warehouse.addProduct(Warehouse.createOldProduct("3", "Java Book", Category.BOOKS, 10, 3));
         warehouse.addProduct(Warehouse.createOldProduct("4", "Gaming Mouse", Category.ELECTRONICS, 8, 3));
 
 // Products created 5 days ago.
@@ -43,7 +44,7 @@ public class App {
         warehouse.addProduct(Warehouse.createOldProduct("10", "Office Chair", Category.FURNITURE, 6, 10));
 
 // Products created 12 days ago.
-        warehouse.addProduct(Warehouse.createOldProduct("16", "Python Book", Category.BOOKS, 8, 12));
+        warehouse.addProduct(Warehouse.createOldProduct("18", "Python Book", Category.BOOKS, 8, 12));
 
 // Products created 14 days ago.
         warehouse.addProduct(Warehouse.createOldProduct("12", "LEGO Set", Category.TOYS, 9, 14));
@@ -53,7 +54,7 @@ public class App {
 
 // Products created with specific dates.
 
-        warehouse.addProduct(Warehouse.createProductWithDate("17", "Summer Dress", Category.CLOTHING, 7,
+        warehouse.addProduct(Warehouse.createProductWithDate("19", "Summer Dress", Category.CLOTHING, 7,
                 LocalDate.of(2025, 6, 15)));
 
         warehouse.addProduct(Warehouse.createProductWithDate("8", "Christmas Toy", Category.TOYS, 10,

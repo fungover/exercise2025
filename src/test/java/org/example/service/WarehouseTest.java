@@ -179,4 +179,8 @@ class WarehouseTest {
 
         assertTrue(toys.isEmpty()); // Verify that the result is an empty list
     }
+
+    // ========================================
+    // TESTS FOR getProductsCreatedAfter()
+    // ========================================
 }

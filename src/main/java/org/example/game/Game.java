@@ -91,11 +91,9 @@ public class Game {
 
     // Försöker flytta spelaren i angiven riktning
     private void handleMove(String direction) {
-        // Spara spelarens gamla position innan flytten
         previousX = player.getX();
         previousY = player.getY();
 
-        // Försök flytta
         boolean moved = movement.movePlayer(player, dungeon, direction);
 
         if (!moved) {
@@ -105,23 +103,25 @@ public class Game {
 
         Tile currentTile = dungeon.get(player.getX(), player.getY());
 
-        // Fiende-möte → starta strid
-        if (currentTile.hasEnemy()) {
-            startCombat(currentTile.getEnemy());
-            return;
-        }
-
-        // Item-ruta
+        // ITEM-ruta
         if (currentTile.hasItem()) {
             Item item = currentTile.getItem();
             player.addToInventory(item);
             System.out.println("You picked up: " + item.getName() + " (" + item.getType() + ")");
-
             currentTile.setItem(null);
         }
 
-        // Exit-ruta
+        // STAIRS-ruta
         if (currentTile.getType() == TileType.STAIRS) {
+            if (currentTile.hasEnemy()) {
+                System.out.println("A powerful enemy blocks the stairs! Defeat it first!");
+                startCombat(currentTile.getEnemy());
+
+                if (currentTile.hasEnemy() || gameOver) {
+                    return;
+                }
+            }
+
             System.out.println("You found the stairs! Descending to floor "
                     + (floors.getCurrentFloor() + 1) + "...");
             dungeon = floors.advance();
@@ -130,10 +130,25 @@ public class Game {
             return;
         }
 
+        // EXIT-ruta
         if (currentTile.getType() == TileType.EXIT) {
+            if (currentTile.hasEnemy()) {
+                System.out.println("The boss guards the exit! You must defeat it first!");
+                startCombat(currentTile.getEnemy());
+
+                if (currentTile.hasEnemy() || gameOver) {
+                    return;
+                }
+            }
+
             System.out.println("🎉 You found the EXIT and escaped the dungeon!");
             gameOver = true;
             return;
+        }
+
+        // Fiende-möte → starta strid
+        if (currentTile.hasEnemy()) {
+            startCombat(currentTile.getEnemy());
         }
 
         // Vanlig flytt
@@ -231,14 +246,33 @@ public class Game {
         }
 
         Tile tile = dungeon.get(x, y);
-        switch (tile.getType()) {
-            case WALL -> System.out.println("To the " + direction + ": Wall");
-            case EMPTY -> System.out.println("To the " + direction + ": Empty");
-            case ENEMY -> System.out.println("To the " + direction + ": Enemy (" + tile.getEnemy().getName() + ")");
-            case ITEM -> System.out.println("To the " + direction + ": Item (" + tile.getItem().getName() + ")");
-            case EXIT -> System.out.println("To the " + direction + ": Exit");
+
+        if (tile.getType() == TileType.WALL) {
+            System.out.println("To the " + direction + ": Wall");
+            return;
+        }
+
+        if (tile.getType() == TileType.STAIRS) {
+            System.out.println("To the " + direction + ": Stairs");
+        }
+
+        if (tile.getType() == TileType.EXIT) {
+            System.out.println("To the " + direction + ": Exit");
+        }
+
+        if (tile.hasEnemy()) {
+            System.out.println("To the " + direction + ": Enemy (" + tile.getEnemy().getName() + ")");
+        }
+
+        if (tile.hasItem()) {
+            System.out.println("To the " + direction + ": Item (" + tile.getItem().getName() + ")");
+        }
+
+        if (!tile.hasEnemy() && !tile.hasItem() && tile.getType() == TileType.EMPTY) {
+            System.out.println("To the " + direction + ": Empty");
         }
     }
+
 
     private void printStats() {
         System.out.println("=== Player Stats ===");
@@ -282,8 +316,6 @@ public class Game {
         return switch (type) {
             case WALL -> "#";
             case EMPTY -> ".";
-            case ENEMY -> "E";
-            case ITEM -> "I";
             case STAIRS -> "S";
             case EXIT -> "X";
         };

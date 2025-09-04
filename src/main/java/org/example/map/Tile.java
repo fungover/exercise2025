@@ -4,15 +4,15 @@ import org.example.entities.Enemy;
 import org.example.entities.Item;
 
 public class Tile {
-    private TileType type;
+    private TileType type;  // Basen av Dungeon (WALL, EMPTY, STAIRS, EXIT)
     private Enemy enemy;
     private Item item;
 
     public Tile(TileType type) {
         this.type = type;
-        this.enemy = null;
     }
 
+    // ==== TYPE ====
     public TileType getType() {
         return type;
     }
@@ -22,16 +22,12 @@ public class Tile {
     }
 
     // ==== ENEMY ====
-
     public Enemy getEnemy() {
         return enemy;
     }
 
     public void setEnemy(Enemy enemy) {
         this.enemy = enemy;
-        if (enemy != null) {
-            this.type = TileType.ENEMY;
-        }
     }
 
     public boolean hasEnemy() {
@@ -40,11 +36,9 @@ public class Tile {
 
     public void removeEnemy() {
         this.enemy = null;
-        this.type = TileType.EMPTY;
     }
 
     // ==== ITEM ====
-
     public boolean hasItem() {
         return item != null;
     }
@@ -55,14 +49,5 @@ public class Tile {
 
     public void setItem(Item item) {
         this.item = item;
-        if (item != null) {
-            this.type = TileType.ITEM;
-        } else {
-            this.type = TileType.EMPTY;
-        }
     }
-
-
-
-
 }

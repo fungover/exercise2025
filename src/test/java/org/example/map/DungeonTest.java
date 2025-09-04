@@ -1,6 +1,6 @@
 package org.example.map;
 
-import org.example.entities.Enemy;
+import org.example.entities.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -103,5 +103,57 @@ public class DungeonTest {
         // På floor 2 ska rutan (8,8) vara EXIT
         assertEquals(TileType.EXIT, floor2.get(8,8).getType(),
                 "Floor 2 should have exit at (8,8)");
+    }
+
+    @Test
+    void stairsShouldBeBlockedByEnemyUntilDefeated() {
+        Dungeon dungeon = new Dungeon(1); // floor 1 -> har stairs
+        Player player = new Player("Test");
+
+        // Hitta stairs
+        Tile stairs = null;
+        for (int y = 0; y < dungeon.getHeight(); y++) {
+            for (int x = 0; x < dungeon.getWidth(); x++) {
+                if (dungeon.get(x, y).getType() == TileType.STAIRS) {
+                    stairs = dungeon.get(x, y);
+                    break;
+                }
+            }
+        }
+        assertNotNull(stairs, "Stairs should exist on floor 1");
+
+        // Kolla att stairs har en miniboss ('Dragon')
+        assertTrue(stairs.hasEnemy(), "Stairs should be blocked by an enemy");
+        assertTrue(stairs.getEnemy() instanceof Dragon, "Enemy on stairs should be a Dragon");
+
+        // När fienden besegras → stairs ska inte längre ha enemy
+        stairs.removeEnemy();
+        assertFalse(stairs.hasEnemy(), "Stairs should be free after enemy is defeated");
+    }
+
+    @Test
+    void exitShouldBeBlockedByBossUntilDefeated() {
+        Dungeon dungeon = new Dungeon(2); // Floor 2 -> har exit
+        Player player = new Player("Test");
+
+        // Hitta exit
+        Tile exit = null;
+        for (int y = 0; y < dungeon.getHeight(); y++) {
+            for (int x = 0; x < dungeon.getWidth(); x++) {
+                if (dungeon.get(x, y).getType() == TileType.EXIT) {
+                    exit = dungeon.get(x, y);
+                    break;
+                }
+            }
+        }
+        assertNotNull(exit, "Exit should exist on final floor");
+
+        // Kolla att exit har en boss (Dragon)
+        assertTrue(exit.hasEnemy(), "Exit should be blocked by a boss");
+        assertTrue(exit.getEnemy() instanceof FinalBoss, "Enemy on exit should be a Balrog");
+
+        // När bossen besegras → exit ska vara fri
+        exit.removeEnemy();
+        assertFalse(exit.hasEnemy(), "Exit should be free after boss is defeated");
     }
 }

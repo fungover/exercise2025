@@ -6,13 +6,18 @@ import java.util.Random;
 public class RandomUtils {
     private static final Random random = new Random();
 
-    public static Enemy randomEnemy() {
-        int roll = random.nextInt(3);
-        return switch (roll) {
-            case 0 -> new Goblin();
-            case 1 -> new Orc();
-            default -> new Dragon();
-        };
+    public static Enemy randomEnemy(int floor) {
+        int roll = random.nextInt(100);
+
+        if (floor == 1) {
+            if (roll < 70) return new Goblin();  // 70%
+            if (roll < 95) return new Orc();     // 25%
+            return new Dragon();                 // 5%
+        } else { // floor == 2
+            if (roll < 40) return new Goblin();  // 40%
+            if (roll < 80) return new Orc();     // 40%
+            return new Dragon();                 // 20%
+        }
     }
 
     public static Item randomWeapon() {

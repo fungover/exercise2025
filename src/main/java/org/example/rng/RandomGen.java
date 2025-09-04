@@ -9,10 +9,6 @@ public class RandomGen {
 	}
 
 	public boolean generateRandom(int chance) {
-		if (random.nextInt(100) <= chance) {
-			return true;
-		} else {
-			return false;
-		}
+		return random.nextInt(100) <= chance;
 	}
 }

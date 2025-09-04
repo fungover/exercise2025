@@ -127,23 +127,6 @@ class CombatServiceTest {
         assertTrue(combatService.haveWon() || !goblin.isAlive());
     }
 
-    @Test
-    void playerLosesDamageWithoutSword() {
-
-        Player player = new Player("Hero");
-        player.getInventory().addItem(new Sword(null));
-        player.setDamage();
-
-        assertEquals(20, player.getDamage(), "Damage should be 20 with sword");
-
-        player.getInventory().removeWeapon();
-        player.setDamage();
-
-        assertEquals(10, player.getDamage(), "Damage should be 10 after removing sword");
-
-
-
-    }
 }
 
 

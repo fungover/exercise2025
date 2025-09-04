@@ -29,8 +29,12 @@ public class Inventory {
         return false;
     }
 
+    // for testing purposes
+    public List<ItemObject> getItems() {
+        return items;
+    }
 
-        public void removeWeapon() {
+    public void removeWeapon() {
             for (int i = 0; i < items.size(); i++) {
                 ItemObject it = items.get(i);
                 if (it instanceof Sword) {

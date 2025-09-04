@@ -14,9 +14,6 @@ public class Warehouse {
     //Method to add a new product.
     public void addProduct(Product product) {
 
-        if (product.name().trim().isEmpty()) { // Check if the product name is empty or just whitespace
-            throw new IllegalArgumentException("Product name cannot be empty");
-        }
 
         products.put(product.id(), product); // Add the product to the map using its ID as the key
     }
@@ -29,9 +26,6 @@ public class Warehouse {
             throw new IllegalArgumentException("Product with id " + id + " not found");
         }
 
-        if (name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Product name cannot be empty");
-        }
 
         //Since records are immutable, we need to create a new instance of the Product record with the updated values.
         Product updatedProduct = new Product(

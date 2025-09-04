@@ -81,7 +81,7 @@ public class Room {
         if (!items.isEmpty()) {
             System.out.println("\nItems here: ");
             for (Item item : items) {
-                System.out.println("- " + item.getName());
+                System.out.println("- " + item.getName() + " (" + item.getDescription() + ")");
             }
         } else {
             System.out.println("\nNo items in here.");

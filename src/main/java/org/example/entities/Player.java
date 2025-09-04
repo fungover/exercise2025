@@ -8,14 +8,18 @@ public class Player {
     private int maxHealth;
     private int attackDamage;
     private Inventory inventory;
+    private Weapon equippedWeapon;
+    private int baseAttackDamage;
 
     // Constructor
     public Player(String name) {
         this.name = name;
         this.maxHealth = 100;
         this.health = maxHealth;
-        this.attackDamage = 10;
+        this.baseAttackDamage = 5;
+        this.attackDamage = baseAttackDamage;
         this.inventory = new Inventory();
+        this.equippedWeapon = null;
     }
 
     // Health methods
@@ -51,6 +55,28 @@ public class Player {
         return inventory.findItem(itemName);
     }
 
+    // Equip Weapon method
+    public boolean equipWeapon(String weaponName) {
+        Item item = findItem(weaponName);
+        if (item != null && item instanceof Weapon) {
+            equippedWeapon = (Weapon) item;
+            updateAttackDamage();
+            System.out.println("You equipped " + item.getName() + " (+" +
+                    ((Weapon) item).getDamage() + " damage)");
+            return true;
+        }
+        return false;
+    }
+
+    // Add damage from weapon to player
+    private void updateAttackDamage() {
+        if (equippedWeapon != null) {
+            this.attackDamage = baseAttackDamage + equippedWeapon.getDamage();
+        } else {
+            this.attackDamage = baseAttackDamage;
+        }
+    }
+
 
     // Combat method
     public int attack() {
@@ -61,8 +87,14 @@ public class Player {
     public void showStats() {
         System.out.println("=== " + name + " Stats ===");
         System.out.println("Health: " + health + " / " + maxHealth);
-        System.out.println("Attack Damage: " + attackDamage);
+        System.out.println("Base Attack: " + baseAttackDamage);
+        if (equippedWeapon != null) {
+            System.out.println("Equipped: " + equippedWeapon.getName() +
+                    " (+" + equippedWeapon.getDamage() + " damage)");
+        }
+        System.out.println("Total Attack: " + attackDamage + " damage");
     }
+
     public void showInventory() {
         inventory.display();
     }

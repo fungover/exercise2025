@@ -34,7 +34,7 @@ public class Game {
         System.out.println("-Hello friend.. I thought you were dead..");
         System.out.println("\n* You feel a cold shiver running down your spine *");
         System.out.println("\n-Don't worry friend, I will get you out of here..");
-        System.out.println("\n(laughs) ..in one way or another...");
+        System.out.println("..hehe..in one way or another...");
         System.out.println("\nBut, before I help you, let's get to know each other a little bit..");
         System.out.println("\nI'm Thade, I used to live here.. a long time ago..");
         System.out.println("(whispers) ..before the monsters came..");
@@ -128,6 +128,24 @@ public class Game {
                 player.showStats();
                 break;
 
+            case "use":
+                if (words.length > 1) {
+                    String itemName = command.substring(4); // Remove "use " (4 characters)
+                    useItem(itemName.trim());
+                } else {
+                    System.out.println("Use what?");
+                }
+                break;
+
+            case "equip":
+                if (words.length > 1) {
+                    String itemName = command.substring(6); // Remove "equip " (6 characters)
+                    equipItem(itemName.trim());
+                } else {
+                    System.out.println("Equip what?");
+                }
+                break;
+
             case "attack":
             case "fight":
                 attackEnemy();
@@ -156,7 +174,6 @@ public class Game {
     private void movePlayer(String direction) {
         Room nextRoom = currentRoom.getExit(direction);
         if (nextRoom != null) {
-            // Kolla om det finns levande fiender
             if (currentRoom.hasAliveEnemies()) {
                 System.out.println("You can't leave while enemies are blocking your way!");
                 return;
@@ -187,6 +204,29 @@ public class Game {
         }
     }
 
+    private void useItem(String itemName) {
+        Item item = player.findItem(itemName);
+        if (item != null && item instanceof Healing) {
+            Healing healingItem = (Healing) item;
+            player.heal(healingItem.getHealingValue());
+            player.removeItem(item);
+            System.out.println("You used " + item.getName() + " and healed " +
+                    healingItem.getHealingValue() + " HP!");
+        } else {
+            System.out.println("You can't use that item!");
+        }
+    }
+
+    private void equipItem(String itemName) {
+        Item item = player.findItem(itemName);
+        if (item != null && item instanceof Weapon) {
+            player.equipWeapon(itemName);
+            player.removeItem(item);
+        } else {
+            System.out.println("You can't equip that!");
+        }
+    }
+
     private void attackEnemy() {
         // TODO: Connect to Combat class
     }
@@ -197,7 +237,9 @@ public class Game {
         System.out.println("look           - Look around the room");
         System.out.println("take <item>    - Pick up an item");
         System.out.println("inventory      - Show your items");
-        System.out.println("stats          - Show your health and stats");
+        System.out.println("stats          - Show your health and damage");
+        System.out.println("use            - Use healing potion");
+        System.out.println("equip          - Equip weapon");
         System.out.println("attack         - Fight enemies in the room");
         System.out.println("help           - Show this help");
         System.out.println("quit           - Exit game");

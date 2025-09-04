@@ -18,7 +18,9 @@ public class Menu {
 
         while (true) {
             try {
-                int input = Integer.parseInt(br.readLine());
+                String line = br.readLine();
+                if (line == null) throw new IOException("Inget val läst (EOF).");
+                int input = Integer.parseInt(line.trim());
                 switch (input) {
                     case 1 -> {return "SE1"; }
                     case 2 -> {return "SE2"; }
@@ -28,7 +30,7 @@ public class Menu {
                 }
 
             } catch (NumberFormatException e) {
-                System.out.println("❌ Du måste skriva en siffra (1–4).");
+                System.out.println("Du måste skriva en siffra (1–4).");
             }
 
         }

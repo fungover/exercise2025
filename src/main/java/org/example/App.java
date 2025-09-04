@@ -7,29 +7,22 @@ import java.time.LocalDate;
 
 public class App {
     public static void main(String[] args) {
+        try {
 
-        Product laptop = new Product(
-                "1",
-                "Gaming Laptop",
-                Category.ELECTRONICS,
-                9,
-                LocalDate.now(),
-                LocalDate.now()
-        );
+            Product okProduct = new Product("1", "Laptop", Category.ELECTRONICS, 8, LocalDate.now(), LocalDate.now());
+            System.out.println("Created product: " + okProduct);
 
-        System.out.println("Product created");
-        System.out.println("ID: " + laptop.id());
-        System.out.println("Name: " + laptop.name());
-        System.out.println("Category: " + laptop.category());
-        System.out.println("Rating: " + laptop.rating());
-        System.out.println("Created Date: " + laptop.createdDate());
+            Product badProduct = new Product("2", "   ", Category.ELECTRONICS, 8, LocalDate.now(), LocalDate.now());
 
-        System.out.println("\n whole product details: " + laptop);
-
-        Product same = new Product("1", "Gaming Laptop", Category.ELECTRONICS, 9, LocalDate.now(), LocalDate.now());
-        System.out.println("laptop equals same: " + laptop.equals(same));
-
-        Product other = new Product("2", "Gaming laptop", Category.ELECTRONICS, 9, LocalDate.now(), LocalDate.now());
-        System.out.println("laptop equals other: " + laptop.equals(other));
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error captured: " + e.getMessage());
+        }
+        try {
+            // Detta borde krascha - dåligt rating
+            Product badRating = new Product("3", "Laptop", Category.ELECTRONICS,
+                    15, LocalDate.now(), LocalDate.now());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Fel fångat: " + e.getMessage());
+        }
     }
 }

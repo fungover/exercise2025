@@ -144,4 +144,27 @@ class WarehouseTest {
         Optional<Product> result = warehouse.getProductById("999"); // Attempt to retrieve a product with a non-existent ID
         assertTrue(result.isEmpty()); // Verify that the result is an empty Optional
     }
+
+    // ========================================
+    // TESTS FOR getProductsByCategorySorted()
+    // ========================================
+
+    @Test
+    @DisplayName("Should return products in category sorted by name (A-Z")
+    void getProductsByCategorySortedSuccessfullyByName() {
+
+        Product laptop = Warehouse.createProduct("1", "Gaming Laptop", Category.ELECTRONICS, 9);
+        Product mouse = Warehouse.createProduct("2", "Gaming Mouse", Category.ELECTRONICS, 8);
+        Product book = Warehouse.createProduct("3", "Java Book", Category.BOOKS, 10);
+
+        warehouse.addProduct(laptop);
+        warehouse.addProduct(mouse);
+        warehouse.addProduct(book);
+
+        List<Product> electronics = warehouse.getProductsByCategorySorted(Category.ELECTRONICS); // Retrieve products in the ELECTRONICS category sorted by name
+
+        assertEquals(2, electronics.size()); // Verify that there are 2 products in the ELECTRONICS category
+        assertEquals("Gaming Laptop", electronics.get(0).name()); // Verify that the first product is "Gaming Laptop" (L comes before M
+        assertEquals("Gaming Mouse", electronics.get(1).name()); // Verify that the second product is "Gaming Mouse"
+    }
 }

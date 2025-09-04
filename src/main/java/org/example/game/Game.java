@@ -21,7 +21,8 @@ public class Game {
         player = new Player(playerName);
 
         continueStory();
-
+        getPlayerAttention();
+        GameInstructions();
         initializeWorld();
         gameLoop();
     }
@@ -29,11 +30,11 @@ public class Game {
     private void showIntroduction() {
         System.out.println("\n=== Welcome to 'Escape The Dark Cave' ===");
         System.out.println("\n* You find yourself waking up in a dark cave *");
-        System.out.println("\nAn old crackly voice speak to you: ");
+        System.out.println("\nAn old crackly voice speaks to you: ");
         System.out.println("-Hello friend.. I thought you were dead..");
         System.out.println("\n* You feel a cold shiver running down your spine *");
         System.out.println("\n-Don't worry friend, I will get you out of here..");
-        System.out.println("\n..one way or another...");
+        System.out.println("\n(laughs) ..in one way or another...");
         System.out.println("\nBut, before I help you, let's get to know each other a little bit..");
         System.out.println("\nI'm Thade, I used to live here.. a long time ago..");
         System.out.println("(whispers) ..before the monsters came..");
@@ -42,17 +43,21 @@ public class Game {
 
     private void continueStory() {
         System.out.println("\n-Listen carefully now..");
-        System.out.println("In order to get out of here..");
-        System.out.println("You need to find a the golden key that will unlock the door to the exit..");
+        System.out.println("Hey, " + player.getName() + "! ARE YOU PAYING ATTENTION?");
+
+
+    }
+
+    private void GameInstructions() {
+        System.out.println("\nYou need to find a the golden key that will unlock the door to the exit..");
         System.out.println("The key is hidden somewhere in the cave..");
         System.out.println("Be careful, there are dangerous monsters everywhere.. ");
         System.out.println("You can't get passed them..if you don't fight for your life..");
-        System.out.println("There are weapons and healing potions spread around the place..");
-        System.out.println("And " + player.getName() + ".. I really suggest you find them first..");
+        System.out.println("There are weapons and healing potions spread around here..");
+        System.out.println("And " + player.getName() + ".. \nI really suggest you find them first..");
         System.out.println("..and watch out for THE TROLL, he is guarding the exit..");
-        System.out.println("\nGood luck frie.." + player.getName() + ".. you'll need it!");
-        System.out.println("\n You can type 'help' to see available commands");
-
+        System.out.println("\nGood luck frie.. hehe.. " + player.getName() + ".. you'll need it!");
+        System.out.println("\nYou can type 'help' to see available commands");
     }
 
     private String getPlayerName() {
@@ -62,11 +67,24 @@ public class Game {
         return name;
     }
 
+    private void getPlayerAttention() {
+        boolean answerYes = false;
+        while (!answerYes) {
+            String answer = scanner.nextLine();
+            if (answer.equalsIgnoreCase("yes") || answer.equalsIgnoreCase("y")) {
+                answerYes = true;
+                System.out.println("\nGood! Here is what you need to do, in order to get out of here..");
+            } else {
+                System.out.println("Okay..It's like that huh? I can wait forever.. \nSay 'yes' when you want to continue..");
+            }
+        }
+    }
+
     private void gameLoop() {
         currentRoom.look();
 
         while (gameRunning && player.isAlive()) {
-            System.out.println("\n>");
+            System.out.println("\n> What do you want to do?");
             String command = scanner.nextLine().toLowerCase();
             handleCommand(command);
         }
@@ -92,9 +110,9 @@ public class Game {
                 break;
 
             case "take":
-            case "get":
                 if (words.length > 1) {
-                    takeItem(words[1]);
+                    String itemName = command.substring(5); //Remove "take " (5 characters)
+                    takeItem(itemName.trim());
                 } else {
                     System.out.println("Take what?");
                 }
@@ -121,9 +139,13 @@ public class Game {
                 break;
 
             case "quit":
-            case "exit":
                 gameRunning = false;
                 System.out.println("Thanks for playing!");
+                break;
+
+            case "exit":
+                System.out.println("To quit the game, type 'quit'");
+                System.out.println("For other commands, type 'help'");
                 break;
 
             default:
@@ -147,7 +169,22 @@ public class Game {
     }
 
     private void takeItem(String itemName) {
-        // TODO: Connect to inventory
+        Item item = currentRoom.findItem(itemName);
+        if (item != null) {
+            if (player.addItem(item)) {
+                currentRoom.removeItem(item);
+                System.out.println("You picked up: " + item.getName());
+            } else {
+                System.out.println("Your inventory is full!");
+            }
+        } else {
+            System.out.println("There's no " + itemName + " here!");
+            // DEBUG: Visa vad som finns
+            System.out.println("Items in room:");
+            for (Item roomItem : currentRoom.getItems()) {
+                System.out.println("- " + roomItem.getName());
+            }
+        }
     }
 
     private void attackEnemy() {
@@ -170,7 +207,7 @@ public class Game {
     private void initializeWorld() {
         // Create rooms
         Room startCave = new Room("Dark Cave",
-                "The cave where you woke up. Cold stone walls surround you. Thade's voice still echoes here.");
+                "The cave where you woke up. Cold stone walls surround you. \nThade's voice still echoes here.");
 
         Room weaponChamber = new Room("Weapon Chamber",
                 "An old armory. Rusty weapons hang on the walls.");
@@ -193,8 +230,8 @@ public class Game {
         trollLair.addExit("south", corridor);
 
         // Add items
-        Weapon sword = new Weapon("Rusty Sword", "An old but sharp sword", "Weapon", 1, 15);
-        Healing potion = new Healing("Health Potion", "A red liquid that smells of herbs", "Healing", 1, 30);
+        Weapon sword = new Weapon("Sword", "An rusty old sword", "Weapon", 1, 15);
+        Healing potion = new Healing("Healing Potion", "A red liquid that smells of herbs", "Healing", 1, 30);
 
         weaponChamber.addItem(sword);
         startCave.addItem(potion);

@@ -122,5 +122,19 @@ class WarehouseTest {
         assertTrue(products.isEmpty()); // Verify that the product list is empty
     }
 
+    // ========================================
+    // TESTS FOR getProductById()
+    // ========================================
 
+    @Test
+    @DisplayName("Should return a product by correct ID")
+    void getProductByIdSuccessfully() {
+        Product testProduct = Warehouse.createProduct("1", "Test Product", Category.ELECTRONICS, 8);
+        warehouse.addProduct(testProduct);
+
+        Optional<Product> result = warehouse.getProductById("1"); // Retrieve the product by its ID
+
+        assertTrue(result.isPresent()); // Verify that the product is found
+        assertEquals(testProduct, result.get()); // Verify that the retrieved product matches the added product
+    }
 }

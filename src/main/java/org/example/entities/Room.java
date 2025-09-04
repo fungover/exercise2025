@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.example.utils.Colors.cyan;
-import static org.example.utils.Colors.red;
+import static org.example.utils.Colors.*;
 
 public class Room {
     private String name;
@@ -72,7 +71,7 @@ public class Room {
     // Display methods
     public void look() {
         System.out.println("\nYou are here:");
-        System.out.println("=== " + name + " ===");
+        System.out.println(bold("=== " + name + " ==="));
         System.out.println(description);
 
         //Show exits

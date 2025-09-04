@@ -45,7 +45,10 @@ public class Game {
 
     private void continueStory() {
         System.out.println(purple("\n-Listen carefully now.."));
-        System.out.println(purple("Hey, " + player.getName() + "! Are you PAYING ATTENTION?"));
+        System.out.print(purple("Hey, "));
+        System.out.print(cyan(player.getName()));
+        System.out.print(purple("! "));
+        System.out.println(bold(purple("Are you PAYING ATTENTION?")));
 
 
     }
@@ -57,16 +60,24 @@ public class Game {
         System.out.println(purple("You can't get passed them or run away..."));
         System.out.println(purple(".. you have to fight for your life first.."));
         System.out.println(purple("There are weapons and healing potions spread around here.."));
-        System.out.println(purple("And " + player.getName() + ".. \nI suggest you find them first.."));
+        System.out.print(purple("And " ));
+        System.out.print(cyan(player.getName()));
+        System.out.println(purple( ".. I suggest you find them first.."));
         System.out.println(purple("oh.. and watch out for THE TROLL, he is guarding the exit.."));
-        System.out.println(purple("\nGood luck frie.. hehe.. " + player.getName() + ".. you'll need it!"));
+        System.out.print(purple("\nGood luck frie.. hehe.. "));
+        System.out.print(cyan(player.getName()));
+        System.out.print(purple(".. you'll need it!"));
         System.out.println("\nYou can type 'help' to see available commands");
     }
 
     private String getPlayerName() {
         String name = scanner.nextLine();
-        System.out.println(purple("\n-" + name + ".. interesting name.."));
-        System.out.println(purple("Okay, friend.. I mean " + name + ".."));
+        System.out.print(purple("\n-"));
+        System.out.print(cyan(name));
+        System.out.print(purple( ".. interesting name.."));
+        System.out.print(purple("\nOkay, friend.. I mean "));
+        System.out.print(cyan(name));
+        System.out.println(purple(".."));
         return name;
     }
 
@@ -283,7 +294,7 @@ public class Game {
                     System.out.println("=== You step outside and breathe fresh air for the first time in ages. ===");
                     System.out.println(bold(green("\n=== 🎉 CONGRATULATIONS! YOU HAVE ESCAPED THE DARK CAVE! 🎉 ===")));
                     System.out.println("\n=== Thade's corruption is broken, and you are finally free! ===");
-                    System.out.println(green("\n=== Thanks for playing " + player.getName() + "! ==="));
+                    System.out.println(cyan("\n=== Thanks for playing " + player.getName() + "! ==="));
                     gameRunning = false;
                 } else {
                     System.out.println("You can't unlock the door while the troll is still alive!");

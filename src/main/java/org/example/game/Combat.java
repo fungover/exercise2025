@@ -46,11 +46,11 @@ public class Combat {
             }
         } else {
             if (enemy.getName().equals("Thade")) {
-                System.out.println(purple("\nThade: -Oh.. "));
+                System.out.print(purple("\nThade: -Oh.. "));
                 System.out.print(cyan(player.getName()));
                 System.out.print(purple(".. don't you see it?"));
-                System.out.println(purple("My real name is not Thade.."));
-                System.out.println(purple("..Thade.. dThad.. deTha.."));
+                System.out.print(purple("\nMy real name is not Thade.."));
+                System.out.println(purple("\n..Thade.. dThad.. deTha.. Detah.."));
                 System.out.println(bold(purple("it's.. DEATH!")));
             }
             System.out.println(red("\nYou lost the fight and died!"));

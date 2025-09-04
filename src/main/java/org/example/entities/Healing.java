@@ -27,6 +27,7 @@ public class Healing extends Item implements Usable {
     public void use(Player player) {
         player.heal(healingValue);
         System.out.println("You used " + getName() + " and healed " + healingValue + " HP!");
+        System.out.println("Your health is now " + player.getHealth() + " HP!");
     }
 
     @Override

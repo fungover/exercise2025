@@ -95,12 +95,14 @@ public class Game {
             if (item instanceof Manifesto manifesto) {
                 System.out.println("\n" + manifesto.getWinMessage());
                 System.out.println("Congratulations, " + player.getName() + "! You win!");
-                System.exit(0);
+                exit(0);
             }
         }, () -> System.out.println("You don't have an item called '" + itemName + "'."));
     }
 
-
+    protected void exit(int code) {
+        System.exit(code);
+    }
 
     private void handleCommand(String input) {
 

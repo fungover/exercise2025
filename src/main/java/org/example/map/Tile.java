@@ -41,7 +41,7 @@ public class Tile {
         return explored;
     }
 
-    public boolean isHasPlayer() {
+    public boolean getHasPlayer() {
         return hasPlayer;
     }
 

@@ -6,6 +6,7 @@ import org.example.entities.Product;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class Warehouse {
@@ -23,10 +24,10 @@ public class Warehouse {
 
     public void updateProduct(String id, String name, Category category,
                               int rating) {
-        var idToLong = Long.parseLong(id);
+
 
         //gets our product from id
-        Product existing = getProductById(idToLong);
+        Product existing = getProductById(id);
 
         //we keep id and createdDate, and update the rest
         Product updated = new Product(existing.id(), name, category, rating,
@@ -39,21 +40,33 @@ public class Warehouse {
         inventory.add(updated);
     }
 
-    public Product getProductById(long id) {
-
+    public Product getProductById(String id) {
+        Long idToLong = Long.parseLong(id);
         return inventory.stream()
                         .filter(p -> p.id()
-                                      .equals(id))
+                                      .equals(idToLong))
                         .findFirst()
                         .orElseThrow(
                           () -> new IllegalArgumentException("Product not found"));
     }
 
+    public Product removeProductById(String id) {
 
-    public void getProducts() {
-        inventory.stream()
-                 .forEach(System.out::println);
+        Product removed = getProductById(id);
+        inventory.remove(removed);
+        return removed;
     }
 
 
+    public List<Product> getAllProducts() {
+        return List.copyOf(inventory); //returns a copy so no one can .clean()
+
+    }
+
+    @Override public String toString() {
+        return "Warehouse Inventory:\n" + inventory.stream()
+                                                   .map(Product::toString)
+                                                   .collect(
+                                                     Collectors.joining("\n"));
+    }
 }

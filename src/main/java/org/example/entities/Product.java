@@ -18,5 +18,11 @@ public record Product(Long id, String name, Category category, int rating,
 
     }
 
+    @Override public String toString() {
+        return String.format(
+          "id=%d, Name=%s, Category=%s, Rating=%d, Created=%s, Modified=%s", id,
+          name, category, rating, createdDate, modifiedDate);
+    }
+
 
 }

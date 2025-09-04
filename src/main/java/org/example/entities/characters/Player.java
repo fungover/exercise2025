@@ -1,7 +1,6 @@
 package org.example.entities.characters;
 
 import org.example.entities.enemies.Enemy;
-import org.example.entities.enemies.Goblin;
 import org.example.entities.items.Inventory;
 import org.example.entities.items.Item;
 import org.example.entities.items.Potion;
@@ -86,9 +85,10 @@ public class Player {
         this.inventory = inventory;
     }
 
-    public String setEquippedWeapon(Weapon weapon){
-        this.equippedWeapon = weapon;
-        return getName() + " equipped " + weapon.getName();
+    public void setEquippedWeapon(Weapon newWeapon){
+        inventory.addItem(equippedWeapon);
+        System.out.println("You equipped " + newWeapon.getName() + " and added " + equippedWeapon.getName() + " to your inventory.");
+        this.equippedWeapon = newWeapon;
     }
 
     //Methods
@@ -106,7 +106,7 @@ public class Player {
             if (this.health > this.maxHealth) {
                 this.health = this.maxHealth;
             }
-            System.out.println(potion.getUseMessage());
+            System.out.println("> You use a " + potion.getName() + " and restore " + healAmount + " health!");
             inventory.removeItem(potion);
         }
     }
@@ -117,10 +117,6 @@ public class Player {
 
     public String getAttackMessage(Enemy enemy) {
         return "> " + getName() + " attacks " + enemy.getName() + " for " + getDamage() + " damage!";
-    }
-
-    public String equipWeapon (Weapon weapon) {
-        return "> " + getName() + " equipped " + weapon.getName();
     }
 
     public String getDeathMessage(Enemy enemy) {

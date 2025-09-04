@@ -44,12 +44,7 @@ public class ItemService {
                 switch (choice) {
                     case 1:
                         if (item instanceof Weapon weapon) {
-                            Weapon oldWeapon = player.getEquippedWeapon();
-                            player.getInventory().addItem(oldWeapon);
-
                             player.setEquippedWeapon(weapon);
-                            System.out.println("You equipped " + weapon.getName() + " and added " + oldWeapon.getName() + " to your inventory.");
-
                         }
 
                         if (item instanceof Potion) {
@@ -95,9 +90,11 @@ public class ItemService {
                     if (potion != null) {
                         player.usePotion(potion);
                         Utils.newRow();
+                        validInput = true;
                     } else {
                         System.out.println("You don't have any health potions.");
                         Utils.newRow();
+                        validInput = true;
                         continue;
                     }
                     break;
@@ -142,13 +139,9 @@ public class ItemService {
                 int choice = Integer.parseInt(input);
                 if (choice > 0 && choice <= weapons.size()) {
                     Weapon selectedWeapon = weapons.get(choice - 1);
-                    Weapon oldWeapon = player.getEquippedWeapon();
 
-                    player.getInventory().addItem(oldWeapon);
                     player.setEquippedWeapon(selectedWeapon);
                     player.getInventory().removeItem(selectedWeapon);
-
-                    System.out.println("You equipped " + selectedWeapon.getName());
 
                     validInput = true;
                 } else {

@@ -226,7 +226,8 @@ public class Game {
 
     private void map() {
         System.out.println("=== Floor " + floors.getCurrentFloor() + " ===");
-        System.out.println("Your current location is at marker: p");
+        System.out.println("Your current location is at marker: P");
+        System.out.println("S is stairs to next floor and X is exit");
         printMapWithPlayer();
         printAvailableDirections();
     }

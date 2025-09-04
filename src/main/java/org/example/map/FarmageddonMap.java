@@ -76,7 +76,7 @@ public class FarmageddonMap {
         }
     }
 
-    private boolean isValidTile(int x, int y) {
+    boolean isValidTile(int x, int y) {
         return x >= 0 && x < width
             && y >= 0 && y < height
             && grid[y][x].getType() == Tile.Type.PATH;

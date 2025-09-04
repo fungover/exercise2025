@@ -4,15 +4,20 @@ import java.util.List;
 import java.util.Scanner;
 import org.example.entities.items.Inventory;
 import org.example.entities.items.Item;
+import org.example.game.cli.CliCombatUI;
+import org.example.game.cli.CombatUI;
 import org.example.game.cli.ConsoleMapPrinter;
-import org.example.game.cli.InputParser;
-import org.example.game.cli.InputParser.Parsed;
+import org.example.game.cli.ExploreParser;
+import org.example.game.cli.ExploreParser.ExploreCommand;
 import org.example.map.Tile;
+import org.example.service.combat.CombatService;
 import org.example.service.movement.MovementService;
 
 public final class GameController {
     private final MovementService movementService = new MovementService();
     private final String[] startupLines;
+    private final CombatService combatService = new CombatService();
+
 
     public GameController(String... startupLines) {
         this.startupLines = (startupLines == null) ? new String[0] : startupLines;
@@ -29,9 +34,9 @@ public final class GameController {
             System.out.print("> ");
             String line = scanner.nextLine();
 
-            Parsed parsed = InputParser.parse(line);
+            ExploreCommand exploreCommand = ExploreParser.parse(line);
 
-            switch (parsed.type()) {
+            switch (exploreCommand.type()) {
                 case QUIT -> {
                     System.out.println("Goodbye!");
                     return;
@@ -59,23 +64,46 @@ public final class GameController {
                 }
 
                 case TAKE -> {
-                    handleTake(context, parsed);
+                    handleTake(context, exploreCommand);
                 }
 
                 case USE -> {
-                    handleUse(context, parsed.oneBasedIndex());
+                    handleUse(context, exploreCommand.oneBasedIndex());
                 }
 
                 case MOVE -> {
-                    var result = movementService.tryMove(context.player(), context.map(), parsed.direction());
+                    var result = movementService.tryMove(context.player(), context.map(), exploreCommand.direction());
                     // Map re-render after a move attempt (so the @ position stays accurate)
                     ConsoleMapPrinter.print(context.map(), context.player().getX(), context.player().getY());
 
                     switch (result) {
                         case MOVED -> {
-                            System.out.println("You move " + parsed.direction().name().toLowerCase() + ".");
-                            promptLootIfPresent(context);
+                            System.out.println("You move " + exploreCommand.direction().name().toLowerCase() + ".");
+
+                            // Check the tile we just entered
+                            var currentTile = context.map().tileAt(context.player().getX(), context.player().getY());
+
+                            if (currentTile.hasEnemy()) {
+                                var enemy = currentTile.enemy();
+
+                                // Run combat via the UI abstraction
+                                CombatUI ui = new CliCombatUI(scanner);
+                                combatService.fight(context.player(), enemy, context.player().getInventory(), ui);
+
+                                // If enemy died, clear it from the tile
+                                if (enemy.isDead()) {
+                                    currentTile.removeEnemy();
+                                }
+
+                                System.out.println("That was scarry, let's continue...");
+                                promptLootIfPresent(context);
+
+                            } else {
+                                // No enemy here, keep the old behavior
+                                promptLootIfPresent(context);
+                            }
                         }
+
                         case BLOCKED_WALL -> System.out.println("A wall blocks your way.");
                         case BLOCKED_OUT_OF_BOUNDS -> System.out.println("You can't go further.");
                     }
@@ -127,11 +155,11 @@ public final class GameController {
         System.out.println("Pick up with: take <number>  or  take all");
     }
 
-    private void handleTake(GameContext context, Parsed parsed) {
+    private void handleTake(GameContext context, ExploreCommand exploreCommand) {
         Tile tile = context.map().tileAt(context.player().getX(), context.player().getY());
         Inventory inventory = context.player().getInventory();
 
-        if (parsed.takeAllFlag()) {
+        if (exploreCommand.takeAllFlag()) {
             if (!tile.hasItems()) {
                 System.out.println("Nothing to take.");
                 return;
@@ -145,7 +173,7 @@ public final class GameController {
             return;
         }
 
-        Integer oneBasedIndex = parsed.oneBasedIndex();
+        Integer oneBasedIndex = exploreCommand.oneBasedIndex();
         if (oneBasedIndex == null) {
             System.out.println("Usage: take <number>  or  take all");
             return;

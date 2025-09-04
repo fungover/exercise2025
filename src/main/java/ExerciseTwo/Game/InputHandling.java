@@ -1,13 +1,12 @@
 package ExerciseTwo.Game;
 
-import ExerciseTwo.Service.PrintText;
+import ExerciseTwo.Utils.PrintText;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class InputHandling {
-    Scanner sc = new Scanner(System.in);
 
-    public String enterName(){
+    public String enterName(Scanner sc){
 
         String name;
 
@@ -20,30 +19,22 @@ public class InputHandling {
             if(name.isEmpty()){
                 PrintText.printRed("You must enter your name");
             }else{
-                System.out.println("Let the adventure begin...");
                 return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase(Locale.ROOT);
             }
         }
     }
 
-    public void move(){
-        System.out.println(" ");
-    }
-
-    public void commands(){
+    public static void commands(){
+        System.out.println("________________________________________");
         System.out.println("""
                 In the game you can use following commands:
-                    l - look
                     i - inventory
-                        up - use potion
-                        sw - switch weapon
-                    a- attack
-                To move in the game use the following commands:
-                    n - north
-                    s - south
-                    e - east
-                    w - west
+                        use - use potion
+                        switch - switch weapon
+                    h - help
+                    q - quit
                 """);
+        System.out.println("________________________________________");
     }
 
 }

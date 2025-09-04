@@ -1,5 +1,7 @@
 package ExerciseTwo.Service;
 
+import ExerciseTwo.Game.PlayerInput;
+
 import java.util.Scanner;
 
 public class Movement {
@@ -21,7 +23,13 @@ public class Movement {
                     w - west
                 """);
 
-            switch (sc.nextLine().toLowerCase()){
+            String inputFromPlayer = sc.nextLine().toLowerCase();
+            PlayerInput input = new PlayerInput();
+            if(input.commandInput(inputFromPlayer)){
+                continue;
+            }
+
+            switch (inputFromPlayer){
                 case "n": return "north";
                 case "s": return "south";
                 case "e": return "east";

@@ -2,6 +2,7 @@ package ExerciseTwo.Service;
 
 import ExerciseTwo.Entities.Enemy.Enemy;
 import ExerciseTwo.Entities.Player;
+import ExerciseTwo.Game.PlayerInput;
 import ExerciseTwo.Utils.GenerateMonster;
 import ExerciseTwo.Utils.PrintText;
 
@@ -25,14 +26,20 @@ public class Combat {
 
     public boolean makeAttack(Scanner sc){
 
-        //move to handling input and return value
         while (true) {
             System.out.println("""
                     Make your choice:
                         a - attack
                         r - run
                     """);
-            switch (sc.nextLine().toLowerCase()) {
+
+            String inputFromPlayer = sc.nextLine().toLowerCase();
+            PlayerInput input = new PlayerInput();
+            if(input.commandInput(inputFromPlayer)){
+                continue;
+            }
+
+            switch (inputFromPlayer) {
                 case "a":
                     return true;
                 case "r":

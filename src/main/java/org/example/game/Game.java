@@ -43,7 +43,7 @@ public class Game {
 
     private void continueStory() {
         System.out.println("\n-Listen carefully now..");
-        System.out.println("Hey, " + player.getName() + "! ARE YOU PAYING ATTENTION?");
+        System.out.println("Hey, " + player.getName() + "! Are you PAYING ATTENTION?");
 
 
     }
@@ -146,6 +146,15 @@ public class Game {
                 }
                 break;
 
+            case "unlock":
+            case "open":
+                if (words.length > 1 && words[1].equalsIgnoreCase("door")) {
+                    unlockDoor();
+                } else {
+                    System.out.println("Unlock what? Try 'unlock door'");
+                }
+                break;
+
             case "attack":
             case "fight":
                 attackEnemy();
@@ -155,6 +164,12 @@ public class Game {
             case "h":
                 showHelp();
                 break;
+
+            case"stuck":
+                System.out.println("Here are a few tips:");
+                System.out.println("Items you see needs to be picked up first");
+                System.out.println("Healing potions can be used to heal your health");
+
 
             case "quit":
                 gameRunning = false;
@@ -211,6 +226,7 @@ public class Game {
             player.removeItem(item);
             System.out.println("You used " + item.getName() + " and healed " +
                     healingItem.getHealingValue() + " HP!");
+            System.out.println("You now have " + player.getHealth() + " HP.");
         } else {
             System.out.println("You can't use that item!");
         }
@@ -247,6 +263,29 @@ public class Game {
         }
     }
 
+    private void unlockDoor() {
+        if (currentRoom.getName().equals("Troll's Lair")) {
+            if (player.findItem("Golden Key") != null) {
+                if (!currentRoom.hasAliveEnemies()) {
+                    System.out.println("\n=== You insert the Golden Key into the massive door... ===");
+                    System.out.println("=== *CLICK* The door unlocks with a satisfying sound! ===");
+                    System.out.println("\n=== The door swings open, revealing bright sunlight! ===");
+                    System.out.println("=== You step outside and breathe fresh air for the first time in ages. ===");
+                    System.out.println("\n=== 🎉 CONGRATULATIONS! YOU HAVE ESCAPED THE DARK CAVE! 🎉 ===");
+                    System.out.println("\n=== Thade's corruption is broken, and you are finally free! ===");
+                    System.out.println("\n=== Thanks for playing " + player.getName() + "! ===");
+                    gameRunning = false;
+                } else {
+                    System.out.println("You can't unlock the door while the troll is still alive!");
+                }
+            } else {
+                System.out.println("You need the Golden Key to unlock this door!");
+            }
+        } else {
+            System.out.println("There's no door to unlock here.");
+        }
+    }
+
     private void showHelp() {
         System.out.println("\n=== Available Commands ===");
         System.out.println("go <direction> - Move (north, south, east, west)");
@@ -254,10 +293,12 @@ public class Game {
         System.out.println("take <item>    - Pick up an item");
         System.out.println("inventory      - Show your items");
         System.out.println("stats          - Show your health and damage");
-        System.out.println("use            - Use healing potion");
-        System.out.println("equip          - Equip weapon");
+        System.out.println("use <item>     - Use healing potion");
+        System.out.println("equip <item>   - Equip weapon");
         System.out.println("attack         - Fight enemies in the room");
+        System.out.println("unlock         - Unlock door");
         System.out.println("help           - Show this help");
+        System.out.println("stuck          - Get some tips..");
         System.out.println("quit           - Exit game");
     }
 
@@ -283,7 +324,7 @@ public class Game {
                 "A long, narrow corridor. You hear growling in the distance.");
 
         Room trollLair = new Room("Troll's Lair",
-                "A massive chamber. The exit door is here, but a huge troll blocks your way!");
+                "A massive chamber. The exit door is here! \nYou could try and unlock it..");
 
         // Connect rooms
         startCave.addExit("east", weaponChamber);
@@ -308,14 +349,19 @@ public class Game {
         // Add items
         Weapon sword = new Weapon("Sword", "An rusty old sword", "Weapon", 1, 15);
         Healing potion = new Healing("Healing Potion", "A red liquid that smells of herbs", "Healing", 1, 30);
+        Healing herb = new Healing("Healing Herb", "A green leaf with a cross on it", "Healing", 1, 30);
+        Key goldenKey = new Key("Golden Key", "This golden key can open any locked door", "Key", 1);
+
 
         weaponChamber.addItem(sword);
         startCave.addItem(potion);
+        bluePrisonCell.addItem(herb);
+        bluePrisonCell.addItem(goldenKey);
 
         // Add enemies
-        Enemy bat = new Enemy("Bat", "A small and aggressive creature", 10, 5);
+        Enemy bat = new Enemy("Bat", "A small and aggressive creature", 20, 5);
         Enemy goblin = new Enemy("Cave Goblin", "A small but vicious creature", 30, 10);
-        Enemy troll = new Enemy("Giant Troll", "The massive guardian of the exit", 80, 30);
+        Enemy troll = new Enemy("Giant Troll", "The massive guardian of the exit", 60, 20);
         Enemy thade = new Enemy("Thade", "Just a dark human shape", 50, 30);
 
         weaponChamber.addEnemy(bat);

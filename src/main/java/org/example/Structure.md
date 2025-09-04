@@ -1,10 +1,10 @@
 ## Project Structure
 
-- **entities/:** Player, enemies,items,tile?
-- **map/:**  Dungeon grid,room,tiles -Dungeon generation and display
-- **game/:** loop and input handling
-- **service/:** combat and movement
-- **utils/:** random number generation (maybe?)
+- **entities/**: Player, Enemy subclasses, Item hierarchy, Tile
+- **map/**:  Dungeon grid, rooms, tiles — generation and display
+- **game/**: Game loop and input handling
+- **service/**: Combat and movement services
+- **utils/**: Random number generation
 
 ## Key features
 

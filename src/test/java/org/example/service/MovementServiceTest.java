@@ -12,7 +12,9 @@ class MovementServiceTest {
 
     @Test void moveNorth_Valid() {
         // (2,2) is player pos, (2,1) must be valid
-        boolean[][] map = {{true, true, true}, {true, false, true}, {false, true, true},};
+        boolean[][] map = {{true, true, true, true, true}, {true, false, true,
+          true, true}, {false, true, true, true, true}, {true, true, true, true,
+          true}, {true, true, true, true, true},};
 
         var dungeon = new mockDungeonGenerator(map);
         var player = new MockPlayer(2, 2);
@@ -25,7 +27,9 @@ class MovementServiceTest {
     }
 
     @Test void moveEast_intoWall() {
-        boolean[][] map = {{true, true, false}, {true, true, false}, {true, true, false},};
+        boolean[][] map = {{true, true, false, true, true}, {true, true, false,
+          true, true}, {true, true, false, true, true}, {true, true, true, true,
+          true}, {true, true, true, true, true},};
 
         var dungeon = new mockDungeonGenerator(map);
         var player = new MockPlayer(1, 1); // (2,1) is a wall
@@ -37,7 +41,9 @@ class MovementServiceTest {
     }
 
     @Test void moveInvalidDirection() {
-        boolean[][] map = {{true, true, true,}, {true, true, true,}, {true, true, true,}};
+        boolean[][] map = {{true, true, true, true, true}, {true, true, true, true
+          , true}, {true, true, true, true, true}, {true, true, true, true, true},
+          {true, true, true, true, true},};
         var dungeon = new mockDungeonGenerator(map);
         var player = new MockPlayer(1, 1); // (2,1) is a wall
         boolean moved = MovementService.movePlayer(player, "poop", dungeon);

@@ -1,8 +1,8 @@
 package org.example.entities;
 
-public class cowKing extends Enemy {
+public class CowKing extends Enemy {
 
-    public cowKing() {
+    public CowKing() {
         super("Mr Cow", 48, 14);
     }
 

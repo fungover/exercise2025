@@ -92,15 +92,18 @@ public class DungeonGenerator {
     }
 
     private void addEnemies() {
-        //how many enemies we want to spawn between 3-6
+        //how many enemies we want to spawn between 3-7
         int numEnemies = RandomGenerator.nextInt(3, 7);
         for (int i = 0; i < numEnemies; i++) {
             int x, y;
+            int attempts = 0;
             do {
                 x = RandomGenerator.nextInt(1, width - 1);
                 y = RandomGenerator.nextInt(1, height - 1);
-            } while (!grid[y][x].isEmpty() ||
-              (x == playerStartX && y == playerStartY));
+            } while (
+              (!grid[y][x].isEmpty() || (x == playerStartX && y == playerStartY)) &&
+                ++attempts < MAX_PLACEMENT_ATTEMPTS);
+            if (attempts >= MAX_PLACEMENT_ATTEMPTS) break;
 
             int roll = RandomGenerator.nextInt(0, 3);
             Enemy enemy;
@@ -108,7 +111,7 @@ public class DungeonGenerator {
             switch (roll) {
                 case 0 -> enemy = new Goblin();
                 case 1 -> enemy = new Orc();
-                case 2 -> enemy = new cowKing();
+                case 2 -> enemy = new CowKing();
                 default -> throw new IllegalStateException("Invalid roll " + roll);
             }
 
@@ -124,11 +127,14 @@ public class DungeonGenerator {
         int numItems = RandomGenerator.nextInt(2, 6);
         for (int i = 0; i < numItems; i++) {
             int x, y;
+            int attempts = 0;
             do {
                 x = RandomGenerator.nextInt(1, width - 1);
                 y = RandomGenerator.nextInt(1, height - 1);
-            } while (!grid[y][x].isEmpty() ||
-              (x == playerStartX && y == playerStartY));
+            } while (
+              (!grid[y][x].isEmpty() || (x == playerStartX && y == playerStartY)) &&
+                ++attempts < MAX_PLACEMENT_ATTEMPTS);
+            if (attempts >= MAX_PLACEMENT_ATTEMPTS) break;
 
             Item item;
             int itemType = RandomGenerator.nextInt(0, 3);

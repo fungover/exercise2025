@@ -3,14 +3,26 @@ package org.example.service;
 import org.example.entities.Player;
 import org.example.map.DungeonGenerator;
 
+import java.util.Locale;
+import java.util.Objects;
+
 public class MovementService {
 
-    public static boolean movePlayer(Player player, String direction, DungeonGenerator dungeon) {
+    public static boolean movePlayer(Player player, String direction,
+                                     DungeonGenerator dungeon) {
+        Objects.requireNonNull(player, "player");
+        Objects.requireNonNull(dungeon, "dungeon");
+        if (direction == null || direction.isBlank()) {
+            System.out.println(
+              "Invalid direction! Use: north, south, east, west (or n, s, e, w).");
+            return false;
+        }
         int newX = player.getX();
         int newY = player.getY();
         String fullDirection;
 
-        switch (direction.toLowerCase()) {
+        final String dir = direction.toLowerCase(Locale.ROOT);
+        switch (dir) {
             case "north":
             case "n":
                 newY--;
@@ -32,7 +44,9 @@ public class MovementService {
                 fullDirection = "West";
                 break;
             default:
-                System.out.println("Invalid direction! Use: north, south, east, west (or n, s, e, w");
+                System.out.println(
+                  "Invalid direction! Use: north, south, east, west (or n, s, e, " +
+                    "w).");
                 return false;
         }
         if (dungeon.isValidPosition(newX, newY)) {

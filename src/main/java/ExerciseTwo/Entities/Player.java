@@ -1,17 +1,19 @@
 package ExerciseTwo.Entities;
 
-import ExerciseTwo.Service.PrintText;
+import ExerciseTwo.Entities.Weapons.ThunderSword;
+import ExerciseTwo.Entities.Weapons.Weapon;
+import ExerciseTwo.Utils.PrintText;
 
 public final class Player {
     
     private String playerName;
-    private int attack;
     private int health;
+    private int weapon;
 
     public Player(String playerName) {
         this.playerName = playerName;
-        this.attack = -10;
         this.health = 100;
+        this.weapon = new ThunderSword().getDamage();
     }
     public Player(){}
 
@@ -32,8 +34,12 @@ public final class Player {
         return health;
     }
 
-    public int getPlayerAttack(){
-        return attack;
+    public void setWeapon(Weapon weapon){
+        this.weapon = weapon.getDamage();
+    }
+
+    public int getWeapon(){
+        return weapon;
     }
 
     public void presentPlayer(){

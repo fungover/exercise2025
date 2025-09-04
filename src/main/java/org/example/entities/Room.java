@@ -68,7 +68,7 @@ public class Room {
 
     // Display methods
     public void look() {
-        System.out.println("=== " + name + " ===");
+        System.out.println("\n=== " + name + " ===");
         System.out.println(description);
 
         //Show exits

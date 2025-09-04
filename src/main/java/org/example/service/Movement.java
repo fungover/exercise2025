@@ -4,7 +4,7 @@ import org.example.entities.Player;
 import org.example.map.Room;
 import org.example.map.Tile;
 
-public class MovementInput {
+public class Movement {
 
     public void renderPlayerPos(Room room, int x, int y) {
         // Here grid[i][j] == grid[y][x] from Room class
@@ -18,35 +18,37 @@ public class MovementInput {
         room.setGrid(y, x, Tile.PLAYER.getTile());
     }
 
-    public void moveInput(String input, Player player, Room room) {
-        ActionInput actionInput = new ActionInput();
+    public void moveInput(Room room, Player player, String dir) {
+        Action action = new Action();
+        dir = dir.toLowerCase();
+
         int x = player.getX();
         int y = player.getY();
 
-        switch (input) {
-            case "North", "N":
-                if (actionInput.walkable(room, y-1, x))
+        switch (dir) {
+            case "move north", "n":
+                if (action.walkable(room, y-1, x))
                     player.setPosition(x, y-1);
-                actionInput.fightEnemy(room, y-1, x);
-                actionInput.pickItem(room, y-1, x);
+                action.fightEnemy(room, y-1, x);
+                action.pickItem(room, y-1, x);
                 break;
-            case "South", "S":
-                if (actionInput.walkable(room, y+1, x))
+            case "move south", "s":
+                if (action.walkable(room, y+1, x))
                     player.setPosition(x, y + 1);
-                actionInput.fightEnemy(room, y+1, x);
-                actionInput.pickItem(room, y+1, x);
+                action.fightEnemy(room, y+1, x);
+                action.pickItem(room, y+1, x);
                 break;
-            case "East", "E":
-                if (actionInput.walkable(room, y, x+1))
+            case "move east", "e":
+                if (action.walkable(room, y, x+1))
                     player.setPosition(x + 1, y);
-                actionInput.fightEnemy(room, y, x+1);
-                actionInput.pickItem(room, y, x+1);
+                action.fightEnemy(room, y, x+1);
+                action.pickItem(room, y, x+1);
                 break;
-            case "West", "W":
-                if (actionInput.walkable(room, y, x-1))
+            case "move west", "w":
+                if (action.walkable(room, y, x-1))
                     player.setPosition(x - 1, y);
-                actionInput.fightEnemy(room, y, x-1);
-                actionInput.pickItem(room, y, x-1);
+                action.fightEnemy(room, y, x-1);
+                action.pickItem(room, y, x-1);
                 break;
             default:
                 System.out.println("Invalid input, only type what is displayed.");

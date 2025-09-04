@@ -2,27 +2,23 @@ package org.example;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.service.Warehouse;
 
-import java.time.LocalDate;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
-        try {
 
-            Product okProduct = new Product("1", "Laptop", Category.ELECTRONICS, 8, LocalDate.now(), LocalDate.now());
-            System.out.println("Created product: " + okProduct);
+        Warehouse warehouse = new Warehouse();
 
-            Product badProduct = new Product("2", "   ", Category.ELECTRONICS, 8, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(Warehouse.createProduct("1", "Gaming Laptop", Category.ELECTRONICS, 9));
+        warehouse.addProduct(Warehouse.createProduct("2", "Running Shoes", Category.SPORTS, 8));
+        warehouse.addProduct(Warehouse.createProduct("3", "Java Book", Category.BOOKS, 7));
+        warehouse.addProduct(Warehouse.createProduct("4", "Javascript Book", Category.BOOKS, 10));
+        warehouse.addProduct(Warehouse.createProduct("5", "Gaming Mouse", Category.ELECTRONICS, 8));
 
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error captured: " + e.getMessage());
-        }
-        try {
-            // Detta borde krascha - dåligt rating
-            Product badRating = new Product("3", "Laptop", Category.ELECTRONICS,
-                    15, LocalDate.now(), LocalDate.now());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error captured " + e.getMessage());
-        }
+        System.out.println("\n=== ELECTRONICS (SORTED BY NAME) ===");
+        List<Product> electronics = warehouse.getProductsByCategorySorted(Category.BOOKS);
+        electronics.forEach(System.out::println);
     }
 }

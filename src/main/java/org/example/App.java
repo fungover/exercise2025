@@ -22,7 +22,7 @@ public class App {
             Product badRating = new Product("3", "Laptop", Category.ELECTRONICS,
                     15, LocalDate.now(), LocalDate.now());
         } catch (IllegalArgumentException e) {
-            System.out.println("Fel fångat: " + e.getMessage());
+            System.out.println("Error captured " + e.getMessage());
         }
     }
 }

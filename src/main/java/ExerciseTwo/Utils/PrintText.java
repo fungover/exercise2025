@@ -1,4 +1,4 @@
-package ExerciseTwo.Service;
+package ExerciseTwo.Utils;
 
 public class PrintText {
 

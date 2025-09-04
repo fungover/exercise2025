@@ -68,7 +68,7 @@ public class Movement {
             }
             case "G" -> {
                 position.setPosition(playerRow, playerCol);
-                return "gift";
+                return "coin";
             }
             case "D" -> {
                 position.setPosition(playerRow, playerCol);

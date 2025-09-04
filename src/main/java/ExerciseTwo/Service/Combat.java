@@ -3,6 +3,7 @@ package ExerciseTwo.Service;
 import ExerciseTwo.Entities.Enemy.Enemy;
 import ExerciseTwo.Entities.Player;
 import ExerciseTwo.Utils.GenerateMonster;
+import ExerciseTwo.Utils.PrintText;
 
 import java.util.Scanner;
 
@@ -66,7 +67,7 @@ public class Combat {
     }
 
     public void gameOver() {
-        System.out.println("Game over!");
+        System.out.println("You are dead"+Emojis.skull+" Game over!");
         System.exit(0);
     }
 

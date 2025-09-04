@@ -48,7 +48,7 @@ public class GameLogic {
 
             if(event.equals("potion")){
                 potion.itemFound();
-                HandleFinds handleItem = new HandleFinds(potion);
+                HandleFinds handleItem = new HandleFinds();
                 boolean answer = handleItem.addFind(sc);
                 if(answer){
                     inventory.addItem(potion);
@@ -56,9 +56,9 @@ public class GameLogic {
                 }
             }
 
-            if(event.equals("gift")){
+            if(event.equals("coin")){
                 coin.itemFound();
-                HandleFinds handleItem = new HandleFinds(coin);
+                HandleFinds handleItem = new HandleFinds();
                 boolean answer = handleItem.addFind(sc);
                 if(answer){
                     inventory.addItem(potion);

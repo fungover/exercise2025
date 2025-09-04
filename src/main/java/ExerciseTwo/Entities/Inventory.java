@@ -8,6 +8,7 @@ public class Inventory {
 
     public void addItem(Item item) {
         inventory.add(item);
+        System.out.println("Item added to inventory");
     }
 
     public void removeItem(Item item) {

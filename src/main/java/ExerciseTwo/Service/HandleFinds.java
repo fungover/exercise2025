@@ -6,12 +6,6 @@ import java.util.Scanner;
 
 public class HandleFinds {
 
-    private Item item;
-
-    public HandleFinds(Item item) {
-        this.item = item;
-    }
-
     public boolean addFind(Scanner sc){
         while (true) {
             System.out.println("Do you want to add your find to your inventory y/n?");

@@ -12,24 +12,49 @@ public class App {
 
         Warehouse warehouse = new Warehouse();
 
-        // New products (created today)
+// Products created today.
         warehouse.addProduct(Warehouse.createProduct("1", "Gaming Laptop", Category.ELECTRONICS, 9));
         warehouse.addProduct(Warehouse.createProduct("2", "New Running Shoes", Category.SPORTS, 8));
+        warehouse.addProduct(Warehouse.createProduct("11", "Tennis Racket", Category.SPORTS, 8));
+        warehouse.addProduct(Warehouse.createProduct("13", "Organic Coffee", Category.FOOD, 9));
 
-        // Older products (3 days ago)
+// Products created 1 day ago.
+        warehouse.addProduct(Warehouse.createOldProduct("15", "Smartphone", Category.ELECTRONICS, 10, 1));
+
+// Products created 2 days ago.
+        warehouse.addProduct(Warehouse.createOldProduct("14", "Chocolate Bar", Category.FOOD, 6, 2));
+
+// Products created 3 days ago.
         warehouse.addProduct(Warehouse.createOldProduct("3", "Java Book", Category.BOOKS, 7, 3));
         warehouse.addProduct(Warehouse.createOldProduct("4", "Gaming Mouse", Category.ELECTRONICS, 8, 3));
 
-        // older products (7 days ago)
+// Products created 5 days ago.
+        warehouse.addProduct(Warehouse.createOldProduct("9", "Winter Jacket", Category.CLOTHING, 7, 5));
+
+// Products created 7 days ago.
         warehouse.addProduct(Warehouse.createOldProduct("5", "JavaScript Book", Category.BOOKS, 6, 7));
         warehouse.addProduct(Warehouse.createOldProduct("6", "Old T-shirt", Category.CLOTHING, 5, 7));
 
-        // older products (30 days ago)
+// Products created 10 days ago.
+        warehouse.addProduct(Warehouse.createOldProduct("10", "Office Chair", Category.FURNITURE, 6, 10));
+
+// Products created 12 days ago.
+        warehouse.addProduct(Warehouse.createOldProduct("16", "Python Book", Category.BOOKS, 8, 12));
+
+// Products created 14 days ago.
+        warehouse.addProduct(Warehouse.createOldProduct("12", "LEGO Set", Category.TOYS, 9, 14));
+
+// Produkter skapade för 30 dagar sedan.
         warehouse.addProduct(Warehouse.createOldProduct("7", "Ancient Furniture", Category.FURNITURE, 4, 30));
 
-        // specific date product (Christmas Toy, created on Dec 24, 2024)
+// Products created with specific dates.
+
+        warehouse.addProduct(Warehouse.createProductWithDate("17", "Summer Dress", Category.CLOTHING, 7,
+                LocalDate.of(2025, 6, 15)));
+
         warehouse.addProduct(Warehouse.createProductWithDate("8", "Christmas Toy", Category.TOYS, 10,
                 LocalDate.of(2024, 12, 24)));
+
 
         System.out.println("=== ALL PRODUCTS ===");
         warehouse.getAllProducts().forEach(System.out::println);

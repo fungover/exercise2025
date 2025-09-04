@@ -7,6 +7,7 @@ import org.example.service.Warehouse;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class App {
@@ -58,8 +59,15 @@ public class App {
                 LocalDate.of(2024, 12, 24)));
 
 
-        System.out.println("=== ALL PRODUCTS ===");
+        System.out.println("\n=== ALL PRODUCTS ===");
         warehouse.getAllProducts().forEach(System.out::println);
+
+        System.out.println("\n=== GETTING A PRODUCT BY ID ===");
+        Optional<Product> found = warehouse.getProductById("1");
+        System.out.println("Product with ID 1: " + found);
+
+        Optional<Product> notFound = warehouse.getProductById("999");
+        System.out.println("Product with ID 999: " + notFound);
 
         System.out.println("\n=== ELECTRONICS (SORTED BY NAME) ===");
         List<Product> electronics = warehouse.getProductsByCategorySorted(Category.ELECTRONICS);

@@ -1,5 +1,6 @@
 package org.example.game;
 
+import org.example.entities.Item;
 import org.example.entities.Manifesto;
 import org.example.entities.Player;
 import org.example.map.FarmageddonMap;
@@ -7,6 +8,8 @@ import org.example.service.MapService;
 import org.example.service.CombatService;
 import org.example.service.MovementService;
 import org.example.service.InventoryService;
+
+import java.util.Optional;
 
 public class Game {
     private Player player;
@@ -45,6 +48,7 @@ public class Game {
         System.out.println("Welcome, " + name + "! The animals have sensed your arrival...");
         System.out.println("You wake up in the middle of a chaotic barn where the animals have gone rogue.");
         System.out.println("Your goal: survive, explore, and uncover the mystery behind the madness.");
+        System.out.println("To win you have to find and use the Manifesto of the Farmageddon.");
         System.out.println();
         System.out.println("HOW TO PLAY:");
         System.out.println("- The game is turn-based. You type one command per turn.");
@@ -56,7 +60,7 @@ public class Game {
         System.out.println("• look → Describe your current tile (wall, enemy, item, etc.)");
         System.out.println("• attack → Attack an enemy if one is present");
         System.out.println("• inventory → View your current items");
-        System.out.println("• use [item name] → Use an item from your inventory (e.g. potion)");
+        System.out.println("• use [item name] → Use an item from your inventory or use Manifesto to win");
         System.out.println("• health → Check your health status");
         System.out.println("• help → Show this help menu again");
         System.out.println();
@@ -78,17 +82,37 @@ public class Game {
         System.out.println("Oh no! You died! Game over. Better luck next time " + name + "!");
     }
 
-    private Manifesto getManifesto() {
-        return player.getInventory().stream()
-                .filter(item -> item instanceof Manifesto)
-                .map(item -> (Manifesto) item)
-                .findFirst()
-                .orElse(null);
+    private void useItem(String itemName) {
+        Optional<Item> optionalItem = player.getInventory().stream()
+                .filter(i -> i.getName().equalsIgnoreCase(itemName.trim()))
+                .findFirst();
+
+        optionalItem.ifPresentOrElse(item -> {
+            item.use(player);
+            player.removeItem(item);
+
+            //win the game and shut it down
+            if (item instanceof Manifesto) {
+                Manifesto manifesto = (Manifesto) item;
+                System.out.println("\n" + manifesto.getWinMessage());
+                System.out.println("Congratulations, " + player.getName() + "! You win!");
+                player.removeItem(item);
+                System.exit(0);
+            }
+        }, () -> {
+            System.out.println("You don't have an item called '" + itemName + "'.");
+        });
     }
 
 
-
     private void handleCommand(String input) {
+
+        if (input.startsWith("use ")) {
+            String itemName = input.substring(4).trim();
+            useItem(itemName);
+            return;
+        }
+
         switch (input) {
             case "move north" -> movementService.move(player, map, 0, -1);
             case "move south" -> movementService.move(player, map, 0, 1);
@@ -99,13 +123,6 @@ public class Game {
             case "attack" -> combatService.attack(player, map);
             case "health" -> System.out.println("Health: " + player.getHealth() + "/" + player.getMaxHealth());
             default -> System.out.println("Unknown command. Try again");
-        }
-
-        Manifesto manifesto = getManifesto();
-        if (manifesto != null) {
-            System.out.println("\n " + manifesto.getWinMessage());
-            System.out.println("Congratulations, " + player.getName() + "! You win!");
-            System.exit(0);
         }
     }
 }

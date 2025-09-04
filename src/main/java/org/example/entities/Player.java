@@ -51,6 +51,10 @@ public class Player {
         inventory.add(item);
     }
 
+    public void removeItem(Item item){
+        inventory.remove(item);
+    }
+
     public boolean isAlive() {
         return health > 0;
     }

@@ -15,7 +15,11 @@ public abstract class Enemy {
         this.position = position;
     }
 
-    public abstract void attack();
+    public int getDamage() {
+        return damage;
+    }
+
+    public abstract void attack(Player player);
 
     public void takeDamage(int damageAmount) {
         health -= damageAmount;

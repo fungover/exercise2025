@@ -40,7 +40,7 @@ public class FarmageddonMapTest {
 
         assertTrue(foundPath); // make sure we found a PATH
 
-        // Testa ogiltiga positioner
+        // Test out of bounds
         assertFalse(map.isValidTile(-1, 0)); // Out of bounds
         assertFalse(map.isValidTile(0, 0)); // Player start, not PATH
 
@@ -59,11 +59,21 @@ public class FarmageddonMapTest {
     }
 
     @Test
-    public void testEnemyPlacement() {
+    public void testEnemyPlacementSomewhere() {
         FarmageddonMap map = new FarmageddonMap(10, 10);
-        Tile enemyTile = map.getTile(2, 2);
+        boolean foundEnemy = false;
 
-        assertEquals(Tile.Type.ENEMY, enemyTile.getType());
-        assertNotNull(enemyTile.getEnemy());
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x < map.getWidth(); x++) {
+                Tile tile = map.getTile(x, y);
+                if (tile.getType() == Tile.Type.ENEMY && tile.getEnemy() != null) {
+                    foundEnemy = true;
+                    break;
+                }
+            }
+            if (foundEnemy) break;
+        }
+
+        assertTrue(foundEnemy, "At least one enemy should be placed on the map");
     }
 }

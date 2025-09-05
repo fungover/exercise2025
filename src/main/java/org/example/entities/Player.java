@@ -38,11 +38,13 @@ public class Player {
     }
 
     public void takeDamage(int amount) {
+        if (amount <= 0) return;
         health -= amount;
         if (health < 0) health = 0;
     }
 
     public void heal(int amount) {
+        if (amount <= 0) return;
         health += amount;
         if (health > maxHealth) health = maxHealth;
     }
@@ -52,6 +54,10 @@ public class Player {
     }
 
     public void removeItem(Item item){
+        if (item == null) return;
+        if (item instanceof Weapon) {
+            throw new IllegalStateException("Weapons cannot be removed from inventory.");
+        }
         inventory.remove(item);
     }
 

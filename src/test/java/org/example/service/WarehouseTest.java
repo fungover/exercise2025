@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -316,5 +317,28 @@ class WarehouseTest {
         long toysCount = warehouse.countProductsInCategory(Category.TOYS); // Attempt to count products in the TOYS category when none exist
 
         assertEquals(0, toysCount); // Verify that the count is 0
+    }
+
+    // ========================================
+    // TESTS FOR getProductsInitialsMap()
+    // ========================================
+
+    @Test
+    @DisplayName("Should return products initials map correctly")
+    void getProductInitialsMapSuccessfullyWhenThereAreProducts() {
+
+        Product apple = Warehouse.createProduct("1", "Apple", Category.FOOD, 8);
+        Product banana = Warehouse.createProduct("2", "Banana", Category.FOOD, 7);
+        Product appleJuice = Warehouse.createProduct("3", "Apple Juice", Category.FOOD, 9);
+
+        warehouse.addProduct(apple);
+        warehouse.addProduct(banana);
+        warehouse.addProduct(appleJuice);
+
+        Map<Character, Integer> initials = warehouse.getProductInitialsMap(); // Retrieve the map of product initials and their counts
+
+        assertEquals(2, initials.size()); // Verify that there are 2 unique initials
+        assertEquals(2, initials.get('A')); // 'A' for Apple and Apple Juice
+        assertEquals(1, initials.get('B')); // 'B' for Banana
     }
 }

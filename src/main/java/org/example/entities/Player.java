@@ -95,4 +95,14 @@ public class Player {
         }
         item.getEffect().apply(this);
     }
+
+    public void moveTo(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + health + " health, " + baseDamage + " base damage, " + inventory.size() + " items)";
+    }
 }

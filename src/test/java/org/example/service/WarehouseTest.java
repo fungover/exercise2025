@@ -283,4 +283,29 @@ class WarehouseTest {
 
         assertTrue(categories.isEmpty()); // Verify that the result is an empty set
     }
+
+    // ========================================
+    // TESTS FOR countProductsInCategory(Category category)
+    // ========================================
+
+    @Test
+    @DisplayName("Should count product in a category correctly")
+    void countProductsInCategorySuccessfullyWhenThereAreProductsInCategory() {
+
+        Product laptop = Warehouse.createProduct("1", "Laptop", Category.ELECTRONICS, 9);
+        Product mouse = Warehouse.createProduct("2", "Mouse", Category.ELECTRONICS, 7);
+        Product book = Warehouse.createProduct("3", "Book", Category.BOOKS, 3);
+
+        warehouse.addProduct(laptop);
+        warehouse.addProduct(mouse);
+        warehouse.addProduct(book);
+
+        long electronicsCount = warehouse.countProductsInCategory(Category.ELECTRONICS); // Count products in the ELECTRONICS category
+        long booksCount = warehouse.countProductsInCategory(Category.BOOKS); // Count products in the BOOKS category
+        long toysCount = warehouse.countProductsInCategory(Category.TOYS); // Count products in the TOYS category
+
+        assertEquals(2, electronicsCount); // Verify that there are 2 products in the ELECTRONICS category
+        assertEquals(1, booksCount); // Verify that there is 1 product in the BOOKS category
+        assertEquals(0, toysCount); // Verify that there are 0 products in the TOYS category
+    }
 }

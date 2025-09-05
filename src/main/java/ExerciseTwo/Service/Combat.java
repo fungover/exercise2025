@@ -57,11 +57,12 @@ public class Combat {
 
     public int enemyDamage(int attackOfPlayer){
         enemy.setHealth(attackOfPlayer);
+        PrintText.printGreen("You attacked your enemy and it received "+attackOfPlayer+" in damage");
         return enemy.getHealth();
     }
 
     public void enemyDefeated() {
-        PrintText.printRed("You defeated the enemy!");
+        PrintText.printYellow("You defeated the enemy!");
     }
 
     public int enemyAttack() {
@@ -70,11 +71,12 @@ public class Combat {
 
     public int playerDamage(int attackOfEnemy) {
         player.setHealth(attackOfEnemy);
+        PrintText.printRed("You were attacked and received "+attackOfEnemy+" in damge");
         return player.getHealth();
     }
 
     public void gameOver() {
-        System.out.println("You are dead"+Emojis.skull+" Game over!");
+        System.out.println("You are dead "+Emojis.skull+" Game over!");
         System.exit(0);
     }
 

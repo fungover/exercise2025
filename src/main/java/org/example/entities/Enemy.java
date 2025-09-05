@@ -25,5 +25,37 @@ public abstract class Enemy {
         this.health = health;
         this.attackBehavior = attackBehavior;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public AttackBehavior getAttackBehavior() {
+        return attackBehavior;
+    }
+
+    public boolean isAlive() {
+        return health > 0;
+    }
+
+    public void takeDamage(int damage) {
+        if (damage < 0) {
+            throw new IllegalArgumentException("Damage cannot be negative");
+        }
+        health = Math.max(0, health - damage);
+    }
+
+    public void attack(Player player) {
+        attackBehavior.attack(player);
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + health + ") " + attackBehavior;
+    }
 }
 

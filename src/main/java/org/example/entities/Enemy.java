@@ -28,6 +28,7 @@ public abstract class Enemy implements Hostile {
 
     // Methods
     public void takeDamage(int amount) {
+        if (amount <= 0) return;
         health -= amount;
         if (health < 0) health = 0;
     }

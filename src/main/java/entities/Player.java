@@ -15,6 +15,10 @@ public class Player {
         return health > 0;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void takeDamage(int damage) {
         health -= damage;
         if (isAlive()) {
@@ -45,6 +49,10 @@ public class Player {
                 System.out.println(item);
             }
         }
+    }
+
+    public void heal(int heal) {
+        health += heal;
     }
 
     public void attack(Enemy enemy) {

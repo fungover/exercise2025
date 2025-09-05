@@ -1,9 +1,8 @@
 package dungeoncrawler.enteties;
 
 public class Enemy extends Entity {
-    int hp;
-    int damage;
-    int strength;
+    private int hp;
+    private int strength;
 
     public Enemy(){
     }
@@ -14,15 +13,9 @@ public class Enemy extends Entity {
     public void setHp(int hp) {
         this.hp = hp;
     }
-
-    public int getDamage() {
-        return damage;
+    public void setStrength(int strength) {
+        this.strength = strength;
     }
-
-    public void setDamage(int damage) {
-        this.damage += damage;
-    }
-
 
     public int getStrength() {
         return strength;

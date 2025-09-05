@@ -22,6 +22,7 @@ public class ShoppingCart {
     }
 
     public void removeProduct(Product product) {
-        products.remove(product);
+        if( !products.remove(product))
+            throw new IllegalArgumentException("No such product");
     }
 }

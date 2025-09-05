@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ShoppingCartTest {
     ShoppingCart shoppingCart = new ShoppingCart();
@@ -37,5 +38,12 @@ public class ShoppingCartTest {
         //Assert - Then
         assertThat(shoppingCart.products()).isEmpty();
     }
+
+    @Test
+    public void removingNonExistingProductThrowsException() {
+        assertThatThrownBy(() -> shoppingCart.removeProduct(new Product("Apple", 4.0f)))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
 
 }

@@ -94,4 +94,39 @@ class WarehouseTest {
 
     }
 
+    @Test void getProductsByCategorySorted_valid() {
+        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
+        Product pc = new Product("PC", Category.ELECTRONICS, 4);
+        Product dogFood = new Product("DogFood", Category.FOOD, 2);
+        Product catFood = new Product("CatFood", Category.FOOD, 7);
+        warehouse.addProduct(lamp);
+        warehouse.addProduct(pc);
+        warehouse.addProduct(dogFood);
+        warehouse.addProduct(catFood);
+
+        List<Product> sortedByCategory = warehouse.getProductsByCategorySorted(
+          Category.FOOD);
+
+        assertEquals(2, sortedByCategory.size());
+
+        assertEquals("CatFood", sortedByCategory.get(0)
+                                                .name());
+        assertEquals("DogFood", sortedByCategory.get(1)
+                                                .name());
+    }
+
+    @Test void getProductsByCategorySorted_invalid() {
+        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
+        Product pc = new Product("PC", Category.ELECTRONICS, 4);
+        warehouse.addProduct(lamp);
+        warehouse.addProduct(pc);
+        List<Product> sortedByCategory = warehouse.getProductsByCategorySorted(
+          Category.FOOD);
+
+        assertEquals(0, sortedByCategory.size(),
+          "Should be 0, we have no Food items in our inventory");
+        assertNotNull(sortedByCategory);
+        assertTrue(sortedByCategory.isEmpty());
+    }
+
 }

@@ -23,6 +23,10 @@ public class App {
         System.out.println();
         iSeeBlackSheep(warehouse);
 
+        System.out.println("-".repeat(20));
+        warehouse.getProductsByCategorySorted(Category.FOOD)
+                 .forEach(System.out::println);
+
     }
 
     private static List<Product> getWarehouseProducts() {
@@ -30,8 +34,12 @@ public class App {
 
         products.add(new Product("laptop", Category.ELECTRONICS, 4));
         products.add(new Product("SlaughterBoat", Category.GAMES, 7));
-        products.add(new Product("cake", Category.FOOD, 10));
+        products.add(new Product("Cake", Category.FOOD, 10));
         products.add(new Product("DuckDetective", Category.GAMES, 8));
+        products.add(new Product("lamp", Category.ELECTRONICS, 10));
+        products.add(new Product("PC", Category.ELECTRONICS, 4));
+        products.add(new Product("DogFood", Category.FOOD, 2));
+        products.add(new Product("CatFood", Category.FOOD, 7));
 
 
         return products;

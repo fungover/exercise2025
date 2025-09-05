@@ -121,31 +121,17 @@ public class Game {
     // --- Use item ---
     private void handleUse(String arg) {
         if (arg == null || arg.isEmpty()) {
-            Printer.error("Ange vilket item du vill använda.");
+            utils.Printer.error("Ange vilket item du vill använda.");
             return;
         }
         try {
             int idx = Integer.parseInt(arg);
-            if (idx >= 0 && idx < player.getInventory().size()) {
-                player.use(player.getInventory().get(idx));
-                player.removeItem(player.getInventory().get(idx));
-                Printer.info("Du använde ett item från inventariet.");
-                return;
-            }
+            service.InventoryService.useItemByIndex(player, idx);
+            return;
         } catch (NumberFormatException ignored) {
-            // Om arg inte är ett nummer, försök matcha namn
+            // inte ett nummer -> fortsätt
         }
-
-        // Matcha namn
-        for (entities.Item item : player.getInventory()) {
-            if (item.getName().toLowerCase().contains(arg.toLowerCase())) {
-                player.use(item);
-                player.removeItem(item);
-                Printer.info("Du använde " + item.getName());
-                return;
-            }
-        }
-        Printer.error("Item hittades inte: " + arg);
+        service.InventoryService.useItemByName(player, arg);
     }
 
     // --- Fiendernas tur ---

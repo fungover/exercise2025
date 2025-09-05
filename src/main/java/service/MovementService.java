@@ -57,9 +57,9 @@ public class MovementService {
 
         // Item
         if (TileType.ITEM.equals(tile.getType()) && tile.getItem() != null) {
-            player.addItem(tile.pickUpItem());
-            Printer.info("Du plockade upp ett föremål!");
+            service.InventoryService.addItem(player, tile.pickUpItem(), service.InventoryService.DEFAULT_MAX_SLOTS);
         }
+
 
         // Enemy
         if (TileType.ENEMY.equals(tile.getType()) && tile.getEnemy() != null) {

@@ -14,6 +14,11 @@ public class CombatService {
         if (tile.getType() == Tile.Type.ENEMY && hostile != null) {
             System.out.println("Combat begins!");
 
+            if (hostile instanceof Enemy enemy) {
+                System.out.println("A " + enemy.getName() + " appears! (ATK: " + enemy.getDamage() +
+                        ", HP: " + enemy.getHealth() + "/" + enemy.getMaxHealth() + ")");
+            }
+
             // Enemy attacks first
             System.out.println("\n--- Enemy's turn ---");
             hostile.attack(player);
@@ -36,7 +41,8 @@ public class CombatService {
                     enemy.defeat(tile);
                 } else {
                     System.out.println("You dealt " + playerDamage + " damage!");
-                    System.out.println(enemy.getName() + " has " + enemy.getHealth() + "/" + enemy.getMaxHealth() + " HP left.");
+                    System.out.println(enemy.getName() + " has " + enemy.getHealth() + "/" +
+                            enemy.getMaxHealth() + " HP left.");
                 }
             }
 
@@ -49,7 +55,7 @@ public class CombatService {
         int totalDamage = BASE_DAMAGE;
         Item bestWeapon = null;
 
-        // Find weapon with highest damage in inventory
+        // Find weapon with highest damage in inventory and use it
         for (Item item : player.getInventory()) {
             if (item instanceof Weapon weapon) {
                 if (bestWeapon == null || weapon.getDamage() > ((Weapon) bestWeapon).getDamage()) {

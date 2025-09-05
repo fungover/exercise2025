@@ -8,7 +8,9 @@ public class GiantHeadlessChicken extends Enemy {
 
     @Override
     public void attack(Player player) {
-        player.takeDamage(damage);
-        System.out.println("In a whirlwind of feathers and confusion, the " + name + " stomps you for " + damage + " damage!");
+        int damageDealt = getDamage();
+        player.takeDamage(damageDealt);
+        System.out.println("In a whirlwind of feathers and confusion, the " + getName() +
+                " stomps you for " + damageDealt + " damage!");
     }
 }

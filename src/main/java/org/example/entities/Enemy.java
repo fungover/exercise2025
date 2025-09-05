@@ -52,8 +52,9 @@ public abstract class Enemy implements Hostile {
 
     // Can be overridden in subclasses
     public void attack(Player player) {
-        player.takeDamage(damage);
-        System.out.println(name + " attacks the player and does " + damage + " damage!");
+        int damageDealt = getDamage();
+        player.takeDamage(damageDealt);
+        System.out.println(getName() + " attacks the player and does " + damageDealt + " damage!");
     }
 }
 

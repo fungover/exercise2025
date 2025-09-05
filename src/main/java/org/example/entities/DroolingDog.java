@@ -9,7 +9,9 @@ public class DroolingDog extends Enemy {
 
     @Override
     public void attack(Player player) {
-        player.takeDamage(damage);
-        System.out.println("The " + name + " slobbers uncontrollably. You slip in the puddle and take " + damage + " damage!");
+        int damageDealt = getDamage();
+        player.takeDamage(damageDealt);
+        System.out.println("The " + getName() + " slobbers uncontrollably. You slip in the puddle and take " +
+                damageDealt + " damage!");
     }
 }

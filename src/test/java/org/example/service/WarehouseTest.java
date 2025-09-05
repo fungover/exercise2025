@@ -223,5 +223,21 @@ class WarehouseTest {
     // TESTS FOR getModifiedProducts()
     // ========================================
 
-    
+    @Test
+    @DisplayName("Should return modified products when products are modified")
+    void getModifiedProductsSuccessfullyWhenThereAreModifiedProducts() {
+
+        Product originalProduct = Warehouse.createOldProduct("1", "Original Product", Category.ELECTRONICS, 8, 3); // Create a product with a created date 3 days ago
+        Product unmodifiedProduct = Warehouse.createProduct("2", "Unmodified Product", Category.BOOKS, 7); // Create a product that will not be modified
+        warehouse.addProduct(originalProduct);
+        warehouse.addProduct(unmodifiedProduct);
+
+        warehouse.updateProduct("1", "Modified Product", Category.ELECTRONICS, 9); // Modify the first product
+        List<Product> modifiedProducts = warehouse.getModifiedProducts(); // Retrieve the list of modified products
+
+        assertEquals(1, modifiedProducts.size()); // Verify that there is 1 modified product
+        assertEquals("Modified Product", modifiedProducts.getFirst().name()); // Verify that the modified product has the updated name
+
+
+    }
 }

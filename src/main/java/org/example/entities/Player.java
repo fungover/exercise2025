@@ -86,6 +86,13 @@ public class Player {
         combatBehaviour.attack(enemy);
     }
 
+    public void addItem(Item item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Item cannot be null");
+        }
+        inventory.add(item);
+    }
+
     public void useItem(Item item) {
         if (item == null) {
             throw new IllegalArgumentException("Item cannot be null");

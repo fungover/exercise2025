@@ -349,4 +349,46 @@ class WarehouseTest {
         Map<Character, Integer> initials = warehouse.getProductInitialsMap(); // Attempt to retrieve the map of product initials when no products exist
         assertTrue(initials.isEmpty()); // Verify that the result is an empty map
     }
+
+    // ========================================
+    // TESTS FOR getTopRatedProductsThisMonth()
+    // ========================================
+
+    @Test
+    @DisplayName("Should return top rated products created this month sorted by newest first")
+    void getTopRatedProductsThisMonthSuccessfullyWhenThereAreTopRatedProducts() {
+
+        /*
+        To ensure we dont break this test in the future when the currect month changes,
+        we calculate the first day of the current month and create products based on that date.
+        Even though this might create product in the future, it will still be in the current month.
+        And the logic in the method we are testing only cares about the month, not the exact date.
+         */
+
+        LocalDate now = LocalDate.now(); // Current date
+        LocalDate startOfMonth = now.withDayOfMonth(1); // First day of the current month
+
+        Product olderProduct = Warehouse.createProductWithDate("1", "Older Product", Category.ELECTRONICS, 10,
+                startOfMonth.plusDays(2)); // Day 3 of current month
+        Product newerProduct = Warehouse.createProductWithDate("2", "Newer Product", Category.BOOKS, 10,
+                startOfMonth.plusDays(5)); // Day 6 of current month
+        Product newestProduct = Warehouse.createProductWithDate("3", "Newest Product", Category.SPORTS, 10,
+                startOfMonth.plusDays(8)); // Day 9 of current month
+        Product lowerRatedProduct = Warehouse.createProductWithDate("4", "Lower Rated", Category.FOOD, 8,
+                startOfMonth.plusDays(10)); // Should not appear in results
+
+        warehouse.addProduct(olderProduct);
+        warehouse.addProduct(newerProduct);
+        warehouse.addProduct(newestProduct);
+        warehouse.addProduct(lowerRatedProduct);
+
+        List<Product> topRated = warehouse.getTopRatedProductsThisMonth(); // Retrieve the top-rated products created this month
+
+        assertEquals(3, topRated.size());
+        assertTrue(topRated.stream().allMatch(product -> product.rating() == 10)); // Verify that all returned products have the highest rating of 10
+
+        assertEquals("Newest Product", topRated.get(0).name()); // Verify that the newest product is first
+        assertEquals("Newer Product", topRated.get(1).name()); // Verify that the newer product is second
+        assertEquals("Older Product", topRated.get(2).name()); // Verify that the older product is last
+    }
 }

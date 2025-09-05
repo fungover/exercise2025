@@ -11,8 +11,8 @@ public class ShoppingCartTest {
 
     @Test
     public void addingProductToCart() {
-        shoppingCart.add(new Product("Milk",14.5f));
-        List<Product> products =  shoppingCart.products();
+        shoppingCart.add(new Product("Milk", 14.5f));
+        List<Product> products = shoppingCart.products();
 
         assertThat(products)
                 .hasSize(1)
@@ -21,14 +21,21 @@ public class ShoppingCartTest {
 
     @Test
     public void calculateTotalCartPrice() {
-        shoppingCart.add(new Product("Milk",14.5f));
-        shoppingCart.add(new Product("Milk",14.5f));
-        shoppingCart.add(new Product("Banana",2.9f));
+        shoppingCart.add(new Product("Milk", 14.5f));
+        shoppingCart.add(new Product("Milk", 14.5f));
+        shoppingCart.add(new Product("Banana", 2.9f));
 
         assertThat(shoppingCart.totalPrice()).isEqualTo(31.9f);
     }
 
+    @Test
+    public void removeExistingProduct() {
+        //Arrange - Given
+        shoppingCart.add(new Product("Apple", 4.0f));
+        //Act - When
+        shoppingCart.removeProduct(new Product("Apple", 4.0f));
+        //Assert - Then
+        assertThat(shoppingCart.products()).isEmpty();
+    }
 
-
-    
 }

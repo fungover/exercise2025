@@ -20,4 +20,8 @@ public class ShoppingCart {
                 .mapToDouble(Product::price)
                 .sum();
     }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+    }
 }

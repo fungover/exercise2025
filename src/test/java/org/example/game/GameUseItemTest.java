@@ -30,16 +30,23 @@ class GameUseItemTest {
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private PrintStream originalOut;
+    private PrintStream captureOut;
 
     @BeforeEach
     void setUpStreams() {
         originalOut = System.out;
-        System.setOut(new PrintStream(outContent));
+        outContent.reset();
+        captureOut = new PrintStream(outContent);
+        System.setOut(captureOut);
     }
 
     @AfterEach
     void restoreStreams() {
         System.setOut(originalOut);
+        if (captureOut != null) {
+            captureOut.flush();
+            captureOut.close();
+        }
     }
 
 

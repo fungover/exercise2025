@@ -22,6 +22,7 @@ class CombatServiceTest {
     @BeforeEach
     void setUpStreams() {
         originalOut = System.out;
+        outContent.reset();
         System.setOut(new PrintStream(outContent));
     }
 
@@ -281,7 +282,7 @@ class CombatServiceTest {
         service.attack(player, map);
 
         String output = outContent.toString();
-        assertTrue(output.contains("A HeadlessChicken appears!"));
+        assertTrue(output.contains("A " + chicken.getName() + " appears!"));
         assertTrue(output.contains("ATK: 20")); // chicken damage
         assertTrue(output.contains("HP: 5/5")); // chicken health
     }

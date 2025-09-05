@@ -8,6 +8,7 @@ import org.example.entities.items.Weapon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -62,5 +63,22 @@ public class CombatServiceTest {
         combatService.battleEnemy(player, enemy, mockInputService);
 
         assertTrue(player.getHealth() < initialPlayerHP);
+    }
+
+    @Test
+    @DisplayName("Test that damage dealt and message have the same values")
+    void testDamageDealtAndMessageHaveSameValues() {
+        Weapon sameDamageWeapon = new Weapon("Same Min & Max Damage Weapon", "Same min and max damage", 10, 10);
+        player.setEquippedWeapon(sameDamageWeapon);
+
+        int initialHealth = enemy.getHealth();
+        int playerDamage = player.getDamage();
+
+        enemy.takeDamage(playerDamage);
+
+        String attackMessage = player.getAttackMessage(enemy, playerDamage);
+
+        assertThat(enemy.getHealth()).isEqualTo(20);
+        assertThat(attackMessage).isEqualTo("> TestPlayer attacks Goblin for 10 damage!");
     }
 }

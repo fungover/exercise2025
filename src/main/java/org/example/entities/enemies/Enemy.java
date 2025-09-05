@@ -81,7 +81,7 @@ public abstract class Enemy {
         }
     }
 
-    public abstract String getAttackMessage();
+    public abstract String getAttackMessage(int enemyDamage);
 
     public abstract String getDeathMessage();
 

@@ -7,8 +7,8 @@ public class GoblinKing extends Enemy {
     }
 
     @Override
-    public String getAttackMessage() {
-        return "The mighty " + getName() + " slashes you for " + getDamage() + " damage!";
+    public String getAttackMessage(int damage) {
+        return "The mighty " + getName() + " slashes you for " + damage + " damage!";
     }
 
     @Override

@@ -131,8 +131,8 @@ public class Player {
         inventory.addItem(item);
     }
 
-    public String getAttackMessage(Enemy enemy) {
-        return "> " + getName() + " attacks " + enemy.getName() + " for " + getDamage() + " damage!";
+    public String getAttackMessage(Enemy enemy, int damage) {
+        return "> " + getName() + " attacks " + enemy.getName() + " for " + damage + " damage!";
     }
 
     public String getDeathMessage(Enemy enemy) {

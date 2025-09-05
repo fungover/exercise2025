@@ -28,7 +28,7 @@ public class CombatService {
                 case 1:
                     int playerDamage = player.getDamage();
                     enemy.takeDamage(playerDamage);
-                    System.out.println(player.getAttackMessage(enemy));
+                    System.out.println(player.getAttackMessage(enemy, playerDamage));
                     Utils.newRow();
                     break;
 
@@ -54,7 +54,7 @@ public class CombatService {
             // Enemy attacks if still alive
             int enemyDamage = enemy.getDamage();
             player.takeDamage(enemyDamage);
-            System.out.println(enemy.getAttackMessage());
+            System.out.println(enemy.getAttackMessage(enemyDamage));
             Utils.newRow();
 
 

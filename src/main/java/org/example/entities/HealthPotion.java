@@ -9,7 +9,11 @@ public class HealthPotion extends Item {
     }
     @Override
     public void use(Player player) {
-        player.setHealth(player.getHealth() + healAmount);
-        System.out.println("You drank " + name + " and healed " + healAmount + " HP!");
+       int before = player.getHealth();
+       int after = Math.min(before + healAmount, player.getMaxHealth());
+        player.setHealth(after);
+
+        int healed = after - before; // Actual healed amount
+        System.out.println("You drank " + name + " and healed " + healed + " HP!");
     }
 }

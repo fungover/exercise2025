@@ -64,7 +64,8 @@ public class GameTests {
 
     @Test
     void usingPotionIncreasesHealth() {
-        Player player = new Player("Test", 50, 1, 1);
+        Player player = new Player("Test", 100, 1, 1);
+        player.setHealth(50);
         player.addItem(new HealthPotion("Small Potion", 20));
         int oldHP = player.getHealth();
 

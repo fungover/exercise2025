@@ -6,9 +6,11 @@ import java.util.List;
 public class Player extends Character {
     private int baseDamage = 6; // Hardcoded value for now
     private List<Item> inventory = new ArrayList<>();
+    private int maxHealth;
 
     public Player(String name, int health, int x, int y) {
         super(name, health, x, y);
+        this.maxHealth = health; // Starting max health
     }
     @Override
     public int getAttackDamage(){
@@ -17,6 +19,13 @@ public class Player extends Character {
 
     public int getInventoryCount() {
         return inventory.size();
+    }
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setHealth(int health) {
+        super.setHealth(Math.min(Math.max(0, health), maxHealth));
     }
 
     @Override
@@ -55,10 +64,10 @@ public class Player extends Character {
         int newY = getY() + dy;
 
         if (newX < 0 || newX >= grid.getWidth() || newY < 0 || newY >= grid.getHeight()) {
-          return;
+            return;
         }
         if (grid.getTiles(newX, newY).isWall()) {
-          return;
+            return;
         }
         setX(newX);
         setY(newY);

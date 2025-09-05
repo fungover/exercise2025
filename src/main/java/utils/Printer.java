@@ -11,65 +11,60 @@ public class Printer {
 
     public static void printWelcome() {
         System.out.println("=== Dungeon Crawler ===");
-        System.out.println("Skriv 'help' för kommandon.");
+        System.out.println("Type 'help' to see available commands.");
     }
 
     public static void printHelp() {
-        System.out.println("=== Kommandon ===");
-        System.out.println("Rörelse:");
-        System.out.println("  n/s/e/w eller move north|south|east|west");
-        System.out.println();
-        System.out.println("Strid:");
-        System.out.println("  attack   (attackerar fiende på samma ruta)");
-        System.out.println();
-        System.out.println("Föremål:");
-        System.out.println("  inventory   (lista dina items)");
-        System.out.println("  use <item>  (ange namn eller index, ex. 'use potion' eller 'use 0')");
-        System.out.println();
-        System.out.println("Utforskning:");
-        System.out.println("  look   (visa karta runt dig)");
-        System.out.println();
-        System.out.println("Övrigt:");
-        System.out.println("  help   (visa denna lista)");
-        System.out.println("  quit   (avsluta spelet)");
+        System.out.println("=== Commands ===");
+        System.out.println("Movement: n/s/e/w or move north|south|east|west");
+        System.out.println("Combat:   attack");
+        System.out.println("Items:    inventory, use <item>");
+        System.out.println("Explore:  look");
+        System.out.println("Other:    help, quit");
     }
 
-
+    /** Short status each turn */
     public static void printStatus(Player p) {
-        System.out.println("Spelare: " + p.getName() +
+        System.out.println("---------------------------------");
+        System.out.println(p.getName() +
                 "  HP: " + p.getHealth() + "/" + p.getMaxHealth() +
                 "  Pos: (" + p.getX() + "," + p.getY() + ")");
+    }
+
+    /** Info about the current tile */
+    public static void printTileInfo(Dungeon d, int x, int y) {
+        Tile t = d.getTile(x, y);
+        if (t == null) {
+            System.out.println("You are outside the dungeon!?");
+            return;
+        }
+        System.out.print("Here: " + t.getType());
+        if (TileType.ENEMY.equals(t.getType()) && t.getEnemy() != null) {
+            System.out.print(" → Enemy: " + t.getEnemy().getType() +
+                    " (HP " + t.getEnemy().getHealth() + ")");
+        }
+        if (TileType.ITEM.equals(t.getType()) && t.getItem() != null) {
+            System.out.print(" → Item: " + t.getItem().getName());
+        }
+        if (TileType.EXIT.equals(t.getType())) {
+            System.out.print(" → You see an exit here!");
+        }
+        System.out.println();
     }
 
     public static void printInventory(Player p) {
         List<entities.Item> inv = p.getInventory();
         if (inv.isEmpty()) {
-            System.out.println("Inventarie: (tomt)");
+            System.out.println("Inventory: (empty)");
             return;
         }
-        System.out.println("Inventarie:");
+        System.out.println("Inventory:");
         for (int i = 0; i < inv.size(); i++) {
             System.out.println("  " + i + ": " + inv.get(i).getName());
         }
     }
 
-    /** Skriv enkel info om aktuell ruta. */
-    public static void printTileInfo(Dungeon d, int x, int y) {
-        Tile t = d.getTile(x, y);
-        if (t == null) {
-            System.out.println("Utanför kartan.");
-            return;
-        }
-        System.out.print("Rutan är: " + t.getType());
-        if (TileType.ENEMY.equals(t.getType()) && t.getEnemy() != null) {
-            System.out.print(" (Fiende HP: " + t.getEnemy().getHealth() + ")");
-        }
-        if (TileType.ITEM.equals(t.getType()) && t.getItem() != null) {
-            System.out.print(" (Item: " + t.getItem().getName() + ")");
-        }
-        System.out.println();
-    }
-
+    /** Simple mini map */
     public static void printMiniMap(Dungeon d, Player p, int radius) {
         int px = p.getX();
         int py = p.getY();
@@ -94,5 +89,5 @@ public class Printer {
     }
 
     public static void info(String msg)  { System.out.println(msg); }
-    public static void error(String msg) { System.out.println("Fel: " + msg); }
+    public static void error(String msg) { System.out.println("Error: " + msg); }
 }

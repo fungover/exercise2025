@@ -22,9 +22,9 @@ public class Game {
     private boolean isRunning = true;
 
     public Game() {
-        // Initiera spelare, dungeon, helpers
+        // Initialize player, dungeon, helpers
         this.player = new Player("Hero", 30, 0, 0);
-        Rng rng = new Rng(); // slumpmässig seed
+        Rng rng = new Rng(); // random seed
         this.dungeon = MapGenerator.createInitialWorld(10, 10, player, rng);
         this.parser = new InputParser();
     }
@@ -34,22 +34,22 @@ public class Game {
         Scanner sc = new Scanner(System.in);
 
         while (isRunning) {
-            // --- 1) Visa kort status ---
+            // --- 1) Show short status ---
             Printer.printStatus(player);
             Printer.printTileInfo(dungeon, player.getX(), player.getY());
 
-            // --- 2) Läs kommando ---
+            // --- 2) Read command ---
             System.out.print("> ");
             String input = sc.nextLine();
             Command cmd = parser.parse(input);
 
-            // --- 3) Kör handling ---
+            // --- 3) Execute command ---
             handleCommand(cmd);
 
-            // --- 6) Fiendernas tur (enkel AI) ---
+            // --- 6) Enemies take their turn (simple AI) ---
             enemyTurns();
 
-            // --- 7) Kontrollera vinst/förlust ---
+            // --- 7) Check win/lose conditions ---
             checkEndConditions();
         }
 
@@ -78,37 +78,10 @@ public class Game {
                 break;
             case "quit":
                 isRunning = false;
-                Printer.info("Spelet avslutas...");
+                Printer.info("Game exited.");
                 break;
             default:
-                Printer.error("Okänt kommando.");
-        }
-    }
-
-    // --- Rörelse ---
-    private void handleMove(String dir) {
-        int dx = 0, dy = 0;
-        switch (dir) {
-            case "north": dy = -1; break;
-            case "south": dy =  1; break;
-            case "east":  dx =  1; break;
-            case "west":  dx = -1; break;
-            default:
-                Printer.error("Ogiltig riktning.");
-                return;
-        }
-        int newX = player.getX() + dx;
-        int newY = player.getY() + dy;
-        if (dungeon.isWalkable(newX, newY)) {
-            player.move(dx, dy);
-            Tile t = dungeon.getTile(newX, newY);
-            // --- 4) Plocka upp item ---
-            if (TileType.ITEM.equals(t.getType()) && t.getItem() != null) {
-                player.addItem(t.pickUpItem());
-                Printer.info("Du plockade upp ett föremål!");
-            }
-        } else {
-            Printer.error("Du kan inte gå dit.");
+                Printer.error("Unknown command.");
         }
     }
 
@@ -121,7 +94,7 @@ public class Game {
     // --- Use item ---
     private void handleUse(String arg) {
         if (arg == null || arg.isEmpty()) {
-            utils.Printer.error("Ange vilket item du vill använda.");
+            Printer.error("Specify which item to use.");
             return;
         }
         try {
@@ -129,12 +102,12 @@ public class Game {
             service.InventoryService.useItemByIndex(player, idx);
             return;
         } catch (NumberFormatException ignored) {
-            // inte ett nummer -> fortsätt
+            // not a number -> try name
         }
         service.InventoryService.useItemByName(player, arg);
     }
 
-    // --- Fiendernas tur ---
+    // --- Enemy turns ---
     private void enemyTurns() {
         for (int y = 0; y < dungeon.getHeight(); y++) {
             for (int x = 0; x < dungeon.getWidth(); x++) {
@@ -148,16 +121,16 @@ public class Game {
         }
     }
 
-    // --- Kontrollera game over eller vinst ---
+    // --- Check win/lose ---
     private void checkEndConditions() {
         if (!player.isAlive()) {
-            Printer.info("Du dog! Game Over.");
+            Printer.info("You died! Game Over.");
             isRunning = false;
             return;
         }
         Tile t = dungeon.getTile(player.getX(), player.getY());
         if (TileType.EXIT.equals(t.getType())) {
-            Printer.info("Du hittade utgången! Du vann!");
+            Printer.info("You found the exit! You win!");
             isRunning = false;
         }
     }

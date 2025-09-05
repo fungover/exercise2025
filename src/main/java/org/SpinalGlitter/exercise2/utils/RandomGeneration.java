@@ -6,7 +6,7 @@ import org.SpinalGlitter.exercise2.map.DungeonMap;
 import java.util.*;
 
 public final class RandomGeneration {
-    public DungeonMap map;
+    private final DungeonMap map;
     public RandomGeneration(DungeonMap map) {
         this.map = map;
     }
@@ -49,7 +49,7 @@ public final class RandomGeneration {
                 placed++;
             }
         }
-        return walls; // return is just for testing purposes
+        return walls;
     }
 
     // Random placing of enemies

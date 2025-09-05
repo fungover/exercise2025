@@ -36,6 +36,9 @@ class RandomGenerationTest {
         assertEquals(5, enemies.size(), "Expected 5 enemies");
         assertEquals(10, walls.size(), "Expected 10 walls");
         assertEquals(1, sword.size(), "Expected 1 sword");
+        assertFalse(potions.containsKey(player.getPosition()), "No potion on player start");
+        assertFalse(enemies.containsKey(player.getPosition()), "No enemy on player start");
+        assertFalse(walls.contains(player.getPosition()), "No wall on player start");
         assertTrue(Collections.disjoint(sword.keySet(), occupiedBeforeSword), "Sword must not overlap prior occupied");
         assertEquals(occupiedBeforeSword.size() + sword.size(), occupied.size(), "Occupied should increase only by sword count");
     }

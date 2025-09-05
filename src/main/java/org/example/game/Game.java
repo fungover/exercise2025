@@ -2,15 +2,15 @@ package org.example.game;
 
 import org.example.entities.Player;
 import org.example.map.Dungeon;
-import org.example.map.Tile;
+import org.example.service.MovementLogic;
 import java.util.Scanner;
 
 public class Game {
 private Scanner scanner = new Scanner(System.in);
 private Player player;
 private Dungeon dungeon;
-private int playerRow;
-private int playerCol;
+private MovementLogic movementLogic;
+
 
     public void startGame() {
     System.out.println("Welcome to the Dungeon.... I have been waiting for an adventurer..");
@@ -18,13 +18,13 @@ private int playerCol;
     String name = scanner.nextLine();
 
     player = new Player(name);
+    dungeon = new Dungeon(3, 3);
+    movementLogic = new MovementLogic();
+
     System.out.println("Well Hello, " + player.getName() + ". Step inside and see what happens...");
     System.out.println("Your health is " + player.getHealth());
+    System.out.println("Lets go!");
 
-    // making the dungeon and start position and player start at index 0,0
-        dungeon = new Dungeon(3,3);
-        playerRow = 0;
-        playerCol = 0;
 
         while (true) {
             System.out.print("> ");
@@ -32,18 +32,22 @@ private int playerCol;
 
             switch (playerInput) {
                 case "move up":
+                    movementLogic.movePlayer(player, "up", dungeon);
                     //  Flytta spelaren upp (north) om nästa tile är walkable
                     break;
 
                     case "move down":
+                        movementLogic.movePlayer(player, "down", dungeon);
                     //  Flytta spelaren ner (south) om nästa tile är walkable
                     break;
 
                 case "move left":
+                    movementLogic.movePlayer(player, "left", dungeon);
                     //  Flytta spelaren vänster (west) om nästa tile är walkable
                     break;
 
                 case "move right":
+                    movementLogic.movePlayer(player, "right", dungeon);
                     //  Flytta spelaren höger (east) om nästa tile är walkable
                     break;
 
@@ -73,7 +77,7 @@ private int playerCol;
             }
         }
 
-
+//För OOP = låta Player eller en MovementService hantera förflyttning - inte i Game
 
     }
 

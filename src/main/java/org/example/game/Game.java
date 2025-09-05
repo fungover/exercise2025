@@ -75,7 +75,12 @@ public class Game {
 
 
         while (player.isAlive()) {
-            String input = console.readLine("> ").trim().toLowerCase();
+            String input = console.readLine("> ");
+            if (input == null) {
+                System.out.println("Input closed. Exiting game.");
+                break;
+            }
+            input = input.trim().toLowerCase();
             handleCommand(input);
         }
 

@@ -14,10 +14,16 @@ public class Dungeon {
 
     public Dungeon() {
         items = new ArrayList<Entity>();
+        enemies = new ArrayList<Enemy>();
+        potions = new ArrayList<Potion>();
+        weapons = new ArrayList<Weapon>();
         tiles = new Tile[30][15];
         placeWalls();
     }
     public void placeEntity(String type, int[] pos){
+        if(pos[0] < 0 || pos[0] >= tiles.length || pos[1] < 0 || pos[1] >= tiles[0].length){
+            throw new IllegalArgumentException("Position out of bounds. [" + pos[0] + ", " + pos[1] + "]");
+        }
         Tile tile = new Tile(type);
         tile.setPosition(pos);
         tiles[pos[0]][pos[1]] = tile;

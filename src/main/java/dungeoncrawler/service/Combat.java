@@ -33,9 +33,10 @@ public class Combat {
     public boolean enemyTurn(Player player, Enemy enemy){
         int number = randomNumber(0,enemy.getStrength());
         if(number >= 5){
-            player.setDamage(10);
+            int damage = 10;
+            player.setHp(player.getHp()-damage);
             message.send("The enemy attacked you!");
-            if(player.getHp()- player.getDamage() <= 0){
+            if(player.getHp() <= 0){
                 message.send("You died.");
                 return false;
             }
@@ -46,9 +47,11 @@ public class Combat {
     }
     public int fight(Enemy enemy, int luckyNumber){
         if(luckyNumber >= 5){
-            enemy.setDamage(10);
+           // enemy.setDamage(10);
+            int damage = 10;
+            enemy.setHp(enemy.getHp()-damage);
             message.send("The attack hit!");
-            if(enemy.getHp() - enemy.getDamage() <= 0){
+            if(enemy.getHp() <= 0){
                 message.send("Enemy defeated!");
                 return 1;
             }

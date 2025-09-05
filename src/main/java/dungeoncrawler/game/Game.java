@@ -63,9 +63,10 @@ public class Game {
 
     private int[] getPosition(){
         while(true){
-            int x = randomNumber(0,29);
-            int y = randomNumber(0,14);
+
             Tile[][] tiles = dungeon.getTiles();
+            int x = randomNumber(0, tiles.length-1);
+            int y = randomNumber(0, tiles[0].length-1);
             if(tiles[x][y] == null){
                 return new int[]{x,y};
             }
@@ -98,8 +99,11 @@ public class Game {
             dungeon.placeEntity("Potion", pos);
         }
         dungeon.setPotions(potions);
-        nbrItems -= nbrPotions;
-        int nbrDaggers = randomNumber(1, nbrItems);
+        int remainingItems = nbrItems - nbrPotions;
+        if(remainingItems <= 0){
+            return;
+        }
+        int nbrDaggers = randomNumber(1, remainingItems);
         for(int i = 0; i < nbrDaggers; i++){
             int[] pos = getPosition();
             Weapon dagger = new Weapon("Dagger",2, pos);
@@ -107,7 +111,10 @@ public class Game {
             items.add(dagger);
             dungeon.placeEntity("Dagger", pos);
         }
-        int nbrSwords = nbrItems - nbrPotions;
+        int nbrSwords = nbrItems - nbrDaggers;
+        if(nbrSwords < 0){
+            nbrSwords = 0;
+        }
         for(int i = 0; i < nbrSwords; i++){
             int[] pos = getPosition();
             Weapon sword = new Weapon("Sword",4, pos);

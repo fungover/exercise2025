@@ -36,7 +36,7 @@ public class GameLogic {
             Tile tile = getSurroundings(player.getPosition());
             if (tile == null) {
                 message.send("You can't see anything. Try walking around a bit. (Go north/east/south/west)");
-                String input = inputHandler.handleMovementInput();
+                String input = inputHandler.handleMovementInput().toLowerCase();
                 switch (input) {
                     case "go north": movement.goNorth(player);
                         break;
@@ -55,30 +55,30 @@ public class GameLogic {
             } else if(tile.getType().equals("Potion")){
                 message.send("You found a potion. Do you want to drink it? (Yes/No");
                 String input = inputHandler.handleYesNoInput();
-                if(input.equals("Yes")){
+                if(input.equalsIgnoreCase("yes")){
                     takeItem(tile);
                 }else{
-                    removeItem(tile);
+                    movement.returnToPrevious(player);
                 }
             }else if(tile.getType().equals("Sword")){
                 message.send("You found a sword on the ground. It will make your attacks 40% stronger");
                 message.send("If you currently have a weapon you have to drop it to pick up a new one.");
                 message.send("Do you want to pick it up= (Yes/No)");
                 String input = inputHandler.handleYesNoInput();
-                if(input.equals("Yes")){
+                if(input.equalsIgnoreCase("yes")){
                     takeItem(tile);
                 }else{
-                    removeItem(tile);
+                    movement.returnToPrevious(player);
                 }
             }else if(tile.getType().equals("Dagger")){
                 message.send("You found a dagger on the ground. It will make your attacks 20% stronger.");
                 message.send("If you currently have a weapon you have to drop it to pick up a new one.");
                 message.send("Do you want to pick it up= (Yes/No)");
                 String input = inputHandler.handleYesNoInput();
-                if(input.equals("Yes")){
+                if(input.equalsIgnoreCase("yes")){
                     takeItem(tile);
                 }else{
-                    removeItem(tile);
+                    movement.returnToPrevious(player);
                 }
             }
         }
@@ -103,8 +103,8 @@ public class GameLogic {
                 removeItem(tile);
                 break;
             case "Dagger":
-                player.setWeaponStrength(2);
                 oldWeapon = player.getWeaponStrength();
+                player.setWeaponStrength(2);
                 strength = player.getTotalStrength()-oldWeapon+player.getWeaponStrength();
                 player.setTotalStrength(strength);
                 removeItem(tile);
@@ -116,15 +116,7 @@ public class GameLogic {
         Tile[][] tiles = dungeon.getTiles();
         tiles[pos[0]][pos[1]] = null;
         List<Entity> itemList = dungeon.getItems();
-        int i = 0;
-        int index = 0;
-        for (Entity item1 : itemList){
-            if(item1.getPosition().equals(pos)){
-                index = i;
-            }
-            i++;
-        }
-        itemList.remove(index);
+        itemList.removeIf(e -> java.util.Arrays.equals(e.getPosition(), pos));
     }
 
     public void startFight(Tile tile){
@@ -161,8 +153,9 @@ public class GameLogic {
         message.send("You lost.");
         message.send("Do you want to play again? (Yes/No)");
         String replay = inputHandler.handleYesNoInput();
-        if(replay.equals("yes")){
+        if(replay.equalsIgnoreCase("yes")){
             message.send("Replay game");
+            running = false;
             newGame();
         }else{
             running = false;
@@ -174,6 +167,7 @@ public class GameLogic {
         String replay = inputHandler.handleYesNoInput();
         if(replay.equals("yes")){
             message.send("Replay game");
+            running = false;
             newGame();
         }else{
             running = false;
@@ -186,15 +180,7 @@ public class GameLogic {
         Tile[][] tiles = dungeon.getTiles();
         tiles[pos[0]][pos[1]] = null;
         List<Enemy> enemyList = dungeon.getEnemies();
-        int i = 0;
-        int index = 0;
-        for (Enemy enemy1 : enemyList){
-            if(enemy1.getPosition().equals(pos)){
-                index = i;
-            }
-            i++;
-        }
-        enemyList.remove(index);
+        enemyList.removeIf(e -> java.util.Arrays.equals(e.getPosition(), pos));
         if(enemyList.isEmpty()){
             win();
         }
@@ -204,7 +190,7 @@ public class GameLogic {
         game.setDungeon(null);
         game.setPlayer(null);
         game.setGameLogic(null);
-        Game game = new Game();
-        game.start();
+        this.game = new Game();
+        this.game.start();
     }
 }

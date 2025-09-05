@@ -4,9 +4,9 @@ public class Entity {
     int[] position;
 
     public int[] getPosition() {
-        return position;
+        return position == null ? null : position.clone();
     }
     public void setPosition(int[] position) {
-        this.position = position;
+        this.position = position == null ? null : position.clone();
     }
 }

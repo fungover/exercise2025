@@ -12,8 +12,8 @@ public class Player {
     public Player(String name, int hp, int[] position) {
         this.name = name;
         this.hp = hp;
-        this.position = position;
-        previousPosition = position;
+        this.position =java.util.Arrays.copyOf(position, 2);
+        previousPosition = java.util.Arrays.copyOf(this.position, 2);
         totalStrength = 10;
         weaponStrength = 0;
     }

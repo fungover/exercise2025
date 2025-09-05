@@ -4,12 +4,15 @@ public class Enemy extends Entity {
     int hp;
     int damage;
     int strength;
-    int[] position;
 
     public Enemy(){
     }
     public int getHp() {
         return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 
     public int getDamage() {
@@ -20,13 +23,6 @@ public class Enemy extends Entity {
         this.damage += damage;
     }
 
-    public int[] getPosition() {
-        return position;
-    }
-
-    public void setPosition(int[] position) {
-        this.position = position;
-    }
 
     public int getStrength() {
         return strength;

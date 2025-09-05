@@ -5,31 +5,23 @@ import dungeoncrawler.enteties.Player;
 public class Movement {
 
     public void goNorth(Player player){
-        int[] pos = player.getPosition();
-        int[] prevPos = pos.clone();
-        player.setPreviousPosition(prevPos);
-        pos[1] -= 1;
-        player.setPosition(pos);
+        move(player, 0, -1);
     }
     public void goSouth(Player player){
-        int[] pos = player.getPosition();
-        int[] prevPos = pos.clone();
-        player.setPreviousPosition(prevPos);
-        pos[1] += 1;
-        player.setPosition(pos);
+        move(player, 0, 1);
     }
     public void goEast(Player player){
-        int[] pos = player.getPosition();
-        int[] prevPos = pos.clone();
-        player.setPreviousPosition(prevPos);
-        pos[0] += 1;
-        player.setPosition(pos);
+        move(player, 1, 0);
     }
     public void goWest(Player player){
+        move(player, -1, 0);
+    }
+    private void move(Player player, int deltaX, int deltaY){
         int[] pos = player.getPosition();
         int[] prevPos = pos.clone();
         player.setPreviousPosition(prevPos);
-        pos[0] -= 1;
+        pos[0] += deltaX;
+        pos[1] += deltaY;
         player.setPosition(pos);
     }
     public void returnToPrevious(Player player){

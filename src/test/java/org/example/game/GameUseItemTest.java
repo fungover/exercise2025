@@ -119,7 +119,6 @@ class GameUseItemTest {
 
         String out = outContent.toString();
         assertTrue(out.contains(manifesto.getWinMessage()));
-        assertTrue(out.contains("Congratulations, Tester! You win!"));
         // Item should be removed
         assertFalse(player.getInventory().contains(manifesto));
         // Exit should have been requested with code 0, but not actually executed

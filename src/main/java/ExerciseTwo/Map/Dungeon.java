@@ -29,6 +29,7 @@ public abstract class Dungeon {
                     case "E": emoji = Emojis.enemy; break;
                     case "G": emoji = Emojis.coin; break;
                     case "P": emoji = Emojis.potion; break;
+                    case "S": emoji = Emojis.sword; break;
                     case "T": emoji = Emojis.treasure; break;
                     default: emoji = Emojis.path; break;
                 }

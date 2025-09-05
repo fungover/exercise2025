@@ -1,6 +1,7 @@
 package ExerciseTwo.Service;
 
 import ExerciseTwo.Game.PlayerInput;
+import ExerciseTwo.Utils.PrintText;
 
 import java.util.Scanner;
 
@@ -76,9 +77,18 @@ public record Movement(Position position) {
                 position.setPosition(playerRow, playerCol);
                 return "coin";
             }
+            case "S" -> {
+                position.setPosition(playerRow, playerCol);
+                return "sword";
+            }
             case "D" -> {
                 position.setPosition(playerRow, playerCol);
                 return "door";
+            }
+            case "T" -> {
+                PrintText.printBlue("You found the secret treasure "+Emojis.treasure);
+                PrintText.printBlue("You WON! CONGRATULATIONS!");
+                return "treasure";
             }
             default -> {
                 System.out.println("You cant walk true walls, try again");

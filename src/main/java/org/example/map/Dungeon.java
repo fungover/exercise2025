@@ -3,21 +3,21 @@ package org.example.map;
 import org.example.entities.Player;
 import org.example.utils.RandomGenerator;
 
-public class Room {
+public class Dungeon {
     private final RandomGenerator rand = new RandomGenerator();
     private final int rows;
     private final int columns;
     private final char[][] grid;
     private boolean printedPlayer = false;
 
-    public Room(Player player) {
+    public Dungeon(Player player) {
         this.rows = 7;
         this.columns = rand.generateNumber(10, 20);
         this.grid = new char[rows][columns];
-        generateRoom(player);
+        generateDungeon(player);
     }
 
-    private void generateRoom(Player player) {
+    private void generateDungeon(Player player) {
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
 
@@ -49,7 +49,7 @@ public class Room {
         }
     }
 
-    public void printRoom() {
+    public void printDungeon() {
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
                 System.out.print(grid[y][x]);
@@ -66,11 +66,11 @@ public class Room {
         return columns;
     }
 
-    public char getGrid(int y, int x) {
+    public char getTile(int y, int x) {
         return grid[y][x];
     }
 
-    public void setGrid(int y, int x, char tile) {
+    public void setTile(int y, int x, char tile) {
         this.grid[y][x] = tile;
     }
 }

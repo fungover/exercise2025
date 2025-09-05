@@ -1,12 +1,17 @@
 package org.example.game;
 
 import org.example.entities.Player;
-import org.example.map.Room;
-import org.example.service.Movement;
+import org.example.entities.items.HealthPotion;
+import org.example.entities.items.Inventory;
+import org.example.entities.items.Weapon;
+import org.example.map.Dungeon;
+import org.example.service.Combat;
+import org.example.service.GameLogic;
 
 import java.util.Scanner;
 
 public class Game {
+
     // All game logic is executed here.
     public static void run() {
         Scanner scan = new Scanner(System.in);
@@ -17,23 +22,51 @@ public class Game {
         System.out.println("Welcome, WELCOME " + name + "! Your adventure begins...");
         System.out.println("--------------------------------");
 
-        Player player = new Player(name);
-        Room room = new Room(player);
 
+
+        final Player player = new Player(name, 70);
+        final Inventory inventory = new Inventory();
+        final GameLogic logic = new GameLogic();
+        Dungeon dungeon = new Dungeon(player);
+
+        // Game loop
         while (true) {
-            Movement movement = new Movement();
-            room.printRoom();
+
+            // Items
+            inventory.addItem(new Weapon("Sword", 1, 20));
+            inventory.addItem(new HealthPotion("Health Potion", 0));
+
+            dungeon.printDungeon();
 
             System.out.print("Choose your direction: ");
-            String direction = scan.nextLine();
-            if (direction.equalsIgnoreCase("Q")) {
+            String userInput = scan.nextLine();
+            if (userInput.equalsIgnoreCase("Q")) {
                 System.out.println("Exiting...");
                 break;
             }
 
-            System.out.println();
-            movement.moveInput(room, player, direction);
-            movement.renderPlayerPos(room, player.getX(),  player.getY());
+            logic.moveInput(dungeon, player, userInput);
+            int xPos = player.getX();
+            int yPos = player.getY();
+            logic.renderPlayerPos(dungeon, xPos, yPos);
+
+            if (logic.wishToFightEnemy(dungeon, yPos, xPos, userInput)) {
+                Weapon weapon = inventory.getWeapon();
+                HealthPotion potion = inventory.getHealthPotion();
+                Combat combat = new Combat();
+                combat.startFight(player, weapon, potion, userInput);
+            }
+
+            if (logic.wishToPickUpItem(dungeon, yPos, xPos, userInput)) {
+                HealthPotion potion;
+                if (inventory.getHealthPotion() != null) {
+                    potion = inventory.getHealthPotion();
+                } else {
+                    potion = new HealthPotion("Health Potion", 0);
+                }
+                inventory.addItem(potion);
+                System.out.println(potion.getName() + " has been picked up!");
+            }
         }
     }
 }

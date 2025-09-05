@@ -21,6 +21,24 @@ public class Inventory {
         }
     }
 
+    public Weapon getWeapon() {
+        for (Item item : items) {
+            if (item instanceof Weapon) {
+                return (Weapon) item;
+            }
+        }
+        return null;
+    }
+
+    public HealthPotion getHealthPotion() {
+        for (Item item : items) {
+            if (item instanceof HealthPotion) {
+                return (HealthPotion) item;
+            }
+        }
+        return null;
+    }
+
     public void displayInventory() {
         for (Item item : items) {
             System.out.println("-----------------------------");

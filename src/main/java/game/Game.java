@@ -11,6 +11,7 @@ import utils.InputParser.Command;
 import utils.Printer;
 import utils.Rng;
 import service.CombatService;
+import service.MovementService;
 
 import java.util.Scanner;
 
@@ -58,7 +59,7 @@ public class Game {
     private void handleCommand(Command cmd) {
         switch (cmd.action()) {
             case "move":
-                handleMove(cmd.arg());
+                MovementService.move(player, dungeon, cmd.arg());
                 break;
             case "attack":
                 handleAttack();

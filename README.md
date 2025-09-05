@@ -12,7 +12,6 @@ To win the game you have to find the manifesto and use it to save the day.
 
 The code is organized into logical packages for clarity and modularity:
 
-## Project Structure
 
 ```plaintext
 src/
@@ -40,16 +39,16 @@ src/
 - Abstract class with attributes: name, health, maxHealth, damage, and position.
 
 ### Hostile (Interface)
-- Requires `getDamage()` and `getName()`
-- Implemented by classes like `DroolingDog`, `GiantHeadlessChicken`
+- Provides `attack(Player player)`.
+- Implemented by classes like `DroolingDog`, `GiantHeadlessChicken`.
 
 ### Item (Superclass)
 - Abstract class with name and position
-- Subclasses like: `Pitchfork`, `Healing Milk`, 
+- Subclasses like: `Pitchfork`, `Healing Milk`. 
 
 ### Weapon (Interface)
 - Requires `getDamage()` and `getName()`
-- Implemented by classes like `Pitchfork`, `TestWeapon`, `Manifesto`
+- Implemented by classes like `Pitchfork`, `TestWeapon`, `Manifesto`.
 
 ---
 
@@ -57,10 +56,10 @@ src/
 
 - Represented as a 2D array grid of `Tile` objects
 - Each `Tile` has a `Type` enum that defines its role in the map:
-    - An enemy
-    - An item
-    - A wall 
-    - A path
+    - Enemy
+    - Item
+    - Wall 
+    - Path
     - A Player start: safe starting location
   
 - Player navigates using directional commands
@@ -79,7 +78,7 @@ The game is turn-based and runs in the terminal:
 
 - Example Commands: `move north`, `health`, `use healingMilk`, `inventory`, `look`
 - Input is handled line-by-line using Console.readLine(), allowing the player to enter commands interactively in the terminal.
-- After each command, the game state updates and feedback is printed
+- After each command, the game state updates and feedback is printed.
 
 ### Example Gameplay
 

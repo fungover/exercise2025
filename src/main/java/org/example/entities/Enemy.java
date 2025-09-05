@@ -73,9 +73,34 @@ class Goblin extends Enemy {
 // Troll
 class Troll extends Enemy {
     public Troll() {
-        super("Troll", 50, new BasicAttach(10));
+        super("Troll", 50, new BasicAttack(10));
     }
 }
 
 // ----END OF SCOPE----------------------------------------------------------------
 
+class BasicAttack implements AttackBehavior {
+    private final int damage;
+    
+    public BasicAttack(int damage) {
+        if (damage < 0) {
+            throw new IllegalArgumentException("Damage cannot be negative");
+        }
+        this.damage = damage;
+    }
+
+    @Override
+    public void attack(Player player) {
+        // For later implementation
+    }
+
+    @Override
+    public int getDamage() {
+        return damage;
+    }
+
+    @Override
+    public String toString() {
+        return "+" + damage + " damage";
+    }
+}

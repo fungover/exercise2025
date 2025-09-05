@@ -1,6 +1,7 @@
 package ExerciseTwo.Entities.Weapons;
 
 import ExerciseTwo.Entities.Inventory.Item;
+import ExerciseTwo.Service.Emojis;
 
 public class DiamondSword extends Item {
 
@@ -10,6 +11,6 @@ public class DiamondSword extends Item {
 
     @Override
     public void itemDescription() {
-        System.out.println("You found "+type+" white damage attack "+effect);
+        System.out.println("You found a "+ type+" "+Emojis.sword +" white damage attack "+effect);
     }
 }

@@ -341,4 +341,12 @@ class WarehouseTest {
         assertEquals(2, initials.get('A')); // 'A' for Apple and Apple Juice
         assertEquals(1, initials.get('B')); // 'B' for Banana
     }
+
+    @Test
+    @DisplayName("Should return empty map when there are no products")
+    void getProductInitialsMapWhenThereAreNoProducts() {
+
+        Map<Character, Integer> initials = warehouse.getProductInitialsMap(); // Attempt to retrieve the map of product initials when no products exist
+        assertTrue(initials.isEmpty()); // Verify that the result is an empty map
+    }
 }

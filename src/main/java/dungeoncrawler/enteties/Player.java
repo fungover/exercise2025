@@ -1,12 +1,12 @@
 package dungeoncrawler.enteties;
 
-public class Player {
+public class Player extends Entity{
     String name;
     int hp;
     int totalStrength;
     int weaponStrength;
     int damage;
-    int[] position;
+    //int[] position;
     int[] previousPosition;
 
     public Player(String name, int hp, int[] position) {
@@ -30,13 +30,13 @@ public class Player {
     public int getDamage() {
         return damage;
     }
-    public int[] getPosition() {
+    /*public int[] getPosition() {
         return position;
     }
     public void setPosition(int[] position) {
         this.position = position;
     }
-
+*/
     public int[] getPreviousPosition() {
         return previousPosition;
     }

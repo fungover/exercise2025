@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.entities;
 
 public interface Position {
     int getX();

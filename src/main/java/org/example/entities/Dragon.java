@@ -1,7 +1,7 @@
 package org.example.entities;
 
-public class Dragon {
-    private int health = 100;
+public class Dragon extends Enemy {
+    private int health = 70;
 
     public void setHealth(int health) {
         this.health = health;

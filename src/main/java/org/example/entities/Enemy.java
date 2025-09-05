@@ -1,6 +1,7 @@
 package org.example.entities;
 
 public abstract class Enemy implements Health {
+    private String name;
     private int health;
     private int damage;
 
@@ -10,6 +11,10 @@ public abstract class Enemy implements Health {
 
     public int getHealth() {
         return health;
+    }
+
+    public String getName(){
+        return name;
     }
 
     public int getDamage() {

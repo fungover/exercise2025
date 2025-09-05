@@ -1,15 +1,14 @@
 package org.example.entities;
 
-import org.example.service.Position;
-
 public class Player implements Health, Position {
     private final String name;
-    private int health = 50;
+    private int health;
     private int x;
     private int y;
 
-    public Player(String name) {
+    public Player(String name, int health) {
         this.name = name;
+        this.health = health;
     }
 
     public String getName() {
@@ -22,10 +21,6 @@ public class Player implements Health, Position {
 
     public int getHealth() {
         return health;
-    }
-
-    public int getMaxHealth() {
-        return 120;
     }
 
     @Override

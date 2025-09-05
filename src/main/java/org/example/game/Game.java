@@ -11,6 +11,7 @@ public class Game {
     private Player player;
     private Room currentRoom;
     private boolean gameRunning;
+    private long startTime;
 
     public Game() {
         scanner = new Scanner(System.in);
@@ -18,6 +19,7 @@ public class Game {
     }
 
     public void start() {
+        startTime = System.currentTimeMillis();
         showIntroduction();
         String playerName = getPlayerName();
         player = new Player(playerName);
@@ -276,7 +278,7 @@ public class Game {
 
             //Check if the player died
             if (!player.isAlive()) {
-                System.out.println(red("*** GAME OVER! ***"));
+                System.out.println(red(bold("\n*** GAME OVER! ***")));
                 gameRunning = false;
             }
         } else {
@@ -285,6 +287,12 @@ public class Game {
     }
 
     private void unlockDoor() {
+        long endTime = System.currentTimeMillis();
+        long gameTimeMs = endTime - startTime;
+        long seconds = gameTimeMs / 1000;
+        long minutes = seconds / 60;
+        seconds = seconds % 60;
+
         if (currentRoom.getName().equals("Troll's Lair")) {
             if (player.findItem("Golden Key") != null) {
                 if (!currentRoom.hasAliveEnemies()) {
@@ -293,6 +301,7 @@ public class Game {
                     System.out.println("\n=== The door swings open, revealing bright sunlight! ===");
                     System.out.println("=== You step outside and breathe fresh air for the first time in ages. ===");
                     System.out.println(bold(green("\n=== 🎉 CONGRATULATIONS! YOU HAVE ESCAPED THE DARK CAVE! 🎉 ===")));
+                    System.out.println(bold(green("=== Game completed in: " + minutes + " minutes and " + seconds + " seconds " + "===")));
                     System.out.println("\n=== Thade's corruption is broken, and you are finally free! ===");
                     System.out.println(cyan("\n=== Thanks for playing " + player.getName() + "! ==="));
                     gameRunning = false;

@@ -1,35 +1,29 @@
 package ExerciseTwo.Service;
 
-import ExerciseTwo.Entities.Item;
+import ExerciseTwo.Game.PlayerInput;
 
 import java.util.Scanner;
 
 public class HandleFinds {
 
-    private Item item;
-
-    public HandleFinds(Item item) {
-        this.item = item;
-    }
-
-    public boolean addFind(Scanner sc){
+    public boolean addFind(Scanner sc, PlayerInput playerInput) {
         while (true) {
             System.out.println("Do you want to add your find to your inventory y/n?");
-            String answer = sc.next().toLowerCase();
-            switch (answer) {
-                case "y" -> {
+
+            String inputFromPlayer = sc.nextLine().toLowerCase();
+
+            if(playerInput.commandInput(inputFromPlayer)){
+                continue;
+            }
+
+            switch (inputFromPlayer) {
+                case "y":
                     return true;
-                }
-                case "n" ->{
+                case "n":
                     return false;
-                }
-                default -> {
+                default:
                     System.out.println("Wrong commando");
-                }
             }
         }
     }
-
-
-
 }

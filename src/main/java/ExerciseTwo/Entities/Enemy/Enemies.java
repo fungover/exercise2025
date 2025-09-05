@@ -10,6 +10,7 @@ public class Enemies {
     public Enemies() {
         enemies.add(new Monster());
         enemies.add(new Troll());
+        enemies.add(new Zombie());
     }
 
     public int getNumEnemies() {

@@ -81,6 +81,26 @@ The game is turn-based and runs in the terminal:
 - Input is handled line-by-line using Console.readLine(), allowing the player to enter commands interactively in the terminal.
 - After each command, the game state updates and feedback is printed
 
+### Example Gameplay
+
+```plaintext
+Good luck, brave farmer. The animals are waiting...
+--------------------------------------------------
+
+> move north
+You can't move outside the farm!
+
+> move south
+You moved to (0, 1)
+Nothing special here.
+
+> move east
+You moved to (1, 1)
+You picked up: Rusty Pitchfork!
+The item has been added to your inventory.
+>
+
+```
 ---
 
 ## Testing

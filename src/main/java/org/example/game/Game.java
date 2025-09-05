@@ -63,13 +63,12 @@ public class Game {
         System.out.println("• inventory → View your current items");
         System.out.println("• use [item name] → Use an item from your inventory or use Manifesto to win");
         System.out.println("• health → Check your health status");
-        System.out.println("• help → Show this help menu again");
         System.out.println();
         System.out.println("TIPS:");
         System.out.println("- Walls block movement. Try another direction.");
         System.out.println("- Enemies can hurt you. Be strategic with your attacks.");
         System.out.println("- Items may heal you or boost your abilities.");
-        System.out.println("- You can only see one tile at a time. Use 'look' often.");
+        System.out.println("- You can only see one tile at a time.");
         System.out.println();
         System.out.println("Good luck, brave farmer. The animals are waiting...");
         System.out.println("--------------------------------------------------");
@@ -96,8 +95,7 @@ public class Game {
 
             //win the and exit the game
             if (item instanceof Manifesto manifesto) {
-                System.out.println("\n" + manifesto.getWinMessage());
-                System.out.println("Congratulations, " + player.getName() + "! You win!");
+                System.out.println("\n" + manifesto.getWinMessage());//
                 exit(0);
             }
         }, () -> System.out.println("You don't have an item called '" + itemName + "'."));

@@ -59,21 +59,20 @@ public class FarmageddonMapTest {
     }
 
     @Test
-    public void testEnemyPlacementSomewhere() {
+    public void testEnemyPlacementAtFixedCoordinates() {
         FarmageddonMap map = new FarmageddonMap(10, 10);
-        boolean foundEnemy = false;
 
-        for (int y = 0; y < map.getHeight(); y++) {
-            for (int x = 0; x < map.getWidth(); x++) {
-                Tile tile = map.getTile(x, y);
-                if (tile.getType() == Tile.Type.ENEMY && tile.getEnemy() != null) {
-                    foundEnemy = true;
-                    break;
-                }
-            }
-            if (foundEnemy) break;
+        int[][] expectedEnemyCoords = {
+                {2, 2},
+                {4, 3},
+                {6, 1},
+                {1, 5}
+        };
+
+        for (int[] coord : expectedEnemyCoords) {
+            Tile tile = map.getTile(coord[0], coord[1]);
+            assertEquals(Tile.Type.ENEMY, tile.getType(), "Tile at (" + coord[0] + "," + coord[1] + ") should be ENEMY");
+            assertNotNull(tile.getEnemy(), "Enemy should be present at (" + coord[0] + "," + coord[1] + ")");
         }
-
-        assertTrue(foundEnemy, "At least one enemy should be placed on the map");
     }
 }

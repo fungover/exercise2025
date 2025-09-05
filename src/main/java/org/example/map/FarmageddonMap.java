@@ -42,6 +42,16 @@ public class FarmageddonMap {
         // Set player start at a safe location
         grid[0][0].setType(Tile.Type.PLAYER_START);
 
+        // Ensure fixed coords are PATH before placing fixed entities
+        ensurePath(2,2);
+        ensurePath(4, 3);
+        ensurePath(6, 1);
+        ensurePath(1, 5);
+        ensurePath(3, 4);
+        ensurePath(5, 2);
+        ensurePath(1, 1);
+        ensurePath(7, 4);
+
         // Place enemies
         placeEnemy(new DroolingDog(2, 2));
         placeEnemy(new GiantHeadlessChicken(4, 3));
@@ -80,6 +90,12 @@ public class FarmageddonMap {
         return x >= 0 && x < width
             && y >= 0 && y < height
             && grid[y][x].getType() == Tile.Type.PATH;
+    }
+
+    private void ensurePath(int x, int y) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            grid[y][x].setType(Tile.Type.PATH);
+        }
     }
 
     private int[] getRandomValidCoordinates() {

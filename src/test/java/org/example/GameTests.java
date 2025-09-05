@@ -42,7 +42,7 @@ public class GameTests {
 
         Combat.doAttack(player, goblin); // New method without input from CLI
 
-        assertTrue(player.getHealth() > oldHP, "Player HP should increase after using potion");
+        assertTrue(goblin.getHealth() < oldHP, "Enemy HP should reduce after attack");
 
     }
     @Test

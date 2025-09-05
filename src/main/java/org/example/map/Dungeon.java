@@ -57,18 +57,19 @@ public class Dungeon {
 
                 Tile tile = grid[y][x];
 
-                // 20% chans att tile innehåller en fiende
-                if (tile.getType() == TileType.EMPTY && RandomUtils.chance(0.20)) {
-                    tile.setEnemy(RandomUtils.randomEnemy(floor));
-                }
+                if (tile.getType() == TileType.EMPTY) {
+                    if (RandomUtils.chance(0.20)) {
+                        // 20% chans att tile får en fiende
+                        tile.setEnemy(RandomUtils.randomEnemy(floor));
 
-                // 20% chans att tile innehåller ett item
-                if (tile.getType() == TileType.EMPTY && RandomUtils.chance(0.20)) {
-                    int roll = new Random().nextInt(3);
-                    switch (roll) {
-                        case 0 -> tile.setItem(RandomUtils.randomWeapon());
-                        case 1 -> tile.setItem(RandomUtils.randomArmor());
-                        case 2 -> tile.setItem(RandomUtils.randomPotion());
+                    } else if (RandomUtils.chance(0.25)) {
+                        // 25% av 80% dvs 20% chans (om ingen fiende) att tile får ett item
+                        int roll = new Random().nextInt(3);
+                        switch (roll) {
+                            case 0 -> tile.setItem(RandomUtils.randomWeapon());
+                            case 1 -> tile.setItem(RandomUtils.randomArmor());
+                            case 2 -> tile.setItem(RandomUtils.randomPotion());
+                        }
                     }
                 }
             }

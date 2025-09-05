@@ -26,9 +26,9 @@ public class CombatService {
         }
 
         // Fienden attackerar tillbaka
-        player.takeDamage(enemy.getDamage());
+        int actualDamage = player.takeDamage(enemy.getDamage());
         log.append(enemy.getName()).append(" attacks you for ")
-                .append(enemy.getDamage()).append(" damage. (")
+                .append(actualDamage).append(" damage. (")
                 .append(player.getHp()).append(" HP left)\n");
 
         if (player.isDead()) {

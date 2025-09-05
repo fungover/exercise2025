@@ -51,13 +51,28 @@ public class Player {
         } else {
             System.out.println("=== Inventory ===");
             for (Item item : inventory) {
-                System.out.println("- " + item.getName() + " (" + item.getType() + ")");
+                String stats = "";
+                switch (item.getType()) {
+                    case WEAPON -> stats = "Damage +" + item.getValue();
+                    case ARMOR -> stats = "Defense +" + item.getValue();
+                    case CONSUMABLE -> stats = "Heals " + item.getValue() + " HP";
+                }
+                System.out.println("- " + item.getName() + " (" + item.getType() + ", " + stats + ")");
             }
         }
 
         System.out.println("\nEquipped:");
-        System.out.println("Weapon: " + (equippedWeapon != null ? equippedWeapon.getName() : "None"));
-        System.out.println("Armor : " + (equippedArmor != null ? equippedArmor.getName() : "None"));
+        if (equippedWeapon != null) {
+            System.out.println("Weapon: " + equippedWeapon.getName() + " (Damage +" + equippedWeapon.getValue() + ")");
+        } else {
+            System.out.println("Weapon: None");
+        }
+
+        if (equippedArmor != null) {
+            System.out.println("Armor : " + equippedArmor.getName() + " (Defense +" + equippedArmor.getValue() + ")");
+        } else {
+            System.out.println("Armor : None");
+        }
     }
 
     // Använd ett item från inventory
@@ -143,12 +158,13 @@ public class Player {
     }
 
     // === Combat ===
-    public void takeDamage(int damage) {
+    public int takeDamage(int damage) {
         int reduced = Math.max(0, damage - defense);
         this.hp -= reduced;
         if (hp < 0) {
             hp = 0;
         }
+        return reduced;
     }
 
     public boolean isDead() {

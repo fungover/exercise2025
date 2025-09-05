@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.entities.Enemy;
+import org.example.entities.Item;
 import org.example.entities.Player;
 import org.junit.jupiter.api.Test;
 
@@ -65,5 +66,42 @@ public class CombatServiceTest {
         assertEquals(initialHp - 10, player.getHp(),
                 "Player should only take half damage when defending");
         assertEquals("Ongoing", result.getStatus(), "Combat should be ongoing after defending");
+    }
+
+    @Test
+    void player_defense_reduces_damage() {
+        Player player = new Player("Player");
+        player.setDefense(5); // Lägg på 5 defense
+        Enemy enemy = new Enemy("Enemy", 30, 20, 10);
+
+        int initialHp = player.getHp();
+
+        combat.attack(player, enemy);
+
+        int expectedDamage = 20 - 5;
+        assertEquals(initialHp - expectedDamage, player.getHp(),
+                "Player should take reduced damage after defense is applied");
+    }
+
+    @Test
+    void player_attack_damage_increases_with_weapon() {
+        Player player = new Player("Player");
+        Enemy enemy = new Enemy("Enemy", 100, 10, 20);
+
+        int baseDamage = player.getAttackDamage();
+
+        Item sword = new Item("Test Sword", Item.ItemType.WEAPON, 30);
+
+        player.addToInventory(sword);
+        player.useItem(sword);
+
+        assertEquals(baseDamage + 30, player.getAttackDamage(),
+                "Player attackDamage should increase by weapon value");
+
+        int initialEnemyHp = enemy.getHp();
+        combat.attack(player, enemy);
+        assertEquals(initialEnemyHp - (baseDamage + 30), enemy.getHp(),
+                "Enemy HP should reduce by boosted attack damage");
+
     }
 }

@@ -5,6 +5,8 @@ import ExerciseTwo.Entities.Inventory.Coin;
 import ExerciseTwo.Entities.Inventory.Inventory;
 import ExerciseTwo.Entities.Inventory.Item;
 import ExerciseTwo.Entities.Inventory.Potion;
+import ExerciseTwo.Entities.Weapons.DiamondSword;
+import ExerciseTwo.Entities.Weapons.Weapon;
 import ExerciseTwo.Map.Dungeon;
 import ExerciseTwo.Service.*;
 
@@ -12,10 +14,12 @@ import java.util.Scanner;
 
 public class GameLogic {
 
+    Weapon weapon;
     Inventory inventory;
     Player player;
 
     public GameLogic(Player player) {
+        this.weapon = new Weapon();
         this.inventory = new Inventory();
         this.player = player;
     }
@@ -24,11 +28,8 @@ public class GameLogic {
 
         Scanner sc = new Scanner(System.in);
 
-        PlayerInput playerInput = new PlayerInput(inventory, player);
+        PlayerInput playerInput = new PlayerInput(inventory, player, weapon);
         HandleFinds handleItem = new HandleFinds();
-
-        Item potion = new Potion();
-        Item coin = new Coin();
 
         dungeon.printMap();
         dungeon.description();
@@ -62,7 +63,8 @@ public class GameLogic {
             }
 
             if (event.equals("potion")) {
-                potion.itemFound();
+                Item potion = new Potion();
+                potion.itemDescription();
                 boolean answer = handleItem.addFind(sc, playerInput);
                 if (answer) {
                     inventory.addItem(potion);
@@ -70,11 +72,18 @@ public class GameLogic {
             }
 
             if (event.equals("coin")) {
-                coin.itemFound();
+                Item coin = new Coin();
+                coin.itemDescription();
                 boolean answer = handleItem.addFind(sc, playerInput);
                 if (answer) {
                     inventory.addItem(coin);
                 }
+            }
+
+            if(event.equals("sword")){
+                Item diamondSword = new DiamondSword();
+                diamondSword.itemDescription();
+                weapon.addWeapon(diamondSword);
             }
 
             if (event.equals("door")) break;

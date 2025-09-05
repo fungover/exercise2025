@@ -2,10 +2,10 @@ package ExerciseTwo.Entities.Weapons;
 
 import ExerciseTwo.Entities.Inventory.Item;
 
-public class DiamondSword extends Item {
+public class Sword extends Item {
 
-    public DiamondSword() {
-        super("Diamond sword", -20);
+    public Sword() {
+        super("Basic sword", -10);
     }
 
     @Override

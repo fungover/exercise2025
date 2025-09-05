@@ -14,7 +14,7 @@ public class InputHandling {
             System.out.println("Welcome to the dungeons!");
             PrintText.printBold("Your quest is to find the hidden treasure");
             System.out.print("Please enter your name: ");
-            name = sc.nextLine();
+            name = sc.nextLine().trim();
 
             if(name.isEmpty()){
                 PrintText.printRed("You must enter your name");
@@ -30,6 +30,8 @@ public class InputHandling {
                 In the game you can use following commands:
                     i - inventory
                         use - use potion
+                    j - weapon inventory
+                        switch - switch weapon
                     p - check your health
                     h - help
                     quit - quit

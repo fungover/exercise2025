@@ -1,7 +1,7 @@
 package ExerciseTwo.Entities;
 
-import ExerciseTwo.Entities.Weapons.ThunderSword;
-import ExerciseTwo.Entities.Weapons.Weapon;
+import ExerciseTwo.Entities.Inventory.Item;
+import ExerciseTwo.Entities.Weapons.Sword;
 import ExerciseTwo.Utils.PrintText;
 
 public final class Player {
@@ -13,7 +13,7 @@ public final class Player {
     public Player(String playerName) {
         this.playerName = playerName;
         this.health = 100;
-        this.weapon = new ThunderSword().getDamage();
+        this.weapon = new Sword().getEffect();
     }
     public Player(){}
 
@@ -34,8 +34,9 @@ public final class Player {
         return health;
     }
 
-    public void setWeapon(Weapon weapon){
-        this.weapon = weapon.getDamage();
+    public void setWeapon(Item item){
+        this.weapon = item.getEffect();
+        PrintText.printYellow("You are know equipped with "+item.getType()+" which causes "+item.getEffect()+" in damage");
     }
 
     public int getWeapon(){
@@ -47,7 +48,7 @@ public final class Player {
     }
 
     public void playerHealth(){
-        System.out.println("You now have "+health+" health");
+        PrintText.printYellow("You now have "+health+" health");
     }
 
 }

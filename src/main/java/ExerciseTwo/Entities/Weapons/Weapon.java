@@ -1,21 +1,34 @@
 package ExerciseTwo.Entities.Weapons;
 
-public abstract class Weapon {
+import ExerciseTwo.Entities.Inventory.Item;
+import ExerciseTwo.Utils.PrintText;
 
-    protected String description;
-    protected int damage;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Weapon(String description, int damage) {
-        this.description = description;
-        this.damage = damage;
+public class Weapon {
+
+List<Item> weapons = new ArrayList<>();
+
+    public void addWeapon(Item item) {
+        weapons.add(new Sword());
+        weapons.add(item);
+        PrintText.printYellow("Sword added to weapon inventory");
     }
 
-    public String getDescription() {
-        return description;
+    public int numWeapons() {
+        return weapons.size();
     }
 
-    public int getDamage() {
-        return damage;
+    public Item getWeapon(int num){
+        return weapons.get(num);
     }
 
+    public void getWeapons() {
+        for(int index = 0; index < weapons.size(); index++){
+            Item item = weapons.get(index);
+            System.out.println(index+": "+item.getType()+" with damage "+ item.getEffect());
+
+        }
+    }
 }

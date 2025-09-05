@@ -12,7 +12,7 @@ En hund ska kunna skälla, vilket returnerar strängen "Voff!"
 
 ShoppingCart
 ------------
-Det ska gå att lägga till produkter med namn och pris.
+✅Det ska gå att lägga till produkter med namn och pris.
 
 Det ska gå att ta bort en produkt.
 
@@ -20,4 +20,4 @@ Det ska gå att beräkna totalpriset.
 
 Det ska gå att tömma kundvagnen.
 
-Kundvagnen ska kunna returnera en lista med alla produkter.
+✅Kundvagnen ska kunna returnera en lista med alla produkter.

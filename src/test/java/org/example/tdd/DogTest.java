@@ -37,6 +37,4 @@ public class DogTest {
         Dog dog = new Dog("Odi", 2);
         assertEquals("Voff!", dog.bark());
     }
-
-
 }

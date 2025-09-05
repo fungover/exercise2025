@@ -15,7 +15,7 @@ public class Combat {
             String cmd = sc.nextLine().toLowerCase().trim();
 
             if (cmd.equals("attack")) {
-               // enemy.setHealth(enemy.getHealth() - player.getAttackDamage());
+                // enemy.setHealth(enemy.getHealth() - player.getAttackDamage());
                 enemy.receiveDamage(player.getAttackDamage());
                 System.out.println("You hit the " + enemy.getName() + " for "
                         + player.getAttackDamage() + " damage!");
@@ -35,6 +35,13 @@ public class Combat {
             } else {
                 System.out.println("Invalid command!");
             }
+
+
         }
+    }
+    // For initiate attack in test without writing "attack" in CLI.
+    public static void doAttack(Character attacker, Character defender) {
+        defender.receiveDamage(attacker.getAttackDamage());
+
     }
 }

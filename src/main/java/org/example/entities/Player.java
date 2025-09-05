@@ -49,4 +49,19 @@ public class Player extends Character {
         }
     }
 
+    // For move in test
+    public void move(int dx, int dy, org.example.map.DungeonGrid grid) {
+        int newX = getX() + dx;
+        int newY = getY() + dy;
+
+        if (newX < 0 || newX >= grid.getWidth() || newY < 0 || newY >= grid.getHeight()) {
+          return;
+        }
+        if (grid.getTiles(newX, newY).isWall()) {
+          return;
+        }
+        setX(newX);
+        setY(newY);
+    }
+
 }

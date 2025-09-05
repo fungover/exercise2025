@@ -7,7 +7,7 @@ import java.util.Scanner;
 import static org.example.utils.Colors.*;
 
 public class Game {
-    private Scanner scanner;
+    private final Scanner scanner;
     private Player player;
     private Room currentRoom;
     private boolean gameRunning;
@@ -257,7 +257,7 @@ public class Game {
 
     private void equipItem(String itemName) {
         Item item = player.findItem(itemName);
-        if (item != null && item instanceof Weapon) {
+        if (item instanceof Weapon) {
             player.equipWeapon(itemName);
             player.removeItem(item);
         } else {

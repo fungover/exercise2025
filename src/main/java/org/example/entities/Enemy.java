@@ -59,3 +59,23 @@ public abstract class Enemy {
     }
 }
 
+// --- ENEMIES --------------------------------------------------------------------
+// --- Add only enemies inside this scope -----------------------------------------
+// ----START OF SCOPE--------------------------------------------------------------
+
+// Goblin
+class Goblin extends Enemy {
+    public Goblin() {
+        super("Goblin", 30, new BasicAttack(5));
+    }
+}
+
+// Troll
+class Troll extends Enemy {
+    public Troll() {
+        super("Troll", 50, new BasicAttach(10));
+    }
+}
+
+// ----END OF SCOPE----------------------------------------------------------------
+

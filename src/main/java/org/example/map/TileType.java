@@ -6,5 +6,4 @@ public enum TileType {
     FLOOR,  // walkable
     SPAWN,  // player start (we'll set this to a tile inside the first room)
     BOSS,   // boss target (will be placed later)
-    DOOR    // maybe add later
 }

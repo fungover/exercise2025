@@ -16,7 +16,7 @@ public final class MovementService {
         var tile = map.tileAt(nx, ny);
         if (tile.getType() == TileType.WALL) return MoveResult.BLOCKED_WALL;
 
-        // Walkable: FLOOR, SPAWN, BOSS, DOOR (treat DOOR as passable for now)
+        // Walkable: FLOOR, SPAWN, BOSS
         player.moveTo(nx, ny);
         return MoveResult.MOVED;
     }

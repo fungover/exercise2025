@@ -11,7 +11,6 @@ public final class ConsoleMapPrinter {
     private static final char FLOOR_G  = '.';
     private static final char SPAWN_G  = 'S';
     private static final char BOSS_G   = 'B';
-    private static final char DOOR_G   = '+';
     private static final char ITEM_G   = '!';
     private static final char PLAYER_G = '@';
 
@@ -47,7 +46,6 @@ public final class ConsoleMapPrinter {
             case FLOOR -> FLOOR_G;
             case SPAWN -> SPAWN_G;
             case BOSS  -> BOSS_G;
-            case DOOR  -> DOOR_G;
         };
     }
 }

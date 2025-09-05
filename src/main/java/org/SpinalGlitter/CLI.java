@@ -1,6 +1,8 @@
 package org.SpinalGlitter;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
@@ -10,10 +12,10 @@ public class CLI {
     // Allowed zones
     private static final Set<String> ALLOWED_ZONES = Set.of("SE1", "SE2", "SE3", "SE4");
     // Time zone for Stockholm (Europe/Stockholm)
-    private static final java.time.ZoneId Z_STHLM = java.time.ZoneId.of("Europe/Stockholm");
+    private static final ZoneId Z_STHLM = java.time.ZoneId.of("Europe/Stockholm");
     // DateTimeFormatter for displaying date and time in Stockholm time zone
-    private static final java.time.format.DateTimeFormatter FMT =
-            java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+    private static final DateTimeFormatter FMT =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                     .withZone(Z_STHLM);
 
     public static void main(String[] args) {
@@ -211,7 +213,7 @@ public class CLI {
                             System.out.println("No data available for today.");
                             break;
                         }
-                        entries.sort(java.util.Comparator.comparing(e -> e.timeStart));
+                        entries.sort(Comparator.comparing(e -> e.timeStart));
 
                         System.out.println("""
                                 Best charging hours today:
@@ -236,7 +238,7 @@ public class CLI {
                                     .average()
                                     .orElse(Double.NaN);
 
-                            System.out.printf("%2dh: %s – %s  (avg %.4f SEK/kWh)%n",
+                            System.out.printf("%2dh: %s – %s  (avg %.4f SEK/kWh)\n",
                                     hours, FMT.format(start.timeStart), FMT.format(end.timeEnd), avg);
                         }
                         System.out.println("--------------------------------");

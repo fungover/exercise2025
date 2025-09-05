@@ -9,7 +9,7 @@ public class Pitchfork extends Item implements Weapon {
 
     @Override
     public void use(Player player) {
-        System.out.println("You jab with your " + name + " with farming fury! It deals " + damage + " damage.");
+        System.out.println("You jab with your " + getName() + " with farming fury! It deals " + damage + " damage.");
             }
     @Override
     public int getDamage() {

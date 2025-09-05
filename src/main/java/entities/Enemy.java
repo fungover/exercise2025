@@ -17,4 +17,15 @@ public abstract class Enemy {
 
     public abstract void attack();
 
+    public void takeDamage(int damageAmount) {
+        health -= damageAmount;
+        if (!isAlive()) {
+            System.out.println(type + " has been killed");
+        }
+    };
+
+    public boolean isAlive() {
+        return health > 0;
+    }
+
 }

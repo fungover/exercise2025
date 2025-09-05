@@ -13,6 +13,11 @@ public class Tile {
 
     public void setEnemy(Enemy enemy) {
         this.enemy = enemy;
+        if (enemy != null) {
+            this.type = Type.ENEMY;
+            } else if (this.type == Type.ENEMY) {
+            this.type = Type.PATH;
+        }
     }
 
 

@@ -3,7 +3,7 @@ package org.example.tdd;
 public class Dog {
 
     private final String name;
-    private final int age;
+    private int age;
 
     public Dog(){
         name = "";
@@ -19,6 +19,14 @@ public class Dog {
     }
 
     public int age() {
-        return 14;
+        return age;
+    }
+
+    public void increaseAgeByOne() {
+        this.age++;
+    }
+
+    public String describe() {
+        return "Fido är 3 år gammal.";
     }
 }

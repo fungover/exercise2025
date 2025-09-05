@@ -18,6 +18,21 @@ public class DogTest {
         assertEquals(14, dog.age());
     }
 
+    @Test
+    public void canIncreaseAgeByOne() {
+        Dog dog = new Dog("Buster",1);
+        dog.increaseAgeByOne();
+        assertEquals(2, dog.age());
+    }
+
+    @Test
+    public void getDescriptionOfDog() {
+        Dog dog = new Dog("Fido",3);
+        String description = dog.describe();
+        assertEquals("Fido är 3 år gammal.",description);
+    }
+
+
 
 
 

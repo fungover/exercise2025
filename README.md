@@ -48,7 +48,7 @@ src/
 
 ### Weapon (Interface)
 - Requires `getDamage()` and `getName()`
-- Implemented by classes like `Pitchfork`, `TestWeapon`, `Manifesto`.
+- Implemented by classes like `Pitchfork`, `TestWeapon`.
 
 ---
 

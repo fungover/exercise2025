@@ -302,10 +302,19 @@ class WarehouseTest {
 
         long electronicsCount = warehouse.countProductsInCategory(Category.ELECTRONICS); // Count products in the ELECTRONICS category
         long booksCount = warehouse.countProductsInCategory(Category.BOOKS); // Count products in the BOOKS category
-        long toysCount = warehouse.countProductsInCategory(Category.TOYS); // Count products in the TOYS category
 
         assertEquals(2, electronicsCount); // Verify that there are 2 products in the ELECTRONICS category
         assertEquals(1, booksCount); // Verify that there is 1 product in the BOOKS category
-        assertEquals(0, toysCount); // Verify that there are 0 products in the TOYS category
+    }
+
+    @Test
+    @DisplayName("Should return 0 when no products exists in the specified category")
+    void countProductsInCategoryWhenThereIsNoProductsInTheSpecifiedCategory() {
+        Product laptop = Warehouse.createProduct("1", "Laptop", Category.ELECTRONICS, 8);
+        warehouse.addProduct(laptop);
+
+        long toysCount = warehouse.countProductsInCategory(Category.TOYS); // Attempt to count products in the TOYS category when none exist
+
+        assertEquals(0, toysCount); // Verify that the count is 0
     }
 }

@@ -274,4 +274,13 @@ class WarehouseTest {
         assertTrue(categories.contains(Category.ELECTRONICS)); // Verify that the ELECTRONICS category is included
         assertTrue(categories.contains(Category.BOOKS)); // Verify that the BOOKS category is included
     }
+
+    @Test
+    @DisplayName("Should return empty set when there are no products")
+    void getCategoriesWithProductsWhenThereAreNoProducts() {
+
+        Set<Category> categories = warehouse.getCategoriesWithProducts(); // Attempt to retrieve categories when no products exist
+
+        assertTrue(categories.isEmpty()); // Verify that the result is an empty set
+    }
 }

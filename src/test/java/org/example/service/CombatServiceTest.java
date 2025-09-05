@@ -137,8 +137,6 @@ class CombatServiceTest {
         assertTrue(output.contains("You attack with your Rusty Pitchfork!"));
     }
 
-    // ===== FULL COMBAT FLOW TESTS =====
-
     @Test
     @DisplayName("Player defeats weak enemy in one hit")
     void attackPlayerDefeatsWeakEnemyEnemyRemovedFromMap() {

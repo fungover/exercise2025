@@ -1,7 +1,5 @@
 package org.example.map;
 
-import org.example.utils.Position;
-
 /** Axis-aligned rectangular room with convenience methods. */
 public record Room(int left, int top, int width, int height) {
 

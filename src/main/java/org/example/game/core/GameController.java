@@ -44,34 +44,20 @@ public final class GameController {
                     return;
                 }
 
-                case HELP -> {
-                    printHelp();
-                }
+                case HELP -> printHelp();
 
-                case MAP -> {
-                    // Just reprint the current map view
-                    ConsoleMapPrinter.print(context.map(), context.player().getX(), context.player().getY());
-                }
+                // Just reprint the current map view
+                case MAP -> ConsoleMapPrinter.print(context.map(), context.player().getX(), context.player().getY());
 
-                case UNKNOWN -> {
-                    System.out.println("Unknown command. Type 'help' for a list of commands.");
-                }
+                case UNKNOWN -> System.out.println("Unknown command. Type 'help' for a list of commands.");
 
-                case INVENTORY -> {
-                    printInventory(context.player().getInventory());
-                }
+                case INVENTORY -> printInventory(context.player().getInventory());
 
-                case LOOT -> {
-                    listGroundItems(context);
-                }
+                case LOOT -> listGroundItems(context);
 
-                case TAKE -> {
-                    handleTake(context, exploreCommand);
-                }
+                case TAKE -> handleTake(context, exploreCommand);
 
-                case USE -> {
-                    handleUse(context, exploreCommand.oneBasedIndex());
-                }
+                case USE -> handleUse(context, exploreCommand.oneBasedIndex());
 
                 case MOVE -> {
                     var result = movementService.tryMove(context.player(), context.map(), exploreCommand.direction());

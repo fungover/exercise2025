@@ -73,10 +73,6 @@ public abstract class Player {
     }
 
     //Movement
-    public void moveBy(int dx, int dy) {
-        this.x += dx; this.y += dy;
-    }
-
     public void moveTo(int nx, int ny) {
         this.x = nx; this.y = ny;
     }

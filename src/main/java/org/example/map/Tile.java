@@ -59,6 +59,6 @@ public final class Tile {
     }
 
     public void removeEnemy() {
-        Enemy e = enemy; enemy = null;
+        enemy = null;
     }
 }

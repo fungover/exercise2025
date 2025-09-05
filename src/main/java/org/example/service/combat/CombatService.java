@@ -27,10 +27,6 @@ public final class CombatService {
         this.fleeRng = new Random();
     }
 
-    public CombatService(long fleeSeed) {
-        this.fleeRng = new Random(fleeSeed);
-    }
-
     /**
      * Pure calculation for one combat exchange:
      * 1) Player attacks enemy.

@@ -14,10 +14,6 @@ public final class ConsoleMapPrinter {
     private static final char ITEM_G   = '!';
     private static final char PLAYER_G = '@';
 
-    public static void print(DungeonMap map) {
-        print(map, -1, -1); // no player overlay
-    }
-
     /** Draw the map, overlaying the player at (playerX, playerY) if coordinates are >= 0. */
     public static void print(DungeonMap map, int playerX, int playerY) {
         StringBuilder out = new StringBuilder(map.height() * (map.width() + 1));

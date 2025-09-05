@@ -8,10 +8,16 @@ public class Tile {
     private Enemy enemy;
     private Item item;
 
-    public Tile(TileType type) { this.type = type; }
+    public Tile(TileType type) {
+        if (type == null) throw new IllegalArgumentException("Tile type cannot be null");
+        this.type = type;
+    }
 
     public TileType getType() { return type; }
-    public void setType(TileType type) { this.type = type; }
+    public void setType(TileType type) {
+        if (type == null) throw new IllegalArgumentException("Tile type cannot be null");
+        this.type = type;
+    }
 
     public boolean isWalkable() { return type.isWalkable(); }
 

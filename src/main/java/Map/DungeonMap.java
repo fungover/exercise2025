@@ -21,12 +21,16 @@ public class DungeonMap {
 
     public DungeonMap(int w, int h) {
         if (w <= 0 || h <= 0) throw new IllegalArgumentException("Map size must be > 0");
+        if (w < 3 || h < 3) {
+            throw new IllegalArgumentException("Map must be at least 3x3 to have an interior floor.");
+        }
         if (w > MAX_WIDTH || h > MAX_HEIGHT) {
             throw new IllegalArgumentException("Map too large. Max: " + MAX_WIDTH + "x" + MAX_HEIGHT);
         }
         this.w = w;
         this.h = h;
         this.grid = new Tile[h][w];
+        generateBasicLayout();
     }
 
     public void generateBasicLayout() {
@@ -41,6 +45,9 @@ public class DungeonMap {
     public void placePlayerAtStart(Player p) {
         this.startX = 1;
         this.startY = 1;
+        if (!inBounds(startX, startY) || !tile(startX, startY).isWalkable()) {
+            throw new IllegalStateException("Start position must be within bounds and walkable. Ensure w,h >= 3 and layout generated.");
+        }
         p.setPos(startX, startY);
         System.out.println("You start at (" + startX + "," + startY + ").");
     }
@@ -62,6 +69,9 @@ public class DungeonMap {
     public void populateRandom(double enemyProb, double lootProb, int maxEnemies, int maxLoot) {
         if (enemyProb < 0 || enemyProb > 1 || lootProb < 0 || lootProb > 1) {
             throw new IllegalArgumentException("Probabilities must be 0..1");
+        }
+        if (maxEnemies < 0 || maxLoot < 0) {
+            throw new IllegalArgumentException("maxEnemies and maxLoot must be >= 0");
         }
         int enemiesPlaced = 0;
         int lootPlaced = 0;
@@ -103,8 +113,11 @@ public class DungeonMap {
     }
 
     public boolean inBounds(int x, int y) { return x >= 0 && y >= 0 && x < w && y < h; }
-    public Tile tile(int x, int y) { return grid[y][x]; }
+    public Tile tile(int x, int y) {
+        if (!inBounds(x, y)) {
+            throw new IndexOutOfBoundsException("Tile out of bounds: (" + x + "," + y + ")");
+        }
+        return grid[y][x];
+    }
 
-    public int getWidth() { return w; }
-    public int getHeight() { return h; }
 }

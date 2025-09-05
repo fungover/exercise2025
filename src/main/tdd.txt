@@ -14,7 +14,7 @@ ShoppingCart
 ------------
 ✅Det ska gå att lägga till produkter med namn och pris.
 
-Det ska gå att ta bort en produkt. Kasta exception om produkten inte finns?
+✅Det ska gå att ta bort en produkt. Kasta exception om produkten inte finns?
 
 ✅Det ska gå att beräkna totalpriset.
 

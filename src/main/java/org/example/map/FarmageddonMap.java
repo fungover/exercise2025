@@ -99,14 +99,18 @@ public class FarmageddonMap {
     }
 
     private int[] getRandomValidCoordinates() {
-        for (int i = 0; i < 100; i++) { // Avoid infinite loop
-            int x = RandomUtils.randomInt(0, width);
-            int y = RandomUtils.randomInt(0, height);
-            if (isValidTile(x, y)) {
-                return new int[]{x, y};
+            for (int i = 0; i < 100; i++) {
+                int x = RandomUtils.randomInt(0, width);
+                int y = RandomUtils.randomInt(0, height);
+                   if (isValidTile(x, y)) return new int[]{x, y};
+            }
+         // Fallback: scan deterministically
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (isValidTile(x, y)) return new int[]{x, y};
             }
         }
-        throw new RuntimeException("No valid tile found for Manifesto placement.");
+           throw new RuntimeException("No valid PATH tile found for Manifesto placement.");
     }
 
     public Tile getTile(int x, int y) {

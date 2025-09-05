@@ -2,6 +2,8 @@ package org.example.game.core;
 
 import java.util.List;
 import java.util.Scanner;
+
+import org.example.entities.enemies.Boss;
 import org.example.entities.items.Inventory;
 import org.example.entities.items.Item;
 import org.example.game.cli.CliCombatUI;
@@ -92,12 +94,17 @@ public final class GameController {
 
                                 // If enemy died, clear it from the tile
                                 if (enemy.isDead()) {
-                                    currentTile.removeEnemy();
+                                    if (enemy instanceof Boss boss) {
+                                        // Clear the whole 2x2 boss footprint and declare victory
+                                        clearBossFootprintAndWin(context, boss);
+                                        return; // end game as a win
+
+                                    } else {
+                                        currentTile.removeEnemy();
+                                        System.out.println("That was scarry, let's continue...");
+                                        promptLootIfPresent(context);
+                                    }
                                 }
-
-                                System.out.println("That was scarry, let's continue...");
-                                promptLootIfPresent(context);
-
                             } else {
                                 // No enemy here, keep the old behavior
                                 promptLootIfPresent(context);
@@ -223,4 +230,23 @@ public final class GameController {
         }
         System.out.println("Use with: use <number>");
     }
+
+    private void clearBossFootprintAndWin(GameContext context, Boss boss) {
+        // Remove all tiles that belong to this boss (it occupies 2x2, but scan safely)
+        var map = context.map();
+        for (int y = 0; y < map.height(); y++) {
+            for (int x = 0; x < map.width(); x++) {
+                var tile = map.tileAt(x, y);
+                if (tile.getType() == org.example.map.TileType.BOSS && tile.hasEnemy() && tile.enemy() == boss) {
+                    tile.setType(org.example.map.TileType.FLOOR);
+                    tile.removeEnemy();
+                }
+            }
+        }
+
+        // Announce victory (no immediate map re-render, so the message is not missed)
+        System.out.println("You have slain the " + boss.archetype() + "!");
+        System.out.println("The evil presence fades… You win! 🎉");
+    }
+
 }

@@ -8,6 +8,9 @@ import org.example.service.enemy.EnemyService;
 import org.example.service.loot.DefaultLootTable;
 import org.example.service.loot.LootService;
 
+import static org.example.utils.GridMath.manhattan;
+import static org.example.utils.Rng.between;
+
 public final class MapGenerator {
     private final Random random;
     private final LootService lootService;
@@ -69,23 +72,24 @@ public final class MapGenerator {
             map.tileAt(spawnX, spawnY).setType(TileType.SPAWN);
 
             lootService.scatter(map, placedRooms, spawnX, spawnY);
-            enemyService.scatter(map, placedRooms, spawnX, spawnY);        }
+            enemyService.scatter(map, placedRooms, spawnX, spawnY);
+            enemyService.placeBoss2x2(map, placedRooms, spawnX, spawnY);}
         return map;
     }
 
     private List<Room> placeRooms(DungeonMap map, int mapWidth, int mapHeight) {
         List<Room> placedRooms = new ArrayList<>();
-
         int attemptsMade = 0;
+
         while (placedRooms.size() < desiredRoomCount && attemptsMade < maxPlacementAttempts) {
             attemptsMade++;
 
-            int roomWidth  = randomBetween(minRoomSize, maxRoomSize);
-            int roomHeight = randomBetween(minRoomSize, maxRoomSize);
+            int roomWidth  = between(random, minRoomSize, maxRoomSize);
+            int roomHeight = between(random, minRoomSize, maxRoomSize);
 
             // Keep a 1-tile border so rooms don’t touch the map edge.
-            int left = randomBetween(1, Math.max(1, mapWidth  - roomWidth  - 2));
-            int top  = randomBetween(1, Math.max(1, mapHeight - roomHeight - 2));
+            int left = between(random, 1, Math.max(1, mapWidth  - roomWidth  - 2));
+            int top  = between(random, 1, Math.max(1, mapHeight - roomHeight - 2));
 
             Room candidate = new Room(left, top, roomWidth, roomHeight);
 
@@ -115,13 +119,13 @@ public final class MapGenerator {
     /** Connect each room to the nearest already-placed room with an L-shaped corridor. */
     private void connectRoomsWithCorridors(DungeonMap map, List<Room> roomsInPlacementOrder) {
         for (int index = 1; index < roomsInPlacementOrder.size(); index++) {
-            Room current = roomsInPlacementOrder.get(index);
-            Room nearest = findNearestRoom(current, roomsInPlacementOrder, index);
+            Room currentRoom = roomsInPlacementOrder.get(index);
+            Room nearestRoom = findNearestRoom(currentRoom, roomsInPlacementOrder, index);
 
-            int startX = roomCenterX(current);
-            int startY = roomCenterY(current);
-            int targetX = roomCenterX(nearest);
-            int targetY = roomCenterY(nearest);
+            int startX  = currentRoom.centerX();
+            int startY  = currentRoom.centerY();
+            int targetX = nearestRoom.centerX();
+            int targetY = nearestRoom.centerY();
 
             boolean carveHorizontalFirst = random.nextBoolean();
             if (carveHorizontalFirst) {
@@ -134,35 +138,21 @@ public final class MapGenerator {
         }
     }
 
-    private Room findNearestRoom(Room reference, List<Room> placed, int searchExclusiveEnd) {
-        Room nearest = placed.getFirst();
-        int bestDistance = gridStepsBetween(
-                roomCenterX(reference), roomCenterY(reference),
-                roomCenterX(nearest), roomCenterY(nearest));
+    private Room findNearestRoom(Room referenceRoom, List<Room> placedRooms, int searchExclusiveEnd) {
+        Room nearestRoom = placedRooms.getFirst();
+        int bestDistance = manhattan(referenceRoom.centerX(), referenceRoom.centerY(),
+                nearestRoom.centerX(),  nearestRoom.centerY());
 
         for (int i = 1; i < searchExclusiveEnd; i++) {
-            Room candidate = placed.get(i);
-            int distance = gridStepsBetween(
-                    roomCenterX(reference), roomCenterY(reference),
-                    roomCenterX(candidate), roomCenterY(candidate));
+            Room candidateRoom = placedRooms.get(i);
+            int distance = manhattan(referenceRoom.centerX(), referenceRoom.centerY(),
+                    candidateRoom.centerX(), candidateRoom.centerY());
             if (distance < bestDistance) {
                 bestDistance = distance;
-                nearest = candidate;
+                nearestRoom = candidateRoom;
             }
         }
-        return nearest;
-    }
-
-    private int roomCenterX(Room room) {
-        return room.left() + room.width() / 2;
-    }
-
-    private int roomCenterY(Room room) {
-        return room.top()  + room.height() / 2;
-    }
-
-    private int gridStepsBetween(int x1, int y1, int x2, int y2) {
-        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+        return nearestRoom;
     }
 
     private void setFloorIfWall(DungeonMap map, int x, int y) {
@@ -185,10 +175,5 @@ public final class MapGenerator {
         for (int row = startRow; row <= endRow; row++) {
             setFloorIfWall(map, fixedX, row);
         }
-    }
-
-    private int randomBetween(int inclusiveMin, int inclusiveMax) {
-        if (inclusiveMax < inclusiveMin) return inclusiveMin; // guard for tiny maps
-        return inclusiveMin + random.nextInt(inclusiveMax - inclusiveMin + 1);
     }
 }

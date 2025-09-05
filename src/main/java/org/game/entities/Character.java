@@ -1,5 +1,8 @@
 package org.game.entities;
 
+import org.game.utils.Colors;
+import org.game.utils.RandomGenerator;
+
 public abstract class Character {
     protected String name;
     protected int health;
@@ -36,16 +39,37 @@ public abstract class Character {
         this.y = y;
     }
 
-    public void TakeDamage(int damage)
-    {
+    public int takeDamage(int damage,boolean isEnemyAttack) {
         this.health -= damage;
-        System.out.println("You take " + damage + " damage");
+        String damageColor = isEnemyAttack ? Colors.redColor : Colors.greenColor;
+        System.out.println(damageColor+getName() + "takes " + damage + " damage! " + health + " health remaining!"+Colors.resetColor );
+    return health;
+    }
+
+    public boolean attackDamage(Character target, boolean isPlayer) {
+        int attackRoll = RandomGenerator.randomInt(0,this.strength);
+        int defenceRoll = RandomGenerator.randomInt(0,target.dexterity + target.defense);
+        //System.out.println(getName() + " rolled " +attackRoll + " attack");
+        //System.out.println(getName() + " rolled " +defenceRoll + " defence");
+        int damage = RandomGenerator.randomInt(1, this.dexterity + this.strength/10);
+        if (attackRoll > RandomGenerator.randomInt(0,defenceRoll) && damage > 0) {
+
+
+            target.takeDamage(damage,!isPlayer);
+            return true;
+            //System.out.println(Colors.greenColor+getName() + " attacks for " + damage + " damage!"+Colors.resetColor );
+        }
+        else {
+            System.out.println(Colors.yellowColor+getName() + " missed " + target.getName() +"!"+Colors.resetColor);
+        return false;
+        }
     }
 
     //Todo Alive
     public boolean isAlive() { return this.health > 0;}
 
     //Todo Get values
+    public String getName() {return this.name;}
     public int getHealth() { return this.health; }
     public int getStrength() { return this.strength; }
     public int getDexterity() { return this.dexterity; }

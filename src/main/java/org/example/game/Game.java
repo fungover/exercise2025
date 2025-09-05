@@ -3,6 +3,7 @@ package org.example.game;
 import org.example.entities.Item;
 import org.example.entities.Manifesto;
 import org.example.entities.Player;
+import org.example.entities.Weapon;
 import org.example.map.FarmageddonMap;
 import org.example.service.MapService;
 import org.example.service.CombatService;
@@ -89,7 +90,9 @@ public class Game {
 
         optionalItem.ifPresentOrElse(item -> {
             item.use(player);
-            player.removeItem(item);
+            if (!(item instanceof Weapon)) {
+                player.removeItem(item);
+            }
 
             //win the and exit the game
             if (item instanceof Manifesto manifesto) {

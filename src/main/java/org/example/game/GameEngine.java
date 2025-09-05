@@ -1,4 +1,4 @@
-package org.example.game.cli;
+package org.example.game;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -12,20 +12,19 @@ import org.example.map.MapGenerator;
 import org.example.utils.Position;
 import org.example.utils.SpawnLocator;
 
-public final class MapAndMovePreviewApp {
+public final class GameEngine {
 
-    public static void main(String[] args) {
-        // Seed strategy: arg = fixed seed; "random"/no arg = new layout each run
-        final long seed = (args.length > 0 && !args[0].equalsIgnoreCase("random"))
-                ? Long.parseLong(args[0])
-                : System.currentTimeMillis();
+    public void start() {
+        start(System.currentTimeMillis());
+    }
 
+    public void start(long seed) {
         final int mapWidth = 40, mapHeight = 15;
 
-        Random parameterRng = new Random(seed ^ 0x9E3779B97F4A7C15L);
+        Random rootRng = new Random(seed);
         final int minRoomSize = 4;
-        final int maxRoomSize = between(parameterRng, 8, 10);
-        final int desiredRoomCount = between(parameterRng, 5, 9);
+        final int maxRoomSize = between(rootRng, 8, 10);
+        final int desiredRoomCount = between(rootRng, 5, 9);
         final int roomPadding = 1;
         final int maxPlacementAttempts = 1000;
 

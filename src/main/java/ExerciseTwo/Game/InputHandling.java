@@ -30,7 +30,6 @@ public class InputHandling {
                 In the game you can use following commands:
                     i - inventory
                         use - use potion
-                        switch - switch weapon
                     p - check your health
                     h - help
                     quit - quit

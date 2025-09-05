@@ -9,5 +9,14 @@ public abstract class Item {
         this.effect = effect;
     }
 
+    public String getType(){
+        return type;
+    }
+
+    public int getEffect() {
+        return effect;
+    }
+
     public abstract void itemFound();
+
 }

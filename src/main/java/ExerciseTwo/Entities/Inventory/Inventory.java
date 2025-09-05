@@ -1,5 +1,7 @@
 package ExerciseTwo.Entities.Inventory;
 
+import ExerciseTwo.Utils.PrintText;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,22 +10,35 @@ public class Inventory {
 
     public void addItem(Item item) {
         inventory.add(item);
-        System.out.println("Item added to inventory");
+        PrintText.printYellow("Item added to Inventory");
     }
 
-    public void removeItem(Item item) {
-        inventory.remove(item);
+    public void removeItem(String item) {
+        inventory.stream()
+                .filter(name -> name.getType().equals(item))
+                .findFirst().ifPresent(inventory::remove);
     }
 
-    public void getInventory() {
+    public boolean getInventory() {
 
         if(inventory.isEmpty()) {
-            System.out.println("Inventory is empty");
+            PrintText.printBold("Inventory is empty");
+            return false;
         }else{
-            System.out.println("Inventory items: ");
-            for(Item item : inventory) {
-                System.out.println("* "+item);
+            PrintText.printBold("Inventory items: ");
+            long countPoint = inventory.stream()
+                    .filter(item -> item.getType().equals("Potion")).count();
+            if(countPoint > 0) {
+                System.out.println("Potion to use: "+countPoint);
             }
+            long countCoins  = inventory.stream()
+                    .filter(item -> item.getType().equals("Coin"))
+                    .mapToInt(Item::getEffect)
+                    .sum();
+            if(countCoins > 0) {
+                System.out.println("Sum of coins collected: "+countCoins);
+            }
+            return countPoint > 0;
         }
     }
 

@@ -25,7 +25,6 @@ public class Player {
             }
         } else {
             this.damage -= 10;
-
         }
     }
     public int getDamage() {

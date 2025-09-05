@@ -27,6 +27,7 @@ public class CombatService {
 
 
             if ("1".equals(input)) {
+                System.out.println(enemy.getPosition());
                 System.out.println("👉 You attack " + enemy.getName() + " for " + player.getDamage() + " damage.");
                 enemy.takeDamage(player.getDamage());
             } else if ("2".equals(input) && player.getInventory().hasPotion() && player.getCurrentHealth() < player.getMaxHealth()) {

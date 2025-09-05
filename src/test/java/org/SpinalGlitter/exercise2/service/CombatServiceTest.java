@@ -34,10 +34,10 @@ class CombatServiceTest {
         combatService.startCombat(player, goblin);
 
         // Assert
-        assertTrue(goblin.getHp() <= 0, "Enemy should be defeated");
-        assertTrue(combatService.haveWon() || !goblin.isAlive());
-        assertEquals(1, combatService.getBattleCount(), "Battle count should be 1 after defeating the goblin");
-
+        assertFalse(goblin.isAlive(), "Goblin should be dead after combat");
+        assertEquals(0, goblin.getHp(), "Goblin HP should be exactly 0");
+        assertTrue(combatService.haveWon(), "Player should have won after defeating the only enemy");
+        assertEquals(1, combatService.getBattleCount(), "Battle count should increment after victory");
     }
 
     @Test

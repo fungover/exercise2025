@@ -6,11 +6,13 @@ import org.SpinalGlitter.exercise2.map.DungeonMap;
 import java.util.*;
 
 public final class RandomGeneration {
-    private RandomGeneration() {
+    public DungeonMap map;
+    public RandomGeneration(DungeonMap map) {
+        this.map = map;
     }
 
 
-    public static Map<Position, Potion> placePotions(DungeonMap map, int count, Position avoid, Random rng) {
+    public Map<Position, Potion> placePotions(int count, Position avoid, Random rng) {
         Map<Position, Potion> out = new HashMap<>();
         int W = map.getWidth(), H = map.getHeight();
         int tries = 0;
@@ -29,7 +31,7 @@ public final class RandomGeneration {
     }
 
     // Random placing of walls
-    public static Set<Position> placeWalls(DungeonMap map, Set<Position> occupied, int count, Position avoid, Random rng) {
+    public Set<Position> placeWalls(Set<Position> occupied, int count, Position avoid, Random rng) {
         int W = map.getWidth(), H = map.getHeight();
         int placed = 0, tries = 0, maxTries = Math.max(1, count) * 400;
         // changes maybe delete
@@ -51,7 +53,7 @@ public final class RandomGeneration {
     }
 
     // Random placing of enemies
-    public static Map<Position, Enemy> placeEnemies(DungeonMap map, int count, Position avoid, Random rng) {
+    public Map<Position, Enemy> placeEnemies(int count, Position avoid, Random rng) {
         Map<Position, Enemy> out = new HashMap<>();
         int W = map.getWidth(), H = map.getHeight();
         int tries = 0;
@@ -72,8 +74,7 @@ public final class RandomGeneration {
     }
 
     // Place sword
-    public static Map<Position, Sword> placeSwords(
-            DungeonMap map,
+    public Map<Position, Sword> placeSwords(
             int count,
             Position avoid,
             Random rng,

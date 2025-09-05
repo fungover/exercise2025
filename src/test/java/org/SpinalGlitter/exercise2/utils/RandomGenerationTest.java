@@ -13,22 +13,23 @@ class RandomGenerationTest {
     @Test
     void placeItems() {
         DungeonMap map = new DungeonMap(20, 20);
+        RandomGeneration random = new RandomGeneration(map);
         Player player = new Player("Hero");
         Random rng = new Random(42);
 
         Set<Position> occupied = new HashSet<>();
         occupied.add(player.getPosition());
 
-        Map<Position, Potion> potions = RandomGeneration.placePotions(map, 5, player.getPosition(), rng);
+        Map<Position, Potion> potions = random.placePotions(5, player.getPosition(), rng);
         occupied.addAll(potions.keySet());
-        Map<Position, Enemy> enemies = RandomGeneration.placeEnemies(map, 5, player.getPosition(), rng);
+        Map<Position, Enemy> enemies = random.placeEnemies(5, player.getPosition(), rng);
         occupied.addAll(enemies.keySet());
-        Set<Position> walls = RandomGeneration.placeWalls(map, occupied, 10, player.getPosition(), rng);
+        Set<Position> walls = random.placeWalls(occupied, 10, player.getPosition(), rng);
         occupied.addAll(walls);
 
 
         Set<Position> occupiedBeforeSword = new HashSet<>(occupied);
-        Map<Position, Sword> sword = RandomGeneration.placeSwords(map, 1, player.getPosition(), rng, occupied);
+        Map<Position, Sword> sword = random.placeSwords(1, player.getPosition(), rng, occupied);
         occupied.addAll(sword.keySet());
 
         assertEquals(5, potions.size(), "Expected 5 potions");

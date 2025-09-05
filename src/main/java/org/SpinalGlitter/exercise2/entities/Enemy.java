@@ -23,6 +23,7 @@ public class Enemy {
     }
 
     public void takeDamage(int amount) {
+        System.out.println("Damaged enemy");
         if (amount <= 0) return;
         this.hp = Math.max(0, this.hp - amount);
     }

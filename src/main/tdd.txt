@@ -1,0 +1,23 @@
+Dog
+---
+Krav:
+
+En hund ska ha ett namn och en ålder.
+
+Det ska gå att öka hundens ålder med ett år.
+
+Det ska gå att få en beskrivning av hunden i textform, t.ex.. "Fido är 3 år gammal."
+
+En hund ska kunna skälla, vilket returnerar strängen "Voff!"
+
+ShoppingCart
+------------
+Det ska gå att lägga till produkter med namn och pris.
+
+Det ska gå att ta bort en produkt.
+
+Det ska gå att beräkna totalpriset.
+
+Det ska gå att tömma kundvagnen.
+
+Kundvagnen ska kunna returnera en lista med alla produkter.

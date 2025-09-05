@@ -21,21 +21,12 @@ public class GameLoop {
 
         Character player = new Player("Dragon Slayer", 100, 2, 2);
 
-
-       // player.takeTurn(); Maybe implement this later
-
         DungeonGrid grid = new DungeonGrid(12, 8);
 
         List<Character> enemies = new ArrayList<>();
-      /*  enemies.add(new Goblin(3,3));
-        enemies.add(new Ghost(5,2));
-        enemies.add(new Troll(7,4));
-        enemies.add(new Dragon(9,1)); */
 
         //Loot on map
         List<ItemOnMap> itemsOnMap = new ArrayList<>();
-       /* itemsOnMap.add(new ItemOnMap(new HealthPotion("Small Potion", 20), 3, 2));
-        itemsOnMap.add(new ItemOnMap(new HealthPotion("Large Potion", 50), 4, 2)); */
 
         //Random enemies
     int [] pos;
@@ -53,20 +44,6 @@ public class GameLoop {
         itemsOnMap.add(new ItemOnMap(new HealthPotion("Small Potion", 20), pos[0], pos[1]));
         pos = RandomGeneration.getRandomPosition(grid, player, enemies, itemsOnMap);
         itemsOnMap.add(new ItemOnMap(new HealthPotion("Large Potion", 50), pos[0], pos[1]));
-
-        //DEBUG
-        System.out.println("Enemies;");
-        for (Character e: enemies) {
-            System.out.println(e.getName()+ " at (" + e.getX() + "," + e.getY() + ")");
-        }
-        System.out.println("Items on map;");
-        for (ItemOnMap i: itemsOnMap) {
-            System.out.println(i.item.getName()+ " at (" + i.x + "," + i.y + ")");
-        }
-
-        // Starting position
-        //From Character abstract class
-        //int[] playerPos = {2, 2};
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;

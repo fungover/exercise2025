@@ -1,7 +1,6 @@
 package org.example.map;
 
 import org.example.entities.Character;
-import org.example.map.Tiles;
 import org.example.utils.Helpers;
 import org.example.utils.ItemOnMap;
 import java.util.List;

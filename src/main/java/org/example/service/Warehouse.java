@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 public class Warehouse {
 
     private final Map<String, Product> products = new HashMap<>(); // Using Hashmap to sore products. Key = ID, Value = Product.

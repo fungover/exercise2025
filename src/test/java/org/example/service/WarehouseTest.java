@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class WarehouseTest {
 
     private Warehouse warehouse;
-    private Product product;
 
     @BeforeEach
     void setUp() {

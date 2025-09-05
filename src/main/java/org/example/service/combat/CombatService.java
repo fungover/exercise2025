@@ -1,6 +1,7 @@
 package org.example.service.combat;
 
 import java.util.List;
+import java.util.Random;
 import org.example.entities.characters.Player;
 import org.example.entities.enemies.Enemy;
 import org.example.entities.items.Inventory;
@@ -9,40 +10,113 @@ import org.example.game.cli.CombatUI;
 
 public final class CombatService {
 
+    /**
+     * Result of a single combat round.
+     */
+    public record RoundResult(
+            int playerDamageDealt,
+            int enemyDamageDealt,
+            boolean enemyDead,
+            boolean playerDead
+    ) {}
+
+    // Seedable RNG for flee so tests can be deterministic if needed.
+    private final Random fleeRng;
+
+    public CombatService() {
+        this.fleeRng = new Random();
+    }
+
+    public CombatService(long fleeSeed) {
+        this.fleeRng = new Random(fleeSeed);
+    }
+
+    /**
+     * Pure calculation for one combat exchange:
+     * 1) Player attacks enemy.
+     * 2) If the enemy survives, the enemy attacks the player.
+     */
+    public RoundResult attackOnce(Player player, Enemy enemy, Inventory inventory) {
+        int playerDamageDealt = player.attackDamage();
+
+        playerDamageDealt += inventory.takeNextAttackBonus();
+
+        enemy.takeDamage(playerDamageDealt);
+
+        int enemyDamageDealt = 0;
+        if (!enemy.isDead()) {
+            enemyDamageDealt = enemy.attackDamage();
+            player.takeDamage(enemyDamageDealt);
+        }
+
+        return new RoundResult(
+                playerDamageDealt,
+                enemyDamageDealt,
+                enemy.isDead(),
+                player.isDead()
+        );
+    }
+
+    /**
+     * Orchestrator with UI loop. Uses attackOnce(...) for the actual math.
+     * Keeps all I/O (printing, reading commands) in here, separate from the logic.
+     */
     public void fight(Player player, Enemy enemy, Inventory inventory, CombatUI ui) {
         ui.showIntro(enemy.name(), player.getHealth(), player.getMaxHealth(), enemy.health(), enemy.maxHealth());
 
         while (!enemy.isDead() && !player.isDead()) {
             CombatUI.Action action = ui.readAction();
+
             switch (action.type()) {
                 case ATTACK -> {
-                    int damage = player.attackDamage();
-                    enemy.takeDamage(damage);
-                    ui.playerAttackFeedback(enemy.name(), damage);
+                    RoundResult round = attackOnce(player, enemy, inventory);
+                    ui.playerAttackFeedback(enemy.name(), round.playerDamageDealt());
+                    if (!round.enemyDead()) {
+                        ui.enemyAttackFeedback(enemy.name(), round.enemyDamageDealt());
+                    }
                 }
+
                 case USE_ITEM -> {
-                    Integer idx = action.oneBasedItemIndex();
-                    if (idx == null) { ui.showMessage("Usage: use <number>"); break; }
+                    Integer selectedIndex = action.oneBasedItemIndex();
+                    if (selectedIndex == null) {
+                        ui.showMessage("Usage: use <number>");
+                        break;
+                    }
+
                     List<Item> items = inventory.items();
-                    if (idx < 1 || idx > items.size()) { ui.showMessage("No such item."); break; }
-                    Item it = items.get(idx - 1);
-                    boolean ok = inventory.use(it, player);
-                    ui.usedItemFeedback(it.name(), ok);
+                    if (selectedIndex < 1 || selectedIndex > items.size()) {
+                        ui.showMessage("No such item.");
+                        break;
+                    }
+
+                    Item chosenItem = items.get(selectedIndex - 1);
+                    boolean usedSuccessfully = inventory.use(chosenItem, player);
+                    ui.usedItemFeedback(chosenItem.name(), usedSuccessfully);
                 }
+
                 case FLEE -> {
-                    if (tryFlee()) { ui.showMessage("You flee successfully!"); return; }
+                    if (attemptFlee()) {
+                        ui.showMessage("You flee successfully!");
+                        return;
+                    }
                     ui.showMessage("You fail to flee!");
                 }
+
                 case HELP -> ui.showMessage("a|attack, use <n>, f|flee, h|help");
-                case UNKNOWN -> { ui.showMessage("Unknown command. Type h for help."); continue; }
+
+                case UNKNOWN -> {
+                    ui.showMessage("Unknown command. Type h for help.");
+                    continue; // go read the next action
+                }
             }
 
-            if (!enemy.isDead()) {
-                int enemyDamage = enemy.attackDamage();
-                player.takeDamage(enemyDamage);
-                ui.enemyAttackFeedback(enemy.name(), enemyDamage);
-            }
-            ui.showStatus(player.getHealth(), player.getMaxHealth(), enemy.health(), enemy.maxHealth());
+            // Show the current status after handling the action.
+            ui.showStatus(
+                    player.getHealth(),
+                    player.getMaxHealth(),
+                    enemy.health(),
+                    enemy.maxHealth()
+            );
         }
 
         if (player.isDead()) {
@@ -53,7 +127,7 @@ public final class CombatService {
         }
     }
 
-    private boolean tryFlee() {
-        return new java.util.Random().nextBoolean(); // simple 50%
+    private boolean attemptFlee() {
+        return fleeRng.nextBoolean(); // simple 50%
     }
 }

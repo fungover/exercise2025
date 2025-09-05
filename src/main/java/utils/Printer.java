@@ -15,15 +15,25 @@ public class Printer {
     }
 
     public static void printHelp() {
-        System.out.println("Kommandon:");
+        System.out.println("=== Kommandon ===");
+        System.out.println("Rörelse:");
         System.out.println("  n/s/e/w eller move north|south|east|west");
-        System.out.println("  look");
-        System.out.println("  attack");
-        System.out.println("  use <item-namn eller index>");
-        System.out.println("  inventory (eller inv)");
-        System.out.println("  help");
-        System.out.println("  quit");
+        System.out.println();
+        System.out.println("Strid:");
+        System.out.println("  attack   (attackerar fiende på samma ruta)");
+        System.out.println();
+        System.out.println("Föremål:");
+        System.out.println("  inventory   (lista dina items)");
+        System.out.println("  use <item>  (ange namn eller index, ex. 'use potion' eller 'use 0')");
+        System.out.println();
+        System.out.println("Utforskning:");
+        System.out.println("  look   (visa karta runt dig)");
+        System.out.println();
+        System.out.println("Övrigt:");
+        System.out.println("  help   (visa denna lista)");
+        System.out.println("  quit   (avsluta spelet)");
     }
+
 
     public static void printStatus(Player p) {
         System.out.println("Spelare: " + p.getName() +

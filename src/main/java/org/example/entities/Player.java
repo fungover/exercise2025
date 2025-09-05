@@ -85,4 +85,14 @@ public class Player {
         }
         combatBehaviour.attack(enemy);
     }
+
+    public void useItem(Item item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Item cannot be null");
+        }
+        if (!inventory.contains(item)) {
+            throw new IllegalArgumentException("Item is not in inventory");
+        }
+        item.getEffect().apply(this);
+    }
 }

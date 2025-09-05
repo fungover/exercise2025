@@ -14,21 +14,23 @@ public class Main {
 
         InputHandling inputHandling = new InputHandling();
         String name = inputHandling.enterName(sc);
+
         Player player = new Player(name);
         player.presentPlayer();
 
         InputHandling.commands();
+
+        GameLogic gameLogic = new GameLogic(player);
 
         Dungeon hallway = new Hallway();
         Dungeon cave = new Cave();
         Dungeon claustrophobic = new Claustrophobic();
         Dungeon treasure = new Treasue();
 
-        GameLogic gameLogic = new GameLogic();
-        gameLogic.runGame(hallway, player);
-        gameLogic.runGame(cave, player);
-        gameLogic.runGame(claustrophobic, player);
-        gameLogic.runGame(treasure, player);
+        gameLogic.gameLoop(hallway);
+        gameLogic.gameLoop(cave);
+        gameLogic.gameLoop(claustrophobic);
+        gameLogic.gameLoop(treasure);
 
     }
 }

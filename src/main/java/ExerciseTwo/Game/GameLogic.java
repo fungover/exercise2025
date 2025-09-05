@@ -12,11 +12,18 @@ import java.util.Scanner;
 
 public class GameLogic {
 
-    public void runGame(Dungeon dungeon, Player player){
+    Inventory inventory;
+    Player player;
+
+    public GameLogic(Player player) {
+        this.inventory = new Inventory();
+        this.player = player;
+    }
+
+    public void gameLoop(Dungeon dungeon) {
 
         Scanner sc = new Scanner(System.in);
 
-        Inventory inventory = new Inventory();
         PlayerInput playerInput = new PlayerInput(inventory, player);
         HandleFinds handleItem = new HandleFinds();
 
@@ -34,16 +41,16 @@ public class GameLogic {
             String move = movement.move(sc, playerInput);
             String event = movement.checkMovement(map, move);
 
-            if(event.equals("enemy")){
+            if (event.equals("enemy")) {
 
                 Combat combat = new Combat(player);
                 combat.description();
                 boolean choice = combat.makeAttack(sc, playerInput);
-                if(choice){
-                    while (true){
+                if (choice) {
+                    while (true) {
                         int attackOfPlayer = combat.playerAttack();
                         int enemyDamage = combat.enemyDamage(attackOfPlayer);
-                        if(enemyDamage < 0){
+                        if (enemyDamage < 0) {
                             combat.enemyDefeated();
                             break;
                         }
@@ -54,24 +61,27 @@ public class GameLogic {
                 }
             }
 
-            if(event.equals("potion")){
+            if (event.equals("potion")) {
                 potion.itemFound();
                 boolean answer = handleItem.addFind(sc, playerInput);
-                if(answer){
+                if (answer) {
                     inventory.addItem(potion);
                 }
             }
 
-            if(event.equals("coin")){
+            if (event.equals("coin")) {
                 coin.itemFound();
                 boolean answer = handleItem.addFind(sc, playerInput);
-                if(answer){
+                if (answer) {
                     inventory.addItem(coin);
                 }
             }
 
-            if(event.equals("door")) break;
+            if (event.equals("door")) break;
+
+            if (event.equals("treasure")) {
+                System.exit(0);
+            }
         }
     }
-
 }

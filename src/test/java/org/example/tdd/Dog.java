@@ -25,4 +25,8 @@ public class Dog {
     public String describe() {
         return name + " är " + age + " år gammal.";
     }
+
+    public String bark() {
+        return "Voff!";
+    }
 }

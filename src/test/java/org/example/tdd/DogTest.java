@@ -1,5 +1,6 @@
 package org.example.tdd;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -28,6 +29,13 @@ public class DogTest {
         Dog dog = new Dog(name, age);
         String description = dog.describe();
         assertEquals(expected, description);
+    }
+
+    @Test
+    @DisplayName("Dog says Voff when commanded to bark")
+    public void canBark() {
+        Dog dog = new Dog("Odi", 2);
+        assertEquals("Voff!", dog.bark());
     }
 
 

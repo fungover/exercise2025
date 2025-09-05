@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -249,5 +250,28 @@ class WarehouseTest {
         List<Product> modifiedProducts = warehouse.getModifiedProducts(); // Attempt to retrieve modified products when none have been modified
 
         assertTrue(modifiedProducts.isEmpty()); // Verify that the result is an empty list
+    }
+
+    // ========================================
+    // TESTS FOR getCategoriesWithProducts()
+    // ========================================
+
+    @Test
+    @DisplayName("Should return all categories with atleast one product.")
+    void getCategoriesWithProductsSuccessfullyWhenThereAreProducts() {
+
+        Product laptop = Warehouse.createProduct("1", "Laptop", Category.ELECTRONICS, 9);
+        Product book = Warehouse.createProduct("2", "Book", Category.BOOKS, 8);
+        Product mouse = Warehouse.createProduct("3", "Mouse", Category.ELECTRONICS, 7);
+
+        warehouse.addProduct(laptop);
+        warehouse.addProduct(book);
+        warehouse.addProduct(mouse);
+
+        Set<Category> categories = warehouse.getCategoriesWithProducts(); // Retrieve the set of categories with at least one product
+
+        assertEquals(2, categories.size()); // Verify that there are 2 unique categories
+        assertTrue(categories.contains(Category.ELECTRONICS)); // Verify that the ELECTRONICS category is included
+        assertTrue(categories.contains(Category.BOOKS)); // Verify that the BOOKS category is included
     }
 }

@@ -7,7 +7,7 @@ public class Potion extends Item{
     }
 
     @Override
-    public void itemFound() {
+    public void itemDescription() {
         System.out.println(type+" found. restores "+effect+" hp if used");
     }
 }

@@ -6,7 +6,7 @@ public class Coin extends Item{
     }
 
     @Override
-    public void itemFound() {
+    public void itemDescription() {
         System.out.println("You found a "+type+", with value "+effect);
     }
 }

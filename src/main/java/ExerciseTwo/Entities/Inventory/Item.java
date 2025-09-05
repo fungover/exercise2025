@@ -17,6 +17,6 @@ public abstract class Item {
         return effect;
     }
 
-    public abstract void itemFound();
+    public abstract void itemDescription();
 
 }

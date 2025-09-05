@@ -10,6 +10,7 @@ import utils.InputParser;
 import utils.InputParser.Command;
 import utils.Printer;
 import utils.Rng;
+import service.CombatService;
 
 import java.util.Scanner;
 
@@ -113,16 +114,7 @@ public class Game {
     // --- Attack ---
     private void handleAttack() {
         Tile t = dungeon.getTile(player.getX(), player.getY());
-        if (t.getEnemy() != null && t.getEnemy().isAlive()) {
-            player.attack(t.getEnemy());
-            Printer.info("Du attackerar " + t.getEnemy().getType() + " (HP kvar: " + t.getEnemy().getHealth() + ")");
-            if (!t.getEnemy().isAlive()) {
-                Printer.info("Fienden är besegrad!");
-                t.removeEnemy();
-            }
-        } else {
-            Printer.error("Ingen fiende att attackera här.");
-        }
+        CombatService.playerAttack(player, t);
     }
 
     // --- Use item ---
@@ -161,8 +153,9 @@ public class Game {
             for (int x = 0; x < dungeon.getWidth(); x++) {
                 Tile t = dungeon.getTile(x, y);
                 Enemy e = t.getEnemy();
-                if (e != null && e.isAlive()) {
-                    e.takeTurn(player); // Enkel AI: attack om på samma ruta
+                if (e != null && e.isAlive() &&
+                        e.getX() == player.getX() && e.getY() == player.getY()) {
+                    CombatService.enemyAttack(e, player);
                 }
             }
         }

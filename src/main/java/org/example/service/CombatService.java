@@ -7,6 +7,11 @@ import org.example.map.Tile;
 public class CombatService {
     private static final int BASE_DAMAGE = 5;
 
+    //for testing to get base damage
+    public static int getBaseDamage() {
+        return BASE_DAMAGE;
+    }
+
     public void attack(Player player, FarmageddonMap map) {
         Tile tile = map.getTile(player.getX(), player.getY());
         Hostile hostile = tile.getEnemy();
@@ -52,26 +57,25 @@ public class CombatService {
     }
 
     private int calculatePlayerDamage(Player player) {
-        int totalDamage = BASE_DAMAGE;
-        Item bestWeapon = null;
+        int baseDamage = BASE_DAMAGE;
+        Weapon bestWeapon = null;
 
-        // Find weapon with highest damage in inventory and use it
+        // Fin best weapon in inventory
         for (Item item : player.getInventory()) {
             if (item instanceof Weapon weapon) {
-                if (bestWeapon == null || weapon.getDamage() > ((Weapon) bestWeapon).getDamage()) {
-                    bestWeapon = item;
+                if (bestWeapon == null || weapon.getDamage() > bestWeapon.getDamage()) {
+                    bestWeapon = weapon;
                 }
             }
         }
 
-        if (bestWeapon != null) {
-            Weapon weapon = (Weapon) bestWeapon;
-            totalDamage = weapon.getDamage();
-            System.out.println("You attack with your " + weapon.getName() + "!");
+        // Only use weapon if its better than base damage
+        if (bestWeapon != null && bestWeapon.getDamage() > baseDamage) {
+            System.out.println("You attack with your " + bestWeapon.getName() + "!");
+            return bestWeapon.getDamage();
         } else {
             System.out.println("You attack with your bare hands!");
+            return baseDamage;
         }
-
-        return totalDamage;
     }
 }

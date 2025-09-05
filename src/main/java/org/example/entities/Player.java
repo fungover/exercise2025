@@ -39,4 +39,32 @@ public class Player {
         this.x = 0;
         this.y = 0;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getBaseDamage() {
+        return baseDamage;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public List<Item> getInventory() {
+        return new ArrayList<>(inventory);
+    }
+
+    public CombatBehaviour getCombatBehaviour() {
+        return combatBehaviour;
+    }
 }

@@ -1,7 +1,7 @@
 package Enemy;
 
 public class Dragon extends Enemy {
-    public Dragon() {
-        super("Dragon", 200, 25, 0, 0);
+    public Dragon(int x, int y) {
+        super("Dragon", 200, 25, x, y);
     }
 }

@@ -67,4 +67,22 @@ public class Player {
     public CombatBehaviour getCombatBehaviour() {
         return combatBehaviour;
     }
+
+    public boolean isAlive() {
+        return health > 0;
+    }
+
+    public void takeDamage(int damage) {
+        if (damage < 0) {
+            throw new IllegalArgumentException("Damage cannot be negative");
+        }
+        health = Math.max(0, health - damage);
+    }
+
+    public void attack(Enemy enemy) {
+        if (enemy == null) {
+            throw new IllegalArgumentException("Enemy cannot be null");
+        }
+        combatBehaviour.attack(enemy);
+    }
 }

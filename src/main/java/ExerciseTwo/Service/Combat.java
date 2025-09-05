@@ -24,7 +24,7 @@ public class Combat {
         enemy.description();
     }
 
-    public boolean makeAttack(Scanner sc){
+    public boolean makeAttack(Scanner sc, PlayerInput playerInput){
 
         while (true) {
             System.out.println("""
@@ -34,8 +34,8 @@ public class Combat {
                     """);
 
             String inputFromPlayer = sc.nextLine().toLowerCase();
-            PlayerInput input = new PlayerInput();
-            if(input.commandInput(inputFromPlayer)){
+
+            if(playerInput.commandInput(inputFromPlayer)){
                 continue;
             }
 
@@ -52,7 +52,7 @@ public class Combat {
     }
 
     public int playerAttack(){
-        return player.getPlayerAttack();
+        return player.getWeapon();
     }
 
     public int enemyDamage(int attackOfPlayer){

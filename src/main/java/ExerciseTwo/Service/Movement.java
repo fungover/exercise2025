@@ -4,36 +4,34 @@ import ExerciseTwo.Game.PlayerInput;
 
 import java.util.Scanner;
 
-public class Movement {
+public record Movement(Position position) {
 
-    private final Position position;
-
-    public Movement(Position position) {
-        this.position = position;
-    }
-
-    public String move(Scanner sc){
-        while (true){
+    public String move(Scanner sc, PlayerInput playerInput) {
+        while (true) {
             System.out.println("In which direction do you want to move?");
             System.out.println("""
-                Enter way to move:
-                    s - south
-                    n - north
-                    e - east
-                    w - west
-                """);
+                    Enter way to move:
+                        s - south
+                        n - north
+                        e - east
+                        w - west
+                    """);
 
             String inputFromPlayer = sc.nextLine().toLowerCase();
-            PlayerInput input = new PlayerInput();
-            if(input.commandInput(inputFromPlayer)){
+
+            if(playerInput.commandInput(inputFromPlayer)){
                 continue;
             }
 
-            switch (inputFromPlayer){
-                case "n": return "north";
-                case "s": return "south";
-                case "e": return "east";
-                case "w": return "west";
+            switch (inputFromPlayer) {
+                case "n":
+                    return "north";
+                case "s":
+                    return "south";
+                case "e":
+                    return "east";
+                case "w":
+                    return "west";
                 default:
                     System.out.println("Wrong commando");
             }
@@ -45,16 +43,16 @@ public class Movement {
         int playerRow = position.getRow();
         int playerCol = position.getCol();
 
-        if(move.equals("north")){
+        if (move.equals("north")) {
             playerRow--;
         }
-        if(move.equals("south")){
+        if (move.equals("south")) {
             playerRow++;
         }
-        if(move.equals("east")){
+        if (move.equals("east")) {
             playerCol++;
         }
-        if(move.equals("west")){
+        if (move.equals("west")) {
             playerCol--;
         }
 

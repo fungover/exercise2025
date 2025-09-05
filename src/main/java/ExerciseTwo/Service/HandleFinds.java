@@ -6,24 +6,24 @@ import java.util.Scanner;
 
 public class HandleFinds {
 
-    public boolean addFind(Scanner sc){
+    public boolean addFind(Scanner sc, PlayerInput playerInput) {
         while (true) {
             System.out.println("Do you want to add your find to your inventory y/n?");
 
             String inputFromPlayer = sc.nextLine().toLowerCase();
-            PlayerInput input = new PlayerInput();
-            if(input.commandInput(inputFromPlayer)){
+
+            if(playerInput.commandInput(inputFromPlayer)){
                 continue;
             }
 
             switch (inputFromPlayer) {
-                case "y" :return true;
-                case "n" : return false;
-                default: System.out.println("Wrong commando");
+                case "y":
+                    return true;
+                case "n":
+                    return false;
+                default:
+                    System.out.println("Wrong commando");
             }
         }
     }
-
-
-
 }

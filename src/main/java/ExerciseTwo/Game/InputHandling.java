@@ -25,16 +25,17 @@ public class InputHandling {
     }
 
     public static void commands(){
-        System.out.println("________________________________________");
+        System.out.println("___________________________________________");
         System.out.println("""
                 In the game you can use following commands:
                     i - inventory
                         use - use potion
                         switch - switch weapon
+                    p - check your health
                     h - help
-                    q - quit
+                    quit - quit
                 """);
-        System.out.println("________________________________________");
+        System.out.println("___________________________________________");
     }
 
 }

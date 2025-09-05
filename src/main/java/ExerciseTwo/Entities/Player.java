@@ -46,4 +46,8 @@ public final class Player {
         PrintText.printGreen("Let the adventure begin... "+playerName);
     }
 
+    public void playerHealth(){
+        System.out.println("You now have "+health+" health");
+    }
+
 }

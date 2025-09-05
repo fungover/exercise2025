@@ -1,9 +1,9 @@
 package ExerciseTwo;
 
 import ExerciseTwo.Entities.*;
+import ExerciseTwo.Game.GameLogic;
 import ExerciseTwo.Game.InputHandling;
 import ExerciseTwo.Map.*;
-import ExerciseTwo.Service.*;
 
 import java.util.Scanner;
 

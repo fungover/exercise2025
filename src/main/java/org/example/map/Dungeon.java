@@ -3,6 +3,8 @@ package org.example.map;
 import org.example.entities.*;
 import org.example.entities.enemies.*;
 import org.example.entities.items.*;
+import org.example.service.MovementService;
+import org.example.utils.InputValidator;
 import org.example.utils.RandomGenerator;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class Dungeon {
     private final Tile[][] tiles;
     private final Player player;
     private final MapGenerator mapGenerator;
+    private final MovementService movementService;
 
     public Dungeon(int width, int height, Player player, MapGenerator mapGenerator) {
         if (width <= 0 || height <= 0) {
@@ -34,6 +37,7 @@ public class Dungeon {
         this.tiles = mapGenerator.generate(width, height);
         this.player = player;
         this.mapGenerator = mapGenerator;
+        this.movementService = new MovementService(this, new InputValidator(this));
         if (width > 2 || height > 3 && tiles[3][2].getType() == TileType.EMPTY) {
             player.moveTo(2, 3);
         } else {
@@ -69,25 +73,13 @@ public class Dungeon {
     }
 
     public void movePlayer(int dx, int dy) {
-        int newX = player.getX() + dx;
-        int newY = player.getY() + dy;
-        if (newX < 0 || newX >= width || newY < 0 || newY >= height) {
-            throw new IllegalArgumentException("Position out of bounds");
-        }
-        if (!getTile(newX, newY).isPassable()) {
-            throw new IllegalArgumentException("Position is not passable");
-        }
-        player.moveTo(newX, newY);
+        movementService.movePlayer(dx, dy, player);
     }
 
     public void interact(int x, int y) {
-        if (x < 0 || x >= width || y < 0 || y >= height) {
-            throw new IllegalArgumentException("Position out of bounds");
-        }
-        int dx = Math.abs(x - player.getX());
-        int dy = Math.abs(y - player.getY());
-        if (dx + dy > 1) {
-            throw new IllegalArgumentException("Position is too far away");
+        InputValidator validator = new InputValidator(this);
+        if (!validator.isValidInteraction(x, y, player)) {
+            throw new IllegalArgumentException("Invalid interaction");
         }
         Tile tile = getTile(x, y);
         if (tile.getType() == TileType.ITEM) {

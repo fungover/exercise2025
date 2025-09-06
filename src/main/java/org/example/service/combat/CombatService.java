@@ -7,8 +7,12 @@ import org.example.entities.enemies.Enemy;
 import org.example.entities.items.Inventory;
 import org.example.entities.items.Item;
 import org.example.game.cli.CombatUI;
+import static org.example.utils.Guard.notNull;
 
-public final class CombatService {
+/**
+ * @param fleeRng Seedable RNG for flee so tests can be deterministic if needed.
+ */
+public record CombatService(Random fleeRng) {
 
     /**
      * Result of a single combat round.
@@ -18,13 +22,15 @@ public final class CombatService {
             int enemyDamageDealt,
             boolean enemyDead,
             boolean playerDead
-    ) {}
-
-    // Seedable RNG for flee so tests can be deterministic if needed.
-    private final Random fleeRng;
+    ) {
+    }
 
     public CombatService() {
-        this.fleeRng = new Random();
+        this(new Random());
+    }
+
+    public CombatService(Random fleeRng) {
+        this.fleeRng = notNull(fleeRng, "fleeRng");
     }
 
     /**

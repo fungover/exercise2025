@@ -48,6 +48,7 @@ public final class WeightedPicker<ValueType> {
 
     /** Randomly pick one option according to its weight. */
     public ValueType pick(Random random) {
+        if (random == null) throw new NullPointerException("random");
         int randomNumber = random.nextInt(totalWeight);
         int runningTotal = 0;
 

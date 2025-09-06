@@ -3,6 +3,7 @@ package org.example.map;
 import org.example.entities.*;
 import org.example.entities.enemies.*;
 import org.example.entities.items.*;
+import org.example.service.ItemService;
 import org.example.service.MovementService;
 import org.example.utils.InputValidator;
 import org.example.utils.RandomGenerator;
@@ -23,6 +24,7 @@ public class Dungeon {
     private final MapGenerator mapGenerator;
     private final MovementService movementService;
     private final CombatService combatService;
+    private final ItemService itemService;
 
     public Dungeon(int width, int height, Player player, MapGenerator mapGenerator) {
         if (width <= 0 || height <= 0) {
@@ -42,6 +44,7 @@ public class Dungeon {
         InputValidator validator = new InputValidator(this);
         this.movementService = new MovementService(this, validator);
         this.combatService = new CombatService(this, validator);
+        this.itemService = new ItemService(this, validator);
         if (width > 2 || height > 3 && tiles[3][2].getType() == TileType.EMPTY) {
             player.moveTo(2, 3);
         } else {
@@ -87,11 +90,7 @@ public class Dungeon {
         }
         Tile tile = getTile(x, y);
         if (tile.getType() == TileType.ITEM) {
-            Item item = tile.getItem();
-            if (item != null) {
-                player.addItem(item);
-                tile.clearContents();
-            }
+            itemService.pickUpItem(x, y, player);
         } else if (tile.getType() == TileType.ENEMY) {
             combatService.engageCombat(x, y, player);
         }

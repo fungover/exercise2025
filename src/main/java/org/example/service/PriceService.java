@@ -11,7 +11,9 @@ import java.net.http.HttpResponse;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class PriceService {
     private static final Logger logger = LoggerFactory.getLogger(PriceService.class);
@@ -42,10 +44,15 @@ public class PriceService {
             PriceEntry[] entries = mapper.readValue(response.body(), PriceEntry[].class);
 
             if (futureOnly) {
-                OffsetDateTime now = OffsetDateTime.now();
-                entries = Arrays.stream(entries)
-                        .filter(entry -> entry.time_end().isAfter(now))
-                        .toArray(PriceEntry[]::new);
+                List<PriceEntry> filtered = new ArrayList<>();
+
+                for (PriceEntry entry : entries) {
+                    if (entry.time_end().isAfter(OffsetDateTime.now())) {
+                        filtered.add(entry);
+                    }
+
+                }
+                entries = filtered.toArray(new PriceEntry[0]);
             }
 
             return entries;
@@ -72,7 +79,8 @@ public class PriceService {
             }
 
             System.out.println("=== " + dayLabel + " ===");
-            Arrays.stream(entries).forEach(entry -> {
+
+            for (PriceEntry entry : entries) {
                 double roundedPrice = Math.round(entry.SEK_per_kWh() * 100) / 100.0;
 
                 String line = formatTimeRange(entry.time_start(), entry.time_end()) + ": \n" + roundedPrice + " SEK_per_kWh \n";
@@ -82,7 +90,9 @@ public class PriceService {
 
                 FileUtil.writeToFile(fileName, csvLine + "\n");
 
-            });
+            }
+
+
         } catch (RuntimeException e) {
             logger.error("Prices could not be written to {}", fileName, e);
         }
@@ -96,13 +106,20 @@ public class PriceService {
                 return;
             }
 
-            double meanPrice = Arrays.stream(entries).mapToDouble(PriceEntry::SEK_per_kWh).average().orElse(0);
+            double totalSum = 0;
+
+            for (PriceEntry entry : entries) {
+                totalSum += entry.SEK_per_kWh();
+            }
+
+            double meanPrice = totalSum / entries.length;
+
             double roundedMeanPrice = Math.round(meanPrice * 100) / 100.0;
 
             int fileStatus = FileUtil.createFile(fileName);
 
             if (fileStatus == 0) {
-                FileUtil.writeToFile(fileName, "Mean_SEK_per_kWh\\n");
+                FileUtil.writeToFile(fileName, "Mean_SEK_per_kWh\n");
             }
 
             String line = roundedMeanPrice + " SEK_per_kWh \n";
@@ -126,17 +143,25 @@ public class PriceService {
                 FileUtil.writeToFile(fileName, "Start,End,Price_SEK_per_kWh\n");
             }
 
-            PriceEntry cheapestEntry = Arrays.stream(entries)
-                    .min(java.util.Comparator
-                            .comparingDouble(PriceEntry::SEK_per_kWh)
-                            .thenComparing(PriceEntry::time_start))
-                    .orElse(null);
+            PriceEntry cheapestEntry = entries[0];
 
-            PriceEntry expensiveEntry = Arrays.stream(entries)
-                    .max(java.util.Comparator
-                            .comparingDouble(PriceEntry::SEK_per_kWh)
-                            .thenComparing(PriceEntry::time_start))
-                    .orElse(null);
+            for (PriceEntry entry : entries) {
+                if (entry.SEK_per_kWh() < cheapestEntry.SEK_per_kWh() ||
+                        (entry.SEK_per_kWh() == cheapestEntry.SEK_per_kWh() &&
+                                entry.time_start().isBefore(cheapestEntry.time_start()))) {
+                    cheapestEntry = entry;
+                }
+            }
+
+            PriceEntry expensiveEntry = entries[0];
+
+            for (PriceEntry entry : entries) {
+                if (entry.SEK_per_kWh() > expensiveEntry.SEK_per_kWh() ||
+                        (entry.SEK_per_kWh() == expensiveEntry.SEK_per_kWh() &&
+                                entry.time_start().isBefore(expensiveEntry.time_start()))) {
+                    expensiveEntry = entry;
+                }
+            }
 
             double roundedCheapestPrice = Math.round(cheapestEntry.SEK_per_kWh() * 100) / 100.0;
             double roundedExpensivePrice = Math.round(expensiveEntry.SEK_per_kWh() * 100) / 100.0;

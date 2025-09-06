@@ -1,5 +1,5 @@
 package map;
 
 public enum TileType {
-    WALL, FLOOR
+    WALL, FLOOR, DOOR
 }

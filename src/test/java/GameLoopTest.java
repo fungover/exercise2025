@@ -17,13 +17,10 @@ public class GameLoopTest {
 
     @BeforeMethod
     void setUp() {
-        random = new Random(42);
-        MapGen mapGen = new MapGen(random.nextLong());
-        dungeon = mapGen.generate(5, 5);
-
+        dungeon = new Dungeon(5, 5);
         hero = new Player("Hero", 30, 5, new Position(0, 0));
         gameLoop = new GameLoop(dungeon, hero);
-    }
+        }
 
     @Test
     void testPlayerMoveIntoWalkableTile() {
@@ -31,7 +28,8 @@ public class GameLoopTest {
         Position newPos = start.translate(1, 0);
         Tile targetTile = dungeon.getTile(newPos);
 
-        assertTrue(targetTile.isWalkable());
+        dungeon.getTile(new Position(1, 0)).setType(TileType.FLOOR);
+        assertTrue(targetTile.isWalkable(), "Target tile must be walkable for this test");
 
         gameLoop.movePlayer("d");
         assertEquals(newPos, hero.getPosition());
@@ -55,6 +53,7 @@ public class GameLoopTest {
             public void use(Character character) {}
         };
         Position itemPos = new Position(1, 0);
+        dungeon.getTile(itemPos).setType(TileType.FLOOR);
         dungeon.getTile(itemPos).setItem(potion);
 
         gameLoop.movePlayer("d");
@@ -65,6 +64,7 @@ public class GameLoopTest {
     @Test
     void testPlayerWinsGame() {
         Position dragonPos = new Position(1, 0);
+        dungeon.getTile(dragonPos).setType(TileType.FLOOR);
         Enemy dragon = new Enemy("Dragon", 1, 0, dragonPos) {
             @Override public String getType() { return "Dragon"; }
         };

@@ -57,5 +57,17 @@ public class Dungeon {
         }
         return tiles[y][x];
     }
-}
 
+    public void movePlayer(int dx, int dy) {
+        int newX = player.getX() + dx;
+        int newY = player.getY() + dy;
+        if (newX < 0 || newX >= width || newY < 0 || newY >= height) {
+            throw new IllegalArgumentException("Position out of bounds");
+        }
+        if (!getTile(newX, newY).isPassable()) {
+            throw new IllegalArgumentException("Position is not passable");
+        }
+        player.moveTo(newX, newY);
+    }
+
+}

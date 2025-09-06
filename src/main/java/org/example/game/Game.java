@@ -13,16 +13,15 @@ import java.util.Scanner;
 public class Game {
 
     // All game logic is executed here.
-    public static void run() {
+    public static void run() throws InterruptedException {
         Scanner scan = new Scanner(System.in);
         System.out.println("--------------------------------");
         System.out.println("\uD83E\uDDD9Welcome to my Dungeon Crawler!");
         System.out.print("State your name, o' brave challenger: ");
         String name = scan.nextLine();
-        System.out.println("Welcome, WELCOME " + name + "! Your adventure begins...");
+        System.out.println("Welcome, WELCOME " + name + "!");
         System.out.println("--------------------------------");
-
-
+        countDown();
 
         final Player player = new Player(name, 70);
         final Inventory inventory = new Inventory();
@@ -36,10 +35,10 @@ public class Game {
         // Game loop
         while (true) {
             // "Clear" the terminal
+            pause(); // This makes it possible to read messages before rerender
             for (int i = 0; i < 50; i++) {
                 System.out.println();
             }
-
             dungeon.printDungeon();
 
             if (logic.wishToPickUpItem(dungeon, player, scan)) {
@@ -67,6 +66,23 @@ public class Game {
             logic.moveInput(dungeon, player, userInput);
 
             logic.renderPlayerPosition(dungeon, player);
+        }
+    }
+
+    private static void countDown() throws InterruptedException {
+        System.out.print("Your adventure begins in 3, ");
+        Thread.sleep(1000);
+        System.out.print("2, ");
+        Thread.sleep(1000);
+        System.out.print("1... ");
+        Thread.sleep(1000);
+    }
+
+    private static void pause() throws InterruptedException {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interrupt status
         }
     }
 }

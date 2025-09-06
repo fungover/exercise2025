@@ -13,5 +13,6 @@ public abstract class Enemy {
 
 	abstract public int attack();
 	abstract public String lootDrop();
+	abstract public int getHealth();
 }
 

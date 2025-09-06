@@ -13,12 +13,11 @@ public class Game {
 	RandomGen randomGen;
 	private Enemy eagle;
 	private Enemy falcon;
+	Scanner input = new Scanner(System.in);
 
 	public Game() {
 		createLeaves();
 		randomGen = new RandomGen();
-		eagle = new Eagle();
-		falcon = new Falcon();
 	}
 
 	public void createLeaves() {
@@ -49,8 +48,22 @@ public class Game {
 		currentLeaf = greenLeaf;
 	}
 
+	public void fight(Enemy entity) {
+		System.out.println("A " + entity + " appeared 🐦");
+		System.out.print("What will you do? ([R]un or [F]ight): ");
+		String choice = input.nextLine().toLowerCase().trim();
+
+		switch (choice) {
+			case "r":
+				System.out.println("You run away from the threat!");
+				break;
+			case "f":
+
+			default:
+		}
+	}
+
 	public void run() {
-		Scanner input = new Scanner(System.in);
 		System.out.println("🦎 Little Leaf Lizards 🍃");
 		System.out.print("Your reptile name?: ");
 		String name = input.nextLine();
@@ -63,9 +76,11 @@ public class Game {
 			// Place enemy spawner here
 			if (randomGen.generateRandom(33)) {
 				if (randomGen.generateRandom(50)) {
-					System.out.println("Loot dropped: " + falcon.lootDrop());
+					falcon = new Falcon();
+					while (falcon.getHealth() > 0 || lizard.getHealth() > 0) {
+					}
 				} else {
-					System.out.println("Loot dropped: " + eagle.lootDrop());
+					eagle = new Eagle();
 				}
 			}
 			System.out.print("Your move (" + currentLeaf.getDescription() + "): ");

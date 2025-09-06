@@ -24,6 +24,10 @@ public class Eagle extends Enemy {
 		}
 	}
 
+	public int getHealth() {
+		return health;
+	}
+
 	public String lootDrop() {
 		int droppedLoot = randomItem.nextInt(4) + 1;
 		if (random.generateRandom(75)) {

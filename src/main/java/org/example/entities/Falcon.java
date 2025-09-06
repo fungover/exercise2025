@@ -5,9 +5,9 @@ import org.example.rng.RandomGen;
 import java.util.Random;
 
 public class Falcon extends Enemy {
-	Random random;
-	RandomGen randomGen;
-	int health;
+	private final Random random;
+	private final RandomGen randomGen;
+	private int health;
 
 	public Falcon() {
 		this.randomGen = new  RandomGen();
@@ -21,6 +21,9 @@ public class Falcon extends Enemy {
 		} else {
 			return 8; // Default damage for Falcons
 		}
+	}
+	public int getHealth() {
+		return health;
 	}
 
 	public String lootDrop() {

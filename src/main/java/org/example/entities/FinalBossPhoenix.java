@@ -19,7 +19,7 @@ public class FinalBossPhoenix extends Enemy {
 		if (randomGen.generateRandom(25)) {
 			return 20;
 		} else
-			return 15; //Default damage for FinalBossCat
+			return 15; //Default damage for FinalBossPhoenix
 	}
 
 	public String lootDrop() {

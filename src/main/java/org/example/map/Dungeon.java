@@ -38,4 +38,24 @@ public class Dungeon {
         }
         throw new IllegalStateException("No empty tile found for player placement");
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Tile getTile(int x, int y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            throw new IllegalArgumentException("Position out of bounds");
+        }
+        return tiles[y][x];
+    }
 }
+

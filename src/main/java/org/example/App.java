@@ -1,8 +1,28 @@
 package org.example;
 
+import org.example.entities.Player;
+import org.example.entities.behaviors.BasicCombat;
+import org.example.game.CommandParser;
+import org.example.game.Game;
+import org.example.map.BasicMapGenerator;
+import org.example.map.Dungeon;
+import org.example.service.CombatService;
+import org.example.service.ItemService;
+import org.example.service.MovementService;
+import org.example.utils.InputValidator;
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello There!");
+        Player player = new Player("Hero", 100, 10, new BasicCombat(10));
+        Dungeon dungeon = new Dungeon(5, 5, player, new BasicMapGenerator());
+        InputValidator validator = new InputValidator(dungeon);
+        CommandParser parser = new CommandParser(dungeon,
+                new MovementService(dungeon, validator),
+                new CombatService(dungeon, validator),
+                new ItemService(dungeon, validator));
+        Game game = new Game(dungeon, parser);
+
+        game.run();
     }
 }
 

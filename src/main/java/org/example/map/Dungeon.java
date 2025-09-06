@@ -3,6 +3,10 @@ package org.example.map;
 import org.example.entities.*;
 import org.example.entities.enemies.*;
 import org.example.entities.items.*;
+import org.example.utils.RandomGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 interface MapGenerator {
     Tile[][] generate (int width, int height);
@@ -139,6 +143,7 @@ class BasicMapGenerator implements MapGenerator {
     @Override
     public Tile[][] generate(int width, int height) {
         Tile[][] tiles = new Tile[height][width];
+        RandomGenerator rng = new RandomGenerator();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 tiles[y][x] = new Tile(TileType.EMPTY);
@@ -155,10 +160,45 @@ class BasicMapGenerator implements MapGenerator {
         }
         // Add enemies and items
         if (width >= 3 && height >= 3) {
-            tiles[1][1] = new Tile(new Goblin()); // ENEMY
-            tiles[1][2] = new Tile(new Troll()); // ENEMY
-            tiles[2][1] = new Tile(new Troll()); // ENEMY
-            tiles[2][2] = new Tile(new Potion("Health Potion", 20)); // ITEM
+            List<int[]> availablePositions = new ArrayList<>();
+            for (int y = 1; y < height - 1; y++) {
+                for (int x = 1; x < width - 1; x++) {
+                    if (tiles[y][x].getType() == TileType.EMPTY && !(x == 2 && y == 3)) {
+                        availablePositions.add(new int[]{x, y});
+                    }
+                }
+            }
+
+            // Place first Goblin
+            if (availablePositions.isEmpty()) {
+                int [] pos = rng.nextElement(availablePositions.toArray(new int[0][]));
+                tiles[pos[1]][pos[0]] = new Tile(new Goblin());
+                System.out.println("Set tile[" + pos[1] + "][" + pos[0] + "]: " + tiles[pos[1]][pos[0]]);
+                availablePositions.removeIf(p -> p[0] == pos[0] && p[1] == pos[1]);
+            }
+
+            // Place first Troll
+            if (availablePositions.isEmpty()) {
+                int [] pos = rng.nextElement(availablePositions.toArray(new int[0][]));
+                tiles[pos[1]][pos[0]] = new Tile(new Troll());
+                System.out.println("Set tile[" + pos[1] + "][" + pos[0] + "]: " + tiles[pos[1]][pos[0]]);
+                availablePositions.removeIf(p -> p[0] == pos[0] && p[1] == pos[1]);
+            }
+
+            // Place second Troll
+            if (availablePositions.isEmpty()) {
+                int [] pos = rng.nextElement(availablePositions.toArray(new int[0][]));
+                tiles[pos[1]][pos[0]] = new Tile(new Troll());
+                System.out.println("Set tile[" + pos[1] + "][" + pos[0] + "]: " + tiles[pos[1]][pos[0]]);
+                availablePositions.removeIf(p -> p[0] == pos[0] && p[1] == pos[1]);
+            }
+
+            // Place Potion
+            if (!availablePositions.isEmpty()) {
+                int[] pos = rng.nextElement(availablePositions.toArray(new int[0][]));
+                tiles[pos[1]][pos[0]] = new Tile(new Potion("Health Potion", 20));
+                System.out.println("Set tile[" + pos[1] + "][" + pos[0] + "]: " + tiles[pos[1]][pos[0]]);
+            }
         }
         return tiles;
     }

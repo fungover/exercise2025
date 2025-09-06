@@ -30,7 +30,6 @@ public class Game {
 
         // Items
         inventory.addItem(new Weapon("Sword", 1, 20));
-        inventory.addItem(new HealthPotion("Health Potion", 0));
 
         // Game loop
         while (true) {
@@ -45,7 +44,7 @@ public class Game {
                 if (inventory.getHealthPotion() != null) {
                     potion = inventory.getHealthPotion();
                 } else {
-                    potion = new HealthPotion("Health Potion", 0);
+                    potion = new HealthPotion("Health Potion", 1);
                 }
                 inventory.addItem(potion);
                 System.out.println("A Health Potion has been picked up!");

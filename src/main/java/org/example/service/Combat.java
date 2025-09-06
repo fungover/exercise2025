@@ -48,12 +48,23 @@ public class Combat {
                     }
                     break;
                 case "3":
-                    System.out.println("You run away!");
-                    isFighting = false;
+                    isFighting = tryRunAway(p, e);
                 default:
                     System.out.println("That is not an option!");
             }
         }
+    }
+
+    private boolean tryRunAway(Player p, Enemy e) {
+        int rand = new RandomGenerator().generateNumber(1, 10);
+        if (rand < 5) {
+            System.out.println("You run away!");
+            return false;
+        } else {
+            System.out.println("You can't get away!");
+            attackByEnemy(p, e);
+        }
+        return true;
     }
 
     private void attackEnemy(Weapon w, Enemy e) {
@@ -79,7 +90,7 @@ public class Combat {
     private void attackByEnemy(Player p, Enemy e) {
         int rand = new RandomGenerator().generateNumber(1, 10);
         if (rand < 7) {
-            System.out.println("The " + e.getName() + " strikes back!"
+            System.out.println("The " + e.getName() + " strikes at you!"
                     + "\nThey dealt " + e.getDamage() + " damage!");
             damageTaken(p, e);
         } else {

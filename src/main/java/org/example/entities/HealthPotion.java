@@ -14,6 +14,6 @@ public class HealthPotion extends Item {
         player.setHealth(after);
 
         int healed = after - before; // Actual healed amount
-        System.out.println("You drank " + name + " and healed " + healed + " HP!");
+        System.out.println("You drank " + getName() + " and healed " + healed + " HP!");
     }
 }

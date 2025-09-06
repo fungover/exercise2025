@@ -29,6 +29,7 @@ public class Room {
         return top() + height - 1;
     }
 
+    // Use integer division to always get a valid tile.
     public Position center() {
         return new Position((left() + right()) / 2, (top() + bottom()) / 2);
     }

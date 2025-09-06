@@ -39,6 +39,10 @@ public class Tile {
         this.item = item;
     }
 
+    public void setType(TileType type) {
+        this.type = type;
+    }
+
     public boolean isWalkable() {
         return type == TileType.FLOOR;
     }

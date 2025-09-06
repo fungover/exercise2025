@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import org.example.rng.RandomGen;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,13 +11,23 @@ public class Lizard {
 	private String[] equipment;
 	private List<String> inventory;
 	private String name;
+	private RandomGen randomGen;
 
 	public Lizard(String name) {
 		this.name = name;
-		health = 20;
+		health = 30;
 		defense = 0;
 		equipment = new String[4];
 		inventory = new ArrayList<String>();
+		randomGen = new RandomGen();
+	}
+
+	public int attack() {
+		if (randomGen.generateRandom(5)) {
+			return 20;
+		} else {
+			return 10; // Default damage for player
+		}
 	}
 
 	public int getHealth() {
@@ -23,10 +35,15 @@ public class Lizard {
 	}
 
 	public void setHealth(int health) {
-		this.health = health;
+		this.health += health;
 	}
+
 	public int getDefense() {
 		return defense;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public void setDefense(int defense) {
@@ -36,6 +53,7 @@ public class Lizard {
 	public String[] getEquipment() {
 		return equipment;
 	}
+
 	public void setEquipment(String[] equipment) {
 		this.equipment = equipment;
 	}
@@ -43,6 +61,7 @@ public class Lizard {
 	public List<String> getInventory() {
 		return inventory;
 	}
+
 	public void setInventory(String item) {
 		this.inventory.add(item);
 	}

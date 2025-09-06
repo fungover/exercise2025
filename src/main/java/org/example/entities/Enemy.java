@@ -1,6 +1,18 @@
 package org.example.entities;
 
-public abstract class Enemy {
+import org.example.rng.RandomGen;
+
+import java.util.Random;
+
+public class Enemy {
+	protected Random random = new Random();
+	protected RandomGen randomGen = new RandomGen();
+	protected int health;
+	protected String name;
+	public Enemy() {
+		this.name = "lootDrop";
+	}
+
 	private final String[] loot = {"Talon Dagger", "Beak Helmet", "Ashes", "Uncommon Feathers"};
 
 	public String[] getLoot() {
@@ -11,8 +23,26 @@ public abstract class Enemy {
 		return "Phoenix Feathers";
 	}
 
-	abstract public int attack();
-	abstract public String lootDrop();
-	abstract public int getHealth();
+	public int getHealth() {
+		return this.health;
+	}
+
+	public void setHealth(int attack) {
+		this.health += attack;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String lootDrop() {
+		int droppedLoot = random.nextInt(4);
+		return getLoot()[droppedLoot];
+	}
+
+	public int attack() {
+		System.out.println("attack");
+		return 0;
+	}
 }
 

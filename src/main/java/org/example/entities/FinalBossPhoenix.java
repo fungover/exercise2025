@@ -25,4 +25,7 @@ public class FinalBossPhoenix extends Enemy {
 	public String lootDrop() {
 		return getRareFeathers();
 	}
+	public int  getHealth() {
+		return health;
+	}
 }

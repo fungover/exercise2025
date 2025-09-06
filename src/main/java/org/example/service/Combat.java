@@ -5,9 +5,11 @@ import org.example.entities.items.HealthPotion;
 import org.example.entities.items.Weapon;
 import org.example.utils.RandomGenerator;
 
+import java.util.Scanner;
+
 public class Combat {
 
-    public void startFight(Player p, Weapon w, HealthPotion hP, String userInput) {
+    public void startFight(Player p, Weapon w, HealthPotion hP, Scanner scan) {
         Enemy e = randomEnemy();
         boolean isFighting = true;
         System.out.println("It's a " + e.getName() + "!");
@@ -17,16 +19,18 @@ public class Combat {
             System.out.println("2. Use an item");
             System.out.println("3. Run away");
             System.out.print("Choose 1, 2 or 3: ");
+            String userInput = scan.nextLine();
 
             switch (userInput) {
                 case "1":
                     attackEnemy(w, e);
+                    if (e.getHealth() <= 0) {
+                        System.out.println("You won!");
+                        isFighting = false;
+                    }
                     attackByEnemy(p, e);
                     if (p.getHealth() <= 0) {
                         System.out.println("You died!");
-                        isFighting = false;
-                    } else if (e.getHealth() <= 0) {
-                        System.out.println("You won!");
                         isFighting = false;
                     }
                     break;

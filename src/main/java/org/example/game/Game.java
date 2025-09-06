@@ -38,26 +38,7 @@ public class Game {
 
             dungeon.printDungeon();
 
-            System.out.print("Choose your direction: ");
-            String userInput = scan.nextLine();
-            if (userInput.equalsIgnoreCase("Q")) {
-                System.out.println("Exiting...");
-                break;
-            }
-
-            logic.moveInput(dungeon, player, userInput);
-            int xPos = player.getX();
-            int yPos = player.getY();
-            logic.renderPlayerPos(dungeon, xPos, yPos);
-
-            if (logic.wishToFightEnemy(dungeon, yPos, xPos, userInput)) {
-                Weapon weapon = inventory.getWeapon();
-                HealthPotion potion = inventory.getHealthPotion();
-                Combat combat = new Combat();
-                combat.startFight(player, weapon, potion, userInput);
-            }
-
-            if (logic.wishToPickUpItem(dungeon, yPos, xPos, userInput)) {
+            if (logic.wishToPickUpItem(dungeon, player, scan)) {
                 HealthPotion potion;
                 if (inventory.getHealthPotion() != null) {
                     potion = inventory.getHealthPotion();
@@ -67,6 +48,16 @@ public class Game {
                 inventory.addItem(potion);
                 System.out.println(potion.getName() + " has been picked up!");
             }
+
+            if (logic.wishToFightEnemy(dungeon, player, scan)) {
+                Weapon weapon = inventory.getWeapon();
+                HealthPotion potion = inventory.getHealthPotion();
+                Combat combat = new Combat();
+                combat.startFight(player, weapon, potion, scan);
+            }
+
+            logic.moveInput(dungeon, player, scan);
+            logic.renderPlayerPosition(dungeon, player);
         }
     }
 }

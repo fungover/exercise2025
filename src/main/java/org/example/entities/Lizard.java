@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Lizard {
 	private int health;
-	private double defense;
+	private int defense;
 	private List<String> equipment;
 	private List<String> inventory;
 	private String name;
@@ -16,7 +16,7 @@ public class Lizard {
 	public Lizard(String name) {
 		this.name = name;
 		health = 30;
-		defense = 1;
+		defense = 0;
 		equipment = new ArrayList<String>();
 		inventory = new ArrayList<String>();
 		randomGen = new RandomGen();
@@ -42,7 +42,7 @@ public class Lizard {
 		this.health -= health;
 	}
 
-	public double getDefense() {
+	public int getDefense() {
 		return defense;
 	}
 
@@ -50,15 +50,15 @@ public class Lizard {
 		return name;
 	}
 
-	public void setDefense(double defenceBuff) {
-		this.defense -= defenceBuff;
+	public void setDefense(int defenceBuff) {
+		this.defense += defenceBuff;
 	}
 
 	public void setEquipment(String item) {
 		if (item != null) {
 			if (!this.equipment.contains(item)) {
 				this.equipment.add(item);
-				setDefense(0.2);
+				setDefense(2);
 			}
 		}
 	}

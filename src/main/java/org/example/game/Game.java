@@ -54,9 +54,9 @@ public class Game {
 
 	public int fight(Enemy entity, Lizard player) {
 		System.out.println("A wild " + entity.getName() + " appeared " + entity.getEmoji());
-		System.out.print("What will you do? ([R]un or [F]ight): ");
-		String choice = input.nextLine().toLowerCase().trim();
-		while (true) {
+		do {
+			System.out.print("What will you do? ([R]un or [F]ight): ");
+			String choice = input.nextLine().toLowerCase().trim();
 			switch (choice) {
 				case "r":
 					return -1;
@@ -77,7 +77,7 @@ public class Game {
 									System.out.println("You won and gained: " + loot + "!");
 									return 1;
 								}
-								player.setAttackedHealth((int) (entity.attack() * player.getDefense()));
+								player.setAttackedHealth(entity.attack() - player.getDefense());
 								if (player.getHealth() <= 0) {
 									return 0;
 								}
@@ -96,10 +96,10 @@ public class Game {
 						}
 					} while (true);
 				default:
-					System.out.println("Invalid choice");
+					System.out.println("Invalid choice!");
 					break;
 			}
-		}
+		} while (true);
 	}
 
 	public void run() {

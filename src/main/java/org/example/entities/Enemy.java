@@ -14,7 +14,7 @@ public class Enemy {
 		this.name = "lootDrop";
 	}
 
-	private final String[] loot = {"Talon Dagger", "Beak Helmet", "Ashes", "Uncommon Feathers", "Hawk's Sight"};
+	private final String[] loot = {"Talon Dagger", "Beak Helmet", "Ashes", "Hawk's Sight"};
 
 	public String[] getLoot() {
 		return this.loot;
@@ -37,7 +37,7 @@ public class Enemy {
 	}
 
 	public String lootDrop() {
-		int droppedLoot = random.nextInt(5);
+		int droppedLoot = random.nextInt(4);
 		return getLoot()[droppedLoot];
 	}
 

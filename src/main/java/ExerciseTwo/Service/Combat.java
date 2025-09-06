@@ -27,8 +27,8 @@ public class Combat {
     public boolean makeAttack(Scanner sc, PlayerInput playerInput){
 
         while (true) {
+            PrintText.printBlue("Make your choice: ");
             System.out.println("""
-                    Make your choice:
                         a - attack
                         r - run
                     """);
@@ -71,7 +71,7 @@ public class Combat {
 
     public int playerDamage(int attackOfEnemy) {
         player.setHealth(attackOfEnemy);
-        PrintText.printRed("You were attacked and received "+attackOfEnemy+" in damge");
+        PrintText.printRed("You were attacked and received "+attackOfEnemy+" in damage");
         return player.getHealth();
     }
 

@@ -9,7 +9,7 @@ public record Movement(Position position) {
 
     public String move(Scanner sc, PlayerInput playerInput) {
         while (true) {
-            System.out.println("In which direction do you want to move?");
+            PrintText.printBlue("In which direction do you want to move?");
             System.out.println("""
                     Enter way to move:
                         s - south

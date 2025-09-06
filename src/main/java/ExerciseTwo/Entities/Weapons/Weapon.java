@@ -24,11 +24,14 @@ List<Item> weapons = new ArrayList<>();
         return weapons.get(num);
     }
 
-    public void getWeapons() {
-        for(int index = 0; index < weapons.size(); index++){
-            Item item = weapons.get(index);
-            System.out.println(index+": "+item.getType()+" with damage "+ item.getEffect());
+    public boolean getWeapons() {
 
-        }
+            for (int index = 0; index < weapons.size(); index++) {
+                Item item = weapons.get(index);
+                System.out.println(index + ": " + item.getType() + " with damage " + item.getEffect());
+            }
+
+        int size = weapons.size();
+            return size > 0;
     }
 }

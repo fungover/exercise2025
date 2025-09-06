@@ -1,6 +1,7 @@
 package ExerciseTwo.Service;
 
 import ExerciseTwo.Game.PlayerInput;
+import ExerciseTwo.Utils.PrintText;
 
 import java.util.Scanner;
 
@@ -8,7 +9,7 @@ public class HandleFinds {
 
     public boolean addFind(Scanner sc, PlayerInput playerInput) {
         while (true) {
-            System.out.println("Do you want to add your find to your inventory y/n?");
+            PrintText.printBlue("Do you want to add your find to your inventory Y/N?");
 
             String inputFromPlayer = sc.nextLine().toLowerCase();
 

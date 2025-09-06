@@ -226,7 +226,7 @@ public final class GameController {
         for (int y = 0; y < map.height(); y++) {
             for (int x = 0; x < map.width(); x++) {
                 var tile = map.tileAt(x, y);
-                if (tile.getType() == org.example.map.TileType.BOSS && tile.hasEnemy() && tile.enemy() == boss) {
+                if (tile.getType() == org.example.map.TileType.BOSS && tile.enemy() == boss) {
                     tile.setType(org.example.map.TileType.FLOOR);
                     tile.removeEnemy();
                 }

@@ -31,7 +31,6 @@ public class Game {
 
         // Game loop
         while (true) {
-
             // Items
             inventory.addItem(new Weapon("Sword", 1, 20));
             inventory.addItem(new HealthPotion("Health Potion", 0));
@@ -56,7 +55,14 @@ public class Game {
                 combat.startFight(player, weapon, potion, scan);
             }
 
-            logic.moveInput(dungeon, player, scan);
+            System.out.print("Enter command (or 'q' to quit game): ");
+            String userInput = scan.nextLine();
+            if (userInput.equalsIgnoreCase("q")) {
+                System.out.println("Exiting game...");
+                break;
+            }
+            logic.moveInput(dungeon, player, userInput);
+
             logic.renderPlayerPosition(dungeon, player);
         }
     }

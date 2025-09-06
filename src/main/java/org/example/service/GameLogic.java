@@ -27,37 +27,35 @@ public class GameLogic {
         d.setTile(p.getY(), p.getX(), player);
     }
 
-    public void moveInput(Dungeon d, Player p, Scanner scan) {
-        System.out.print("Choose your direction: ");
-        String userInput = scan.nextLine();
+    public void moveInput(Dungeon d, Player p, String userInput) {
         userInput = userInput.toLowerCase();
 
         int x = p.getX();
         int y = p.getY();
 
         switch (userInput) {
-            case "move north", "n":
+            case "u":
                 if (isWalkable(d, y - 1, x)) {
                     p.setPosition(x, y - 1);
-                    System.out.println(p.getName() + " moved north.");
+                    System.out.println(p.getName() + " moved up.");
                 }
                 break;
-            case "move south", "s":
+            case "d":
                 if (isWalkable(d, y + 1, x)) {
                     p.setPosition(x, y + 1);
-                    System.out.println(p.getName() + " moved south.");
+                    System.out.println(p.getName() + " moved down.");
                 }
                 break;
-            case "move east", "e":
+            case "r":
                 if (isWalkable(d, y, x + 1)) {
                     p.setPosition(x + 1, y);
-                    System.out.println(p.getName() + " moved east.");
+                    System.out.println(p.getName() + " moved to the right.");
                 }
                 break;
-            case "move west", "w":
+            case "l":
                 if (isWalkable(d, y, x - 1)) {
                     p.setPosition(x - 1, y);
-                    System.out.println(p.getName() + " moved west.");
+                    System.out.println(p.getName() + " moved to the left.");
                 }
                 break;
             default:
@@ -72,30 +70,40 @@ public class GameLogic {
 
     public boolean wishToFightEnemy(Dungeon d, Player p, Scanner scan) {
         if (d.getTile(p.getY(), p.getX() + 1) == enemy ||
-                d.getTile(p.getY(), p.getX() + 1) == enemy ||
-                d.getTile(p.getY() - 1, p.getX()) == enemy ||
+                d.getTile(p.getY(), p.getX() - 1) == enemy ||
+                d.getTile(p.getY() + 1, p.getX()) == enemy ||
                 d.getTile(p.getY() - 1, p.getX()) == enemy) {
             System.out.println("There's an enemy here!");
             System.out.println("Do you wish to fight it, yes or no?");
-            System.out.print("Y/N: ");
-            String userInput = scan.nextLine();
-            return userInput.equalsIgnoreCase("y");
+            return validAnswer(scan);
         }
         return false;
     }
 
     public boolean wishToPickUpItem(Dungeon d, Player p, Scanner scan) {
         if (d.getTile(p.getY(), p.getX() + 1) == item ||
-                d.getTile(p.getY(), p.getX() + 1) == item ||
-                d.getTile(p.getY() - 1, p.getX()) == item ||
+                d.getTile(p.getY(), p.getX() - 1) == item ||
+                d.getTile(p.getY() + 1, p.getX()) == item ||
                 d.getTile(p.getY() - 1, p.getX()) == item) {
             System.out.println("There's an item here!");
             System.out.println("Do you wish to pick it up, yes or no?");
-            System.out.print("Y/N: ");
-            String userInput = scan.nextLine();
-            return userInput.equalsIgnoreCase("y");
+            return validAnswer(scan);
         }
         return false;
+    }
+
+    private boolean validAnswer(Scanner scan) {
+        while (true) {
+            System.out.print("Y/N: ");
+            String userInput = scan.nextLine();
+            if (userInput.equalsIgnoreCase("y")) {
+                return true;
+            } else if (userInput.equalsIgnoreCase("n")) {
+                return false;
+            } else {
+                System.out.println("Invalid input, only type what is displayed.");
+            }
+        }
     }
 
 }

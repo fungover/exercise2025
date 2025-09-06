@@ -56,6 +56,10 @@ public class Dungeon {
             }
             System.out.println(); // Line break for every row
         }
+        System.out.println("Move Up (U)");
+        System.out.println("Move Down (D)");
+        System.out.println("Move Right (R)");
+        System.out.println("Move Left (L)");
     }
 
     public int getRows() {

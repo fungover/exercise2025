@@ -28,9 +28,9 @@ public class Tile {
     @Override
     public String toString() {
         String symbol = ".";
-        switch(type) {
+        switch (type) {
             case WALL -> symbol = "#";
-            case EMPTY -> symbol = ".";
+            case FLOOR -> symbol = ".";
         }
         if (enemy != null && item != null) return "E/I";
         if (enemy != null) return "E";

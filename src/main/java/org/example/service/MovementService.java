@@ -16,16 +16,22 @@ public class MovementService {
     }
 
     public void move(Character character, Position newPosition) {
+        Tile tile = dungeon.getTile(newPosition);
+
+        if (tile == null || !tile.isWalkable()) {
+            System.out.println("You can't move there!");
+            return;
+        }
+
         character.setPosition(newPosition);
         System.out.println(character.getName() + " moves to " + newPosition);
 
-        Tile tile = dungeon.getTile(newPosition);
-        if (tile != null && tile.hasItem() && character instanceof Player player) {
+        if (tile.hasItem() && tile.getEnemy() == null && character instanceof Player player) {
             Item item = tile.getItem();
             player.getInventory().addItem(item);
-            System.out.println(player.getName() + " picks up " + item.getName() + "!");
             tile.setItem(null);
-
+            System.out.println(player.getName() + " picks up " + item.getName() + "!");
         }
     }
+
 }

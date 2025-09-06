@@ -1,6 +1,5 @@
 package org.example.service;
 
-
 import org.example.entities.*;
 import org.example.map.Dungeon;
 import org.example.map.Tile;
@@ -41,8 +40,7 @@ public class GameLoop {
             else hero.getInventory().showItems();
 
             System.out.println("Move (w/a/s/d), use item (u), or quit (q):");
-            String input = scanner.nextLine();
-
+            String input = scanner.nextLine().trim().toLowerCase();
             running = handleInput(input);
         }
 
@@ -83,8 +81,13 @@ public class GameLoop {
             case "s" -> hero.getPosition().translate(0, 1);
             case "a" -> hero.getPosition().translate(-1, 0);
             case "d" -> hero.getPosition().translate(1, 0);
-            default -> hero.getPosition();
+            default -> null;
         };
+
+        if (newPos == null) {
+            System.out.println("Invalid command!");
+            return;
+        }
 
         Tile targetTile = dungeon.getTile(newPos);
         if (targetTile != null && targetTile.isWalkable()) {

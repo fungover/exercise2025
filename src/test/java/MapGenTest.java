@@ -1,5 +1,3 @@
-package org.example.tests;
-
 import org.example.entities.Position;
 import org.example.map.Dungeon;
 import org.example.map.MapGen;

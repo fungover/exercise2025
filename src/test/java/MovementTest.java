@@ -1,5 +1,3 @@
-package org.example.tests;
-
 import org.example.entities.Position;
 import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;

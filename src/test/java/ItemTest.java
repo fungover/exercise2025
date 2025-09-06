@@ -1,9 +1,7 @@
-package org.example.tests;
-
 import org.example.entities.*;
 import org.testng.annotations.Test;
 
-import static org.junit.Assert.*;
+import static org.testng.Assert.*;
 
 public class ItemTest {
 

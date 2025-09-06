@@ -1,5 +1,3 @@
-package org.example.tests;
-
 import org.example.entities.*;
 import org.junit.Test;
 

@@ -1,6 +1,7 @@
 package org.example.entities.items.consumables;
 
 import org.example.entities.characters.Player;
+import static org.example.utils.Guard.notNull;
 
 /** Grants a one-time bonus to the player's next attack, the bonus is stored in Inventory; combat applies & clears it. */
 public final class DamagePotion extends Potion {
@@ -12,7 +13,7 @@ public final class DamagePotion extends Potion {
     }
 
     public DamagePotion(PotionTier tier) {
-        super("Damage Potion", "Next attack +" + tier.nextAttackBonus() + " damage");
+        super("Damage Potion", "Next attack +" + notNull(tier, "tier").nextAttackBonus() + " damage");
         this.tier = tier;
     }
 

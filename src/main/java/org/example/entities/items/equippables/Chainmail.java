@@ -1,5 +1,7 @@
 package org.example.entities.items.equippables;
 
+import static org.example.utils.Guard.notNull;
+
 public final class Chainmail extends Armor {
     private final ArmorTier tier;
 
@@ -10,7 +12,7 @@ public final class Chainmail extends Armor {
 
     public Chainmail(ArmorTier tier) {
         super("Chainmail",
-                "Chainmail (-" + tier.damageReduction() + " dmg taken)",
+                "Chainmail (-" + notNull(tier, "tier").damageReduction() + " dmg taken)",
                 tier.damageReduction());
         this.tier = tier;
     }

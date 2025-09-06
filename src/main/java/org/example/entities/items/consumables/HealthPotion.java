@@ -1,6 +1,7 @@
 package org.example.entities.items.consumables;
 
 import org.example.entities.characters.Player;
+import static org.example.utils.Guard.notNull;
 
 /** Restores HP based on its PotionTier's healAmount. */
 public final class HealthPotion extends Potion {
@@ -12,7 +13,7 @@ public final class HealthPotion extends Potion {
     }
 
     public HealthPotion(PotionTier tier) {
-        super("Health Potion", "Heals " + tier.healAmount() + " HP");
+        super("Health Potion", "Heals " + notNull(tier, "tier").healAmount() + " HP");
         this.tier = tier;
     }
 

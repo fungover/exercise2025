@@ -1,5 +1,7 @@
 package org.example.entities.items.equippables;
 
+import static org.example.utils.Guard.notNull;
+
 public final class Sword extends Weapon {
     private final WeaponTier tier;
 
@@ -10,7 +12,7 @@ public final class Sword extends Weapon {
 
     public Sword(WeaponTier tier) {
         super("Sword",
-                "Sword (+" + tier.bonusDamage() + " damage)",
+                "Sword (+" + notNull(tier, "tier").bonusDamage() + " damage)",
                 tier.bonusDamage());
         this.tier = tier;
     }

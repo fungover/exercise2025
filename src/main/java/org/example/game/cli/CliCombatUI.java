@@ -38,22 +38,31 @@ public record CliCombatUI(Scanner in) implements CombatUI {
 
     @Override
     public Action readAction() {
+
         System.out.print("(combat)> ");
-        String line = in.nextLine().trim().toLowerCase();
-        switch (line) {
+        System.out.flush();
+        final String line;
+        try {
+            line = in.nextLine();
+        } catch (java.util.NoSuchElementException | IllegalStateException e) {
+            // EOF or scanner closed: treat as a flee attempt to exit combat cleanly
+            return Action.flee();
+        }
+        String normalized = line.trim().toLowerCase();
+        switch (normalized) {
             case "a", "attack" -> {
                 return Action.attack();
             }
             case "f", "flee" -> {
                 return Action.flee();
             }
-            case "h", "help" -> {
+            case "h", "help", "?" -> {
                 return Action.help();
             }
         }
-        if (line.startsWith("use ")) {
+        if (normalized.startsWith("use ")) {
             try {
-                int idx = Integer.parseInt(line.substring(4).trim());
+                int idx = Integer.parseInt(normalized.substring(4).trim());
                 if (idx > 0) return Action.use(idx);
             } catch (NumberFormatException ignored) {
             }

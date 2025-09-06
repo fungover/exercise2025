@@ -16,6 +16,7 @@ import org.example.service.combat.CombatService;
 import org.example.service.movement.MovementService;
 
 public final class GameController {
+    public enum RunResult { QUIT, RESTART, VICTORY }
     private final MovementService movementService = new MovementService();
     private final String[] startupLines;
     private final CombatService combatService = new CombatService();
@@ -25,7 +26,7 @@ public final class GameController {
         this.startupLines = (startupLines == null) ? new String[0] : startupLines;
     }
 
-    public void run(GameContext context, Scanner scanner) {
+    public RunResult run(GameContext context, Scanner scanner) {
         // Initial render
         ConsoleMapPrinter.print(context.map(), context.player().getX(), context.player().getY());
         for (String s : startupLines) {
@@ -41,7 +42,7 @@ public final class GameController {
             switch (exploreCommand.type()) {
                 case QUIT -> {
                     System.out.println("Goodbye!");
-                    return;
+                    return RunResult.QUIT;
                 }
 
                 case HELP -> printHelp();
@@ -78,13 +79,16 @@ public final class GameController {
                                 CombatUI ui = new CliCombatUI(scanner);
                                 combatService.fight(context.player(), enemy, context.player().getInventory(), ui);
 
-                                // If enemy died, clear it from the tile
+                                if (context.player().isDead()) {
+                                    System.out.println("You died… Game over.");
+                                    boolean playAgain = askYesNo(scanner, "Play again? (y/n): ");
+                                    return playAgain ? RunResult.RESTART : RunResult.QUIT;
+                                }
                                 if (enemy.isDead()) {
                                     if (enemy instanceof Boss boss) {
-                                        // Clear the whole 2x2 boss footprint and declare victory
                                         clearBossFootprintAndWin(context, boss);
-                                        return; // end game as a win
-
+                                        boolean playAgain = askYesNo(scanner, "Play again? (y/n): ");
+                                        return playAgain ? RunResult.RESTART : RunResult.VICTORY;
                                     } else {
                                         currentTile.removeEnemy();
                                         System.out.println("That was scary, let's continue...");
@@ -92,7 +96,6 @@ public final class GameController {
                                     }
                                 }
                             } else {
-                                // No enemy here, keep the old behavior
                                 promptLootIfPresent(context);
                             }
                         }
@@ -235,4 +238,13 @@ public final class GameController {
         System.out.println("The evil presence fades… You win! 🎉");
     }
 
+    private boolean askYesNo(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String ans = scanner.nextLine().trim().toLowerCase();
+            if (ans.equals("y") || ans.equals("yes") || ans.equals("j") || ans.equals("ja")) return true;
+            if (ans.equals("n") || ans.equals("no")) return false;
+            System.out.println("Please type 'y' or 'n'.");
+        }
+    }
 }

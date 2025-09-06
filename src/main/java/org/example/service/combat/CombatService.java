@@ -122,8 +122,7 @@ public record CombatService(Random fleeRng) {
         }
 
         if (player.isDead()) {
-            ui.showMessage("You died… Game over.");
-            System.exit(0);
+            return;
         } else {
             ui.showMessage("You defeated the " + enemy.name() + "!");
         }

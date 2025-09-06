@@ -53,14 +53,12 @@ public class Game {
 	}
 
 	public int fight(Enemy entity, Lizard player) {
-		System.out.println("A wild " + entity.getName() + " appeared 🐦");
+		System.out.println("A wild " + entity.getName() + " appeared " + entity.getEmoji());
 		System.out.print("What will you do? ([R]un or [F]ight): ");
 		String choice = input.nextLine().toLowerCase().trim();
-		boolean enemyMenu = true;
-		while (enemyMenu) {
+		while (true) {
 			switch (choice) {
 				case "r":
-					System.out.println("You run away from the threat!");
 					return -1;
 				case "f":
 					do {
@@ -76,23 +74,21 @@ public class Game {
 								if (entity.getHealth() <= 0) {
 									String loot = entity.lootDrop();
 									player.getInventory().add(loot);
-									System.out.println("You won and gained: " + loot  + "!");
+									System.out.println("You won and gained: " + loot + "!");
 									return 1;
 								}
-								player.setHealth(-entity.attack());
-								if  (player.getHealth() <= 0) {
-									System.out.println("You lost!");
+								player.setAttackedHealth((int) (entity.attack() * player.getDefense()));
+								if (player.getHealth() <= 0) {
 									return 0;
 								}
 								break;
 							case "h":
 								if (player.getInventory().contains("Ashes")) {
 									System.out.println("You healed!");
-									player.setHealth(10);
+									player.setHealth(30);
 								}
 								break;
 							case "r":
-								System.out.println("You run away from the threat!");
 								return -1;
 							default:
 								System.out.println("Invalid choice!");
@@ -104,9 +100,6 @@ public class Game {
 					break;
 			}
 		}
-		if (player.getHealth() <= 0) {
-			return 0;
-		} else return 1;
 	}
 
 	public void run() {
@@ -116,29 +109,45 @@ public class Game {
 		lizard = new Lizard(name);
 		System.out.println("Hello, mighty " + lizard.getName() + "!");
 
-		System.out.println("Your current leaf " + currentLeaf.getName());
 
 		boolean gameOn = true;
 		while (gameOn) {
-			// Place enemy spawner here
-			if (randomGen.generateRandom(50)) {
-				if (randomGen.generateRandom(50)) {
-					falcon = new Falcon();
-					fight(falcon, lizard);
-				}
-				 else {
-					eagle = new Eagle();
-					fight(eagle, lizard);
-				}
-			}
+			System.out.println("Your current leaf: " + currentLeaf.getName());
 			System.out.print("Your move (" + currentLeaf.getDescription() + "): ");
 			String move = input.nextLine().toLowerCase().trim();
 			if (currentLeaf.getNextLeaf(move) != null) {
 				currentLeaf = currentLeaf.getNextLeaf(move);
-				System.out.println(currentLeaf.getName());
 			} else {
 				System.out.println("No leaf there");
 			}
+			// Place enemy spawner here
+			if (randomGen.generateRandom(20)) {
+				if (randomGen.generateRandom(50)) {
+					falcon = new Falcon();
+					int falconFight = fight(falcon, lizard);
+					if (falconFight == 0) {
+						System.out.println("You died and lost the game!");
+						gameOn = false;
+					} else if (falconFight == -1) {
+						System.out.println("You ran away from the threat!");
+					}
+				} else {
+					eagle = new Eagle();
+					int eagleFight = fight(eagle, lizard);
+					if (eagleFight == 0) {
+						System.out.println("You died and lost the game!");
+						gameOn = false;
+					} else if (eagleFight == -1) {
+						System.out.println("You ran away from the threat!");
+					}
+				}
+			} else {
+				String foundItem = lootDrop.lootDrop();
+				System.out.println("You found an item: " + foundItem + "!");
+				lizard.setInventory(foundItem);
+				lizard.setEquipment(foundItem);
+			}
+
 		}
 	}
 }

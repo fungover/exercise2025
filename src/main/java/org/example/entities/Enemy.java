@@ -9,14 +9,15 @@ public class Enemy {
 	protected RandomGen randomGen = new RandomGen();
 	protected int health;
 	protected String name;
+	protected String emoji;
 	public Enemy() {
 		this.name = "lootDrop";
 	}
 
-	private final String[] loot = {"Talon Dagger", "Beak Helmet", "Ashes", "Uncommon Feathers"};
+	private final String[] loot = {"Talon Dagger", "Beak Helmet", "Ashes", "Uncommon Feathers", "Hawk's Sight"};
 
 	public String[] getLoot() {
-		return loot;
+		return this.loot;
 	}
 
 	public String getRareFeathers() {
@@ -32,17 +33,20 @@ public class Enemy {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public String lootDrop() {
-		int droppedLoot = random.nextInt(4);
+		int droppedLoot = random.nextInt(5);
 		return getLoot()[droppedLoot];
 	}
 
 	public int attack() {
-		System.out.println("attack");
 		return 0;
+	}
+
+	public String getEmoji() {
+		return this.emoji;
 	}
 }
 

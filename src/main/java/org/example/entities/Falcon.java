@@ -10,19 +10,14 @@ public class Falcon extends Enemy {
 		random = new Random();
 		super.health = 20;
 		super.name = "Falcon";
+		super.emoji = "🐦";
 	}
 
 	public int attack() {
 		if (randomGen.generateRandom(5)) {
-			return 12;
+			return 20;
 		} else {
-			return 5; // Default damage for Falcons
+			return 10; // Default damage for Falcons
 		}
 	}
-
-
-	public String lootDrop() {
-		return super.lootDrop();
-	}
-
 }

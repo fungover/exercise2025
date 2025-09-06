@@ -10,17 +10,14 @@ public class Eagle extends Enemy {
 		random = new Random();
 		super.health = 20;
 		super.name = "Eagle";
+		super.emoji = "🦅";
 	}
 
 	public int attack() {
 		if (randomGen.generateRandom(5)) {
-			return 10; // Chance at critical hit
+			return 20; // Chance at critical hit
 		} else {
-			return 5; // Default damage for Eagles
+			return 10; // Default damage for Eagles
 		}
-	}
-
-	public String lootDrop() {
-		return super.lootDrop();
 	}
 }

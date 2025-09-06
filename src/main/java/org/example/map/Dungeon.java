@@ -1,6 +1,7 @@
 package org.example.map;
 
 import org.example.entities.Player;
+import org.example.entities.items.Inventory;
 import org.example.utils.RandomGenerator;
 
 public class Dungeon {
@@ -49,7 +50,7 @@ public class Dungeon {
         }
     }
 
-    public void printDungeon() {
+    public void printDungeon(Inventory inventory) {
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
                 System.out.print(grid[y][x]);
@@ -60,6 +61,7 @@ public class Dungeon {
         System.out.println("Move Down (D)");
         System.out.println("Move Right (R)");
         System.out.println("Move Left (L)");
+        inventory.displayInventory();
     }
 
     public int getRows() {

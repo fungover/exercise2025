@@ -35,11 +35,10 @@ public class Game {
         // Game loop
         while (true) {
             // "Clear" the terminal
-            pause(); // This makes it possible to read messages before rerender
             for (int i = 0; i < 50; i++) {
                 System.out.println();
             }
-            dungeon.printDungeon();
+            dungeon.printDungeon(inventory);
 
             if (logic.wishToPickUpItem(dungeon, player, scan)) {
                 HealthPotion potion;
@@ -66,6 +65,7 @@ public class Game {
             logic.moveInput(dungeon, player, userInput);
 
             logic.renderPlayerPosition(dungeon, player);
+            pause(); // This makes it possible to read messages before rerender
         }
     }
 
@@ -80,7 +80,7 @@ public class Game {
 
     private static void pause() throws InterruptedException {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Restore interrupt status
         }

@@ -9,7 +9,7 @@ public abstract class Item {
         this.quantity = quantity;
     }
 
-    public String getName() {
+    public String getType() {
         return name;
     }
 
@@ -18,7 +18,7 @@ public abstract class Item {
     }
 
     public String displayInfo() {
-        return getName() + ": " + getQuantity();
+        return "Type: " + getType() + ", Quantity: " + getQuantity();
     }
 
     public void addQuantity() {

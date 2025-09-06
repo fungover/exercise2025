@@ -97,6 +97,7 @@ public class GameLogic {
             System.out.print("Y/N: ");
             String userInput = scan.nextLine();
             if (userInput.equalsIgnoreCase("y")) {
+                System.out.println();
                 return true;
             } else if (userInput.equalsIgnoreCase("n")) {
                 return false;

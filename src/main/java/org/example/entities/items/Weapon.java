@@ -3,14 +3,14 @@ package org.example.entities.items;
 public class Weapon extends Item {
     private int damage;
 
-    public Weapon(String name, int quantity, int damage) {
-        super(name, quantity);
+    public Weapon(String type, int quantity, int damage) {
+        super(type, quantity);
         this.damage = damage;
     }
 
     @Override
-    public String getName() {
-        return super.getName();
+    public String getType() {
+        return super.getType();
     }
 
     @Override
@@ -24,6 +24,6 @@ public class Weapon extends Item {
 
     @Override
     public String displayInfo() {
-        return getName() + ", Damage: " + damage;
+        return "Type: " + getType() + ", Damage: " + damage;
     }
 }

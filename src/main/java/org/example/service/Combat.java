@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.entities.*;
 import org.example.entities.items.HealthPotion;
+import org.example.entities.items.Inventory;
 import org.example.entities.items.Weapon;
 import org.example.utils.RandomGenerator;
 
@@ -9,8 +10,11 @@ import java.util.Scanner;
 
 public class Combat {
 
-    public void startFight(Player p, Weapon w, HealthPotion hP, Scanner scan) {
+    public void startFight(Player p, Inventory inventory, Scanner scan) {
         Enemy e = randomEnemy();
+        Weapon w = inventory.getWeapon();
+        HealthPotion hp = inventory.getHealthPotion();
+
         boolean isFighting = true;
         System.out.println("It's a " + e.getName() + "!");
         while (isFighting) {
@@ -35,11 +39,12 @@ public class Combat {
                     }
                     break;
                 case "2":
-                    if (hP.getQuantity() == 0) {
+                    if (hp == null) {
                         System.out.println("You have no potions!");
                     } else {
                         System.out.println("You use a health potion!");
-                        p.setHealth(hP.restoreHealth());
+                        p.setHealth(hp.restoreHealth());
+                        inventory.removeItem(hp);
                     }
                     break;
                 case "3":
@@ -53,10 +58,19 @@ public class Combat {
 
     private void attackEnemy(Weapon w, Enemy e) {
         int rand = new RandomGenerator().generateNumber(1, 10);
+        int damage;
+
+        // If player has no weapon in hand.
+        if (w == null) {
+            damage = rand;
+        } else {
+            damage = w.getDamage();
+        }
+
         if (rand < 7) {
             System.out.println("You swing your sword!\nDealing " +
-                    w.getDamage() + " damage!");
-            damageGiven(e, w.getDamage());
+                    damage + " damage!");
+            damageGiven(e, damage);
         } else {
             System.out.println("You missed!");
         }

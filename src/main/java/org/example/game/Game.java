@@ -29,11 +29,16 @@ public class Game {
         final GameLogic logic = new GameLogic();
         Dungeon dungeon = new Dungeon(player);
 
+        // Items
+        inventory.addItem(new Weapon("Sword", 1, 20));
+        inventory.addItem(new HealthPotion("Health Potion", 0));
+
         // Game loop
         while (true) {
-            // Items
-            inventory.addItem(new Weapon("Sword", 1, 20));
-            inventory.addItem(new HealthPotion("Health Potion", 0));
+            // "Clear" the terminal
+            for (int i = 0; i < 50; i++) {
+                System.out.println();
+            }
 
             dungeon.printDungeon();
 
@@ -45,14 +50,12 @@ public class Game {
                     potion = new HealthPotion("Health Potion", 0);
                 }
                 inventory.addItem(potion);
-                System.out.println(potion.getName() + " has been picked up!");
+                System.out.println("A Health Potion has been picked up!");
             }
 
             if (logic.wishToFightEnemy(dungeon, player, scan)) {
-                Weapon weapon = inventory.getWeapon();
-                HealthPotion potion = inventory.getHealthPotion();
                 Combat combat = new Combat();
-                combat.startFight(player, weapon, potion, scan);
+                combat.startFight(player, inventory, scan);
             }
 
             System.out.print("Enter command (or 'q' to quit game): ");

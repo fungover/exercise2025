@@ -70,4 +70,25 @@ public class Dungeon {
         player.moveTo(newX, newY);
     }
 
+    public void interact(int x, int y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            throw new IllegalArgumentException("Position out of bounds");
+        }
+        Tile tile = getTile(x, y);
+        if (tile.getType() == TileType.ITEM) {
+            Item item = tile.getItem();
+            if (item != null) {
+                player.addItem(item);
+                tile.clearContents();
+            }
+        } else if (tile.getType() == TileType.ENEMY) {
+            Enemy enemy = tile.getEnemy();
+            if (enemy != null && enemy.isAlive()) {
+                player.attack(enemy);
+                if (!enemy.isAlive()) {
+                    tile.clearContents();
+                }
+            }
+        }
+    }
 }

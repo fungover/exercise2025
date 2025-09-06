@@ -1,13 +1,8 @@
 package org.example.entities;
 
+import org.example.entities.behaviors.*;
 import java.util.ArrayList;
 import java.util.List;
-
-interface CombatBehaviour {
-    void attack(Enemy enemy);
-    int getDamage();
-    String toString();
-}
 
 public class Player {
     private final String name;
@@ -114,28 +109,4 @@ public class Player {
     }
 }
 
-class BasicCombat implements CombatBehaviour {
-    private final int damage;
 
-    public BasicCombat(int damage) {
-        if (damage < 0) {
-            throw new IllegalArgumentException("Damage cannot be negative");
-        }
-        this.damage = damage;
-    }
-
-    @Override
-    public void attack(Enemy enemy) {
-        enemy.takeDamage(damage);
-    }
-
-    @Override
-    public int getDamage() {
-        return damage;
-    }
-
-    @Override
-    public String toString() {
-        return "+" + damage + " damage";
-    }
-}

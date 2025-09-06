@@ -13,7 +13,6 @@ public class Tile {
         this.type = type;
         this.enemy = null;
         this.item = null;
-
     }
 
     public Tile(Enemy enemy) {

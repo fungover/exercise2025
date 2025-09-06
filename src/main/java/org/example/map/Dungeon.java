@@ -6,6 +6,7 @@ import org.example.entities.items.*;
 import org.example.service.MovementService;
 import org.example.utils.InputValidator;
 import org.example.utils.RandomGenerator;
+import org.example.service.CombatService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class Dungeon {
     private final Player player;
     private final MapGenerator mapGenerator;
     private final MovementService movementService;
+    private final CombatService combatService;
 
     public Dungeon(int width, int height, Player player, MapGenerator mapGenerator) {
         if (width <= 0 || height <= 0) {
@@ -37,7 +39,9 @@ public class Dungeon {
         this.tiles = mapGenerator.generate(width, height);
         this.player = player;
         this.mapGenerator = mapGenerator;
-        this.movementService = new MovementService(this, new InputValidator(this));
+        InputValidator validator = new InputValidator(this);
+        this.movementService = new MovementService(this, validator);
+        this.combatService = new CombatService(this, validator);
         if (width > 2 || height > 3 && tiles[3][2].getType() == TileType.EMPTY) {
             player.moveTo(2, 3);
         } else {
@@ -89,13 +93,7 @@ public class Dungeon {
                 tile.clearContents();
             }
         } else if (tile.getType() == TileType.ENEMY) {
-            Enemy enemy = tile.getEnemy();
-            if (enemy != null && enemy.isAlive()) {
-                player.attack(enemy);
-                if (!enemy.isAlive()) {
-                    tile.clearContents();
-                }
-            }
+            combatService.engageCombat(x, y, player);
         }
     }
 

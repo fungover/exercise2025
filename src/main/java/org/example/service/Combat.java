@@ -4,15 +4,13 @@ import org.example.entities.Character;
 import java.util.Scanner;
 
 public class Combat {
-    public static void start(Character player, Character enemy) {
-        Scanner sc = new Scanner(System.in);
+    public static void start(Scanner scanner, Character player, Character enemy) {
         System.out.println("Combat started vs " + enemy.getName() + "!");
-
         while (player.isAlive() && enemy.isAlive()) {
             System.out.println("Your HP: " + player.getHealth() + "|"
                     + enemy.getName() + " HP: " + enemy.getHealth());
             System.out.print("Command(attack/run): "); // Item (use potion as choice maybe)
-            String cmd = sc.nextLine().toLowerCase().trim();
+            String cmd = scanner.nextLine().toLowerCase().trim();
 
             if (cmd.equals("attack")) {
                 // enemy.setHealth(enemy.getHealth() - player.getAttackDamage());

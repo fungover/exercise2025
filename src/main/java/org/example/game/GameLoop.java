@@ -94,7 +94,7 @@ public class GameLoop {
                     Character enemy = it.next();
                     if (player.getX() == enemy.getX() && player.getY() == enemy.getY()) {
                         System.out.println("You encountered a " + enemy.getName() + "!");
-                        Combat.start(player, enemy);
+                        Combat.start(scanner, player, enemy);
                         if (!enemy.isAlive()) {
                             it.remove(); // Remove defeated enemy
 

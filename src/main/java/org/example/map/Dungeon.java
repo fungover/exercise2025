@@ -1,6 +1,8 @@
 package org.example.map;
 
 import org.example.entities.*;
+import org.example.entities.enemies.*;
+import org.example.entities.items.*;
 
 interface MapGenerator {
     Tile[][] generate (int width, int height);
@@ -28,15 +30,19 @@ public class Dungeon {
         this.tiles = mapGenerator.generate(width, height);
         this.player = player;
         this.mapGenerator = mapGenerator;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (tiles[y][x].getType() == TileType.EMPTY) {
-                    player.moveTo(x, y);
-                    return;
+        if (width > 2 || height > 3 && tiles[3][2].getType() == TileType.EMPTY) {
+            player.moveTo(2, 3);
+        } else {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    if (tiles[y][x].getType() == TileType.EMPTY) {
+                        player.moveTo(x, y);
+                        return;
+                    }
                 }
             }
+            throw new IllegalStateException("No empty tile found for player placement");
         }
-        throw new IllegalStateException("No empty tile found for player placement");
     }
 
     public int getWidth() {
@@ -73,6 +79,11 @@ public class Dungeon {
     public void interact(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height) {
             throw new IllegalArgumentException("Position out of bounds");
+        }
+        int dx = Math.abs(x - player.getX());
+        int dy = Math.abs(y - player.getY());
+        if (dx + dy > 1) {
+            throw new IllegalArgumentException("Position is too far away");
         }
         Tile tile = getTile(x, y);
         if (tile.getType() == TileType.ITEM) {
@@ -121,5 +132,34 @@ public class Dungeon {
             sb.append('\n');
         }
         return sb.toString();
+    }
+}
+
+class BasicMapGenerator implements MapGenerator {
+    @Override
+    public Tile[][] generate(int width, int height) {
+        Tile[][] tiles = new Tile[height][width];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                tiles[y][x] = new Tile(TileType.EMPTY);
+            }
+        }
+        // Add walls around the border
+        for (int x = 0; x < width; x++) {
+            tiles[0][x] = new Tile(TileType.WALL);
+            tiles[height - 1][x] = new Tile(TileType.WALL);
+        }
+        for (int y = 0; y < height; y++) {
+            tiles[y][0] = new Tile(TileType.WALL);
+            tiles[y][width - 1] = new Tile(TileType.WALL);
+        }
+        // Add enemies and items
+        if (width >= 3 && height >= 3) {
+            tiles[1][1] = new Tile(new Goblin()); // ENEMY
+            tiles[1][2] = new Tile(new Troll()); // ENEMY
+            tiles[2][1] = new Tile(new Troll()); // ENEMY
+            tiles[2][2] = new Tile(new Potion("Health Potion", 20)); // ITEM
+        }
+        return tiles;
     }
 }

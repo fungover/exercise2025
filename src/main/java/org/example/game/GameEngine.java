@@ -1,7 +1,5 @@
 package org.example.game;
 
-import java.util.Random;
-import java.util.Scanner;
 import org.example.entities.characters.Player;
 import org.example.game.core.GameContext;
 import org.example.game.core.GameController;
@@ -12,7 +10,14 @@ import org.example.map.MapGenerator;
 import org.example.utils.Position;
 import org.example.utils.SpawnLocator;
 
+import java.util.Random;
+import java.util.Scanner;
+
 public final class GameEngine {
+
+    private static int between(Random rng, int minInclusive, int maxInclusive) {
+        return minInclusive + rng.nextInt(maxInclusive - minInclusive + 1);
+    }
 
     public void start() {
         start(System.currentTimeMillis());
@@ -53,8 +58,8 @@ public final class GameEngine {
             // Build the player via factory (spawns at SPAWN)
             Player player = PlayerFactory.create(choice, name, spawn.x(), spawn.y());
 
-            System.out.println("Welcome " + player.archetype() + " " + player.getName() + "!\n " +
-                    "You mission is to navigate a very old and dark mineshaft, and find the source of the evil that lurks down there!\n " +
+            System.out.println("Welcome " + player.archetype() + " " + player.getName() + "!\n" +
+                    "Your mission is to navigate a very old and dark mineshaft and find the source of the evil that lurks down there!\n" +
                     "Press Enter to start the adventure!");
             in.nextLine();
 
@@ -64,9 +69,5 @@ public final class GameEngine {
                     "This is dark... I need to be careful of enemies hiding in the shadows.");
             controller.run(new GameContext(map, player), in);
         }
-    }
-
-    private static int between(Random rng, int minInclusive, int maxInclusive) {
-        return minInclusive + rng.nextInt(maxInclusive - minInclusive + 1);
     }
 }

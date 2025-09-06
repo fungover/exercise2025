@@ -11,15 +11,28 @@ public enum Direction {
     private final String[] aliases;
 
     Direction(int dx, int dy, String... aliases) {
-        this.dx = dx; this.dy = dy; this.aliases = aliases;
+        this.dx = dx;
+        this.dy = dy;
+        this.aliases = aliases;
     }
 
-    /** Map full-word input to a Direction. */
+    /** Map only WASD or full words (north/south/west/east) to a Direction. */
     public static Direction fromInput(String token) {
         if (token == null) return null;
         String t = token.trim().toLowerCase();
+
+        // WASD
+        switch (t) {
+            case "w": return NORTH;
+            case "a": return WEST;
+            case "s": return SOUTH;
+            case "d": return EAST;
+        }
+
         for (Direction d : values()) {
-            for (String a : d.aliases) if (a.equals(t)) return d;
+            for (String a : d.aliases) {
+                if (a.equals(t)) return d;
+            }
         }
         return null;
     }

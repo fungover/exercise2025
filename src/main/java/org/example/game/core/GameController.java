@@ -87,7 +87,7 @@ public final class GameController {
 
                                     } else {
                                         currentTile.removeEnemy();
-                                        System.out.println("That was scarry, let's continue...");
+                                        System.out.println("That was scary, let's continue...");
                                         promptLootIfPresent(context);
                                     }
                                 }

@@ -1,25 +1,34 @@
 package org.example.map;
 
-/** Axis-aligned rectangular room with convenience methods. */
+/**
+ * Axis-aligned rectangular room with convenience methods.
+ */
 public record Room(int left, int top, int width, int height) {
+    public Room {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("width and height must be > 0");
+        }
+    }
 
     public int right() {
-        return left + width  - 1;
+        return left + width - 1;
     }
 
     public int bottom() {
-        return top  + height - 1;
+        return top + height - 1;
     }
 
     public int centerX() {
-        return left + width  / 2;
+        return left + width / 2;
     }
 
     public int centerY() {
-        return top  + height / 2;
+        return top + height / 2;
     }
 
-    /** Returns true if this room intersects or is within 'padding' tiles of another room. */
+    /**
+     * Returns true if this room intersects or is within 'padding' tiles of another room.
+     */
     public boolean intersectsWith(Room other, int padding) {
         int expandedLeft = left - padding;
         int expandedTop = top - padding;

@@ -81,15 +81,6 @@ public final class ExploreParser {
 
             // Movement: only WASD or full words.
             default -> {
-                if (head.length() == 1) {
-                    return switch (head) {
-                        case "w" -> ExploreCommand.move(Direction.NORTH);
-                        case "a" -> ExploreCommand.move(Direction.WEST);
-                        case "s" -> ExploreCommand.move(Direction.SOUTH);
-                        case "d" -> ExploreCommand.move(Direction.EAST);
-                        default  -> ExploreCommand.unknown();
-                    };
-                }
                 Direction direction = Direction.fromInput(head);
                 return (direction != null) ? ExploreCommand.move(direction) : ExploreCommand.unknown();
             }

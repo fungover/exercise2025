@@ -15,19 +15,36 @@ public class RandomGeneration {
             List<ItemOnMap> items) {
         int x, y;
         boolean occupied;
+        int attempts = 0;
+        int cap = grid.getWidth() * grid.getHeight() * 2;
 
-        do {
+        while (attempts++ < cap) {
             x = random.nextInt(grid.getWidth());
             y = random.nextInt(grid.getHeight());
 
             occupied = grid.getTiles(x, y).isWall()
                     || (player.getX() == x && player.getY() == y)
-                    || containsEnemyAt(x, y, enemies)
-                    || containsItemAt(x, y, items);
-        } while (occupied);
-        return new int[]{x, y};
-
+                    || Helpers.containsEnemyAt(x, y, enemies)
+                    || Helpers.containsItemAt(x, y, items);
+            if (!occupied) {
+                return new int[]{x, y};
+            }
+        }
+        // Fallback scanning
+        for (int yy = 0; yy < grid.getHeight(); yy++) {
+            for (int xx = 0; xx < grid.getWidth(); xx++) {
+                boolean fallbackOccupied = grid.getTiles(xx, yy).isWall()
+                        || (player.getX() == xx && player.getY() == yy)
+                        || Helpers.containsEnemyAt(xx, yy, enemies)
+                        || Helpers.containsItemAt(xx, yy, items);
+                if (!fallbackOccupied) {
+                    return new int[]{xx, yy};
+                }
+            }
+        }
+        throw new IllegalStateException("Unable to find a free position");
     }
+
     private static boolean containsEnemyAt(int x, int y, List<Character> enemies) {
         for (Character e : enemies) {
             if (e.getX() == x && e.getY() == y) return true;

@@ -91,4 +91,35 @@ public class Dungeon {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (x == player.getX() && y == player.getY()) {
+                    sb.append('P');
+                } else {
+                    Tile tile = tiles[y][x];
+                    switch (tile.getType()) {
+                        case WALL:
+                            sb.append('#');
+                            break;
+                        case ENEMY:
+                            sb.append('E');
+                            break;
+                        case ITEM:
+                            sb.append('I');
+                            break;
+                        case EMPTY:
+                            sb.append('.');
+                            break;
+                    }
+                }
+                sb.append(' ');
+            }
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
 }

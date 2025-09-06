@@ -69,7 +69,7 @@ public class GameTests {
         player.addItem(new HealthPotion("Small Potion", 20));
         int oldHP = player.getHealth();
 
-        player.useItem(0);
+        player.useItem(1); // useItem now expects index 1
 
         assertTrue(player.getHealth() > oldHP, "Player HP should increase after using potion");
     }

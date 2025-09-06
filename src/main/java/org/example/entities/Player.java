@@ -24,6 +24,7 @@ public class Player extends Character {
         return maxHealth;
     }
 
+    @Override
     public void setHealth(int health) {
         super.setHealth(Math.min(Math.max(0, health), maxHealth));
     }
@@ -31,7 +32,7 @@ public class Player extends Character {
     @Override
     public void takeTurn() {
         // Player takes turn logic
-        System.out.println(name + " waits for your command...");
+        System.out.println(getName() + " waits for your command...");
     }
 
     // Inventory logic
@@ -50,11 +51,13 @@ public class Player extends Character {
         }
     }
     public void useItem(int index) {
-        if (index >= 0 && index < inventory.size()) {
-            Item item = inventory.remove(index);
+        int idx = index - 1; // Accept 1-based selection from showInventory()
+        if (idx >= 0 && idx < inventory.size()) {
+            Item item = inventory.get(idx);
             item.use(this);
+            inventory.remove(idx);
         } else {
-            System.out.println("Invalid item index!");
+            System.out.println("Invalid item index! Choose 1.." + inventory.size());
         }
     }
 

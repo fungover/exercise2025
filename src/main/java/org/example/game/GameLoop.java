@@ -63,7 +63,7 @@ public class GameLoop {
                 continue;
             } else if (command.startsWith("use ")) {
                 try {
-                    int index = Integer.parseInt(command.split(" ")[1]) - 1;
+                    int index = Integer.parseInt(command.split(" ")[1]);
                     ((Player) player).useItem(index);
                 } catch (Exception e) {
                     System.out.println("Usage: use <item number>");

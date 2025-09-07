@@ -14,10 +14,10 @@ A CLI-based dungeon game in Java with a 5x5 grid. Players move, fight enemies (`
 
 ## Run
 - **Build**: `mvn compile` or `./gradlew build`.
-- **Production**: `java -cp target/classes org.example.App` (random enemy/potion).
-- **Test**: Execute testfiles in `src/test/java/org.example` using appropriate IDE
-- **Tests**: `mvn test` or `./gradlew test`.
-
+- **Run (Maven)**: `mvn -q exec:java -Dexec.mainClass=org.example.App` or `java -cp target/classes org.example.App`.
+- **Run (Gradle)**: `./gradlew run` (if the Application plugin is applied) or `java -cp build/classes/java/main org.example.App`.
+- **Tests (CLI)**: `mvn test` or `./gradlew test`.
+- **Tests (IDE)**: Run JUnit 5 tests under `src/test/java/org/example`.
 ## Adding Classes
 - **New Enemy** (in `entities.enemies`):
   ```java

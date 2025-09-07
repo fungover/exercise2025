@@ -28,6 +28,10 @@ public class Player {
         }
     }
 
+    public Position getPosition() {
+        return position;
+    }
+
     public void move(int dx, int dy) {
         position.move(dx, dy);
     }

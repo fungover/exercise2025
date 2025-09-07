@@ -48,7 +48,7 @@ public final class Player {
     }
 
     public void playerHealth(){
-        PrintText.printYellow("You now have "+health+" health");
+        PrintText.printYellow("You have "+health+" in health");
     }
 
 }

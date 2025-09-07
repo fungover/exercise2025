@@ -12,7 +12,7 @@ import org.example.service.CombatService;
 import org.example.service.ItemService;
 import org.example.service.MovementService;
 import org.example.utils.InputValidator;
-import org.example.utils.RandomGenerator;
+import org.example.utils.Rng;
 
 public class App {
     public static void main(String[] args) {
@@ -22,7 +22,7 @@ public class App {
         Dungeon dungeon;
         if (isTestMode) {
             // TESTING ONLY: Uses seeded RandomGenerator and overrides map generation
-            RandomGenerator rng = new RandomGenerator(12345L);
+            Rng rng = new Rng(12345L);
             dungeon = new Dungeon(5, 5, player, new BasicMapGenerator() {
                 @Override
                 public Tile[][] generate(int width, int height) {

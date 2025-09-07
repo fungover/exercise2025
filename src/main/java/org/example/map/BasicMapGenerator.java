@@ -5,7 +5,7 @@ import org.example.entities.TileType;
 import org.example.entities.enemies.Goblin;
 import org.example.entities.enemies.Troll;
 import org.example.entities.items.Potion;
-import org.example.utils.RandomGenerator;
+import org.example.utils.Rng;
 import org.example.entities.Enemy;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class BasicMapGenerator implements MapGenerator {
     @Override
     public Tile[][] generate(int width, int height) {
         Tile[][] tiles = new Tile[height][width];
-        RandomGenerator rng = new RandomGenerator();
+        Rng rng = new Rng();
         // Initialize all tiles as EMPTY
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

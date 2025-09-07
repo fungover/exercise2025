@@ -3,15 +3,15 @@ package org.example.utils;
 import java.util.List;
 import java.util.Random;
 
-public class RandomGenerator {
+public class Rng {
     private final Random random;
 
-    public RandomGenerator() {
+    public Rng() {
         this.random = new Random();
         System.out.println("Random generator initialized");
     }
 
-    public RandomGenerator(long seed) {
+    public Rng(long seed) {
         this.random = new Random(seed);
         System.out.println("Random generator initialized with seed: " + seed);
     }

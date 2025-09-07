@@ -61,7 +61,7 @@ public class Controls {
       switch (input2) {
         case "1" -> {
           Enemy enemy = player.getLocationObj().enemy();
-          fight(player, enemy);
+          Combat.fight(player, enemy);
         }
         case "2" -> player.rest();
         case "3" -> {chooseLocation(player);}
@@ -87,43 +87,6 @@ public class Controls {
           return;
         }
         default -> System.out.println("Invalid input.");
-      }
-    }
-  }
-
-  static void fight(Player player, Enemy enemy) {
-    System.out.println("You went to " + enemy.getName());
-    while(player.getHealth() > 0 && enemy.getHealth() > 0) {
-      System.out.printf("%n1. Attack %n2. Escape%n3. Use item%n");
-      String input = scanner.nextLine();
-      switch (input) {
-        case "1" -> {
-          enemy.setHealth(enemy.getHealth() - player.hit());
-          player.addExperience((int) (player.hit() * 10));
-          System.out.println("You hit " + enemy.getName() +
-                  " for " + player.hit() + " damage. " +
-                  "Enemy HP: " + enemy.getHealth());
-
-          if (enemy.getHealth() > 0) {
-            player.setHealth(player.getHealth() - enemy.hit());
-            System.out.println(enemy.getName() + " hits you for " +
-                    enemy.hit() + " damage. " +
-                    "Your HP: " + player.getHealth());
-          }else if(enemy.getHealth() <= 0) {
-            System.out.println("You killed " + enemy.getName());
-            player.addItem(player.getItem());
-          }
-        }
-        case "2" -> {player.setHealth(player.getHealth()-1); System.out.println("You ran away! While you were running, the enemy hit you for 1 damage."); return;}
-        case "3" -> {
-          if(player.showInventory(false, true)) {
-            System.out.println("Enter food name: ");
-            String item = scanner.nextLine();
-            player.useItem(item);
-          }else {
-            System.out.println("Empty");
-          }
-        }
       }
     }
   }

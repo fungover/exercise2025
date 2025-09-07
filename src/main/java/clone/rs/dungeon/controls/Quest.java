@@ -5,7 +5,7 @@ import clone.rs.dungeon.character.Player;
 
 import java.util.Scanner;
 
-import static clone.rs.dungeon.controls.Controls.fight;
+import static clone.rs.dungeon.controls.Combat.fight;
 
 public class Quest {
 

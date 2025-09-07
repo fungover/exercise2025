@@ -15,8 +15,10 @@ public class Warehouse {
 
     // Methods
     public void addProduct(Product product) {
+        if (product == null || product.getName().isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be null or blank");
+        }
         products.add(product);
     }
-
 
 }

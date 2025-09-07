@@ -16,8 +16,12 @@ public class Game {
     menu();
   }
 
-  static void main() throws IOException, InterruptedException {
-    Game game = new Game("RS clone dungeon");
-    game.run();
-  }
+  public static void main(String[] args) {
+    try {
+      new Game("RS clone dungeon").run();
+      } catch (IOException | InterruptedException e) {
+      e.printStackTrace();
+      System.exit(1);
+      }
+    }
 }

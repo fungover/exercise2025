@@ -1,6 +1,7 @@
 package service;
 
 import entities.Enemy;
+import entities.Item;
 import entities.Player;
 import map.DungeonMap;
 import map.Tile;
@@ -35,7 +36,9 @@ public class Movement {
         System.out.println("Moved to" + player.getPosition());
 
         if (destinationTile.getItem() != null) {
-            // TODO
+            Item item = destinationTile.getItem();
+            player.addItem(item);
+            destinationTile.setItem(null);
         }
 
         if (destinationTile.getEnemy() != null) {

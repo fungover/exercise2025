@@ -50,7 +50,24 @@ public class Player {
     }
 
     public void useItem(Item item) {
-        currentItem = item;
+        if (item == null) {
+            System.out.println("No such item.");
+            return;
+        }
+
+        if (!inventory.contains(item)) {
+            System.out.println("You don't have that item.");
+            return;
+        }
+
+        item.applyEffect(this);
+
+        if ("potion".equalsIgnoreCase(item.getType())) {
+            inventory.remove(item);
+        } else if ("weapon".equalsIgnoreCase(item.getType())) {
+            currentItem = item;
+            System.out.println("You equipped " + item.getName());
+        }
     }
 
     public void listInventory() {
@@ -64,11 +81,24 @@ public class Player {
     }
 
     public void heal(int heal) {
+        if (heal <= 0) {
+            return;
+        }
         health += heal;
     }
 
     public void attack(Enemy enemy) {
-        // TODO
+        if (enemy == null || !enemy.isAlive()) {
+            System.out.println("There is no enemy to attack.");
+            return;
+        }
+        int damage = 10;
+        if (currentItem != null && "weapon".equalsIgnoreCase(currentItem.getType())) {
+            damage += currentItem.getEffect();
+        }
+
+        System.out.printf("%s attacks %s for %d damage%n", name, enemy.getType(), damage);
+        enemy.takeDamage(damage);
     }
 
 }

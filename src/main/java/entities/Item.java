@@ -23,4 +23,6 @@ public abstract class Item {
         return effect;
     }
 
+    public abstract void applyEffect(Player player);
+
 }

@@ -6,7 +6,8 @@ public class HealingPotion extends Item {
         super(name, type, healingAmount);
     }
 
-    public void heal(Player player) {
+    @Override
+    public void applyEffect(Player player) {
         System.out.println(player.getName() + " drinks " + getName() + " and heals " + getEffect() + " hp");
         player.heal(getEffect());
     }

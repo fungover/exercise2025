@@ -110,12 +110,36 @@ public class DungeonMap {
         return null;
     }
 
-    // TODO add player position, aswell as items and monsters.
-    public void printToConsole() {
+    public Position randomEmptyFloor(int attempts) {
+        for (int i = 0; i < attempts; i++) {
+            int x = random.nextInt(width);
+            int y = random.nextInt(height);
+            if (inBounds(x, y) && tiles[y][x].isEmpty()) {
+                return new Position(x, y);
+            }
+        }
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (tiles[y][x].isEmpty()) {
+                    return new Position(x, y);
+                }
+            }
+        }
+        return null;
+    }
+
+    public void printToConsole(entities.Player player) {
         for (int y = 0; y < height; y++) {
             StringBuilder line = new StringBuilder();
             for (int x = 0; x < width; x++) {
-                line.append(tiles[y][x].toString());
+                if (player != null
+                        && player.getPosition() != null
+                        && player.getPosition().getX() == x
+                        && player.getPosition().getY() == y) {
+                    line.append('@');
+                } else {
+                    line.append(tiles[y][x].toString());
+                }
             }
             System.out.println(line);
         }

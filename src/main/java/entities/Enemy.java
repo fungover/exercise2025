@@ -15,6 +15,14 @@ public abstract class Enemy {
         this.position = position;
     }
 
+    public void setPosition(Position pos) {
+        this.position = pos;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
     public int getDamage() {
         return damage;
     }
@@ -31,9 +39,6 @@ public abstract class Enemy {
 
     public void takeDamage(int damageAmount) {
         health -= damageAmount;
-        if (!isAlive()) {
-            System.out.println(type + " has been killed");
-        }
     };
 
     public boolean isAlive() {

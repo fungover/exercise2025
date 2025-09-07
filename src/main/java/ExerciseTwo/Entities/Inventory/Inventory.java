@@ -22,7 +22,7 @@ public class Inventory {
     public boolean getInventory() {
 
         if(inventory.isEmpty()) {
-            PrintText.printBold("Inventory is empty");
+            PrintText.printRed("Inventory is empty");
             return false;
         }else{
             PrintText.printBold("Inventory items: ");

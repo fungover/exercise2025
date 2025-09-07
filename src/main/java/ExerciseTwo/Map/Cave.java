@@ -13,6 +13,6 @@ public class Cave extends Dungeon{
 
     @Override
     public void description() {
-        System.out.println("You have entered the cave");
+        System.out.println("You have entered a dark cave, watch your steps");
     }
 }

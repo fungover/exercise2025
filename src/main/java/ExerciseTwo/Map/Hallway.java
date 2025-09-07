@@ -13,7 +13,10 @@ public class Hallway extends Dungeon{
 
     @Override
     public void description() {
-        System.out.println("You have entered a dark hallway");
+        System.out.println("""
+    You have entered the hallway to the dungeons.
+    Your journey know begins... Good Luck!
+    """);
     }
 
 }

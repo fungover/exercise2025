@@ -150,11 +150,18 @@ public class Player extends Character {
   }
 
   public void useItem(String itemName) {
-    for (Item i : inventory) {
+    for (int idx = 0; idx < inventory.size(); idx++) {
+      Item i = inventory.get(idx);
       if (itemName.equalsIgnoreCase(i.getName())) {
         if (i.isFood()) {
-          health = health + i.getEffect();
-          System.out.println("You has eaten " + i.getName() + " food." );
+          health += i.getEffect();
+          System.out.println("You have eaten " + i.getName() + " and restored " + i.getEffect() + " HP.");
+
+          i.addAmount(-1);
+          if (i.getAmount() <= 0) {
+            inventory.remove(idx);
+          }
+
           return;
         } else {
           System.out.println(i.getName() + " is not eatable.");

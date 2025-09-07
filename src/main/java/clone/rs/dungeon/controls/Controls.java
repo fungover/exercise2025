@@ -52,7 +52,7 @@ public class Controls {
               + " Location:" + player.getLocation());
 
       SaveLoad.savePlayer(player);
-      System.out.printf("%n1. Find enemy%n2. Rest%n3. Location%n4. Show inventory%n5. Equip item%n9. Exit%n");
+      System.out.printf("%n1. Find enemy%n2. Rest%n3. Location%n4. Show inventory%n5. Equip item%n6. Dragon slayer(quest)%n7. Exit%n");
       String input2 = scanner.nextLine();
 
       switch (input2) {
@@ -82,7 +82,14 @@ public class Controls {
           } else
             System.out.println("Empty");
         }
-        case "9" -> {
+        case "6" -> {
+          if(player.getLevel() < 10){
+            System.out.println("You need at least 10 level.");
+          }else if(true){
+
+          };
+        }
+        case "7" -> {
           System.out.println("Hurry back!");
           return;
         }

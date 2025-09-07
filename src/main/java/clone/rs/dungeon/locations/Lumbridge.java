@@ -15,7 +15,7 @@ public class Lumbridge extends Location{
 
   @Override
   public String description() {
-    return "Lumbridge is a large town where players begin their journey";
+    return "(Easy)Lumbridge is a large town where players begin their journey";
   }
 
   @Override

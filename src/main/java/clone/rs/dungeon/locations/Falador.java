@@ -13,7 +13,7 @@ public class Falador extends Location {
 
   @Override
   public String description() {
-    return "The Dwarven Mine contains almost every ore, with the exception of silver, runite, and special ores.";
+    return "(Hard)The Dwarven Mine contains almost every ore, with the exception of silver, runite, and special ores.";
   }
 
   @Override

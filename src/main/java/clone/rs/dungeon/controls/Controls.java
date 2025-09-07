@@ -131,7 +131,7 @@ public class Controls {
   private static Player createCharacter() throws IOException {
     System.out.println("Enter character name:");
     String name = System.console().readLine();
-    Player player = new Player( name, 10, 3, new Weapon("hand"), new Lumbridge());
+    Player player = new Player( name, 10, 3, new Weapon("Hand"), new Lumbridge());
     SaveLoad.savePlayer(player);
     return player;
   }

@@ -13,7 +13,7 @@ public class Varrock extends Location {
 
   @Override
   public String description() {
-    return "Varrock, originally known as Avarrocka, is the capital of the massive kingdom of Misthalin";
+    return "(Medium)Varrock, originally known as Avarrocka, is the capital of the massive kingdom of Misthalin";
   }
 
   @Override

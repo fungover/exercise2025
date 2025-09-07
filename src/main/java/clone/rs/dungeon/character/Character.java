@@ -19,7 +19,6 @@ public class Character {
   public void setHealth(double health) { this.health = health; }
 
   public double getLevel() { return level; }
-  public void setLevel(double level) { this.level = level; }
 
   public void attack(Character target) {
     System.out.printf("%s Hit %s with 1 damage %n", name, target.name);

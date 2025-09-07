@@ -88,7 +88,7 @@ public class Player extends Character {
   }
 
   public void rest() throws InterruptedException {
-    System.out.println("***Resting your health ***");
+    System.out.println("*** Resting restores your health ***");
     while(health < getMaxHp()) {
       System.out.println(getHealth()+"/"+getMaxHp());
       Thread.sleep(1000);

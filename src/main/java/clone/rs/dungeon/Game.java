@@ -5,6 +5,8 @@ import clone.rs.dungeon.character.Player;
 import clone.rs.dungeon.weapons.Hand;
 import clone.rs.dungeon.weapons.Weapon;
 
+import java.io.IOException;
+
 import static clone.rs.dungeon.controls.Controls.menu;
 
 public class Game {
@@ -14,12 +16,12 @@ public class Game {
     this.name = name;
   }
 
-  public void run() {
+  public void run() throws IOException {
     System.out.printf("Welcome to %s%n", this.name);
     menu();
   }
 
-  static void main(){
+  static void main() throws IOException {
     Game game = new Game("RS clone dungeon");
     game.run();
   }

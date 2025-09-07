@@ -71,9 +71,10 @@ public class Controls {
           }
         }
         case "4" -> {
-          player.showInventory();
+          player.showInventory(false);
         }
         case "5" -> {
+          player.showInventory(true);
           System.out.println("Enter item name: ");
           String item = scanner.nextLine();
           player.equipItem(item);

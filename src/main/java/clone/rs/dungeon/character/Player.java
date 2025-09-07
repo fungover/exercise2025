@@ -114,13 +114,18 @@ public class Player extends Character {
     return inventory;
   }
 
-  public void showInventory() {
+  // if true, shows only wearable items
+  public void showInventory(boolean isWearable) {
     System.out.println("Inventory:");
     if (inventory.isEmpty()) {
       System.out.println("Your inventory is empty.");
     } else {
       for (Item i : inventory) {
-        System.out.println(i);
+        if(isWearable && i.isWearable()) {
+          System.out.println(i);
+        } else if(!isWearable) {
+          System.out.println(i);
+        }
       }
     }
   }

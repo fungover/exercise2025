@@ -116,20 +116,24 @@ public class Player extends Character {
 
   // if true, shows only wearable items
   public boolean showInventory(boolean isWearable, boolean isFood) {
-    System.out.println("🎒 Your Inventory:");
+    System.out.println("\uD83C\uDF92Inventory:");
+    boolean found = false;
+
     for (Item i : inventory) {
       if (isWearable && i.isWearable()) {
         System.out.println(i);
-        return true;
-      } else if (!isWearable && !isFood) {
-        System.out.println(i);
-        return true;
+        found = true;
       } else if (isFood && i.isFood()) {
         System.out.println(i);
-        return true;
+        found = true;
+      } else if (!isWearable && !isFood) {
+        // если оба флага false, печатаем всё
+        System.out.println(i);
+        found = true;
       }
     }
-    return false;
+
+    return found;
   }
 
   public void equipItem(String itemName) {

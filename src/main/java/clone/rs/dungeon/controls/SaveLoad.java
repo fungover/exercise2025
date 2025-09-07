@@ -1,10 +1,11 @@
 package clone.rs.dungeon.controls;
 
 import clone.rs.dungeon.character.Player;
+import clone.rs.dungeon.weapons.Hand;
+import clone.rs.dungeon.weapons.Weapon;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.FileWriter;
 import java.io.FileReader;
@@ -24,16 +25,32 @@ public class SaveLoad {
         data.put("name", player.getName());
         data.put("health", player.getHealth());
         data.put("level", player.getLevel());
+        data.put("weapon", player.getWeapon());
 
-        try (FileWriter writer = new FileWriter("player.yml")) {
+        try (FileWriter writer = new FileWriter(FILE_NAME)) {
             yaml.dump(data, writer);
         }
     }
 
     public static Player loadPlayer() throws IOException {
-        Yaml yaml = new Yaml(new Constructor(Player.class, new LoaderOptions()));
+        Yaml yaml = new Yaml(new LoaderOptions());
         try (FileReader reader = new FileReader(FILE_NAME)) {
-            return yaml.load(reader);
+            Map<String, Object> data = yaml.load(reader);
+
+            String name = (String) data.get("name");
+            double health = ((Number) data.get("health")).doubleValue();
+            double level = ((Number) data.get("level")).doubleValue();
+
+            String weaponName = (String) data.get("weapon");
+            Weapon weapon;
+
+            if ("hand".equalsIgnoreCase(weaponName)) {
+                weapon = new Hand();
+            } else {
+                weapon = new Hand();
+            }
+
+            return new Player(name, health, level, weapon);
         }
     }
 }

@@ -1,7 +1,10 @@
 package org.game.entities.npcs;
 
 import org.game.entities.Enemy;
+import org.game.entities.EquipmentSlot;
 import org.game.entities.Item;
+
+import java.util.List;
 
 public class Goblin extends Enemy {
     public Goblin(int x, int y) {
@@ -19,17 +22,17 @@ public class Goblin extends Enemy {
 
         // Todo drop table here
         // Item Name | Type | Price
-        addToLootTable(new Item("Coin","Currency",1,5));
-        addToLootTable(new Item("Bones","Misc",0,1));
-        addToLootTable(new Item("Bread","Consumable",1,1));
-        addToLootTable(new Item("Bronze Axe","Weapon",5,1));
-        addToLootTable(new Item("Bronze Sword","Weapon",5,1));
-        addToLootTable(new Item("Bronze Shield","Off-Hand",5,1));
-        addToLootTable(new Item("Bronze Helmet","Armour",5,1));
-        addToLootTable(new Item("Bronze Platechest","Armour",15,1));
-        addToLootTable(new Item("Bronze Platelegs","Armour",10,1));
-        addToLootTable(new Item("Bronze Boots","Armour",5,1));
-        addToLootTable(new Item("Bronze Gauntlets","Armour",5,1));
+        addToLootTable(new Item("coin","currency",1,5));
+        addToLootTable(new Item("bones","misc",0,1));
+        addToLootTable(new Item("bread","consumable",1,1));
+        addToLootTable(new Item("bronze axe","weapon",5,1,List.of(EquipmentSlot.WEAPON)));
+        addToLootTable(new Item("bronze sword","weapon",5,1,List.of(EquipmentSlot.WEAPON)));
+        addToLootTable(new Item("bronze shield","offhand",5,1,List.of(EquipmentSlot.OFFHAND)));
+        addToLootTable(new Item("bronze helmet","head",5,1,List.of(EquipmentSlot.HEAD)));
+        addToLootTable(new Item("bronze platechest","chest",15,1,List.of(EquipmentSlot.CHEST)));
+        addToLootTable(new Item("bronze platelegs","legs",10,1,List.of(EquipmentSlot.LEGS)));
+        addToLootTable(new Item("bronze boots","boot",5,1,List.of(EquipmentSlot.BOOTS)));
+        addToLootTable(new Item("bronze gauntlets","gloves",5,1,List.of(EquipmentSlot.GLOVES)));
 
     }
 }

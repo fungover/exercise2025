@@ -1,11 +1,15 @@
 package org.game;
 
+import java.util.Collections;
+import java.util.List;
 import org.game.entities.Item;
 import org.game.entities.Player;
 import org.game.entities.npcs.Goblin;
 import org.game.systems.CombatHandler;
 import org.game.systems.InputHandler;
 import org.game.utils.ClearConsole;
+import org.game.utils.Colors;
+
 
 
 public class Game {
@@ -18,7 +22,9 @@ public class Game {
         boolean running = true;
 
         while (running && player.isAlive()) {
-            String input = InputHandler.getInput("Valid commands: move| look {not in yet} | inventory | quit]");
+            String input = InputHandler.getInput(Colors.yellowColor +
+                    "Valid commands: move | inventory | equip | equiptment | die | additem | takedamage | fight | spawnloot | quit"
+                    + Colors.resetColor);
 
             switch (input) {
                 case "move":
@@ -32,11 +38,20 @@ public class Game {
                     player.showInventory();
                     break;
 
+                case "equip":
+                    System.out.println("What do you want to equip?");
+                    player.showInventory();
+                    String equipItem = InputHandler.getInput("Enter item name: ");
+                    player.equipItem(equipItem);
+                    break;
+
+                case "armour":
+                    player.showEquipment();
+                    break;
+
                 case "quit":
                     running = false;
                     break;
-
-                case "skills":
 
                     // Todo dev commands
                 case "die":
@@ -48,7 +63,9 @@ public class Game {
                     String ItemType = InputHandler.getInput("Type of item: ");
                     int itemValue = Integer.parseInt(InputHandler.getInput("Enter value of item: "));
                     int itemQuantity = Integer.parseInt(InputHandler.getInput("Enter value of item quantity: "));
-                    Item item = new Item(itemName,ItemType,itemValue, itemQuantity);
+                    System.out.println("What slot type?: HEAD|CHEST|OFFHAND|WEAPON|LEGS|GLOVES|BOOTS");
+                    List<String> itemSlot = Collections.singletonList(InputHandler.getInput("Enter slot type:"));
+                    Item item = new Item(itemName,ItemType,itemValue, itemQuantity,itemSlot);
                     player.addItem(item);
                     break;
 
@@ -60,20 +77,15 @@ public class Game {
                     System.out.println("you have "+ player.getHealth() + " hp left");
                     break;
 
-                case "spawnenemy":
-                    for (int i =0; i < 1000; i++) {
-                        //System.out.println("Spawning Goblin");
+                case "spawnloot":
+                    for (int i =0; i < 5; i++) {
                         Goblin testGoblin = new Goblin(0, 0);
                         testGoblin.setHealth(0);
-                        //System.out.println("you have defeated the Goblin");
 
                         Item loots = testGoblin.getLoot();
-                        if (loots != null) {
-                           // System.out.println("The Goblin dropped " + loots.getName()+ " x " + loots.getQuantity());
+
                             player.addItem(loots);
-                        } else {
-                          //  System.out.println("The Goblin dropped nothing");
-                        }
+
                     }
                     break;
 

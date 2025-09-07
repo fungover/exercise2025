@@ -29,4 +29,19 @@ public class WarehouseTest {
         assertThatThrownBy(() -> warehouse.addProduct(testProduct))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    @DisplayName("Update an existing product in Warehouse by searching with id")
+    public void updateProduct() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct = new Product(1, "Test Product", Category.GENERAL, 1);
+        warehouse.addProduct(testProduct);
+
+        Product updatedTestProduct = new Product(1, "Update Test Product", Category.GENERAL, 1);
+        warehouse.updateProduct(updatedTestProduct);
+
+        assertThat(warehouse.getAllProducts()).contains(updatedTestProduct);
+        assertThat(warehouse.getAllProducts()).doesNotContain(testProduct);
+        assertThat(warehouse.getAllProducts().size()).isEqualTo(1);
+    }
 }

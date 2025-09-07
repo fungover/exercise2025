@@ -23,11 +23,21 @@ public class Game {
     }
 
     public void run() {
-        System.out.println("Welcome to The Dungeon! Commands: move <direction>, attack <x> <y>, pickup <x> <y>");
+        System.out.println("Welcome to The Dungeon! Commands: move <direction>, attack <x> <y>, pickup <x> <y>, quit or exit");
         displayState();
         while (isRunning && !isGameOver()) {
-            System.out.println("Enter command: ");
+            System.out.print("Enter command: ");
+            if (!scanner.hasNextLine()) {
+                System.out.println("\nNo input. Exiting...");
+                break;
+            }
             String command = scanner.nextLine();
+            String trimmed = command.trim();
+            if (trimmed.equalsIgnoreCase("quit") || trimmed.equalsIgnoreCase("exit")) {
+                isRunning = false;
+                System.out.println("Quitting game...");
+                break;
+            }
             String result = parser.parseCommand(command);
             System.out.println(result);
             displayState();
@@ -37,24 +47,8 @@ public class Game {
         } else {
             System.out.println("Game ended, thanks for playing!");
         }
-        scanner.close();
+        // Intentionally not closing System.in-backed scanner to avoid impacting host process.
     }
-
-/*    private String processCommand(String command) {
-        if (command == null || command.trim().isEmpty()) {
-            return "Invalid command: null or empty";
-        }
-        String cmd = command.trim().toLowerCase();
-        System.out.println("Processing command: " + cmd);
-        if (cmd.equals("quit")) {
-            isRunning = false;
-            return "Quitting game...";
-        } else if (cmd.equals("status")) {
-            return getStatus();
-        } else {
-            return parser.parseCommand(cmd);
-        }
-    }*/
 
     private void displayState() {
         System.out.println("Current map:\n" + dungeon);

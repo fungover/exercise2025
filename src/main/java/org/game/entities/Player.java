@@ -10,6 +10,10 @@ public class Player extends Character {
 private Map<String,Item> inventory = new HashMap<>();
 private Map<String,Item> equipment = new HashMap<>();
 
+private int bonusStrength = 0;
+private int bonusDefense = 0;
+private int bonusHealth = 0;
+
     public Player(String name, int x, int y) {
     super(
             name,
@@ -24,6 +28,27 @@ private Map<String,Item> equipment = new HashMap<>();
             y);
 
     }
+
+
+    @Override
+    public int getStrength() {
+        return super.getStrength()+bonusStrength;
+    }
+    @Override
+    public int getDefense() {
+        return super.getDefense()+bonusDefense;
+    }
+    @Override
+    public int getHealth() {
+        return super.getHealth()+bonusHealth;
+    }
+
+
+
+
+
+
+
 
     public void addItem(Item item) {
         if (inventory.containsKey(item.getName())) {
@@ -54,11 +79,9 @@ private Map<String,Item> equipment = new HashMap<>();
         Item itemToEquip = null;
 
         for (Item item : inventory.values()) {
-            if (item.getName().equals(itemName)) {
-                if (item.getName().equalsIgnoreCase(itemName)) {
-                    itemToEquip = item;
-                    break;
-                }
+            if (item.getName().equalsIgnoreCase(itemName)) {
+                itemToEquip = item;
+                break;
             }
         }
 
@@ -72,20 +95,31 @@ private Map<String,Item> equipment = new HashMap<>();
             return;
         }
 
+        // if item unequip
         for (String slot : itemToEquip.getSlots()) {
             if (equipment.containsKey(slot)) {
-                Item old = equipment.remove(slot);
-                addItem(old);
-                System.out.println("Unequipped " + old.getName() + " from " + slot);
+                unEquipItem(slot);
             }
 
-            equipment.put(slot,new Item(
-                    itemToEquip.getName(),
-                    itemToEquip.getType(),
-                    itemToEquip.getPrice(),
-                    1,
-                    itemToEquip.getSlots()
-            ));
+            equipment.put(slot, itemToEquip);
+
+            // item stats
+            bonusStrength += itemToEquip.getStrengthBonus();
+            bonusDefense += itemToEquip.getDefenseBonus();
+            bonusHealth += itemToEquip.getHealthBonus();
+
+            System.out.println("+ " + bonusStrength + " Strenght added");
+            System.out.println("+ " + bonusDefense + " Defense added");
+            System.out.println("+ " + bonusHealth + " Health added");
+
+//            // equip item
+//            equipment.put(slot,new Item(
+//                    itemToEquip.getName(),
+//                    itemToEquip.getType(),
+//                    itemToEquip.getPrice(),
+//                    1,
+//                    itemToEquip.getSlots()
+//            ));
         }
 
 
@@ -103,19 +137,40 @@ private Map<String,Item> equipment = new HashMap<>();
         if (equipment.isEmpty()) {
             System.out.println("No items in your equipment");
         } else  {
-            System.out.println(Colors.cyanColor + "===============Equipment==================");
+            System.out.println(Colors.cyanColor + "==================Equipment==================");
             for (Map.Entry<String, Item> entry : equipment.entrySet()) {
                 System.out.println(Colors.cyanColor + " * " + entry.getKey() + " [" + entry.getValue().getName() + "]" +Colors.resetColor);
             }
         }
+
+        System.out.println(Colors.cyanColor + "====================Stats====================");
+        System.out.println("Strength: " + getStrength());
+        System.out.println("Defense: " + getDefense());
+        System.out.println("Health: " + getHealth() + Colors.resetColor);
+
+
+
+
+
     }
 
     public void unEquipItem(String slot) {
         if (equipment.containsKey(slot)) {
             Item removed = equipment.remove(slot);
+
+            bonusStrength -= removed.getStrengthBonus();
+            bonusDefense -= removed.getDefenseBonus();
+            bonusHealth -= removed.getHealthBonus();
+
+            addItem(removed);
+
             System.out.println("Unequipped " + removed.getName() + " from slot " + slot);
         } else  {
             System.out.println("Nothing equipped in your " + slot + " slot");
         }
     }
+
+
+
+
 }

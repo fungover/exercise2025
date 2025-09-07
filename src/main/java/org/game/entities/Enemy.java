@@ -51,7 +51,10 @@ public class Enemy extends Character {
                                     base.getType(),
                                     base.getPrice(),
                                     base.getQuantity(),
-                                    slots
+                                    slots,
+                                    base.getStrengthBonus(),
+                                    base.getDefenseBonus(),
+                                    base.getHealthBonus()
                             ));
                         } else {
                             drop = new Item(base.getName(),

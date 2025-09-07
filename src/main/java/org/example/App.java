@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.entities.Player;
 import org.example.entities.Tile;
+import org.example.entities.TileType;
 import org.example.entities.behaviors.BasicCombat;
 import org.example.entities.enemies.Troll;
 import org.example.game.CommandParser;
@@ -12,23 +13,37 @@ import org.example.service.CombatService;
 import org.example.service.ItemService;
 import org.example.service.MovementService;
 import org.example.utils.InputValidator;
-import org.example.utils.Rng;
 
 public class App {
     public static void main(String[] args) {
         boolean isTestMode = "true".equals(System.getProperty("test.mode", "false"));
-
         Player player = new Player("Hero", 100, 10, new BasicCombat(10));
         Dungeon dungeon;
         if (isTestMode) {
-            // TESTING ONLY: Uses seeded RandomGenerator and overrides map generation
-            Rng rng = new Rng(12345L);
+            // TESTING ONLY: Deterministic map, no randomness
             dungeon = new Dungeon(5, 5, player, new BasicMapGenerator() {
                 @Override
                 public Tile[][] generate(int width, int height) {
-                    Tile[][] tiles = super.generate(width, height);
-                    tiles[2][1] = new Tile(new Troll()); // Enemy at (1, 2)
-                    tiles[1][1] = new Tile(new Troll()); // Enemy at (1, 1)
+                    // Create a blank map of the exact size
+                    Tile[][] tiles = new Tile[height][width];
+                    // Fill all with empty
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            tiles[y][x] = new Tile(TileType.EMPTY);
+                        }
+                    }
+                    // Add solid border walls
+                    for (int x = 0; x < width; x++) {
+                        tiles[0][x] = new Tile(TileType.WALL);
+                        tiles[height - 1][x] = new Tile(TileType.WALL);
+                    }
+                    for (int y = 0; y < height; y++) {
+                        tiles[y][0] = new Tile(TileType.WALL);
+                        tiles[y][width - 1] = new Tile(TileType.WALL);
+                    }
+                    // Place deterministic enemies
+                    tiles[2][1] = new Tile(new Troll()); // at (x=1, y=2)
+                    tiles[1][1] = new Tile(new Troll()); // at (x=1, y=1)
                     return tiles;
                 }
             });

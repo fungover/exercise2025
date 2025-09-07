@@ -85,9 +85,7 @@ public class Controls {
         case "6" -> {
           if(player.getLevel() < 10){
             System.out.println("You need at least 10 level.");
-          }else if(true){
-
-          };
+          }else Quest.start(player);
         }
         case "7" -> {
           System.out.println("Hurry back!");
@@ -98,7 +96,7 @@ public class Controls {
     }
   }
 
-  private static void fight(Player player, Enemy enemy) {
+  static void fight(Player player, Enemy enemy) {
     System.out.println("You went to " + enemy.getName());
     while(player.getHealth() > 0 && enemy.getHealth() > 0) {
       System.out.printf("%n1. Attack %n2. Escape%n3. Use item%n");

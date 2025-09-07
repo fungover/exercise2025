@@ -89,8 +89,8 @@ public class Player extends Character {
 
   public void rest() throws InterruptedException {
     System.out.println("*** Resting restores your health ***");
-    while(health < getMaxHp()) {
-      System.out.println(getHealth()+"/"+getMaxHp());
+    while (health < getMaxHp()) {
+      System.out.println(getHealth() + "/" + getMaxHp());
       Thread.sleep(1000);
       health++;
     }
@@ -117,18 +117,18 @@ public class Player extends Character {
   // if true, shows only wearable items
   public boolean showInventory(boolean isWearable, boolean isFood) {
     System.out.println("Inventory:");
-      for (Item i : inventory) {
-        if(isWearable && i.isWearable()) {
-          System.out.println(i);
-          return true;
-        } else if(!isWearable && !isFood) {
-          System.out.println(i);
-          return true;
-        } else if(isFood && i.isFood()) {
-          System.out.println(i);
-          return true;
-        }
+    for (Item i : inventory) {
+      if (isWearable && i.isWearable()) {
+        System.out.println(i);
+        return true;
+      } else if (!isWearable && !isFood) {
+        System.out.println(i);
+        return true;
+      } else if (isFood && i.isFood()) {
+        System.out.println(i);
+        return true;
       }
+    }
     return false;
   }
 
@@ -170,6 +170,16 @@ public class Player extends Character {
       }
     }
     System.out.println("You don't have that item in your inventory.");
+  }
+
+  public int checkItem(String itemName) {
+    int quantity = 0;
+    for (Item i : inventory) {
+      if (itemName.equalsIgnoreCase(i.getName())) {
+        quantity += i.getAmount();
+      }
+    }
+    return quantity;
   }
 
 }

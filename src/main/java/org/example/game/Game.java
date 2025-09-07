@@ -56,20 +56,20 @@ public class Game {
     }
 
     private void GameInstructions() {
-        System.out.println(purple("\nYou need to find a the golden key that will unlock the door to the exit.."));
+        System.out.println(purple("\nYou need to find the golden key that will unlock the door to the exit.."));
         System.out.println(purple("The key is hidden somewhere in the cave.."));
         System.out.println(purple("Be careful, there are dangerous monsters everywhere.. "));
-        System.out.println(purple("You can't get passed them or run away..."));
+        System.out.println(purple("You can't get past them or run away..."));
         System.out.println(purple(".. you have to fight for your life first.."));
         System.out.println(purple("There are weapons and healing potions spread around here.."));
         System.out.print(purple("And " ));
         System.out.print(cyan(player.getName()));
-        System.out.println(purple( ".. I suggest you find them first.."));
-        System.out.println(purple("oh.. and watch out for THE TROLL, he is guarding the exit.."));
-        System.out.print(purple("\nGood luck frie.. hehe.. "));
+        System.out.println(purple( ".. I suggest you find them before picking fights.."));
+        System.out.println(purple("Oh.. and watch out for THE TROLL, he is guarding the exit.."));
+        System.out.print(purple("\nGood luck, hehe.. "));
         System.out.print(cyan(player.getName()));
         System.out.print(purple(".. you'll need it!"));
-        System.out.println("\nYou can type 'help' to see available commands");
+        System.out.println("\nType 'help' to see available commands");
     }
 
     private String getPlayerName() {
@@ -107,7 +107,12 @@ public class Game {
     }
 
     private void handleCommand(String command) {
-        String[] words = command.split(" ");
+        String normalized = command == null ? "" : command.trim();
+        if (normalized.isEmpty()) {
+            System.out.println("Type a command or 'help'.");
+            return;
+        }
+        String[] words = normalized.split("\\s+");
         String action = words[0];
 
         switch (action) {
@@ -127,8 +132,9 @@ public class Game {
 
             case "take":
                 if (words.length > 1) {
-                    String itemName = command.substring(5); //Remove "take " (5 characters)
-                    takeItem(itemName.trim());
+                    int idx = command.indexOf(' ');
+                    String itemName = idx >= 0 ? command.substring(idx + 1).trim() : "";
+                    takeItem(itemName);
                 } else {
                     System.out.println("Take what?");
                 }
@@ -146,8 +152,9 @@ public class Game {
 
             case "use":
                 if (words.length > 1) {
-                    String itemName = command.substring(4); // Remove "use " (4 characters)
-                    useItem(itemName.trim());
+                    int idx = command.indexOf(' ');
+                    String itemName = idx >= 0 ? command.substring(idx + 1).trim() : "";
+                    useItem(itemName);
                 } else {
                     System.out.println("Use what?");
                 }
@@ -155,8 +162,9 @@ public class Game {
 
             case "equip":
                 if (words.length > 1) {
-                    String itemName = command.substring(6); // Remove "equip " (6 characters)
-                    equipItem(itemName.trim());
+                    int idx = command.indexOf(' ');
+                    String itemName = idx >= 0 ? command.substring(idx + 1).trim() : "";
+                    equipItem(itemName);
                 } else {
                     System.out.println("Equip what?");
                 }

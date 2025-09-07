@@ -18,11 +18,17 @@ public class Inventory {
 
     public Inventory(int maxCapacity) {
         this.items = new ArrayList<>();
+        if (maxCapacity <= 0) {
+            throw new IllegalArgumentException("maxCapacity must be positive");
+        }
         this.maxCapacity = maxCapacity;
     }
 
     // Item management
     public boolean addItem(Item item) {
+        if (item == null) {
+            return false;
+        }
         if (items.size() < maxCapacity) {
             items.add(item);
             return true;

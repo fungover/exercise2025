@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductTest {
-    @Test
-    @DisplayName("Can create a valid Product instance")
-    public void canCreateProduct() {
-        Product product = new Product();
 
-        assertThat(product).isNotNull();
+    @Test
+    @DisplayName("Can create a Product with a unique ID")
+    public void canCreateProductWithId(){
+        Product product = new Product(1);
+        assertThat(product.getId()).isEqualTo(1);
     }
 }

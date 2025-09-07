@@ -13,7 +13,10 @@ public class Player {
 
     // Constructor
     public Player(String name) {
-        this.name = name;
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be blank");
+        }
+        this.name = name.trim();
         this.maxHealth = 100;
         this.health = maxHealth;
         this.baseAttackDamage = 5;

@@ -2,7 +2,7 @@ package org.example.entities.behaviors;
 
 import org.example.entities.Enemy;
 
-public class BasicCombat implements CombatBehaviour {
+public class BasicCombat implements CombatBehavior {
     private final int damage;
 
     public BasicCombat(int damage) {

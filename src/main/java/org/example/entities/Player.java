@@ -11,9 +11,9 @@ public class Player {
     private final List<Item> inventory;
     private int x;
     private int y;
-    private final CombatBehaviour combatBehaviour;
+    private final CombatBehavior combatBehavior;
 
-    public Player(String name, int health, int baseDamage, CombatBehaviour combatBehaviour) {
+    public Player(String name, int health, int baseDamage, CombatBehavior combatBehavior) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Player name cannot be null or empty");
         }
@@ -23,13 +23,13 @@ public class Player {
         if (baseDamage < 0) {
             throw new IllegalArgumentException("Base damage cannot be negative");
         }
-        if (combatBehaviour == null) {
+        if (combatBehavior == null) {
             throw new IllegalArgumentException("Combat behaviour cannot be null");
         }
         this.name = name;
         this.health = health;
         this.baseDamage = baseDamage;
-        this.combatBehaviour = combatBehaviour;
+        this.combatBehavior = combatBehavior;
         this.inventory = new ArrayList<>();
         this.x = 0;
         this.y = 0;
@@ -59,8 +59,8 @@ public class Player {
         return new ArrayList<>(inventory);
     }
 
-    public CombatBehaviour getCombatBehaviour() {
-        return combatBehaviour;
+    public CombatBehavior getCombatBehaviour() {
+        return combatBehavior;
     }
 
     public boolean isAlive() {
@@ -78,7 +78,7 @@ public class Player {
         if (enemy == null) {
             throw new IllegalArgumentException("Enemy cannot be null");
         }
-        combatBehaviour.attack(enemy);
+        combatBehavior.attack(enemy);
     }
 
     public void addItem(Item item) {

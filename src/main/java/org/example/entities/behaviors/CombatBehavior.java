@@ -2,7 +2,7 @@ package org.example.entities.behaviors;
 
 import org.example.entities.Enemy;
 
-public interface CombatBehaviour {
+public interface CombatBehavior {
     void attack(Enemy enemy);
     int getDamage();
     String toString();

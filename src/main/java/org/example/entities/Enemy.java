@@ -32,7 +32,6 @@ public class Enemy {
     }
 
     public void takeDamage(int damage) {
-        this.health -= damage;
         int dmg = Math.max(0, damage);
         this.health = Math.max(0, this.health - dmg);
         if (this.health == 0) {

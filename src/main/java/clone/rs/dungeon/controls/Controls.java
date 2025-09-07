@@ -71,13 +71,16 @@ public class Controls {
           }
         }
         case "4" -> {
-          player.showInventory(false);
+          if(player.showInventory(false, false)){
+          }else System.out.println("Empty");
         }
         case "5" -> {
-          player.showInventory(true);
-          System.out.println("Enter item name: ");
-          String item = scanner.nextLine();
-          player.equipItem(item);
+          if (player.showInventory(true, false)) {
+            System.out.println("Enter item name: ");
+            String item = scanner.nextLine();
+            player.equipItem(item);
+          } else
+            System.out.println("Empty");
         }
         case "9" -> {
           System.out.println("Hurry back!");
@@ -91,7 +94,7 @@ public class Controls {
   private static void fight(Player player, Enemy enemy) {
     System.out.println("You went to " + enemy.getName());
     while(player.getHealth() > 0 && enemy.getHealth() > 0) {
-      System.out.printf("%n1. Attack %n2. Escape%n");
+      System.out.printf("%n1. Attack %n2. Escape%n3. Use item%n");
       String input = scanner.nextLine();
       switch (input) {
         case "1" -> {
@@ -112,6 +115,15 @@ public class Controls {
           }
         }
         case "2" -> {player.setHealth(player.getHealth()-1); System.out.println("You ran away! While you were running, the enemy hit you for 1 damage."); return;}
+        case "3" -> {
+          if(player.showInventory(false, true)) {
+            System.out.println("Enter food name: ");
+            String item = scanner.nextLine();
+            player.useItem(item);
+          }else {
+            System.out.println("Empty");
+          }
+        }
       }
     }
   }

@@ -34,9 +34,9 @@ public class Lumbridge extends Location{
     Random random = new Random();
     double chance = random.nextDouble();
 
-    if (chance < 0.95) return new Item("Bones", 1, false, false, 0);
-    else if (chance < 0.97) return new Item("Bronze sword",1 , true, false, 2);
-    else if (chance < 0.99) return new Item("Meat", 1, false, true, 5);
+    if (chance < 0.80) return new Item("Bones", 1, false, false, 0);
+    else if (chance < 0.90) return new Item("Bronze sword",1 , true, false, 2);
+    else if (chance < 0.98) return new Item("Meat", 1, false, true, 5);
     else return new Item("Maple Bow",1, true, false, 4);
   }
 

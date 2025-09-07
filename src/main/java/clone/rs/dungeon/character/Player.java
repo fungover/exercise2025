@@ -115,19 +115,21 @@ public class Player extends Character {
   }
 
   // if true, shows only wearable items
-  public void showInventory(boolean isWearable) {
+  public boolean showInventory(boolean isWearable, boolean isFood) {
     System.out.println("Inventory:");
-    if (inventory.isEmpty()) {
-      System.out.println("Your inventory is empty.");
-    } else {
       for (Item i : inventory) {
         if(isWearable && i.isWearable()) {
           System.out.println(i);
-        } else if(!isWearable) {
+          return true;
+        } else if(!isWearable && !isFood) {
           System.out.println(i);
+          return true;
+        } else if(isFood && i.isFood()) {
+          System.out.println(i);
+          return true;
         }
       }
-    }
+    return false;
   }
 
   public void equipItem(String itemName) {
@@ -140,6 +142,22 @@ public class Player extends Character {
           return;
         } else {
           System.out.println(i.getName() + " is not wearable.");
+          return;
+        }
+      }
+    }
+    System.out.println("You don't have that item in your inventory.");
+  }
+
+  public void useItem(String itemName) {
+    for (Item i : inventory) {
+      if (itemName.equalsIgnoreCase(i.getName())) {
+        if (i.isFood()) {
+          health = health + i.getEffect();
+          System.out.println("You has eaten " + i.getName() + " food." );
+          return;
+        } else {
+          System.out.println(i.getName() + " is not eatable.");
           return;
         }
       }

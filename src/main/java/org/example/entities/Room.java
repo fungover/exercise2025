@@ -1,9 +1,6 @@
 package org.example.entities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.example.utils.Colors.*;
 
@@ -122,13 +119,13 @@ public class Room {
         return description;
     }
     public Map<String, Room> getExits() {
-        return exits;
+        return Collections.unmodifiableMap(exits);
     }
     public List<Item> getItems() {
-        return items;
+        return Collections.unmodifiableList(items);
     }
     public List<Enemy> getEnemies() {
-        return enemies;
+        return Collections.unmodifiableList(enemies);
     }
     public boolean isVisited() {
         return visited;

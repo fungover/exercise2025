@@ -4,10 +4,10 @@ import java.io.IOException;
 
 import static clone.rs.dungeon.controls.Controls.menu;
 
-public class Game {
+public class Main {
   final private String name;
 
-  public Game(String name) {
+  public Main(String name) {
     this.name = name;
   }
 
@@ -18,7 +18,7 @@ public class Game {
 
   public static void main(String[] args) {
     try {
-      new Game("RS clone dungeon").run();
+      new Main("RS clone dungeon").run();
       } catch (IOException | InterruptedException e) {
       e.printStackTrace();
       System.exit(1);

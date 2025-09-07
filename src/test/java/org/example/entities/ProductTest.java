@@ -1,7 +1,5 @@
-package org.example;
+package org.example.entities;
 
-import org.example.entities.Category;
-import org.example.entities.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;

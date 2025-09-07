@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.entities.Category;
 import org.example.entities.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,7 @@ public class ProductTest {
 
     @Test
     @DisplayName("Can create a Product with a unique ID")
-    public void canCreateProductWithId(){
+    public void canCreateProductWithId() {
         Product product = new Product(1);
         assertThat(product.getId()).isEqualTo(1);
     }
@@ -18,8 +19,15 @@ public class ProductTest {
 
     @Test
     @DisplayName("Can create a Product with a name")
-    public void canCreateProductWithName(){
+    public void canCreateProductWithName() {
         Product product = new Product(1, "Laptop");
         assertThat(product.getName()).isEqualTo("Laptop");
+    }
+
+    @Test
+    @DisplayName("Can create a Product with a category")
+    public void canCreateProductWithCategory() {
+        Product product = new Product(1, "Laptop", Category.GENERAL);
+        assertThat(product.getCategory()).isEqualTo(Category.GENERAL);
     }
 }

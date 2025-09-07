@@ -19,6 +19,10 @@ public class Player {
         return name;
     }
 
+    public ArrayList<Item> getInventory() {
+        return inventory;
+    }
+
     public void takeDamage(int damage) {
         health -= damage;
         if (isAlive()) {

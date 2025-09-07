@@ -19,6 +19,10 @@ public abstract class Enemy {
         return damage;
     }
 
+    public int getHealth() {
+        return health;
+    }
+
     public String getType() {
         return type;
     }

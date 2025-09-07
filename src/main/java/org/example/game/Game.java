@@ -31,15 +31,22 @@ public class Game {
 
         int difficulty = switch (difficultyChoice) {
             case 1 -> 5;
-            case 2 -> 10;
+            case 2 -> 11;
             case 3 -> 15;
             default -> 10;
+        };
+
+        int startLocation = switch (difficultyChoice) {
+            case 1 -> 1;
+            case 2 -> 5;
+            case 3 -> 7;
+            default -> 2;
         };
 
         Tile[][] generated = DungeonGenerator.generateDungeon(difficulty, difficulty);
         DungeonMap map = new DungeonMap(generated);
 
-        Player player = new Player(PlayerName, 100, 2, 2);
+        Player player = new Player(PlayerName, 100, startLocation, startLocation);
         generated[player.getX()][player.getY()].setVisited(true);
 
         map.print(player);

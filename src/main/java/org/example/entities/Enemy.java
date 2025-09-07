@@ -10,6 +10,11 @@ public class Enemy {
 
     // Constructor
     public Enemy(String name, String description, int health, int attackDamage) {
+        if (name == null || description == null) {
+            throw new IllegalArgumentException("Name and description cannot be null");
+        }
+        if (health <= 0) throw new IllegalArgumentException("Health must be > 0");
+        if (attackDamage < 0) throw new IllegalArgumentException("attackDamage must be >= 0");
         this.name = name;
         this.description = description;
         this.maxHealth = health;
@@ -20,22 +25,23 @@ public class Enemy {
 
     // Combat methods
     public int attack() {
-        if (isAlive) {
-            return attackDamage;
+        if (isAlive()) {
+            return Math.max(0, attackDamage);
         }
         return 0;
     }
 
     public void takeDamage(int damage) {
         this.health -= damage;
-        if (this.health <= 0) {
-            this.health = 0;
+        int dmg = Math.max(0, damage);
+        this.health = Math.max(0, this.health - dmg);
+        if (this.health == 0) {
             this.isAlive = false;
         }
     }
 
     public boolean isAlive() {
-        return isAlive && health > 0;
+        return health > 0;
     }
 
     // Display methods
@@ -44,7 +50,7 @@ public class Enemy {
         System.out.println("Description: " + description);
         System.out.println("Health: " + health + "/" + maxHealth);
         System.out.println("Attack: " + attackDamage);
-        System.out.println("Alive: " + (isAlive ? "Alive" : "Dead"));
+        System.out.println("Alive: " + (isAlive() ? "Alive" : "Dead"));
     }
 
     //Getters

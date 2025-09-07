@@ -4,6 +4,7 @@ public class Product {
     private final int id;
     private final String name;
     private final Category category;
+    private final double rating;
 
     // Constructors
     public Product(int id) {
@@ -15,9 +16,14 @@ public class Product {
     }
 
     public Product(int id, String name, Category category) {
+        this(id, name, category, 0.0);
+    }
+
+    public Product(int id, String name, Category category, double rating) {
         this.id = id;
         this.name = name;
         this.category = category;
+        this.rating = rating;
     }
 
     // Getters
@@ -31,5 +37,9 @@ public class Product {
 
     public Category getCategory() {
         return this.category;
+    }
+
+    public double getRating() {
+        return this.rating;
     }
 }

@@ -30,4 +30,11 @@ public class ProductTest {
         Product product = new Product(1, "Laptop", Category.GENERAL);
         assertThat(product.getCategory()).isEqualTo(Category.GENERAL);
     }
+
+    @Test
+    @DisplayName("Can create a Product with a rating")
+    public void canCreateProductWithRating() {
+        Product product = new Product(1, "Laptop", Category.GENERAL, 1.5);
+        assertThat(product.getRating()).isEqualTo(1.5);
+    }
 }

@@ -57,4 +57,26 @@ public class WarehouseTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    @DisplayName("Get all products from Warehouse")
+    public void getAllProducts() {
+        Warehouse warehouse = new Warehouse();
+
+        Product testProduct1 = new Product(1, "Test Product", Category.GENERAL, 1);
+        warehouse.addProduct(testProduct1);
+
+        Product testProduct2 = new Product(1, "Test Product", Category.GENERAL, 1);
+        warehouse.addProduct(testProduct2);
+
+        assertThat(warehouse.getAllProducts()).contains(testProduct1, testProduct2);
+        assertThat(warehouse.getAllProducts().size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("getAllProducts returns empty list if warehouse is empty")
+    public void getAllProductsEmptyWarehouse() {
+        Warehouse warehouse = new Warehouse();
+        assertThat(warehouse.getAllProducts()).isEmpty();
+    }
+
 }

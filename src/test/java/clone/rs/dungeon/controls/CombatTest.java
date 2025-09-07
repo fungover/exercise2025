@@ -47,7 +47,8 @@ class CombatTest {
     player.addItem(apple);
 
     player.useItem("Apple");
-    assertEquals(15, player.getHealth(), "Using food item should increase player's health");
+    double expected = Math.min(5 + 10, player.getMaxHp());
+    assertEquals(expected, player.getHealth(), "Using food item should increase player's health up to max HP");
   }
 
   @Test

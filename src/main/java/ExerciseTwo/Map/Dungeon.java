@@ -6,7 +6,39 @@ public abstract class Dungeon {
     private String[][] dungeonMap;
 
     public Dungeon(String[][] dungeonMap) {
+        if (!checkMap(dungeonMap) || !validateMap(dungeonMap)) {
+            throw new IllegalArgumentException("Invalid map");
+        }
         this.dungeonMap = dungeonMap;
+    }
+
+    private boolean checkMap(String[][] dungeonMap) {
+        if (dungeonMap == null) {
+            return false;
+        }
+        if(dungeonMap.length == 0 || dungeonMap[0].length == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateMap(String[][] dungeonMap) {
+        for (int i = 0; i < dungeonMap.length; i++) {
+            for (int j = 0; j < dungeonMap[0].length; j++) {
+                if (!dungeonMap[0][j].equals("#")) {
+                    return false;
+                }
+                if (!dungeonMap[i][0].equals("#")) {
+                    return false;
+                }
+                String[] row = dungeonMap[i];
+
+                if(!row[row.length-1].equals("#")) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public String[][] getDungeonMap() {

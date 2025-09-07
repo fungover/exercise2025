@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import java.util.Objects;
+
 public abstract class Item {
     private String name;
     private String description;
@@ -9,9 +11,10 @@ public abstract class Item {
 
     // Constructor
     public Item(String name, String description, String type, int quantity) {
-        this.name = name;
-        this.description = description;
-        this.type = type;
+        this.name = Objects.requireNonNull(name, "name");
+        this.description = Objects.requireNonNull(description, "description");
+        this.type = Objects.requireNonNull(type, "type");
+        if (quantity < 0) throw new IllegalArgumentException("Quantity must be >= 0");
         this.quantity = quantity;
     }
 

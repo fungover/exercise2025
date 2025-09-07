@@ -31,10 +31,8 @@ public class Player {
     }
 
     public void heal(int amount) {
-        this.health += amount;
-        if (this.health > maxHealth) {
-            this.health = maxHealth;
-        }
+        if (amount <= 0) return;
+        this.health = Math.min(maxHealth, this.health + amount);
     }
 
     public boolean isAlive() {
@@ -54,6 +52,9 @@ public class Player {
 
     // Equip Weapon method
     public boolean equipWeapon(String weaponName) {
+        if (weaponName == null || weaponName.isBlank()) {
+            return false;
+        }
         Item item = findItem(weaponName);
         if (item != null && item instanceof Weapon) {
             equippedWeapon = (Weapon) item;
@@ -115,9 +116,9 @@ public class Player {
 
     // Setters
     public void setHealth(int health) {
-        this.health = health;
+        this.health = Math.max(0, Math.min(maxHealth, health));
     }
     public void setAttackDamage(int attackDamage) {
-        this.attackDamage = attackDamage;
+        this.attackDamage = Math.max(0, attackDamage);
     }
 }

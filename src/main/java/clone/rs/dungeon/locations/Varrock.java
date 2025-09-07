@@ -32,7 +32,7 @@ public class Varrock extends Location {
     Random random = new Random();
     double chance = random.nextDouble();
 
-    if (chance < 0.95) return new Item("Bones");
+    if (chance < 0.95) return new Item("Bones", 1, false, false, 0);
     else if (chance < 0.97) return new Item("Mithril longsword", 1, true, false, 6);
     else if (chance < 0.99) return new Item("Swordfish", 1, false, true, 10);
     else return new Item("Magic bow", 1, true, false, 9);

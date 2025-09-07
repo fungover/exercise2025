@@ -4,7 +4,6 @@ import clone.rs.dungeon.Items.Item;
 import clone.rs.dungeon.character.Player;
 import clone.rs.dungeon.locations.Location;
 import clone.rs.dungeon.locations.Lumbridge;
-import clone.rs.dungeon.weapons.Hand;
 import clone.rs.dungeon.weapons.Weapon;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.LoaderOptions;
@@ -37,6 +36,9 @@ public class SaveLoad {
                     Map<String, Object> itemData = new LinkedHashMap<>();
                     itemData.put("name", item.getName());
                     itemData.put("amount", item.getAmount());
+                    itemData.put("wearable", item.isWearable());
+                    itemData.put("food", item.isFood());
+                    itemData.put("effect", item.getEffect());
                     return itemData;
                 })
                 .toList());
@@ -46,6 +48,7 @@ public class SaveLoad {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static Player loadPlayer() throws IOException {
         Yaml yaml = new Yaml(new LoaderOptions());
         try (FileReader reader = new FileReader(FILE_NAME)) {
@@ -56,7 +59,7 @@ public class SaveLoad {
             double level = ((Number) data.get("level")).doubleValue();
             String weaponName = (String) data.get("weapon");
             int experience = ((Number) data.get("experience")).intValue();
-            String  locationName = (String) data.get("location");
+            String locationName = (String) data.get("location");
 
             Location location;
             if ("Lumbridge".equalsIgnoreCase(locationName)) {
@@ -65,13 +68,7 @@ public class SaveLoad {
                 location = new Lumbridge();
             }
 
-            Weapon weapon;
-            if ("Hand".equalsIgnoreCase(weaponName)) {
-                weapon = new Hand();
-            } else {
-                weapon = new Hand();
-            }
-
+            Weapon weapon = new Weapon(weaponName);
 
             Player player = new Player(name, health, level, weapon, location);
             player.setExperience(experience);
@@ -81,12 +78,14 @@ public class SaveLoad {
                 for (Map<String, Object> itemMap : inventoryData) {
                     String itemName = (String) itemMap.get("name");
                     int amount = ((Number) itemMap.get("amount")).intValue();
-                    player.addItem(new Item(itemName, amount));
+                    boolean wearable = (Boolean) itemMap.get("wearable");
+                    boolean food = (Boolean) itemMap.get("food");
+                    int effect = ((Number) itemMap.get("effect")).intValue();
+                    player.addItem(new Item(itemName, amount, wearable, food, effect));
                 }
             }
 
             return player;
         }
-
     }
 }

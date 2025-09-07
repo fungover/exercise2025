@@ -1,7 +1,7 @@
 package clone.rs.dungeon.Items;
 
 public class Item {
-  private String name;
+  private final String name;
   private int amount;
   private boolean wearable;
   private int effect;
@@ -9,6 +9,10 @@ public class Item {
 
   public Item(String name, int amount, boolean wearable, boolean food, int effect) {
     this.name = name;
+    this.amount = amount;
+    this.wearable = wearable;
+    this.food = food;
+    this.effect = effect;
   }
 
   public Item(String name) {

@@ -3,7 +3,6 @@ package clone.rs.dungeon.character;
 import clone.rs.dungeon.Items.Item;
 import clone.rs.dungeon.locations.Location;
 import clone.rs.dungeon.locations.Lumbridge;
-import clone.rs.dungeon.weapons.Hand;
 import clone.rs.dungeon.weapons.Weapon;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class Player extends Character {
 
   public Player() {
     super();
-    this.weapon = new Hand();
+    this.weapon = new Weapon("hand");
     this.location = new Lumbridge();
   }
 
@@ -125,4 +124,22 @@ public class Player extends Character {
       }
     }
   }
+
+  public void equipItem(String itemName) {
+    for (Item i : inventory) {
+      if (itemName.equalsIgnoreCase(i.getName())) {
+        if (i.isWearable()) {
+          Weapon newWeapon = new Weapon(i.getName());
+          setWeapon(newWeapon);
+          System.out.println("You equipped " + i.getName() + " with damage " + newWeapon.damage());
+          return;
+        } else {
+          System.out.println(i.getName() + " is not wearable.");
+          return;
+        }
+      }
+    }
+    System.out.println("You don't have that item in your inventory.");
+  }
+
 }

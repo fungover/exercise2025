@@ -1,10 +1,5 @@
 package clone.rs.dungeon;
 
-import clone.rs.dungeon.character.Enemy;
-import clone.rs.dungeon.character.Player;
-import clone.rs.dungeon.weapons.Hand;
-import clone.rs.dungeon.weapons.Weapon;
-
 import java.io.IOException;
 
 import static clone.rs.dungeon.controls.Controls.menu;

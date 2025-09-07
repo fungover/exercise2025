@@ -1,12 +1,10 @@
 package clone.rs.dungeon.controls;
 
-import clone.rs.dungeon.character.Character;
 import clone.rs.dungeon.character.Enemy;
 import clone.rs.dungeon.character.Player;
 import clone.rs.dungeon.locations.Falador;
 import clone.rs.dungeon.locations.Lumbridge;
 import clone.rs.dungeon.locations.Varrock;
-import clone.rs.dungeon.weapons.Hand;
 import clone.rs.dungeon.weapons.Weapon;
 
 import java.io.IOException;
@@ -54,7 +52,7 @@ public class Controls {
               + " Location:" + player.getLocation());
 
       SaveLoad.savePlayer(player);
-      System.out.printf("%n1. Find enemy%n2. Rest%n3. Location%n4. Show inventory%n9. Exit%n");
+      System.out.printf("%n1. Find enemy%n2. Rest%n3. Location%n4. Show inventory%n5. Equip item%n9. Exit%n");
       String input2 = scanner.nextLine();
 
       switch (input2) {
@@ -74,6 +72,11 @@ public class Controls {
         }
         case "4" -> {
           player.showInventory();
+        }
+        case "5" -> {
+          System.out.println("Enter item name: ");
+          String item = scanner.nextLine();
+          player.equipItem(item);
         }
         case "9" -> {
           System.out.println("Hurry back!");
@@ -115,7 +118,7 @@ public class Controls {
   private static Player createCharacter() throws IOException {
     System.out.println("Enter character name:");
     String name = System.console().readLine();
-    Player player = new Player( name, 10, 3, new Hand(), new Lumbridge());
+    Player player = new Player( name, 10, 3, new Weapon("hand"), new Lumbridge());
     SaveLoad.savePlayer(player);
     return player;
   }

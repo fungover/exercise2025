@@ -192,7 +192,9 @@ public class Player extends Character {
     return quantity;
   }
 
-  public void addTitle(String dragonSlayer) {
-    name = name + " (DragonSlayer✨)";
+  public void addTitle(String title) {
+    if (!name.contains(title)) {
+      name = name + " (" + title + "✨)";
+    }
   }
 }

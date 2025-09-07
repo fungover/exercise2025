@@ -1,7 +1,9 @@
 package org.example;
 
 import org.example.entities.Player;
+import org.example.entities.Tile;
 import org.example.entities.behaviors.BasicCombat;
+import org.example.entities.enemies.Troll;
 import org.example.game.CommandParser;
 import org.example.game.Game;
 import org.example.map.BasicMapGenerator;
@@ -10,18 +12,35 @@ import org.example.service.CombatService;
 import org.example.service.ItemService;
 import org.example.service.MovementService;
 import org.example.utils.InputValidator;
+import org.example.utils.RandomGenerator;
 
 public class App {
     public static void main(String[] args) {
+        boolean isTestMode = "true".equals(System.getProperty("test.mode", "false"));
+
         Player player = new Player("Hero", 100, 10, new BasicCombat(10));
-        Dungeon dungeon = new Dungeon(5, 5, player, new BasicMapGenerator());
+        Dungeon dungeon;
+        if (isTestMode) {
+            // TESTING ONLY: Uses seeded RandomGenerator and overrides map generation
+            RandomGenerator rng = new RandomGenerator(12345L);
+            dungeon = new Dungeon(5, 5, player, new BasicMapGenerator() {
+                @Override
+                public Tile[][] generate(int width, int height) {
+                    Tile[][] tiles = super.generate(width, height);
+                    tiles[2][1] = new Tile(new Troll()); // Enemy at (1, 2)
+                    tiles[1][1] = new Tile(new Troll()); // Enemy at (1, 1)
+                    return tiles;
+                }
+            });
+        } else {
+            dungeon = new Dungeon(5, 5, player, new BasicMapGenerator());
+        }
         InputValidator validator = new InputValidator(dungeon);
         CommandParser parser = new CommandParser(dungeon,
                 new MovementService(dungeon, validator),
                 new CombatService(dungeon, validator),
                 new ItemService(dungeon, validator));
         Game game = new Game(dungeon, parser);
-
         game.run();
     }
 }

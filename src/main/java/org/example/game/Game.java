@@ -23,7 +23,7 @@ public class Game {
     }
 
     public void run() {
-        System.out.println("Welcome to The Dungeon! Commands: move <direction>, attack <x> <y>, pickup <x> <y>, status, quit");
+        System.out.println("Welcome to The Dungeon! Commands: move <direction>, attack <x> <y>, pickup <x> <y>");
         displayState();
         while (isRunning && !isGameOver()) {
             System.out.println("Enter command: ");
@@ -40,7 +40,7 @@ public class Game {
         scanner.close();
     }
 
-    private String processCommand(String command) {
+/*    private String processCommand(String command) {
         if (command == null || command.trim().isEmpty()) {
             return "Invalid command: null or empty";
         }
@@ -54,7 +54,7 @@ public class Game {
         } else {
             return parser.parseCommand(cmd);
         }
-    }
+    }*/
 
     private void displayState() {
         System.out.println("Current map:\n" + dungeon);

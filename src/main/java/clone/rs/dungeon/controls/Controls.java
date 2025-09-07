@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Controls {
   private static final Scanner scanner = new Scanner(System.in);
 
-  public static void menu() throws IOException {
+  public static void menu() throws IOException, InterruptedException {
     Player player = null;
 
     while (player == null) {
@@ -44,7 +44,7 @@ public class Controls {
       System.out.println("-----------");
       System.out.printf("(" + player.getName() + ") Health:" + player.getHealth() + " Level:" + player.getLevel() + "(" +player.getExp() +") Weapon:" + player.getWeapon());
       SaveLoad.savePlayer(player);
-      System.out.printf("%n1. Find enemy%n2. Move to%n9. Exit%n");
+      System.out.printf("%n1. Find enemy%n2. Rest%n3. Location%n9. Exit%n");
       String input2 = scanner.nextLine();
 
       switch (input2) {
@@ -52,7 +52,7 @@ public class Controls {
           Enemy goblin = new Enemy("Goblin", 5, 3, 1);
           fight(player, goblin);
         }
-        case "2" -> System.out.println("Escaped!");
+        case "2" -> player.rest();
         case "9" -> {
           System.out.println("Game over.");
           return;
@@ -82,8 +82,6 @@ public class Controls {
                     "Your HP: " + player.getHealth());
           }else if(goblin.getHealth() <= 0) {
             System.out.println("You killed " + goblin.getName());
-          }else{
-            System.out.println("You are dead.");
           }
         }
         case "2" -> {player.setHealth(player.getHealth()-1); System.out.println("You ran away! While you were running, the enemy hit you for 1 damage."); return;}

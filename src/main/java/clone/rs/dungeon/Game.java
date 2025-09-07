@@ -16,12 +16,12 @@ public class Game {
     this.name = name;
   }
 
-  public void run() throws IOException {
+  public void run() throws IOException, InterruptedException {
     System.out.printf("Welcome to %s%n", this.name);
     menu();
   }
 
-  static void main() throws IOException {
+  static void main() throws IOException, InterruptedException {
     Game game = new Game("RS clone dungeon");
     game.run();
   }

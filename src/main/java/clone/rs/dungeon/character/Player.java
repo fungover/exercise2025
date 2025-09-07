@@ -56,8 +56,13 @@ public class Player extends Character {
     return 10 + (lvl - 3);
   }
 
-  public void rest() {
-
+  public void rest() throws InterruptedException {
+    System.out.println("***Resting your health ***");
+    while(health < getMaxHp()) {
+      System.out.println(getHealth()+"/"+getMaxHp());
+      Thread.sleep(1000);
+      health++;
+    }
   }
 
   public void setWeapon(Weapon weapon) {

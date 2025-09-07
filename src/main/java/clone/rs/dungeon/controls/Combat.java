@@ -15,7 +15,9 @@ public class Combat {
       String input = scanner.nextLine();
       switch (input) {
         case "1" -> attack(player, enemy);
-        case "2" -> escape(player);
+        case "2" -> {
+          escape(player); return;
+        }
         case "3" -> useItem(player);
       }
     }

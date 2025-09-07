@@ -158,11 +158,14 @@ public class Player extends Character {
       Item i = inventory.get(idx);
       if (itemName.equalsIgnoreCase(i.getName())) {
         if (i.isFood()) {
-          if(getHealth() + i.getEffect() < getMaxHp()) {
-            health += i.getEffect();
-            System.out.println("You have eaten " + i.getName() + " and restored " + i.getEffect() + " HP.");
-          }else
+          if (getHealth() < getMaxHp()) {
+            double newHp = Math.min(getMaxHp(), getHealth() + i.getEffect());
+            int healed = (int)Math.round(newHp - getHealth());
+            health = newHp;
+            System.out.println("You have eaten " + i.getName() + " and restored " + healed + " HP.");
+            } else {
             System.out.printf("❤️ HP: %d / %d%n", (int) getHealth(), (int) getMaxHp());
+            }
 
           i.addAmount(-1);
           if (i.getAmount() <= 0) {

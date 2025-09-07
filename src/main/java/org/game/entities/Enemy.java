@@ -36,4 +36,31 @@ public class Enemy extends Character {
                 }
                 return lootTable.get(RandomGenerator.randomInt(0, lootTable.size() -1));
             }
+
+            public List<Item> dropLoot() {
+                List<Item> drops = new ArrayList<>();
+
+                for (Item base : lootTable) {
+                    if (RandomGenerator.chance(50)) {
+                        List<String> slots = base.getSlots();
+                        Item drop;
+                        if (slots !=null) {
+
+                            drops.add(new Item(
+                                    base.getName(),
+                                    base.getType(),
+                                    base.getPrice(),
+                                    base.getQuantity(),
+                                    slots
+                            ));
+                        } else {
+                            drop = new Item(base.getName(),
+                                    base.getType(),
+                                    base.getPrice(),
+                                    base.getQuantity());
+                        }
+                    }
+                }
+                return drops;
+            }
 }

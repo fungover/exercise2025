@@ -41,7 +41,7 @@ public class Dungeon {
         this.movementService = new MovementService(this, validator);
         this.combatService = new CombatService(this, validator);
         this.itemService = new ItemService(this, validator);
-        if (width > 2 || height > 3 && tiles[3][2].getType() == TileType.EMPTY) {
+        if (width > 2 && height > 3 && tiles[3][2].getType() == TileType.EMPTY) {
             player.moveTo(2, 3);
         } else {
             for (int y = 0; y < height; y++) {

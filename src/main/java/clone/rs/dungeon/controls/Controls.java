@@ -10,8 +10,11 @@ import clone.rs.dungeon.weapons.Weapon;
 import java.io.IOException;
 import java.util.Scanner;
 
+import static clone.rs.dungeon.controls.movements.LocationManager.changePlayerLocation;
+import static clone.rs.dungeon.controls.movements.LocationManager.chooseLocation;
+
 public class Controls {
-  private static final Scanner scanner = new Scanner(System.in);
+  public static final Scanner scanner = new Scanner(System.in);
 
   public static void menu() throws IOException, InterruptedException {
     Player player = null;
@@ -61,15 +64,7 @@ public class Controls {
           fight(player, enemy);
         }
         case "2" -> player.rest();
-        case "3" -> {
-          System.out.println("Choose a location:\n1. Lumbridge\n2. Varrock\n3. Dwarven Mine");
-          String location = scanner.nextLine();
-          switch (location) {
-            case "1" -> {player.changeLocation(new Lumbridge()); System.out.println(player.locationDescription());}
-            case "2" -> {player.changeLocation(new Varrock()); System.out.println(player.locationDescription());}
-            case "3" -> {player.changeLocation(new Falador()); System.out.println(player.locationDescription());}
-          }
-        }
+        case "3" -> {chooseLocation(player);}
         case "4" -> {
           if(player.showInventory(false, false)){
           }else System.out.println("Empty");

@@ -22,8 +22,8 @@ public class Quest {
     pause(2000);
 
     int bonesCount = player.checkItem("Bones");
-    if (bonesCount < 100) {
-      System.out.println("\nElder: \"You are not prepared. You need 100 bones to complete your preparation.\"");
+    if (bonesCount < 50) {
+      System.out.println("\nElder: \"You are not prepared. You need 50 bones to complete your preparation.\"");
       System.out.println("You currently have: " + bonesCount + " bones.");
       System.out.println("Collect more bones and come back!");
       return;

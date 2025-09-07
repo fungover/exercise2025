@@ -57,6 +57,7 @@ public class ProductTest {
     @DisplayName("Can update a Product's modified date when name is changed")
     public void canCreateProductWithModifiedDate() {
         Product product;
+        Product updated;
 
         try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
             LocalDate currentDate = LocalDate.of(2025, 1, 1);
@@ -65,11 +66,12 @@ public class ProductTest {
         }
 
         try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
-            LocalDate currentDate = LocalDate.of(2025, 1, 1);
-            mockedStatic.when(LocalDate::now).thenReturn(currentDate);
-            product.setName("Notebook");
+            LocalDate updateDate = LocalDate.of(2025, 1, 5);
+            mockedStatic.when(LocalDate::now).thenReturn(updateDate);
+            updated = product.update("Notebook", Category.GENERAL, 2);
 
-            assertThat(product.getModifiedDate()).isEqualTo(currentDate);
+            assertThat(updated.getModifiedDate()).isEqualTo(updateDate);
+            assertThat(product.getModifiedDate()).isNotEqualTo(updateDate);
         }
     }
 

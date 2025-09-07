@@ -8,7 +8,7 @@ public class Product {
     private final Category category;
     private final int rating;
     private final LocalDate createdDate;
-    private LocalDate modifiedDate;
+    private final LocalDate modifiedDate;
 
     // Constructors
     public Product(int id) {
@@ -24,11 +24,22 @@ public class Product {
     }
 
     public Product(int id, String name, Category category, int rating) {
+        LocalDate now = LocalDate.now();
         this.id = id;
         this.name = name;
         this.category = category;
         this.rating = rating;
-        this.createdDate = LocalDate.now();
+        this.createdDate = now;
+        this.modifiedDate = now;
+    }
+
+    private Product(int id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.rating = rating;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
     }
 
     // Getters
@@ -56,12 +67,8 @@ public class Product {
         return this.modifiedDate;
     }
 
-    // Setters
-    private void setModifiedDate() {
-        this.modifiedDate = LocalDate.now();
-    }
-
-    public void setName(String notebook) {
-        setModifiedDate();
+    // Methods
+    public Product update(String name, Category category, int rating) {
+        return new Product(this.id, name, category, rating, this.createdDate, LocalDate.now());
     }
 }

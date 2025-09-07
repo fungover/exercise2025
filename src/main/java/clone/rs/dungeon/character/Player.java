@@ -1,20 +1,25 @@
 package clone.rs.dungeon.character;
 
+import clone.rs.dungeon.locations.Location;
+import clone.rs.dungeon.locations.Lumbridge;
 import clone.rs.dungeon.weapons.Hand;
 import clone.rs.dungeon.weapons.Weapon;
 
 public class Player extends Character {
   private Weapon weapon;
+  private Location location;
   private int experience = 0;
 
   public Player() {
     super();
     this.weapon = new Hand();
+    this.location = new Lumbridge();
   }
 
-  public Player(String name, double health, double level, Weapon weapon) {
+  public Player(String name, double health, double level, Weapon weapon, Location location) {
     super(name, health, level);
     this.weapon = weapon;
+    this.location = location;
   }
 
   public void checkLevel() {
@@ -49,6 +54,18 @@ public class Player extends Character {
 
   public String getWeapon() {
     return weapon.name();
+  }
+
+  public String getLocation() {
+    return location.name();
+  }
+
+  public Location getLocationObj() {
+    return location;
+  }
+
+  public void changeLocation(Location newLocation) {
+    this.location = newLocation;
   }
 
   public int getMaxHp() {

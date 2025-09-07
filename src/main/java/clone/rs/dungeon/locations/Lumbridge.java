@@ -1,21 +1,11 @@
 package clone.rs.dungeon.locations;
 
-public class Lumbridge extends Map{
+import clone.rs.dungeon.character.Enemy;
 
-  @Override
-  public int size() {
-    return width() * height();
-  }
+import java.util.Random;
 
-  @Override
-  public int height() {
-    return 10;
-  }
+public class Lumbridge extends Location{
 
-  @Override
-  public int width() {
-    return 10;
-  }
 
   @Override
   public String name() {
@@ -25,5 +15,16 @@ public class Lumbridge extends Map{
   @Override
   public String description() {
     return "Lumbridge is a large town where players begin their journey";
+  }
+
+  @Override
+  public Enemy enemy() {
+    Random random = new Random();
+    double chance = random.nextDouble(); // 0.0 - 1.0
+
+    if (chance < 0.5) return new Enemy("Goblin", 5, 3, 1);
+    else if (chance < 0.8) return new Enemy("Chicken", 3, 1, 0);
+    else if (chance < 0.95) return new Enemy("Cow", 12, 8, 2);
+    else return new Enemy("Guard", 20, 21, 3);
   }
 }

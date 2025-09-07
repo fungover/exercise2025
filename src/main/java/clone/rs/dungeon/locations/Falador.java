@@ -21,10 +21,10 @@ public class Falador extends Location {
     Random random = new Random();
     double chance = random.nextDouble();
 
-    if (chance < 0.5) return new Enemy("Dwarf", 10, 7, 4);
-    else if (chance < 0.8) return new Enemy("Scorpion", 17, 14, 2);
-    else if (chance < 0.95) return new Enemy("Dwarf gang member", 40, 44, 8);
-    else return new Enemy("King Scorpion", 30, 32, 7);
+    if (chance < 0.5) return new Enemy("\uD83D\uDC77\u200D♂\uFE0FDwarf", 10, 7, 4);
+    else if (chance < 0.8) return new Enemy("\uD83E\uDD82Scorpion", 17, 14, 2);
+    else if (chance < 0.95) return new Enemy("\uD83D\uDC77\u200D♂\uFE0F\uD83D\uDD2ADwarf gang member", 40, 44, 8);
+    else return new Enemy("\uD83D\uDC51\uD83E\uDD82King Scorpion", 30, 32, 7);
   }
 
   @Override
@@ -32,9 +32,9 @@ public class Falador extends Location {
     Random random = new Random();
     double chance = random.nextDouble();
 
-    if (chance < 0.95) return new Item("Bones", 1, false, false, 0);
-    else if (chance < 0.97) return new Item("Rune longsword", 1, true, false, 11);
-    else if (chance < 0.99) return new Item("Monkfish", 1, false, true, 15);
+    if (chance < 0.87) return new Item("Bones", 1, false, false, 0);
+    else if (chance < 0.92) return new Item("Rune longsword", 1, true, false, 11);
+    else if (chance < 0.98) return new Item("Monkfish", 1, false, true, 15);
     else return new Item("Dragon crossbow",1, true, false, 16);
   }
 

@@ -21,10 +21,10 @@ public class Varrock extends Location {
     Random random = new Random();
     double chance = random.nextDouble();
 
-    if (chance < 0.5) return new Enemy("Giant rat", 5, 6, 1);
-    else if (chance < 0.8) return new Enemy("Lucien", 14, 14, 2);
-    else if (chance < 0.95) return new Enemy("Grizzly bear", 27, 21, 4);
-    else return new Enemy("Black Knight", 42, 33, 6);
+    if (chance < 0.5) return new Enemy("\uD83D\uDC00Giant rat", 5, 6, 1);
+    else if (chance < 0.8) return new Enemy("\uD83D\uDC31Lucien", 14, 14, 2);
+    else if (chance < 0.95) return new Enemy("\uD83D\uDC3BGrizzly bear", 27, 21, 4);
+    else return new Enemy("⚔\uFE0F\uD83D\uDEE1\uFE0FBlack Knight", 42, 33, 6);
   }
 
   @Override
@@ -32,9 +32,9 @@ public class Varrock extends Location {
     Random random = new Random();
     double chance = random.nextDouble();
 
-    if (chance < 0.95) return new Item("Bones", 1, false, false, 0);
-    else if (chance < 0.97) return new Item("Mithril longsword", 1, true, false, 6);
-    else if (chance < 0.99) return new Item("Swordfish", 1, false, true, 10);
+    if (chance < 0.75) return new Item("Bones", 1, false, false, 0);
+    else if (chance < 0.85) return new Item("Mithril longsword", 1, true, false, 6);
+    else if (chance < 0.95) return new Item("Swordfish", 1, false, true, 10);
     else return new Item("Magic bow", 1, true, false, 9);
   }
 }

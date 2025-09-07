@@ -23,10 +23,10 @@ public class Lumbridge extends Location{
     Random random = new Random();
     double chance = random.nextDouble();
 
-    if (chance < 0.5) return new Enemy("Goblin", 5, 3, 1);
-    else if (chance < 0.8) return new Enemy("Chicken", 3, 1, 0);
-    else if (chance < 0.95) return new Enemy("Cow", 12, 8, 2);
-    else return new Enemy("Guard", 20, 21, 3);
+    if (chance < 0.5) return new Enemy("\uD83D\uDC79Goblin", 5, 3, 1);
+    else if (chance < 0.8) return new Enemy("\uD83D\uDC14Chicken", 3, 1, 0);
+    else if (chance < 0.95) return new Enemy("\uD83D\uDC04Cow", 12, 8, 2);
+    else return new Enemy("\uD83D\uDC77\u200D♂\uFE0F\uD83D\uDEE1\uFE0FGuard", 20, 21, 3);
   }
 
   @Override
@@ -34,9 +34,9 @@ public class Lumbridge extends Location{
     Random random = new Random();
     double chance = random.nextDouble();
 
-    if (chance < 0.80) return new Item("Bones", 1, false, false, 0);
-    else if (chance < 0.90) return new Item("Bronze sword",1 , true, false, 2);
-    else if (chance < 0.98) return new Item("Meat", 1, false, true, 5);
+    if (chance < 0.75) return new Item("Bones", 1, false, false, 0);
+    else if (chance < 0.85) return new Item("Bronze sword",1 , true, false, 2);
+    else if (chance < 0.95) return new Item("Meat", 1, false, true, 5);
     else return new Item("Maple Bow",1, true, false, 4);
   }
 

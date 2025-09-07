@@ -40,7 +40,14 @@ public class Quest {
 
     fight(player, new Enemy("Green Dragon 🐉", 75, 79, 10));
 
-    // После победы
+    printlnDelay("\n🏆 Congratulations! You have slain the dragon!", 2000);
+    player.addTitle("Dragon Slayer");
+    printlnDelay("✨ You are now known as: " + player.getName() + " the Dragon Slayer!", 2000);
+    fight(player, new Enemy("Green Dragon 🐉", 75, 79, 10));
+    if (player.getHealth() <= 0) {
+      printlnDelay("\n💀 You were slain by the dragon... Train more and try again.", 2000);
+      return;
+      }
     printlnDelay("\n🏆 Congratulations! You have slain the dragon!", 2000);
     player.addTitle("Dragon Slayer");
     printlnDelay("✨ You are now known as: " + player.getName() + " the Dragon Slayer!", 2000);

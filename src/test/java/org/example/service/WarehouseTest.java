@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class WarehouseTest {
 
     @Test
-    @DisplayName("Add a new product to Warehouse")
+    @DisplayName("addProduct: adds a new product to Warehouse")
     public void addProduct() {
         Warehouse warehouse = new Warehouse();
         Product testProduct = new Product(1, "Test Product", Category.GENERAL, 1);
@@ -21,7 +21,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Throw exception if no Product name is provided")
+    @DisplayName("addProduct: throws IllegalArgumentException if product name is blank")
     public void throwExceptionIfNoProductNameProvided() {
         Warehouse warehouse = new Warehouse();
         Product testProduct = new Product(1, "", Category.GENERAL, 1);
@@ -31,7 +31,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Update an existing product in Warehouse by searching with id")
+    @DisplayName("updateProduct: updates an existing product by ID")
     public void updateProduct() {
         Warehouse warehouse = new Warehouse();
         Product testProduct = new Product(1, "Test Product", Category.GENERAL, 1);
@@ -46,7 +46,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Throw exception if no Product is found to update")
+    @DisplayName("updateProduct: throws IllegalArgumentException if product ID is not found")
     public void throwExceptionIfNoProductFoundToUpdate() {
         Warehouse warehouse = new Warehouse();
         Product testProduct = new Product(1, "Test Product", Category.GENERAL, 1);
@@ -58,7 +58,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Get all products from Warehouse")
+    @DisplayName("getAllProducts: returns all products in warehouse")
     public void getAllProducts() {
         Warehouse warehouse = new Warehouse();
 

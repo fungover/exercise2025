@@ -12,35 +12,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ProductTest {
 
     @Test
-    @DisplayName("Can create a Product with a unique ID")
+    @DisplayName("Product constructor: sets unique ID")
     public void canCreateProductWithId() {
         Product product = new Product(1);
         assertThat(product.getId()).isEqualTo(1);
     }
 
     @Test
-    @DisplayName("Can create a Product with a name")
+    @DisplayName("Product constructor: sets name")
     public void canCreateProductWithName() {
         Product product = new Product(1, "Laptop");
         assertThat(product.getName()).isEqualTo("Laptop");
     }
 
     @Test
-    @DisplayName("Can create a Product with a category")
+    @DisplayName("Product constructor: sets category")
     public void canCreateProductWithCategory() {
         Product product = new Product(1, "Laptop", Category.GENERAL);
         assertThat(product.getCategory()).isEqualTo(Category.GENERAL);
     }
 
     @Test
-    @DisplayName("Can create a Product with a rating")
+    @DisplayName("Product constructor: sets rating")
     public void canCreateProductWithRating() {
         Product product = new Product(1, "Laptop", Category.GENERAL, 1);
         assertThat(product.getRating()).isEqualTo(1);
     }
 
     @Test
-    @DisplayName("Can create a Product with a created date")
+    @DisplayName("Product constructor: sets createdDate")
     public void canCreateProductWithGetCreatedDate() {
         try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
             LocalDate currentDate = LocalDate.of(2025, 1, 1);
@@ -52,7 +52,7 @@ public class ProductTest {
     }
 
     @Test
-    @DisplayName("Can update a Product's modified date when name is changed")
+    @DisplayName("update(): updates modifiedDate and returns new Product")
     public void canCreateProductWithModifiedDate() {
         Product product;
         Product updated;

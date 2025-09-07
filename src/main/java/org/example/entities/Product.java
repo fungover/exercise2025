@@ -1,10 +1,13 @@
 package org.example.entities;
 
+import java.time.LocalDate;
+
 public class Product {
     private final int id;
     private final String name;
     private final Category category;
     private final double rating;
+    private final LocalDate createdDate;
 
     // Constructors
     public Product(int id) {
@@ -24,6 +27,7 @@ public class Product {
         this.name = name;
         this.category = category;
         this.rating = rating;
+        this.createdDate = LocalDate.now();
     }
 
     // Getters
@@ -42,4 +46,9 @@ public class Product {
     public double getRating() {
         return this.rating;
     }
+
+    public LocalDate getCreatedDate() {
+        return this.createdDate;
+    }
+
 }

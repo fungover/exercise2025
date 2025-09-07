@@ -5,6 +5,8 @@ import org.game.entities.Item;
 import org.game.entities.Player;
 import org.game.utils.ClearConsole;
 
+import java.util.List;
+
 public class CombatHandler {
     public static void fight(Player player, Enemy enemy) {
         System.out.println("A Wild " + enemy.getName() + " appears!");
@@ -35,16 +37,24 @@ public class CombatHandler {
 
             if (!enemy.isAlive()) {
                 System.out.println("You defeated the " + enemy.getName() + " !");
-                Item loot = enemy.getLoot();
-                if (loot != null) {
-                    System.out.println("You loot " + loot.getName() + " !");
-                    player.addItem(loot);
-                }else {
-                    System.out.println("The " + enemy.getName()+ " dropped nothing.");
+
+                List<Item> lootlist = enemy.dropLoot();
+
+                if (lootlist.isEmpty()) {
+                    System.out.println("There is no loot!");
+                } else {
+                    System.out.println("You found ");
+                    for (Item loot: lootlist) {
+                        player.addItem(loot);
+                        System.out.println(" * "+loot.getName()+" x"+loot.getQuantity());
+                        System.out.println(loot.getName()+" x"+loot.getSlots());
+
+                    }
                 }
+
             }
 
-            else{
+            if (!player.isAlive()){
             System.out.println("You were defeated by a " + enemy.getName() + "...");
             }
 

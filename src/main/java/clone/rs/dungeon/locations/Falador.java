@@ -33,9 +33,9 @@ public class Falador extends Location {
     double chance = random.nextDouble();
 
     if (chance < 0.95) return new Item("Bones");
-    else if (chance < 0.97) return new Item("Rune longsword");
-    else if (chance < 0.99) return new Item("Monkfish");
-    else return new Item("Dragon crossbow");
+    else if (chance < 0.97) return new Item("Rune longsword", 1, true, false, 11);
+    else if (chance < 0.99) return new Item("Monkfish", 1, false, true, 15);
+    else return new Item("Dragon crossbow",1, true, false, 16);
   }
 
 }

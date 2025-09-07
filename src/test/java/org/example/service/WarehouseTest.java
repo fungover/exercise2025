@@ -44,4 +44,17 @@ public class WarehouseTest {
         assertThat(warehouse.getAllProducts()).doesNotContain(testProduct);
         assertThat(warehouse.getAllProducts().size()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("Throw exception if no Product is found to update")
+    public void throwExceptionIfNoProductFoundToUpdate() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct = new Product(1, "Test Product", Category.GENERAL, 1);
+        warehouse.addProduct(testProduct);
+
+        Product updatedTestProduct = new Product(2, "Update Test Product", Category.GENERAL, 1);
+        assertThatThrownBy(() -> warehouse.updateProduct(updatedTestProduct))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
 }

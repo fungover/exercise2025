@@ -5,11 +5,11 @@ import java.util.*;
 import static org.example.utils.Colors.*;
 
 public class Room {
-    private String name;
-    private String description;
-    private Map<String, Room> exits; // Direction -> room
-    private List<Item> items;
-    private List<Enemy> enemies;
+    private final String name;
+    private final String description;
+    private final Map<String, Room> exits; // Direction -> room
+    private final List<Item> items;
+    private final List<Enemy> enemies;
     private boolean visited;
 
     // Constructor

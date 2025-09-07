@@ -32,6 +32,10 @@ public class Player {
         return position;
     }
 
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
     public void move(int dx, int dy) {
         position.move(dx, dy);
     }

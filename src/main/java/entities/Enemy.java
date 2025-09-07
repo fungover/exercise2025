@@ -19,6 +19,10 @@ public abstract class Enemy {
         return damage;
     }
 
+    public String getType() {
+        return type;
+    }
+
     public abstract void attack(Player player);
 
     public void takeDamage(int damageAmount) {

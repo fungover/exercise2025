@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,8 +37,8 @@ public class ProductTest {
     @Test
     @DisplayName("Can create a Product with a rating")
     public void canCreateProductWithRating() {
-        Product product = new Product(1, "Laptop", Category.GENERAL, 1.5);
-        assertThat(product.getRating()).isEqualTo(1.5);
+        Product product = new Product(1, "Laptop", Category.GENERAL, 1);
+        assertThat(product.getRating()).isEqualTo(1);
     }
 
     @Test
@@ -47,8 +48,29 @@ public class ProductTest {
             LocalDate currentDate = LocalDate.of(2025, 1, 1);
             mockedStatic.when(LocalDate::now).thenReturn(currentDate);
 
-            Product product = new Product(1, "Laptop", Category.GENERAL, 1.5);
+            Product product = new Product(1, "Laptop", Category.GENERAL, 1);
             assertThat(product.getCreatedDate()).isEqualTo(currentDate);
         }
     }
+
+    @Test
+    @DisplayName("Can update a Product's modified date when name is changed")
+    public void canCreateProductWithModifiedDate() {
+        Product product;
+
+        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
+            LocalDate currentDate = LocalDate.of(2025, 1, 1);
+            mockedStatic.when(LocalDate::now).thenReturn(currentDate);
+            product = new Product(1, "Laptop", Category.GENERAL, 1);
+        }
+
+        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
+            LocalDate currentDate = LocalDate.of(2025, 1, 1);
+            mockedStatic.when(LocalDate::now).thenReturn(currentDate);
+            product.setName("Notebook");
+
+            assertThat(product.getModifiedDate()).isEqualTo(currentDate);
+        }
+    }
+
 }

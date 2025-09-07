@@ -8,10 +8,6 @@ import org.example.service.MovementService;
 import org.example.utils.InputValidator;
 import org.example.service.CombatService;
 
-interface MapGenerator {
-    Tile[][] generate (int width, int height);
-}
-
 public class Dungeon {
     private final int width;
     private final int height;

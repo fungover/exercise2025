@@ -11,6 +11,10 @@ import org.example.entities.Enemy;
 import java.util.ArrayList;
 import java.util.List;
 
+interface MapGenerator {
+    Tile[][] generate (int width, int height);
+}
+
 public class BasicMapGenerator implements MapGenerator {
     @Override
     public Tile[][] generate(int width, int height) {

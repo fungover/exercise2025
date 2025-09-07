@@ -34,19 +34,19 @@ public class CommandParser {
                 case "move":
                     if (parts.length != 2) {
                         System.out.println("Invalid move command: expected 'move <direction>'");
-                        return "Invalid command: use 'move <direction>' (eg. 'move up'";
+                        return "Invalid command: use 'move <direction>' (e.g, 'move up'";
                     }
                     return handleMoveCommand(parts[1]);
                 case "attack":
                     if (parts.length != 3) {
                         System.out.println("Invalid attack command: expected 'attack <x> <y>'");
-                        return "Invalid command: use 'attack <x> <y>' (eg. 'attack 1 1')";
+                        return "Invalid command: use 'attack <x> <y>' (e.g, 'attack 1 1')";
                     }
                     return handleAttackCommand(parts[1], parts[2]);
                 case "pickup":
                     if (parts.length != 3) {
                         System.out.println("Invalid pickup command: expected 'pickup <x> <y>'");
-                        return "Invalid command: use 'pickup <x> <y>' (eg. 'pickup 2 2')";
+                        return "Invalid command: use 'pickup <x> <y>' (e.g, 'pickup 2 2')";
                     }
                     return handlePickupCommand(parts[1], parts[2]);
                 default:

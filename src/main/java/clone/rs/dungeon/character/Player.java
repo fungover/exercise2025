@@ -23,9 +23,10 @@ public class Player extends Character {
     while (experience >= expForNextLevel) {
       experience -= expForNextLevel;
       level++;
-      System.out.println("Level up! You are now level " + level);
+      System.out.println("***Level up! You are now level " + level + "***");
 
       expForNextLevel = (int) (level * level * 10);
+      health = getMaxHp();
     }
   }
 
@@ -48,6 +49,15 @@ public class Player extends Character {
 
   public String getWeapon() {
     return weapon.name();
+  }
+
+  public int getMaxHp() {
+    int lvl = (int) getLevel();
+    return 10 + (lvl - 3);
+  }
+
+  public void rest() {
+
   }
 
   public void setWeapon(Weapon weapon) {

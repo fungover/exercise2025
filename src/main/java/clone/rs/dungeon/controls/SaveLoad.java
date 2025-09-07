@@ -26,6 +26,7 @@ public class SaveLoad {
         data.put("health", player.getHealth());
         data.put("level", player.getLevel());
         data.put("weapon", player.getWeapon());
+        data.put("experience", player.getExp());
 
         try (FileWriter writer = new FileWriter(FILE_NAME)) {
             yaml.dump(data, writer);
@@ -40,17 +41,20 @@ public class SaveLoad {
             String name = (String) data.get("name");
             double health = ((Number) data.get("health")).doubleValue();
             double level = ((Number) data.get("level")).doubleValue();
-
             String weaponName = (String) data.get("weapon");
-            Weapon weapon;
+            int experience = ((Number) data.get("experience")).intValue();
 
-            if ("hand".equalsIgnoreCase(weaponName)) {
+            Weapon weapon;
+            if ("Hand".equalsIgnoreCase(weaponName)) {
                 weapon = new Hand();
             } else {
                 weapon = new Hand();
             }
 
-            return new Player(name, health, level, weapon);
+
+            Player player = new Player(name, health, level, weapon);
+            player.addExperience(experience);
+            return player;
         }
     }
 }

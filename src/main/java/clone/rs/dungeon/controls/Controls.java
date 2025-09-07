@@ -41,7 +41,8 @@ public class Controls {
     }
 
     while (true) {
-      System.out.printf("(" + player.getName() + ") Health:" + player.getHealth() + " Level:" + player.getLevel() + " Weapon:" + player.getWeapon());
+      System.out.println("-----------");
+      System.out.printf("(" + player.getName() + ") Health:" + player.getHealth() + " Level:" + player.getLevel() + "(" +player.getExp() +") Weapon:" + player.getWeapon());
       SaveLoad.savePlayer(player);
       System.out.printf("%n1. Find enemy%n2. Move to%n9. Exit%n");
       String input2 = scanner.nextLine();
@@ -69,6 +70,7 @@ public class Controls {
       switch (input) {
         case "1" -> {
           goblin.setHealth(goblin.getHealth() - player.hit());
+          player.addExperience((int) (player.hit() * 10));
           System.out.println("You hit " + goblin.getName() +
                   " for " + player.hit() + " damage. " +
                   "Enemy HP: " + goblin.getHealth());
@@ -78,6 +80,10 @@ public class Controls {
             System.out.println(goblin.getName() + " hits you for " +
                     goblin.hit() + " damage. " +
                     "Your HP: " + player.getHealth());
+          }else if(goblin.getHealth() <= 0) {
+            System.out.println("You killed " + goblin.getName());
+          }else{
+            System.out.println("You are dead.");
           }
         }
         case "2" -> {player.setHealth(player.getHealth()-1); System.out.println("You ran away! While you were running, the enemy hit you for 1 damage."); return;}

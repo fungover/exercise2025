@@ -13,4 +13,5 @@ public class Enemy extends Character {
   public double hit() {
     return damage;
   }
+
 }

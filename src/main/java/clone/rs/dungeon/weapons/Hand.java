@@ -11,4 +11,10 @@ public class Hand extends Weapon {
   public double damage() {
     return 1;
   }
+
+  public static void getWeapon(){
+
+  }
 }
+
+

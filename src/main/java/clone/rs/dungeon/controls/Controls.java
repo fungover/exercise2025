@@ -54,7 +54,7 @@ public class Controls {
               + " Location:" + player.getLocation());
 
       SaveLoad.savePlayer(player);
-      System.out.printf("%n1. Find enemy%n2. Rest%n3. Location%n9. Exit%n");
+      System.out.printf("%n1. Find enemy%n2. Rest%n3. Location%n4. Show inventory%n9. Exit%n");
       String input2 = scanner.nextLine();
 
       switch (input2) {
@@ -64,16 +64,19 @@ public class Controls {
         }
         case "2" -> player.rest();
         case "3" -> {
-          System.out.println("Choose a location:\n1. Lumbridge\n2. Varrock\n3. Falador");
+          System.out.println("Choose a location:\n1. Lumbridge\n2. Varrock\n3. Dwarven Mine");
           String location = scanner.nextLine();
           switch (location) {
-            case "1" -> {player.changeLocation(new Lumbridge());}
-            case "2" -> {player.changeLocation(new Varrock());}
-            case "3" -> {player.changeLocation(new Falador());}
+            case "1" -> {player.changeLocation(new Lumbridge()); System.out.println(player.locationDescription());}
+            case "2" -> {player.changeLocation(new Varrock()); System.out.println(player.locationDescription());}
+            case "3" -> {player.changeLocation(new Falador()); System.out.println(player.locationDescription());}
           }
         }
+        case "4" -> {
+          player.showInventory();
+        }
         case "9" -> {
-          System.out.println("Game over.");
+          System.out.println("Hurry back!");
           return;
         }
         default -> System.out.println("Invalid input.");
@@ -101,6 +104,7 @@ public class Controls {
                     "Your HP: " + player.getHealth());
           }else if(enemy.getHealth() <= 0) {
             System.out.println("You killed " + enemy.getName());
+            player.addItem(player.getItem());
           }
         }
         case "2" -> {player.setHealth(player.getHealth()-1); System.out.println("You ran away! While you were running, the enemy hit you for 1 damage."); return;}

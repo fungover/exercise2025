@@ -1,6 +1,7 @@
 package clone.rs.dungeon.locations;
 
 import clone.rs.dungeon.character.Enemy;
+import clone.rs.dungeon.Items.Item;
 
 import java.util.Random;
 
@@ -25,4 +26,16 @@ public class Falador extends Location {
     else if (chance < 0.95) return new Enemy("Dwarf gang member", 40, 44, 8);
     else return new Enemy("King Scorpion", 30, 32, 7);
   }
+
+  @Override
+  public Item item() {
+    Random random = new Random();
+    double chance = random.nextDouble();
+
+    if (chance < 0.95) return new Item("Bones");
+    else if (chance < 0.97) return new Item("Rune longsword");
+    else if (chance < 0.99) return new Item("Monkfish");
+    else return new Item("Dragon crossbow");
+  }
+
 }

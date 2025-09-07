@@ -1,11 +1,16 @@
 package clone.rs.dungeon.character;
 
+import clone.rs.dungeon.Items.Item;
 import clone.rs.dungeon.locations.Location;
 import clone.rs.dungeon.locations.Lumbridge;
 import clone.rs.dungeon.weapons.Hand;
 import clone.rs.dungeon.weapons.Weapon;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player extends Character {
+  private List<Item> inventory = new ArrayList<>();
   private Weapon weapon;
   private Location location;
   private int experience = 0;
@@ -64,8 +69,18 @@ public class Player extends Character {
     return location;
   }
 
+  public Item getItem() {
+    var item = location.item();
+    System.out.println("You got: " + item);
+    return item;
+  }
+
   public void changeLocation(Location newLocation) {
     this.location = newLocation;
+  }
+
+  public String locationDescription() {
+    return location.description();
   }
 
   public int getMaxHp() {
@@ -84,5 +99,30 @@ public class Player extends Character {
 
   public void setWeapon(Weapon weapon) {
     this.weapon = weapon;
+  }
+
+  public void addItem(Item item) {
+    for (Item i : inventory) {
+      if (i.getName().equalsIgnoreCase(item.getName())) {
+        i.addAmount(item.getAmount());
+        return;
+      }
+    }
+    inventory.add(item);
+  }
+
+  public List<Item> getInventory() {
+    return inventory;
+  }
+
+  public void showInventory() {
+    System.out.println("Inventory:");
+    if (inventory.isEmpty()) {
+      System.out.println("Your inventory is empty.");
+    } else {
+      for (Item i : inventory) {
+        System.out.println(i);
+      }
+    }
   }
 }

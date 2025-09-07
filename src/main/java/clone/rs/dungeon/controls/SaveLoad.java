@@ -1,5 +1,6 @@
 package clone.rs.dungeon.controls;
 
+import clone.rs.dungeon.Items.Item;
 import clone.rs.dungeon.character.Player;
 import clone.rs.dungeon.locations.Location;
 import clone.rs.dungeon.locations.Lumbridge;
@@ -13,6 +14,7 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SaveLoad {
@@ -30,6 +32,14 @@ public class SaveLoad {
         data.put("weapon", player.getWeapon());
         data.put("experience", player.getExp());
         data.put("location", player.getLocation());
+        data.put("inventory", player.getInventory().stream()
+                .map(item -> {
+                    Map<String, Object> itemData = new LinkedHashMap<>();
+                    itemData.put("name", item.getName());
+                    itemData.put("amount", item.getAmount());
+                    return itemData;
+                })
+                .toList());
 
         try (FileWriter writer = new FileWriter(FILE_NAME)) {
             yaml.dump(data, writer);
@@ -64,8 +74,19 @@ public class SaveLoad {
 
 
             Player player = new Player(name, health, level, weapon, location);
-            player.addExperience(experience);
+            player.setExperience(experience);
+
+            List<Map<String, Object>> inventoryData = (List<Map<String, Object>>) data.get("inventory");
+            if (inventoryData != null) {
+                for (Map<String, Object> itemMap : inventoryData) {
+                    String itemName = (String) itemMap.get("name");
+                    int amount = ((Number) itemMap.get("amount")).intValue();
+                    player.addItem(new Item(itemName, amount));
+                }
+            }
+
             return player;
         }
+
     }
 }

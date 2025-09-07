@@ -1,6 +1,7 @@
 package clone.rs.dungeon.locations;
 
 import clone.rs.dungeon.character.Enemy;
+import clone.rs.dungeon.Items.Item;
 
 import java.util.Random;
 
@@ -24,5 +25,16 @@ public class Varrock extends Location {
     else if (chance < 0.8) return new Enemy("Lucien", 14, 14, 2);
     else if (chance < 0.95) return new Enemy("Grizzly bear", 27, 21, 4);
     else return new Enemy("Black Knight", 42, 33, 6);
+  }
+
+  @Override
+  public Item item() {
+    Random random = new Random();
+    double chance = random.nextDouble();
+
+    if (chance < 0.95) return new Item("Bones");
+    else if (chance < 0.97) return new Item("Mithril longsword");
+    else if (chance < 0.99) return new Item("Swordfish");
+    else return new Item("Magic bow");
   }
 }

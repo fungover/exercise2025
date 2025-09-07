@@ -16,7 +16,7 @@ class CombatTest {
 
   @BeforeEach
   void setUp() {
-    player = new Player("TestPlayer", 20, 1, new Weapon("Hand"), null);
+    player = new Player("TestPlayer", 20, 10, new Weapon("Hand"), null);
     enemy = new Enemy("Goblin", 10, 1, 1);
   }
 

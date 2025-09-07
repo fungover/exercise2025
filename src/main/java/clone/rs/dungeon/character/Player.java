@@ -88,9 +88,9 @@ public class Player extends Character {
   }
 
   public void rest() throws InterruptedException {
-    System.out.println("*** Resting restores your health ***");
+    System.out.println("💤 *** Resting... Your health is being restored *** 🛌");
     while (health < getMaxHp()) {
-      System.out.println(getHealth() + "/" + getMaxHp());
+      System.out.println("❤️ Health: " + (int)getHealth() + "/" + getMaxHp());
       Thread.sleep(1000);
       health++;
     }
@@ -116,7 +116,7 @@ public class Player extends Character {
 
   // if true, shows only wearable items
   public boolean showInventory(boolean isWearable, boolean isFood) {
-    System.out.println("Inventory:");
+    System.out.println("🎒 Your Inventory:");
     for (Item i : inventory) {
       if (isWearable && i.isWearable()) {
         System.out.println(i);
@@ -154,8 +154,11 @@ public class Player extends Character {
       Item i = inventory.get(idx);
       if (itemName.equalsIgnoreCase(i.getName())) {
         if (i.isFood()) {
-          health += i.getEffect();
-          System.out.println("You have eaten " + i.getName() + " and restored " + i.getEffect() + " HP.");
+          if(getHealth() + i.getEffect() < getMaxHp()) {
+            health += i.getEffect();
+            System.out.println("You have eaten " + i.getName() + " and restored " + i.getEffect() + " HP.");
+          }else
+            System.out.printf("❤️ HP: %d / %d%n", (int) getHealth(), (int) getMaxHp());
 
           i.addAmount(-1);
           if (i.getAmount() <= 0) {
@@ -182,4 +185,7 @@ public class Player extends Character {
     return quantity;
   }
 
+  public void addTitle(String dragonSlayer) {
+    name = name + " (DragonSlayer✨)";
+  }
 }

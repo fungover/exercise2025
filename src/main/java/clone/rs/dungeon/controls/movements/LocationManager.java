@@ -17,7 +17,10 @@ public class LocationManager {
     }
   }
   public static void chooseLocation(Player player) {
-    System.out.println("Choose a location:\n1. Lumbridge\n2. Varrock\n3. Dwarven Mine");
+    System.out.println("📍 Choose a location:");
+    System.out.println("1️⃣  Lumbridge");
+    System.out.println("2️⃣  Varrock");
+    System.out.println("3️⃣  Dwarven Mine");
     int locationChoice = Integer.parseInt(scanner.nextLine());
     changePlayerLocation(player, locationChoice);
     System.out.println("You moved to " + player.getLocation());

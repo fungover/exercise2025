@@ -46,16 +46,28 @@ public class Controls {
 
     while (true) {
       System.out.println("-----------");
-      System.out.printf("(" + player.getName() + ") Health:"
-              + player.getHealth() + " Level:"
-              + player.getLevel()
-              + "(" +player.getExp()
-              +") Weapon:"
-              + player.getWeapon()
-              + " Location:" + player.getLocation());
+      System.out.printf(
+              "👤 %s  |  ❤️ %d/%d  |  ⭐ Lv.%d (%d XP)  |  ⚔️ %s  |  🏰 %s%n",
+              player.getName(),
+              (int) player.getHealth(), player.getMaxHp(),
+              (int) player.getLevel(), (int) player.getExp(),
+              player.getWeapon(),
+              player.getLocation()
+      );
+
+
 
       SaveLoad.savePlayer(player);
-      System.out.printf("%n1. Find enemy%n2. Rest%n3. Location%n4. Show inventory%n5. Equip item%n6. Dragon slayer(quest)%n7. Exit%n");
+      System.out.printf(
+              "%n"
+                      + "1️⃣  Find enemy ⚔️%n"
+                      + "2️⃣  Rest ❤️%n"
+                      + "3️⃣  Change location 🏰%n"
+                      + "4️⃣  Show inventory 🎒%n"
+                      + "5️⃣  Equip item 🛡️%n"
+                      + "6️⃣  Dragon Slayer Quest 🐉%n"
+                      + "7️⃣  Exit 🚪%n"
+      );
       String input2 = scanner.nextLine();
 
       switch (input2) {
@@ -67,7 +79,7 @@ public class Controls {
         case "3" -> {chooseLocation(player);}
         case "4" -> {
           if(player.showInventory(false, false)){
-          }else System.out.println("Empty");
+          }else System.out.println("🎒 Your inventory is empty!");
         }
         case "5" -> {
           if (player.showInventory(true, false)) {
@@ -75,11 +87,11 @@ public class Controls {
             String item = scanner.nextLine();
             player.equipItem(item);
           } else
-            System.out.println("Empty");
+            System.out.println("👜 Your inventory is empty!");
         }
         case "6" -> {
           if(player.getLevel() < 10){
-            System.out.println("You need at least 10 level.");
+            System.out.println("⚔️ You need to be at least level 10 to do that!");
           }else Quest.start(player);
         }
         case "7" -> {

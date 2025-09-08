@@ -15,9 +15,9 @@ public class Eagle extends Enemy {
 
 	public int attack() {
 		if (randomGen.generateRandom(5)) {
-			return 20; // Chance at critical hit
+			return 12; // Chance at critical hit
 		} else {
-			return 10; // Default damage for Eagles
+			return 5; // Default damage for Eagles
 		}
 	}
 }

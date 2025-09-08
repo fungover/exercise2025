@@ -15,9 +15,9 @@ public class Falcon extends Enemy {
 
 	public int attack() {
 		if (randomGen.generateRandom(5)) {
-			return 20;
+			return 12;
 		} else {
-			return 10; // Default damage for Falcons
+			return 5; // Default damage for Falcons
 		}
 	}
 }

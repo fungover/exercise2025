@@ -58,7 +58,7 @@ public class Lizard {
 		if (item != null) {
 			if (!this.equipment.contains(item)) {
 				this.equipment.add(item);
-				setDefense(2);
+				setDefense(1);
 			}
 		}
 	}

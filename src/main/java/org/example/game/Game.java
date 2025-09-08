@@ -1,9 +1,6 @@
 package org.example.game;
 
-import org.example.entities.Eagle;
-import org.example.entities.Enemy;
-import org.example.entities.Falcon;
-import org.example.entities.Lizard;
+import org.example.entities.*;
 import org.example.rng.RandomGen;
 import org.example.tree.Leaf;
 
@@ -14,6 +11,7 @@ public class Game {
 	RandomGen randomGen;
 	private Enemy eagle;
 	private Enemy falcon;
+	private Enemy phoenix;
 	private Lizard lizard;
 	private Enemy lootDrop;
 	Scanner input = new Scanner(System.in);
@@ -25,12 +23,12 @@ public class Game {
 	}
 
 	public void createLeaves() {
-		Leaf greenLeaf = new Leaf("Green Leaf", "[U]p or [L]eft");
-		Leaf redLeaf = new Leaf("Red Leaf", "[R]ight or [D]own");
-		Leaf orangeLeaf = new Leaf("Orange Leaf", "[R]ight or [L]eft");
-		Leaf yellowLeaf = new Leaf("Yellow Leaf", "[U]p or [L]eft");
-		Leaf purpleLeaf = new Leaf("Purple Leaf", "[D]own or [H]ome");
-		Leaf goldenLeaf = new Leaf("Golden Leaf", "[R]ight");
+		Leaf greenLeaf = new Leaf("Greenwood", "[U]p or [L]eft");
+		Leaf redLeaf = new Leaf("Red Hollow", "[R]ight or [D]own");
+		Leaf orangeLeaf = new Leaf("Amberfield", "[R]ight or [L]eft");
+		Leaf yellowLeaf = new Leaf("Yellow Meadow", "[U]p or [L]eft");
+		Leaf goldenLeaf = new Leaf("Goldgrove", "[R]ight");
+		Leaf purpleLeaf = new Leaf("Purple Vale", "[D]own or [H]ome");
 
 		greenLeaf.setNextLeaf("u", redLeaf);
 		greenLeaf.setNextLeaf("l", orangeLeaf);
@@ -72,9 +70,6 @@ public class Game {
 							case "a":
 								entity.setHealth(-player.attack());
 								if (entity.getHealth() <= 0) {
-									String loot = entity.lootDrop();
-									player.getInventory().add(loot);
-									System.out.println("You won and gained: " + loot + "!");
 									return 1;
 								}
 								player.setAttackedHealth(entity.attack() - player.getDefense());
@@ -86,6 +81,7 @@ public class Game {
 								if (player.getInventory().contains("Ashes")) {
 									System.out.println("You healed!");
 									player.setHealth(30);
+									player.getInventory().remove("Ashes");
 								}
 								break;
 							case "r":
@@ -121,33 +117,45 @@ public class Game {
 				System.out.println("No leaf there");
 			}
 			// Place enemy spawner here
-			if (randomGen.generateRandom(20)) {
-				if (randomGen.generateRandom(50)) {
-					falcon = new Falcon();
-					int falconFight = fight(falcon, lizard);
-					if (falconFight == 0) {
-						System.out.println("You died and lost the game!");
-						gameOn = false;
-					} else if (falconFight == -1) {
-						System.out.println("You ran away from the threat!");
-					}
+			String foundItem = lootDrop.lootDrop();
+			if (currentLeaf.getName().equals("Purple Leaf")) {
+				phoenix = new Phoenix();
+				int phoenixFight = fight(phoenix, lizard);
+				if (phoenixFight == 0) {
+					System.out.println("Phoenix won!");
+					gameOn = false;
+				} else if (phoenixFight == 1) {
+					System.out.println("Phoenix defeated and you gained " + phoenix.getRareFeathers() + "!");
+					lizard.setInventory(phoenix.getRareFeathers());
 				} else {
-					eagle = new Eagle();
-					int eagleFight = fight(eagle, lizard);
-					if (eagleFight == 0) {
-						System.out.println("You died and lost the game!");
-						gameOn = false;
-					} else if (eagleFight == -1) {
-						System.out.println("You ran away from the threat!");
-					}
+					System.out.println("You ran away!");
 				}
 			} else {
-				String foundItem = lootDrop.lootDrop();
-				System.out.println("You found an item: " + foundItem + "!");
-				lizard.setInventory(foundItem);
-				lizard.setEquipment(foundItem);
-			}
+				if (randomGen.generateRandom(25)) {
+					int fight;
+					if (randomGen.generateRandom(50)) {
+						falcon = new Falcon();
+						fight = fight(falcon, lizard);
+					} else {
+						eagle = new Eagle();
+						fight = fight(eagle, lizard);
+					}
+					if (fight == 0) {
+						System.out.println("You died and lost the game!");
+						gameOn = false;
+					} else if (fight == -1) {
+						System.out.println("You ran away from the threat!");
+					} else {
+						System.out.println("You won and gained: " + foundItem + "!");
+						lizard.setInventory(foundItem);
+					}
+				} else {
+					System.out.println("You found an item: " + foundItem + "!");
+					lizard.setInventory(foundItem);
+					lizard.setEquipment(foundItem);
+				}
 
+			}
 		}
 	}
 }

@@ -12,8 +12,17 @@ public record Product(
         ZonedDateTime modifiedDate
 ) {
     public Product {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product name cannot be empty or null.");
+        }
         if (rating < 0 || rating > 10) {
-            throw new IllegalArgumentException("Rating must be between 0 and 10");
+            throw new IllegalArgumentException("Rating must be between 0 and 10.");
+        }
+        if (createdDate == null) {
+            throw new IllegalArgumentException("Created date cannot be null.");
+        }
+        if (modifiedDate == null) {
+            throw new IllegalArgumentException("Modified date cannot be null.");
         }
     }
 }

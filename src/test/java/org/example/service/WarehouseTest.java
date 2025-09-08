@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -26,7 +26,7 @@ class WarehouseTest {
     void addProductToWarehouse(){
         ZonedDateTime now = ZonedDateTime.now();
         Product clicker = ( new Product(
-                "clicker-001",
+                UUID.randomUUID().toString(),
                 "Clicker",
                 Category.TRAINING,
                 5,
@@ -46,18 +46,18 @@ class WarehouseTest {
     @Test
     @DisplayName("Throws an exception when name is empty")
     void addProductToWarehouseWithEmptyName_throwsException(){
-        Product productWithEmptyName = new Product(
-                "p-001",
-                "", //
-                Category.FOOD,
-                3,
-                ZonedDateTime.now(),
-                ZonedDateTime.now()
-        );
-
-        assertThatThrownBy(() -> warehouse.addProduct(productWithEmptyName))
+        assertThatThrownBy(() -> warehouse.addProduct(
+                new Product(
+                        UUID.randomUUID().toString(),
+                        "",
+                        Category.FOOD,
+                        3,
+                        ZonedDateTime.now(),
+                        ZonedDateTime.now()
+                )))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Product name cannot be empty or null.");
+
     }
 
     @Test
@@ -66,7 +66,7 @@ class WarehouseTest {
         Warehouse warehouse = new Warehouse();
 
         Product chewBone = new Product(
-                "p-001",
+                UUID.randomUUID().toString(),
                 "Chew Bone",
                 Category.FOOD,
                 4,
@@ -74,7 +74,7 @@ class WarehouseTest {
                 ZonedDateTime.now());
 
         Product SqueakyBanana = new Product(
-                "p-002",
+                UUID.randomUUID().toString(),
                 "Squeaky Banana",
                 Category.TOYS,
                 3,
@@ -96,7 +96,7 @@ class WarehouseTest {
     public void getAllProducts_throwsException_whenTryingToModifyReturnedList() {
         Warehouse warehouse = new Warehouse();
         Product redBlanket = new Product(
-                "p-001",
+                UUID.randomUUID().toString(),
                 "Red Blanket",
                 Category.BEDDING,
                 4,
@@ -108,7 +108,7 @@ class WarehouseTest {
         List<Product> allProducts = warehouse.getAllProducts();
 
         assertThatThrownBy(() -> allProducts.add(new Product(
-                "p-002",
+                UUID.randomUUID().toString(),
                 "Squeaky Banana",
                 Category.TOYS,
                 3,

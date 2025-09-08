@@ -16,8 +16,10 @@ public class Position {
         }
 
         for (int i = 0; i < dungeonMap.length; i++) {
-            for (int j = 0; j < dungeonMap[0].length; j++) {
-                if (dungeonMap[i][j].equals("@")) {
+            String[] row = dungeonMap[i];
+            if(row == null) continue;
+            for (int j = 0; j < row.length; j++) {
+                if (row[j].equals("@")) {
                     this.row = i;
                     this.col = j;
                     return;

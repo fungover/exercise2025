@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -55,10 +56,8 @@ class WarehouseTest {
                 ZonedDateTime.now()
         );
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            warehouse.addProduct(productWithEmptyName);
-        });
-
-        assertThat(exception.getMessage()).isEqualTo("Product name cannot be empty or null.");
+        assertThatThrownBy(() -> warehouse.addProduct(productWithEmptyName))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product name cannot be empty or null.");
     }
 }

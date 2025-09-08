@@ -15,6 +15,9 @@ public class Warehouse {
     }
 
     public void addProduct(Product product) {
-        products.add(product);
+        if (product.name() == null || product.name().isEmpty()){
+            throw new IllegalArgumentException("Product name cannot be empty or null.");
+    }
+        this.products.add(product);
     }
 }

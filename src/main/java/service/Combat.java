@@ -29,6 +29,7 @@ public class Combat {
         player.attack(enemy);
 
         if (!enemy.isAlive()) {
+            System.out.println("You killed " + enemy.getType());
             tile.setEnemy(null);
         } else {
             System.out.println(enemy.getType() + " has " + enemy.getHealth() + " hp");

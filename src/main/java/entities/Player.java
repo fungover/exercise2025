@@ -46,7 +46,7 @@ public class Player {
 
     public void addItem(Item item) {
         inventory.add(item);
-        System.out.printf("You just picked up " + item);
+        System.out.println("You just picked up " + item);
     }
 
     public void useItem(Item item) {

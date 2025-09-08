@@ -32,8 +32,8 @@ public class Movement {
             return;
         }
 
-        player.move(newX, newY);
-        System.out.println("Moved to" + player.getPosition());
+        player.move(dx, dy);
+        System.out.println("Moved to " + player.getPosition());
 
         if (destinationTile.getItem() != null) {
             Item item = destinationTile.getItem();

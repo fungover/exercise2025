@@ -25,4 +25,8 @@ public abstract class Item {
 
     public abstract void applyEffect(Player player);
 
+    @Override
+    public String toString() {
+        return name + " (" + type + ")";
+    }
 }

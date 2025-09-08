@@ -35,17 +35,26 @@ public class Warehouse {
         products.add(product);
     }
 
-    public void updateProduct(Product product) {
-        if (product == null || product.getName().isBlank()) {
+    public void updateProduct(String id, String name, Category category, int rating) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("Product id cannot be null or blank");
+        }
+        if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Product name cannot be null or blank");
+        }
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
         }
 
         int index = IntStream.range(0, products.size())
-                .filter(i -> products.get(i).getId() == product.getId())
+                .filter(i -> products.get(i).getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
-        products.set(index, product);
+        Product existingProduct = products.get(index);
+        Product updatedProduct = existingProduct.update(name, category, rating);
+
+        products.set(index, updatedProduct);
     }
 
     public List<Product> getProductsByCategorySorted(Category category) {

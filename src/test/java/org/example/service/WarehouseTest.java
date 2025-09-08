@@ -57,11 +57,14 @@ public class WarehouseTest {
         Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct);
 
-        Product updatedTestProduct = new Product("1", "Update Test Product", Category.GENERAL, 1);
-        warehouse.updateProduct(updatedTestProduct);
+        // Use the new method signature
+        warehouse.updateProduct("1", "Updated Test Product", Category.ELECTRONICS, 5);
 
-        assertThat(warehouse.getAllProducts()).contains(updatedTestProduct);
-        assertThat(warehouse.getAllProducts()).doesNotContain(testProduct);
+        Product updatedProduct = warehouse.getProductById("1").get();
+        assertThat(updatedProduct.getName()).isEqualTo("Updated Test Product");
+        assertThat(updatedProduct.getCategory()).isEqualTo(Category.ELECTRONICS);
+        assertThat(updatedProduct.getRating()).isEqualTo(5);
+        assertThat(updatedProduct.getId()).isEqualTo("1");
         assertThat(warehouse.getAllProducts().size()).isEqualTo(1);
     }
 
@@ -72,8 +75,7 @@ public class WarehouseTest {
         Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct);
 
-        Product updatedTestProduct = new Product("2", "Update Test Product", Category.GENERAL, 1);
-        assertThatThrownBy(() -> warehouse.updateProduct(updatedTestProduct))
+        assertThatThrownBy(() -> warehouse.updateProduct("2", "Updated Product", Category.GENERAL, 2))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

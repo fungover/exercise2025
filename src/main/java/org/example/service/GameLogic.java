@@ -1,6 +1,9 @@
 package org.example.service;
 
 import org.example.entities.Player;
+import org.example.entities.items.HealthPotion;
+import org.example.entities.items.Inventory;
+import org.example.entities.items.Item;
 import org.example.map.Dungeon;
 import org.example.map.Tile;
 
@@ -105,6 +108,17 @@ public class GameLogic {
                 System.out.println("Invalid input, only type what is displayed.");
             }
         }
+    }
+
+    public void pickUpItem(Item newItem, Inventory inventory, Class<? extends Item> itemClass) {
+        Item pickedUpItem;
+        if (inventory.getItem(itemClass) != null) {
+            pickedUpItem = inventory.getItem(itemClass);
+        } else {
+            pickedUpItem = newItem;
+        }
+        inventory.addItem(pickedUpItem);
+        System.out.println("A " + pickedUpItem.getType() + " has been picked up!");
     }
 
 }

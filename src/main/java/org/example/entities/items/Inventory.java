@@ -21,19 +21,10 @@ public class Inventory {
         }
     }
 
-    public Weapon getWeapon() {
+    public <T extends Item> T getItem(Class<T> itemClass) {
         for (Item item : items) {
-            if (item instanceof Weapon) {
-                return (Weapon) item;
-            }
-        }
-        return null;
-    }
-
-    public HealthPotion getHealthPotion() {
-        for (Item item : items) {
-            if (item instanceof HealthPotion) {
-                return (HealthPotion) item;
+            if (itemClass.isInstance(item)) {
+                return itemClass.cast(item);
             }
         }
         return null;

@@ -2,11 +2,17 @@ package org.example.entities.items;
 
 public class HealthPotion extends Item {
 
-    public HealthPotion(String name, int quantity) {
+    public HealthPotion(int quantity) {
+        String name = "Health Potion";
         super(name, quantity);
     }
 
     public int restoreHealth() {
         return 20;
+    }
+
+    @Override
+    public String getType() {
+        return "Health Potion";
     }
 }

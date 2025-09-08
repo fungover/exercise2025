@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class Game {
 
     // All game logic is executed here.
-    public static void run() throws InterruptedException {
+    public static void run() {
         Scanner scan = new Scanner(System.in);
         System.out.println("--------------------------------");
         System.out.println("\uD83E\uDDD9Welcome to my Dungeon Crawler!");
@@ -29,7 +29,7 @@ public class Game {
         Dungeon dungeon = new Dungeon(player);
 
         // Items
-        inventory.addItem(new Weapon("Sword", 1, 20));
+        inventory.addItem(new Weapon("Sword", 20));
 
         // Game loop
         while (true) {
@@ -40,14 +40,7 @@ public class Game {
             dungeon.printDungeon(inventory);
 
             if (logic.wishToPickUpItem(dungeon, player, scan)) {
-                HealthPotion potion;
-                if (inventory.getHealthPotion() != null) {
-                    potion = inventory.getHealthPotion();
-                } else {
-                    potion = new HealthPotion("Health Potion", 1);
-                }
-                inventory.addItem(potion);
-                System.out.println("A Health Potion has been picked up!");
+                logic.pickUpItem(new HealthPotion(1), inventory, HealthPotion.class);
             }
 
             if (logic.wishToFightEnemy(dungeon, player, scan)) {
@@ -68,16 +61,20 @@ public class Game {
         }
     }
 
-    private static void countDown() throws InterruptedException {
-        System.out.print("Your adventure begins in 3, ");
-        Thread.sleep(1000);
-        System.out.print("2, ");
-        Thread.sleep(1000);
-        System.out.print("1... ");
-        Thread.sleep(1000);
+    private static void countDown() {
+        try {
+            System.out.print("Your adventure begins in 3, ");
+            Thread.sleep(1000);
+            System.out.print("2, ");
+            Thread.sleep(1000);
+            System.out.print("1... ");
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println("Something went terribly wrong.");
+        }
     }
 
-    private static void pause() throws InterruptedException {
+    private static void pause() {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

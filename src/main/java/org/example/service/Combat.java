@@ -12,8 +12,8 @@ public class Combat {
 
     public void startFight(Player p, Inventory inventory, Scanner scan) {
         Enemy e = randomEnemy();
-        Weapon w = inventory.getWeapon();
-        HealthPotion hp = inventory.getHealthPotion();
+        Weapon w = inventory.getItem(Weapon.class);
+        HealthPotion hp = inventory.getItem(HealthPotion.class);
 
         boolean isFighting = true;
         System.out.println("It's a " + e.getName() + "!");

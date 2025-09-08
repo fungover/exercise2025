@@ -3,7 +3,8 @@ package org.example.entities.items;
 public class Weapon extends Item {
     private int damage;
 
-    public Weapon(String type, int quantity, int damage) {
+    public Weapon(String type, int damage) {
+        int quantity = 1;
         super(type, quantity);
         this.damage = damage;
     }

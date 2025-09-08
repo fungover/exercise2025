@@ -4,6 +4,7 @@ I then started to break down the assignment into smaller requirements and mapped
 different parts of the codebase. 
 My next steps:
 [] Choose inheritance, or interface
+[] Know when to use javadoc-tool or just ///
 [] test what I have built to this point and ask myself if I will embrace a TDD approach from here ??? 
 [] add commands, to get the game moving. 
 [] create entities 

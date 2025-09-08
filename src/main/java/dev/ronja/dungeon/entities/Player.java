@@ -15,23 +15,23 @@ package dev.ronja.dungeon.entities;
  *     <li>heal (increases HP, up to max)</li>
  *     <li>check if the player is still alive</li>
  * </ul>
- *
  **/
 
 public class Player {
     private final String name;
-    // Players current Health Point
     private int hp;
     private final int maxHp;
 
-    // Constructor
+    /**
+     * Constructs a new player with given name and default max HP
+     * @param name the player`s chosen name
+     **/
     public Player(String name) {
         this.name = name;
         this.maxHp = 100;
         this.hp = maxHp;
     }
 
-    // Getters - Info about player
     public String getName() {
         return name;
     }
@@ -44,14 +44,12 @@ public class Player {
         return maxHp;
     }
 
-    // Check if player is alive
     public boolean isAlive() {
         return hp > 0;
     }
 
     /**
      * Sets the players HP directly, but restricted between 0 and maxHp
-     *
      * @param newHp the new HP value
      **/
     public void setHp(int newHp) {
@@ -66,7 +64,6 @@ public class Player {
 
     /**
      * Method: Applies damage to the player
-     *
      * @param amount how much HP to subtract (must be >=0 )
      *               if amount is larger than current HP, HP is set to 0
      **/
@@ -80,7 +77,6 @@ public class Player {
 
     /**
      * Method: Heals the player
-     *
      * @param amount how much HP to restore (must be >= 0)
      *               healing cannot raise HP above maxHp
      **/
@@ -89,6 +85,7 @@ public class Player {
         System.out.println(name + " Healed for " + amount + " HP: " + hp + " / " + maxHp);
     }
 
+    /// Returns a human-readable string
     @Override
     public String toString() {
         return name + " HP: " + hp + " / " + maxHp + " / ";

@@ -47,6 +47,18 @@ public class RandomUtils {
 
             tiles[x][y].setItem(new Item("Potion", "potion", 30));
         }
+
+        //Place one unique map item
+        int mapX, mapY;
+        do {
+            mapX = random.nextInt(rows);
+            mapY = random.nextInt(cols);
+        } while (!tiles[mapX][mapY].isWalkable()
+                || tiles[mapX][mapY].getItem() != null
+                || tiles[mapX][mapY].getEnemy() != null
+                || (mapX == player.getX() && mapY == player.getY()));
+
+        tiles[mapX][mapY].setItem(new Item("Dungeon Map", "map", 0));
     }
 
     public static void placeEnemies(Tile[][] tiles, int enemyCount, Player player) {

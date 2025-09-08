@@ -33,7 +33,7 @@ public class Game {
         System.out.println("\nSelect difficulty(just type in the number):\n 1. Easy 2. Normal 3. Hard \n");
         String choice = "";
         do {
-            System.out.print("Choose your fate:");
+            System.out.print("Choose your fate: ");
             choice = input.nextLine();
             if (!choice.equals("1") && !choice.equals("2") && !choice.equals("3")) {
                 System.out.println("Invalid choice. Try again");
@@ -99,9 +99,9 @@ public class Game {
         };
 
         wallCount = switch (difficultyChoice) {
-            case 1 -> 3;
-            case 2 -> 15;
-            case 3 -> 30;
+            case 1 -> 10;
+            case 2 -> 25;
+            case 3 -> 40;
             default -> 15;
         };
 

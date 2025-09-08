@@ -5,6 +5,7 @@ import org.example.entities.Player;
 
 public class DungeonMap {    ;
     private Tile[][] dungeon;
+    private String heart = "\u2764";
 
     public DungeonMap(Tile[][] dungeon) {
         this.dungeon = dungeon;
@@ -16,11 +17,13 @@ public class DungeonMap {    ;
 
     //method to provide correct symbol for the tile
     private String getSymbolForTile(Tile tile, int row, int col, Player player) {
-        if (row == player.getX() && col == player.getY()) return "P";
+        if (row == player.getX() && col == player.getY()) return "X";
         if (!tile.isVisited()) return ".";
         if (!tile.isWalkable()) return "#";
         if (tile.getEnemy() != null) return "E";
-        if (tile.getItem() != null) return "P";
+        if (tile.getItem() != null) {
+            return "map".equals(tile.getItem().getType()) ? "M" : "P"; // map or potion
+        }
         return " ";
     }
 
@@ -37,8 +40,8 @@ public class DungeonMap {    ;
             }
             System.out.println();
         }
-        System.out.println("\n [?] = Unexplored tile, [P] = Player location, [E] = Enemy, [#] = Wall, [P] = Item \n");
-        String heart = "\u2764";
+
+        System.out.println("\n [?] = Unexplored tile, [X] = Your location, [E] = Enemy, [#] = Wall, [P] = Potion, [M] = Map \n");
         System.out.println("Hero name: " + player.getName() + " " + heart + "HP: " + player.getHealth() + "/100");
         Tile currentTile = dungeon[player.getX()][player.getY()];
         String onCurrentTile = "On current tile: ";
@@ -50,10 +53,5 @@ public class DungeonMap {    ;
         }  else {
             System.out.println(onCurrentTile + "Nothing");
         }
-
-
-
     }
-
 }
-

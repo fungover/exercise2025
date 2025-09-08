@@ -10,10 +10,16 @@ public class Weapon {
 
 List<Item> weapons = new ArrayList<>();
 
-    public void addWeapon(Item item) {
+    public Weapon(){
         weapons.add(new Sword());
+    }
+
+    public void setWeapon(Item item) {
         weapons.add(item);
-        PrintText.printYellow("Sword added to weapon inventory");
+        PrintText.printYellow("""
+    Sword added to weapon inventory.
+    Press j to check weapon inventory
+    """);
     }
 
     public int numWeapons() {
@@ -21,6 +27,9 @@ List<Item> weapons = new ArrayList<>();
     }
 
     public Item getWeapon(int num){
+        if(num < 0 || num >= weapons.size()){
+            throw new IndexOutOfBoundsException("Index Out of Bounds");
+        }
         return weapons.get(num);
     }
 

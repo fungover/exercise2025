@@ -78,6 +78,7 @@ private MovementLogic movementLogic;
                     break;
 
                 case "use potion":
+                    player.usePotion();
                     //  Använd en potion från inventory
                     break;
 

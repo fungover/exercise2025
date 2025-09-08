@@ -53,5 +53,20 @@ public class Player {
     public List<Item> getInventory() {
         return inventory;
     }
+
+
+    public void usePotion() {
+        for (Item item : inventory) {
+            if (item.getType().equals("potion")) {
+                int healAmount = item.getEffect();
+                health += healAmount;
+                if (health > 100) health = 100;
+                System.out.println("You used a " + item.getName() + "and healed " + healAmount + "!");
+                inventory.remove(item);
+                return;
+            }
+        }
+        System.out.println("You have no potions!");
+    }
 }
 

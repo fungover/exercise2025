@@ -22,7 +22,11 @@ public class API {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(response.body(), new TypeReference<>() {});
+        if (response.statusCode() == 200) {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(response.body(), new TypeReference<>() {});
+        } else {
+            return null;
+        }
     }
 }

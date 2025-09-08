@@ -11,8 +11,6 @@ public class App {
     static void main() {
         String zone = zoneSelection();
 
-        System.out.println("Selected zone: " + zone);
-
         DateTimeFormatter dayFmt = DateTimeFormatter.ofPattern("dd");
         DateTimeFormatter monthFmt = DateTimeFormatter.ofPattern("MM");
 
@@ -26,15 +24,30 @@ public class App {
             List<ElectricityPrice> pricesTomorrow = api.fetchPrices(zone, dayFmt.format(tomorrow), monthFmt.format(tomorrow), String.valueOf(tomorrow.getYear()));
 
             double meanPrice = CalculateMeanPrice(pricesToday);
-            double meanPriceTomorrow = CalculateMeanPrice(pricesTomorrow);
 
-            System.out.println("Mean price on the electricity for today: " + meanPrice + "(SEK/kWh)\nMean price on the electricity for tomorrow: " + meanPriceTomorrow + "(SEK/kWh)");
+            System.out.println("Mean price on the electricity for today: " + String.format("%.4f", meanPrice) + "(SEK/kWh)");
+
+            if (pricesTomorrow != null) {
+                System.out.println("The mean price for tomorrow is " + String.format("%.4f", CalculateMeanPrice(pricesTomorrow)) + "(SEK/kWh)");
+            } else {
+                System.out.println("The mean price for tomorrow could not be calculated at this time.");
+            }
 
             ElectricityPrice cheapest = getPrice(pricesToday, false);
             ElectricityPrice mostExpensive = getPrice(pricesToday, true);
 
-            System.out.println("Cheapest price is " + OffsetDateTime.parse(cheapest.time_start).format(DateTimeFormatter.ofPattern("HH:mm")) + " for " + cheapest.SEK_per_kWh + "(SEK/kWh)");
-            System.out.println("The most expensive price is " + OffsetDateTime.parse(mostExpensive.time_start).format(DateTimeFormatter.ofPattern("HH:mm")) + " for " + mostExpensive.SEK_per_kWh + "(SEK/kWh)");
+            System.out.println("Cheapest price is " + OffsetDateTime.parse(cheapest.time_start).format(DateTimeFormatter.ofPattern("HH:mm")) + " for " + String.format("%.4f", cheapest.SEK_per_kWh) + "(SEK/kWh)");
+            System.out.println("The most expensive price is " + OffsetDateTime.parse(mostExpensive.time_start).format(DateTimeFormatter.ofPattern("HH:mm")) + " for " + String.format("%.4f", mostExpensive.SEK_per_kWh) + "(SEK/kWh)");
+
+            double[] priceArray = makePricesArray(pricesToday);
+
+            int[] hourArr = {2, 4, 8};
+
+            System.out.println("If you would like to charge your vehicle, i would recommend start chargin at these times depending on the length you wish to charge:");
+
+            for (int i : hourArr) {
+                GetResultFromHours(priceArray, i, pricesToday);
+            }
 
         } catch (IOException | InterruptedException e) {
             System.out.println("Error fetching prices: " + e.getMessage());
@@ -93,5 +106,49 @@ public class App {
         }
 
         return best;
+    }
+
+    public static double[] makePricesArray(List<ElectricityPrice> prices) {
+        double[] result = new double[prices.size()];
+        for (int i = 0; i < prices.size(); i++) {
+            result[i] = prices.get(i).SEK_per_kWh;
+        }
+
+        return result;
+    }
+
+    public static BestHoursRecord getCheapestHours(double[] prices, int hours) {
+        int n = prices.length;
+
+        double sum = 0;
+        for (int i = 0; i < hours; i++) {
+            sum += prices[i];
+        }
+
+        double bestSum = sum;
+        int bestStart = 0;
+
+        for (int start = 1; start <= n - hours; start++) {
+            sum = sum - prices[start - 1] + prices[start + hours - 1];
+            if (sum < bestSum) {
+                bestSum = sum;
+                bestStart = start;
+            }
+        }
+
+        return new BestHoursRecord(bestStart, bestSum);
+    }
+
+    public static void GetResultFromHours(double[] priceArray, int hours, List<ElectricityPrice> prices) {
+        BestHoursRecord returningResult = getCheapestHours(priceArray, hours);
+
+        int bestStart = returningResult.startIndex();
+        double sum = returningResult.totalSum();
+
+        String startTime = OffsetDateTime
+                .parse(prices.get(bestStart).time_start)
+                .format(DateTimeFormatter.ofPattern("HH:mm"));
+
+        System.out.println("(" + hours + " hours) start charging at " + startTime + ". It will cost a total of " + String.format("%.2f", sum) + "kr");
     }
 }

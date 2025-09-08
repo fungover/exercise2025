@@ -56,7 +56,7 @@ public class Warehouse {
     public List<Product> getProductsByCategorySorted(Category category) {
         return products.values().stream() // Convert the collection of products to a stream
                 .filter(product -> product.category() == category) // Filter products by the specified category
-                .sorted(Comparator.comparing(Product::name)) // Sort the filtered products by name in ascending order
+                .sorted(Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER)) // Sort the filtered products by name in ascending order
                 .collect(Collectors.toList()); // Collect the sorted products into a list and return it
     }
 
@@ -92,7 +92,7 @@ public class Warehouse {
     // Return a Map<Character, Integer> of the first letters in product names and their counts.
     public Map<Character, Integer> getProductInitialsMap() {
         return products.values().stream() // Taking all the product names with values.
-                .map(product -> Character.toUpperCase(product.name().charAt(0)))  // Mapping to the first character of each product name and converting it to uppercase.
+                .map(product -> Character.toUpperCase(product.name().trim().charAt(0)))  // Mapping to the first character of each product name and converting it to uppercase.
                 .collect(Collectors.groupingBy(  // Grouping by the first character.
                         character -> character,
                         Collectors.collectingAndThen(
@@ -115,7 +115,7 @@ public class Warehouse {
         if (maxRating.isEmpty()) { // If no products were created this month, return an empty list
             return Collections.emptyList();
         }
-        // Return products with max rating, created this month, sorted by newest first.
+        // Return products with max rating, created this month, sorted by the newest first.
         return products.values().stream()
                 .filter(product -> !product.createdDate().isBefore(startOfMonth)) // Filter products created this month
                 .filter(product -> product.rating() == maxRating.getAsInt()) // Filter products with the maximum rating

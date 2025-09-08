@@ -161,7 +161,7 @@ class WarehouseTest {
     // ========================================
 
     @Test
-    @DisplayName("Should return products in category sorted by name (A-Z")
+    @DisplayName("Should return products in category sorted by name (A-Z)")
     void getProductsByCategorySortedSuccessfullyByName() {
 
         Product laptop = Warehouse.createProduct("1", "Gaming Laptop", Category.ELECTRONICS, 9);
@@ -183,8 +183,8 @@ class WarehouseTest {
     @DisplayName("Should return empty list when no products in the specified category")
     void getProductsByCategorySortedWhenNoProductsInCategory() {
 
-        Product electronisProduct = Warehouse.createProduct("1", "Laptop", Category.ELECTRONICS, 8);
-        warehouse.addProduct(electronisProduct);
+        Product electronicsProduct = Warehouse.createProduct("1", "Laptop", Category.ELECTRONICS, 8);
+        warehouse.addProduct(electronicsProduct);
 
         List<Product> toys = warehouse.getProductsByCategorySorted(Category.TOYS); // Attempt to retrieve products in the TOYS category when none exist
 
@@ -212,7 +212,7 @@ class WarehouseTest {
         List<Product> recentProducts = warehouse.getProductsCreatedAfter(baseDate); // Retrieve products created after baseDate (2025-09-02)
 
         assertEquals(1, recentProducts.size()); // Verify that there is 1 product created after the specified date
-        assertEquals("New Product", recentProducts.getFirst().name()); // Verify that the product is "New Product"
+        assertEquals("New Product", recentProducts.get(0).name()); // Verify that the product is "New Product"
     }
 
     @Test
@@ -247,7 +247,7 @@ class WarehouseTest {
         List<Product> modifiedProducts = warehouse.getModifiedProducts(); // Retrieve the list of modified products
 
         assertEquals(1, modifiedProducts.size()); // Verify that there is 1 modified product
-        assertEquals("Modified Product", modifiedProducts.getFirst().name()); // Verify that the modified product has the updated name
+        assertEquals("Modified Product", modifiedProducts.get(0).name()); // Verify that the modified product has the updated name
     }
 
     @Test

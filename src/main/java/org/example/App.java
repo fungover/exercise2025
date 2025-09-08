@@ -23,7 +23,7 @@ public class App {
 
 // Products created 1 day ago.
         warehouse.addProduct(Warehouse.createOldProduct("15", "Smartphone", Category.ELECTRONICS, 10, 1));
-        warehouse.addProduct(Warehouse.createOldProduct("16", "Ipad", Category.ELECTRONICS, 10, 1));
+        warehouse.addProduct(Warehouse.createOldProduct("16", "ipad", Category.ELECTRONICS, 10, 1));
 
 // Products created 2 days ago.
         warehouse.addProduct(Warehouse.createOldProduct("14", "Chocolate Bar", Category.FOOD, 6, 2));
@@ -49,7 +49,7 @@ public class App {
 // Products created 14 days ago.
         warehouse.addProduct(Warehouse.createOldProduct("12", "LEGO Set", Category.TOYS, 9, 14));
 
-// Produkter skapade för 30 dagar sedan.
+// Products created 30 days ago.
         warehouse.addProduct(Warehouse.createOldProduct("7", "Ancient Furniture", Category.FURNITURE, 4, 30));
 
 // Products created with specific dates.
@@ -88,13 +88,13 @@ public class App {
         System.out.println("\n=== VG ASSIGNMENT TEST ===");
 
         Set<Category> categories = warehouse.getCategoriesWithProducts();
-        System.out.println("\n=== CATEGORIES WITH PRODUCT: " + categories + " ===");
+        System.out.println("\n=== CATEGORIES WITH PRODUCTS: " + categories + " ===");
 
         long electronicsCount = warehouse.countProductsInCategory(Category.ELECTRONICS);
         System.out.println("\n=== NUMBER OF PRODUCTS IN ELECTRONICS: " + electronicsCount + " ===");
 
         Map<Character, Integer> initials = warehouse.getProductInitialsMap();
-        System.out.println("\n=== NUMBER OF FIRST CHARACTER OCCURENCES IN EACH PRODUCT: " + initials + " ===");
+        System.out.println("\n=== NUMBER OF FIRST CHARACTER OCCURRENCES IN EACH PRODUCT: " + initials + " ===");
 
         System.out.println("\n=== TOP RATED PRODUCTS THIS MONTH ===");
         List<Product> topRated = warehouse.getTopRatedProductsThisMonth();

@@ -1,6 +1,7 @@
 package org.example.entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-public record Product(String id, String name, CategoryType category,
-                      int rating, Date createdDate, Date modifiedDate) {}
+public record Product(String id, String name, Category category,
+                      int rating, LocalDateTime createdDate,
+                      LocalDateTime modifiedDate) {}

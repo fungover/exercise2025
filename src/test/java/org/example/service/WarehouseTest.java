@@ -36,7 +36,7 @@ class WarehouseTest {
 
         warehouse.addProduct(clicker);
 
-        List<Product> products = warehouse.products();
+        List<Product> products = warehouse.getAllProducts();
 
         assertThat(products)
                 .hasSize(1)
@@ -59,4 +59,36 @@ class WarehouseTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Product name cannot be empty or null.");
     }
+
+    @Test
+    @DisplayName("Returns all added products to Warehouse")
+    public void getAllProducts_returnsAllAddedProducts() {
+        Warehouse warehouse = new Warehouse();
+
+        Product chewBone = new Product(
+                "p-001",
+                "Chew Bone",
+                Category.FOOD,
+                4,
+                ZonedDateTime.now(),
+                ZonedDateTime.now());
+
+        Product SqueakyBanana = new Product(
+                "p-002",
+                "Squeaky Banana",
+                Category.TOYS,
+                3,
+                ZonedDateTime.now(),
+                ZonedDateTime.now());
+
+        warehouse.addProduct(chewBone);
+        warehouse.addProduct(SqueakyBanana);
+
+        List<Product> allProducts = warehouse.getAllProducts();
+
+        assertThat(allProducts)
+                .hasSize(2)
+                .containsExactly(chewBone, SqueakyBanana);
+    }
+
 }

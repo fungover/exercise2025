@@ -49,6 +49,10 @@ public class Warehouse {
     }
 
     public List<Product> getProductsByCategorySorted(Category category) {
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+        }
+
         return products.stream()
                 .filter(p -> p.getCategory() == category)
                 .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))

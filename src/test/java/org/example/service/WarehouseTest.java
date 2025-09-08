@@ -159,6 +159,16 @@ public class WarehouseTest {
     }
 
     @Test
+    @DisplayName("getProductsByCategorySorted: throws exception if invalid input")
+    public void throwsExceptionIfNoCategoryProvided() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL);
+
+        assertThatThrownBy(() -> warehouse.getProductsByCategorySorted(null))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
     @DisplayName("getProductsCreatedAfter(LocalDate date): returns Products created after a given date")
     public void getProductsCreatedAfter() {
         Warehouse warehouse = new Warehouse();

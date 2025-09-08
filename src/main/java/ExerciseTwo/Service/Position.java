@@ -10,8 +10,12 @@ public class Position {
     }
 
     private void findPlayer(String[][] dungeonMap) {
-        for (int i = 0; i < dungeonMap.length; i++) {
 
+        if(dungeonMap == null || dungeonMap.length == 1){
+            throw new IllegalArgumentException("Map is null or empty");
+        }
+
+        for (int i = 0; i < dungeonMap.length; i++) {
             for (int j = 0; j < dungeonMap[0].length; j++) {
                 if (dungeonMap[i][j].equals("@")) {
                     this.row = i;

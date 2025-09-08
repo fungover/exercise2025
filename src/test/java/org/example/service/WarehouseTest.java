@@ -10,8 +10,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class WarehouseTest {
 
+    // Helper methods
+    private Product addProductToWarehouse(Warehouse warehouse, String id, String name, Category category) {
+        Product product = new Product(id, name, category, 1);
+        warehouse.addProduct(product);
+        return product;
+    }
+
     @Test
-    @DisplayName("addProduct: adds a new product to Warehouse")
+    @DisplayName("addProduct: adds a new Product to Warehouse")
     public void addProduct() {
         Warehouse warehouse = new Warehouse();
         Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
@@ -21,7 +28,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("addProduct: throws IllegalArgumentException if product name is blank")
+    @DisplayName("addProduct: throws IllegalArgumentException if Product name is blank")
     public void throwExceptionIfNoProductNameProvided() {
         Warehouse warehouse = new Warehouse();
         Product testProduct = new Product("1", "", Category.GENERAL, 1);
@@ -31,7 +38,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("updateProduct: updates an existing product by ID")
+    @DisplayName("updateProduct: updates an existing Product by ID")
     public void updateProduct() {
         Warehouse warehouse = new Warehouse();
         Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
@@ -46,7 +53,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("updateProduct: throws IllegalArgumentException if product ID is not found")
+    @DisplayName("updateProduct: throws IllegalArgumentException if Product ID is not found")
     public void throwExceptionIfNoProductFoundToUpdate() {
         Warehouse warehouse = new Warehouse();
         Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
@@ -58,7 +65,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("getAllProducts: returns all products in warehouse")
+    @DisplayName("getAllProducts: returns all Products in Warehouse")
     public void getAllProducts() {
         Warehouse warehouse = new Warehouse();
 
@@ -73,7 +80,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("getAllProducts: returns empty list if warehouse is empty")
+    @DisplayName("getAllProducts: returns empty list if Warehouse is empty")
     public void getAllProductsEmptyWarehouse() {
         Warehouse warehouse = new Warehouse();
         assertThat(warehouse.getAllProducts()).isEmpty();
@@ -90,7 +97,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("getProductById: throws IllegalArgumentException if product ID is not found")
+    @DisplayName("getProductById: throws IllegalArgumentException if Product ID is not found")
     public void throwExceptionIfNoProductFound() {
         Warehouse warehouse = new Warehouse();
         Product testProduct = new Product("99", "Test Product", Category.GENERAL, 1);
@@ -98,6 +105,34 @@ public class WarehouseTest {
 
         assertThatThrownBy(() -> warehouse.getProductById("100"))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("getProductsByCategorySorted: returns Products in a category, sorted A-Z by name")
+    public void getProductsByCategorySorted() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL);
+        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL);
+        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Television", Category.GENERAL);
+        Product testProduct4 = addProductToWarehouse(warehouse, "4", "Sandwich", Category.GENERAL);
+        Product testProduct5 = addProductToWarehouse(warehouse, "5", "Candy", Category.GENERAL);
+        Product testProduct6 = addProductToWarehouse(warehouse, "6", "VR Glasses", Category.GENERAL);
+        Product testProduct7 = addProductToWarehouse(warehouse, "7", "Android TV", Category.ELECTRONICS);
+
+        assertThat(warehouse.getProductsByCategorySorted(Category.GENERAL))
+                .extracting(Product::getName)
+                .containsExactly("Candy", "Computer", "Laptop", "Sandwich", "Television", "VR Glasses");
+    }
+
+    @Test
+    @DisplayName("getProductsByCategorySorted: returns empty list if Category is empty")
+    public void getProductsByCategorySortedEmptyCategory() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL);
+        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL);
+        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Television", Category.GENERAL);
+
+        assertThat(warehouse.getProductsByCategorySorted(Category.ELECTRONICS)).isEmpty();
     }
 
 }

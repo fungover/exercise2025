@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.entities.Category;
 import org.example.entities.Product;
 
 import java.util.ArrayList;
@@ -42,4 +43,10 @@ public class Warehouse {
         products.set(index, product);
     }
 
+    public List<Product> getProductsByCategorySorted(Category category) {
+        return products.stream()
+                .filter(p -> p.getCategory() == category)
+                .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
+                .toList();
+    }
 }

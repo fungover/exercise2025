@@ -14,19 +14,23 @@ public class API {
     public List<ElectricityPrice> fetchPrices(String zone, String day, String month, String year) throws IOException, InterruptedException {
         String apiUrl = "https://www.elprisetjustnu.se/api/v1/prices/" + year + "/"+ month +"-" + day + "_" + zone + ".json";
 
-        HttpClient client = HttpClient.newHttpClient();
+
+        HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(java.time.Duration.ofSeconds(10))
+                .build();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(apiUrl))
                 .header("Accept", "application/json")
+                .timeout(java.time.Duration.ofSeconds(10))
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(response.body(), new TypeReference<>() {});
+            return mapper.readValue(response.body(), new TypeReference<List<ElectricityPrice>>() {});
         } else {
-            return null;
+            return java.util.List.of();
         }
     }
 }

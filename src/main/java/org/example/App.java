@@ -8,7 +8,7 @@ import java.util.List;
 import java.io.IOException;
 
 public class App {
-    static void main() {
+    public static void main(String[] args) {
         String zone = zoneSelection();
 
         DateTimeFormatter dayFmt = DateTimeFormatter.ofPattern("dd");
@@ -23,12 +23,17 @@ public class App {
             List<ElectricityPrice> pricesToday = api.fetchPrices(zone, dayFmt.format(today), monthFmt.format(today), String.valueOf(today.getYear()));
             List<ElectricityPrice> pricesTomorrow = api.fetchPrices(zone, dayFmt.format(tomorrow), monthFmt.format(tomorrow), String.valueOf(tomorrow.getYear()));
 
+            if (pricesToday == null || pricesToday.isEmpty()) {
+                System.out.println("No price data available for today.");
+                return;
+            }
+
             double meanPrice = CalculateMeanPrice(pricesToday);
 
-            System.out.println("Mean price on the electricity for today: " + String.format("%.4f", meanPrice) + "(SEK/kWh)");
+            System.out.println("Mean price for today: " + String.format("%.4f", meanPrice) + " (SEK/kWh)");
 
             if (pricesTomorrow != null) {
-                System.out.println("The mean price for tomorrow is " + String.format("%.4f", CalculateMeanPrice(pricesTomorrow)) + "(SEK/kWh)");
+                System.out.println("Mean price for tomorrow: " + String.format("%.4f", CalculateMeanPrice(pricesTomorrow)) + " (SEK/kWh)");
             } else {
                 System.out.println("The mean price for tomorrow could not be calculated at this time.");
             }
@@ -43,7 +48,7 @@ public class App {
 
             int[] hourArr = {2, 4, 8};
 
-            System.out.println("If you would like to charge your vehicle, i would recommend start chargin at these times depending on the length you wish to charge:");
+            System.out.println("If you would like to charge your vehicle, I recommend starting at these times depending on how long you plan to charge:");
 
             for (int i : hourArr) {
                 GetResultFromHours(priceArray, i, pricesToday);
@@ -63,13 +68,23 @@ public class App {
         System.out.println("Please select what zone you would like to see with the corresponding number");
 
         Scanner scanner = new Scanner(System.in);
-        String selection = scanner.nextLine();
-
-        return "SE" + selection;
+        String selection = scanner.nextLine().trim();
+        return switch (selection) {
+            case "1" -> "SE1";
+            case "2" -> "SE2";
+            case "3" -> "SE3";
+            case "4" -> "SE4";
+            default -> {
+                System.out.println("Invalid selection. Defaulting to SE3.");
+                yield "SE3";
+            }
+        };
     }
 
     public static double CalculateMeanPrice(List<ElectricityPrice> prices) {
-        double meanP = 0;
+        if (prices == null || prices.isEmpty()) return 0.0;
+
+        double meanP = 0.0;
 
         for (ElectricityPrice price : prices) {
             meanP += price.SEK_per_kWh;
@@ -119,6 +134,10 @@ public class App {
 
     public static BestHoursRecord getCheapestHours(double[] prices, int hours) {
         int n = prices.length;
+
+        if (hours <= 0 || hours > n) {
+            throw new IllegalArgumentException("Hours must be between 1 and " + n);
+        }
 
         double sum = 0;
         for (int i = 0; i < hours; i++) {

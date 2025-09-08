@@ -6,6 +6,7 @@ import org.example.entities.Product;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 public class Warehouse {
@@ -16,11 +17,14 @@ public class Warehouse {
         return new ArrayList<>(products);
     }
 
-    public Product getProductById(String id) {
-      return products.stream()
-              .filter(p -> p.getId().equals(id))
-              .findFirst()
-              .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    public Optional<Product> getProductById(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("Product id cannot be null or blank");
+        }
+
+        return products.stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst();
     }
 
     // Methods

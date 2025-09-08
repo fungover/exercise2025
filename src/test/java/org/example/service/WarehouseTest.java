@@ -106,17 +106,27 @@ public class WarehouseTest {
         Product testProduct = new Product("99", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct);
 
-        assertThat(warehouse.getProductById("99")).isEqualTo(testProduct);
+        assertThat(warehouse.getProductById("99")).contains(testProduct);
     }
 
     @Test
-    @DisplayName("getProductById: throws IllegalArgumentException if Product ID is not found")
-    public void throwExceptionIfNoProductFound() {
+    @DisplayName("getProductById: returns empty Optional if Product ID is not found")
+    public void returnsEmptyOptionalIfNoProductFound() {
         Warehouse warehouse = new Warehouse();
         Product testProduct = new Product("99", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct);
 
-        assertThatThrownBy(() -> warehouse.getProductById("100"))
+        assertThat(warehouse.getProductById("100")).isEmpty();
+    }
+
+    @Test
+    @DisplayName("getProductById: throws exception if invalid input")
+    public void throwsExceptionIfNoProductIdProvided() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct = new Product("99", "Test Product", Category.GENERAL, 1);
+        warehouse.addProduct(testProduct);
+
+        assertThatThrownBy(() -> warehouse.getProductById(""))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

@@ -3,6 +3,8 @@ package org.example.entities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProductTest {
@@ -11,6 +13,7 @@ public class ProductTest {
     private String name;
     private Category category;
     private int rating;
+    private LocalDate createdDate;
     private Product product;
 
     @BeforeEach
@@ -19,7 +22,9 @@ public class ProductTest {
         name = "Test product";
         category = Category.ELECTRONICS;
         rating = 8;
-        product = new Product(id, name, category, rating);
+        createdDate = LocalDate.of(2025, 9, 8);
+
+        product = new Product(id, name, category, rating, createdDate);
     }
 
     @Test
@@ -51,12 +56,19 @@ public class ProductTest {
         String name = "Test product";
         Category category = Category.ELECTRONICS;
         int rating = 8;
+        LocalDate createdDate = LocalDate.of(2025, 9, 8);
         // When
-        Product product = new Product(id, name, category, rating);
+        Product product = new Product(id, name, category, rating, createdDate);
         // Then
         assertEquals(id, product.id());
         assertEquals(name, product.name());
         assertEquals(category, product.category());
         assertEquals(rating, product.rating());
+        assertEquals(createdDate, product.createdDate());
+    }
+
+    @Test
+    void productShouldHaveCreatedDate() {
+        assertEquals(createdDate, product.createdDate());
     }
 }

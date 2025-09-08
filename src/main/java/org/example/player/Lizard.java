@@ -1,4 +1,4 @@
-package org.example.entities;
+package org.example.player;
 
 import org.example.rng.RandomGen;
 
@@ -8,17 +8,17 @@ import java.util.List;
 public class Lizard {
 	private int health;
 	private int defense;
-	private List<String> equipment;
-	private List<String> inventory;
-	private String name;
-	private RandomGen randomGen;
+	private final List<String> equipment;
+	private final List<String> inventory;
+	private final String name;
+	private final RandomGen randomGen;
 
 	public Lizard(String name) {
 		this.name = name;
 		health = 30;
 		defense = 0;
-		equipment = new ArrayList<String>();
-		inventory = new ArrayList<String>();
+		equipment = new ArrayList<>();
+		inventory = new ArrayList<>();
 		randomGen = new RandomGen();
 	}
 

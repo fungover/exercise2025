@@ -1,4 +1,4 @@
-package org.example.entities;
+package org.example.enemies;
 
 import org.example.rng.RandomGen;
 

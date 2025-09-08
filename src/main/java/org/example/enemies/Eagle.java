@@ -1,23 +1,23 @@
-package org.example.entities;
+package org.example.enemies;
 
 import org.example.rng.RandomGen;
 
 import java.util.Random;
 
-public class Falcon extends Enemy {
-	public Falcon() {
+public class Eagle extends Enemy {
+	public Eagle() {
 		randomGen = new RandomGen();
 		random = new Random();
 		super.health = 20;
-		super.name = "Falcon";
-		super.emoji = "🐦";
+		super.name = "Eagle";
+		super.emoji = "🦅";
 	}
 
 	public int attack() {
 		if (randomGen.generateRandom(5)) {
-			return 12;
+			return 12; // Chance at critical hit
 		} else {
-			return 5; // Default damage for Falcons
+			return 5; // Default damage for Eagles
 		}
 	}
 }

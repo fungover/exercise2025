@@ -28,7 +28,7 @@ public class GameLogic {
 
         Scanner sc = new Scanner(System.in);
 
-        PlayerInput playerInput = new PlayerInput(inventory, player, weapon);
+        PlayerInput playerInput = new PlayerInput(inventory, player, weapon, sc);
         HandleFinds handleItem = new HandleFinds();
 
         dungeon.printMap();
@@ -51,7 +51,7 @@ public class GameLogic {
                     while (true) {
                         int attackOfPlayer = combat.playerAttack();
                         int enemyDamage = combat.enemyDamage(attackOfPlayer);
-                        if (enemyDamage < 0) {
+                        if (enemyDamage <= 0) {
                             combat.enemyDefeated();
                             break;
                         }
@@ -83,7 +83,7 @@ public class GameLogic {
             if(event.equals("sword")){
                 Item diamondSword = new DiamondSword();
                 diamondSword.itemDescription();
-                weapon.addWeapon(diamondSword);
+                weapon.setWeapon(diamondSword);
             }
 
             if (event.equals("door")) break;

@@ -14,6 +14,7 @@ public class ProductTest {
     private Category category;
     private int rating;
     private LocalDate createdDate;
+    private LocalDate modifiedDate;
     private Product product;
 
     @BeforeEach
@@ -23,8 +24,9 @@ public class ProductTest {
         category = Category.ELECTRONICS;
         rating = 8;
         createdDate = LocalDate.of(2025, 9, 8);
+        modifiedDate = createdDate;
 
-        product = new Product(id, name, category, rating, createdDate);
+        product = new Product(id, name, category, rating, createdDate, createdDate);
     }
 
     @Test
@@ -57,8 +59,9 @@ public class ProductTest {
         Category category = Category.ELECTRONICS;
         int rating = 8;
         LocalDate createdDate = LocalDate.of(2025, 9, 8);
+        modifiedDate = createdDate;
         // When
-        Product product = new Product(id, name, category, rating, createdDate);
+        Product product = new Product(id, name, category, rating, createdDate, modifiedDate);
         // Then
         assertEquals(id, product.id());
         assertEquals(name, product.name());
@@ -70,5 +73,12 @@ public class ProductTest {
     @Test
     void productShouldHaveCreatedDate() {
         assertEquals(createdDate, product.createdDate());
+    }
+
+    @Test
+    void modifiedDateShouldInitiallyEqualCreatedDate() {
+        assertEquals(createdDate, product.createdDate());
+        assertEquals(modifiedDate, product.modifiedDate());
+        assertEquals(product.createdDate(), product.modifiedDate());
     }
 }

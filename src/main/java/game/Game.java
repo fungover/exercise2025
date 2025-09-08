@@ -130,7 +130,6 @@ public class Game {
         }
     }
 
-
     // --- Attack ---
     private void handleAttack() {
         Tile t = dungeon.getTile(player.getX(), player.getY());

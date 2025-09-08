@@ -8,14 +8,9 @@ import utils.Printer;
 public class CombatService {
 
     public static void playerAttack(Player player, Tile tile) {
-        if (player == null) {
-            Printer.error("No player present.");
-            return;
-        }
-        if (tile == null) {
-            Printer.error("There is nothing to attack here.");
-            return;
-        }
+        if (player == null) { Printer.error("No player present."); return; }
+        if (tile == null)   { Printer.error("There is nothing to attack here."); return; }
+
         Enemy enemy = tile.getEnemy();
         if (enemy == null || !enemy.isAlive()) {
             Printer.error("There is no enemy to attack here.");
@@ -29,7 +24,7 @@ public class CombatService {
 
         if (!enemy.isAlive()) {
             Printer.info(enemy.getType() + " is defeated!");
-            tile.removeEnemy(); // safe: Tile handles type reset
+            tile.removeEnemy();
         }
     }
 

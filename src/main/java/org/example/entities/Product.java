@@ -34,6 +34,7 @@ public final class Product {
     public LocalDate getModifiedDate() { return modifiedDate; }
     public Category getCategory() { return category; }
 
+
     // Factory method för uppdateringar
     public Product withUpdates(String name, Category category, int rating) {
         return new Product(

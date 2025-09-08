@@ -9,47 +9,57 @@ import utils.Printer;
 public class InventoryService {
     public static final int DEFAULT_MAX_SLOTS = 8;
 
-    /** Försök lägga till ett item om plats finns. */
     public static boolean addItem(Player player, Item item, int maxSlots) {
         if (player.getInventory().size() >= maxSlots) {
-            Printer.error("Inventariet är fullt (" + maxSlots + " platser).");
+            Printer.error("Inventory is full (" + maxSlots + " slots).");
             return false;
         }
         player.addItem(item);
-        Printer.info("Du plockade upp: " + item.getName());
+        Printer.info("Picked up: " + item.getName());
         return true;
     }
 
-    /** Använd item via index (0-baserat). */
     public static void useItemByIndex(Player player, int index) {
         if (index < 0 || index >= player.getInventory().size()) {
-            Printer.error("Ogiltigt index.");
+            Printer.error("Invalid inventory index.");
             return;
         }
         Item item = player.getInventory().get(index);
         item.use(player);
         if (isConsumable(item)) {
+            // remove by index to avoid shifting issues after equals()
             player.removeItem(item);
         }
-        Printer.info("Använde: " + item.getName());
+        Printer.info("Used: " + item.getName());
     }
 
-    /** Använd item genom att matcha namn.*/
     public static void useItemByName(Player player, String namePart) {
-        for (Item item : player.getInventory()) {
-            if (item.getName().toLowerCase().contains(namePart.toLowerCase())) {
-                item.use(player);
-                if (isConsumable(item)) {
-                    player.removeItem(item);
-                }
-                Printer.info("Använde: " + item.getName());
-                return;
+        if (namePart == null || namePart.isEmpty()) {
+            Printer.error("Specify an item name.");
+            return;
+        }
+        // Index-based search to avoid ConcurrentModificationException
+        int foundIndex = -1;
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            Item it = player.getInventory().get(i);
+            if (it.getName().toLowerCase().contains(namePart.toLowerCase())) {
+                foundIndex = i;
+                break;
             }
         }
-        Printer.error("Item hittades inte: " + namePart);
+        if (foundIndex == -1) {
+            Printer.error("Item not found: " + namePart);
+            return;
+        }
+
+        Item item = player.getInventory().get(foundIndex);
+        item.use(player);
+        if (isConsumable(item)) {
+            player.removeItem(item); // safe: not inside for-each
+        }
+        Printer.info("Used: " + item.getName());
     }
 
-    /** Potion och Weapon är engångs. */
     private static boolean isConsumable(Item item) {
         return (item instanceof HealingPotion) || (item instanceof Weapon);
     }

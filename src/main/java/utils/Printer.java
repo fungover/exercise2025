@@ -35,7 +35,7 @@ public class Printer {
     public static void printTileInfo(Dungeon d, int x, int y) {
         Tile t = d.getTile(x, y);
         if (t == null) {
-            System.out.println("You are outside the dungeon!?");
+            System.out.println("Here: (outside the dungeon)");
             return;
         }
         System.out.print("Here: " + t.getType());

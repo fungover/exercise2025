@@ -100,6 +100,9 @@ public class Game {
 
     private void handleCommand(Command cmd) {
         switch (cmd.action()) {
+            case "empty":
+                Printer.info("No command entered. Type 'help' to see available commands.");
+                break;
             case "move":
                 MovementService.move(player, dungeon, cmd.arg());
                 break;
@@ -123,9 +126,10 @@ public class Game {
                 Printer.info("Game exited.");
                 break;
             default:
-                Printer.error("Unknown command.");
+                Printer.error("Unknown command. Type 'help' to see available commands.");
         }
     }
+
 
     // --- Attack ---
     private void handleAttack() {

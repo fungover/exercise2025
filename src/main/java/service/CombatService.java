@@ -5,45 +5,39 @@ import entities.Player;
 import map.Tile;
 import utils.Printer;
 
-/**
- * CombatService hanterar strider mellan spelare och fiender.
- */
 public class CombatService {
 
-    /**
-     * Spelaren attackerar fienden på en given tile.
-     */
     public static void playerAttack(Player player, Tile tile) {
+        if (player == null) {
+            Printer.error("No player present.");
+            return;
+        }
+        if (tile == null) {
+            Printer.error("There is nothing to attack here.");
+            return;
+        }
         Enemy enemy = tile.getEnemy();
         if (enemy == null || !enemy.isAlive()) {
-            Printer.error("Ingen fiende att attackera här.");
+            Printer.error("There is no enemy to attack here.");
             return;
         }
 
-        int damage = player.getBaseDamage(); // enkel formel: bara basdamage
+        int damage = player.getBaseDamage();
         enemy.takeDamage(damage);
-
-        Printer.info("Du attackerar " + enemy.getType() + " för " + damage +
-                " skada. (HP kvar: " + enemy.getHealth() + ")");
+        Printer.info("You hit the " + enemy.getType() + " for " + damage +
+                " damage. (Enemy HP: " + enemy.getHealth() + ")");
 
         if (!enemy.isAlive()) {
-            Printer.info(enemy.getType() + " är besegrad!");
-            tile.removeEnemy();
+            Printer.info(enemy.getType() + " is defeated!");
+            tile.removeEnemy(); // safe: Tile handles type reset
         }
     }
 
-    /**
-     * Fienden attackerar spelaren.
-     */
     public static void enemyAttack(Enemy enemy, Player player) {
-        if (enemy == null || !enemy.isAlive() || player == null || !player.isAlive()) {
-            return;
-        }
-
+        if (enemy == null || !enemy.isAlive() || player == null || !player.isAlive()) return;
         int dmg = enemy.getDamage();
         player.takeDamage(dmg);
-
-        Printer.info(enemy.getType() + " attackerar dig för " + dmg +
-                " skada! (Din HP: " + player.getHealth() + ")");
+        Printer.info(enemy.getType() + " hits you for " + dmg +
+                " damage! (Your HP: " + player.getHealth() + ")");
     }
 }

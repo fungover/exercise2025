@@ -16,16 +16,12 @@ import service.MovementService;
 import java.util.Scanner;
 
 public class Game {
-    private final Player player;
-    private final Dungeon dungeon;
+    private Player player;
+    private Dungeon dungeon;
     private final InputParser parser;
     private boolean isRunning = true;
 
     public Game() {
-        // Initialize player, dungeon, helpers
-        this.player = new Player("Hero", 30, 0, 0);
-        Rng rng = new Rng(); // random seed
-        this.dungeon = MapGenerator.createInitialWorld(10, 10, player, rng);
         this.parser = new InputParser();
     }
 
@@ -33,8 +29,21 @@ public class Game {
         Printer.printWelcome();
         Scanner sc = new Scanner(System.in);
 
+        // --- Start sequence: ask for player name ---
+        System.out.print("Enter your name: ");
+        String name = sc.nextLine().trim();
+        if (name.isEmpty()) name = "Hero";
+
+        // --- Initialize player and map ---
+        this.player = new Player(name, 30, 0, 0);
+        Rng rng = new Rng(); // random seed
+        this.dungeon = MapGenerator.createInitialWorld(10, 10, player, rng);
+
+        // Show help once at the start
+        Printer.printHelp();
+
         while (isRunning) {
-            // --- 1) Show short status ---
+            // --- 1) Show short status + tile info ---
             Printer.printStatus(player);
             Printer.printTileInfo(dungeon, player.getX(), player.getY());
 

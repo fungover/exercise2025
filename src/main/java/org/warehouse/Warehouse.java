@@ -24,4 +24,7 @@ public class Warehouse {
   public List<Product> getAllProducts() {
     return new ArrayList<>(products);
   }
+
+//  public List<Product> updateProducts(Product product) {
+//  }
 }

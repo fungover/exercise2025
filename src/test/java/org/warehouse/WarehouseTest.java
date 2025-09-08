@@ -5,7 +5,9 @@ import org.warehouse.entities.Category;
 import org.warehouse.entities.Product;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WarehouseTest {
@@ -29,9 +31,19 @@ public class WarehouseTest {
             LocalDate.now());
 
     warehouse.addProduct(product);
+    List<Product> products = warehouse.getAllProducts();
 
-    assertEquals(1, warehouse.getAllProducts().size());
-    assertEquals("Film", warehouse.getAllProducts().getFirst().getName());
-    assertEquals(Category.THRILLER, warehouse.getAllProducts().getFirst().getCategory());
+    assertThat(products)
+            .hasSize(1)
+            .contains(product);
+
+//    assertEquals(1, warehouse.getAllProducts().size());
+//    assertEquals("Film", warehouse.getAllProducts().getFirst().getName());
+//    assertEquals(Category.THRILLER, warehouse.getAllProducts().getFirst().getCategory());
+  }
+
+  @Test
+  public void updateProductToWarehouse() {
+    Warehouse warehouse = new Warehouse("Test warehouse");
   }
 }

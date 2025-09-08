@@ -8,7 +8,7 @@ public class Troll extends Enemy {
 
     @Override
     public void description() {
-        System.out.println("The encounter a hugh "+ type +" with "+health+" hp");
+        System.out.println("You encounter a hugh "+ type +" with "+health+" hp");
     }
 
 }

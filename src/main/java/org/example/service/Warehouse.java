@@ -6,27 +6,31 @@ import org.example.entities.Product;
 
 import java.time.LocalDate;
 import java.util.*;
+
 public class Warehouse {
 
     private final Map<String, Product> products = new HashMap<>();
 
-    // --- G-level methods ---
 
+    // addProduct(Product product): Add a new product (validate name is not empty)
     public void addProduct(Product product) {
-        if (product == null) {
-            throw new IllegalArgumentException("Product cannot be null");
-        }
-        if (product.getName().isBlank()) {
-            throw new IllegalArgumentException("Product name cannot be empty");
-        }
-        if (products.containsKey(product.getId())) {
-            throw new IllegalArgumentException("Product with this ID already exists");
+
+            if (product == null) {
+                throw new IllegalArgumentException("Product cannot be null");
+            }
+            if (product.name().isBlank()) {
+                throw new IllegalArgumentException("Product name cannot be empty");
+            }
+            if (products.containsKey(product.id())) {
+                throw new IllegalArgumentException("Product with this ID already exists");
+            }
+            products.put(product.id(), product);
         }
 
-        products.put(product.getId(), product);
-    }
 
+        // updateProduct(String id, String name, Category category, int rating): Modify an existing product
     public void updateProduct(String id, String name, Category category, int rating) {
+
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
@@ -38,52 +42,58 @@ public class Warehouse {
         }
 
         Product existing = products.get(id);
+
         if (existing == null) {
             throw new IllegalArgumentException("Product with id " + id + " does not exist");
         }
 
-        Product updated = existing.withUpdates(name, category, rating);
+        Product updated  = new Product(existing.id(), name, category, rating, existing.createdDate(), LocalDate.now());
         products.put(id, updated);
     }
 
-    /**
-     * Retrieve all products in a given category, sorted alphabetically by name.
-     *
-     * @param category the category to filter by
-     * @return a list of products in the category, sorted A–Z
-     */
+    // getAllProducts(): Retrieve all products
+    public List<Product> getAllProducts() {
 
-    public List<Product> getProductsByCategorySorted(Category category) {
+        products.values().forEach(System.out::println); // Just to see the products in console, can be removed later
+        return List.copyOf(products.values());
+    }
+
+    // getProductById(String id): Retrieve product by ID
+    public Product getProductById(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("Id cannot be null or empty");
+        }
+        Product product = products.get(id);
+        if (product == null) {
+            throw new IllegalArgumentException("Product with id " + id + " does not exist");
+        }
+        return product;
+    }
+
+    //getProductsByCategorySorted(Category category): Products in a category, sorted A–Z by name
+    public  List<Product> getProductsByCategorySorted(Category category) {
         return products.values()
                 .stream()
-                .filter(p -> p.getCategory() == category)
-                .sorted(Comparator.comparing(Product::getName))
+                .filter(p -> p.category() == category)
+                .sorted(Comparator.comparing(Product::name))
                 .toList();
     }
 
+    // getProductsCreatedAfter(LocalDate date): Products created after a specific date
     public List<Product> getProductsCreatedAfter(LocalDate date) {
-        return null; // TODO: implement
+        return products.values()
+                .stream()
+                .filter(p -> p.createdDate().isAfter(date))
+                .toList();
     }
 
+    //getModifiedProducts(): Products where createdDate != modifiedDate
     public List<Product> getModifiedProducts() {
-        return null; // TODO: implement
+        return products.values()
+                .stream()
+                .filter(product -> !product.createdDate().equals(product.modifiedDate()))
+                .toList();
     }
 
-    // --- VG-level methods ---
 
-    public Set<Category> getCategoriesWithProducts() {
-        return null; // TODO: implement
-    }
-
-    public long countProductsInCategory(Category category) {
-        return 0; // TODO: implement
-    }
-
-    public Map<Character, Long> getProductInitialsMap() {
-        return null; // TODO: implement
-    }
-
-    public List<Product> getTopRatedProductsThisMonth() {
-        return null; // TODO: implement
-    }
 }

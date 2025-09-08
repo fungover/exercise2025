@@ -28,10 +28,19 @@ public class Warehouse {
         products.put(productId, product);
     }
 
-
     public List<Product> getAllProducts() {
         return products.values()
                 .stream()
                 .collect(Collectors.toUnmodifiableList());
     }
+
+    public Optional<Product> getProductById(String id) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            return Optional.ofNullable(products.get(uuid));
+        } catch (IllegalArgumentException e) {
+            return Optional.empty();
+        }
+    }
+
 }

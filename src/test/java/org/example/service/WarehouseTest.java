@@ -121,4 +121,42 @@ class WarehouseTest {
                 .containsExactly(redBlanket);
 
     }
+
+    @Test
+    @DisplayName("Returns product by valid ID")
+    void getProductById_returnsProduct_whenIdExists() {
+        Product chewBone = new Product(
+                UUID.randomUUID().toString(),
+                "Chew Bone",
+                Category.FOOD,
+                4,
+                ZonedDateTime.now(),
+                ZonedDateTime.now());
+
+        warehouse.addProduct(chewBone);
+
+        Optional<Product> result = warehouse.getProductById(chewBone.id());
+
+        assertThat(result)
+                .isPresent()
+                .contains(chewBone);
+    }
+
+    @Test
+    @DisplayName("Returns empty when product ID does not exist")
+    void getProductById_returnsEmpty_whenIdDoesNotExist() {
+        Optional<Product> result = warehouse.getProductById(UUID.randomUUID().toString());
+
+        assertThat(result)
+                .isEmpty();
+    }
+
+    @Test
+    @DisplayName("Returns empty when ID is not a valid UUID")
+    void getProductById_returnsEmpty_whenIdIsInvalidFormat() {
+        Optional<Product> result = warehouse.getProductById("not-a-uuid");
+
+        assertThat(result)
+                .isEmpty();
+    }
 }

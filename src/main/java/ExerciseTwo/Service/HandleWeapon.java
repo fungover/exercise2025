@@ -9,9 +9,7 @@ import java.util.Scanner;
 
 public class HandleWeapon {
 
-    public static void handleWeapon(Weapon weapon, Player player) {
-
-        Scanner sc = new Scanner(System.in);
+    public static void handleWeapon(Weapon weapon, Player player, Scanner sc) {
 
         boolean checkWeapon = weapon.getWeapons();
 

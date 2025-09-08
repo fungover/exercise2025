@@ -26,7 +26,7 @@ public class PlayerInput {
 
         switch (inputFromPlayer) {
             case "i" : HandleInventory.handleInventory(inventory, player, sc); return true;
-            case "j" : HandleWeapon.handleWeapon(weapon, player); return true;
+            case "j" : HandleWeapon.handleWeapon(weapon, player, sc); return true;
             case "h":  InputHandling.commands(); return true;
             case "p" : player.playerHealth(); return true;
             case "quit": System.exit(0);

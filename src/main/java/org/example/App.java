@@ -143,7 +143,7 @@ public class App {
     public static BestHoursRecord getCheapestHours(double[] prices, int hours) {
         int n = prices.length;
         if (hours <= 0 || hours > n) {
-            throw new IllegalArgumentException("Hours must be between 1 and " + n);
+            throw new IllegalArgumentException("hours must be between 1 and " + n);
         }
 
         double sum = 0;
@@ -166,7 +166,7 @@ public class App {
     }
 
     public static void GetResultFromHours(double[] priceArray, int hours, List<ElectricityPrice> prices) {
-        if (priceArray == null || prices.isEmpty()) {
+        if (priceArray == null || prices == null) {
             throw new IllegalArgumentException("Arrays must not be null");
         }
         BestHoursRecord returningResult = getCheapestHours(priceArray, hours);

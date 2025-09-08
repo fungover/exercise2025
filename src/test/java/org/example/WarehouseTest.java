@@ -1,4 +1,29 @@
 package org.example;
 
+import org.example.entities.Category;
+import org.example.entities.Product;
+import org.example.service.Warehouse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class WarehouseTest {
+    private Warehouse warehouse;
+
+    @BeforeEach
+    void setUp() {
+        warehouse = new Warehouse();
+    }
+
+    @Test
+    void addProductSuccess() {
+        Product product = new Product("1", "Laptop", Category.ELECTRONICS, 8, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(product);
+
+        assertEquals(1, warehouse.getAllProducts().size());
+        assertEquals("Laptop", warehouse.getAllProducts().get(0).name());
+    }
 }

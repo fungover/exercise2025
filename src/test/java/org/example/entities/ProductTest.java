@@ -26,7 +26,7 @@ public class ProductTest {
         createdDate = LocalDate.of(2025, 9, 8);
         modifiedDate = createdDate;
 
-        product = new Product(id, name, category, rating, createdDate, createdDate);
+        product = new Product(id, name, category, rating, createdDate);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ProductTest {
         LocalDate createdDate = LocalDate.of(2025, 9, 8);
         modifiedDate = createdDate;
         // When
-        Product product = new Product(id, name, category, rating, createdDate, modifiedDate);
+        Product product = new Product(id, name, category, rating, createdDate);
         // Then
         assertEquals(id, product.id());
         assertEquals(name, product.name());

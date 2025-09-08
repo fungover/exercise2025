@@ -4,11 +4,14 @@ public class Product {
     String id;
     String name;
     Category category;
+    int rating;
 
-    public Product(String id, String name, Category category) {
+
+    public Product(String id, String name, Category category, int rating) {
         this.id = id;
         this.name = name;
         this.category = category;
+        this.rating = rating;
     }
 
     public String id() {
@@ -24,4 +27,7 @@ public class Product {
     }
 
 
+    public int rating() {
+        return rating;
+    }
 }

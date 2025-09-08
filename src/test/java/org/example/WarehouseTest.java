@@ -21,15 +21,33 @@ public class WarehouseTest {
 
     @Test
     void addProductSuccess() {
-        Product product = new Product("1", "Laptop", Category.ELECTRONICS, 8, LocalDate.now(), LocalDate.now());
+        Product product = new Product("1", "Car", Category.TOYS, 8, LocalDate.now(), LocalDate.now());
         warehouse.addProduct(product);
 
         assertEquals(1, warehouse.getAllProducts().size());
-        assertEquals("Laptop", warehouse.getAllProducts().get(0).name());
+        assertEquals("Car", warehouse.getAllProducts().get(0).name());
     }
 
     @Test
     void addProductFailure() {
         assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(null));
+    }
+
+    @Test
+    void updateProductSuccess() {
+        Product product = new Product("1", "Car", Category.TOYS, 8, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(product);
+
+        Product updated = warehouse.updateProduct(
+                "1",
+                "Laptop",
+                Category.ELECTRONICS,
+                10
+        );
+        assertEquals("Laptop", updated.name());
+        assertEquals(10, updated.rating());
+
+
+
     }
 }

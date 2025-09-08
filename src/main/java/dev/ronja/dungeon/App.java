@@ -1,7 +1,12 @@
-package org.example;
+package dev.ronja.dungeon;
 
+import dev.ronja.dungeon.game.Game;
+
+/**
+ * Starts the Game
+ **/
 public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello There!");
+    static void main(String[] args) {
+        new Game().run();
     }
 }

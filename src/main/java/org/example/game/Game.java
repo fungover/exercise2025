@@ -3,6 +3,7 @@ package org.example.game;
 import org.example.entities.Player;
 import org.example.map.Dungeon;
 import org.example.service.MovementLogic;
+import org.example.map.Tile;
 import java.util.Scanner;
 
 public class Game {
@@ -52,6 +53,8 @@ private MovementLogic movementLogic;
                     break;
 
                 case "look":
+                    Tile currentTile = dungeon.getTile(player.getRow(), player.getCol());
+                    System.out.println("You are standing on a: " + currentTile.getTileType() + " tile");
                     //  Visa vilken tile spelaren står på
                     break;
 
@@ -80,6 +83,7 @@ private MovementLogic movementLogic;
 //För OOP = låta Player eller en MovementService hantera förflyttning - inte i Game
 
     }
+
 
 
 }

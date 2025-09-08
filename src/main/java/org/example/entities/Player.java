@@ -17,20 +17,16 @@ public class Player {
     }
 
     public String getName() {
-
         return name;
     } // returns players name
 
     public int getHealth() {
-
         return health;
     } // returns players health
 
     public void setHealth(int health) {
-
         this.health = health;
     }  // updating players health
-
 
     public int getRow() {
         return row;

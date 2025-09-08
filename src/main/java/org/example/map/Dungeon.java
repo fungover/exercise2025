@@ -5,7 +5,6 @@ import java.util.stream.IntStream;
 public class Dungeon {
 
     private Tile[][] tiles;
-
     public Dungeon(int rows, int cols) {
         tiles = new Tile[rows][cols];
 

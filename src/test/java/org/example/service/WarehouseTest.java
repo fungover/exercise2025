@@ -73,10 +73,31 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("getAllProducts returns empty list if warehouse is empty")
+    @DisplayName("getAllProducts: returns empty list if warehouse is empty")
     public void getAllProductsEmptyWarehouse() {
         Warehouse warehouse = new Warehouse();
         assertThat(warehouse.getAllProducts()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("getProductById: returns a Product by id")
+    public void getProductById() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct = new Product(99, "Test Product", Category.GENERAL, 1);
+        warehouse.addProduct(testProduct);
+
+        assertThat(warehouse.getProductById(99)).isEqualTo(testProduct);
+    }
+
+    @Test
+    @DisplayName("getProductById: throws IllegalArgumentException if product ID is not found")
+    public void throwExceptionIfNoProductFound() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct = new Product(99, "Test Product", Category.GENERAL, 1);
+        warehouse.addProduct(testProduct);
+
+        assertThatThrownBy(() -> warehouse.getProductById(100))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
 }

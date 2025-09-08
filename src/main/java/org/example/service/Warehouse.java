@@ -14,6 +14,13 @@ public class Warehouse {
         return new ArrayList<>(products);
     }
 
+    public Product getProductById(int id) {
+        return products.stream()
+                .filter(p -> p.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    }
+
     // Methods
     public void addProduct(Product product) {
         if (product == null || product.getName().isBlank()) {

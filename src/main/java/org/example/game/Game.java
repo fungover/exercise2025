@@ -3,6 +3,7 @@ package org.example.game;
 import org.example.entities.Item;
 import org.example.entities.Player;
 import org.example.entities.Potion;
+import org.example.entities.Weapon;
 import org.example.map.Dungeon;
 import org.example.service.MovementLogic;
 import org.example.map.Tile;
@@ -23,7 +24,9 @@ private MovementLogic movementLogic;
     player = new Player(name);
     dungeon = new Dungeon(3, 3);
     movementLogic = new MovementLogic();
-    player.addItem(new Potion("Small Potion", 20)); // en test för att se om det funkar att se inventory
+    player.addItem(new Potion("Small Potion", 20));  // en test för att se om det funkar att se inventoryplayer.addItem(new Weapon("Fire Sword", 20));
+    player.addItem(new Weapon("Wooden Sword", 10));
+    player.addItem(new Weapon("Fire Sword", 10));
 
     System.out.println("Well Hello, " + player.getName() + ". Step inside and see what happens...");
     System.out.println("Your health is " + player.getHealth());

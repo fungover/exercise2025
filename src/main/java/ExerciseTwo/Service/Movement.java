@@ -2,6 +2,7 @@ package ExerciseTwo.Service;
 
 import ExerciseTwo.Game.PlayerInput;
 import ExerciseTwo.Utils.PrintText;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 
 import java.util.Scanner;
 
@@ -41,48 +42,53 @@ public record Movement(Position position) {
 
     public String checkMovement(String[][] dungeonMap, String move) {
 
-        int playerRow = position.getRow();
-        int playerCol = position.getCol();
+        int newRow = position.getRow();
+        int newCol = position.getCol();
 
         if (move.equals("north")) {
-            playerRow--;
+            newRow--;
         }
         if (move.equals("south")) {
-            playerRow++;
+            newRow++;
         }
         if (move.equals("east")) {
-            playerCol++;
+            newCol++;
         }
         if (move.equals("west")) {
-            playerCol--;
+            newCol--;
         }
 
-        String checkMap = dungeonMap[playerRow][playerCol];
+        if(newRow < 0 || newRow >= dungeonMap.length || newCol < 0 || newCol >= dungeonMap[newRow].length){
+            System.out.println("You cant move outside of the map");
+            return "wall";
+        }
+
+        String checkMap = dungeonMap[newRow][newCol];
 
         switch (checkMap) {
             case " ", "@" -> {
-                position.setPosition(playerRow, playerCol);
+                position.setPosition(newRow, newCol);
                 return "path";
                 //or update map for @
             }
             case "P" -> {
-                position.setPosition(playerRow, playerCol);
+                position.setPosition(newRow, newCol);
                 return "potion";
             }
             case "E" -> {
-                position.setPosition(playerRow, playerCol);
+                position.setPosition(newRow, newCol);
                 return "enemy";
             }
             case "G" -> {
-                position.setPosition(playerRow, playerCol);
+                position.setPosition(newRow, newCol);
                 return "coin";
             }
             case "S" -> {
-                position.setPosition(playerRow, playerCol);
+                position.setPosition(newRow, newCol);
                 return "sword";
             }
             case "D" -> {
-                position.setPosition(playerRow, playerCol);
+                position.setPosition(newRow, newCol);
                 return "door";
             }
             case "T" -> {

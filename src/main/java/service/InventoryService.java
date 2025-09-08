@@ -10,6 +10,14 @@ public class InventoryService {
     public static final int DEFAULT_MAX_SLOTS = 8;
 
     public static boolean addItem(Player player, Item item, int maxSlots) {
+        if (player == null) {
+        Printer.error("No player present.");
+        return false;
+        }
+        if (item == null) {
+        Printer.error("Cannot pick up a null item.");
+        return false;
+        }
         if (player.getInventory().size() >= maxSlots) {
             Printer.error("Inventory is full (" + maxSlots + " slots).");
             return false;
@@ -20,6 +28,10 @@ public class InventoryService {
     }
 
     public static void useItemByIndex(Player player, int index) {
+        if (player == null) {
+        Printer.error("No player present.");
+            return;
+        }
         if (index < 0 || index >= player.getInventory().size()) {
             Printer.error("Invalid inventory index.");
             return;
@@ -34,6 +46,10 @@ public class InventoryService {
     }
 
     public static void useItemByName(Player player, String namePart) {
+        if (player == null) {
+            Printer.error("No player present.");
+            return;
+        }
         if (namePart == null || namePart.isEmpty()) {
             Printer.error("Specify an item name.");
             return;

@@ -6,6 +6,7 @@ package entities;
 public class Weapon implements Item {
     private final String name;
     private final int bonusDamage;
+    private boolean applied = false;
 
     public Weapon(String name, int bonusDamage) {
         this.name = name;
@@ -19,8 +20,9 @@ public class Weapon implements Item {
 
     @Override
     public void use(Player player) {
-        if (player != null && player.isAlive()) {
+        if (player != null && player.isAlive() && !applied && bonusDamage > 0) {
             player.setBaseDamage(player.getBaseDamage() + bonusDamage);
+            applied = true;
         }
     }
 }

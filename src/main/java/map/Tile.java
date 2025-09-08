@@ -36,9 +36,11 @@ public class Tile {
 
     public void removeEnemy() {
         this.enemy = null;
-        if (this.type.equals(TileType.ENEMY)) {
+        if (this.item != null) {
+            this.type = TileType.ITEM;
+            } else if (TileType.ENEMY.equals(this.type)) {
             this.type = TileType.EMPTY;
-        }
+            }
     }
 
     public Item getItem() {
@@ -55,9 +57,11 @@ public class Tile {
     public Item pickUpItem() {
         Item picked = this.item;
         this.item = null;
-        if (this.type.equals(TileType.ITEM)) {
+        if (this.enemy != null) {
+            this.type = TileType.ENEMY;
+            } else if (TileType.ITEM.equals(this.type)) {
             this.type = TileType.EMPTY;
-        }
+            }
         return picked;
     }
 

@@ -27,42 +27,47 @@ public class Game {
 
     public void run() {
         Printer.printWelcome();
-        Scanner sc = new Scanner(System.in);
+        try(Scanner sc = new Scanner(System.in)) {
 
-        // --- Start sequence: ask for player name ---
-        System.out.print("Enter your name: ");
-        String name = sc.nextLine().trim();
-        if (name.isEmpty()) name = "Hero";
+            // --- Start sequence: ask for player name ---
+            System.out.print("Enter your name: ");
+            String name = sc.nextLine().trim();
+            if (name.isEmpty()) name = "Hero";
 
-        // --- Initialize player and map ---
-        this.player = new Player(name, 30, 0, 0);
-        Rng rng = new Rng(); // random seed
-        this.dungeon = MapGenerator.createInitialWorld(10, 10, player, rng);
+            // --- Initialize player and map ---
+            this.player = new Player(name, 30, 0, 0);
+            Rng rng = new Rng(); // random seed
+            this.dungeon = MapGenerator.createInitialWorld(10, 10, player, rng);
 
-        // Show help once at the start
-        Printer.printHelp();
+            // Show help once at the start
+            Printer.printHelp();
 
-        while (isRunning) {
-            // --- 1) Show short status + tile info ---
-            Printer.printStatus(player);
-            Printer.printTileInfo(dungeon, player.getX(), player.getY());
+            while (isRunning) {
+                // --- 1) Show short status + tile info ---
+                Printer.printStatus(player);
+                Printer.printTileInfo(dungeon, player.getX(), player.getY());
 
-            // --- 2) Read command ---
-            System.out.print("> ");
-            String input = sc.nextLine();
-            Command cmd = parser.parse(input);
+                // --- 2) Read command ---
+                System.out.print("> ");
+                if (!sc.hasNextLine()) {
+                    break; // EOF
+                }
+                String input = sc.nextLine();
+                Command cmd = parser.parse(input);
 
-            // --- 3) Execute command ---
-            handleCommand(cmd);
+                // --- 3) Execute command ---
+                handleCommand(cmd);
+                if (!isRunning) {
+                    break; // quit should be immediate
+                }
 
-            // --- 6) Enemies take their turn (simple AI) ---
-            enemyTurns();
+                // --- 6) Enemies take their turn ---
+                enemyTurns();
 
-            // --- 7) Check win/lose conditions ---
-            checkEndConditions();
+                // --- 7) Check win/lose conditions ---
+                checkEndConditions();
+            }
         }
-
-        sc.close();
     }
 
     // --- Win/Lose checks  ---

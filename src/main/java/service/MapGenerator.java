@@ -68,8 +68,20 @@ public class MapGenerator {
                 return new int[]{x, y};
             }
         }
-        // fallback (borde ej hända om kartan inte är för blockerad)
-        return new int[]{1, 1};
+        // Deterministic fallback: scan interior for the first valid EMPTY tile
+        for (int y = 1; y < d.getHeight() - 1; y++) {
+            for (int x = 1; x < d.getWidth() - 1; x++) {
+                Tile t2 = d.getTile(x, y);
+                if (t2 != null
+                        && d.isWalkable(x, y)
+                        && TileType.EMPTY.equals(t2.getType())
+                        && t2.getEnemy() == null
+                        && t2.getItem() == null) {
+                        return new int[]{x, y};
+                        }
+                }
+            }
+        throw new IllegalStateException("Map generation failed: no empty interior tile available.");
     }
 
     private static void setPlayerPosition(Player p, int x, int y) {

@@ -57,8 +57,11 @@ public class MovementService {
 
         // Item
         if (TileType.ITEM.equals(tile.getType()) && tile.getItem() != null) {
-            service.InventoryService.addItem(player, tile.pickUpItem(), service.InventoryService.DEFAULT_MAX_SLOTS);
-        }
+            var item = tile.getItem();
+            if (service.InventoryService.addItem(player, item, service.InventoryService.DEFAULT_MAX_SLOTS)) {
+                tile.pickUpItem();
+                }
+            }
 
 
         // Enemy

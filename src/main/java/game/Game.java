@@ -65,6 +65,39 @@ public class Game {
         sc.close();
     }
 
+    // --- Win/Lose checks  ---
+    private void checkEndConditions() {
+        if (!player.isAlive()) {
+            Printer.info("You died! Game Over.");
+            isRunning = false;
+            return;
+        }
+
+        Tile t = dungeon.getTile(player.getX(), player.getY());
+        if (TileType.EXIT.equals(t.getType())) {
+            Printer.info("You found the exit! You win!");
+            isRunning = false;
+            return;
+        }
+
+        if (allEnemiesDefeated()) {
+            Printer.info("All enemies defeated! You win!");
+            isRunning = false;
+        }
+    }
+
+    private boolean allEnemiesDefeated() {
+        for (int y = 0; y < dungeon.getHeight(); y++) {
+            for (int x = 0; x < dungeon.getWidth(); x++) {
+                Tile tile = dungeon.getTile(x, y);
+                if (tile.getEnemy() != null && tile.getEnemy().isAlive()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private void handleCommand(Command cmd) {
         switch (cmd.action()) {
             case "move":
@@ -122,25 +155,11 @@ public class Game {
             for (int x = 0; x < dungeon.getWidth(); x++) {
                 Tile t = dungeon.getTile(x, y);
                 Enemy e = t.getEnemy();
-                if (e != null && e.isAlive() &&
-                        e.getX() == player.getX() && e.getY() == player.getY()) {
+                if (e != null && e.isAlive()
+                        && e.getX() == player.getX() && e.getY() == player.getY()) {
                     CombatService.enemyAttack(e, player);
                 }
             }
-        }
-    }
-
-    // --- Check win/lose ---
-    private void checkEndConditions() {
-        if (!player.isAlive()) {
-            Printer.info("You died! Game Over.");
-            isRunning = false;
-            return;
-        }
-        Tile t = dungeon.getTile(player.getX(), player.getY());
-        if (TileType.EXIT.equals(t.getType())) {
-            Printer.info("You found the exit! You win!");
-            isRunning = false;
         }
     }
 }

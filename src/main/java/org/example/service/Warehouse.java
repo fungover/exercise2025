@@ -33,5 +33,5 @@ public class Warehouse {
         return products.values()
                 .stream()
                 .collect(Collectors.toUnmodifiableList());
-}
+    }
 }

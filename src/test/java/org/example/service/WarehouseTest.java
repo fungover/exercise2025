@@ -14,7 +14,7 @@ public class WarehouseTest {
     @DisplayName("addProduct: adds a new product to Warehouse")
     public void addProduct() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product(1, "Test Product", Category.GENERAL, 1);
+        Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct);
 
         assertThat(warehouse.getAllProducts()).contains(testProduct);
@@ -24,7 +24,7 @@ public class WarehouseTest {
     @DisplayName("addProduct: throws IllegalArgumentException if product name is blank")
     public void throwExceptionIfNoProductNameProvided() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product(1, "", Category.GENERAL, 1);
+        Product testProduct = new Product("1", "", Category.GENERAL, 1);
 
         assertThatThrownBy(() -> warehouse.addProduct(testProduct))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -34,10 +34,10 @@ public class WarehouseTest {
     @DisplayName("updateProduct: updates an existing product by ID")
     public void updateProduct() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product(1, "Test Product", Category.GENERAL, 1);
+        Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct);
 
-        Product updatedTestProduct = new Product(1, "Update Test Product", Category.GENERAL, 1);
+        Product updatedTestProduct = new Product("1", "Update Test Product", Category.GENERAL, 1);
         warehouse.updateProduct(updatedTestProduct);
 
         assertThat(warehouse.getAllProducts()).contains(updatedTestProduct);
@@ -49,10 +49,10 @@ public class WarehouseTest {
     @DisplayName("updateProduct: throws IllegalArgumentException if product ID is not found")
     public void throwExceptionIfNoProductFoundToUpdate() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product(1, "Test Product", Category.GENERAL, 1);
+        Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct);
 
-        Product updatedTestProduct = new Product(2, "Update Test Product", Category.GENERAL, 1);
+        Product updatedTestProduct = new Product("2", "Update Test Product", Category.GENERAL, 1);
         assertThatThrownBy(() -> warehouse.updateProduct(updatedTestProduct))
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -62,10 +62,10 @@ public class WarehouseTest {
     public void getAllProducts() {
         Warehouse warehouse = new Warehouse();
 
-        Product testProduct1 = new Product(1, "Test Product", Category.GENERAL, 1);
+        Product testProduct1 = new Product("1", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct1);
 
-        Product testProduct2 = new Product(1, "Test Product", Category.GENERAL, 1);
+        Product testProduct2 = new Product("1", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct2);
 
         assertThat(warehouse.getAllProducts()).contains(testProduct1, testProduct2);
@@ -83,20 +83,20 @@ public class WarehouseTest {
     @DisplayName("getProductById: returns a Product by id")
     public void getProductById() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product(99, "Test Product", Category.GENERAL, 1);
+        Product testProduct = new Product("99", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct);
 
-        assertThat(warehouse.getProductById(99)).isEqualTo(testProduct);
+        assertThat(warehouse.getProductById("99")).isEqualTo(testProduct);
     }
 
     @Test
     @DisplayName("getProductById: throws IllegalArgumentException if product ID is not found")
     public void throwExceptionIfNoProductFound() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product(99, "Test Product", Category.GENERAL, 1);
+        Product testProduct = new Product("99", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct);
 
-        assertThatThrownBy(() -> warehouse.getProductById(100))
+        assertThatThrownBy(() -> warehouse.getProductById("100"))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

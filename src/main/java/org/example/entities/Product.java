@@ -3,7 +3,7 @@ package org.example.entities;
 import java.time.LocalDate;
 
 public class Product {
-    private final int id;
+    private final String id;
     private final String name;
     private final Category category;
     private final int rating;
@@ -11,19 +11,19 @@ public class Product {
     private final LocalDate modifiedDate;
 
     // Constructors
-    public Product(int id) {
+    public Product(String id) {
         this(id, "");
     }
 
-    public Product(int id, String name) {
+    public Product(String id, String name) {
         this(id, name, Category.GENERAL);
     }
 
-    public Product(int id, String name, Category category) {
+    public Product(String id, String name, Category category) {
         this(id, name, category, 0);
     }
 
-    public Product(int id, String name, Category category, int rating) {
+    public Product(String id, String name, Category category, int rating) {
         LocalDate now = LocalDate.now();
         this.id = id;
         this.name = name;
@@ -33,7 +33,7 @@ public class Product {
         this.modifiedDate = now;
     }
 
-    private Product(int id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate) {
+    private Product(String id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -43,7 +43,7 @@ public class Product {
     }
 
     // Getters
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 

@@ -3,7 +3,7 @@ package org.example.map;
 import org.example.entities.Tile;
 import org.example.entities.Player;
 
-public class DungeonMap {
+public class DungeonMap {    ;
     private Tile[][] dungeon;
 
     public DungeonMap(Tile[][] dungeon) {
@@ -20,7 +20,7 @@ public class DungeonMap {
         if (!tile.isVisited()) return ".";
         if (!tile.isWalkable()) return "#";
         if (tile.getEnemy() != null) return "E";
-        if (tile.getItem() != null) return "I";
+        if (tile.getItem() != null) return "P";
         return " ";
     }
 
@@ -29,7 +29,7 @@ public class DungeonMap {
         int rows = dungeon.length;
         int cols = dungeon[0].length;
 
-        System.out.println("Dungeon map:");
+        System.out.println("\n\nDungeon map:");
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 Tile tile = dungeon[i][j];
@@ -37,8 +37,20 @@ public class DungeonMap {
             }
             System.out.println();
         }
-        System.out.println("\n [?] = Unexplored tile, [P] = Player location, [E] = Enemy, [#] = Wall, [I] = Item \n");
-        System.out.println("Hero name: " + player.getName() + " HP: " + player.getHealth() + "/100");
+        System.out.println("\n [?] = Unexplored tile, [P] = Player location, [E] = Enemy, [#] = Wall, [P] = Item \n");
+        String heart = "\u2764";
+        System.out.println("Hero name: " + player.getName() + " " + heart + "HP: " + player.getHealth() + "/100");
+        Tile currentTile = dungeon[player.getX()][player.getY()];
+        String onCurrentTile = "On current tile: ";
+
+        if (currentTile.getEnemy() != null) {
+            System.out.println(onCurrentTile + currentTile.getEnemy().getName() + " HP: " + currentTile.getEnemy().getHealth() + " Attack: " + currentTile.getEnemy().getDamage());
+        } else if (currentTile.getItem() != null) {
+            System.out.println(onCurrentTile + currentTile.getItem().getName());
+        }  else {
+            System.out.println(onCurrentTile + "Nothing");
+        }
+
 
 
     }

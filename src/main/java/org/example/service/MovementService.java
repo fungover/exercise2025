@@ -12,10 +12,14 @@ public class MovementService {
         switch (command.toLowerCase()) {
             case "go north" -> newX--;
             case "go south" -> newX++;
-            case "go east" -> newY--;
-            case "go west" -> newY++;
+            case "go east" -> newY++;
+            case "go west" -> newY--;
             case "look" -> {
                 lookAround(player, tile);
+                return;
+            }
+            case "attack" -> {
+                CombatService.fightRound(player, tile);
                 return;
             }
             default -> {
@@ -26,14 +30,14 @@ public class MovementService {
 
         //condition to check map boundaries
         if(newX < 0 || newY < 0 || newX >= tile.length || newY >= tile[0].length) {
-            System.out.println("You can't move outside the map");
+            System.out.println("\nYou can't move outside the map");
             return;
         }
 
         //check if tile is walkable
         Tile target =  tile[newX][newY];
         if(!target.isWalkable()) {
-            System.out.println("You bump into a wall");
+            System.out.println("\nYou bump into a wall");
             return;
         }
 
@@ -41,7 +45,7 @@ public class MovementService {
         player.setX(newX);
         player.setY(newY);
         target.setVisited(true);
-        System.out.println("You have moved one tile");
+        System.out.println("\nYou have moved one tile");
     }
 
     private static void lookAround(Player player, Tile[][] tile) {
@@ -54,7 +58,7 @@ public class MovementService {
         if(y - 1 >= 0) tile[x][y - 1].setVisited(true); //make west visible
         if(y + 1 < tile[0].length) tile[x][y + 1].setVisited(true); //make east visible
 
-        System.out.println("You look around and observe the surrounding tiles");
+        System.out.println("\nYou look around and observe the surrounding tiles");
     }
 
 }

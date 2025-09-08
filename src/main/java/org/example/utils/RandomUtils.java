@@ -10,6 +10,13 @@ import java.util.Random;
 public class RandomUtils {
     private static final Random random = new Random();
 
+    //method to place all random objects
+    public static void placeAllObjects(Tile[][] tiles, int wallCount, int itemCount, int enemyCount, Player player) {
+        placeWalls(tiles, wallCount, player);
+        placeItems(tiles, itemCount, player);
+        placeEnemies(tiles, enemyCount, player);
+    }
+
     //method to place walls
     public static void placeWalls(Tile[][] tiles, int wallCount, Player player) {
         int rows = tiles.length;
@@ -36,9 +43,9 @@ public class RandomUtils {
             do {
                 x = random.nextInt(rows);
                 y = random.nextInt(cols);
-            } while (!tiles[x][y].isWalkable() || tiles[x][y].getItem() != null);
+            } while (!tiles[x][y].isWalkable() || tiles[x][y].getItem() != null || tiles[x][y].getEnemy() !=null || (x == player.getX() && y == player.getY()));
 
-            tiles[x][y].setItem(new Item("Potion", "potion", 20));
+            tiles[x][y].setItem(new Item("Potion", "potion", 30));
         }
     }
 
@@ -51,9 +58,9 @@ public class RandomUtils {
             do {
                 x = random.nextInt(rows);
                 y = random.nextInt(cols);
-            } while (!tiles[x][y].isWalkable() || tiles[x][y].getEnemy() != null);
+            } while (!tiles[x][y].isWalkable() || tiles[x][y].getEnemy() != null || tiles[x][y].getItem() != null || (x == player.getX() && y == player.getY()));
 
-            tiles[x][y].setEnemy(new Enemy("Goblin", 30, 5, x, y));
+            tiles[x][y].setEnemy(new Enemy("Goblin", 30, 15, x, y));
         }
     }
 }

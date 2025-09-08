@@ -8,14 +8,16 @@ import org.example.entities.Item;
 public class Player {
     private String name;
     private int health;
+    private int attack;
     private int x, y;
     private List<Item> inventory;
 
 
     //Constructor
-    public Player(String name, int health, int startX, int startY) {
+    public Player(String name, int health, int attack, int startX, int startY) {
         this.name = name;
         this.health = health;
+        this.attack = attack;
         this.x = startX;
         this.y = startY;
         this.inventory = new ArrayList<>();
@@ -29,6 +31,8 @@ public class Player {
     public int getHealth() {
         return health;
     }
+
+    public int getAttack() { return attack; }
 
     public int getX() {
         return x;
@@ -49,6 +53,7 @@ public class Player {
     public void setHealth(int health) {
         this.health = health;
     }
+    public void setAttack(int attack) { this.attack = attack; }
     public void setX(int x) {
         this.x = x;
     }

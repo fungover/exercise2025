@@ -42,5 +42,4 @@ public class Warehouse {
             return Optional.empty();
         }
     }
-
 }

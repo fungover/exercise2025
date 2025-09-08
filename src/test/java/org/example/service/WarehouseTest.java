@@ -8,6 +8,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -73,5 +74,31 @@ public class WarehouseTest {
         IllegalArgumentException exception =
                 assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(testProduct2));
         assertTrue(exception.getMessage().contains("duplicate id"));
+    }
+
+    /** getProductById method */
+    @Test
+    void getProductById_success_getCorrectProductById() {
+        LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
+        Product testProduct = Product.createNew("id1", "Product1", Category.BOOKS, 7, createdAt);
+        warehouse.addProduct(testProduct);
+
+        var testProductById = warehouse.getProductById(testProduct.id());
+
+        assertEquals(Optional.of(testProduct), warehouse.getProductById(testProduct.id()));
+    }
+
+    @Test
+    void getProductById_nullId_throwsNullPointerException() {
+        NullPointerException exception =
+                assertThrows(NullPointerException.class, () -> warehouse.getProductById(null));
+        assertTrue(exception.getMessage().contains("id"));
+    }
+
+    @Test
+    void getProductById_blankId_throwsIllegalArgumentException() {
+        IllegalArgumentException exception =
+                assertThrows(IllegalArgumentException.class, () -> warehouse.getProductById("  "));
+        assertTrue(exception.getMessage().contains("id required"));
     }
 }

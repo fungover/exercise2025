@@ -2,10 +2,7 @@ package org.example.service;
 
 import org.example.entities.Product;
 import java.time.Clock;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public final class Warehouse {
     private final Map<String, Product> store = new HashMap<>();
@@ -31,13 +28,14 @@ public final class Warehouse {
         store.put(product.id(), product);
     }
 
+    public Optional<Product> getProductById(String id) {
+        Objects.requireNonNull(id, "id");
+        if (id.isBlank()) throw new IllegalArgumentException("id required");
+        return Optional.ofNullable(store.get(id));
+    }
 
      /*
     updateProduct(String id, String name, Category category, int rating) {
-
-    }
-
-    getProductById(String id) {
 
     }
 

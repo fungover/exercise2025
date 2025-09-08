@@ -46,8 +46,12 @@ public class WarehouseTest {
         );
         assertEquals("Laptop", updated.name());
         assertEquals(10, updated.rating());
+    }
 
-
-
+    @ Test
+    void updateProductFailure() {
+        assertThrows(IllegalArgumentException.class, () ->
+                warehouse.updateProduct("99", "Failure", Category.BOOKS, 5)
+        );
     }
 }

@@ -18,10 +18,20 @@ public record Product(Long id, String name, Category category, int rating,
 
     }
 
+    //test constructor to give other dates.
+    public Product(String name, Category category, int rating,
+                   LocalDate createdDate) {
+        if (rating < 0 || rating > 10) {
+            throw new IllegalArgumentException("rating should be between 0 and 10");
+        }
+        this(idCounter++, name, category, rating, createdDate, LocalDate.now());
+    }
+
     @Override public String toString() {
         return String.format(
-          "id=%d, Name=%s, Category=%s, Rating=%d, Created=%s, Modified=%s", id,
-          name, category, rating, createdDate, modifiedDate);
+          //%-15s means that its left-align with a width of 15
+          "id=%d, Name=%-15s Category=%-12s Rating=%-3d Created=%-12s " +
+            "Modified=%s", id, name, category, rating, createdDate, modifiedDate);
     }
 
 

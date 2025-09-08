@@ -26,16 +26,12 @@ public class Warehouse {
     public void updateProduct(String id, String name, Category category,
                               int rating) {
 
-
         //gets our product from id
         Product existing = getProductById(id);
 
         //we keep id and createdDate, and update the rest
         Product updated = new Product(existing.id(), name, category, rating,
           existing.createdDate(), LocalDate.now());
-
-//        System.out.println("exisiting " + existing);
-//        System.out.println("updated " + updated);
 
         inventory.remove(existing);
         inventory.add(updated);
@@ -75,6 +71,13 @@ public class Warehouse {
         return inventory.stream()
                         .filter(p -> p.category() == category)
                         .sorted(Comparator.comparing(Product::name))
+                        .collect(Collectors.toUnmodifiableList());
+    }
+
+    public List<Product> getProductsCreatedAfter(LocalDate date) {
+        return inventory.stream()
+                        .filter(p -> p.createdDate()
+                                      .isAfter(date))
                         .collect(Collectors.toUnmodifiableList());
     }
 }

@@ -4,6 +4,7 @@ import org.example.entities.Category;
 import org.example.entities.Product;
 import org.example.service.Warehouse;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,26 +17,30 @@ public class App {
         });
 
 
-        iSeeBlackSheep(warehouse);
+//        iSeeBlackSheep(warehouse);
 
-        warehouse.updateProduct("1", "blueLaptop", Category.FOOD, 3);
+//        warehouse.updateProduct("1", "blueLaptop", Category.FOOD, 3);
 
         System.out.println();
         iSeeBlackSheep(warehouse);
 
         System.out.println("-".repeat(20));
-        warehouse.getProductsByCategorySorted(Category.FOOD)
-                 .forEach(System.out::println);
+//        warehouse.getProductsByCategorySorted(Category.FOOD)
+//                 .forEach(System.out::println);
 
+//        System.out.println(products.get(0)
+        LocalDate now = LocalDate.now();
+        System.out.println(warehouse.getProductsCreatedAfter(now));
     }
 
     private static List<Product> getWarehouseProducts() {
         List<Product> products = new ArrayList<>();
-
-        products.add(new Product("laptop", Category.ELECTRONICS, 4));
+        LocalDate yesterday = LocalDate.now()
+                                       .plusDays(4);
+        products.add(new Product("laptop", Category.ELECTRONICS, 4, yesterday));
         products.add(new Product("SlaughterBoat", Category.GAMES, 7));
         products.add(new Product("Cake", Category.FOOD, 10));
-        products.add(new Product("DuckDetective", Category.GAMES, 8));
+        products.add(new Product("DuckDetective", Category.GAMES, 8, yesterday));
         products.add(new Product("lamp", Category.ELECTRONICS, 10));
         products.add(new Product("PC", Category.ELECTRONICS, 4));
         products.add(new Product("DogFood", Category.FOOD, 2));

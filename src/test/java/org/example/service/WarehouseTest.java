@@ -5,6 +5,7 @@ import org.example.entities.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -118,8 +119,10 @@ class WarehouseTest {
     @Test void getProductsByCategorySorted_invalid() {
         Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
         Product pc = new Product("PC", Category.ELECTRONICS, 4);
+
         warehouse.addProduct(lamp);
         warehouse.addProduct(pc);
+
         List<Product> sortedByCategory = warehouse.getProductsByCategorySorted(
           Category.FOOD);
 
@@ -127,6 +130,42 @@ class WarehouseTest {
           "Should be 0, we have no Food items in our inventory");
         assertNotNull(sortedByCategory);
         assertTrue(sortedByCategory.isEmpty());
+    }
+
+    @Test void getProductsCreatedAfter_valid() {
+        LocalDate testDate = LocalDate.now(); //todays date
+        LocalDate daysFromCheck5 = LocalDate.now() // 5 After today
+                                            .plusDays(5);
+
+        Product lamp = new Product("lamp", Category.ELECTRONICS, 10, daysFromCheck5);
+        Product pc = new Product("PC", Category.ELECTRONICS, 4, daysFromCheck5);
+        Product ps5 = new Product("Super Delux Playstaion", Category.ELECTRONICS, 4);
+
+        warehouse.addProduct(lamp);
+        warehouse.addProduct(pc);
+        warehouse.addProduct(ps5);
+        List<Product> productsCreaetedAfterList = warehouse.getProductsCreatedAfter(
+          testDate);
+        assertEquals(2, productsCreaetedAfterList.size());
+    }
+
+    @Test void getProductsCreatedAfter_invalid() {
+        LocalDate testDate = LocalDate.now(); // todays date
+
+        Product lamp = new Product("lamp", Category.ELECTRONICS, 10,
+          testDate.minusDays(1));
+        Product pc = new Product("PC", Category.ELECTRONICS, 4,
+          testDate.minusDays(2));
+        Product ps5 = new Product("Super Delux Playstaion", Category.ELECTRONICS, 6,
+          testDate.minusDays(3));
+
+        warehouse.addProduct(lamp);
+        warehouse.addProduct(pc);
+        warehouse.addProduct(ps5);
+        List<Product> productsCreatedAfterList = warehouse.getProductsCreatedAfter(
+          testDate);
+        assertEquals(0, productsCreatedAfterList.size());
+
     }
 
 }

@@ -38,7 +38,13 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+            <version>4.7.6</version>
+        </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -67,6 +73,14 @@
                 <version>3.5.3</version>
                 <configuration>
                     <argLine>@{argLine} --enable-preview</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <mainClass>game.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>

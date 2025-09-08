@@ -1,36 +1,99 @@
-## 🧪 How to Work on the Exercises
+# Dungeon Crawler (CLI, Java)
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+A simple turn-based dungeon crawler game implemented in Java 17+ using Object-Oriented Programming principles.  
+The game runs in the command-line interface (CLI) and is fully tested with JUnit 5.
 
-### 📥 1. Clone or Fork the Repository
+---
+
+## 🎮 How to Play
+
+1. Start the game:
+   ```bash
+   mvn exec:java
+   ```
+
+2. Enter your player name when prompted.
+
+3. Use commands to explore the dungeon:
+    - **move north/south/east/west** or **n/s/e/w** → Move around the dungeon
+    - **attack** → Attack an enemy on your tile
+    - **use <item>** → Use an item by name or index (e.g. `use potion` or `use 0`)
+    - **inventory** → Show your items
+    - **look** → Show info about current and nearby tiles
+    - **help** → Show available commands
+    - **quit** → Exit the game
+
+4. **Win conditions**
+    - Reach the **EXIT** tile, or
+    - Defeat all enemies
+
+5. **Lose condition**
+    - Your health drops to `0` or below → *Game Over*.
+
+---
+
+## 🧪 Run Tests
+
+All unit tests (JUnit 5) can be executed with:
+
 ```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
-
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
-
-Example for user githubuser working on Exercise 1:
-
-```bash
-git checkout -b githubuser/exercise1
+mvn test
 ```
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
+---
 
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
+## 📦 Package Structure
+
+```
+src/main/java
+├── entities    # Player, Enemy (Goblin, Skeleton, Orc), Item (Weapon, HealingPotion)
+├── game        # Game loop, Main entry point
+├── map         # Dungeon, Tile, TileType
+├── service     # Game logic: CombatService, MovementService, InventoryService, MapGenerator
+└── utils       # Helpers: Rng, FakeRng (for tests), Printer, InputParser
 ```
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
+---
 
-Link the PR to the issue you're solving.
+## 📄 Class Overview
 
-Include a clear description of your solution.
+- **entities.Player** → Player character (health, position, inventory, baseDamage)
+- **entities.Enemy** → Abstract enemy with subclasses *Goblin*, *Skeleton*, *Orc*
+- **entities.Item** → Abstract item with *Weapon* (damage boost) and *HealingPotion* (heal)
+- **map.Dungeon** → 2D grid of `Tile`, manages enemies/items placement and walls
+- **map.Tile** → Holds type (EMPTY, WALL, ITEM, ENEMY, START, EXIT) and references to item/enemy
+- **service.CombatService** → Handles damage calculation, attacks, death/removal of enemies
+- **service.MovementService** → Validates and updates player movement
+- **service.InventoryService** → Handles adding, using, removing items
+- **service.MapGenerator** → Creates a dungeon with walls, enemies, items, start/exit
+- **utils.Rng** → Random number wrapper, *FakeRng* for deterministic tests
+- **utils.InputParser** → Parses player commands
+- **utils.Printer** → CLI output (status, inventory, help, tile info)
+- **game.Game** → Main game loop (turn-based)
+- **game.Main** → Program entry point
 
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+---
+
+## 🚀 Requirements
+
+- Java 17 or newer
+- Maven 3.8+
+
+---
+
+## ✅ Example Run
+
+```
+Welcome to the Dungeon!
+Enter your name: Hero
+Type 'help' for available commands.
+
+> look
+You see a dark corridor. There is an enemy nearby.
+> attack
+You hit the Goblin for 5 damage. (Enemy HP: 5)
+> attack
+Goblin is defeated!
+> move east
+You move east.
+```

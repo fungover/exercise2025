@@ -72,6 +72,9 @@ public class Player {
      **/
     public void takeDamage(int amount) {
         setHp(this.hp - amount); //Reusing setHp
+        if (!isAlive()) {
+            System.out.println(name + " has fallen in battle ! ");
+        }
         System.out.println(name + " Took " + amount + " damage! HP: " + hp + " / " + maxHp);
     }
 

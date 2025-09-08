@@ -40,5 +40,23 @@ public class Game {
     public void run() {
         System.out.println(" Welcome to the Dungeon of mysteries, " + player.getName() + " ! ");
         System.out.println(" You have " + player.getHp() + " Health points ");
+
+        while (player.isAlive()) {
+            System.out.println(" < ");
+            String command = in.nextLine().trim().toLowerCase();
+
+            switch (command) {
+                case "status" -> System.out.println(player);
+                case "damage" -> player.takeDamage(10);
+                case "heal" -> player.heal(5);
+                case "suicide" -> player.takeDamage(player.getHp());
+                case "quit" -> {
+                    System.out.println(" Goodbye ");
+                    return;
+                }
+                default -> System.out.println( "Unknown command. Try: status, damage, heal, suicide, quit!" );
+            }
+        }
+        System.out.println("GAME OVER! You will now be buried in the darkest depths of the dungeon");
     }
 }

@@ -8,10 +8,10 @@ import java.time.LocalDate;
 public class ProductTest {
   @Test
   public void canCreateProductWithSpecifiedAttributes() {
-    Warehouse product = new Product(
+    Product product = new Product(
             "1",
-            "Jacket",
-            Category.CLOTHING,
+            "Film",
+            Category.THRILLER,
             10,
             LocalDate.now(),
             LocalDate.now());

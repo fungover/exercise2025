@@ -12,7 +12,10 @@ import java.util.List;
 
 public class API {
     public List<ElectricityPrice> fetchPrices(String zone, String day, String month, String year) throws IOException, InterruptedException {
-        String apiUrl = "https://www.elprisetjustnu.se/api/v1/prices/" + year + "/"+ month +"-" + day + "_" + zone + ".json";
+        String dd = day.length() == 1 ? "0" + day : day;
+        String mm = month.length() == 1 ? "0" + month : month;
+        String zz = zone.toUpperCase();
+        String apiUrl = "https://www.elprisetjustnu.se/api/v1/prices/" + year + "/" + mm + "-" + dd + "_" + zz + ".json";
 
         HttpClient client = HttpClient.newBuilder()
                 .connectTimeout(java.time.Duration.ofSeconds(10))

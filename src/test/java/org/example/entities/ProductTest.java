@@ -11,8 +11,9 @@ public class ProductTest {
         // Given
         String id = "1";
         String name = "Test product";
+        Category category = Category.ELECTRONICS;
         // When
-        Product product = new Product(id, name);
+        Product product = new Product(id, name, category);
         // Then
         assertEquals(id, product.id());
 
@@ -22,10 +23,22 @@ public class ProductTest {
     void shouldCreateProductWithIdAndName() {
         String id = "1";
         String name = "Test product";
+        Category category = Category.ELECTRONICS;
 
-        Product product = new Product(id, name);
+        Product product = new Product(id, name, category);
 
         assertEquals(id, product.id());
         assertEquals(name, product.name());
+    }
+
+    @Test
+    void ProductShouldHaveCategory() {
+        String id = "1";
+        String name = "Test product";
+        Category category = Category.ELECTRONICS;
+
+        Product product = new Product(id, name, category);
+
+        assertEquals(category, product.category());
     }
 }

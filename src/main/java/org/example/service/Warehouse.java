@@ -10,12 +10,11 @@ import java.util.stream.Collectors;
 
 public class Warehouse {
 
-    private final Map<String, Product> products = new HashMap<>(); // Using Hashmap to sore products. Key = ID, Value = Product.
+    private final Map<String, Product> products = new HashMap<>(); // Using Hashmap to store products. Key = ID, Value = Product.
 
     //Method to add a new product.
     public void addProduct(Product product) {
-
-
+        Objects.requireNonNull(product, "Product cannot be null");
         products.put(product.id(), product); // Add the product to the map using its ID as the key
     }
 

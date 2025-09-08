@@ -51,6 +51,16 @@ class WarehouseTest {
         assertEquals("Name cannot be empty", exception.getMessage());
     }
 
+    @Test
+    @DisplayName("Should throw eception when adding null product")
+    void addNullProductThrowsException() {
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
+                () -> warehouse.addProduct(null)
+        );
+        assertEquals("Product cannot be null", exception.getMessage());
+    }
+
     // ========================================
     // TESTS FOR updateProduct()
     // ========================================

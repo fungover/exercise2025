@@ -4,6 +4,10 @@ import org.example.entities.Category;
 import org.example.entities.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,6 +21,15 @@ public class WarehouseTest {
         return product;
     }
 
+    private Product createProductWithMockedDate(String id, String name, Category category, int rating, int year, int month, int day) {
+        LocalDate mockedDate = LocalDate.of(year, month, day);
+        try (MockedStatic<LocalDate> mockedStatic = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
+            mockedStatic.when(LocalDate::now).thenReturn(mockedDate);
+            return new Product(id, name, category, rating);
+        }
+    }
+
+    // Tests
     @Test
     @DisplayName("addProduct: adds a new Product to Warehouse")
     public void addProduct() {
@@ -134,5 +147,47 @@ public class WarehouseTest {
 
         assertThat(warehouse.getProductsByCategorySorted(Category.ELECTRONICS)).isEmpty();
     }
+
+    @Test
+    @DisplayName("getProductsCreatedAfter(LocalDate date): returns Products created after a given date")
+    public void getProductsCreatedAfter() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5);
+        Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27);
+        Product testProduct3 = createProductWithMockedDate("2", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31);
+        Product testProduct4 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24);
+        Product testProduct5 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 1, 2002, 1, 1);
+
+        warehouse.addProduct(testProduct1);
+        warehouse.addProduct(testProduct2);
+        warehouse.addProduct(testProduct3);
+        warehouse.addProduct(testProduct4);
+        warehouse.addProduct(testProduct5);
+
+        LocalDate testDate = LocalDate.of(1997, 2, 1);
+        assertThat(warehouse.getProductsCreatedAfter(testDate)).extracting(Product::getName).containsExactly("Laptop", "Desk Chair", "Pen Set");
+    }
+
+    @Test
+    @DisplayName("getProductsCreatedAfter(LocalDate date): throws an exception if invalid input")
+    public void getProductsCreatedAfterEmptyList() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5);
+        Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27);
+        Product testProduct3 = createProductWithMockedDate("2", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31);
+        Product testProduct4 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24);
+        Product testProduct5 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 1, 2002, 1, 1);
+
+        warehouse.addProduct(testProduct1);
+        warehouse.addProduct(testProduct2);
+        warehouse.addProduct(testProduct3);
+        warehouse.addProduct(testProduct4);
+        warehouse.addProduct(testProduct5);
+
+        assertThatThrownBy(() -> warehouse.getProductsCreatedAfter(null))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+
 
 }

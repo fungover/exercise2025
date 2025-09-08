@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.entities.Category;
 import org.example.entities.Product;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -47,6 +48,16 @@ public class Warehouse {
         return products.stream()
                 .filter(p -> p.getCategory() == category)
                 .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
+                .toList();
+    }
+
+    public List<Product> getProductsCreatedAfter(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+
+        return products.stream()
+                .filter(p -> p.getCreatedDate().isAfter(date) || p.getCreatedDate().isEqual(date))
                 .toList();
     }
 }

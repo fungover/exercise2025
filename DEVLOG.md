@@ -1,16 +1,33 @@
-# These are my Development Notes
-To get started with this project I began by setting up a file structure that felt logical and scalable.
+# Development Notes
+#### To get started with this project I began by setting up a file structure that felt logical and scalable.
 I then started to break down the assignment into smaller requirements and mapped them to 
 different parts of the codebase. 
-My next steps:
-[] Choose inheritance, or interface
-[] Know when to use javadoc-tool or just ///
+
+# To do:
+[] Choose inheritance, or interface - NOT BOTH 
+
+🧠 Some thoughts about it....
+
+_*I initially mixed up abstract classes and interfaces, but TDD made the difference
+between them obvious. I need all my enemies to run through the same loop. Therefore,
+I want to test the logic in isolation. 
+I want a contract to mock, not a shared base implementation. 
+I suddenly realized the huge benefits of interfaces!!*_
+
+[x] Know when to use javadoc-tool or just "///"
+
 [] test what I have built to this point and ask myself if I will embrace a TDD approach from here ??? 
+
 [] add commands, to get the game moving. 
+
 [] create entities 
+
 [] create a map
+
 [] create items
 
+
+### THE ASSIGNMENT / _ISSUE_
 
 🧠 Objective
 Design and implement a turn-based Dungeon Crawler game in Java using Object-Oriented Programming (OOP) principles. The game will run in the command-line interface (CLI), and user input will be processed line-by-line (i.e. after pressing Enter). Players explore a dungeon, encounter enemies, collect items, and manage their health and inventory.

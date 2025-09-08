@@ -1,12 +1,17 @@
 package org.example.entities;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 // hanterar spelarens namn, hälsa, position, inventory.
 public class Player {
     private String name;
     private int health;
     private int row;
     private int col;
+    private List<Item> inventory = new ArrayList<>();
+
 
 
     public Player(String name) {
@@ -40,5 +45,13 @@ public class Player {
         this.row = newRow;
         this.col = newCol;
     } // updating positions
+
+    public void addItem(Item item) {
+        inventory.add(item);
+    }
+
+    public List<Item> getInventory() {
+        return inventory;
+    }
 }
 

@@ -57,7 +57,7 @@ public class WarehouseTest {
         Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct);
 
-        // Use the new method signature
+
         warehouse.updateProduct("1", "Updated Test Product", Category.ELECTRONICS, 5);
 
         Product updatedProduct = warehouse.getProductById("1").get();
@@ -66,6 +66,16 @@ public class WarehouseTest {
         assertThat(updatedProduct.getRating()).isEqualTo(5);
         assertThat(updatedProduct.getId()).isEqualTo("1");
         assertThat(warehouse.getAllProducts().size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("updateProduct: updates an existing Product without changing createdDate")
+    public void updateProductWithoutChangingCreatedDate() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct = createProductWithMockedDate("1", "Test Product", Category.GENERAL, 1, 2024, 1, 5);
+        warehouse.addProduct(testProduct);
+
+        assertThat(warehouse.getProductById("1").get().getCreatedDate()).isEqualTo(testProduct.getCreatedDate());
     }
 
     @Test

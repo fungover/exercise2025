@@ -142,7 +142,6 @@ public class App {
 
     public static BestHoursRecord getCheapestHours(double[] prices, int hours) {
         int n = prices.length;
-
         if (hours <= 0 || hours > n) {
             throw new IllegalArgumentException("Hours must be between 1 and " + n);
         }
@@ -170,15 +169,12 @@ public class App {
         if (priceArray == null || prices.isEmpty()) {
             throw new IllegalArgumentException("Arrays must not be null");
         }
-
         BestHoursRecord returningResult = getCheapestHours(priceArray, hours);
 
         int bestStart = returningResult.startIndex();
-
         if (bestStart >= prices.size()) {
             throw new  IllegalArgumentException("Best start index exceeds prices list size");
         }
-
         double sum = returningResult.totalSum();
 
         String startTime = OffsetDateTime

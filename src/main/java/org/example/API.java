@@ -14,7 +14,6 @@ public class API {
     public List<ElectricityPrice> fetchPrices(String zone, String day, String month, String year) throws IOException, InterruptedException {
         String apiUrl = "https://www.elprisetjustnu.se/api/v1/prices/" + year + "/"+ month +"-" + day + "_" + zone + ".json";
 
-
         HttpClient client = HttpClient.newBuilder()
                 .connectTimeout(java.time.Duration.ofSeconds(10))
                 .build();

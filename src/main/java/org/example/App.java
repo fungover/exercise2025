@@ -32,7 +32,7 @@ public class App {
 
             System.out.println("Mean price for today: " + String.format("%.4f", meanPrice) + " (SEK/kWh)");
 
-            if (pricesTomorrow != null) {
+            if (pricesTomorrow != null && !pricesTomorrow.isEmpty()) {
                 System.out.println("Mean price for tomorrow: " + String.format("%.4f", CalculateMeanPrice(pricesTomorrow)) + " (SEK/kWh)");
             } else {
                 System.out.println("The mean price for tomorrow could not be calculated at this time.");
@@ -96,6 +96,10 @@ public class App {
     }
 
     public static ElectricityPrice getPrice(List<ElectricityPrice> prices, boolean expensive) {
+        if (prices == null || prices.isEmpty()) {
+            throw new IllegalArgumentException("Prices list must not be null or empty.");
+        }
+
         ElectricityPrice best = prices.getFirst();
 
         for (int i = 1; i < prices.size(); i++) {
@@ -124,6 +128,10 @@ public class App {
     }
 
     public static double[] makePricesArray(List<ElectricityPrice> prices) {
+        if (prices == null || prices.isEmpty()) {
+            throw new IllegalArgumentException("Prices list must not be null or empty");
+        }
+
         double[] result = new double[prices.size()];
         for (int i = 0; i < prices.size(); i++) {
             result[i] = prices.get(i).SEK_per_kWh;
@@ -159,9 +167,18 @@ public class App {
     }
 
     public static void GetResultFromHours(double[] priceArray, int hours, List<ElectricityPrice> prices) {
+        if (priceArray == null || prices.isEmpty()) {
+            throw new IllegalArgumentException("Arrays must not be null");
+        }
+
         BestHoursRecord returningResult = getCheapestHours(priceArray, hours);
 
         int bestStart = returningResult.startIndex();
+
+        if (bestStart >= prices.size()) {
+            throw new  IllegalArgumentException("Best start index exceeds prices list size");
+        }
+
         double sum = returningResult.totalSum();
 
         String startTime = OffsetDateTime

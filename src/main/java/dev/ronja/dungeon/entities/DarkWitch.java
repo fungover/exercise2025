@@ -1,9 +1,10 @@
 package dev.ronja.dungeon.entities;
 
-public class Siren implements Enemy {
-    private final String name = "Siren";
-    private int hp = 50;
-    private final int damage = 8;
+public class DarkWitch implements Enemy {
+
+    private final String name = "Dark Witch";
+    private int hp = 60;
+    private final int damage = 10;
 
     @Override
     public String getName() {
@@ -34,8 +35,8 @@ public class Siren implements Enemy {
 
     @Override
     public void attack(Player player) {
-        System.out.println(name + " hums a haunting melody and drains "
-        + damage + " HP from " + player.getName() + "!");
+        System.out.println(name + " casts a Shadow curse on "
+                + player.getName() + " and deals " + damage + " in dark damage! ");
         player.takeDamage(damage);
     }
 

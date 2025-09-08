@@ -72,7 +72,7 @@ public class Player {
         if (!isAlive()) {
             System.out.println(name + " has fallen in battle ! ");
         }
-        System.out.println(name + " Took " + amount + " damage! HP: " + hp + " / " + maxHp);
+        System.out.println(name + " Took " + amount + " in damage! HP: " + hp + " / " + maxHp);
     }
 
     /**

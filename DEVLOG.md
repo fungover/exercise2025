@@ -16,11 +16,11 @@ I suddenly realized the huge benefits of interfaces!!*_
 
 [x] Know when to use javadoc-tool or just "///"
 
-[] test what I have built to this point and ask myself if I will embrace a TDD approach from here ??? 
+[x] test what I have built to this point and ask myself if I will embrace a TDD approach from here ??? 
 
 [] add commands, to get the game moving. 
 
-[] create entities 
+[x] create entities 
 
 [] create a map
 

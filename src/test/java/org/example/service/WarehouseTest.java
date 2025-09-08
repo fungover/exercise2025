@@ -22,7 +22,7 @@ class WarehouseTest {
     }
 
     @Test
-    @DisplayName( "Add a product to the warehouse")
+    @DisplayName( "Adds a product to the warehouse")
     void addProductToWarehouse(){
         ZonedDateTime now = ZonedDateTime.now();
         Product clicker = ( new Product(
@@ -44,7 +44,7 @@ class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Throws an exception when addProduct name is empty")
+    @DisplayName("Throws an exception when name is empty")
     void addProductToWarehouseWithEmptyName_throwsException(){
         Product productWithEmptyName = new Product(
                 "p-001",
@@ -61,7 +61,7 @@ class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Returns all added products to Warehouse")
+    @DisplayName("Returns all added products to  the warehouse")
     public void getAllProducts_returnsAllAddedProducts() {
         Warehouse warehouse = new Warehouse();
 
@@ -91,4 +91,34 @@ class WarehouseTest {
                 .containsExactly(chewBone, SqueakyBanana);
     }
 
+    @Test
+    @DisplayName("Throws an exception when trying to modify returned list")
+    public void getAllProducts_throwsException_whenTryingToModifyReturnedList() {
+        Warehouse warehouse = new Warehouse();
+        Product redBlanket = new Product(
+                "p-001",
+                "Red Blanket",
+                Category.BEDDING,
+                4,
+                ZonedDateTime.now(),
+                ZonedDateTime.now());
+
+        warehouse.addProduct(redBlanket);
+
+        List<Product> allProducts = warehouse.getAllProducts();
+
+        assertThatThrownBy(() -> allProducts.add(new Product(
+                "p-002",
+                "Squeaky Banana",
+                Category.TOYS,
+                3,
+                ZonedDateTime.now(),
+                ZonedDateTime.now())))
+                .isInstanceOf(UnsupportedOperationException.class);
+
+        assertThat(allProducts)
+                .hasSize(1)
+                .containsExactly(redBlanket);
+
+    }
 }

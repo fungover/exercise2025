@@ -101,4 +101,7 @@ public class Player {
         enemy.takeDamage(damage);
     }
 
+    public int getHealth() {
+        return health;
+    }
 }

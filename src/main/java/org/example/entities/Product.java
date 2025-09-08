@@ -10,4 +10,10 @@ public record Product(
         int rating,
         ZonedDateTime createdDate,
         ZonedDateTime modifiedDate
-) {}
+) {
+    public Product {
+        if (rating < 0 || rating > 10) {
+            throw new IllegalArgumentException("Rating must be between 0 and 10");
+        }
+    }
+}

@@ -1,4 +1,4 @@
 package dev.ronja.dungeon.entities;
 
-public class Wepon {
+public class Siren {
 }

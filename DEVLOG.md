@@ -3,6 +3,7 @@ To get started with this project I began by setting up a file structure that fel
 I then started to break down the assignment into smaller requirements and mapped them to 
 different parts of the codebase. 
 My next steps:
+[] Choose inheritance, or interface
 [] test what I have built to this point and ask myself if I will embrace a TDD approach from here ??? 
 [] add commands, to get the game moving. 
 [] create entities 

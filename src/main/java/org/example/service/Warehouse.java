@@ -14,7 +14,7 @@ public class Warehouse {
         return products;
     }
 
-    public void add(Product product) {
+    public void addProduct(Product product) {
         products.add(product);
     }
 }

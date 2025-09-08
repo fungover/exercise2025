@@ -34,12 +34,31 @@ class WarehouseTest {
                 now
         ));
 
-        warehouse.add(clicker);
+        warehouse.addProduct(clicker);
 
         List<Product> products = warehouse.products();
 
         assertThat(products)
                 .hasSize(1)
                 .containsExactly(clicker);
+    }
+
+    @Test
+    @DisplayName("Throws an exception when add product name is empty")
+    void addProductToWarehouse_throwsException(){
+        Product productWithEmptyName = new Product(
+                "p-001",
+                "", //
+                Category.FOOD,
+                3,
+                ZonedDateTime.now(),
+                ZonedDateTime.now()
+        );
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            warehouse.addProduct(productWithEmptyName);
+        });
+
+        assertThat(exception.getMessage()).isEqualTo("Product name cannot be empty or null.");
     }
 }

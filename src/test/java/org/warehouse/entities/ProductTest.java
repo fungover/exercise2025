@@ -5,6 +5,8 @@ import org.warehouse.Warehouse;
 
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ProductTest {
   @Test
   public void canCreateProductWithSpecifiedAttributes() {
@@ -15,5 +17,9 @@ public class ProductTest {
             10,
             LocalDate.now(),
             LocalDate.now());
+
+    assertEquals("1", product.getId());
+    assertEquals("Film", product.getName());
+    assertEquals(Category.THRILLER, product.getCategory());
   }
 }

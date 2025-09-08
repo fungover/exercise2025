@@ -11,7 +11,6 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class WarehouseTest {
 
@@ -45,8 +44,8 @@ class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Throws an exception when add product name is empty")
-    void addProductToWarehouse_throwsException(){
+    @DisplayName("Throws an exception when addProduct name is empty")
+    void addProductToWarehouseWithEmptyName_throwsException(){
         Product productWithEmptyName = new Product(
                 "p-001",
                 "", //

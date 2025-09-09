@@ -390,11 +390,11 @@ class WareHouseTest {
         LocalDate dateAug20 = LocalDate.of(2025, 8, 20);
         LocalDate dateSep20LastYear = LocalDate.of(2024, 9, 20);
 
-        Product product1 = new Product("1", "Apple", Category.FOOD, 10, dateSep11, defaultDay);
+        Product product1 = new Product("1", "Apple", Category.FOOD, 10, dateSep11, dateSep11);
         Product product2 = new Product("2", "Avocado", Category.FOOD, 8, dateSep9, dateSep9);
         Product product3 = new Product("3", "Pants", Category.CLOTHING, 7, defaultDay, dateSep11);
         Product product4 = new Product("4", "Pants", Category.CLOTHING, 7, defaultDay, dateSep11);
-        Product product5 = new Product("5", "Wobbler", Category.TOYS, 10, dateSep11, dateAug20);
+        Product product5 = new Product("5", "Wobbler", Category.TOYS, 10, dateSep11, dateSep11);
         Product product6 = new Product("6", "Wobbler", Category.TOYS, 10, dateSep20LastYear, dateAug20);
 
         // test for empty list

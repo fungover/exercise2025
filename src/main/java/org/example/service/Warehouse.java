@@ -7,6 +7,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
+
 public class Warehouse {
     private final List<Product> products = new ArrayList<>();
 
@@ -45,7 +49,17 @@ public class Warehouse {
                 .filter(p -> p.id().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-            }
+    }
+    public List<Product> getProductsByCategorySorted(Category category) {
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
         }
+        return products.stream()
+                .filter(p -> p.category() == category)
+                .sorted(Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER))
+                .collect(Collectors.toList());
+    }
+    }
+
 
 

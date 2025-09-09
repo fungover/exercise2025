@@ -4,10 +4,7 @@ import org.example.entities.Category;
 import org.example.entities.Product;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Warehouse {
@@ -82,7 +79,7 @@ public class Warehouse {
 
     public long countProductsInCategory(Category category) {
         return products.stream()
-                .filter(p -> p.category() == category )
+                .filter(p -> p.category() == category)
                 .count();
     }
 
@@ -95,5 +92,28 @@ public class Warehouse {
                         c -> 1,
                         Integer::sum
                 ));
+    }
+
+    public List<Product> getTopRatedProductsThisMonth() {
+        LocalDate now = LocalDate.now();
+        List<Product> thisMonth = products.stream()
+                .filter(p -> p.createdDate().getMonth() == now.getMonth()
+                        && p.createdDate().getYear() == now.getYear())
+                .toList();
+
+        OptionalInt maxRating = thisMonth.stream()
+                .mapToInt(Product::rating)
+                .max();
+
+        if (maxRating.isEmpty()) return Collections.emptyList();
+
+        return thisMonth.stream()
+                .filter(p -> p.rating() == maxRating.getAsInt())
+                .sorted((p1, p2) -> {
+                    int cmp = p2.createdDate().compareTo(p1.createdDate()); // newest first
+                    if (cmp != 0) return cmp;
+                    return p1.name().compareToIgnoreCase(p2.name()); // tie-breaker
+                })
+                .toList();
     }
 }

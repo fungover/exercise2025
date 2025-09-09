@@ -57,7 +57,7 @@ public class WarehouseTest {
         assertEquals(10, updated.rating());
     }
 
-    @ Test
+    @Test
     void updateProductFailureNonExistentProduct() {
         assertThrows(IllegalArgumentException.class, () ->
                 warehouse.updateProduct("99", "Failure", Category.BOOKS, 5)
@@ -169,7 +169,7 @@ public class WarehouseTest {
         assertTrue(categories.contains(Category.TOYS));
     }
 
-    @ Test
+    @Test
     void countProductsInCategory() {
         warehouse.addProduct(new Product("1", "iPad", Category.ELECTRONICS, 9, LocalDate.now(), LocalDate.now()));
         warehouse.addProduct(new Product("2", "TV", Category.ELECTRONICS, 8, LocalDate.now(), LocalDate.now()));
@@ -193,5 +193,23 @@ public class WarehouseTest {
         assertEquals(1, initialsMap.get('L'));
         assertEquals(1, initialsMap.get('I'));
         assertEquals(2, initialsMap.get('H'));
+    }
+
+    @Test
+    void getTopRatedProductsThisMonth() {
+        LocalDate today = LocalDate.now();
+        LocalDate lastMonth = today.minusMonths(1);
+
+        warehouse.addProduct(new Product("1", "Laptop", Category.ELECTRONICS, 10, today, today));
+        warehouse.addProduct(new Product("2", "iPhone", Category.ELECTRONICS, 9, today, today));
+        warehouse.addProduct(new Product("3", "Harry Potter", Category.BOOKS, 10, today, today));
+        warehouse.addProduct(new Product("4", "Old Product", Category.BOOKS, 10, lastMonth, lastMonth));
+
+        List<Product> topProducts = warehouse.getTopRatedProductsThisMonth();
+
+        assertEquals(2, topProducts.size());
+        assertEquals("Harry Potter", topProducts.get(0).name());
+        assertEquals("Laptop", topProducts.get(1).name());
+        assertTrue(topProducts.stream().noneMatch(p -> p.name().equals("Old Product")));
     }
 }

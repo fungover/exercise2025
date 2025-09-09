@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.entities.Category;
 import org.example.entities.Product;
 
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -11,9 +12,6 @@ public class Warehouse {
     private final Map<UUID, Product> products = new LinkedHashMap<>();
 
     public void addProduct(Product product) {
-        if (product == null) {
-            throw new IllegalArgumentException("Product cannot be null");
-        }
 
         UUID productId;
         try {
@@ -55,5 +53,26 @@ public class Warehouse {
                 .filter(product -> category.equals(product.category()))
                 .sorted(Comparator.comparing(Product::name))
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    public Optional<Product> updateProduct(String id, String name, Category category, int rating) {
+
+        UUID productId;
+        try {
+            productId = UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Product ID must be a valid UUID");
+        }
+
+        return Optional.ofNullable(products.computeIfPresent(productId, (key, existingProduct) ->
+                new Product(
+                        existingProduct.id(),
+                        name,
+                        category,
+                        rating,
+                        existingProduct.createdDate(),
+                        ZonedDateTime.now()
+                )
+        ));
     }
 }

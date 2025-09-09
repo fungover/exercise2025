@@ -225,4 +225,78 @@ class WarehouseTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Category cannot be null");
     }
+
+    @Test
+    @DisplayName("Updates successfully existing product with new values")
+    void updateProduct_updatesExistingProduct_whenValidInputProvided() {
+        ZonedDateTime createdTime = ZonedDateTime.now().minusDays(1);
+
+        Product originalProduct = new Product(
+                UUID.randomUUID().toString(),
+                "Old Dog Food",
+                Category.FOOD,
+                3,
+                createdTime,
+                createdTime);
+
+        warehouse.addProduct(originalProduct);
+
+        Optional<Product> updatedProduct = warehouse.updateProduct(
+                originalProduct.id(),
+                "Premium Dog Food",
+                Category.FOOD,
+                5);
+
+        assertThat(updatedProduct)
+                .isPresent();
+
+        Product updated = updatedProduct.get();
+        assertThat(updated.id()).isEqualTo(originalProduct.id());
+        assertThat(updated.name()).isEqualTo("Premium Dog Food");
+        assertThat(updated.category()).isEqualTo(Category.FOOD);
+        assertThat(updated.rating()).isEqualTo(5);
+        assertThat(updated.createdDate()).isEqualTo(originalProduct.createdDate());
+        assertThat(updated.modifiedDate()).isAfter(originalProduct.modifiedDate());
+
+        // Verify that product is updated in the warehouse
+        Optional<Product> retrievedProduct = warehouse.getProductById(originalProduct.id());
+        assertThat(retrievedProduct)
+                .isPresent()
+                .contains(updated);
+    }
+    @Test
+    @DisplayName("Update throws exception when rating is below valid range")
+    void updateProduct_throwsException_whenRatingIsBelowZero() {
+        ZonedDateTime now = ZonedDateTime.now();
+        Product originalProduct = new Product(
+                UUID.randomUUID().toString(),
+                "Original Name",
+                Category.FOOD,
+                5,
+                now,
+                now);
+
+        warehouse.addProduct(originalProduct);
+
+        assertThatThrownBy(() -> warehouse.updateProduct(
+                originalProduct.id(),
+                "Product Name",
+                Category.FOOD,
+                -1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Rating must be between 0 and 10.");
+    }
+    @Test
+    @DisplayName("Update returns empty optional when product ID does not exist")
+    void updateProduct_returnsEmpty_whenProductIdDoesNotExist() {
+        String nonExistentId = UUID.randomUUID().toString();
+
+        Optional<Product> result = warehouse.updateProduct(
+                nonExistentId,
+                "New Name",
+                Category.FOOD,
+                5);
+
+        assertThat(result).isEmpty();
+    }
 }

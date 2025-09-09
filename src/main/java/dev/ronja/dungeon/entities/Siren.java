@@ -2,8 +2,9 @@ package dev.ronja.dungeon.entities;
 
 public class Siren implements Enemy {
     private final String name = "Siren";
-    private int hp = 50;
+    private final int maxHp = 50;
     private final int damage = 8;
+    private int hp = maxHp;
 
     @Override
     public String getName() {
@@ -16,8 +17,18 @@ public class Siren implements Enemy {
     }
 
     @Override
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    @Override
     public int getDamage() {
         return damage;
+    }
+
+    @Override
+    public void setHp(int hp) {
+        this.hp = Math.max(0, Math.min(hp, maxHp));
     }
 
     @Override

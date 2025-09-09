@@ -4,7 +4,7 @@ I then started to break down the assignment into smaller requirements and mapped
 different parts of the codebase. 
 
 # To do:
-[] Choose inheritance, or interface - NOT BOTH 
+[x] Choose inheritance, or interface - NOT BOTH 
 
 🧠 Some thoughts about it....
 

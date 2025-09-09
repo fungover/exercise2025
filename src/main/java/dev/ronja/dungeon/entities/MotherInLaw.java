@@ -3,8 +3,9 @@ package dev.ronja.dungeon.entities;
 public class MotherInLaw implements Enemy, PsychologicalAttack {
 
     private final String name = "Mother-in-Law";
-    private int hp = 70;
+    private final int maxHp = 70;
     private final int damage = 5;
+    private int hp = maxHp;
 
     @Override
     public String getName() {
@@ -17,8 +18,18 @@ public class MotherInLaw implements Enemy, PsychologicalAttack {
     }
 
     @Override
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    @Override
     public int getDamage() {
         return damage;
+    }
+
+    @Override
+    public void setHp(int hp) {
+        this.hp = Math.max(0, Math.min(hp, maxHp));
     }
 
     @Override

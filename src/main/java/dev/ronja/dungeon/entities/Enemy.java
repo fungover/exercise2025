@@ -9,11 +9,24 @@ public interface Enemy {
 
     int getHp();
 
+    int getMaxHp();
+
     int getDamage();
 
-    boolean isAlive();
+    ///  Default boolean for all enemies
+    default boolean isAlive() {
+        return getHp() > 0;
+    }
 
-    void takeDamage(int amount);
+    ///  Default takeDamage()
+    void setHp(int hp);
+
+    default void takeDamage(int amount) {
+        int dmg = Math.max(0, amount);
+        int newHp = Math.max(0, getHp() - dmg);
+        setHp(newHp);
+    }
+
 
     void attack(Player player);
 }

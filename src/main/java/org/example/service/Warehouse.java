@@ -6,6 +6,7 @@ import org.example.entities.Product;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Warehouse {
 
@@ -102,4 +103,54 @@ public class Warehouse {
                 .toList();
     }
 
+    /**
+     * Get all categories that have at least one product
+     *
+     * @return set of categories with products
+     */
+    public Set<Category> getCategoriesWithProducts() {
+        return products.values()
+                .stream()
+                .map(Product::category)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Count products in a specific category
+     *
+     * @param category the category to filter by
+     * @return count of products in the specified category
+     */
+    public int countProductsInCategory(Category category){
+        return (int) products.values()
+                .stream()
+                .filter(p -> p.category() == category)
+                .count();
+    }
+
+    public Map<Character, Integer> getProductInitialsMap() {
+        return products.values()
+                .stream()
+                .map(p -> p.name().toUpperCase().charAt(0))
+                .collect(Collectors.toMap(
+                        initial -> initial,
+                        initial -> 1,
+                        Integer::sum
+                ));
+    }
+
+    /**
+     * Get top 3 highest rated products created in the current month
+     *
+     * @return list of top 3 highest rated products created this month
+     */
+    public List<Product> getTopRatedProductsThisMonth() {
+        LocalDate now = LocalDate.now();
+        return products.values()
+                .stream()
+                .filter(p -> p.createdDate().getMonth() == now.getMonth() && p.createdDate().getYear() == now.getYear())
+                .sorted(Comparator.comparingInt(Product::rating).reversed())
+                .limit(3)
+                .toList();
+    }
 }

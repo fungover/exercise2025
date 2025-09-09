@@ -221,6 +221,34 @@ public class WarehouseTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    @DisplayName("getModifiedProducts(): returns Products where createdDate != modifiedDate")
+    public void getModifiedProductsNotEqualToCreatedDate() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL);
+        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL);
+        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Television", Category.GENERAL);
 
+        //Delay a bit to make sure modifiedDate is different from createdDate
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        warehouse.updateProduct("1", "Desktop", Category.GENERAL, 10);
+
+        assertThat(warehouse.getModifiedProducts()).extracting(Product::getName).containsExactly("Desktop");
+    }
+
+    @Test
+    @DisplayName("getModifiedProducts(): returns an empty list if no products found")
+    public void getModifiedProductsEmptyList() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL);
+        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL);
+
+        assertThat(warehouse.getModifiedProducts()).isEmpty();
+    }
 
 }

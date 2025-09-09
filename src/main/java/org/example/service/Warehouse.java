@@ -77,4 +77,10 @@ public class Warehouse {
                 .filter(p -> p.getCreatedDate().isAfter(date) || p.getCreatedDate().isEqual(date))
                 .toList();
     }
+
+    public List<Product> getModifiedProducts() {
+        return products.stream()
+                .filter(p -> p.getModifiedDate().isAfter(p.getCreatedDate()))
+                .toList();
+    }
 }

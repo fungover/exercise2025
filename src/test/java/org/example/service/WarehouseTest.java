@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.example.entities.Category.ELECTRONICS;
 
 public class WarehouseTest {
 
@@ -65,11 +66,11 @@ public class WarehouseTest {
         warehouse.addProduct(testProduct);
 
 
-        warehouse.updateProduct("1", "Updated Test Product", Category.ELECTRONICS, 5);
+        warehouse.updateProduct("1", "Updated Test Product", ELECTRONICS, 5);
 
         Product updatedProduct = warehouse.getProductById("1").get();
         assertThat(updatedProduct.getName()).isEqualTo("Updated Test Product");
-        assertThat(updatedProduct.getCategory()).isEqualTo(Category.ELECTRONICS);
+        assertThat(updatedProduct.getCategory()).isEqualTo(ELECTRONICS);
         assertThat(updatedProduct.getRating()).isEqualTo(5);
         assertThat(updatedProduct.getId()).isEqualTo("1");
         assertThat(warehouse.getAllProducts().size()).isEqualTo(1);
@@ -191,7 +192,7 @@ public class WarehouseTest {
         Product testProduct4 = addProductToWarehouse(warehouse, "4", "Sandwich", Category.GENERAL, 1);
         Product testProduct5 = addProductToWarehouse(warehouse, "5", "Candy", Category.GENERAL, 1);
         Product testProduct6 = addProductToWarehouse(warehouse, "6", "VR Glasses", Category.GENERAL, 1);
-        Product testProduct7 = addProductToWarehouse(warehouse, "7", "Android TV", Category.ELECTRONICS, 1);
+        Product testProduct7 = addProductToWarehouse(warehouse, "7", "Android TV", ELECTRONICS, 1);
 
         assertThat(warehouse.getProductsByCategorySorted(Category.GENERAL))
                 .extracting(Product::getName)
@@ -206,7 +207,7 @@ public class WarehouseTest {
         Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL, 1);
         Product testProduct3 = addProductToWarehouse(warehouse, "3", "Television", Category.GENERAL, 1);
 
-        assertThat(warehouse.getProductsByCategorySorted(Category.ELECTRONICS)).isEmpty();
+        assertThat(warehouse.getProductsByCategorySorted(ELECTRONICS)).isEmpty();
     }
 
     @Test
@@ -294,12 +295,12 @@ public class WarehouseTest {
     @DisplayName("getCategoriesWithProducts(): return all categories with at least one product")
     public void getCategoriesWithProducts() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.ELECTRONICS, 1);
-        Product testProduct2 = addProductToWarehouse(warehouse, "3", "Television", Category.ELECTRONICS, 1);
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", ELECTRONICS, 1);
+        Product testProduct2 = addProductToWarehouse(warehouse, "3", "Television", ELECTRONICS, 1);
         Product testProduct3 = addProductToWarehouse(warehouse, "1", "Apple", Category.FOOD, 1);
 
         assertThat(warehouse.getCategoriesWithProducts().size()).isEqualTo(2);
-        assertThat(warehouse.getCategoriesWithProducts()).containsExactlyInAnyOrder(Category.ELECTRONICS, Category.FOOD);
+        assertThat(warehouse.getCategoriesWithProducts()).containsExactlyInAnyOrder(ELECTRONICS, Category.FOOD);
     }
 
     @Test
@@ -308,6 +309,37 @@ public class WarehouseTest {
         Warehouse warehouse = new Warehouse();
 
         assertThat(warehouse.getCategoriesWithProducts()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("countProductsInCategory(): returns number of products in a category")
+    public void countProductsInCategoryCountsProducts() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", ELECTRONICS, 1);
+        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL, 1);
+        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Television", ELECTRONICS, 1);
+        Product testProduct4 = addProductToWarehouse(warehouse, "4", "Sandwich", Category.FOOD, 1);
+
+        assertThat(warehouse.countProductsInCategory(Category.ELECTRONICS)).isEqualTo(2);
+        assertThat(warehouse.countProductsInCategory(Category.GENERAL)).isEqualTo(1);
+        assertThat(warehouse.countProductsInCategory(Category.FOOD)).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("countProductsInCategory(): returns 0 if no products found")
+    public void countProductsInCategoryEmptyList() {
+        Warehouse warehouse = new Warehouse();
+        assertThat(warehouse.countProductsInCategory(Category.ELECTRONICS)).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("countProductsInCategory(): throws exception if invalid input")
+    public void countProductsInCategoryThrowsException() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", ELECTRONICS, 1);
+
+        assertThatThrownBy(() -> warehouse.countProductsInCategory(null))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
 }

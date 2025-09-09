@@ -13,7 +13,12 @@ public class Warehouse {
     private final List<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
-        if (product == null) throw new IllegalArgumentException("Product cannot be null");
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+        if (product.name() == null || product.name().isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be empty");
+        }
         products.add(product);
     }
 
@@ -22,23 +27,23 @@ public class Warehouse {
     }
 
     public Product updateProduct(String id, String name, Category category, int rating) {
-        for (int i = 0; i < products.size(); i++) {
-            Product p = products.get(i);
-            if (p.id().equals(id)) {
-                Product updated = new Product(
-                        id,
-                        name,
-                        category,
-                        rating,
-                        p.createdDate(),
-                        LocalDate.now()
-                );
-                products.set(i, updated);
-                return updated;
-            }
-        }
-        throw new IllegalArgumentException("Product with ID " + id + " not found");
+        Product existing = getProductById(id);
+
+        Product updated = new Product(
+                id,
+                name,
+                category,
+                rating,
+                existing.createdDate(),
+                LocalDate.now()
+        );
+
+        int index = products.indexOf(existing);
+        products.set(index, updated);
+
+        return updated;
     }
+
 
     public Product getProductById(String id) {
         return products.stream()
@@ -54,9 +59,9 @@ public class Warehouse {
                 .toList();
     }
 
-    public List<Product> getProductsBasedOnDateSuccess(LocalDate date) {
+    public List<Product> getProductsCreatedAfter(LocalDate date) {
         return products.stream()
-                .filter(p-> p.createdDate().isAfter(date))
+                .filter(p -> p.createdDate().isAfter(date))
                 .toList();
     }
 

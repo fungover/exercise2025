@@ -12,6 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
+
     private Warehouse warehouse;
 
     @BeforeEach
@@ -24,12 +25,19 @@ public class WarehouseTest {
         Product product = new Product("1", "Car", Category.TOYS, 8, LocalDate.now(), LocalDate.now());
         warehouse.addProduct(product);
 
+        List<Product> products = warehouse.getAllProducts();
         assertEquals(1, warehouse.getAllProducts().size());
         assertEquals("Car", warehouse.getAllProducts().get(0).name());
     }
 
     @Test
-    void addProductFailure() {
+    void addProductFailureEmptyName() {
+        Product product = new Product("1", "", Category.TOYS, 5, LocalDate.now(), LocalDate.now());
+        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
+    }
+
+    @Test
+    void addProductFailure_nullProduct() {
         assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(null));
     }
 
@@ -49,7 +57,7 @@ public class WarehouseTest {
     }
 
     @ Test
-    void updateProductFailure() {
+    void updateProductFailureNonExistentProduct() {
         assertThrows(IllegalArgumentException.class, () ->
                 warehouse.updateProduct("99", "Failure", Category.BOOKS, 5)
         );
@@ -57,7 +65,15 @@ public class WarehouseTest {
 
     @Test
     void getAllProductsSuccess() {
+        Product p1 = new Product("1", "Car", Category.TOYS, 8, LocalDate.now(), LocalDate.now());
+        Product p2 = new Product("2", "Book", Category.BOOKS, 7, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+
         List<Product> products = warehouse.getAllProducts();
+        assertEquals(2, products.size());
+        assertEquals("Car", products.get(0).name());
+        assertEquals("Book", products.get(1).name());
     }
 
     @Test
@@ -66,7 +82,6 @@ public class WarehouseTest {
         warehouse.addProduct(product);
 
         Product result = warehouse.getProductById("2");
-
 
         assertEquals("2", result.id());
         assertEquals("Harry Potter", result.name());
@@ -94,7 +109,7 @@ public class WarehouseTest {
     }
 
     @Test
-    void getProductsBasedOnDateSuccess() {
+    void getProductsCreatedAfterSuccess() {
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1);
 
@@ -106,7 +121,7 @@ public class WarehouseTest {
         warehouse.addProduct(p2);
         warehouse.addProduct(p3);
 
-        List<Product> results = warehouse.getProductsBasedOnDateSuccess(yesterday);
+        List<Product> results = warehouse.getProductsCreatedAfter(yesterday);
 
         assertEquals(2, results.size());
         assertTrue(results.stream().anyMatch(p -> p.name().equals("Ticket to Ride")));
@@ -114,10 +129,9 @@ public class WarehouseTest {
     }
 
     @Test
-    void getProductsBasedOnDateFailure() {
+    void getProductsCreatedAfterFailure() {
         LocalDate nextWeek = LocalDate.now().plusWeeks(1);
-
-        assertTrue(warehouse.getProductsBasedOnDateSuccess(nextWeek).isEmpty());
+        assertTrue(warehouse.getProductsCreatedAfter(nextWeek).isEmpty());
     }
 
     @Test

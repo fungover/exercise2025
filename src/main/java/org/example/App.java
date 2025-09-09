@@ -16,13 +16,12 @@ public class App {
     public static void main(String[] args) throws Exception {
 
         // Välj zon (SE1/SE2/SE3/SE4) som argument nr 1
-        String zone;
-        if (args.length > 0) {
-            zone = args[0].toUpperCase();
-        } else {
+        java.util.Set<String> VALID_ZONES = java.util.Set.of("SE1", "SE2", "SE3", "SE4");
+        String zone = (args.length > 0) ? args[0].toUpperCase() : "SE1";
+        if (!VALID_ZONES.contains(zone)) {
+            System.err.println("Ogiltig zon '" + zone + "'. Tillåtna zoner: " + VALID_ZONES + ". Faller tillbaka till SE1.");
             zone = "SE1";
         }
-
         // Välj CSV som argument nr 2 (tex: SE1 lulea-energi-homeadress-consumption.csv)
         String csvPath;
         if (args.length > 1) {

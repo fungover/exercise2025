@@ -72,4 +72,10 @@ public class WarehouseTest {
         assertEquals("2", result.id());
         assertEquals("Harry Potter", result.name());
     }
+
+    @Test
+    void getProductByIdFailure() {
+        assertThrows(IllegalArgumentException.class, () -> warehouse.getProductById("404"));
+    }
+
 }

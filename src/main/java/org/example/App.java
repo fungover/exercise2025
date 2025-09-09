@@ -1,7 +1,11 @@
 package org.example;
 
+import org.example.game.Game;
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello There!");
+        Game game = new Game();
+        game.start();
     }
+
 }

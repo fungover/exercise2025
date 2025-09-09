@@ -167,4 +167,15 @@ public class WarehouseTest {
         assertTrue(categories.contains(Category.BOOKS));
         assertTrue(categories.contains(Category.TOYS));
     }
+
+    @ Test
+    void countProductsInCategory() {
+        warehouse.addProduct(new Product("1", "iPad", Category.ELECTRONICS, 9, LocalDate.now(), LocalDate.now()));
+        warehouse.addProduct(new Product("2", "TV", Category.ELECTRONICS, 8, LocalDate.now(), LocalDate.now()));
+        warehouse.addProduct(new Product("3", "Titanic", Category.MOVIES, 7, LocalDate.now(), LocalDate.now()));
+
+        assertEquals(2, warehouse.countProductsInCategory(Category.ELECTRONICS));
+        assertEquals(1, warehouse.countProductsInCategory(Category.MOVIES));
+        assertEquals(0, warehouse.countProductsInCategory(Category.BOOKS));
+    }
 }

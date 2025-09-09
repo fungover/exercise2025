@@ -30,6 +30,9 @@ public record Product(
         if (modifiedDate == null) {
             modifiedDate = createdDate;
         }
+        if (modifiedDate.isBefore(createdDate)) {
+            throw new IllegalArgumentException("modifiedDate cannot be before createdDate");
+        }
     }
 }
 

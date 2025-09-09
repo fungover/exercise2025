@@ -18,10 +18,10 @@ public record Product(
         if (rating < 0 || rating > 10) {
             throw new IllegalArgumentException("Rating must be between 0 and 10");
         }
-        if (createdDate() == null) {
+        if (createdDate == null) {
             createdDate = LocalDate.now();
         }
-        if (modifiedDate() == null) {
+        if (modifiedDate == null) {
             modifiedDate = createdDate;
         }
     }

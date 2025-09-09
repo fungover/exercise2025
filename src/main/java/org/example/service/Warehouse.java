@@ -27,7 +27,6 @@ public class Warehouse {
             products.put(product.id(), product);
         }
 
-
         // updateProduct(String id, String name, Category category, int rating): Modify an existing product
     public void updateProduct(String id, String name, Category category, int rating) {
 
@@ -70,7 +69,11 @@ public class Warehouse {
         return product;
     }
 
-    //getProductsByCategorySorted(Category category): Products in a category, sorted A–Z by name
+    /**
+     * Get products by category sorted by name A-Z
+     * @param category the category to filter by
+     * @return list of products in the specified category sorted by name
+     */
     public  List<Product> getProductsByCategorySorted(Category category) {
         return products.values()
                 .stream()
@@ -79,7 +82,11 @@ public class Warehouse {
                 .toList();
     }
 
-    // getProductsCreatedAfter(LocalDate date): Products created after a specific date
+    /**
+     * Get products created after a specific date
+     * @param date the date to filter by
+     * @return list of products created after the specified date
+     */
     public List<Product> getProductsCreatedAfter(LocalDate date) {
         return products.values()
                 .stream()
@@ -94,6 +101,5 @@ public class Warehouse {
                 .filter(product -> !product.createdDate().equals(product.modifiedDate()))
                 .toList();
     }
-
 
 }

@@ -277,6 +277,7 @@ public class WarehouseTest {
         warehouse.updateProduct("1", "Desktop", Category.GENERAL, 10);
 
         assertThat(warehouse.getModifiedProducts()).extracting(Product::getName).containsExactly("Desktop");
+        assertThat(warehouse.getModifiedProducts().size()).isEqualTo(1);
     }
 
     @Test
@@ -287,6 +288,26 @@ public class WarehouseTest {
         Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL, 1);
 
         assertThat(warehouse.getModifiedProducts()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("getCategoriesWithProducts(): return all categories with at least one product")
+    public void getCategoriesWithProducts() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.ELECTRONICS, 1);
+        Product testProduct2 = addProductToWarehouse(warehouse, "3", "Television", Category.ELECTRONICS, 1);
+        Product testProduct3 = addProductToWarehouse(warehouse, "1", "Apple", Category.FOOD, 1);
+
+        assertThat(warehouse.getCategoriesWithProducts().size()).isEqualTo(2);
+        assertThat(warehouse.getCategoriesWithProducts()).containsExactlyInAnyOrder(Category.ELECTRONICS, Category.FOOD);
+    }
+
+    @Test
+    @DisplayName("getCategoriesWithProducts(): return empty list if no products found")
+    public void getCategoriesWithProductsEmptyList() {
+        Warehouse warehouse = new Warehouse();
+
+        assertThat(warehouse.getCategoriesWithProducts()).isEmpty();
     }
 
 }

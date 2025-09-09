@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Warehouse {
@@ -85,5 +86,12 @@ public class Warehouse {
         return products.stream()
                 .filter(p -> p.getModifiedDate().isAfter(p.getCreatedDate()))
                 .toList();
+    }
+
+    public List<Category> getCategoriesWithProducts() {
+        return products.stream()
+                .map(Product::getCategory)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

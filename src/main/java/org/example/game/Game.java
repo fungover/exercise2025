@@ -1,6 +1,7 @@
 package org.example.game;
 
 import org.example.entities.*;
+import org.example.utils.GameText;
 
 import java.util.Scanner;
 
@@ -32,54 +33,45 @@ public class Game {
     }
 
     private void showIntroduction() {
-        System.out.println(bold("\n=== Welcome to 'Escape The Dark Cave' ==="));
-        System.out.println("\n* You find yourself waking up in a dark cave *");
-        System.out.println("\nAn old crackly voice speaks to you: ");
-        System.out.println(purple("-Hello friend.. I thought you were dead.."));
-        System.out.println("\n* You feel a cold shiver running down your spine *");
-        System.out.println(purple("\n-Don't worry friend, I will get you out of here.."));
-        System.out.println(purple("..hehe..in one way or another..."));
-        System.out.println(purple("\nBut, before I help you, let's get to know each other a little bit.."));
-        System.out.println(purple("\nI'm Thade, I used to live here.. a long time ago.."));
-        System.out.println(purple("(whispers) ..before the monsters came.."));
-        System.out.println(purple("\n-What is your name, friend? "));
+        System.out.println(GameText.GAME_TITLE);
+        System.out.println(GameText.CAVE_INTRO);
+        System.out.println(GameText.THADE_GREETING);
+        System.out.println(GameText.SPINE_SHIVER);
+        System.out.println(GameText.THADE_REASSURANCE);
+        System.out.println(GameText.THADE_INTRODUCTION);
+        System.out.println(GameText.NAME_PROMPT);
     }
 
     private void continueStory() {
-        System.out.println(purple("\n-Listen carefully now.."));
+        System.out.println(GameText.LISTEN_CAREFULLY);
         System.out.print(purple("Hey, "));
         System.out.print(cyan(player.getName()));
         System.out.print(purple("! "));
-        System.out.println(bold(purple("Are you PAYING ATTENTION?")));
-
-
+        System.out.println(GameText.ATTENTION_CHECK);
     }
 
     private void GameInstructions() {
-        System.out.println(purple("\nYou need to find the golden key that will unlock the door to the exit.."));
-        System.out.println(purple("The key is hidden somewhere in the cave.."));
-        System.out.println(purple("Be careful, there are dangerous monsters everywhere.. "));
-        System.out.println(purple("You can't get past them or run away..."));
-        System.out.println(purple(".. you have to fight for your life first.."));
-        System.out.println(purple("There are weapons and healing potions spread around here.."));
-        System.out.print(purple("And " ));
+        System.out.println(GameText.FIND_KEY_INSTRUCTION);
+        System.out.println(GameText.DANGER_WARNING);
+        System.out.println(GameText.ITEMS_ADVICE);
+        System.out.print(purple("And "));
         System.out.print(cyan(player.getName()));
-        System.out.println(purple( ".. I suggest you find them before picking fights.."));
-        System.out.println(purple("Oh.. and watch out for THE TROLL, he is guarding the exit.."));
+        System.out.println(GameText.FIND_ITEMS_FIRST);
+        System.out.println(GameText.TROLL_WARNING);
         System.out.print(purple("\nGood luck, hehe.. "));
         System.out.print(cyan(player.getName()));
-        System.out.print(purple(".. you'll need it!"));
-        System.out.println("\nType 'help' to see available commands");
+        System.out.print(GameText.GOOD_LUCK);
+        System.out.println(GameText.HELP_PROMPT);
     }
 
     private String getPlayerName() {
         String name = scanner.nextLine();
         System.out.print(purple("\n-"));
         System.out.print(cyan(name));
-        System.out.print(purple( ".. interesting name.."));
-        System.out.print(purple("\nOkay, friend.. I mean "));
+        System.out.print(GameText.NAME_INTERESTING);
+        System.out.print(GameText.NAME_OKAY);
         System.out.print(cyan(name));
-        System.out.println(purple(".."));
+        System.out.println(GameText.NAME_DOTS);
         return name;
     }
 
@@ -89,18 +81,17 @@ public class Game {
             String answer = scanner.nextLine();
             if (answer.equalsIgnoreCase("yes") || answer.equalsIgnoreCase("y")) {
                 answerYes = true;
-                System.out.println(purple("\nGood! Here is what you need to do, in order to get out of here.."));
+                System.out.println(GameText.ATTENTION_RESPONSE_GOOD);
             } else {
-                System.out.println(purple("Okay..It's like that huh? I can wait forever.. \nSay 'yes' when you want to continue.."));
+                System.out.println(GameText.ATTENTION_RESPONSE_WAIT);
             }
         }
     }
 
     private void gameLoop() {
         currentRoom.look();
-
         while (gameRunning && player.isAlive()) {
-            System.out.println("\n> What do you want to do?");
+            System.out.println(GameText.WHAT_TO_DO);
             String command = scanner.nextLine().toLowerCase();
             handleCommand(command);
         }
@@ -109,7 +100,7 @@ public class Game {
     private void handleCommand(String command) {
         String normalized = command == null ? "" : command.trim();
         if (normalized.isEmpty()) {
-            System.out.println("Type a command or 'help'.");
+            System.out.println(GameText.TYPE_COMMAND);
             return;
         }
         String[] words = normalized.split("\\s+");
@@ -121,7 +112,7 @@ public class Game {
                 if (words.length > 1) {
                     movePlayer(words[1]);
                 } else {
-                    System.out.println("Go where? (north, south, east, west)");
+                    System.out.println(GameText.GO_WHERE);
                 }
                 break;
 
@@ -136,7 +127,7 @@ public class Game {
                     String itemName = idx >= 0 ? command.substring(idx + 1).trim() : "";
                     takeItem(itemName);
                 } else {
-                    System.out.println("Take what?");
+                    System.out.println(GameText.TAKE_WHAT);
                 }
                 break;
 
@@ -156,7 +147,7 @@ public class Game {
                     String itemName = idx >= 0 ? command.substring(idx + 1).trim() : "";
                     useItem(itemName);
                 } else {
-                    System.out.println("Use what?");
+                    System.out.println(GameText.USE_WHAT);
                 }
                 break;
 
@@ -166,7 +157,7 @@ public class Game {
                     String itemName = idx >= 0 ? command.substring(idx + 1).trim() : "";
                     equipItem(itemName);
                 } else {
-                    System.out.println("Equip what?");
+                    System.out.println(GameText.EQUIP_WHAT);
                 }
                 break;
 
@@ -175,7 +166,7 @@ public class Game {
                 if (words.length > 1 && words[1].equalsIgnoreCase("door")) {
                     unlockDoor();
                 } else {
-                    System.out.println("Unlock what? Try 'unlock door'");
+                    System.out.println(GameText.UNLOCK_WHAT);
                 }
                 break;
 
@@ -191,30 +182,29 @@ public class Game {
 
             case "stuck":
             case "hint":
-                System.out.println(yellow("\nHere are a few tips:"));
-                System.out.println("Items you see needs to be picked up before you can use/equip them.");
-                System.out.println("You can pick up items by typing 'take <item>'.");
-                System.out.println("You can use items by typing 'use <item>'.");
-                System.out.println("You can equip items by typing 'equip <item>'.");
-                System.out.println("Once you see an enemy you can't leave the room without fighting first.");
-                System.out.println("You can take, use/equip items before fighting.");
-                System.out.println("There is no compass, you need to keep track of where you are..");
-                System.out.println("For available commands, type 'help'.");
+                System.out.println(GameText.TIPS_HEADER);
+                System.out.println(GameText.TIP_PICKUP);
+                System.out.println(GameText.TIP_TAKE);
+                System.out.println(GameText.TIP_USE);
+                System.out.println(GameText.TIP_EQUIP);
+                System.out.println(GameText.TIP_COMBAT);
+                System.out.println(GameText.TIP_PREPARE);
+                System.out.println(GameText.TIP_NAVIGATION);
+                System.out.println(GameText.TIP_HELP);
                 break;
 
 
             case "quit":
                 gameRunning = false;
-                System.out.println("Thanks for playing!");
+                System.out.println(GameText.THANKS_FOR_PLAYING);
                 break;
 
             case "exit":
-                System.out.println("To quit the game, type 'quit'");
-                System.out.println("For other commands, type 'help'");
+                System.out.println(GameText.QUIT_INSTRUCTION);
                 break;
 
             default:
-                System.out.println("I don't understand that command. Type 'help' for available commands.");
+                System.out.println(GameText.UNKNOWN_COMMAND);
         }
     }
 
@@ -222,13 +212,13 @@ public class Game {
         Room nextRoom = currentRoom.getExit(direction);
         if (nextRoom != null) {
             if (currentRoom.hasAliveEnemies()) {
-                System.out.println("You can't leave while enemies are blocking your way!");
+                System.out.println(GameText.ENEMIES_BLOCKING);
                 return;
             }
             currentRoom = nextRoom;
             currentRoom.look();
         } else {
-            System.out.println("You can't go that way!");
+            System.out.println(GameText.NO_EXIT);
         }
     }
 
@@ -237,13 +227,13 @@ public class Game {
         if (item != null) {
             if (player.addItem(item)) {
                 currentRoom.removeItem(item);
-                System.out.println("You picked up: " + item.getName());
+                System.out.printf(GameText.ITEM_PICKED_UP + "%n", item.getName());
             } else {
-                System.out.println("Your inventory is full!");
+                System.out.println(GameText.INVENTORY_FULL);
             }
         } else {
-            System.out.println("There's no " + itemName + " here!");
-            System.out.println("Items in room:");
+            System.out.printf(GameText.NO_ITEM_HERE + "%n", itemName);
+            System.out.println(GameText.ITEMS_IN_ROOM);
             for (Item roomItem : currentRoom.getItems()) {
                 System.out.println("- " + roomItem.getName());
             }
@@ -259,7 +249,7 @@ public class Game {
                 player.removeItem(item);
             }
         } else {
-            System.out.println("You can't use that item!");
+            System.out.println(GameText.CANT_USE_ITEM);
         }
     }
 
@@ -269,7 +259,7 @@ public class Game {
             player.equipWeapon(itemName);
             player.removeItem(item);
         } else {
-            System.out.println("You can't equip that!");
+            System.out.println(GameText.CANT_EQUIP_ITEM);
         }
     }
 
@@ -286,11 +276,11 @@ public class Game {
 
             //Check if the player died
             if (!player.isAlive()) {
-                System.out.println(red(bold("\n*** GAME OVER! ***")));
+                System.out.println(GameText.GAME_OVER);
                 gameRunning = false;
             }
         } else {
-            System.out.println("There are no enemies here to fight!");
+            System.out.println(GameText.NO_ENEMIES);
         }
     }
 
@@ -304,40 +294,39 @@ public class Game {
         if (currentRoom.getName().equals("Troll's Lair")) {
             if (player.findItem("Golden Key") != null) {
                 if (!currentRoom.hasAliveEnemies()) {
-                    System.out.println(yellow("\n=== You insert the Golden Key into the massive door... ==="));
-                    System.out.println("=== *CLICK* The door unlocks with a satisfying sound! ===");
-                    System.out.println("\n=== The door swings open, revealing bright sunlight! ===");
-                    System.out.println("=== You step outside and breathe fresh air for the first time in ages. ===");
-                    System.out.println(bold(green("\n=== 🎉 CONGRATULATIONS! YOU HAVE ESCAPED THE DARK CAVE! 🎉 ===")));
-                    System.out.println(bold(green("=== Game completed in: " + minutes + " minutes and " + seconds + " seconds " + "===")));
-                    System.out.println("\n=== Thade's corruption is broken, and you are finally free! ===");
-                    System.out.println(cyan("\n=== Thanks for playing " + player.getName() + "! ==="));
+                    System.out.println(GameText.DOOR_UNLOCK_START);
+                    System.out.println(GameText.DOOR_UNLOCK_CLICK);
+                    System.out.println(GameText.DOOR_OPENS);
+                    System.out.println(GameText.VICTORY_CONGRATULATIONS);
+                    System.out.printf(GameText.VICTORY_TIME + "%n", minutes, seconds);
+                    System.out.println(GameText.THADE_FREED);
+                    System.out.printf(GameText.THANKS_FOR_PLAYING + "%n", player.getName());
                     gameRunning = false;
                 } else {
-                    System.out.println("You can't unlock the door while the troll is still alive!");
+                    System.out.println(GameText.TROLL_STILL_ALIVE);
                 }
             } else {
-                System.out.println("You need the Golden Key to unlock this door!");
+                System.out.println(GameText.NEED_GOLDEN_KEY);
             }
         } else {
-            System.out.println("There's no door to unlock here.");
+            System.out.println(GameText.NO_DOOR_HERE);
         }
     }
 
     private void showHelp() {
-        System.out.println(yellow("\n=== Available Commands ==="));
-        System.out.println("go <direction> - Move (north, south, east, west)");
-        System.out.println("look           - Look around the room");
-        System.out.println("take <item>    - Pick up an item");
-        System.out.println("inventory      - Show your items");
-        System.out.println("stats          - Show your health and damage");
-        System.out.println("use <item>     - Use healing potion");
-        System.out.println("equip <item>   - Equip weapon");
-        System.out.println("attack         - Fight enemies in the room");
-        System.out.println("unlock         - Unlock door");
-        System.out.println("help           - Show this help");
-        System.out.println("stuck or hint  - Get some tips..");
-        System.out.println("quit           - Exit game");
+        System.out.println(GameText.HELP_HEADER);
+        System.out.println(GameText.HELP_GO);
+        System.out.println(GameText.HELP_LOOK);
+        System.out.println(GameText.HELP_TAKE);
+        System.out.println(GameText.HELP_INVENTORY);
+        System.out.println(GameText.HELP_STATS);
+        System.out.println(GameText.HELP_USE);
+        System.out.println(GameText.HELP_EQUIP);
+        System.out.println(GameText.HELP_ATTACK);
+        System.out.println(GameText.HELP_UNLOCK);
+        System.out.println(GameText.HELP_HELP);
+        System.out.println(GameText.HELP_HINT);
+        System.out.println(GameText.HELP_QUIT);
     }
 
 }

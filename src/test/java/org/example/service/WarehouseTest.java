@@ -102,4 +102,24 @@ import static org.junit.jupiter.api.Assertions.*;
          Warehouse w = new Warehouse();
          assertThrows(IllegalArgumentException.class, () -> w.getProductsByCategorySorted(null));
      }
-}
+     // --- getProductsCreatedAfter ---
+    @Test
+     void getProductsCreatedAfterShouldFilter() {
+         Warehouse w = new Warehouse();
+         LocalDate fiveDaysAgo = LocalDate.now().minusDays(5);
+         LocalDate yesterday = LocalDate.now().minusDays(1);
+         LocalDate today = LocalDate.now();
+
+         w.addProduct(new Product("x", "X", Category.Food, 5, fiveDaysAgo, fiveDaysAgo));
+         w.addProduct(new Product("y", "Y", Category.Drink, 5, yesterday, yesterday));
+         w.addProduct(new Product("z", "Z", Category.Drink, 5, today, today));
+
+         var result = w.getProductsCreatedAfter(LocalDate.now().minusDays(2));
+         assertEquals(2, result.size()); // Yesterday and Today
+    }
+    @Test
+     void getProductsCreatedAfterShouldThrowExceptionWhenDateIsNull() {
+        Warehouse w = new Warehouse();
+        assertThrows(IllegalArgumentException.class, () -> w.getProductsCreatedAfter(null));
+     }
+ }

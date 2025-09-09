@@ -59,6 +59,14 @@ public class Warehouse {
                 .sorted(Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER))
                 .collect(Collectors.toList());
     }
+    public List<Product> getProductsCreatedAfter(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+        return products.stream()
+                .filter(p -> p.createdDate().isAfter(date))
+                .collect(Collectors.toList());
+    }
     }
 
 

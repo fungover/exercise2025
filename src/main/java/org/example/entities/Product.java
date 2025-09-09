@@ -24,5 +24,12 @@ public record Product(
         if (modifiedDate == null) {
             throw new IllegalArgumentException("Modified date cannot be null.");
         }
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product ID cannot be null or empty.");
+        }
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null.");
+        }
+
     }
 }

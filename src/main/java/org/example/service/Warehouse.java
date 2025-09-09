@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.entities.Product;
 import org.example.entities.Category;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -39,6 +40,18 @@ public class Warehouse {
         return products.stream()
                 .filter(p -> p.category().equals(category))
                 .sorted(Comparator.comparing(Product::name))
+                .toList();
+    }
+
+    public List<Product> getProductsCreatedAfter(LocalDate date) {
+        return products.stream()
+                .filter(p -> p.createdDate().isAfter(date))
+                .toList();
+    }
+
+    public List<Product> getModifiedProducts() {
+        return products.stream()
+                .filter(p -> !p.modifiedDate().equals(p.createdDate()))
                 .toList();
     }
 }

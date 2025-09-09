@@ -90,6 +90,8 @@ public class App {
         PriceUtils.printWindowSummary(futurePrices, start8, 8);
     }
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     // Hjälpmetod för att hämta priser för en viss dag
     private static List<PricePoint> fetchPrices(HttpClient client, LocalDate date, String zone) throws Exception {
         String year = String.valueOf(date.getYear());
@@ -98,15 +100,18 @@ public class App {
         String url = "https://www.elprisetjustnu.se/api/v1/prices/"
                 + year + "/" + monthDay + "_" + zone + ".json";
 
-        HttpRequest request = HttpRequest.newBuilder(URI.create(url)).GET().build();
+        HttpRequest request = HttpRequest.newBuilder(URI.create(url))
+                .header("Accept", "application/json")
+                .timeout(java.time.Duration.ofSeconds(10))
+                .GET()
+                .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(response.body(), new TypeReference<List<PricePoint>>() {});
-        } else {
-            return List.of();
+            return MAPPER.readValue(response.body(), new TypeReference<List<PricePoint>>() {});
         }
+        System.err.println("Kunde inte hämta priser (" + response.statusCode() + "): " + url);
+        return List.of();
     }
 
     // Läser en CSV-fil med elförbrukning och

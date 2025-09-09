@@ -113,7 +113,7 @@ public class PriceUtils {
 
     // Summering av hittat fönster
     public static void printWindowSummary(List<PricePoint> prices, int start, int windowSize) {
-        if (start < 0) {
+        if (prices == null || start < 0 || windowSize <= 0 || (start + windowSize) > prices.size()) {
             System.out.println("Ingen " + windowSize + "h-period (för få datapunkter).");
             return;
         }

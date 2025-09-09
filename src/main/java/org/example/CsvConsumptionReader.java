@@ -15,9 +15,7 @@ public class CsvConsumptionReader {
     public static List<ConsumptionPoint> readConsumption(String filename) throws IOException {
         List<ConsumptionPoint> list = new ArrayList<>();
 
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-
-        try {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             boolean firstLine = true;
 
@@ -50,12 +48,10 @@ public class CsvConsumptionReader {
                     }
                     list.add(new ConsumptionPoint(time, consumption));
                 } catch (NumberFormatException nfe) {
-                    // ogiltigt tal – hoppa över
+                   // ogiltigt tal – hoppa över
+                   }
                 }
-            } // <-- här saknades en klammer!
-        } finally {
-            br.close();
-        }
+            }
 
         return list;
     }

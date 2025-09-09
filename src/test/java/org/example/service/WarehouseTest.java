@@ -23,6 +23,8 @@ class WarehouseTest {
         warehouse = new Warehouse();
     }
 
+    //TEST ADD PRODUCT
+
     @Test
     @DisplayName( "Adds a product to the warehouse")
     void addProductToWarehouse(){
@@ -61,6 +63,8 @@ class WarehouseTest {
                 .hasMessage("Product name cannot be empty or null.");
 
     }
+
+    //TEST GET ALL PRODUCTS
 
     @Test
     @DisplayName("Returns all added products to  the warehouse")
@@ -124,6 +128,8 @@ class WarehouseTest {
 
     }
 
+    //TEST GET PRODUCT BY ID
+
     @Test
     @DisplayName("Returns product by valid ID")
     void getProductById_returnsProduct_whenIdExists() {
@@ -161,6 +167,8 @@ class WarehouseTest {
         assertThat(result)
                 .isEmpty();
     }
+
+    //TEST GET PRODUCTS BY CATEGORY SORTED
 
     @Test
     @DisplayName("Returns products of specified category sorted alphabetically by name")
@@ -228,6 +236,8 @@ class WarehouseTest {
                 .hasMessage("Category cannot be null");
     }
 
+    //TEST UPDATE PRODUCT
+
     @Test
     @DisplayName("Updates successfully existing product with new values")
     void updateProduct_updatesExistingProduct_whenValidInputProvided() {
@@ -266,6 +276,7 @@ class WarehouseTest {
                 .isPresent()
                 .contains(updated);
     }
+
     @Test
     @DisplayName("Update throws exception when rating is below valid range")
     void updateProduct_throwsException_whenRatingIsBelowZero() {
@@ -301,6 +312,8 @@ class WarehouseTest {
 
         assertThat(result).isEmpty();
     }
+
+    //TEST GET PRODUCTS CREATED AFTER
 
     @Test
     @DisplayName("Returns products created AFTER given ZonedDateTime")

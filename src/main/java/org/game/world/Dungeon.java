@@ -59,6 +59,4 @@ public class Dungeon {
         if (x < 0 || y < 0 || x > width - 1 || y > height - 1) return null;
         return map[x][y];
     }
-
-
 }

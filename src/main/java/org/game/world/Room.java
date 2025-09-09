@@ -9,7 +9,6 @@ import org.game.utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Room {
     private String type;
@@ -62,7 +61,6 @@ public class Room {
                 break;
         }
     }
-
 
     public String getType() {return type;}
     public List<Enemy> getEnemies(){return enemies;}

@@ -99,29 +99,8 @@ public class Game {
 
                     // Todo dev commands
                 case "die":
-                    player.takeDamage(1000,true);
+                    player.takeDamage(10,true);
                     break;
-
-                case "additem":
-                    String itemName = InputHandler.getInput("Enter item name: ");
-                    String ItemType = InputHandler.getInput("Type of item: ");
-                    int itemValue = Integer.parseInt(InputHandler.getInput("Enter value of item: "));
-                    int itemQuantity = Integer.parseInt(InputHandler.getInput("Enter value of item quantity: "));
-                    System.out.println("What slot type?: HEAD|CHEST|OFFHAND|WEAPON|LEGS|GLOVES|BOOTS");
-                    List<String> itemSlot = Collections.singletonList(InputHandler.getInput("Enter slot type:"));
-                    Item item = new Item(itemName,ItemType,itemValue, itemQuantity,itemSlot);
-                    player.addItem(item);
-                    break;
-
-//                case "additem":
-//                    String itemName = InputHandler.getInput("Enter item name: ");
-//                    String ItemType = InputHandler.getInput("Type of item: ");
-//                    int itemValue = Integer.parseInt(InputHandler.getInput("Enter value of item: "));
-//                    int itemQuantity = Integer.parseInt(InputHandler.getInput("Enter value of item quantity: "));
-//                    System.out.println("What slot type?: HEAD|CHEST|OFFHAND|WEAPON|LEGS|GLOVES|BOOTS");
-//                    List<String> itemSlot = Collections.singletonList(InputHandler.getInput("Enter slot type:"));
-//                    player.addItem(item);
-//                    break;
 
                     case "colors":
 

@@ -2,7 +2,9 @@ package org.game.world;
 
 import org.game.entities.Enemy;
 import org.game.entities.Item;
+import org.game.entities.npcs.Dragon;
 import org.game.entities.npcs.Goblin;
+import org.game.entities.npcs.Skeleton;
 import org.game.utils.RandomGenerator;
 
 import java.util.ArrayList;
@@ -29,7 +31,10 @@ public class Room {
         switch (type.toLowerCase()) {
             case "enemy":
                 Goblin goblin = new Goblin(0,0);
-                enemies.add(goblin);
+                Skeleton skeleton = new Skeleton(0,0);
+                int rollEnemy = RandomGenerator.randomInt(0,1);
+                if (rollEnemy == 0){enemies.add(goblin);}
+                else if (rollEnemy == 1) {enemies.add(skeleton);}
                 break;
 
             case "treasure":
@@ -43,12 +48,16 @@ public class Room {
                 break;
             case "boss":
                 Goblin bossgoblin = new Goblin(0,0);
-                enemies.add(bossgoblin);
+                Dragon dragon = new Dragon(0,0);
+                enemies.add(dragon);
                 break;
+
             case "empty":
                 break;
+
             case "shop":
                 break;
+
             default:
                 break;
         }

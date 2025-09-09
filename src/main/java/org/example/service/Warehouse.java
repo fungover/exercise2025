@@ -46,4 +46,11 @@ public class Warehouse {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Product with ID " + id + " not found"));
     }
+
+    public List<Product> getProductsByCategorySorted(Category category) {
+        return products.stream()
+                .filter(p -> p.category() == category)
+                .sorted((p1, p2) -> p1.name().compareToIgnoreCase(p2.name()))
+                .toList();
+    }
 }

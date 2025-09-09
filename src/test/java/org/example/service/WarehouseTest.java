@@ -373,4 +373,57 @@ class WarehouseTest {
 
         assertThat(recentProducts).isEmpty();
     }
+
+    //TEST GET MODIFIED PRODUCTS
+
+    @Test
+    @DisplayName("Returns products where createdDate is NOT the same as modifiedDate")
+    void getModifiedProducts_returnsModifiedProducts() {
+        ZonedDateTime now = ZonedDateTime.now();
+        Product modified = new Product(
+                UUID.randomUUID().toString(),
+                "Modified Toy",
+                Category.TOYS,
+                7,
+                now,
+                now.plusDays(1) // modified 1 day later
+        );
+        Product unmodified = new Product(
+                UUID.randomUUID().toString(),
+                "Unmodified Toy",
+                Category.TOYS,
+                5,
+                now,
+                now // same date as created date
+        );
+
+        warehouse.addProduct(modified);
+        warehouse.addProduct(unmodified);
+
+        List<Product> result = warehouse.getModifiedProducts();
+
+        assertThat(result)
+                .hasSize(1)
+                .containsExactly(modified);
+    }
+
+    @Test
+    @DisplayName("Returns empty list when no products are modified")
+    void getModifiedProducts_returnsEmpty_whenNoProductsModified() {
+        ZonedDateTime now = ZonedDateTime.now();
+        Product product = new Product(
+                UUID.randomUUID().toString(),
+                "Chew Bone",
+                Category.FOOD,
+                4,
+                now,
+                now // not modified
+        );
+
+        warehouse.addProduct(product);
+
+        List<Product> result = warehouse.getModifiedProducts();
+
+        assertThat(result).isEmpty();
+    }
 }

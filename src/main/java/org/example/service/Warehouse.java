@@ -81,4 +81,11 @@ public class Warehouse {
                 .filter(product -> product.createdDate().isAfter(dateTime))
                 .collect(Collectors.toList());
     }
+
+    //returns products that have been modified since the given date
+    public List<Product> getModifiedProducts() {
+        return products.values().stream()
+                .filter(product -> !product.createdDate().isEqual(product.modifiedDate()))
+                .collect(Collectors.toUnmodifiableList());
+    }
 }

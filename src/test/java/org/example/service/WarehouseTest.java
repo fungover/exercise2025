@@ -218,4 +218,31 @@ public class WarehouseTest {
         assertThrows(NullPointerException.class, () -> warehouse.getProductsCreatedAfter(null));
     }
 
+    /** getModifiedProducts method */
+    @Test
+    void getModifiedProducts_success_returnsOnlyUpdatedOnes() {
+        LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 10, 0);
+        Product product1 = Product.createNew("id1", "A", Category.BOOKS, 5, createdAt);
+        Product product2 = Product.createNew("id2", "B", Category.BOOKS, 5, createdAt);
+
+        warehouse.addProduct(product1);
+        warehouse.addProduct(product2);
+
+        warehouse.updateProduct("id2", "updated product", Category.BOOKS, 7);
+
+        var result = warehouse.getModifiedProducts();
+        assertEquals(List.of("id2"), result.stream().map(Product::id).toList());
+    }
+
+    @Test
+    void getModifiedProducts_noneModified_returnsEmpty() {
+        LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
+
+        Product product = Product.createNew("id1", "A", Category.BOOKS, 5, createdAt);
+
+        warehouse.addProduct(product);
+
+        var result = warehouse.getModifiedProducts();
+        assertTrue(result.isEmpty());
+    }
 }

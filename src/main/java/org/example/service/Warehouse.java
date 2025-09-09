@@ -66,9 +66,9 @@ public final class Warehouse {
                 .toList();
     }
 
-     /*
-    getModifiedProducts() {
-
+    public List<Product> getModifiedProducts() {
+        return store.values().stream()
+                .filter(p -> !p.createdDate().equals(p.modifiedDate()))
+                .toList();
     }
-    */
 }

@@ -401,4 +401,24 @@ public class WarehouseTest {
         }
     }
 
+    @Test
+    @DisplayName("getTopRatedProductsThisMonth(): returns an empty list if no products found")
+    public void getTopRatedProductsThisMonthEmptyList() {
+        Warehouse warehouse = new Warehouse();
+        assertThat(warehouse.getTopRatedProductsThisMonth()).isEmpty();
+        Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 2025, 1, 31, 23, 59, 59);
+        warehouse.addProduct(testProduct1);
+
+        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
+            LocalDateTime date1 = LocalDateTime.of(2025, 2, 1, 00, 00, 00, 0);
+
+            mockedStatic.when(LocalDateTime::now)
+                    .thenReturn(date1);
+
+            List<Product> expectedProducts = warehouse.getTopRatedProductsThisMonth();
+
+            assertThat(expectedProducts).isEmpty();
+        }
+    }
+
 }

@@ -8,10 +8,14 @@ public class Warehouse {
     private final ArrayList<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
-        if (product.rating() >= 0 && product.rating() < 10) {
-            products.add(product);
+        if (product.name().isEmpty()) {
+            System.out.println("Product name must not be empty");
         } else {
-            System.out.println("Rating must be between 0 and 10");
+            products.add(product);
         }
+    }
+
+    public ArrayList<Product> getProducts() {
+        return products;
     }
 }

@@ -23,8 +23,8 @@ public class Dragon extends Enemy {
         // Todo drop table here
         //   Item Name    |     Type   |      Price    |   Quantity   |      SlotType      |
         addToLootTable(new Item("coin","currency",1,5));
-        addToLootTable(new Item("bones","misc",0,1));
-        addToLootTable(new Item("bread","consumable",1,1));
+        addToLootTable(new Item("bread","consumable",1,1,true,5));
+        addToLootTable(new Item("healing potion","consumable",1,1,true,10));
         addToLootTable(new Item("steel axe","weapon",5,1,List.of(EquipmentSlot.WEAPON),3,0,0));
         addToLootTable(new Item("steel sword","weapon",5,1,List.of(EquipmentSlot.WEAPON),3,0,0));
         addToLootTable(new Item("steel shield","offhand",5,1,List.of(EquipmentSlot.OFFHAND),0,3,4));

@@ -24,7 +24,8 @@ public class Skeleton extends Enemy {
         // Item Name | Type | Price
         addToLootTable(new Item("coin","currency",1,5));
         addToLootTable(new Item("bones","misc",0,1));
-        addToLootTable(new Item("bread","consumable",1,1));
+        addToLootTable(new Item("bread","consumable",1,1,true,5));
+        addToLootTable(new Item("healing potion","consumable",1,1,true,10));
         addToLootTable(new Item("iron axe","weapon",5,1,List.of(EquipmentSlot.WEAPON),2,0,0));
         addToLootTable(new Item("iron sword","weapon",5,1,List.of(EquipmentSlot.WEAPON),2,0,0));
         addToLootTable(new Item("iron shield","offhand",5,1,List.of(EquipmentSlot.OFFHAND),0,2,3));

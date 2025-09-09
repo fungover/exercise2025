@@ -23,47 +23,66 @@ public class Enemy extends Character {
                 y);
     }
 
-            // Todo adds item to loot table
-            protected void addToLootTable(Item item) {
-                lootTable.add(item);
-            }
+        // Todo adds item to loot table
+        protected void addToLootTable(Item item) {
+            lootTable.add(item);
+        }
 
-            // Todo rolls for loot when enemy dies
-            public Item getLoot() {
-                if (lootTable.isEmpty())return null;
-                if (!RandomGenerator.chance(50)) {
-                    return null;
+        // Todo rolls for loot when enemy dies
+        public Item getLoot() {
+            if (lootTable.isEmpty())return null;
+            if (!RandomGenerator.chance(50)) {
+                return null;
+            }
+            return lootTable.get(RandomGenerator.randomInt(0, lootTable.size() -1));
+        }
+
+        public List<Item> dropLoot() {
+            List<Item> drops = new ArrayList<>();
+
+            for (Item base : lootTable) {
+                // Roll chance to drop
+                if (!RandomGenerator.chance(50)) continue;
+
+                Item drop;
+
+                // Equipable items
+                if (base.isEquippable()) {
+                    drop = new Item(
+                            base.getName(),
+                            base.getType(),
+                            base.getPrice(),
+                            base.getQuantity(),
+                            base.getSlots(),
+                            base.getStrengthBonus(),
+                            base.getDefenseBonus(),
+                            base.getHealthBonus()
+                    );
                 }
-                return lootTable.get(RandomGenerator.randomInt(0, lootTable.size() -1));
-            }
-
-            public List<Item> dropLoot() {
-                List<Item> drops = new ArrayList<>();
-
-                for (Item base : lootTable) {
-                    if (RandomGenerator.chance(50)) {
-                        List<String> slots = base.getSlots();
-                        Item drop;
-                        if (slots !=null) {
-
-                            drops.add(new Item(
-                                    base.getName(),
-                                    base.getType(),
-                                    base.getPrice(),
-                                    base.getQuantity(),
-                                    slots,
-                                    base.getStrengthBonus(),
-                                    base.getDefenseBonus(),
-                                    base.getHealthBonus()
-                            ));
-                        } else {
-                            drop = new Item(base.getName(),
-                                    base.getType(),
-                                    base.getPrice(),
-                                    base.getQuantity());
-                        }
-                    }
+                // Consumable items
+                else if (base.isConsumable()) {
+                    drop = new Item(
+                            base.getName(),
+                            base.getType(),
+                            base.getPrice(),
+                            base.getQuantity(),
+                            true,
+                            base.getHealAmount()
+                    );
                 }
-                return drops;
+                // Regular non-equipable, non-consumable items
+                else {
+                    drop = new Item(
+                            base.getName(),
+                            base.getType(),
+                            base.getPrice(),
+                            base.getQuantity()
+                    );
+                }
+
+                drops.add(drop);
             }
+
+            return drops;
+        }
 }

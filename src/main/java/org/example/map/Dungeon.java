@@ -21,6 +21,7 @@ public class Dungeon {
 
     // 2D array med Tile objekt [rad][kolumn] = [y][x]
     private final Tile[][] grid;
+    private static final java.util.Random RNG = new java.util.Random();
 
     public Dungeon(int floor) {
         grid = new Tile[HEIGHT][WIDTH];
@@ -64,7 +65,7 @@ public class Dungeon {
 
                     } else if (RandomUtils.chance(0.25)) {
                         // 25% av 80% dvs 20% chans (om ingen fiende) att tile får ett item
-                        int roll = new Random().nextInt(3);
+                        int roll = RNG.nextInt(3);
                         switch (roll) {
                             case 0 -> tile.setItem(RandomUtils.randomWeapon());
                             case 1 -> tile.setItem(RandomUtils.randomArmor());

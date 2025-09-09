@@ -7,6 +7,9 @@ public class FloorService {
     private int currentFloor;
 
     public FloorService(int totalFloors) {
+        if (totalFloors < 1) {
+            throw new IllegalArgumentException("totalFloors must be >= 1");
+        }
         this.totalFloors = totalFloors;
         this.currentFloor = 1; // start på våning 1
     }

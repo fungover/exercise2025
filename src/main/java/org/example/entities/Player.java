@@ -2,6 +2,7 @@ package org.example.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 // Player som har namn, hp, attackDamage, defense och en position på kartan (x, y)
 public class Player {
@@ -15,6 +16,8 @@ public class Player {
     private int defense;
     private int xp;
     private int xpToLevelUp;
+    private int weaponBonus;
+    private int armorBonus;
 
     private Item equippedWeapon;
     private Item equippedArmor;
@@ -34,6 +37,8 @@ public class Player {
         this.xpToLevelUp = 100;
         this.equippedWeapon = new Item("Bare Hands", Item.ItemType.WEAPON, 0);
         this.equippedArmor = new Item("Cloth Armor", Item.ItemType.ARMOR, 0);
+        this.weaponBonus = 0;
+        this.armorBonus = 0;
     }
 
     // === Inventory ===
@@ -42,7 +47,7 @@ public class Player {
     }
 
     public List<Item> getInventory() {
-        return inventory;
+        return Collections.unmodifiableList(inventory);
     }
 
     public void printInventory() {
@@ -77,6 +82,11 @@ public class Player {
 
     // Använd ett item från inventory
     public void useItem(Item item) {
+        if (item == null) return;
+        if (!inventory.contains(item)) {
+            System.out.println("Item not in inventory: " + (item.getName()));
+            return;
+        }
         switch (item.getType()) {
             case CONSUMABLE -> {
                 setHp(getHp() + item.getValue());
@@ -89,7 +99,7 @@ public class Player {
                     System.out.println("Unequipped " + equippedWeapon.getName() + " and returned it to inventory.");
                 }
                 equippedWeapon = item;
-                setAttackDamage(20 + item.getValue()); // Standard damage + vapnets värde
+                weaponBonus = item.getValue(); // gear bonus only; base ATK kept in attackDamage
                 inventory.remove(item);
                 System.out.println(getName() + " equipped weapon: " + item.getName());
             }
@@ -99,7 +109,7 @@ public class Player {
                     System.out.println("Unequipped " + equippedArmor.getName() + " and returned it to inventory.");
                 }
                 equippedArmor = item;
-                setDefense(item.getValue());
+                armorBonus = item.getValue(); // gear bonus only; base DEF kept in defense
                 inventory.remove(item);
                 System.out.println(getName() + " equipped armor: " + item.getName());
             }
@@ -120,7 +130,7 @@ public class Player {
     }
 
     public void setHp(int hp) {
-        this.hp = Math.min(hp, maxHp);
+        this.hp = Math.max(0, Math.min(hp, maxHp));
     }
 
     public int getLevel() {
@@ -128,15 +138,15 @@ public class Player {
     }
 
     public int getAttackDamage() {
-        return attackDamage;
+        return attackDamage + weaponBonus;
     }
 
     public void setAttackDamage(int attackDamage) {
-        this.attackDamage = attackDamage;
+        this.attackDamage = Math.max(0, attackDamage);
     }
 
     public int getDefense() {
-        return defense;
+        return defense + armorBonus;
     }
 
     public void setDefense(int defense) {
@@ -159,7 +169,7 @@ public class Player {
 
     // === Combat ===
     public int takeDamage(int damage) {
-        int reduced = Math.max(0, damage - defense);
+        int reduced = Math.max(0, damage - getDefense());
         this.hp -= reduced;
         if (hp < 0) {
             hp = 0;
@@ -184,7 +194,7 @@ public class Player {
     public void gainXp(int amount) {
         xp += amount;
         System.out.println(getName() + " gained " + amount + " XP!");
-        if (xp >= xpToLevelUp) {
+        while (xp >= xpToLevelUp) {
             levelUp();
         }
     }

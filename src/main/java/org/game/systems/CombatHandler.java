@@ -26,7 +26,12 @@ public class CombatHandler {
 
                     break;
 
-                case "use item":
+                case "use":
+                    player.showInventory();
+                    String itemName = InputHandler.getInput("Which item would you like to use? ");
+                    player.useItem(itemName);
+                    break;
+
                 case "run":
                     System.out.println("You run away from the battle!");
                     return;
@@ -46,9 +51,6 @@ public class CombatHandler {
                     System.out.println("You found ");
                     for (Item loot: lootlist) {
                         player.addItem(loot);
-                        System.out.println(" * "+loot.getName()+" x"+loot.getQuantity());
-                        System.out.println(loot.getName()+" x"+loot.getSlots());
-
                     }
                 }
 

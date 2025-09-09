@@ -14,7 +14,8 @@ public class Item {
     private int strengthBonus;
     private int defenseBonus;
 
-    private int healing;
+    private boolean consumable;
+    private int healAmount;
 
 
     //Todo constructor for equipable items
@@ -31,15 +32,29 @@ public class Item {
     }
     //Todo constructor for non equipable items
     public Item(String name, String type, int price, int quantity) {
-        this(name, type, price, quantity, null);
+        this.name = name;
+        this.type = type;
+        this.price  = price;
+        this.quantity  = quantity;
+        this.slots =null;
     }
 
-    public Item(String name, String type, int price, int quantity, Object o) {}
+    // constructor for consumables
+    public Item(String name, String type, int price, int quantity,boolean consumable, int healAmount) {
+        this.name = name;
+        this.type = type;
+        this.price = price;
+        this.quantity = quantity;
+        this.slots = null;
+        this.consumable = true;
+        this.healAmount = healAmount;
+    }
 
 
     public boolean isEquippable(){
         return slots !=null && !slots.isEmpty();
     }
+    public boolean isConsumable(){return  consumable;}
 
     public String getName() {return name;}
     public String getType() {return type;}
@@ -49,7 +64,7 @@ public class Item {
     public int getStrengthBonus() {return strengthBonus;}
     public int getDefenseBonus() {return defenseBonus;}
     public int getHealthBonus() {return healthBonus;}
-    public int getHealing() {return healing;}
+    public int getHealAmount() {return healAmount;}
 
 
     public void setName(String name) {this.name = name;}

@@ -164,7 +164,8 @@ public class Game {
                     break;
 
                 case "loot":
-                    player.addItem(new Item("Healing Potion","Potion",10,100));
+                    player.addItem(new Item("Healing Potion","consumable",10,100,true,10));
+                    player.addItem(new Item("Bread","consumable",10,100,true,10));
                     break;
 
                 default:

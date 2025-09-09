@@ -45,7 +45,27 @@ private int bonusHealth = 0;
 
 
 
+public void useItem(String itemName) {
+        Item itemToUse = inventory.get(itemName);
 
+        if (itemToUse == null) {
+            System.out.println("Item not found");
+            return;
+        }
+
+        if (itemToUse.isConsumable()) {
+            int heal = itemToUse.getHealAmount();
+            setHealth(getHealth()+heal);
+            System.out.println("You consumed " + itemToUse.getName() + " and gained " + heal + " health");
+        }
+
+        itemToUse.removeQuantity(1);
+        if (itemToUse.getQuantity() <= 0) {
+            inventory.remove(itemToUse.getName());
+        } else {
+            System.out.println(itemToUse.getName() + " is not a consumable item");
+        }
+}
 
 
 

@@ -29,20 +29,29 @@ public class CsvConsumptionReader {
                 }
 
                 // tar bort citattecken
-                String cleaned = line.replace("\"", "");
+                String cleaned = line.replace("\"", "").trim();
+                if (cleaned.isEmpty()) continue;
 
                 // delar upp på semikolon → [datum, el-kwh]
                 String[] parts = cleaned.split(";");
+                if (parts.length < 2) {
+                    // rad saknar fält – hoppa över
+                    continue;
+                }
 
-                String time = parts[0];
-                String kwhStr = parts[1];
+                String time = parts[0].trim();
+                String kwhStr = parts[1].trim().replace(",", ".");
 
-                kwhStr = kwhStr.replace(",", ".");
-
-                double consumption = Double.parseDouble(kwhStr);
-
-                list.add(new ConsumptionPoint(time, consumption));
-            }
+                try {
+                    double consumption = Double.parseDouble(kwhStr);
+                    if (consumption < 0) {
+                        // ignorera negativa värden
+                        continue;
+                    }
+                    list.add(new ConsumptionPoint(time, consumption));
+                } catch (NumberFormatException nfe) {
+                    // ogiltigt tal – hoppa över
+                }
         } finally {
             br.close();
         }

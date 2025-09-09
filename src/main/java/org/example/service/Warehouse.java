@@ -61,4 +61,10 @@ public class Warehouse {
                 .distinct()
                 .toList();
     }
+
+    public int countProductsByCategory(Category category) {
+        return (int) products.stream()
+                .filter(p -> p.category().equals(category))
+                .count();
+    }
 }

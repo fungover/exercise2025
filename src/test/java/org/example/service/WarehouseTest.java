@@ -139,12 +139,44 @@ public class WarehouseTest {
         LocalDate today = LocalDate.now();
 
         warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
-        warehouse.addProduct(new Product("p-002", "Refrigerator", Category.APPLIANCES, 7, today, today));
+        warehouse.addProduct(new Product("p-006", "Refrigerator", Category.APPLIANCES, 7, today, today));
 
         var categories = warehouse.getCategoriesWithProducts();
 
         assertThat(categories)
                 .containsExactly(Category.TV, Category.APPLIANCES)
                 .doesNotContain(Category.COMPUTER, Category.PHONE);
+    }
+
+    @Test
+    void countProductsByCategory_returnsCorrectCount() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate today = LocalDate.now();
+
+        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
+        warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
+        warehouse.addProduct(new Product("p-003", "Pro Laptop", Category.COMPUTER, 8, today, today));
+        warehouse.addProduct(new Product("p-006", "Refrigerator", Category.APPLIANCES, 7, today, today));
+
+        int tvCount = warehouse.countProductsByCategory(Category.TV);
+        int computerCount = warehouse.countProductsByCategory(Category.COMPUTER);
+        int appliancesCount = warehouse.countProductsByCategory(Category.APPLIANCES);
+
+        assertThat(tvCount).isEqualTo(1);
+        assertThat(computerCount).isEqualTo(2);
+        assertThat(appliancesCount).isEqualTo(1);
+    }
+
+    @Test
+    void countProductsByCategory_whenNoneExists_returnsZero() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate today = LocalDate.now();
+
+        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
+        warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
+
+        int phoneCount = warehouse.countProductsByCategory(Category.PHONE);
+
+        assertThat(phoneCount).isEqualTo(0);
     }
 }

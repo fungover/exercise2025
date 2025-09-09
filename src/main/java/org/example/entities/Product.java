@@ -24,4 +24,10 @@ public record Product (
     public static Product createNew(String id, String name, Category category, int rating, LocalDateTime now) {
         return new Product(id, name, category, rating, now, now);
     }
+
+    public Product withUpdated(String name, Category category, int rating, LocalDateTime now) {
+        Objects.requireNonNull(now, "now");
+        return new Product(this.id, name, category, rating, this.createdDate, now);
+    }
+
 }

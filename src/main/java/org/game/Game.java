@@ -113,6 +113,16 @@ public class Game {
                     player.addItem(item);
                     break;
 
+//                case "additem":
+//                    String itemName = InputHandler.getInput("Enter item name: ");
+//                    String ItemType = InputHandler.getInput("Type of item: ");
+//                    int itemValue = Integer.parseInt(InputHandler.getInput("Enter value of item: "));
+//                    int itemQuantity = Integer.parseInt(InputHandler.getInput("Enter value of item quantity: "));
+//                    System.out.println("What slot type?: HEAD|CHEST|OFFHAND|WEAPON|LEGS|GLOVES|BOOTS");
+//                    List<String> itemSlot = Collections.singletonList(InputHandler.getInput("Enter slot type:"));
+//                    player.addItem(item);
+//                    break;
+
                     case "colors":
 
                         System.out.println(Colors.blackColor+"test"+Colors.resetColor);
@@ -139,18 +149,6 @@ public class Game {
                     String takeDamage = InputHandler.getInput("Enter damage amount: ");
                     player.takeDamage(Integer.parseInt(takeDamage),false);
                     System.out.println("you have "+ player.getHealth() + " hp left");
-                    break;
-
-                case "spawnloot":
-                    for (int i =0; i < 5; i++) {
-                        Goblin testGoblin = new Goblin(0, 0);
-                        testGoblin.setHealth(0);
-
-                        Item loots = testGoblin.getLoot();
-
-                            player.addItem(loots);
-
-                    }
                     break;
 
                 case "fight":

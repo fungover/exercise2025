@@ -1,7 +1,5 @@
 package org.game;
 
-import java.util.Collections;
-import java.util.List;
 import org.game.entities.Enemy;
 import org.game.entities.Item;
 import org.game.entities.Player;
@@ -62,9 +60,8 @@ public class Game {
                             for (Item loot : room.getLoot()) {
                                 player.addItem(loot);
                             }
-
                             room.setVisited(true);
-
+                            tile.setRoom(null);
                         }
 
                         System.out.println("You moved " + dir);

@@ -66,11 +66,7 @@ public class Player {
     public void setHp(int newHp) {
         if (newHp < 0) {
             this.hp = 0; // Never negative
-        } else if (newHp > maxHp) {
-            this.hp = maxHp;
-        } else {
-            this.hp = newHp;
-        }
+        } else this.hp = Math.min(newHp, maxHp);
     }
 
     /**

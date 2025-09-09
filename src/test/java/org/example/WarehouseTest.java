@@ -81,8 +81,8 @@ public class WarehouseTest {
     @Test
     void getProductsByCategorySuccess() {
         Product p1 = new Product("1", "Laptop", Category.ELECTRONICS, 8, LocalDate.now(), LocalDate.now());
-        Product p2 = new Product("2", "Smartphone", Category.ELECTRONICS, 9, LocalDate.now(), LocalDate.now());
-        Product p3 = new Product("3", "Novel", Category.BOOKS, 7, LocalDate.now(), LocalDate.now());
+        Product p2 = new Product("2", "iPhone", Category.ELECTRONICS, 9, LocalDate.now(), LocalDate.now());
+        Product p3 = new Product("3", "Harry Potter", Category.BOOKS, 7, LocalDate.now(), LocalDate.now());
         warehouse.addProduct(p1);
         warehouse.addProduct(p2);
         warehouse.addProduct(p3);
@@ -90,7 +90,7 @@ public class WarehouseTest {
         List<Product> electronics = warehouse.getProductsByCategorySorted(Category.ELECTRONICS);
 
         assertEquals(2, electronics.size());
-        assertEquals("Laptop", electronics.get(0).name());      // A–Z order
-        assertEquals("Smartphone", electronics.get(1).name());
+        assertEquals("iPhone", electronics.get(0).name());
+        assertEquals("Laptop", electronics.get(1).name());
     }
 }

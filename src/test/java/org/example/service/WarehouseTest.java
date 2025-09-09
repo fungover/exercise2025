@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
      @Test
      void addProductShouldAddSuccessfully() {
      Warehouse warehouse = new Warehouse();
-     Product p = new Product(
+     Product product = new Product(
              "1",
              "Kiwi",
              Category.Food,
@@ -21,14 +21,14 @@ import static org.junit.jupiter.api.Assertions.*;
              LocalDate.now(),
              LocalDate.now()
      );
-     warehouse.addProduct(p);
+     warehouse.addProduct(product);
      assertEquals(1, warehouse.getAllProducts().size());
      }
 
      @Test
      void addProductShouldThrowExceptionIfNameEmpty() {
          Warehouse warehouse = new Warehouse();
-         Product p = new Product(
+         Product product = new Product(
                  "2",
                  "",
                  Category.Food,
@@ -36,14 +36,28 @@ import static org.junit.jupiter.api.Assertions.*;
                  LocalDate.now(),
                  LocalDate.now()
          );
-         assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(p));
+         assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
+     }
+
+     @Test
+     void addProductShouldThrowExceptionIfRatingOutOfRange() {
+         Warehouse warehouse = new Warehouse();
+         Product product = new Product(
+                 "3",
+                 "Pear",
+                 Category.Food,
+                 11,
+                 LocalDate.now(),
+                 LocalDate.now()
+         );
+         assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
      }
 
      // --- updateProduct ---
      @Test
      void updateProductShouldUpdateSuccessfully() {
          Warehouse warehouse = new Warehouse();
-         Product p = new Product(
+         Product product = new Product(
                  "4",
                  "Milk",
                  Category.Food,
@@ -51,7 +65,7 @@ import static org.junit.jupiter.api.Assertions.*;
                  LocalDate.now(),
                  LocalDate.now()
          );
-         warehouse.addProduct(p);
+         warehouse.addProduct(product);
 
          warehouse.updateProduct("4", "Apple", Category.Food, 9);
 
@@ -74,7 +88,7 @@ import static org.junit.jupiter.api.Assertions.*;
          );
          warehouse.addProduct(p);
          Product product = warehouse.getProductById("1");
-         assertEquals(p, product);
+         assertEquals(p, product); // p = product
      }
      @Test
      void getProductByIdShouldThrowExceptionWhenIdDoesNotExist(){
@@ -85,13 +99,13 @@ import static org.junit.jupiter.api.Assertions.*;
      // --- getProductsByCategorySorted ---
      @Test
      void getProductsByCategorySortedShouldReturnSortedProductsByCategory(){
-         Warehouse w = new Warehouse();
-         w.addProduct(new Product("a", "Orange", Category.Food, 5, LocalDate.now(), LocalDate.now()));
-         w.addProduct(new Product("b", "Kiwi", Category.Food, 8, LocalDate.now(), LocalDate.now()));
-         w.addProduct(new Product("c", "Apple", Category.Drink, 7, LocalDate.now(), LocalDate.now()));
-         w.addProduct(new Product("d", "Milk", Category.Drink, 9, LocalDate.now(), LocalDate.now()));
+         Warehouse warehouse = new Warehouse();
+         warehouse.addProduct(new Product("a", "Orange", Category.Food, 5, LocalDate.now(), LocalDate.now()));
+         warehouse.addProduct(new Product("b", "Kiwi", Category.Food, 8, LocalDate.now(), LocalDate.now()));
+         warehouse.addProduct(new Product("c", "Apple", Category.Drink, 7, LocalDate.now(), LocalDate.now()));
+         warehouse.addProduct(new Product("d", "Milk", Category.Drink, 9, LocalDate.now(), LocalDate.now()));
 
-         var foods = w.getProductsByCategorySorted(Category.Food);
+         var foods = warehouse.getProductsByCategorySorted(Category.Food);
          assertEquals(2, foods.size());
          assertEquals("Kiwi", foods.get(0).name());
          assertEquals("Orange", foods.get(1).name());
@@ -99,55 +113,55 @@ import static org.junit.jupiter.api.Assertions.*;
      }
      @Test
      void getProductsByCategorySortedShouldThrowExceptionWhenCategoryIsNull(){
-         Warehouse w = new Warehouse();
-         assertThrows(IllegalArgumentException.class, () -> w.getProductsByCategorySorted(null));
+         Warehouse warehouse = new Warehouse();
+         assertThrows(IllegalArgumentException.class, () -> warehouse.getProductsByCategorySorted(null));
      }
      // --- getProductsCreatedAfter ---
     @Test
      void getProductsCreatedAfterShouldFilter() {
-         Warehouse w = new Warehouse();
+         Warehouse warehouse = new Warehouse();
          LocalDate fiveDaysAgo = LocalDate.now().minusDays(5);
          LocalDate yesterday = LocalDate.now().minusDays(1);
          LocalDate today = LocalDate.now();
 
-         w.addProduct(new Product("x", "X", Category.Food, 5, fiveDaysAgo, fiveDaysAgo));
-         w.addProduct(new Product("y", "Y", Category.Drink, 5, yesterday, yesterday));
-         w.addProduct(new Product("z", "Z", Category.Drink, 5, today, today));
+         warehouse.addProduct(new Product("x", "X", Category.Food, 5, fiveDaysAgo, fiveDaysAgo));
+         warehouse.addProduct(new Product("y", "Y", Category.Drink, 5, yesterday, yesterday));
+         warehouse.addProduct(new Product("z", "Z", Category.Drink, 5, today, today));
 
-         var result = w.getProductsCreatedAfter(LocalDate.now().minusDays(2));
+         var result = warehouse.getProductsCreatedAfter(LocalDate.now().minusDays(2));
          assertEquals(2, result.size()); // Yesterday and Today
     }
     @Test
      void getProductsCreatedAfterShouldThrowExceptionWhenDateIsNull() {
-        Warehouse w = new Warehouse();
-        assertThrows(IllegalArgumentException.class, () -> w.getProductsCreatedAfter(null));
+        Warehouse warehouse = new Warehouse();
+        assertThrows(IllegalArgumentException.class, () -> warehouse.getProductsCreatedAfter(null));
      }
 
      // --- getModifiedProducts ---
      @Test
      void getModifiedProductsShouldReturnModified() {
-         Warehouse w = new Warehouse();
+         Warehouse warehouse = new Warehouse();
          LocalDate now = LocalDate.now();
          LocalDate yesterday = now.minusDays(1);
 
          // Not modified (createdDate == modifiedDate)
-         w.addProduct(new Product("m1", "M1", Category.Food, 5, now, now));
+         warehouse.addProduct(new Product("m1", "M1", Category.Food, 5, now, now));
          // Modified (createdDate != modifiedDate)
-         w.addProduct(new Product("m2", "M2", Category.Drink, 5, now, yesterday));
+         warehouse.addProduct(new Product("m2", "M2", Category.Drink, 5, now, yesterday));
 
-         var modified = w.getModifiedProducts();
+         var modified = warehouse.getModifiedProducts();
          assertEquals(1, modified.size());
          assertEquals("m2", modified.get(0).id());
      }
      @Test
      void getModifiedProductsShouldReturnEmptyListWhenNoModified() {
-         Warehouse w = new Warehouse();
+         Warehouse warehouse = new Warehouse();
          LocalDate today = LocalDate.now();
 
-         w.addProduct(new Product("n1", "N1", Category.Food, 5, today, today));
-         w.addProduct(new Product("n2", "N2", Category.Drink, 5, today, today));
+         warehouse.addProduct(new Product("n1", "N1", Category.Food, 5, today, today));
+         warehouse.addProduct(new Product("n2", "N2", Category.Drink, 5, today, today));
 
-         var modified = w.getModifiedProducts();
+         var modified = warehouse.getModifiedProducts();
          assertTrue(modified.isEmpty());
      }
  }

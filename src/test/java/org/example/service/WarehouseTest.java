@@ -4,10 +4,8 @@ import org.example.entities.Category;
 import org.example.entities.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+
+import java.time.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -163,11 +161,11 @@ public class WarehouseTest {
 
     @Test
     void getProductsByCategorySorted_noProductsInCategory_returnsEmptyList() {
-        LocalDateTime t1 = LocalDateTime.of(2025, 9, 1, 12, 0);
-        LocalDateTime t2 = LocalDateTime.of(2025, 9, 2, 12, 0);
+        LocalDateTime createdAt1 = LocalDateTime.of(2025, 9, 1, 12, 0);
+        LocalDateTime createdAt2 = LocalDateTime.of(2025, 9, 2, 12, 0);
 
-        Product product1 = Product.createNew("id1", "A", Category.BOOKS, 5, t1);
-        Product product2 = Product.createNew("id2", "B", Category.TOYS,  8, t2);
+        Product product1 = Product.createNew("id1", "A", Category.BOOKS, 5, createdAt1);
+        Product product2 = Product.createNew("id2", "B", Category.TOYS,  8, createdAt2);
 
         warehouse.addProduct(product1);
         warehouse.addProduct(product2);
@@ -183,4 +181,41 @@ public class WarehouseTest {
         assertThrows(NullPointerException.class,
                 () -> warehouse.getProductsByCategorySorted(null));
     }
+
+    /** getProductsCreatedAfter method */
+    @Test
+    void getProductsCreatedAfter_success_filtersStrictlyAfterDate() {
+        LocalDateTime createdAt1 = LocalDateTime.of(2025, 9, 1, 12, 0);
+        LocalDateTime createdAt2 = LocalDateTime.of(2025, 9, 2, 12, 0);
+        LocalDateTime createdAt3 = LocalDateTime.of(2025, 9, 3, 12, 0);
+
+        Product product1 = Product.createNew("id1", "sep01",  Category.BOOKS, 5, createdAt1);
+        Product product2 = Product.createNew("id2", "sep02", Category.BOOKS, 5, createdAt2);
+        Product product3 = Product.createNew("id3", "sep03",  Category.BOOKS, 5, createdAt3);
+        warehouse.addProduct(product1);
+        warehouse.addProduct(product2);
+        warehouse.addProduct(product3);
+
+        var result = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 9, 2));
+
+        assertEquals(List.of("sep03"), result.stream().map(Product::name).toList());
+    }
+
+    @Test
+    void getProductsCreatedAfter_noMatches_returnsEmpty() {
+        LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
+
+       Product product = Product.createNew("id1", "sep01", Category.BOOKS, 5, createdAt);
+
+       warehouse.addProduct(product);
+
+        var result = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 9, 1));
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void getProductsCreatedAfter_nullDate_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> warehouse.getProductsCreatedAfter(null));
+    }
+
 }

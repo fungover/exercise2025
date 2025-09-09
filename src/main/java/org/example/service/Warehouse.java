@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.entities.Category;
 import org.example.entities.Product;
 import java.time.Clock;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -58,11 +59,14 @@ public final class Warehouse {
                 .toList();
     }
 
-     /*
-    getProductsCreatedAfter(LocalDate date) {
-
+    public List<Product> getProductsCreatedAfter(LocalDate date) {
+        Objects.requireNonNull(date, "date");
+        return store.values().stream()
+                .filter(product -> product.createdDate().toLocalDate().isAfter(date))
+                .toList();
     }
 
+     /*
     getModifiedProducts() {
 
     }

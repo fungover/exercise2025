@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -26,7 +27,7 @@ public class WarehouseTest {
 
     // Helper methods
     private Product addProductToWarehouse(Warehouse warehouse, String id, String name, Category category, int rating) {
-        Product product = new Product(id, name, category, 1);
+        Product product = new Product(id, name, category, rating);
         warehouse.addProduct(product);
         return product;
     }
@@ -368,6 +369,36 @@ public class WarehouseTest {
     public void getProductInitialsMapEmptyList() {
         Warehouse warehouse = new Warehouse();
         assertThat(warehouse.getProductInitialsMap().size()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("getTopRatedProductsThisMonth(): returns Products with max rating, created this month, sorted by newest first")
+    public void getTopRatedProductsThisMonth() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 2002, 1, 1, 18, 0, 0);
+        Product testProduct2 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 10, 1782, 8, 24, 18, 0, 0);
+        warehouse.addProduct(testProduct1);
+        warehouse.addProduct(testProduct2);
+
+        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
+            LocalDateTime date1 = LocalDateTime.of(2025, 1, 18, 18, 0, 0, 0);
+            LocalDateTime date2 = LocalDateTime.of(2025, 1, 18, 18, 0, 1, 0);
+            LocalDateTime date3 = LocalDateTime.of(2025, 1, 18, 18, 0, 2, 0);
+
+            mockedStatic.when(LocalDateTime::now)
+                    .thenReturn(date1)
+                    .thenReturn(date2)
+                    .thenReturn(date3);
+
+            Product testProduct3 = addProductToWarehouse(warehouse, "1", "Laptop", ELECTRONICS, 10);
+            Product testProduct4 = addProductToWarehouse(warehouse, "2", "Television", ELECTRONICS, 10);
+            Product testProduct5 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL, 9);
+
+            List<Product> expectedProducts = warehouse.getTopRatedProductsThisMonth();
+
+            assertThat(expectedProducts.size()).isEqualTo(2);
+            assertThat(expectedProducts).containsExactly(testProduct4, testProduct3);
+        }
     }
 
 }

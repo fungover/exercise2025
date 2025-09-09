@@ -111,4 +111,15 @@ public class Warehouse {
     }
 
 
+    public List<Product> getTopRatedProductsThisMonth() {
+        int maxRating = products.stream()
+                .filter(p -> p.getCreatedDate().getMonth().equals(LocalDateTime.now().getMonth()))
+                .map(Product::getRating).max(Integer::compareTo).orElse(0);
+
+        return products.stream()
+                .filter(p -> p.getCreatedDate().getMonth().equals(LocalDateTime.now().getMonth()))
+                .filter(p -> p.getRating() == maxRating)
+                .sorted((p1, p2) -> p2.getCreatedDate().compareTo(p1.getCreatedDate()))
+                .toList();
+    }
 }

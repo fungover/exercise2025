@@ -12,11 +12,36 @@ public final class Product {
 
     public Product(String id, String name, Category category, int rating,
                    LocalDate createdDate, LocalDate modifiedDate) {
+        if (id == null) {
+            throw new IllegalArgumentException("id cannot be null");
+        }
         this.id = id;
+
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("name cannot be blank");
+        }
         this.name = name;
+
+        if (category == null) {
+            throw new IllegalArgumentException("category cannot be null");
+        }
         this.category = category;
+
+        if (rating < 0 || rating > 10) {
+            throw new IllegalArgumentException("rating must be between 0 and 10");
+        }
         this.rating = rating;
+
+        if (createdDate == null) {
+            throw new IllegalArgumentException("createdDate cannot be null");
+        }
         this.createdDate = createdDate;
+
+        if (modifiedDate == null) {
+            throw new IllegalArgumentException("modifiedDate cannot be null");
+        } else if (modifiedDate.isBefore(createdDate)) {
+            throw new IllegalArgumentException("modifiedDate cannot be before createdDate");
+        }
         this.modifiedDate = modifiedDate;
     }
 

@@ -6,6 +6,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,9 +43,9 @@ public class ProductTest {
     @Test
     @DisplayName("Product constructor: sets createdDate")
     public void canCreateProductWithGetCreatedDate() {
-        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
-            LocalDate currentDate = LocalDate.of(2025, 1, 1);
-            mockedStatic.when(LocalDate::now).thenReturn(currentDate);
+        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
+            LocalDateTime currentDate = LocalDateTime.of(2025, 1, 1, 18, 0, 0, 0);
+            mockedStatic.when(LocalDateTime::now).thenReturn(currentDate);
 
             Product product = new Product("1", "Laptop", Category.GENERAL, 1);
             assertThat(product.getCreatedDate()).isEqualTo(currentDate);
@@ -57,15 +58,15 @@ public class ProductTest {
         Product product;
         Product updated;
 
-        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
-            LocalDate currentDate = LocalDate.of(2025, 1, 1);
-            mockedStatic.when(LocalDate::now).thenReturn(currentDate);
+        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
+            LocalDateTime currentDate = LocalDateTime.of(2025, 1, 1, 18, 0, 0, 0);
+            mockedStatic.when(LocalDateTime::now).thenReturn(currentDate);
             product = new Product("1", "Laptop", Category.GENERAL, 1);
         }
 
-        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
-            LocalDate updateDate = LocalDate.of(2025, 1, 5);
-            mockedStatic.when(LocalDate::now).thenReturn(updateDate);
+        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
+            LocalDateTime updateDate = LocalDateTime.of(2025, 1, 5, 18, 0, 0, 0);
+            mockedStatic.when(LocalDateTime::now).thenReturn(updateDate);
             updated = product.update("Notebook", Category.GENERAL, 2);
 
             assertThat(updated.getModifiedDate()).isEqualTo(updateDate);

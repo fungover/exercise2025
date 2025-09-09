@@ -8,6 +8,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -21,10 +22,10 @@ public class WarehouseTest {
         return product;
     }
 
-    private Product createProductWithMockedDate(String id, String name, Category category, int rating, int year, int month, int day) {
-        LocalDate mockedDate = LocalDate.of(year, month, day);
-        try (MockedStatic<LocalDate> mockedStatic = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
-            mockedStatic.when(LocalDate::now).thenReturn(mockedDate);
+    private Product createProductWithMockedDate(String id, String name, Category category, int rating, int year, int month, int day, int hour, int minute, int second) {
+        LocalDateTime mockedDate = LocalDateTime.of(year, month, day, hour, minute, second, 0);
+        try (MockedStatic<LocalDateTime> mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
+            mockedStatic.when(LocalDateTime::now).thenReturn(mockedDate);
             return new Product(id, name, category, rating);
         }
     }
@@ -72,7 +73,7 @@ public class WarehouseTest {
     @DisplayName("updateProduct: updates an existing Product without changing createdDate")
     public void updateProductWithoutChangingCreatedDate() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = createProductWithMockedDate("1", "Test Product", Category.GENERAL, 1, 2024, 1, 5);
+        Product testProduct = createProductWithMockedDate("1", "Test Product", Category.GENERAL, 1, 2024, 1, 5, 18, 0, 0);
         warehouse.addProduct(testProduct);
 
         assertThat(warehouse.getProductById("1").get().getCreatedDate()).isEqualTo(testProduct.getCreatedDate());
@@ -181,14 +182,14 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("getProductsCreatedAfter(LocalDate date): returns Products created after a given date")
+    @DisplayName("getProductsCreatedAfter(LocalDateTime date): returns Products created after a given date")
     public void getProductsCreatedAfter() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5);
-        Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27);
-        Product testProduct3 = createProductWithMockedDate("2", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31);
-        Product testProduct4 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24);
-        Product testProduct5 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 1, 2002, 1, 1);
+        Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5, 18, 0, 0);
+        Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27, 18, 0, 0);
+        Product testProduct3 = createProductWithMockedDate("2", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31, 18, 0, 0);
+        Product testProduct4 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24, 18, 0, 0);
+        Product testProduct5 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 1, 2002, 1, 1, 18, 0, 0);
 
         warehouse.addProduct(testProduct1);
         warehouse.addProduct(testProduct2);
@@ -196,7 +197,7 @@ public class WarehouseTest {
         warehouse.addProduct(testProduct4);
         warehouse.addProduct(testProduct5);
 
-        LocalDate testDate = LocalDate.of(1997, 2, 1);
+        LocalDateTime testDate = LocalDateTime.of(1997, 2, 1, 18, 0, 0, 0);
         assertThat(warehouse.getProductsCreatedAfter(testDate)).extracting(Product::getName).containsExactly("Laptop", "Desk Chair", "Pen Set");
     }
 
@@ -204,11 +205,11 @@ public class WarehouseTest {
     @DisplayName("getProductsCreatedAfter(LocalDate date): throws an exception if invalid input")
     public void getProductsCreatedAfterEmptyList() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5);
-        Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27);
-        Product testProduct3 = createProductWithMockedDate("2", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31);
-        Product testProduct4 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24);
-        Product testProduct5 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 1, 2002, 1, 1);
+        Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5, 18, 0, 0);
+        Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27, 18, 0, 0);
+        Product testProduct3 = createProductWithMockedDate("2", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31, 18, 0, 0);
+        Product testProduct4 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24, 18, 0, 0);
+        Product testProduct5 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 1, 2002, 1, 1, 18, 0, 0);
 
         warehouse.addProduct(testProduct1);
         warehouse.addProduct(testProduct2);

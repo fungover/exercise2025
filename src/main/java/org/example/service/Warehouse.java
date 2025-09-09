@@ -3,7 +3,7 @@ package org.example.service;
 import org.example.entities.Category;
 import org.example.entities.Product;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,7 +68,7 @@ public class Warehouse {
                 .toList();
     }
 
-    public List<Product> getProductsCreatedAfter(LocalDate date) {
+    public List<Product> getProductsCreatedAfter(LocalDateTime date) {
         if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");
         }

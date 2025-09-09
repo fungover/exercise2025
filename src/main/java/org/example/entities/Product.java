@@ -1,14 +1,14 @@
 package org.example.entities;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Product {
     private final String id;
     private final String name;
     private final Category category;
     private final int rating;
-    private final LocalDate createdDate;
-    private final LocalDate modifiedDate;
+    private final LocalDateTime createdDate;
+    private final LocalDateTime modifiedDate;
 
     // Constructors
     public Product(String id) {
@@ -24,7 +24,7 @@ public class Product {
     }
 
     public Product(String id, String name, Category category, int rating) {
-        LocalDate now = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
         this.id = id;
         this.name = name;
         this.category = category;
@@ -33,7 +33,7 @@ public class Product {
         this.modifiedDate = now;
     }
 
-    private Product(String id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate) {
+    private Product(String id, String name, Category category, int rating, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -59,16 +59,16 @@ public class Product {
         return this.rating;
     }
 
-    public LocalDate getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return this.createdDate;
     }
 
-    public LocalDate getModifiedDate() {
+    public LocalDateTime getModifiedDate() {
         return this.modifiedDate;
     }
 
     // Methods
     public Product update(String name, Category category, int rating) {
-        return new Product(this.id, name, category, rating, this.createdDate, LocalDate.now());
+        return new Product(this.id, name, category, rating, this.createdDate, LocalDateTime.now());
     }
 }

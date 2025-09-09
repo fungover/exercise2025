@@ -13,7 +13,7 @@ public class CombatText {
     public static final String COMBAT_START = bold("\nThe fight against %s begins!");
     public static final String PLAYER_ATTACK = green("\nYou attack for %d damage!");
     public static final String ENEMY_HEALTH_LEFT = "%s has %d health left.";
-    public static final String ENEMY_ATTACK = red("\n%s attack you for %d damage!");
+    public static final String ENEMY_ATTACK = red("\n%s attacks you for %d damage!");
     public static final String PLAYER_HEALTH_LEFT = "You have %d health left.";
 
     // Victory/Defeat

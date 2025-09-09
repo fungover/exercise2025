@@ -99,7 +99,7 @@ public class GameText {
     public static final String HELP_QUIT = "quit           - Exit game";
 
     public static final String TIPS_HEADER = yellow("\nHere are a few tips:");
-    public static final String TIP_PICKUP = "Items you see needs to be picked up before you can use/equip them.";
+    public static final String TIP_PICKUP = "Items you see need to be picked up before you can use/equip them.";
     public static final String TIP_TAKE = "You can pick up items by typing 'take <item>'.";
     public static final String TIP_USE = "You can use items by typing 'use <item>'.";
     public static final String TIP_EQUIP = "You can equip items by typing 'equip <item>'.";

@@ -3,9 +3,9 @@
 ### Overview
 - A text-based adventure game implemented in Java using Object Oriented Programming principles.
 
-#### Core Classes: 
+#### Core Classes 
 Player, Enemy, Room, Item _(abstract)_
-#### Subclasses:
+#### Subclasses
 Weapon, Healing, Key _(Inherit from Item)_
 
 ### Method Override
@@ -18,9 +18,9 @@ Each Item subclass implements displayInfo() differently:
 Usable interface for consumable items.
 
 ### Collections
-- ArrayList< Items> in Inventory class
-- Map<String, Room> for room exits
-- List< Enemy> in Room class
+- ```ArrayList<Items>``` in Inventory class
+- ```Map<String, Room>``` for room exits
+- ```List<Enemy>``` in Room class
 
 ### Text Management
 Centralized text handling using utility classes:
@@ -29,7 +29,7 @@ Centralized text handling using utility classes:
 - Colors.java: Console color formatting
 
 ### Adding New Classes
-#### Addning New Item Type:
+#### Adding New Item Type
 1. Create class extending Item.
 2. Implement displayInfo() method.
 3. Optionally implement Usable interface if consumable.

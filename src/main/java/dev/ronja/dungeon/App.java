@@ -8,6 +8,7 @@ import dev.ronja.dungeon.game.Game;
 
 public class App {
     static void main(String[] args) {
-        new Game().run();
+        Game game = new Game();
+        game.run();
     }
 }

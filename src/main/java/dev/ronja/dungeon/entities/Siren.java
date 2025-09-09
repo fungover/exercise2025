@@ -50,4 +50,9 @@ public class Siren implements Enemy {
         player.takeDamage(damage);
     }
 
+    @Override
+    public String toString() {
+        return getName() + " (HP: " + getHp() + ", DMG: " + getDamage() + ")";
+    }
+
 }

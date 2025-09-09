@@ -56,4 +56,9 @@ public class MotherInLaw implements Enemy, PsychologicalAttack {
                 + player.getName() + " loses " + damage + " in HP from mental exhaustion!");
         player.takeDamage(damage * 2);
     }
+
+    @Override
+    public String toString() {
+        return getName() + " (HP: " + getHp() + ", DMG: " + getDamage() + ")";
+    }
 }

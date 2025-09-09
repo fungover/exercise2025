@@ -27,6 +27,6 @@ public interface Enemy {
         setHp(newHp);
     }
 
-
     void attack(Player player);
+
 }

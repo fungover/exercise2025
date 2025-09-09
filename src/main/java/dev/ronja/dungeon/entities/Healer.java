@@ -4,5 +4,5 @@ public interface Healer {
     int healAmount();
 
     void heal(Player player);
-
 }
+

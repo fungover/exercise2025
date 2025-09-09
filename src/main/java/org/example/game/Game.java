@@ -22,7 +22,7 @@ private MovementLogic movementLogic;
     String name = scanner.nextLine();
 
     player = new Player(name);
-    dungeon = new Dungeon(3, 3);
+    dungeon = new Dungeon(5, 5);
     movementLogic = new MovementLogic();
     player.addItem(new Potion("Potion", 20));  // en test för att se om det funkar att se inventoryplayer.addItem(new Weapon("Fire Sword", 20));
     player.addItem(new Weapon("Wooden Sword", 10));

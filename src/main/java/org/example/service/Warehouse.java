@@ -93,4 +93,14 @@ public class Warehouse {
                         .distinct()//a category only appears once in results
                         .collect(Collectors.toUnmodifiableList());
     }
+
+    public long countProductsInCategory(Category category) {
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+        }
+
+        return inventory.stream()
+                        .filter(p -> p.category() == category)
+                        .count();
+    }
 }

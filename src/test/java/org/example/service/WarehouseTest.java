@@ -230,5 +230,40 @@ class WarehouseTest {
         assertTrue(categories_emptyList.isEmpty());
     }
 
+    @Test void countProductsInCategory_valid() {
+        // 2 electronics 2 food 1 game
+        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
+        Product pc = new Product("PC", Category.ELECTRONICS, 4);
+        Product hotdog = new Product("HotDog", Category.FOOD, 4);
+        Product angryFish = new Product("AngryFish", Category.FOOD, 6);
+        Product sillyBirds = new Product("SillyBirds", Category.GAMES, 9);
+        warehouse.addProduct(lamp);
+        warehouse.addProduct(pc);
+        warehouse.addProduct(hotdog);
+        warehouse.addProduct(angryFish);
+        warehouse.addProduct(sillyBirds);
+
+
+        //when we ask for a Category food, we should get back 2
+        long amountOfProductsInFood = warehouse.countProductsInCategory(
+          Category.FOOD);
+
+        System.out.println(amountOfProductsInFood);
+
+        assertEquals(2, amountOfProductsInFood);
+
+    }
+
+    @Test void countProductsInCategory_invalid_nullCategory() {
+        /*
+        Test for null input and string-based parsing
+         */
+
+        assertThrows(IllegalArgumentException.class,
+          () -> warehouse.countProductsInCategory(null));
+        assertThrows(IllegalArgumentException.class,
+          () -> warehouse.countProductsInCategory(Category.valueOf("Toys")));
+
+    }
 
 }

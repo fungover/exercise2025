@@ -1,4 +1,4 @@
-package org.example.entities;
+package org.example.entities.enemies;
 
 //fiendens typ, hälsa, damage, position (använd arv för olika fiendetyper).
 public class Enemy {

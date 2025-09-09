@@ -3,22 +3,22 @@ package org.example.tree;
 public class Leaves {
 	private Leaf currentLeaf;
 
-	public Leaf currentLeaf() {
+	public void setCurrentLeaf(Leaf currentLeaf) {
+		this.currentLeaf = currentLeaf;
+	}
+
+	public Leaf getCurrentLeaf() {
 		return currentLeaf;
 	}
 
-	public void move() {
-		do {
-			System.out.println("Your current leaf: " + currentLeaf.getName());
-			System.out.print("Your move (" + currentLeaf.getDescription() + "): ");
-			String move = System.console().readLine();
+	public Leaf move(Leaf currentLeaf, String move) {
 			if (currentLeaf.getNextLeaf(move) != null) {
-				currentLeaf = currentLeaf.getNextLeaf(move);
-				break;
+				setCurrentLeaf(currentLeaf.getNextLeaf(move));
+				return currentLeaf.getNextLeaf(move);
 			} else {
 				System.out.println("No leaf there");
+				return currentLeaf;
 			}
-		} while (true);
 	}
 
 	public void move(String move) {
@@ -50,6 +50,6 @@ public class Leaves {
 		purpleLeaf.setNextLeaf("d", yellowLeaf);
 		purpleLeaf.setNextLeaf("h", greenLeaf);
 
-		currentLeaf = greenLeaf;
+		setCurrentLeaf(greenLeaf);
 	}
 }

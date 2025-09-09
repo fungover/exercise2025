@@ -14,7 +14,6 @@ public class Lizard {
 	public Lizard(String name) {
 		this.name = name;
 		health = 30;
-		defense = 0;
 		randomGen = new RandomGen();
 	}
 
@@ -30,8 +29,16 @@ public class Lizard {
 		return health;
 	}
 
-	public void setHealth(int health) {
-		this.health = health;
+	public void setHealth(int health, Inventory inventory) {
+	 if (inventory != null && inventory.getInventory().containsKey("Ashes")) {
+		 this.health = health;
+		 int count = inventory.getInventory().get("Ashes");
+		 if (count > 1) {
+			 inventory.getInventory().put("Ashes", count - 1);
+		 } else {
+			 inventory.getInventory().remove("Ashes");
+		 }
+	 }
 	}
 
 	public void setAttackedHealth(int health) {
@@ -40,6 +47,13 @@ public class Lizard {
 
 	public int getDefense() {
 		return defense;
+	}
+
+	public void setDefense(Equipment equipment) {
+		defense = 0;
+		for (String equipped : equipment.getEquipment()) {
+			this.defense += 1;
+		}
 	}
 
 	public String getName() {
@@ -62,5 +76,9 @@ public class Lizard {
 		} else {
 			System.out.println("Item " + item + " not found");
 		}
+	}
+
+	public void equippedItems(Equipment equipment) {
+		equipment.printEquipment();
 	}
 }

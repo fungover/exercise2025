@@ -26,7 +26,7 @@ public class Inventory {
 
 	public void printItems() {
 		for (String item : inventory.keySet()) {
-			System.out.println(item + " " + inventory.get(item));
+			System.out.println(item + ": " + inventory.get(item));
 		}
 	}
 }

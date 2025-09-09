@@ -1,6 +1,7 @@
 package org.example.enemies;
 
 import org.example.player.Lizard;
+import org.example.player.equipment.Inventory;
 import org.example.rng.RandomGen;
 
 import java.util.Random;
@@ -13,7 +14,7 @@ public class Enemy {
 	protected String emoji;
 
 
-	private final String[] loot = {"Talon Dagger", "Beak Helmet", "Ashes", "Hawk's Sight"};
+	private final String[] loot = {"Talon Dagger", "Beak Helmet", "Ashes", "Hawk's Sight", "Scales"};
 
 	public String[] getLoot() {
 		return this.loot;
@@ -48,7 +49,7 @@ public class Enemy {
 		return this.emoji;
 	}
 
-	public int fight(Enemy entity, Lizard player) {
+	public int fight(Enemy entity, Lizard player, Inventory playerInventory) {
 		System.out.println("\nA wild " + entity.getName() + " appeared " + entity.getEmoji());
 		do {
 			System.out.print("What will you do? ([R]un or [F]ight): ");
@@ -77,6 +78,7 @@ public class Enemy {
 								break;
 							case "h":
 								// Add heal logic here
+								player.setHealth(30, playerInventory);
 								break;
 							case "r":
 								return -1;

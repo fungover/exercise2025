@@ -21,6 +21,7 @@ public class Player {
     private final String name;
     private int hp;
     private final int maxHp;
+    private Weapon weapon;
 
     /**
      * Constructs a new player with given name and default max HP
@@ -30,6 +31,16 @@ public class Player {
         this.name = name;
         this.maxHp = 100;
         this.hp = maxHp;
+        this.weapon = new ExplosiveBanana(); // default
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+        System.out.println(name + " equipped " + weapon.getName() + "!");
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
     }
 
     public String getName() {

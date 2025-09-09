@@ -1,4 +1,6 @@
 package dev.ronja.dungeon.entities;
 
-public class Weapon {
+public interface Weapon {
+    String getName();
+    int getDamage();
 }

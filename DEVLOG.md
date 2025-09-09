@@ -18,13 +18,13 @@ I suddenly realized the huge benefits of interfaces!!*_
 
 [x] test what I have built to this point and ask myself if I will embrace a TDD approach from here ??? 
 
-[] add commands, to get the game moving. 
+[x] add commands, to get the game moving. 
 
 [x] create entities 
 
 [] create a map
 
-[] create items
+[x] create items
 
 
 ### THE ASSIGNMENT / _ISSUE_

@@ -88,9 +88,9 @@ public class Game {
                 case "attack" -> {
                     ensureEnemy();
                     if (!player.isAlive()) break;
-                    int strike = 10; //Todo: connect to weapon
+                    int strike = player.getWeapon().getDamage();
                     enemy.takeDamage(strike);
-                    System.out.println(player.getName() + " strikes " + enemy.getName() + " for " + strike + " damage ");
+                    System.out.println(player.getName() + " strikes with " + player.getWeapon().getName() + " for " + strike + " damage ");
 
                     if (!enemy.isAlive()) {
                         System.out.println(" You defeated the " + enemy.getName() + " use 'next or 'spawn to continue ");

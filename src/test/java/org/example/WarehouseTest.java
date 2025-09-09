@@ -150,4 +150,21 @@ public class WarehouseTest {
         assertEquals(1, modifiedProducts.size());
         assertEquals("Modified Product", modifiedProducts.get(0).name());
     }
+
+    @Test
+    void getCategoriesWithProducts() {
+        Product p1 = new Product("1", "Speakers", Category.ELECTRONICS, 9, LocalDate.now(), LocalDate.now());
+        Product p2 = new Product("2", "Lord of the Flies", Category.BOOKS, 7, LocalDate.now(), LocalDate.now());
+        Product p3 = new Product("3", "Rubik's Cube", Category.TOYS, 8, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+        warehouse.addProduct(p3);
+
+        List<Category> categories = warehouse.getCategoriesWithProducts();
+
+        assertEquals(3, categories.size());
+        assertTrue(categories.contains(Category.ELECTRONICS));
+        assertTrue(categories.contains(Category.BOOKS));
+        assertTrue(categories.contains(Category.TOYS));
+    }
 }

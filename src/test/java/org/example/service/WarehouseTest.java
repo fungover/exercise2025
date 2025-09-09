@@ -8,6 +8,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -139,5 +140,47 @@ public class WarehouseTest {
                 () -> warehouse.updateProduct("missing-id", "test", Category.BOOKS, 7));
     }
 
+    /** getProductsByCategorySorted method */
+    @Test
+    void getProductsByCategorySorted_success_filtersAndSorts() {
+        LocalDateTime createdAt1 = LocalDateTime.of(2025, 9, 1, 12, 0);
+        LocalDateTime createdAt2 = LocalDateTime.of(2025, 9, 2, 12, 0);
+        LocalDateTime createdAt3 = LocalDateTime.of(2025, 9, 3, 12, 0);
 
+        Product testProduct1 = Product.createNew("id1", "C", Category.BOOKS, 5, createdAt1);
+        Product testProduct2 = Product.createNew("id2", "B", Category.TOYS, 8, createdAt2);
+        Product testProduct3 = Product.createNew("id3", "A", Category.TOYS, 8, createdAt3);
+
+        warehouse.addProduct(testProduct1);
+        warehouse.addProduct(testProduct2);
+        warehouse.addProduct(testProduct3);
+
+        var result = warehouse.getProductsByCategorySorted(Category.TOYS);
+
+        assertEquals(List.of("A", "B"),
+                result.stream().map(Product::name).toList());
+    }
+
+    @Test
+    void getProductsByCategorySorted_noProductsInCategory_returnsEmptyList() {
+        LocalDateTime t1 = LocalDateTime.of(2025, 9, 1, 12, 0);
+        LocalDateTime t2 = LocalDateTime.of(2025, 9, 2, 12, 0);
+
+        Product product1 = Product.createNew("id1", "A", Category.BOOKS, 5, t1);
+        Product product2 = Product.createNew("id2", "B", Category.TOYS,  8, t2);
+
+        warehouse.addProduct(product1);
+        warehouse.addProduct(product2);
+
+        var result = warehouse.getProductsByCategorySorted(Category.ELECTRONICS);
+
+        assertTrue(result.isEmpty());
+    }
+
+
+    @Test
+    void getProductsByCategorySorted_nullCategory_throwsNullPointerException() {
+        assertThrows(NullPointerException.class,
+                () -> warehouse.getProductsByCategorySorted(null));
+    }
 }

@@ -50,11 +50,15 @@ public final class Warehouse {
         return updated;
     }
 
- /*
-    getProductsByCategorySorted(Category category) {
-
+    public List<Product> getProductsByCategorySorted(Category category) {
+        Objects.requireNonNull(category, "category");
+        return store.values().stream()
+                .filter(product -> product.category() == category)
+                .sorted(Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER))
+                .toList();
     }
 
+     /*
     getProductsCreatedAfter(LocalDate date) {
 
     }

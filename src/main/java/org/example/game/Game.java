@@ -51,19 +51,7 @@ private MovementLogic movementLogic;
         Tile tile = emptyTiles.remove(random.nextInt(emptyTiles.size()));
         tile.setEnemy(enemy);
         enemy.moveTo(tile.getRow(), tile.getCol());
-
-        System.out.println(enemy.getType() + " placed at row " + enemy.getRow() + ", col " + enemy.getCol());
     }
-
-        for (int r = 0; r < dungeon.getRows(); r++) {
-            for (int c = 0; c < dungeon.getCols(); c++) {
-                Tile t = dungeon.getTile(r, c);
-                String s = t.getTileType();
-                if (t.getEnemy() != null) s += " (" + t.getEnemy().getType() + ")";
-                System.out.print(s + "\t");
-            }
-            System.out.println();
-        }
 
         movementLogic = new MovementLogic();
 
@@ -85,18 +73,6 @@ private MovementLogic movementLogic;
         for (Item item : items) {
             Tile tile = emptyTilesForItems.remove(random.nextInt(emptyTilesForItems.size()));
             tile.setItem(item);
-            System.out.println(item.getName() + " placed at row " + tile.getRow() + ", col " + tile.getCol());
-        }
-
-        for (int r = 0; r < dungeon.getRows(); r++) {
-            for (int c = 0; c < dungeon.getCols(); c++) {
-                Tile t = dungeon.getTile(r, c);
-                String s = t.getTileType();
-                if (t.getEnemy() != null) s += " (" + t.getEnemy().getType() + ")";
-                if (t.getItem() != null) s += " (" + t.getItem().getName() + ")";
-                System.out.print(s + "\t");
-            }
-            System.out.println();
         }
 
     System.out.println("Well Hello, " + player.getName() + ". Step inside and see what happens...");

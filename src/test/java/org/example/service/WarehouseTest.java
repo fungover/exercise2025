@@ -122,4 +122,32 @@ import static org.junit.jupiter.api.Assertions.*;
         Warehouse w = new Warehouse();
         assertThrows(IllegalArgumentException.class, () -> w.getProductsCreatedAfter(null));
      }
+
+     // --- getModifiedProducts ---
+     @Test
+     void getModifiedProductsShouldReturnModified() {
+         Warehouse w = new Warehouse();
+         LocalDate now = LocalDate.now();
+         LocalDate yesterday = now.minusDays(1);
+
+         // Not modified (createdDate == modifiedDate)
+         w.addProduct(new Product("m1", "M1", Category.Food, 5, now, now));
+         // Modified (createdDate != modifiedDate)
+         w.addProduct(new Product("m2", "M2", Category.Drink, 5, now, yesterday));
+
+         var modified = w.getModifiedProducts();
+         assertEquals(1, modified.size());
+         assertEquals("m2", modified.get(0).id());
+     }
+     @Test
+     void getModifiedProductsShouldReturnEmptyListWhenNoModified() {
+         Warehouse w = new Warehouse();
+         LocalDate today = LocalDate.now();
+
+         w.addProduct(new Product("n1", "N1", Category.Food, 5, today, today));
+         w.addProduct(new Product("n2", "N2", Category.Drink, 5, today, today));
+
+         var modified = w.getModifiedProducts();
+         assertTrue(modified.isEmpty());
+     }
  }

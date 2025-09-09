@@ -7,6 +7,6 @@ public record Product (
     Category category,
     int rating,
     LocalDate createdDate,
-    LocalDate modifedDate
+    LocalDate modifiedDate
     )
 {}

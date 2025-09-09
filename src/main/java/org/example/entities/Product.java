@@ -24,7 +24,7 @@ public record Product(Long id, String name, Category category, int rating,
         if (rating < 0 || rating > 10) {
             throw new IllegalArgumentException("rating should be between 0 and 10");
         }
-        this(idCounter++, name, category, rating, createdDate, LocalDate.now());
+        this(idCounter++, name, category, rating, createdDate, createdDate);
     }
 
     @Override public String toString() {

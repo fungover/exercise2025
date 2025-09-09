@@ -80,4 +80,10 @@ public class Warehouse {
                                       .isAfter(date))
                         .collect(Collectors.toUnmodifiableList());
     }
+
+    public List<Product> getModifiedProducts() {
+        return inventory.stream()
+                        .filter(p -> p.createdDate() != p.modifiedDate())
+                        .collect(Collectors.toUnmodifiableList());
+    }
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -166,6 +167,37 @@ class WarehouseTest {
           testDate);
         assertEquals(0, productsCreatedAfterList.size());
 
+    }
+
+    @Test void getModifiedProducts_valid() {
+        LocalDate testDate = LocalDate.now()
+                                      .minusDays(2);
+        Product lamp = new Product("lamp", Category.ELECTRONICS, 10, testDate);
+        Product pc = new Product("PC", Category.ELECTRONICS, 4, testDate);
+        warehouse.addProduct(lamp);
+        warehouse.addProduct(pc);
+
+        String idAsString = String.valueOf(lamp.id());
+        warehouse.updateProduct(idAsString, "bed", Category.FOOD, 2);
+        List<Product> getModifiedProductsList = warehouse.getModifiedProducts();
+
+        assertEquals(1, getModifiedProductsList.size());
+    }
+
+    @Test void getModifiedProducts_invalid() {
+        //when we modify a Product its modified date is set to the day its modified.
+        //this can be changed by using LocalDateTime instead of LocalDate
+        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
+        Product pc = new Product("PC", Category.ELECTRONICS, 4);
+        warehouse.addProduct(lamp);
+        warehouse.addProduct(pc);
+
+        String idAsString = String.valueOf(lamp.id());
+        warehouse.updateProduct(idAsString, "bed", Category.FOOD, 2);
+
+        
+        List<Product> getModifiedProductsList = warehouse.getModifiedProducts();
+        assertEquals(2, getModifiedProductsList.size());
     }
 
 }

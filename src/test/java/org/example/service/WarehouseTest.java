@@ -75,4 +75,20 @@ public class WarehouseTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("id");
     }
+
+    @Test
+    void getProductsByCategorySorted_returnsAtoZByName() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate today = LocalDate.now();
+        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
+        warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
+        warehouse.addProduct(new Product("p-003", "Pro Laptop", Category.COMPUTER, 8, today, today));
+        warehouse.addProduct(new Product("p-004", "Another Laptop", Category.COMPUTER, 7, today, today));
+
+        var computers = warehouse.getProductsByCategorySorted(Category.COMPUTER);
+
+        assertThat(computers)
+                .extracting(Product::name)
+                .containsExactly("Another Laptop", "Budget Laptop", "Pro Laptop");
+    }
 }

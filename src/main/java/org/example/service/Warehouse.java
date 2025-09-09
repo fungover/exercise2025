@@ -1,8 +1,10 @@
 package org.example.service;
 
 import org.example.entities.Product;
+import org.example.entities.Category;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Warehouse {
@@ -31,5 +33,12 @@ public class Warehouse {
                 .filter(p -> p.id().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("id not found: " + id));
+    }
+
+    public List<Product> getProductsByCategorySorted(Category category) {
+        return products.stream()
+                .filter(p -> p.category().equals(category))
+                .sorted(Comparator.comparing(Product::name))
+                .toList();
     }
 }

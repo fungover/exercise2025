@@ -7,7 +7,9 @@ import org.example.model.Hour;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 public class ElectricityPriceService {
@@ -30,35 +32,40 @@ public class ElectricityPriceService {
 
 		HttpRequest request = HttpRequest.newBuilder()
 						.uri(URI.create(URL))
+						.header("Accept", "application/json")
+						.timeout(Duration.ofSeconds(30))
 						.GET()
 						.build();
 
 		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-		try {
-
-			return objectMapper.readValue(response.body(), new TypeReference<>() {
-			});
-		} catch (Exception e) {
-			return null;
+		if (response.statusCode() != 200) {
+			throw new IOException("Unexpected HTTP " + response.statusCode() + " for " + URL);
 		}
+		return objectMapper.readValue(response.body(), new TypeReference<List<Hour>>() {
+		});
 	}
 
 	public void chargingHours(List<Hour> periods, int hours) {
-		double min_sum = Integer.MAX_VALUE;
-		int bestHour = 0;
-		for (int i = 0; i < periods.size() - hours + 1; i++) {
-			double current = 0.0;
-			int currentHour = periods.get(i).formatHour(periods.get(i).time_start());
-			for (int j = 0; j < hours; j++) {
-				current += periods.get(i + j).SEK_per_kWh();
-			}
-			if (current < min_sum) {
-				min_sum = current;
-				bestHour = currentHour;
+		if (periods == null || periods.isEmpty() || hours <= 0 || hours > periods.size()) {
+			System.out.println("No valid periods/hours to compute charging window.");
+			return;
+		}
+		double current = 0.0;
+		for (int j = 0; j < hours; j++) {
+			current += periods.get(j).SEK_per_kWh();
+		}
+		double minSum = current;
+		int bestIndex = 0;
+		for (int i = 1; i <= periods.size() - hours; i++) {
+			current += periods.get(i + hours - 1).SEK_per_kWh();
+			current -= periods.get(i - 1).SEK_per_kWh();
+			if (current < minSum) {
+				minSum = current;
+				bestIndex = i;
 			}
 		}
-		System.out.printf("Cheapest %dh charging period begins at %02d:00", hours,  bestHour);
+		int bestHour = periods.get(bestIndex).startHour();
+		System.out.printf("Cheapest %dh charging period begins at %02d:00%n", hours, bestHour);
 	}
 
 	public void printLowestPrice(List<Hour> prices, int day) {
@@ -67,7 +74,7 @@ public class ElectricityPriceService {
 		for (Hour h : prices) {
 			if (h.SEK_per_kWh() < lowest) {
 				lowest = h.SEK_per_kWh();
-				lowestHour = h.formatHour(h.time_start());
+				lowestHour = h.startHour();
 			}
 		}
 
@@ -80,17 +87,22 @@ public class ElectricityPriceService {
 		for (Hour h : prices) {
 			if (h.SEK_per_kWh() > highest) {
 				highest = h.SEK_per_kWh();
-				highestHour = h.formatHour(h.time_start());
+				highestHour = h.startHour();
 			}
 		}
 		System.out.printf("Highest price: %.2f kr/kWh at %02d:00", highest, highestHour);
 	}
 
 	public void printMeanPrice(List<Hour> prices, int day) {
+		if (prices == null || prices.isEmpty()) {
+			System.out.println("No prices available.");
+			return;
+		}
 		double total = 0.0;
 		for (Hour h : prices) {
 			total += h.SEK_per_kWh();
 		}
-		System.out.printf("Average price: %.2f kr/kWh", total / prices.size());
+		LocalDate date = LocalDate.now(ZoneId.of("Europe/Stockholm")).plusDays(day);
+		System.out.printf("Average price on %s: %.2f kr/kWh%n", date, total / prices.size());
 	}
 }

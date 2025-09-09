@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -53,5 +54,10 @@ public class WarehouseTest {
         assertThrows(IllegalArgumentException.class, () ->
                 warehouse.updateProduct("99", "Failure", Category.BOOKS, 5)
         );
+    }
+
+    @Test
+    void getAllProductsSuccess() {
+        List<Product> products = warehouse.getAllProducts();
     }
 }

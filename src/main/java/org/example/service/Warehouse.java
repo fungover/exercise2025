@@ -85,12 +85,15 @@ public class Warehouse {
 
     public Map<Character, Integer> getProductInitialsMap() {
         return products.stream()
-                .map(p -> p.name().charAt(0))
-                .map(Character::toUpperCase)
-                .collect(Collectors.toMap(
+                .map(p -> Character.toUpperCase(p.name().charAt(0)))
+                .collect(Collectors.groupingBy(
                         c -> c,
-                        c -> 1,
-                        Integer::sum
+                        Collectors.counting()
+                ))
+                .entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> e.getValue().intValue()
                 ));
     }
 
@@ -110,9 +113,9 @@ public class Warehouse {
         return thisMonth.stream()
                 .filter(p -> p.rating() == maxRating.getAsInt())
                 .sorted((p1, p2) -> {
-                    int cmp = p2.createdDate().compareTo(p1.createdDate()); // newest first
+                    int cmp = p2.createdDate().compareTo(p1.createdDate());
                     if (cmp != 0) return cmp;
-                    return p1.name().compareToIgnoreCase(p2.name()); // tie-breaker
+                    return p1.name().compareToIgnoreCase(p2.name());
                 })
                 .toList();
     }

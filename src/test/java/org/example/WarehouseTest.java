@@ -26,9 +26,8 @@ public class WarehouseTest {
         Product product = new Product("1", "Car", Category.TOYS, 8, LocalDate.now(), LocalDate.now());
         warehouse.addProduct(product);
 
-        List<Product> products = warehouse.getAllProducts();
         assertEquals(1, warehouse.getAllProducts().size());
-        assertEquals("Car", warehouse.getAllProducts().get(0).name());
+        assertEquals("Car", warehouse.getAllProducts().getFirst().name());
     }
 
     @Test
@@ -149,7 +148,7 @@ public class WarehouseTest {
         List<Product> modifiedProducts = warehouse.getModifiedProducts();
 
         assertEquals(1, modifiedProducts.size());
-        assertEquals("Modified Product", modifiedProducts.get(0).name());
+        assertEquals("Modified Product", modifiedProducts.getFirst().name());
     }
 
     @Test

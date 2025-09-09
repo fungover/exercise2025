@@ -40,11 +40,8 @@ public class GameText {
     public static final String NAME_OKAY = purple("\nOkay, friend.. I mean ");
     public static final String NAME_DOTS = purple("..");
 
-    // Item Messages
+    // Item Message
     public static final String ITEM_PICKED_UP = "You picked up: %s";
-    public static final String ITEM_USED_HEALING = "You used %s and healed %d HP!";
-    public static final String CURRENT_HEALTH = "You now have %d HP.";
-    public static final String WEAPON_EQUIPPED = "You equipped %s (+%d damage)";
 
     // Error Messages
     public static final String NO_EXIT = "You can't go that way!";

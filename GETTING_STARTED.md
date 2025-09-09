@@ -22,6 +22,12 @@ Usable interface for consumable items.
 - Map<String, Room> for room exits
 - List< Enemy> in Room class
 
+### Text Management
+Centralized text handling using utility classes:
+- GameText.java: Story, UI messages, and general game text
+- CombatText.java: Combat-specific messages and dialog
+- Colors.java: Console color formatting
+
 ### Adding New Classes
 #### Addning New Item Type:
 1. Create class extending Item.

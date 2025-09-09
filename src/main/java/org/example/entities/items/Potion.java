@@ -1,4 +1,4 @@
-package org.example.entities;
+package org.example.entities.items;
 
 public class Potion extends Item {
 

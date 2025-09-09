@@ -1,6 +1,8 @@
 package org.example.entities;
 
 
+import org.example.entities.items.Item;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +63,7 @@ public class Player {
                 int healAmount = item.getEffect();
                 health += healAmount;
                 if (health > 100) health = 100;
-                System.out.println("You used a " + item.getName() + "and healed " + healAmount + "!");
+                System.out.println("You used a " + item.getName() + "and healed " + healAmount + "! " + "your health is now " + health);
                 inventory.remove(item);
                 return;
             }

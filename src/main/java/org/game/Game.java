@@ -51,7 +51,7 @@ public class Game {
                         Tile tile = dungeon.getTile(player.getX(), player.getY());
                         if (tile != null && tile.getRoom() != null && !tile.getRoom().IsVisited()) {
                             Room room = tile.getRoom();
-                            System.out.println("You encountered a " + room.getType() + "room!");
+                            System.out.println("You encountered a " + room.getType() + " room!");
 
                             for (Enemy e: room.getEnemies()) {
                                 CombatHandler.fight(player,e);

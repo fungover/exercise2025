@@ -195,9 +195,40 @@ class WarehouseTest {
         String idAsString = String.valueOf(lamp.id());
         warehouse.updateProduct(idAsString, "bed", Category.FOOD, 2);
 
-        
+
         List<Product> getModifiedProductsList = warehouse.getModifiedProducts();
         assertEquals(2, getModifiedProductsList.size());
     }
+
+
+    //vg
+    @Test void getCategoriesWithProducts_valid() {
+        // 2 electronics 2 food 1 game
+        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
+        Product pc = new Product("PC", Category.ELECTRONICS, 4);
+        Product hotdog = new Product("HotDog", Category.FOOD, 4);
+        Product angryFish = new Product("AngryFish", Category.FOOD, 6);
+        Product sillyBirds = new Product("SillyBirds", Category.GAMES, 9);
+        warehouse.addProduct(lamp);
+        warehouse.addProduct(pc);
+        warehouse.addProduct(hotdog);
+        warehouse.addProduct(angryFish);
+        warehouse.addProduct(sillyBirds);
+
+        List<Category> getCategoriesWithProductsList =
+          warehouse.getCategoriesWithProducts();
+
+        assertEquals(3, getCategoriesWithProductsList.size());
+        assertTrue(getCategoriesWithProductsList.contains(Category.FOOD));
+        assertTrue(getCategoriesWithProductsList.contains(Category.ELECTRONICS));
+        assertTrue(getCategoriesWithProductsList.contains(Category.GAMES));
+    }
+
+    @Test void getCategoriesWithProducts_isEmpty() {
+        List<Category> categories_emptyList = warehouse.getCategoriesWithProducts();
+        assertEquals(0, categories_emptyList.size());
+        assertTrue(categories_emptyList.isEmpty());
+    }
+
 
 }

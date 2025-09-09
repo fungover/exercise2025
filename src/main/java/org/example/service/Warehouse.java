@@ -86,4 +86,11 @@ public class Warehouse {
                         .filter(p -> p.createdDate() != p.modifiedDate())
                         .collect(Collectors.toUnmodifiableList());
     }
+
+    public List<Category> getCategoriesWithProducts() {
+        return inventory.stream()
+                        .map(Product::category)//get the category of each product
+                        .distinct()//a category only appears once in results
+                        .collect(Collectors.toUnmodifiableList());
+    }
 }

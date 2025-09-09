@@ -30,6 +30,18 @@ public class Warehouse {
     }
 
     public void updateProduct(String id, String name, Category category, int rating) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("Product id cannot be empty");
+        }
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be empty");
+        }
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+        }
+        if (rating < 0 || rating > 10) {
+            throw new IllegalArgumentException("Product rating must be between 0 and 10");
+        }
         for (int i = 0; i < products.size(); i++) {
             Product product = products.get(i);
             if (product.id().equals(id)) {

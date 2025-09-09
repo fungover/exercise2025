@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.entities.Product;
 import org.example.entities.Category;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
@@ -163,5 +164,54 @@ import static org.junit.jupiter.api.Assertions.*;
 
          var modified = warehouse.getModifiedProducts();
          assertTrue(modified.isEmpty());
+     }
+     // --- getAllProducts ---
+     @Test
+     void getAllProductsShouldReturnDefensiveCopy() {
+         Warehouse warehouse = new Warehouse();
+         Product product = new Product(
+                 "10",
+                 "A",
+                 Category.Food,
+                 5,
+                 LocalDate.now(),
+                 LocalDate.now()
+         );
+         warehouse.addProduct(product);
+
+         var copy = warehouse.getAllProducts();
+         assertEquals(1, copy.size());
+         copy.clear();
+         assertEquals(1, warehouse.getAllProducts().size());
+     }
+     // --- updateProduct failures ---
+     @Test
+     void updateProductShouldThrowExceptionWhenIdDoesNotExist() {
+         Warehouse warehouse = new Warehouse();
+         assertThrows(IllegalArgumentException.class, () ->
+                 warehouse.updateProduct("missing", "Name", Category.Food, 5));
+     }
+    @Test
+     void updateProductShouldValidateInput() {
+         Warehouse warehouse = new Warehouse();
+         // Valid product first
+        Product product = new Product("u1", "Coffee", Category.Drink, 6, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(product);
+
+        // Empty id
+        assertThrows(IllegalArgumentException.class, () ->
+                warehouse.updateProduct("", "Coffee", Category.Drink, 6));
+        // Empty name
+        assertThrows(IllegalArgumentException.class, () ->
+                warehouse.updateProduct("u1", "", Category.Drink, 6));
+        //Null category
+        assertThrows(IllegalArgumentException.class, () ->
+                warehouse.updateProduct("u1", "Coffee", null, 6));
+        // Rating out of range
+        assertThrows(IllegalArgumentException.class, () ->
+                warehouse.updateProduct("u1", "Coffee", Category.Drink, -1));
+        assertThrows(IllegalArgumentException.class, () ->
+                warehouse.updateProduct("u1", "Coffee", Category.Drink, 11));
+
      }
  }

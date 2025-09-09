@@ -6,11 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 class WarehouseTest {
 
@@ -258,7 +260,7 @@ class WarehouseTest {
         assertThat(updated.createdDate()).isEqualTo(originalProduct.createdDate());
         assertThat(updated.modifiedDate()).isAfter(originalProduct.modifiedDate());
 
-        // Verify that product is updated in the warehouse
+        // Verify that the product is updated in the warehouse
         Optional<Product> retrievedProduct = warehouse.getProductById(originalProduct.id());
         assertThat(retrievedProduct)
                 .isPresent()
@@ -298,5 +300,64 @@ class WarehouseTest {
                 5);
 
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Returns products created AFTER given ZonedDateTime")
+    void getProductsCreatedAfter_returnsMatchingProducts() {
+        Warehouse warehouse = new Warehouse();
+
+        ZonedDateTime now = ZonedDateTime.now();
+        Product oldProduct = new Product(
+                UUID.randomUUID().toString(),
+                "Old",
+                Category.FOOD,
+                5, now.minusDays(2),
+                now.minusDays(2));
+
+        Product newProduct = new Product(
+                UUID.randomUUID().toString(),
+                "New",
+                Category.FOOD,
+                8,
+                now.plusHours(1),
+                now.plusHours(1));
+
+        warehouse.addProduct(oldProduct);
+        warehouse.addProduct(newProduct);
+
+        List<Product> result = warehouse.getProductsCreatedAfter(now);
+
+        assertEquals(1, result.size());
+        assertEquals("New", result.get(0).name());
+    }
+
+    @Test
+    @DisplayName("Should return empty list when no products created after the specified ZonedDateTime")
+    void getProductsCreatedAfterZonedDateTimeWhenThereAreNoMatchingProducts() {
+        ZonedDateTime baseDateTime = ZonedDateTime.of(
+                2025,
+                9,
+                1,
+                12,
+                0,
+                0,
+                0,
+                ZoneId.systemDefault()); // 1 Sep 2025 12:00
+
+        Product oldProduct = new Product(
+                UUID.randomUUID().toString(),
+                "Old conditioner",
+                Category.GROOMING,
+                7,
+                baseDateTime.minusDays(2), // Created 30 Aug 2025
+                baseDateTime.minusDays(2)
+        );
+
+        warehouse.addProduct(oldProduct);
+
+        List<Product> recentProducts = warehouse.getProductsCreatedAfter(baseDateTime);
+
+        assertThat(recentProducts).isEmpty();
     }
 }

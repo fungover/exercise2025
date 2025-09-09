@@ -75,4 +75,10 @@ public class Warehouse {
                 )
         ));
     }
+
+    public List<Product> getProductsCreatedAfter(ZonedDateTime dateTime) {
+        return products.values().stream()
+                .filter(product -> product.createdDate().isAfter(dateTime))
+                .collect(Collectors.toList());
+    }
 }

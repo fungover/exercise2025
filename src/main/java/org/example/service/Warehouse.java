@@ -1,7 +1,9 @@
 package org.example.service;
 
+import org.example.entities.Category;
 import org.example.entities.Product;
 import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public final class Warehouse {
@@ -34,11 +36,21 @@ public final class Warehouse {
         return Optional.ofNullable(store.get(id));
     }
 
-     /*
-    updateProduct(String id, String name, Category category, int rating) {
+    public Product updateProduct(String id, String name, Category category, int rating) {
+        Objects.requireNonNull(id, "id");
+        if (id.isBlank()) throw new IllegalArgumentException("id required");
 
+        Product existing = Optional.ofNullable(store.get(id))
+                .orElseThrow(() -> new NoSuchElementException("not found: " + id));
+
+        LocalDateTime now = LocalDateTime.now(clock);
+        Product updated = existing.withUpdated(name, category, rating, now);
+
+        store.put(id, updated);
+        return updated;
     }
 
+ /*
     getProductsByCategorySorted(Category category) {
 
     }

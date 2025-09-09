@@ -8,6 +8,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -85,7 +86,7 @@ public class WarehouseTest {
 
         var testProductById = warehouse.getProductById(testProduct.id());
 
-        assertEquals(Optional.of(testProduct), warehouse.getProductById(testProduct.id()));
+        assertEquals(Optional.of(testProduct), testProductById);
     }
 
     @Test
@@ -101,4 +102,42 @@ public class WarehouseTest {
                 assertThrows(IllegalArgumentException.class, () -> warehouse.getProductById("  "));
         assertTrue(exception.getMessage().contains("id required"));
     }
+
+    /** updateProduct method */
+    @Test
+    void updateProduct_success_updatesFields_andPersists() {
+        LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 9, 0);
+        Product original = Product.createNew("id1", "Original", Category.BOOKS, 5, createdAt);
+        warehouse.addProduct(original);
+
+        Product updated = warehouse.updateProduct("id1", "New Name", Category.TOYS, 9);
+
+        assertEquals("id1", updated.id());
+        assertEquals("New Name", updated.name());
+        assertEquals(Category.TOYS, updated.category());
+        assertEquals(9, updated.rating());
+        assertEquals(createdAt, updated.createdDate());
+        assertEquals(LocalDateTime.of(2025, 9, 8, 12, 0), updated.modifiedDate());
+        assertEquals(Optional.of(updated), warehouse.getProductById("id1"));
+    }
+
+    @Test
+    void updateProduct_nullId_throwsNullPointerException() {
+        assertThrows(NullPointerException.class,
+                () -> warehouse.updateProduct(null, "test", Category.BOOKS, 7));
+    }
+
+    @Test
+    void updateProduct_blankId_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.updateProduct("   ", "test", Category.BOOKS, 7));
+    }
+
+    @Test
+    void updateProduct_missingId_throwsNoSuchElementException() {
+        assertThrows(NoSuchElementException.class,
+                () -> warehouse.updateProduct("missing-id", "test", Category.BOOKS, 7));
+    }
+
+
 }

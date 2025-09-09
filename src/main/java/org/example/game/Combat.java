@@ -2,6 +2,7 @@ package org.example.game;
 
 import org.example.entities.Enemy;
 import org.example.entities.Player;
+import org.example.utils.CombatText;
 
 import static org.example.utils.Colors.*;
 
@@ -9,52 +10,52 @@ public class Combat {
     public void startCombat(Player player, Enemy enemy) {
         // Special dialog for Thade
         if (enemy.getName().equals("Thade")) {
-            System.out.println(purple("\nThade: -" + player.getName() + "! You found me!"));
-            System.out.println(purple("Thade: -But... something is wrong... I can't control myself!"));
-            System.out.println(purple("Thade: -The darkness... it's taking over! RUN!"));
-            System.out.println(purple("Thade: -I... must... DESTROY YOU!"));
+            System.out.printf(CombatText.THADE_FOUND + "%n", player.getName());
+            System.out.println(CombatText.THADE_WRONG);
+            System.out.println(CombatText.THADE_DARKNESS);
+            System.out.println(CombatText.THADE_DESTROY);
         }
 
-        //Print out information about the fight
-        System.out.println(bold("\nThe fight against " + enemy.getName() + " begins!"));
-        //While-loop continues while both are alive
+        // Print out information about the fight
+        System.out.printf(CombatText.COMBAT_START + "%n", enemy.getName());
+
+        // While-loop continues while both are alive
         while (player.isAlive() && enemy.isAlive()) {
-            //Player attacks then enemy attacks
+            // Player attacks then enemy attacks
             int playerDamage = player.attack();
             enemy.takeDamage(playerDamage);
-            System.out.println(green("\nYou attack for " + playerDamage + " damage!"));
-            System.out.println(enemy.getName() + " has " + enemy.getHealth() + " health left.");
+            System.out.printf(CombatText.PLAYER_ATTACK + "%n", playerDamage);
+            System.out.printf(CombatText.ENEMY_HEALTH_LEFT + "%n", enemy.getName(), enemy.getHealth());
 
             if (enemy.isAlive()) {
-
                 int enemyDamage = enemy.attack();
                 player.takeDamage(enemyDamage);
-                System.out.println(red("\n" + enemy.getName() + " attack you for " + enemyDamage + " damage!"));
-                System.out.println("You have " + player.getHealth() + " health left.");
+                System.out.printf(CombatText.ENEMY_ATTACK + "%n", enemy.getName(), enemyDamage);
+                System.out.printf(CombatText.PLAYER_HEALTH_LEFT + "%n", player.getHealth());
             }
         }
-        //Check who won
+
+        // Check who won
         if (player.isAlive()) {
-            System.out.println(bold(green("\nYou won the fight!")));
-            System.out.println("You have " + player.getHealth() + " health left.");
+            System.out.println(CombatText.COMBAT_VICTORY);
+            System.out.printf(CombatText.PLAYER_HEALTH_AFTER + "%n", player.getHealth());
             if (enemy.getName().equals("Thade")) {
-                System.out.print(purple("\nThade: -Well played, "));
+                System.out.print(CombatText.THADE_WELL_PLAYED);
                 System.out.print(cyan(player.getName()));
                 System.out.print(purple(".."));
-                System.out.println(purple("..well played..my friend.. "));
-                System.out.print("*Thade slowly dies*");
+                System.out.println(CombatText.THADE_WELL_PLAYED_END);
+                System.out.print(CombatText.THADE_DIES);
             }
         } else {
             if (enemy.getName().equals("Thade")) {
-                System.out.print(purple("\nThade: -Oh.. "));
+                System.out.print(CombatText.THADE_REVEAL_START);
                 System.out.print(cyan(player.getName()));
-                System.out.print(purple(".. don't you see it?"));
-                System.out.print(purple("\nMy real name is not Thade.."));
-                System.out.println(purple("\n..Thade.. dThad.. deTha.. Detah.."));
-                System.out.println(bold(purple("it's.. DEATH!")));
+                System.out.print(CombatText.THADE_REVEAL_QUESTION);
+                System.out.print(CombatText.THADE_NOT_NAME);
+                System.out.println(CombatText.THADE_REVEAL_SEQUENCE);
+                System.out.println(CombatText.THADE_REVEAL_DEATH);
             }
-            System.out.println(red("\nYou lost the fight and died!"));
-
+            System.out.println(CombatText.COMBAT_DEFEAT);
         }
     }
 }

@@ -4,11 +4,17 @@ import org.example.entities.Category;
 import org.example.entities.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -88,6 +94,38 @@ public class WarehouseTest {
 
         assertThatThrownBy(() -> warehouse.updateProduct("2", "Updated Product", Category.GENERAL, 2))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @ParameterizedTest
+    @MethodSource("testBlankIncludeNull")
+    @DisplayName("updateProduct: throws IllegalArgumentException for invalid inputs")
+    void throwExceptionIfInvalidInputToUpdate(String id, String name, Category category, int rating) {
+        Warehouse warehouse = new Warehouse();
+        warehouse.addProduct(new Product("1", "Laptop", Category.GENERAL, 1));
+
+        assertThatThrownBy(() -> warehouse.updateProduct(id, name, category, rating))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    static Stream<Arguments> testBlankIncludeNull() {
+        return Stream.of(
+                //Id
+                Arguments.of(null, "Test Product", Category.GENERAL, 5),
+                Arguments.of("", "Test Product", Category.GENERAL, 5),
+                Arguments.of(" ", "Test Product", Category.GENERAL, 5),
+
+                //Name
+                Arguments.of("1", null, Category.GENERAL, 5),
+                Arguments.of("1", "", Category.GENERAL, 5),
+                Arguments.of("1", " ", Category.GENERAL, 5),
+
+                //Category
+                Arguments.of("1", "Test Product", null, 5),
+
+                //Rating
+                Arguments.of("1", "Test Product", Category.GENERAL, 11),
+                Arguments.of("1", "Test Product", Category.GENERAL, 0)
+        );
     }
 
     @Test
@@ -231,7 +269,7 @@ public class WarehouseTest {
 
         //Delay a bit to make sure modifiedDate is different from createdDate
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

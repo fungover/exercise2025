@@ -45,6 +45,9 @@ public class Warehouse {
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null");
         }
+        if (rating < 1 || rating > 10){
+            throw new IllegalArgumentException("Rating must be between 1 and 10");
+        }
 
         int index = IntStream.range(0, products.size())
                 .filter(i -> products.get(i).getId().equals(id))

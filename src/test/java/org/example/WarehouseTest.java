@@ -60,4 +60,16 @@ public class WarehouseTest {
     void getAllProductsSuccess() {
         List<Product> products = warehouse.getAllProducts();
     }
+
+    @Test
+    void getProductByIdSuccess() {
+        Product product = new Product("2", "Harry Potter", Category.BOOKS, 8, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(product);
+
+        Product result = warehouse.getProductById("2");
+
+
+        assertEquals("2", result.id());
+        assertEquals("Harry Potter", result.name());
+    }
 }

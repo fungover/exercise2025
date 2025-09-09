@@ -39,4 +39,11 @@ public class Warehouse {
         }
         throw new IllegalArgumentException("Product with ID " + id + " not found");
     }
+
+    public Product getProductById(String id) {
+        return products.stream()
+                .filter(p -> p.id().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Product with ID " + id + " not found"));
+    }
 }

@@ -54,4 +54,11 @@ public class Warehouse {
                 .filter(p -> !p.modifiedDate().equals(p.createdDate()))
                 .toList();
     }
+
+    public List<Category> getCategoriesWithProducts() {
+        return products.stream()
+                .map(Product::category)
+                .distinct()
+                .toList();
+    }
 }

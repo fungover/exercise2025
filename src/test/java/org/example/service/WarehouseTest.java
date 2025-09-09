@@ -132,4 +132,19 @@ public class WarehouseTest {
                 .extracting(Product::id)
                 .containsExactly("p-002");
     }
+
+    @Test
+    void getCategoriesWithProducts_returnsOnlyCategoriesWithProducts() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate today = LocalDate.now();
+
+        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
+        warehouse.addProduct(new Product("p-002", "Refrigerator", Category.APPLIANCES, 7, today, today));
+
+        var categories = warehouse.getCategoriesWithProducts();
+
+        assertThat(categories)
+                .containsExactly(Category.TV, Category.APPLIANCES)
+                .doesNotContain(Category.COMPUTER, Category.PHONE);
+    }
 }

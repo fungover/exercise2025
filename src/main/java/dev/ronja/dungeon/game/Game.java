@@ -1,6 +1,9 @@
 package dev.ronja.dungeon.game;
 
+import dev.ronja.dungeon.entities.Healer;
+import dev.ronja.dungeon.entities.Mother;
 import dev.ronja.dungeon.entities.Player;
+import dev.ronja.dungeon.entities.Potion;
 
 import java.util.Scanner;
 
@@ -39,24 +42,49 @@ public class Game {
      **/
     public void run() {
         System.out.println(" Welcome to the Dungeon of mysteries, " + player.getName() + " ! ");
-        System.out.println(" You have " + player.getHp() + " Health points ");
+        System.out.println(" You have " + player.getHp() + " Health points (HP) ");
+        System.out.println(" Commands: status, damage, heal, potion <n>, mother <n>, quit ");
 
         while (player.isAlive()) {
             System.out.println(" < ");
-            String command = in.nextLine().trim().toLowerCase();
+            String line = in.nextLine().trim().toLowerCase();
 
-            switch (command) {
+            if (line.isEmpty()) continue;
+
+            String[] parts = line.split("\\s+");
+            String cmd = parts[0];
+
+            switch (cmd) {
                 case "status" -> System.out.println(player);
                 case "damage" -> player.takeDamage(10);
                 case "heal" -> player.heal(5);
-                case "suicide" -> player.takeDamage(player.getHp());
+                case "potion" -> {
+                    int amount = parseAmount(parts, 30);
+                    Healer h = new Potion(amount);
+                    h.heal(player);
+                }
+                case "mother" -> {
+                    int amount = parseAmount(parts, 20);
+                    Healer h = new Mother(amount);
+                    h.heal(player);
+                }
                 case "quit" -> {
                     System.out.println(" Goodbye ");
                     return;
                 }
-                default -> System.out.println( "Unknown command. Try: status, damage, heal, suicide, quit!" );
+                default -> System.out.println( "Unknown command. Try: status, damage, heal, quit!" );
             }
         }
         System.out.println("GAME OVER! You will now be buried in the darkest depths of the dungeon");
+    }
+
+    private static int parseAmount(String[] parts, int fallback) {
+        if (parts.length < 2) return fallback;
+        try {
+            return Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+            System.out.println(" Not a number. Using default: " + fallback);
+            return fallback;
+        }
     }
 }

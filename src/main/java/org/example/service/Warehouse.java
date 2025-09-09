@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Warehouse {
 
@@ -82,5 +84,16 @@ public class Warehouse {
         return products.stream()
                 .filter(p -> p.category() == category )
                 .count();
+    }
+
+    public Map<Character, Integer> getProductInitialsMap() {
+        return products.stream()
+                .map(p -> p.name().charAt(0))
+                .map(Character::toUpperCase)
+                .collect(Collectors.toMap(
+                        c -> c,
+                        c -> 1,
+                        Integer::sum
+                ));
     }
 }

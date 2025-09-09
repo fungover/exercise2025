@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -177,5 +178,20 @@ public class WarehouseTest {
         assertEquals(2, warehouse.countProductsInCategory(Category.ELECTRONICS));
         assertEquals(1, warehouse.countProductsInCategory(Category.MOVIES));
         assertEquals(0, warehouse.countProductsInCategory(Category.BOOKS));
+    }
+
+    @Test
+    void getProductInitialsMap() {
+        warehouse.addProduct(new Product("1", "Laptop", Category.ELECTRONICS, 9, LocalDate.now(), LocalDate.now()));
+        warehouse.addProduct(new Product("2", "iPhone", Category.ELECTRONICS, 8, LocalDate.now(), LocalDate.now()));
+        warehouse.addProduct(new Product("3", "Harry Potter", Category.BOOKS, 7, LocalDate.now(), LocalDate.now()));
+        warehouse.addProduct(new Product("4", "Headphones", Category.ELECTRONICS, 6, LocalDate.now(), LocalDate.now()));
+
+        Map<Character, Integer> initialsMap = warehouse.getProductInitialsMap();
+
+        assertEquals(3, initialsMap.size());
+        assertEquals(1, initialsMap.get('L'));
+        assertEquals(1, initialsMap.get('I'));
+        assertEquals(2, initialsMap.get('H'));
     }
 }

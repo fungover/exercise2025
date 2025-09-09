@@ -1,6 +1,10 @@
 package org.example.tree;
 
 public class Leaves {
+public Leaves(){
+	createLeaves();
+}
+
 	private Leaf currentLeaf;
 
 	public void setCurrentLeaf(Leaf currentLeaf) {

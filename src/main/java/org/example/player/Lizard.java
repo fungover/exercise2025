@@ -73,6 +73,7 @@ public class Lizard {
 					inventory.getInventory().remove(item);
 				}
 			}
+			setDefense(equipment);
 		} else {
 			System.out.println("Item " + item + " not found");
 		}

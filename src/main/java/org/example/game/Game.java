@@ -20,7 +20,6 @@ public class Game {
 
 	public Game() {
 		leaves = new Leaves();
-		leaves.createLeaves();
 		randomGen = new RandomGen();
 		enemy = new Enemy();
 		inventory = new Inventory();
@@ -85,7 +84,8 @@ public class Game {
 					lizard.equippedItems(equipment);
 				}
 			} else {
-				currentLeaf = leaves.move(currentLeaf, move);// Place enemy spawner here
+				currentLeaf = leaves.move(currentLeaf, move);
+				// Place enemy spawner here
 				String foundItem = enemy.lootDrop();
 				if (currentLeaf.getName().equals("Purple Vale")) {
 					Enemy phoenix = new Phoenix();

@@ -58,8 +58,6 @@ public class Game {
         boolean running = true;
         while (running) {
             map.print(player);
-
-            System.out.println("Commands: [go north] [go south] [go west] [go east] [look] [attack] [quit]");
             System.out.print("Enter your command: ");
             String command = input.nextLine().trim().toLowerCase();
 
@@ -99,7 +97,7 @@ public class Game {
         };
 
         wallCount = switch (difficultyChoice) {
-            case 1 -> 10;
+            case 1 -> 5;
             case 2 -> 25;
             case 3 -> 40;
             default -> 15;

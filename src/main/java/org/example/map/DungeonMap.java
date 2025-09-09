@@ -2,6 +2,7 @@ package org.example.map;
 
 import org.example.entities.Tile;
 import org.example.entities.Player;
+import org.example.service.ItemService;
 
 public class DungeonMap {    ;
     private Tile[][] dungeon;
@@ -43,8 +44,10 @@ public class DungeonMap {    ;
 
         System.out.println("\n [?] = Unexplored tile, [X] = Your location, [E] = Enemy, [#] = Wall, [P] = Potion, [M] = Map \n");
         System.out.println("Hero name: " + player.getName() + " " + heart + "HP: " + player.getHealth() + "/100");
+        ItemService.printInventory(player);
+        System.out.println("Commands: [go north] [go south] [go west] [go east] [look] [attack] [quit]");
         Tile currentTile = dungeon[player.getX()][player.getY()];
-        String onCurrentTile = "On current tile: ";
+        String onCurrentTile = "\nOn current tile: ";
 
         if (currentTile.getEnemy() != null) {
             System.out.println(onCurrentTile + currentTile.getEnemy().getName() + " HP: " + currentTile.getEnemy().getHealth() + " Attack: " + currentTile.getEnemy().getDamage());

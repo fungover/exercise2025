@@ -5,7 +5,7 @@ import org.example.entities.Tile;
 
 public class MovementService {
 
-    public static void movePlayer(String command, Player player, Tile[][] tile) {
+    public static void movePlayer(String command, Player player, Tile[][] tiles) {
         int newX = player.getX();
         int newY = player.getY();
 
@@ -14,12 +14,18 @@ public class MovementService {
             case "go south" -> newX++;
             case "go east" -> newY++;
             case "go west" -> newY--;
+            case "pickup" -> {
+                ItemService.pickupItem(tiles, player);
+            }
+            case "use potion" -> {
+                ItemService.useItem(player);
+            }
             case "look" -> {
-                lookAround(player, tile);
+                lookAround(player, tiles);
                 return;
             }
             case "attack" -> {
-                CombatService.fightRound(player, tile);
+                CombatService.fightRound(player, tiles);
                 return;
             }
             default -> {
@@ -29,13 +35,13 @@ public class MovementService {
         }
 
         //condition to check map boundaries
-        if(newX < 0 || newY < 0 || newX >= tile.length || newY >= tile[0].length) {
+        if(newX < 0 || newY < 0 || newX >= tiles.length || newY >= tiles[0].length) {
             System.out.println("\nYou can't move outside the map");
             return;
         }
 
         //check if tile is walkable
-        Tile target =  tile[newX][newY];
+        Tile target =  tiles[newX][newY];
         if(!target.isWalkable()) {
             System.out.println("\nYou bump into a wall");
             return;

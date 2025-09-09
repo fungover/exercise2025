@@ -23,12 +23,12 @@ public class ProductTest {
         Product product = new Product(id, name, category, rating, created, created);
 
         // Kontrollerar att produktens fält är satta korrekt
-        assertThat(product.getId()).isEqualTo(id);
-        assertThat(product.getName()).isEqualTo(name);
-        assertThat(product.getCategory()).isEqualTo(category);
-        assertThat(product.getRating()).isEqualTo(rating);
-        assertThat(product.getCreatedDate()).isEqualTo(created);
-        assertThat(product.getModifiedDate()).isEqualTo(created);
+        assertThat(product.id()).isEqualTo(id);
+        assertThat(product.name()).isEqualTo(name);
+        assertThat(product.category()).isEqualTo(category);
+        assertThat(product.rating()).isEqualTo(rating);
+        assertThat(product.createdDate()).isEqualTo(created);
+        assertThat(product.modifiedDate()).isEqualTo(created);
     }
 
     @Test

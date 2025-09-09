@@ -13,17 +13,17 @@ import static org.junit.jupiter.api.Assertions.*;
      // --- addProduct ---
      @Test
      void addProductShouldAddSuccessfully() {
-     Warehouse warehouse = new Warehouse();
-     Product product = new Product(
-             "1",
-             "Kiwi",
-             Category.Food,
-             8,
-             LocalDate.now(),
-             LocalDate.now()
-     );
-     warehouse.addProduct(product);
-     assertEquals(1, warehouse.getAllProducts().size());
+         Warehouse warehouse = new Warehouse();
+         Product product = new Product(
+                 "1",
+                 "Kiwi",
+                 Category.Food,
+                 8,
+                 LocalDate.now(),
+                 LocalDate.now()
+         );
+         warehouse.addProduct(product);
+         assertEquals(1, warehouse.getAllProducts().size());
      }
 
      @Test
@@ -77,7 +77,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
      // --- getProductById ---
      @Test
-     void getProductByIdShouldReturnProductWhenIdExists(){
+     void getProductByIdShouldReturnProductWhenIdExists() {
          Warehouse warehouse = new Warehouse();
          Product p = new Product(
                  "1",
@@ -91,15 +91,16 @@ import static org.junit.jupiter.api.Assertions.*;
          Product product = warehouse.getProductById("1");
          assertEquals(p, product); // p = product
      }
+
      @Test
-     void getProductByIdShouldThrowExceptionWhenIdDoesNotExist(){
+     void getProductByIdShouldThrowExceptionWhenIdDoesNotExist() {
          Warehouse warehouse = new Warehouse();
          assertThrows(IllegalArgumentException.class, () -> warehouse.getProductById("85"));
      }
 
      // --- getProductsByCategorySorted ---
      @Test
-     void getProductsByCategorySortedShouldReturnSortedProductsByCategory(){
+     void getProductsByCategorySortedShouldReturnSortedProductsByCategory() {
          Warehouse warehouse = new Warehouse();
          warehouse.addProduct(new Product("a", "Orange", Category.Food, 5, LocalDate.now(), LocalDate.now()));
          warehouse.addProduct(new Product("b", "Kiwi", Category.Food, 8, LocalDate.now(), LocalDate.now()));
@@ -112,13 +113,15 @@ import static org.junit.jupiter.api.Assertions.*;
          assertEquals("Orange", foods.get(1).name());
 
      }
+
      @Test
-     void getProductsByCategorySortedShouldThrowExceptionWhenCategoryIsNull(){
+     void getProductsByCategorySortedShouldThrowExceptionWhenCategoryIsNull() {
          Warehouse warehouse = new Warehouse();
          assertThrows(IllegalArgumentException.class, () -> warehouse.getProductsByCategorySorted(null));
      }
+
      // --- getProductsCreatedAfter ---
-    @Test
+     @Test
      void getProductsCreatedAfterShouldFilter() {
          Warehouse warehouse = new Warehouse();
          LocalDate fiveDaysAgo = LocalDate.now().minusDays(5);
@@ -131,11 +134,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
          var result = warehouse.getProductsCreatedAfter(LocalDate.now().minusDays(2));
          assertEquals(2, result.size()); // Yesterday and Today
-    }
-    @Test
+     }
+
+     @Test
      void getProductsCreatedAfterShouldThrowExceptionWhenDateIsNull() {
-        Warehouse warehouse = new Warehouse();
-        assertThrows(IllegalArgumentException.class, () -> warehouse.getProductsCreatedAfter(null));
+         Warehouse warehouse = new Warehouse();
+         assertThrows(IllegalArgumentException.class, () -> warehouse.getProductsCreatedAfter(null));
      }
 
      // --- getModifiedProducts ---
@@ -154,6 +158,7 @@ import static org.junit.jupiter.api.Assertions.*;
          assertEquals(1, modified.size());
          assertEquals("m2", modified.get(0).id());
      }
+
      @Test
      void getModifiedProductsShouldReturnEmptyListWhenNoModified() {
          Warehouse warehouse = new Warehouse();
@@ -165,6 +170,7 @@ import static org.junit.jupiter.api.Assertions.*;
          var modified = warehouse.getModifiedProducts();
          assertTrue(modified.isEmpty());
      }
+
      // --- getAllProducts ---
      @Test
      void getAllProductsShouldReturnDefensiveCopy() {
@@ -184,6 +190,7 @@ import static org.junit.jupiter.api.Assertions.*;
          copy.clear();
          assertEquals(1, warehouse.getAllProducts().size());
      }
+
      // --- updateProduct failures ---
      @Test
      void updateProductShouldThrowExceptionWhenIdDoesNotExist() {
@@ -191,27 +198,95 @@ import static org.junit.jupiter.api.Assertions.*;
          assertThrows(IllegalArgumentException.class, () ->
                  warehouse.updateProduct("missing", "Name", Category.Food, 5));
      }
-    @Test
+
+     @Test
      void updateProductShouldValidateInput() {
          Warehouse warehouse = new Warehouse();
          // Valid product first
-        Product product = new Product("u1", "Coffee", Category.Drink, 6, LocalDate.now(), LocalDate.now());
-        warehouse.addProduct(product);
+         Product product = new Product("u1", "Coffee", Category.Drink, 6, LocalDate.now(), LocalDate.now());
+         warehouse.addProduct(product);
 
-        // Empty id
-        assertThrows(IllegalArgumentException.class, () ->
-                warehouse.updateProduct("", "Coffee", Category.Drink, 6));
-        // Empty name
-        assertThrows(IllegalArgumentException.class, () ->
-                warehouse.updateProduct("u1", "", Category.Drink, 6));
-        //Null category
-        assertThrows(IllegalArgumentException.class, () ->
-                warehouse.updateProduct("u1", "Coffee", null, 6));
-        // Rating out of range
-        assertThrows(IllegalArgumentException.class, () ->
-                warehouse.updateProduct("u1", "Coffee", Category.Drink, -1));
-        assertThrows(IllegalArgumentException.class, () ->
-                warehouse.updateProduct("u1", "Coffee", Category.Drink, 11));
+         // Empty id
+         assertThrows(IllegalArgumentException.class, () ->
+                 warehouse.updateProduct("", "Coffee", Category.Drink, 6));
+         // Empty name
+         assertThrows(IllegalArgumentException.class, () ->
+                 warehouse.updateProduct("u1", "", Category.Drink, 6));
+         //Null category
+         assertThrows(IllegalArgumentException.class, () ->
+                 warehouse.updateProduct("u1", "Coffee", null, 6));
+         // Rating out of range
+         assertThrows(IllegalArgumentException.class, () ->
+                 warehouse.updateProduct("u1", "Coffee", Category.Drink, -1));
+         assertThrows(IllegalArgumentException.class, () ->
+                 warehouse.updateProduct("u1", "Coffee", Category.Drink, 11));
+
+     }
+
+     // --- getCategoriesWithProducts ---
+     @Test
+     void getCategoriesWithProductsShouldReturnSortedCategories() {
+         Warehouse warehouse = new Warehouse();
+         warehouse.addProduct(new Product("c1", "Water", Category.Drink, 5, LocalDate.now(), LocalDate.now()));
+         warehouse.addProduct(new Product("c2", "Bread", Category.Food, 5, LocalDate.now(), LocalDate.now()));
+
+         var categories = warehouse.getCategoriesWithProducts();
+         assertEquals(2, categories.size());
+         assertTrue(categories.contains(Category.Drink));
+         assertTrue(categories.contains(Category.Food));
+     }
+
+     // --- countProductsInCategory ---
+     @Test
+     void countProductsInCategoryShouldCount() {
+         Warehouse warehouse = new Warehouse();
+         warehouse.addProduct(new Product("f1", "Apple", Category.Food, 7, LocalDate.now(), LocalDate.now()));
+         warehouse.addProduct(new Product("f2", "Banana", Category.Food, 6, LocalDate.now(), LocalDate.now()));
+         warehouse.addProduct(new Product("d1", "Cola", Category.Drink, 6, LocalDate.now(), LocalDate.now()));
+
+         long count = warehouse.countProductsInCategory(Category.Food);
+         assertEquals(2, count);
+     }
+
+     @Test
+     void countProductsInCategoryShouldThrowOnNull() {
+         Warehouse warehouse = new Warehouse();
+         assertThrows(IllegalArgumentException.class, () -> warehouse.countProductsInCategory(null));
+     }
+
+     // --- getProductInitialsMap ---
+     @Test
+     void getProductInitialsMapShouldCountInitialsCaseInsensitive() {
+         Warehouse warehouse = new Warehouse();
+         warehouse.addProduct(new Product("i1", "apple", Category.Food, 5, LocalDate.now(), LocalDate.now()));
+         warehouse.addProduct(new Product("i2", "Avocado", Category.Food, 5, LocalDate.now(), LocalDate.now()));
+         warehouse.addProduct(new Product("i3", "banana", Category.Food, 5, LocalDate.now(), LocalDate.now()));
+
+         var map = warehouse.getProductInitialsMap();
+         assertEquals(2, map.get('A'));
+         assertEquals(1, map.get('B'));
+         assertFalse(map.containsKey('C'));
+     }
+
+     // --- getTopRatedProductsThisMonth ---
+     @Test
+     void getTopRatedProductsThisMonthShouldReturnTopRatedCreatedThisMonthSortedNewestFirst() {
+         Warehouse warehouse = new Warehouse();
+         LocalDate now = LocalDate.now();
+         LocalDate earlierThisMonth = now.minusDays(5);
+         LocalDate lastMonth = now.minusMonths(1);
+
+         warehouse.addProduct(new Product("t1", "A", Category.Food, 9, earlierThisMonth, earlierThisMonth));
+         warehouse.addProduct(new Product("t2", "B", Category.Food, 10, now, now));
+         warehouse.addProduct(new Product("t3", "C", Category.Food, 10, earlierThisMonth, earlierThisMonth));
+         warehouse.addProduct(new Product("t4", "D", Category.Food, 10, lastMonth, lastMonth)); // annan månad
+
+         var result = warehouse.getTopRatedProductsThisMonth();
+
+         assertEquals(2, result.size());
+         // New first
+         assertEquals("B", result.get(0).name());
+         assertEquals("C", result.get(1).name());
 
      }
  }

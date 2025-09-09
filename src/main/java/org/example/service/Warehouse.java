@@ -87,7 +87,57 @@ public class Warehouse {
                 .filter(p -> !p.createdDate().equals(p.modifiedDate()))
                 .collect(Collectors.toList());
      }
+     // --- VG methods ---
+    public java.util.Set<Category> getCategoriesWithProducts() {
+        return products.stream()
+                .map(Product::category)
+                .collect(java.util.stream.Collectors.toSet());
     }
+    public long countProductsInCategory(Category category) {
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+        }
+        return products.stream()
+                .filter(p -> p.category() == category)
+                .count();
+    }
+    public java.util.Map<Character, Integer> getProductInitialsMap() {
+        return products.stream()
+                .map(Product::name)
+                .filter(n -> n != null && !n.isBlank())
+                .map(n -> Character.toUpperCase(n.charAt(0)))
+                .collect(java.util.stream.Collectors.toMap(
+                       c -> c,
+                       c -> 1,
+                       Integer::sum
+                ));
+    }
+    public List<Product> getTopRatedProductsThisMonth() {
+        LocalDate now = LocalDate.now();
+        int year = now.getYear();
+        int month = now.getMonthValue();
+
+        var thisMonth = products.stream()
+                .filter(p -> p.createdDate().getYear() == year && p.createdDate().getMonthValue() == month)
+                .collect(Collectors.toList());
+
+        if (thisMonth.isEmpty()) {
+            return List.of();
+        }
+
+        int maxRating = thisMonth.stream()
+                .mapToInt(Product::rating)
+                .max()
+                .orElse(0);
+
+        return thisMonth.stream()
+                .filter(p -> p.rating() == maxRating)
+                .sorted(Comparator.comparing(Product::createdDate).reversed())
+                .collect(Collectors.toList());
+    }
+
+}
+
 
 
 

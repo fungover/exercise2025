@@ -72,7 +72,7 @@ class WareHouseTest {
 
         Product beforeUpdate = new Product("5", "Valid", Category.FOOD, 5, today, today);
 
-        warehouse.addProduct((beforeUpdate));
+        warehouse.addProduct(beforeUpdate);
         warehouse.updateProduct("5", "Updated", Category.ELECTRONICS, 9);
 
         Product afterUpdate = warehouse.getProductById("5");
@@ -84,8 +84,7 @@ class WareHouseTest {
         assertThat(afterUpdate.rating()).isEqualTo(9);
         assertThat(afterUpdate.createdDate()).isEqualTo(today); // createdDate should be unchanged
 
-        assertThat(beforeUpdate.modifiedDate()).isNotEqualTo(afterUpdate.modifiedDate());
-        assertThat(afterUpdate.modifiedDate()).isAfterOrEqualTo(LocalDate.now());
+        assertThat(afterUpdate.modifiedDate()).isAfter(beforeUpdate.modifiedDate());
     }
 
     @Test
@@ -222,7 +221,7 @@ class WareHouseTest {
         assertThat(warehouse.getAllProducts().size()).isEqualTo(3);
         assertThat(filteredList.size()).isEqualTo(2);
         assertThat(filteredList2.size()).isEqualTo(1);
-        assertThat(filteredList3.isEmpty());
+        assertThat(filteredList3).isEmpty();
     }
 
     @Test

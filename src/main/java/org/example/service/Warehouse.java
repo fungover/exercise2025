@@ -19,8 +19,14 @@ public class Warehouse {
             if (product == null) {
                 throw new IllegalArgumentException("Product cannot be null");
             }
+            if (product.id() == null || product.id().isBlank()) {
+                throw new IllegalArgumentException("Product id cannot be null or empty");
+            }
             if (product.name().isBlank()) {
                 throw new IllegalArgumentException("Product name cannot be empty");
+            }
+            if (product.category() == null) {
+                throw new IllegalArgumentException("Category cannot be null");
             }
             if (products.containsKey(product.id())) {
                 throw new IllegalArgumentException("Product with this ID already exists");
@@ -55,7 +61,7 @@ public class Warehouse {
     public List<Product> getAllProducts() {
 
         products.values().forEach(System.out::println); // Just to see the products in console, can be removed later
-        return List.copyOf(products.values());
+        return Collections.unmodifiableList(new ArrayList<>(products.values()));
     }
 
     // getProductById(String id): Retrieve product by ID
@@ -80,7 +86,7 @@ public class Warehouse {
                 .stream()
                 .filter(p -> p.category() == category)
                 .sorted(Comparator.comparing(Product::name))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     /**
@@ -89,10 +95,13 @@ public class Warehouse {
      * @return list of products created after the specified date
      */
     public List<Product> getProductsCreatedAfter(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
         return products.values()
                 .stream()
                 .filter(p -> p.createdDate().isAfter(date))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     //getModifiedProducts(): Products where createdDate != modifiedDate
@@ -100,7 +109,7 @@ public class Warehouse {
         return products.values()
                 .stream()
                 .filter(product -> !product.createdDate().equals(product.modifiedDate()))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     /**
@@ -151,6 +160,6 @@ public class Warehouse {
                 .filter(p -> p.createdDate().getMonth() == now.getMonth() && p.createdDate().getYear() == now.getYear())
                 .sorted(Comparator.comparingInt(Product::rating).reversed())
                 .limit(3)
-                .toList();
+                .collect(Collectors.toList());
     }
 }

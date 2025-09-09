@@ -14,6 +14,8 @@ import org.mockito.Mockito;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -340,6 +342,32 @@ public class WarehouseTest {
 
         assertThatThrownBy(() -> warehouse.countProductsInCategory(null))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("getProductInitialsMap(): returns a Map<Character, Integer> of first letters in product names and their counts")
+    public void getProductInitialsMap() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", ELECTRONICS, 1);
+        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL, 1);
+        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Camera", ELECTRONICS, 1);
+        Product testProduct4 = addProductToWarehouse(warehouse, "4", "Sandwich", Category.FOOD, 1);
+        Product testProduct5 = addProductToWarehouse(warehouse, "5", "Sushi", Category.FOOD, 1);
+
+        Map<Character, Integer> expectedMap = warehouse.getProductInitialsMap();
+        System.out.println(expectedMap);
+
+        assertThat(expectedMap.size()).isEqualTo(3);
+        assertThat(expectedMap.get('L')).isEqualTo(1);
+        assertThat(expectedMap.get('C')).isEqualTo(2);
+        assertThat(expectedMap.get('S')).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("getProductInitialsMap(): returns an empty Map if no products found")
+    public void getProductInitialsMapEmptyList() {
+        Warehouse warehouse = new Warehouse();
+        assertThat(warehouse.getProductInitialsMap().size()).isEqualTo(0);
     }
 
 }

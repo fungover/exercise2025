@@ -4,9 +4,7 @@ import org.example.entities.Category;
 import org.example.entities.Product;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -104,4 +102,13 @@ public class Warehouse {
                 .filter(p -> p.getCategory() == category)
                 .count();
     }
+
+    public Map<Character, Integer> getProductInitialsMap() {
+        return products.stream()
+                .map(Product::getName)
+                .map(name -> name.charAt(0))
+                .collect(Collectors.toMap(name -> name, name -> 1, Integer::sum));
+    }
+
+
 }

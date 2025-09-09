@@ -159,4 +159,70 @@ class WarehouseTest {
         assertThat(result)
                 .isEmpty();
     }
+
+    @Test
+    @DisplayName("Returns products of specified category sorted alphabetically by name")
+    void getProductsByCategorySorted_returnsProductsSortedByName() {
+        ZonedDateTime now = ZonedDateTime.now();
+
+        Product premiumFood = new Product(
+                UUID.randomUUID().toString(),
+                "Zebra Premium Dog Food",
+                Category.FOOD,
+                5,
+                now,
+                now);
+
+        Product alfaFood = new Product(
+                UUID.randomUUID().toString(),
+                "Alpha Dog Food",
+                Category.FOOD,
+                4,
+                now,
+                now);
+
+        Product betaFood = new Product(
+                UUID.randomUUID().toString(),
+                "Beta Premium Food",
+                Category.FOOD,
+                5,
+                now,
+                now);
+
+        Product toy = new Product(
+                UUID.randomUUID().toString(),
+                "Ball",
+                Category.TOYS,
+                3,
+                now,
+                now);
+
+        warehouse.addProduct(premiumFood);
+        warehouse.addProduct(alfaFood );
+        warehouse.addProduct(betaFood);
+        warehouse.addProduct(toy);
+
+        List<Product> foodProducts = warehouse.getProductsByCategorySorted(Category.FOOD);
+
+        assertThat(foodProducts)
+                .hasSize(3)
+                .containsExactly(alfaFood, betaFood, premiumFood); // Alpha, Beta, Zebra
+    }
+
+    @Test
+    @DisplayName("Sorting category returns empty list when warehouse is empty")
+    void getProductsByCategorySorted_returnsEmptyList_whenWarehouseIsEmpty() {
+        List<Product> products = warehouse.getProductsByCategorySorted(Category.FOOD);
+
+        assertThat(products)
+                .isEmpty();
+    }
+
+    @Test
+    @DisplayName("Sorting category throws exception when category is null")
+    void getProductsByCategorySorted_throwsException_whenCategoryIsNull() {
+        assertThatThrownBy(() -> warehouse.getProductsByCategorySorted(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Category cannot be null");
+    }
 }

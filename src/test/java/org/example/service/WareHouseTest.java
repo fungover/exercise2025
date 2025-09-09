@@ -183,5 +183,81 @@ class WareHouseTest {
         assertThat(filteredListToys.size()).isEqualTo(0);
     }
 
+    @Test
+    @DisplayName("Tests for getProductsCreatedAfter method")
+    void getProductsCreatedAfter() {
 
+        Clock fixedClock = Clock.fixed(
+                LocalDate.of(2025, 9, 1).atStartOfDay(ZoneOffset.UTC).toInstant(),
+                ZoneOffset.UTC
+        );
+        Clock editedDate = Clock.fixed(
+                LocalDate.of(2025, 9, 9).atStartOfDay(ZoneOffset.UTC).toInstant(),
+                ZoneOffset.UTC
+        );
+        Clock oneMoreEditedDate = Clock.fixed(
+                LocalDate.of(2025, 9, 11).atStartOfDay(ZoneOffset.UTC).toInstant(),
+                ZoneOffset.UTC
+        );
+        LocalDate defaultDay = LocalDate.now(fixedClock);
+        LocalDate dateSep9 = LocalDate.now(editedDate);
+        LocalDate dateSep11 = LocalDate.now(oneMoreEditedDate);
+
+        Product product1 = new Product("1", "Product1", Category.ELECTRONICS, 1, defaultDay, defaultDay);
+        Product product2 = new Product("2", "Product2", Category.ELECTRONICS, 1, dateSep9, dateSep9
+        );
+        Product product3 = new Product("3", "Product3", Category.ELECTRONICS, 1, dateSep11, dateSep11);
+
+        warehouse.addProduct(product1);
+        warehouse.addProduct(product2);
+        warehouse.addProduct(product3);
+
+        List <Product> filteredList =  warehouse.getProductsCreatedAfter(defaultDay);
+        List <Product> filteredList2 =  warehouse.getProductsCreatedAfter(dateSep9);
+        List <Product> filteredList3 =  warehouse.getProductsCreatedAfter(LocalDate.of(2025, 12, 20));
+
+        // tests
+        assertThat(warehouse.getAllProducts().size()).isEqualTo(3);
+        assertThat(filteredList.size()).isEqualTo(2);
+        assertThat(filteredList2.size()).isEqualTo(1);
+        assertThat(filteredList3.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Tests for getModifiedProducts method")
+    void getModifiedProducts() {
+        Clock fixedClock = Clock.fixed(
+                LocalDate.of(2025, 9, 1).atStartOfDay(ZoneOffset.UTC).toInstant(),
+                ZoneOffset.UTC
+        );
+        Clock editedDate = Clock.fixed(
+                LocalDate.of(2025, 9, 9).atStartOfDay(ZoneOffset.UTC).toInstant(),
+                ZoneOffset.UTC
+        );
+        Clock oneMoreEditedDate = Clock.fixed(
+                LocalDate.of(2025, 9, 11).atStartOfDay(ZoneOffset.UTC).toInstant(),
+                ZoneOffset.UTC
+        );
+        LocalDate defaultDay = LocalDate.now(fixedClock);
+        LocalDate dateSep9 = LocalDate.now(editedDate);
+        LocalDate dateSep11 = LocalDate.now(oneMoreEditedDate);
+
+        Product normalProduct = new Product("1", "Product1", Category.ELECTRONICS, 1, defaultDay, defaultDay);
+        Product modifiedProduct1 = new Product("2", "Product2", Category.ELECTRONICS, 1, defaultDay, dateSep9);
+        Product modifiedProduct2 = new Product("3", "Product3", Category.ELECTRONICS, 1, defaultDay, dateSep11);
+
+        warehouse.addProduct(normalProduct);
+        warehouse.addProduct(modifiedProduct1);
+        warehouse.addProduct(modifiedProduct2);
+
+        List <Product> result =  warehouse.getModifiedProducts();
+
+        // tests
+        assertThat(warehouse.getAllProducts().size()).isEqualTo(3);
+        assertThat(result).doesNotContain(normalProduct);
+        assertThat(warehouse.getModifiedProducts().size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("")
 }

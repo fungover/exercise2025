@@ -66,9 +66,38 @@ private MovementLogic movementLogic;
         }
 
         movementLogic = new MovementLogic();
-    player.addItem(new Potion("Potion", 20));  // en test för att se om det funkar att se inventoryplayer.addItem(new Weapon("Fire Sword", 20));
-    player.addItem(new Weapon("Wooden Sword", 10));
-    player.addItem(new Weapon("Fire Sword", 10));
+
+        List<Item> items = List.of(
+                new Potion("Small Potion", 20),
+                new Potion("Large Potion", 50),
+                new Weapon("Wooden Sword", 10),
+                new Weapon("Fire Sword", 20)
+        );
+
+        List<Tile> emptyTilesForItems =
+                IntStream.range(0, dungeon.getRows())
+                        .boxed()
+                        .flatMap(row -> IntStream.range(0, dungeon.getCols())
+                                .mapToObj(col -> dungeon.getTile(row, col)))
+                        .filter(Tile::isWalkable)
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+        for (Item item : items) {
+            Tile tile = emptyTilesForItems.remove(random.nextInt(emptyTilesForItems.size()));
+            tile.setItem(item);
+            System.out.println(item.getName() + " placed at row " + tile.getRow() + ", col " + tile.getCol());
+        }
+
+        for (int r = 0; r < dungeon.getRows(); r++) {
+            for (int c = 0; c < dungeon.getCols(); c++) {
+                Tile t = dungeon.getTile(r, c);
+                String s = t.getTileType();
+                if (t.getEnemy() != null) s += " (" + t.getEnemy().getType() + ")";
+                if (t.getItem() != null) s += " (" + t.getItem().getName() + ")";
+                System.out.print(s + "\t");
+            }
+            System.out.println();
+        }
 
     System.out.println("Well Hello, " + player.getName() + ". Step inside and see what happens...");
     System.out.println("Your health is " + player.getHealth());

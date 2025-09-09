@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class WarehouseTest {
 
     // Helper methods
-    private Product addProductToWarehouse(Warehouse warehouse, String id, String name, Category category) {
+    private Product addProductToWarehouse(Warehouse warehouse, String id, String name, Category category, int rating) {
         Product product = new Product(id, name, category, 1);
         warehouse.addProduct(product);
         return product;
@@ -185,13 +185,13 @@ public class WarehouseTest {
     @DisplayName("getProductsByCategorySorted: returns Products in a category, sorted A-Z by name")
     public void getProductsByCategorySorted() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL);
-        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL);
-        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Television", Category.GENERAL);
-        Product testProduct4 = addProductToWarehouse(warehouse, "4", "Sandwich", Category.GENERAL);
-        Product testProduct5 = addProductToWarehouse(warehouse, "5", "Candy", Category.GENERAL);
-        Product testProduct6 = addProductToWarehouse(warehouse, "6", "VR Glasses", Category.GENERAL);
-        Product testProduct7 = addProductToWarehouse(warehouse, "7", "Android TV", Category.ELECTRONICS);
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL, 1);
+        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL, 1);
+        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Television", Category.GENERAL, 1);
+        Product testProduct4 = addProductToWarehouse(warehouse, "4", "Sandwich", Category.GENERAL, 1);
+        Product testProduct5 = addProductToWarehouse(warehouse, "5", "Candy", Category.GENERAL, 1);
+        Product testProduct6 = addProductToWarehouse(warehouse, "6", "VR Glasses", Category.GENERAL, 1);
+        Product testProduct7 = addProductToWarehouse(warehouse, "7", "Android TV", Category.ELECTRONICS, 1);
 
         assertThat(warehouse.getProductsByCategorySorted(Category.GENERAL))
                 .extracting(Product::getName)
@@ -202,9 +202,9 @@ public class WarehouseTest {
     @DisplayName("getProductsByCategorySorted: returns empty list if Category is empty")
     public void getProductsByCategorySortedEmptyCategory() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL);
-        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL);
-        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Television", Category.GENERAL);
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL, 1);
+        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL, 1);
+        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Television", Category.GENERAL, 1);
 
         assertThat(warehouse.getProductsByCategorySorted(Category.ELECTRONICS)).isEmpty();
     }
@@ -213,7 +213,7 @@ public class WarehouseTest {
     @DisplayName("getProductsByCategorySorted: throws exception if invalid input")
     public void throwsExceptionIfNoCategoryProvided() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL);
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL, 1);
 
         assertThatThrownBy(() -> warehouse.getProductsByCategorySorted(null))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -263,9 +263,9 @@ public class WarehouseTest {
     @DisplayName("getModifiedProducts(): returns Products where createdDate != modifiedDate")
     public void getModifiedProductsNotEqualToCreatedDate() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL);
-        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL);
-        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Television", Category.GENERAL);
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL, 1);
+        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL, 1);
+        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Television", Category.GENERAL, 1);
 
         //Delay a bit to make sure modifiedDate is different from createdDate
         try {
@@ -283,8 +283,8 @@ public class WarehouseTest {
     @DisplayName("getModifiedProducts(): returns an empty list if no products found")
     public void getModifiedProductsEmptyList() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL);
-        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL);
+        Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", Category.GENERAL, 1);
+        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL, 1);
 
         assertThat(warehouse.getModifiedProducts()).isEmpty();
     }

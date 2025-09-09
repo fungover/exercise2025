@@ -119,4 +119,21 @@ public class WarehouseTest {
 
         assertTrue(warehouse.getProductsBasedOnDateSuccess(nextWeek).isEmpty());
     }
+
+    @Test
+    void getModifiedProductsSuccess() {
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = today.minusDays(1);
+
+        Product p1 = new Product("1", "Unmodified Product", Category.TOYS, 8, today, today);
+        Product p2 = new Product("2", "Modified Product", Category.BOOKS, 3, yesterday, today);
+
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+
+        List<Product> modifiedProducts = warehouse.getModifiedProducts();
+
+        assertEquals(1, modifiedProducts.size());
+        assertEquals("Modified Product", modifiedProducts.get(0).name());
+    }
 }

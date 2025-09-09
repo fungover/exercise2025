@@ -52,6 +52,7 @@ public class CsvConsumptionReader {
                 } catch (NumberFormatException nfe) {
                     // ogiltigt tal – hoppa över
                 }
+            } // <-- här saknades en klammer!
         } finally {
             br.close();
         }

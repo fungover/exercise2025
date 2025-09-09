@@ -32,8 +32,9 @@ public class WarehouseTest {
 
     @Test
     void addProductFailureEmptyName() {
-        Product product = new Product("1", "", Category.TOYS, 5, LocalDate.now(), LocalDate.now());
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
+        assertThrows(IllegalArgumentException.class, () ->
+                new Product("1", "", Category.TOYS, 5, LocalDate.now(), LocalDate.now())
+        );
     }
 
     @Test

@@ -15,9 +15,28 @@ public class Warehouse {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
-        if (product.name() == null || product.name().isBlank()) {
-            throw new IllegalArgumentException("Product name cannot be empty");
+        if (product.id() == null || product.id().isBlank()) {
+            throw new IllegalArgumentException("Product ID cannot be null or blank");
         }
+        if (product.name() == null || product.name().isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be null or blank");
+        }
+        if (product.category() == null) {
+            throw new IllegalArgumentException("Product category cannot be null");
+        }
+        if (product.rating() < 0 || product.rating() > 10) {
+            throw new IllegalArgumentException("Product rating must be between 0 and 10");
+        }
+        if (product.createdDate() == null || product.modifiedDate() == null) {
+            throw new IllegalArgumentException("Product dates cannot be null");
+        }
+        if (product.modifiedDate().isBefore(product.createdDate())) {
+            throw new IllegalArgumentException("Modified date cannot be before created date");
+        }
+        if (products.stream().anyMatch(p -> p.id().equals(product.id()))) {
+            throw new IllegalArgumentException("Product with ID " + product.id() + " already exists");
+        }
+
         products.add(product);
     }
 
@@ -26,6 +45,20 @@ public class Warehouse {
     }
 
     public Product updateProduct(String id, String name, Category category, int rating) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("Product ID cannot be null or blank");
+        }
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be null or blank");
+        }
+        name = name.trim();
+        if (category == null) {
+            throw new IllegalArgumentException("Product category cannot be null");
+        }
+        if (rating < 0 || rating > 10) {
+            throw new IllegalArgumentException("Product rating must be between 0 and 10");
+        }
+
         Product existing = getProductById(id);
 
         Product updated = new Product(
@@ -45,8 +78,11 @@ public class Warehouse {
 
 
     public Product getProductById(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("id cannot be null/blank");
+        }
         return products.stream()
-                .filter(p -> p.id().equals(id))
+                .filter(p -> Objects.equals(p.id(), id))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Product with ID " + id + " not found"));
     }
@@ -59,6 +95,9 @@ public class Warehouse {
     }
 
     public List<Product> getProductsCreatedAfter(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("date cannot be null");
+        }
         return products.stream()
                 .filter(p -> p.createdDate().isAfter(date))
                 .toList();

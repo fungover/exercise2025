@@ -1,15 +1,13 @@
+// Lizard.java
 package org.example.player;
 
+import org.example.player.equipment.Equipment;
+import org.example.player.equipment.Inventory;
 import org.example.rng.RandomGen;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Lizard {
 	private int health;
 	private int defense;
-	private final List<String> equipment;
-	private final List<String> inventory;
 	private final String name;
 	private final RandomGen randomGen;
 
@@ -17,8 +15,6 @@ public class Lizard {
 		this.name = name;
 		health = 30;
 		defense = 0;
-		equipment = new ArrayList<>();
-		inventory = new ArrayList<>();
 		randomGen = new RandomGen();
 	}
 
@@ -50,24 +46,21 @@ public class Lizard {
 		return name;
 	}
 
-	public void setDefense(int defenceBuff) {
-		this.defense += defenceBuff;
-	}
-
-	public void setEquipment(String item) {
-		if (item != null) {
-			if (!this.equipment.contains(item)) {
-				this.equipment.add(item);
-				setDefense(1);
+	public void equipItem(String item, Inventory inventory,  Equipment equipment) {
+		if (inventory.getInventory().containsKey(item)) {
+			if (equipment.getEquipment().contains(item)) {
+				System.out.println("Item already equipped");
+			} else {
+				equipment.setEquipment(item);
+				int count = inventory.getInventory().get(item);
+				if (count > 1) {
+					inventory.getInventory().put(item, count - 1);
+				} else {
+					inventory.getInventory().remove(item);
+				}
 			}
+		} else {
+			System.out.println("Item " + item + " not found");
 		}
-	}
-
-	public List<String> getInventory() {
-		return inventory;
-	}
-
-	public void setInventory(String item) {
-		this.inventory.add(item);
 	}
 }

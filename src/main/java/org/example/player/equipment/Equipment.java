@@ -1,3 +1,4 @@
+// Equipment.java
 package org.example.player.equipment;
 
 import java.util.ArrayList;
@@ -13,6 +14,11 @@ public class Equipment {
 			equipment.add(item);
 		}
 	}
+
+	public List<String> getEquipment() {
+		return equipment;
+	}
+
 	public void printEquipment() {
 		for (String item : equipment) {
 			System.out.println(item);

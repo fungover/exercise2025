@@ -2,6 +2,8 @@ package org.example.game;
 
 import org.example.enemies.*;
 import org.example.player.Lizard;
+import org.example.player.equipment.Equipment;
+import org.example.player.equipment.Inventory;
 import org.example.rng.RandomGen;
 import org.example.tree.Leaf;
 import org.example.tree.Leaves;
@@ -18,12 +20,16 @@ public class Game {
 	private Enemy enemy;
 
 	private Lizard lizard;
+	private Inventory inventory;
+	private Equipment equipment;
 
 	public Game() {
 		leaves.createLeaves();
 		currentLeaf = leaves.currentLeaf();
 		randomGen = new RandomGen();
 		enemy = new Enemy();
+		inventory = new Inventory();
+		equipment = new Equipment();
 	}
 
 	public void run() {
@@ -48,7 +54,7 @@ public class Game {
 					gameOn = false;
 				} else if (phoenixFight == 1) {
 					System.out.println("Phoenix defeated and you gained " + phoenix.getRareFeathers() + "!");
-					lizard.setInventory(phoenix.getRareFeathers());
+					// Put rare feathers in inventory
 				} else {
 					System.out.println("You ran away!");
 					leaves.move("d");
@@ -70,12 +76,13 @@ public class Game {
 						System.out.println("You ran away from the threat!");
 					} else {
 						System.out.println("\nYou won and gained: " + foundItem + "!");
-						lizard.setInventory(foundItem);
+						// Place the item in the inventory
+						inventory.addItem(foundItem);
 					}
 				} else {
 					System.out.println("\nYou found an item: " + foundItem + "!");
-					lizard.setInventory(foundItem);
-					lizard.setEquipment(foundItem);
+					// Place the item in the inventory
+					inventory.addItem(foundItem);
 				}
 
 			}

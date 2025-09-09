@@ -76,11 +76,7 @@ public class Enemy {
 								}
 								break;
 							case "h":
-								if (player.getInventory().contains("Ashes")) {
-									System.out.println("You healed!");
-									player.setHealth(30);
-									player.getInventory().remove("Ashes");
-								}
+								// Add heal logic here
 								break;
 							case "r":
 								return -1;

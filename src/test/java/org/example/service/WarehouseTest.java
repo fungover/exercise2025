@@ -179,4 +179,57 @@ public class WarehouseTest {
 
         assertThat(phoneCount).isEqualTo(0);
     }
+
+    @Test
+    void getProductInitialsMap_CountsByFirstLetter_caseInsensitive() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate today = LocalDate.now();
+
+        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
+        warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
+        warehouse.addProduct(new Product("p-003", "Pro Laptop", Category.COMPUTER, 8, today, today));
+        warehouse.addProduct(new Product("p-007", "Samsung 65\" 4K", Category.TV, 8, today, today));
+
+
+        var map = warehouse.getProductInitialsMap();
+
+        assertThat(map.get('S')).isEqualTo(2);
+        assertThat(map.get('B')).isEqualTo(1);
+        assertThat(map.get('P')).isEqualTo(1);
+
+        assertThat(map.keySet()).containsExactlyInAnyOrder('S', 'B', 'P');
+    }
+
+    @Test
+    void getTopRatedProductsThisMonth_returnsTopRatedCreatedThisMonth_sortedNewestFirst() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate fixedNow = LocalDate.of(2025, 9, 15);
+
+        Product p1 = new Product("p-001", "Best TV", Category.TV, 10, fixedNow.minusDays(10), fixedNow.minusDays(10));
+        Product p2 = new Product("p-002", "Best Laptop", Category.COMPUTER, 10, fixedNow.minusDays(5), fixedNow.minusDays(5));
+        Product p3 = new Product("p-003", "Mid Phone", Category.PHONE, 7, fixedNow.minusDays(13), fixedNow.minusDays(13));
+        Product p4 = new Product("p-004", "Best Refrigerator", Category.APPLIANCES, 10, fixedNow.minusMonths(1), fixedNow.minusMonths(1));
+
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+        warehouse.addProduct(p3);
+        warehouse.addProduct(p4);
+
+        var result = warehouse.getTopRatedProductsThisMonth(fixedNow);
+
+        assertThat(result).containsExactly(p2, p1);
+    }
+
+    @Test
+    void getTopRatedProductsThisMonth_whenNoMatchingProducts_returnsEmptyList() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate today = LocalDate.now();
+
+        warehouse.addProduct(new Product("p-001", "Mid Phone", Category.TV, 7, today, today));
+        warehouse.addProduct(new Product("p-002", "Mid Laptop", Category.COMPUTER, 7, today, today));
+
+        var result = warehouse.getTopRatedProductsThisMonth(today);
+
+        assertThat(result).isEmpty();
+    }
 }

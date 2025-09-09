@@ -33,8 +33,9 @@ public class App {
         System.out.println("Vald zon: " + zone);
 
         // Skapa HttpClient en gång
-        HttpClient client = HttpClient.newHttpClient();
-
+        HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(java.time.Duration.ofSeconds(10))
+                .build();
         // CSV-läge - Hämtar historiska priser för datumen i CSV och räknar total kostnad
         if (csvPath != null) {
             System.out.println("CSV angiven: " + csvPath);

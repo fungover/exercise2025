@@ -1,5 +1,8 @@
 package org.example.game;
 
+import org.example.entities.enemies.Enemy;
+import org.example.entities.enemies.Orc;
+import org.example.entities.enemies.Troll;
 import org.example.entities.items.Item;
 import org.example.entities.Player;
 import org.example.entities.items.Potion;
@@ -7,7 +10,13 @@ import org.example.entities.items.Weapon;
 import org.example.map.Dungeon;
 import org.example.service.MovementLogic;
 import org.example.map.Tile;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Game {
 private Scanner scanner = new Scanner(System.in);
@@ -23,7 +32,40 @@ private MovementLogic movementLogic;
 
     player = new Player(name);
     dungeon = new Dungeon(5, 5);
-    movementLogic = new MovementLogic();
+    Random random = new Random();
+
+    List<Enemy> enemies = List.of(
+            new Troll(0,0),
+            new Orc(0,0)
+    );
+
+    List<Tile> emptyTiles =
+            IntStream.range(0, dungeon.getRows())
+                    .boxed()
+                    .flatMap(row -> IntStream.range(0,dungeon.getCols())
+                            .mapToObj(col ->dungeon.getTile(row,col)))
+                    .filter(Tile::isWalkable)
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+    for (Enemy enemy: enemies) {
+        Tile tile = emptyTiles.remove(random.nextInt(emptyTiles.size()));
+        tile.setEnemy(enemy);
+        enemy.moveTo(tile.getRow(), tile.getCol());
+
+        System.out.println(enemy.getType() + " placed at row " + enemy.getRow() + ", col " + enemy.getCol());
+    }
+
+        for (int r = 0; r < dungeon.getRows(); r++) {
+            for (int c = 0; c < dungeon.getCols(); c++) {
+                Tile t = dungeon.getTile(r, c);
+                String s = t.getTileType();
+                if (t.getEnemy() != null) s += " (" + t.getEnemy().getType() + ")";
+                System.out.print(s + "\t");
+            }
+            System.out.println();
+        }
+
+        movementLogic = new MovementLogic();
     player.addItem(new Potion("Potion", 20));  // en test för att se om det funkar att se inventoryplayer.addItem(new Weapon("Fire Sword", 20));
     player.addItem(new Weapon("Wooden Sword", 10));
     player.addItem(new Weapon("Fire Sword", 10));
@@ -61,7 +103,9 @@ private MovementLogic movementLogic;
                 case "look":
                     Tile currentTile = dungeon.getTile(player.getRow(), player.getCol());
                     System.out.println("You are standing on a: " + currentTile.getTileType() + " tile");
-                    //  Visa vilken tile spelaren står på
+                    if (currentTile.getEnemy() != null) {
+                        System.out.println("There is a " + currentTile.getEnemy().getType() + " here!");
+                    }
                     break;
 
                 case "inventory":

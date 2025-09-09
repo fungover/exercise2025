@@ -52,4 +52,8 @@ public class Enemy {
     }
 
 
+    public void moveTo(int row, int col) {
+        this.row = row;
+        this.col = col;
+    }
 }

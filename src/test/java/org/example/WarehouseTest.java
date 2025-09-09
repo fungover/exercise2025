@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
     private Warehouse warehouse;
@@ -92,5 +91,32 @@ public class WarehouseTest {
         assertEquals(2, electronics.size());
         assertEquals("iPhone", electronics.get(0).name());
         assertEquals("Laptop", electronics.get(1).name());
+    }
+
+    @Test
+    void getProductsBasedOnDateSuccess() {
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = today.minusDays(1);
+
+        Product p1 = new Product("1", "Computer", Category.ELECTRONICS, 3, yesterday, yesterday);
+        Product p2 = new Product("2", "Ticket to Ride",  Category.BOARDGAMES, 4, today, today);
+        Product p3 = new Product("3", "Fight Club",  Category.MOVIES, 5, today, today);
+
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+        warehouse.addProduct(p3);
+
+        List<Product> results = warehouse.getProductsBasedOnDateSuccess(yesterday);
+
+        assertEquals(2, results.size());
+        assertTrue(results.stream().anyMatch(p -> p.name().equals("Ticket to Ride")));
+        assertTrue(results.stream().anyMatch(p -> p.name().equals("Fight Club")));
+    }
+
+    @Test
+    void getProductsBasedOnDateFailure() {
+        LocalDate nextWeek = LocalDate.now().plusWeeks(1);
+
+        assertTrue(warehouse.getProductsBasedOnDateSuccess(nextWeek).isEmpty());
     }
 }

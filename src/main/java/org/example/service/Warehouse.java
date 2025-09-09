@@ -53,4 +53,10 @@ public class Warehouse {
                 .sorted((p1, p2) -> p1.name().compareToIgnoreCase(p2.name()))
                 .toList();
     }
+
+    public List<Product> getProductsBasedOnDateSuccess(LocalDate date) {
+        return products.stream()
+                .filter(p-> p.createdDate().isAfter(date))
+                .toList();
+    }
 }

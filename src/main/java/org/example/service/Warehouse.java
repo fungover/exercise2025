@@ -43,7 +43,7 @@ public class Warehouse {
     // Returnerar en lista med produkter i en specifik kategori sorterade efter namn
     public List<Product> getProductsByCategorySorted(Category category) {
         return products.stream()
-                .filter(p -> p.category().equals(category))
+                .filter(p -> p.category() == category)
                 .sorted(Comparator.comparing(Product::name))
                 .toList();
     }
@@ -71,9 +71,9 @@ public class Warehouse {
     }
 
     // Returnerar antalet produkter i en specifik kategori
-    public int countProductsByCategory(Category category) {
+    public int countProductsInCategory(Category category) {
         return (int) products.stream()
-                .filter(p -> p.category().equals(category))
+                .filter(p -> p.category() == category)
                 .count();
     }
 

@@ -11,8 +11,7 @@ public record Product(
         LocalDate modifiedDate
 ) {
     public Product {
-        // Här inne är det "compact constructor"
-        // Du kan lägga all validering här, samma som vi redan har gjort
+
         if (id == null) {
             throw new IllegalArgumentException("id cannot be null");
         }

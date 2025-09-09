@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -12,11 +13,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class WarehouseTest {
 
+    private Warehouse warehouse;
+    private final LocalDate today = LocalDate.now();
+
+    @BeforeEach
+    void setUp() {
+        warehouse = new Warehouse();
+    }
+
+
     @Test
     void addProduct_storesProductInWarehouse() {
-        // Skapa ett tomt lager och en produkt
-        Warehouse warehouse = new Warehouse();
-        LocalDate today = LocalDate.now();
         Product tv = new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today);
 
         warehouse.addProduct(tv);
@@ -29,8 +36,6 @@ public class WarehouseTest {
 
     @Test
     void addProduct_nullProduct_throwsException() {
-        Warehouse warehouse = new Warehouse();
-
         assertThatThrownBy(() -> warehouse.addProduct(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("product");
@@ -38,8 +43,6 @@ public class WarehouseTest {
 
     @Test
     void addProduct_duplicatedId_throwsException() {
-        Warehouse warehouse = new Warehouse();
-        LocalDate today = LocalDate.now();
         Product first = new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today);
         Product duplicateId = new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today);
 
@@ -53,8 +56,6 @@ public class WarehouseTest {
 
     @Test
     void getProductById_returnsMatchingProduct() {
-        Warehouse warehouse = new Warehouse();
-        LocalDate today = LocalDate.now();
         Product tv = new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today);
         Product laptop = new Product("p-002", "Budget Laptop", Category.COMPUTER, 8, today, today);
 
@@ -67,8 +68,6 @@ public class WarehouseTest {
 
     @Test
     void getProductById_unknownId_throwsException() {
-        Warehouse warehouse = new Warehouse();
-        LocalDate today = LocalDate.now();
         warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
 
         assertThatThrownBy(() -> warehouse.getProductById("p-000"))
@@ -78,8 +77,6 @@ public class WarehouseTest {
 
     @Test
     void getProductsByCategorySorted_returnsAtoZByName() {
-        Warehouse warehouse = new Warehouse();
-        LocalDate today = LocalDate.now();
         warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
         warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
         warehouse.addProduct(new Product("p-003", "Pro Laptop", Category.COMPUTER, 8, today, today));
@@ -94,7 +91,6 @@ public class WarehouseTest {
 
     @Test
     void getProductsCreatedAfter_returnsOnlyNewer() {
-        Warehouse warehouse = new Warehouse();
         var d1 = LocalDate.of(2025, 1, 1);
         var d2 = LocalDate.of(2025, 1, 2);
         var d3 = LocalDate.of(2025, 1, 3);
@@ -117,7 +113,6 @@ public class WarehouseTest {
 
     @Test
     void getModifiedProducts_returnsWhereCreatedNotEqualModified() {
-        Warehouse warehouse = new Warehouse();
         var createdDate = LocalDate.of(2025, 1, 1);
 
         // CreatedDate är samma som ModifiedDate
@@ -135,9 +130,6 @@ public class WarehouseTest {
 
     @Test
     void getCategoriesWithProducts_returnsOnlyCategoriesWithProducts() {
-        Warehouse warehouse = new Warehouse();
-        LocalDate today = LocalDate.now();
-
         warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
         warehouse.addProduct(new Product("p-006", "Refrigerator", Category.APPLIANCES, 7, today, today));
 
@@ -149,18 +141,15 @@ public class WarehouseTest {
     }
 
     @Test
-    void countProductsByCategory_returnsCorrectCount() {
-        Warehouse warehouse = new Warehouse();
-        LocalDate today = LocalDate.now();
-
+    void countProductsInCategory_returnsCorrectCount() {
         warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
         warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
         warehouse.addProduct(new Product("p-003", "Pro Laptop", Category.COMPUTER, 8, today, today));
         warehouse.addProduct(new Product("p-006", "Refrigerator", Category.APPLIANCES, 7, today, today));
 
-        int tvCount = warehouse.countProductsByCategory(Category.TV);
-        int computerCount = warehouse.countProductsByCategory(Category.COMPUTER);
-        int appliancesCount = warehouse.countProductsByCategory(Category.APPLIANCES);
+        int tvCount = warehouse.countProductsInCategory(Category.TV);
+        int computerCount = warehouse.countProductsInCategory(Category.COMPUTER);
+        int appliancesCount = warehouse.countProductsInCategory(Category.APPLIANCES);
 
         assertThat(tvCount).isEqualTo(1);
         assertThat(computerCount).isEqualTo(2);
@@ -168,23 +157,17 @@ public class WarehouseTest {
     }
 
     @Test
-    void countProductsByCategory_whenNoneExists_returnsZero() {
-        Warehouse warehouse = new Warehouse();
-        LocalDate today = LocalDate.now();
-
+    void countProductsInCategory_whenNoneExists_returnsZero() {
         warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
         warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
 
-        int phoneCount = warehouse.countProductsByCategory(Category.PHONE);
+        int phoneCount = warehouse.countProductsInCategory(Category.PHONE);
 
         assertThat(phoneCount).isEqualTo(0);
     }
 
     @Test
     void getProductInitialsMap_CountsByFirstLetter_caseInsensitive() {
-        Warehouse warehouse = new Warehouse();
-        LocalDate today = LocalDate.now();
-
         warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
         warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
         warehouse.addProduct(new Product("p-003", "Pro Laptop", Category.COMPUTER, 8, today, today));
@@ -202,7 +185,6 @@ public class WarehouseTest {
 
     @Test
     void getTopRatedProductsThisMonth_returnsTopRatedCreatedThisMonth_sortedNewestFirst() {
-        Warehouse warehouse = new Warehouse();
         LocalDate fixedNow = LocalDate.of(2025, 9, 15);
 
         Product p1 = new Product("p-001", "Best TV", Category.TV, 10, fixedNow.minusDays(10), fixedNow.minusDays(10));
@@ -222,9 +204,6 @@ public class WarehouseTest {
 
     @Test
     void getTopRatedProductsThisMonth_whenNoMatchingProducts_returnsEmptyList() {
-        Warehouse warehouse = new Warehouse();
-        LocalDate today = LocalDate.now();
-
         warehouse.addProduct(new Product("p-001", "Mid Phone", Category.TV, 7, today, today));
         warehouse.addProduct(new Product("p-002", "Mid Laptop", Category.COMPUTER, 7, today, today));
 

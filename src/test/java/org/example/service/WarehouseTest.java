@@ -50,4 +50,29 @@ public class WarehouseTest {
                 .hasMessageContaining("id");
 
     }
+
+    @Test
+    void getProductById_returnsMatchingProduct() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate today = LocalDate.now();
+        Product tv = new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today);
+        Product laptop = new Product("p-002", "Budget Laptop", Category.COMPUTER, 8, today, today);
+
+        warehouse.addProduct(tv);
+        warehouse.addProduct(laptop);
+
+        Product found = warehouse.getProductById("p-001");
+        assertThat(found).isEqualTo(tv);
+    }
+
+    @Test
+    void getProductById_unknownId_throwsException() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate today = LocalDate.now();
+        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
+
+        assertThatThrownBy(() -> warehouse.getProductById("p-000"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("id");
+    }
 }

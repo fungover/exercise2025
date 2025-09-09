@@ -25,4 +25,11 @@ public class Warehouse {
     public List<Product> getAllProducts() {
         return new ArrayList<>(products);
     }
+
+    public Product getProductById(String id) {
+        return products.stream()
+                .filter(p -> p.id().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("id not found: " + id));
+    }
 }

@@ -16,8 +16,10 @@ public class Warehouse {
 
 
     public boolean addProduct(Product product) {
-        if (!product.name()
-                    .isEmpty()) {
+        if (product == null) return false;
+
+        String name = product.name();
+        if (name != null && !name.isBlank()) {
             inventory.add(product);
             return true;
         }

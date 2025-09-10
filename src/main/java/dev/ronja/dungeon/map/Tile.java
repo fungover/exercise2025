@@ -1,5 +1,8 @@
 package dev.ronja.dungeon.map;
 
+/**
+ * One Tile in the map, dynamic and scalable
+ **/
 public class Tile {
     private TileType type;
 

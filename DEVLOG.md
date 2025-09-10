@@ -25,15 +25,19 @@ a straight path, since I am learning by doing all the time.
 
 [x] create entities 
 
-[] create a map, I need a UI loop
+[x] create a map, I need a UI loop
 _*I need to understand how to move from Primitive chars in a 2D array to Tile Objects.
 The thing with Tile objects is that every object represents a tile with different properties.
 Chars is basically a chase after # and . all over the map.
-
 !*_
 
-
 [x] create weapons
+
+[] get the game flowing and fun to play. (BETTER UX!!)
+[] get different enemies moving around with a variety of counterattacks 
+[] ability to choose weapon, (not only bare hand default☠️)
+[] Implement a CommandParser. (My never ending switch is absolutely terrible) 
+[] SEPARATE THE CONCERNS between different classes (CombatService, ConsoleRenderer, PathFindingService(algorithms) etc.)
 
 
 ### THE ASSIGNMENT / _ISSUE_

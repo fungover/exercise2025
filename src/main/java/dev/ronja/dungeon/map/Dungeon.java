@@ -3,7 +3,7 @@ package dev.ronja.dungeon.map;
 import java.util.Random;
 
 /**
- * A Grid in the CLI, now with Tiles
+ * A Grid in the CLI, with Tiles
  **/
 
 public class Dungeon {

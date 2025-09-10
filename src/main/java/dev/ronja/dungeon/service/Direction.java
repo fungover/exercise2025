@@ -1,5 +1,8 @@
 package dev.ronja.dungeon.service;
-/** This is for the moving logics  **/
+
+/**
+ * This is for the moving logics
+ **/
 public enum Direction {
     N(0, -1), S(0, 1), W(-1, 0), E(1, 0);
 

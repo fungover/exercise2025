@@ -123,6 +123,15 @@ public class WarehouseTest {
     }
 
     @Test
+    void shouldReturnEmptyListWhenNoProductsFoundAfterDate() {
+        warehouse.addProduct(new Product("1", "Test product", Category.ELECTRONICS, 3, LocalDate.of(2025, 1, 1)));
+
+        List<Product> result = warehouse.getProductsCreatedAfter(LocalDate.of(2099, 12, 10));
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
     void shouldGetModifiedProducts() {
         LocalDate createdDate = LocalDate.of(2025, 9, 8);
         LocalDate modifiedDate = LocalDate.of(2025, 9, 15);

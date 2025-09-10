@@ -151,12 +151,10 @@ public class ElectricPriceUtils {
      * @return The combined list of prices
      */
     public static List<ElectricityPrice> concatLists(List<ElectricityPrice> pricesToday, List<ElectricityPrice> pricesTomorrow) {
-        List<ElectricityPrice> allPrices = pricesToday;
-        if (pricesTomorrow != null) {
-            allPrices = Stream.concat(pricesToday.stream(), pricesTomorrow.stream()).toList();
-        }
-
-        return allPrices;
+        return Stream.concat(
+                pricesToday == null ? Stream.<ElectricityPrice>empty() : pricesToday.stream(),
+                pricesTomorrow == null ? Stream.<ElectricityPrice>empty() : pricesTomorrow.stream()
+        ).toList();
     }
 
     /**

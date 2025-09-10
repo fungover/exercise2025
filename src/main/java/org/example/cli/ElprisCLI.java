@@ -24,8 +24,6 @@ import java.util.List;
 public class ElprisCLI {
     public void start() {
         Scanner scanner = new Scanner(System.in);
-       /* System.out.print("Välj priszon (SE1, SE2, SE3, SE4): ");
-        String zon = scanner.nextLine().trim().toUpperCase();*/
         String zon;
         while (true) {
             System.out.print(("Välj priszon (SE1, SE2, SE3, SE4): "));
@@ -41,6 +39,7 @@ public class ElprisCLI {
         List<Elpris> prices = new ArrayList<>();
                 prices.addAll(fetcher.getPrice(zon, today));
                 prices.addAll(fetcher.getPrice(zon, tomorrow));
+                prices.sort(java.util.Comparator.comparing(Elpris::getTimeStart));
 
         if (prices.isEmpty()) {
             System.out.println("Inga priser hittades.");

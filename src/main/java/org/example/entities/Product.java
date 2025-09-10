@@ -69,6 +69,15 @@ public class Product {
 
     // Methods
     public Product update(String name, Category category, int rating) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be null or blank");
+        }
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+        }
+        if (rating < 1 || rating > 10){
+            throw new IllegalArgumentException("Rating must be between 1 and 10");
+        }
         return new Product(this.id, name, category, rating, this.createdDate, LocalDateTime.now());
     }
 }

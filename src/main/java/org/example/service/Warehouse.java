@@ -42,4 +42,10 @@ public class Warehouse {
                 .filter(product -> product.createdDate().isAfter(cutoffDate))
                 .collect(Collectors.toList());
     }
+
+    public List<Product> getModifiedProducts() {
+        return products.stream()
+                .filter(product -> !product.createdDate().equals(product.modifiedDate()))
+                .collect(Collectors.toList());
+    }
 }

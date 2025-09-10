@@ -114,4 +114,22 @@ public class WarehouseTest {
         assertTrue(recentProducts.contains(newProduct2));
         assertFalse(recentProducts.contains(oldProduct));
     }
+
+    @Test
+    void shouldGetModifiedProducts() {
+        LocalDate createdDate = LocalDate.of(2025, 9, 8);
+        LocalDate modifiedDate = LocalDate.of(2025, 9, 15);
+
+        Product unmodifiedProduct = new Product("1", "Unmodified", Category.ELECTRONICS, 6, createdDate);
+        Product modifiedProduct = new Product("2", "Modified", Category.SPORTS, 7, createdDate, modifiedDate);
+
+        warehouse.addProduct(unmodifiedProduct);
+        warehouse.addProduct(modifiedProduct);
+
+        List<Product> modifiedProducts = warehouse.getModifiedProducts();
+
+        assertEquals(1, modifiedProducts.size());
+        assertTrue(modifiedProducts.contains(modifiedProduct));
+        assertFalse(modifiedProducts.contains(unmodifiedProduct));
+    }
 }

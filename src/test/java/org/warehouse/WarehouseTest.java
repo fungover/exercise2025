@@ -11,24 +11,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WarehouseTest {
+  Warehouse warehouse = new Warehouse("Test warehouse");
+
+  Product product = new Product(
+          "1",
+          "Film",
+          Category.THRILLER,
+          10,
+          LocalDate.now(),
+          LocalDate.now());
 
   @Test
   public void canCreateWarehouseAndGetName() {
-    Warehouse warehouse = new Warehouse("Test warehouse");
 
     assertEquals(warehouse.getName(), "Test warehouse");
   }
 
   @Test
   public void canAddProductToWarehouse() {
-    Warehouse warehouse = new Warehouse("Test warehouse");
-    Product product = new Product(
-            "1",
-            "Film",
-            Category.THRILLER,
-            10,
-            LocalDate.now(),
-            LocalDate.now());
 
     warehouse.addProduct(product);
     List<Product> products = warehouse.getAllProducts();
@@ -43,7 +43,16 @@ public class WarehouseTest {
   }
 
   @Test
-  public void updateProductToWarehouse() {
-    Warehouse warehouse = new Warehouse("Test warehouse");
+  public void canUpdateProduct() {
+
+    warehouse.addProduct(product);
+
+    warehouse.updateProduct("2", "Film2", Category.DRAMA, 9);
+    Product updated = warehouse.getAllProducts().getFirst();
+
+    assertThat(updated.getName()).isEqualTo("Film2");
+    assertThat(updated.getCategory()).isEqualTo(Category.DRAMA);
+    assertThat(product.getCreatedDate()).isEqualTo(updated.getCreatedDate());
+    assertThat(product.getModifiedDate()).isEqualTo(LocalDate.now());
   }
 }

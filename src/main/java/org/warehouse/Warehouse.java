@@ -1,5 +1,6 @@
 package org.warehouse;
 
+import org.warehouse.entities.Category;
 import org.warehouse.entities.Product;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class Warehouse {
     return new ArrayList<>(products);
   }
 
-//  public List<Product> updateProducts(Product product) {
-//  }
+  public void updateProduct(String id, String name, Category category, int rating) {
+    
+  }
 }

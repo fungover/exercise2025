@@ -22,27 +22,16 @@ public class Product {
   public String getId() {
     return id;
   }
-
-  public String setId() {
-    return id;
-  }
-
   public String getName() {
     return name;
   }
-
   public Category getCategory() {
     return category;
   }
-
-  public int getRating() {
-    return rating;
-  }
-
+  public int getRating() { return rating; }
   public LocalDate getCreatedDate() {
     return createdDate;
   }
-
   public LocalDate getModifiedDate() {
     return modifiedDate;
   }

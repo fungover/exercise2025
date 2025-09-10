@@ -95,4 +95,23 @@ public class WarehouseTest {
         // Temporary debug
         electronicsProducts.forEach(p -> System.out.println(p.name()));
     }
+
+    @Test
+    void shouldGetProductsCreatedAfterGivenDate() {
+        LocalDate cutoffDate = LocalDate.of(2025, 9, 8);
+        Product oldProduct = new Product("1", "Test product", Category.ELECTRONICS, 3, LocalDate.of(2025, 9, 1));
+        Product newProduct1 = new Product("2", "New Product 1", Category.ELECTRONICS, 8, LocalDate.of(2025, 9, 10));
+        Product newProduct2 = new Product("3", "New Product 2", Category.SPORTS, 5, LocalDate.of(2025, 9, 15));
+
+        warehouse.addProduct(oldProduct);
+        warehouse.addProduct(newProduct1);
+        warehouse.addProduct(newProduct2);
+
+        List<Product> recentProducts = warehouse.getProductsCreatedAfter(cutoffDate);
+
+        assertEquals(2, recentProducts.size());
+        assertTrue(recentProducts.contains(newProduct1));
+        assertTrue(recentProducts.contains(newProduct2));
+        assertFalse(recentProducts.contains(oldProduct));
+    }
 }

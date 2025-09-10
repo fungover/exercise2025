@@ -151,8 +151,7 @@ public class WarehouseTest {
 
     @Test
     void shouldThrowExceptionWhenUpdatingNonExistentProduct() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            warehouse.updateProduct("999", "Name", Category.ELECTRONICS, 5);
-        });
+        assertThrows(IllegalArgumentException.class, () ->
+                warehouse.updateProduct("999", "Name", Category.ELECTRONICS, 5));
     }
 }

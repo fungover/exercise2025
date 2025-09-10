@@ -24,10 +24,19 @@ public class Dungeon {
                 } else  {
                     Tile tile = new Tile (true,"[ ]");
 
-                    if (RandomGenerator.chance(20)) {tile.setRoom(new Room("enemy"));}
-                    else if (RandomGenerator.chance(10)) {tile.setRoom(new Room("treasure"));
-                    }else if (RandomGenerator.chance(5)) {tile.setRoom(new Room("boss"));
-                    }
+                if (RandomGenerator.chance(20))
+                        {tile.setRoom(new Room("enemy"));}
+
+                else if (RandomGenerator.chance(10))
+                         {tile.setRoom(new Room("treasure"));}
+
+                else if (RandomGenerator.chance(5))
+                        {tile.setRoom(new Room("boss"));
+                        int roll = RandomGenerator.randomInt(1, 100);
+
+                        if (roll <= 20) {tile.setRoom(new Room("enemy"));}
+                        else if (roll <= 30) {tile.setRoom(new Room("treasure"));}
+                        else if (roll <= 35) {tile.setRoom(new Room("boss"));}
 
                     map[x][y] = tile;
 

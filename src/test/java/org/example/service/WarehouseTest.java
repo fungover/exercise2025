@@ -92,8 +92,6 @@ public class WarehouseTest {
         assertEquals(2, electronicsProducts.size());
         assertEquals("Apple iMac G3", electronicsProducts.get(0).name());
         assertEquals("Nokia 3310", electronicsProducts.get(1).name());
-        // Temporary debug
-        electronicsProducts.forEach(p -> System.out.println(p.name()));
     }
 
     @Test
@@ -131,5 +129,30 @@ public class WarehouseTest {
         assertEquals(1, modifiedProducts.size());
         assertTrue(modifiedProducts.contains(modifiedProduct));
         assertFalse(modifiedProducts.contains(unmodifiedProduct));
+    }
+
+    @Test
+    void shouldUpdateExistingProduct() {
+        Product originalProduct = new Product("1", "Old Product", Category.ELECTRONICS, 8, LocalDate.of(2025, 9, 1));
+
+        warehouse.addProduct(originalProduct);
+
+        warehouse.updateProduct("1", "New Product", Category.SPORTS, 5);
+
+        Optional<Product> updated = warehouse.getProductById("1");
+
+        assertTrue(updated.isPresent());
+        assertEquals("New Product", updated.get().name());
+        assertEquals(Category.SPORTS, updated.get().category());
+        assertEquals(5, updated.get().rating());
+        assertEquals(LocalDate.of(2025, 9, 1), updated.get().createdDate());
+        assertNotEquals(originalProduct.createdDate(), updated.get().modifiedDate());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentProduct() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            warehouse.updateProduct("999", "Name", Category.ELECTRONICS, 5);
+        });
     }
 }

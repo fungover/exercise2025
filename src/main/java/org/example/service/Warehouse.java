@@ -48,4 +48,29 @@ public class Warehouse {
                 .filter(product -> !product.createdDate().equals(product.modifiedDate()))
                 .collect(Collectors.toList());
     }
+
+    public void updateProduct(String id, String name, Category category, int rating) {
+        // Find existing product
+        Optional<Product> existingProduct = products.stream()
+                .filter(product -> product.id().equals(id))
+                .findFirst();
+
+        if (existingProduct.isEmpty()) {
+            throw new IllegalArgumentException("Product with id " + id + " not found");
+        }
+        // Remove old product
+        products.removeIf(product -> product.id().equals(id));
+
+        // Create new product with updated values
+        Product updatedProduct = new Product(
+                id,
+                name,
+                category,
+                rating,
+                existingProduct.get().createdDate(),
+                LocalDate.now()
+        );
+
+        products.add(updatedProduct);
+    }
 }

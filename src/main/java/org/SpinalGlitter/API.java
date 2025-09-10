@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 public class API {
     private static final String BASE = "https://www.elprisetjustnu.se/api/v1/prices";
     // HTTP client for making requests
-    private final HttpClient http = HttpClient.newBuilder().connectTimeout(java.time.Duration.ofSeconds(10)).build();
+    private final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
     // JSON object mapper for parsing responses
     private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 

@@ -12,7 +12,7 @@ public class CLI {
     // Allowed zones
     private static final Set<String> ALLOWED_ZONES = Set.of("SE1", "SE2", "SE3", "SE4");
     // Time zone for Stockholm (Europe/Stockholm)
-    private static final ZoneId Z_STHLM = java.time.ZoneId.of("Europe/Stockholm");
+    private static final ZoneId Z_STHLM = ZoneId.of("Europe/Stockholm");
     // DateTimeFormatter for displaying date and time in Stockholm time zone
     private static final DateTimeFormatter FMT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")

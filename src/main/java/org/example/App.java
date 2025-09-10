@@ -102,7 +102,7 @@ public class App {
 
     private static LocalDate askForDate(Scanner scanner) {
         while (true) {
-            System.out.println("Enter day: 'today', 'tomorrow', 'yesterday' or YYYY-MM-DD (default = today =" + "ENTER)");
+            System.out.println("Enter day: 'today', 'tomorrow', 'yesterday' or YYYY-MM-DD (default: today)");
             System.out.print("> ");
             String s = scanner.nextLine().trim().toLowerCase();
 

@@ -13,7 +13,6 @@ public class ConsumptionCalculator {
             try {
                 OffsetDateTime priceTime = OffsetDateTime.parse(p.time_start);
 
-                // loopa över consumption och jämför bara timme
                 for (Map.Entry<String, Double> entry : consumption.entrySet()) {
                     OffsetDateTime consTime = OffsetDateTime.parse(entry.getKey());
 

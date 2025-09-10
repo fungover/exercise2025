@@ -89,7 +89,7 @@ public class Printers {
         System.out.println("| SE3 | Stockholm / Södra Mellansverige");
         System.out.println("| SE4 | Malmö / Södra Sverige");
         System.out.println("==========================================================");
-        System.out.print("Enter Zone (SE1–SE4, default SE3): ");
+        System.out.print("Enter Zone (SE1–SE4, default: SE3): ");
     }
 
     public static void printBestChargingWindows(PriceEntry[] prices) {

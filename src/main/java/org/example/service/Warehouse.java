@@ -5,6 +5,7 @@ import org.example.entities.Product;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -98,7 +99,19 @@ public final class Warehouse {
         return Map.copyOf(counts);
     }
 
-    /*
-    getTopRatedProductsThisMonth(): Products with max rating, created this month, sorted by newest first
-*/
-}
+    public List<Product> getTopRatedProductsThisMonth() {
+        YearMonth currentMonth = YearMonth.now(clock);
+
+        List<Product> inMonth = store.values().stream()
+                .filter(product -> YearMonth.from(product.createdDate()).equals(currentMonth))
+                .toList();
+
+        if (inMonth.isEmpty()) return List.of();
+
+        int top = inMonth.stream().mapToInt(Product::rating).max().orElseThrow();
+
+        return inMonth.stream()
+                .filter(product -> product.rating() == top)
+                .sorted(Comparator.comparing(Product::createdDate).reversed())
+                .toList();
+    }}

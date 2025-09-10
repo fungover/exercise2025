@@ -320,4 +320,46 @@ public class WarehouseTest {
     void getProductInitialsMap_empty_returnsEmptyMap() {
         assertTrue(warehouse.getProductInitialsMap().isEmpty());
     }
+
+    /** getTopRatedProductsThisMonth method */
+    @Test
+    void getTopRatedProductsThisMonth_success_returnsTopRatedThisMonth_sortedByNewestFirst() {
+        // Fixed clock in @BeforeEach makes "this month" = 2025-09 (Europe/Stockholm)
+        LocalDateTime aug31 = LocalDateTime.of(2025, 8, 31, 12, 0);
+        LocalDateTime sep01 = LocalDateTime.of(2025, 9, 1,  9,  0);
+        LocalDateTime sep02 = LocalDateTime.of(2025, 9, 2, 10,  0);
+        LocalDateTime sep03 = LocalDateTime.of(2025, 9, 3, 11,  0);
+        LocalDateTime sep04 = LocalDateTime.of(2025, 9, 4, 12,  0);
+
+        Product productOld = Product.createNew("id1", "Old product", Category.BOOKS, 10, aug31);
+        Product product1Low = Product.createNew("id2", "new product low rated", Category.BOOKS, 7, sep01);
+        Product product2Top = Product.createNew("id3", "new product top rated", Category.TOYS,  9, sep02);
+        Product product3Top = Product.createNew("id4", "new product top rated", Category.FOOD,  9, sep03);
+        Product product4Low = Product.createNew("id5", "new product low rated", Category.BOOKS, 8, sep04);
+
+        warehouse.addProduct(productOld);
+        warehouse.addProduct(product1Low);
+        warehouse.addProduct(product2Top);
+        warehouse.addProduct(product3Top);
+        warehouse.addProduct(product4Low);
+
+        var result = warehouse.getTopRatedProductsThisMonth();
+
+        assertEquals(List.of(product3Top, product2Top), result);
+    }
+
+    @Test
+    void getTopRatedProductsThisMonth_noProductsInCurrentMonth_returnsEmptyList() {
+        LocalDateTime aug30 = LocalDateTime.of(2025, 8, 30, 12, 0);
+        LocalDateTime aug31 = LocalDateTime.of(2025, 8, 31, 12, 0);
+
+        Product product1Old = Product.createNew("id1", "Old product top rated", Category.BOOKS, 9, aug30);
+        Product product2Old = Product.createNew("id2", "Old product low rated", Category.TOYS,  8, aug31);
+        warehouse.addProduct(product1Old);
+        warehouse.addProduct(product2Old);
+
+        var result = warehouse.getTopRatedProductsThisMonth();
+
+        assertTrue(result.isEmpty());
+    }
 }

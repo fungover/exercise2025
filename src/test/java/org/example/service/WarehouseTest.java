@@ -140,7 +140,7 @@ public class WarehouseTest {
         Product testProduct1 = new Product("1", "Test Product", Category.GENERAL, 1);
         warehouse.addProduct(testProduct1);
 
-        Product testProduct2 = new Product("1", "Test Product", Category.GENERAL, 1);
+        Product testProduct2 = new Product("2", "Test Product2", Category.GENERAL, 1);
         warehouse.addProduct(testProduct2);
 
         assertThat(warehouse.getAllProducts()).contains(testProduct1, testProduct2);
@@ -229,9 +229,9 @@ public class WarehouseTest {
         Warehouse warehouse = new Warehouse();
         Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5, 18, 0, 0);
         Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27, 18, 0, 0);
-        Product testProduct3 = createProductWithMockedDate("2", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31, 18, 0, 0);
-        Product testProduct4 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24, 18, 0, 0);
-        Product testProduct5 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 1, 2002, 1, 1, 18, 0, 0);
+        Product testProduct3 = createProductWithMockedDate("3", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31, 18, 0, 0);
+        Product testProduct4 = createProductWithMockedDate("4", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24, 18, 0, 0);
+        Product testProduct5 = createProductWithMockedDate("5", "Pen Set", Category.GENERAL, 1, 2002, 1, 1, 18, 0, 0);
 
         warehouse.addProduct(testProduct1);
         warehouse.addProduct(testProduct2);
@@ -249,9 +249,9 @@ public class WarehouseTest {
         Warehouse warehouse = new Warehouse();
         Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5, 18, 0, 0);
         Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27, 18, 0, 0);
-        Product testProduct3 = createProductWithMockedDate("2", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31, 18, 0, 0);
-        Product testProduct4 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24, 18, 0, 0);
-        Product testProduct5 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 1, 2002, 1, 1, 18, 0, 0);
+        Product testProduct3 = createProductWithMockedDate("3", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31, 18, 0, 0);
+        Product testProduct4 = createProductWithMockedDate("4", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24, 18, 0, 0);
+        Product testProduct5 = createProductWithMockedDate("5", "Pen Set", Category.GENERAL, 1, 2002, 1, 1, 18, 0, 0);
 
         warehouse.addProduct(testProduct1);
         warehouse.addProduct(testProduct2);
@@ -299,8 +299,8 @@ public class WarehouseTest {
     public void getCategoriesWithProducts() {
         Warehouse warehouse = new Warehouse();
         Product testProduct1 = addProductToWarehouse(warehouse, "1", "Laptop", ELECTRONICS, 1);
-        Product testProduct2 = addProductToWarehouse(warehouse, "3", "Television", ELECTRONICS, 1);
-        Product testProduct3 = addProductToWarehouse(warehouse, "1", "Apple", Category.FOOD, 1);
+        Product testProduct2 = addProductToWarehouse(warehouse, "2", "Television", ELECTRONICS, 1);
+        Product testProduct3 = addProductToWarehouse(warehouse, "3", "Apple", Category.FOOD, 1);
 
         assertThat(warehouse.getCategoriesWithProducts().size()).isEqualTo(2);
         assertThat(warehouse.getCategoriesWithProducts()).containsExactlyInAnyOrder(ELECTRONICS, Category.FOOD);
@@ -391,7 +391,7 @@ public class WarehouseTest {
 
             Product testProduct3 = addProductToWarehouse(warehouse, "1", "Laptop", ELECTRONICS, 10);
             Product testProduct4 = addProductToWarehouse(warehouse, "2", "Television", ELECTRONICS, 10);
-            Product testProduct5 = addProductToWarehouse(warehouse, "2", "Computer", Category.GENERAL, 9);
+            Product testProduct5 = addProductToWarehouse(warehouse, "5", "Computer", Category.GENERAL, 9);
 
             List<Product> expectedProducts = warehouse.getTopRatedProductsThisMonth();
 

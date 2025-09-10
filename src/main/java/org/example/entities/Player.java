@@ -1,6 +1,7 @@
 package org.example.entities;
 
 import org.example.entities.items.Item;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,6 @@ public class Player {
     private int row;
     private int col;
     private List<Item> inventory = new ArrayList<>();
-
 
 
     public Player(String name) {
@@ -58,20 +58,6 @@ public class Player {
             if (item.getType().equals("weapon")) return true;
         }
         return false;
-    }
-
-    public void usePotion() {
-        for (Item item : inventory) {
-            if (item.getType().equals("potion")) {
-                int healAmount = item.getEffect();
-                health += healAmount;
-                if (health > 100) health = 100;
-                System.out.println("You used a " + item.getName() + "and healed " + healAmount + "! " + "your health is now " + health);
-                inventory.remove(item);
-                return;
-            }
-        }
-        System.out.println("You have no potions!");
     }
 }
 

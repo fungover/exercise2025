@@ -25,7 +25,6 @@ public class Spawner {
     }
 
     private static void spawnEnemies(Dungeon dungeon) {
-
         List<Enemy> enemies = List.of(
                 new Troll(0, 0),
                 new Orc(0, 0)
@@ -41,7 +40,7 @@ public class Spawner {
     }
 
     private static void spawnItems(Dungeon dungeon) {
-        // Skapa items
+
         List<Item> items = List.of(
                 new Potion("Small Potion", 20),
                 new Potion("Large Potion", 50),
@@ -49,10 +48,8 @@ public class Spawner {
                 new Weapon("Fire Sword", 20)
         );
 
-        // Hämta alla walkable tiles
         List<Tile> emptyTiles = getWalkableTiles(dungeon);
 
-        // Placera items slumpmässigt
         for (Item item : items) {
             Tile tile = emptyTiles.remove(random.nextInt(emptyTiles.size()));
             tile.setItem(item);

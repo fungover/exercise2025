@@ -7,38 +7,17 @@ import org.example.map.Dungeon;
 import org.example.service.Combat;
 import org.example.service.MovementLogic;
 import org.example.map.Tile;
+import org.example.service.PotionLogic;
 import org.example.utils.Spawner;
-
 import java.util.Random;
 import java.util.Scanner;
 
 
 public class Game {
-private Scanner scanner = new Scanner(System.in);
-private Player player;
-private Dungeon dungeon;
-private MovementLogic movementLogic;
-
-    public void printDungeonDebug() {
-        System.out.println("=== Dungeon Debug Map ===");
-        for (int row = 0; row < dungeon.getRows(); row++) {
-            for (int col = 0; col < dungeon.getCols(); col++) {
-                Tile tile = dungeon.getTile(row, col);
-
-                if (player.getRow() == row && player.getCol() == col) {
-                    System.out.print("P ");
-                } else if (tile.getEnemy() != null) {
-                    System.out.print("E ");
-                } else if (tile.getItem() != null) {
-                    System.out.print("I ");
-                } else {
-                    System.out.print(". ");
-                }
-            }
-            System.out.println();
-        }
-        System.out.println("=========================");
-    }
+    private Scanner scanner = new Scanner(System.in);
+    private Player player;
+    private Dungeon dungeon;
+    private MovementLogic movementLogic;
 
     private boolean allEnemiesDefeated() {
         for (int row = 0; row < dungeon.getRows(); row++) {
@@ -52,32 +31,28 @@ private MovementLogic movementLogic;
         return true;
     }
 
-
     public void startGame() {
-
-
         System.out.println("Welcome to the Dungeon.... I have been waiting for an adventurer..");
-    System.out.print("Please, tell me your name ");
-    String name = scanner.nextLine();
+        System.out.print("Please, tell me your name ");
+        String name = scanner.nextLine();
 
-    player = new Player(name);
-    dungeon = new Dungeon(5, 5);
-    Combat combat = new Combat();
-    Random random = new Random();
-    movementLogic = new MovementLogic();
-    Spawner.spawnAll(dungeon);
+        player = new Player(name);
+        dungeon = new Dungeon(5, 5);
+        Combat combat = new Combat();
+        PotionLogic potionLogic = new PotionLogic();
+        Random random = new Random();
+        movementLogic = new MovementLogic();
+        Spawner.spawnAll(dungeon);
 
-    int previousRow = player.getRow();
-    int previousCol = player.getCol();
+        int previousRow = player.getRow();
+        int previousCol = player.getCol();
 
-    System.out.println("Well Hello, " + player.getName() + ". Step inside and see what happens...");
-    System.out.println("Your health is " + player.getHealth());
-    System.out.println("Lets go!");
-        printDungeonDebug();
+        System.out.println("Well Hello, " + player.getName() + ". Step inside and see what happens...");
+        System.out.println("Your health is " + player.getHealth());
+        System.out.println("Lets go!");
 
 
         while (true) {
-
             System.out.print("> ");
             String playerInput = scanner.nextLine();
             Tile currentTile = dungeon.getTile(player.getRow(), player.getCol());
@@ -89,10 +64,10 @@ private MovementLogic movementLogic;
                     movementLogic.movePlayer(player, "up", dungeon);
                     break;
 
-                    case "move down":
-                        previousRow = player.getRow();
-                        previousCol = player.getCol();
-                        movementLogic.movePlayer(player, "down", dungeon);
+                case "move down":
+                    previousRow = player.getRow();
+                    previousCol = player.getCol();
+                    movementLogic.movePlayer(player, "down", dungeon);
                     break;
 
                 case "move left":
@@ -105,7 +80,6 @@ private MovementLogic movementLogic;
                     previousRow = player.getRow();
                     previousCol = player.getCol();
                     movementLogic.movePlayer(player, "right", dungeon);
-                    //  Flytta spelaren höger (east) om nästa tile är walkable
                     break;
 
                 case "look":
@@ -125,7 +99,6 @@ private MovementLogic movementLogic;
                             System.out.println("- " + item.getName());
                         }
                     }
-
                     break;
 
                 case "attack":
@@ -145,7 +118,7 @@ private MovementLogic movementLogic;
                     break;
 
                 case "use potion":
-                    player.usePotion();
+                    potionLogic.usePotion(player);
                     break;
                 case "move back":
                     player.moveTo(previousRow, previousCol);
@@ -153,7 +126,8 @@ private MovementLogic movementLogic;
                     break;
 
                 case "quit":
-                    break;
+                    System.out.println("Thanks for playing!");
+                    return;
 
                 default:
                     System.out.println("Nothing happens... maybe try another move?");

@@ -16,7 +16,7 @@ public class ElectricPriceUtils {
      * @param pricesTomorrow The list of prices for tomorrow (can be null)
      * @return Returns the mean price as a BigDecimal
      */
-    public static BigDecimal meanPrice(List<ElectricityPrice> pricesToday, List<ElectricityPrice> pricesTomorrow) {
+    /*public static BigDecimal meanPrice(List<ElectricityPrice> pricesToday, List<ElectricityPrice> pricesTomorrow) {
         BigDecimal meanPrice;
         if (pricesTomorrow != null) {
             ZonedDateTime start = ZonedDateTime.now();
@@ -46,7 +46,34 @@ public class ElectricPriceUtils {
             meanPrice = meanPriceCalculator(pricesToday);
         }
         return meanPrice;
+    }*/
+    public static BigDecimal meanPrice(List<ElectricityPrice> pricesToday, List<ElectricityPrice> pricesTomorrow) {
+        // If tomorrow's data is missing, use the entire 'pricesToday' list without filtering
+        if (pricesTomorrow == null) {
+            return meanPriceCalculator(pricesToday);
+        }
+
+        ZonedDateTime start = ZonedDateTime.now();
+        ZonedDateTime end = start.plusHours(24);
+
+        // Merge lists (today + tomorrow)
+        List<ElectricityPrice> all = Stream.concat(
+                pricesToday == null ? Stream.<ElectricityPrice>empty() : pricesToday.stream(),
+                pricesTomorrow.stream()
+        ).toList();
+
+        // Include only price blocks that overlap the interval [start, end)
+        List<ElectricityPrice> filtered = all.stream()
+                .filter(p -> {
+                    ZonedDateTime s = ZonedDateTime.parse(p.time_start());
+                    ZonedDateTime e = ZonedDateTime.parse(p.time_end());
+                    return !e.isBefore(start) && s.isBefore(end);
+                })
+                .toList();
+
+        return meanPriceCalculator(filtered);
     }
+
 
     /**
      * Calculate the mean price from a list of ElectricityPrice objects
@@ -55,6 +82,11 @@ public class ElectricPriceUtils {
      * @return Returns the mean price as a BigDecimal
      */
     public static BigDecimal meanPriceCalculator(List<ElectricityPrice> prices) {
+        if (prices == null || prices.isEmpty()) {
+            // Nothing to calculate
+            return BigDecimal.ZERO.setScale(5, RoundingMode.HALF_UP);
+        }
+
         BigDecimal sum = BigDecimal.ZERO;
         for (ElectricityPrice price : prices) {
             sum = sum.add(BigDecimal.valueOf(price.SEK_per_kWh()));
@@ -71,23 +103,37 @@ public class ElectricPriceUtils {
      * @param pricesTomorrow The list of prices for tomorrow (can be null)
      */
     public static void printCheapestAndMostExpensiveHours(List<ElectricityPrice> pricesToday, List<ElectricityPrice> pricesTomorrow) {
-        List<ElectricityPrice> allPrices = concatLists(pricesToday, pricesTomorrow);
+        // Merge lists safely; treat null as empty
+        List<ElectricityPrice> allPrices = Stream.concat(
+                pricesToday == null ? Stream.<ElectricityPrice>empty() : pricesToday.stream(),
+                pricesTomorrow == null ? Stream.<ElectricityPrice>empty() : pricesTomorrow.stream()
+        ).toList();
 
         if (allPrices.isEmpty()) {
             System.out.println("No price data available.");
             return;
         }
 
-        // Get the least expensive hour and the most expensive hour
-        ElectricityPrice cheapest = allPrices.stream()
-                .min(Comparator.comparing(ElectricityPrice::SEK_per_kWh))
-                .get();
+        // Single pass to find cheapest and most expensive (with tie-breaker by earliest start time)
+        ElectricityPrice cheapest = null;
+        ElectricityPrice mostExpensive = null;
 
-        ElectricityPrice mostExpensive = allPrices.stream()
-                .max(Comparator.comparing(ElectricityPrice::SEK_per_kWh))
-                .get();
+        for (ElectricityPrice p : allPrices) {
+            if (cheapest == null
+                    || p.SEK_per_kWh() < cheapest.SEK_per_kWh()
+                    || (p.SEK_per_kWh() == cheapest.SEK_per_kWh()
+                    && ZonedDateTime.parse(p.time_start()).isBefore(ZonedDateTime.parse(cheapest.time_start())))) {
+                cheapest = p;
+            }
+            if (mostExpensive == null
+                    || p.SEK_per_kWh() > mostExpensive.SEK_per_kWh()
+                    || (p.SEK_per_kWh() == mostExpensive.SEK_per_kWh()
+                    && ZonedDateTime.parse(p.time_start()).isBefore(ZonedDateTime.parse(mostExpensive.time_start())))) {
+                mostExpensive = p;
+            }
+        }
 
-        // Format time
+        // Format time for output
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         String cheapestTime = ZonedDateTime.parse(cheapest.time_start()).format(formatter);
@@ -96,6 +142,7 @@ public class ElectricPriceUtils {
         System.out.printf("Cheapest hour is: %s with a price of: %.5f SEK/kWh%n", cheapestTime, cheapest.SEK_per_kWh());
         System.out.printf("Most expensive hour is %s with a price of %.5f SEK/kWh%n", mostExpensiveTime, mostExpensive.SEK_per_kWh());
     }
+
 
     /**
      *
@@ -136,6 +183,10 @@ public class ElectricPriceUtils {
      * @param hours     Duration in hours to charge (2, 4, or 8)
      */
     public static String slidingWindowAlgorithm(List<ElectricityPrice> allPrices, int hours) {
+        if (allPrices == null || allPrices.isEmpty()) {
+            return "No price data available.";
+        }
+
         //Filter the list to only include prices from now
         ZonedDateTime start = ZonedDateTime.now();
         List<ElectricityPrice> filteredList = allPrices.stream()

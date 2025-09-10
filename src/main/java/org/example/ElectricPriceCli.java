@@ -35,14 +35,23 @@ public class ElectricPriceCli {
                 String jsonDataTomorrow = GetDataFromAPI.fetchDataPrices(LocalDate.now().plusDays(1), input);
 
                 if (jsonDataToday != null) {
-                    stmt = true;
-                    pricesToday = GetDataFromAPI.ConvertDataToObjects(jsonDataToday);
+                    try {
+                        pricesToday = GetDataFromAPI.ConvertDataToObjects(jsonDataToday);
+                        stmt = true;
+                    } catch (IOException e) {
+                        System.err.println("Failed to parse today's data: " + e.getMessage());
+                    }
                 }
                 if (jsonDataTomorrow != null) {
-                    pricesTomorrow = GetDataFromAPI.ConvertDataToObjects(jsonDataTomorrow);
+                    try {
+                        pricesTomorrow = GetDataFromAPI.ConvertDataToObjects(jsonDataTomorrow);
+                    } catch (IOException e) {
+                        System.err.println("Failed to parse tomorrow's data: " + e.getMessage());
+                    }
                 }
                 if (jsonDataToday != null) {
-                    System.out.println("Prices fetched successfully for zone " + input);
+                    System.out.println("Prices fetched successfully for zone " + input +
+                            (pricesTomorrow == null ? " (tomorrow not yet available)" : ""));
                 }
             } else {
                 System.out.println("Invalid Zone Input");

@@ -36,4 +36,27 @@ public class PriceUtils {
         }
         return mostExpensive;
     }
+
+    public static int findBestWindowStart(List<PricePoint> prices, int windowSize) {
+        if (prices == null || prices.size() < windowSize) {
+            throw new IllegalArgumentException("not enough data for window of size " + windowSize);
+        }
+
+        double bestAvg = Double.MAX_VALUE;
+        int bestIndex = 0;
+
+        for (int i = 0; i <= prices.size() - windowSize; i++) {
+            double sum = 0;
+            for (int j = 0; j < windowSize; j++) {
+                sum += prices.get(i + j).getPrice();
+            }
+            double avg = sum / windowSize;
+
+            if (avg < bestAvg) {
+                bestAvg = avg;
+                bestIndex = i;
+            }
+        }
+        return bestIndex;
+    }
 }

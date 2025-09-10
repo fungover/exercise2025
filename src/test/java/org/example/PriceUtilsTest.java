@@ -58,4 +58,80 @@ public class PriceUtilsTest {
         List<PricePoint> empty = List.of();
         assertThrows(IllegalArgumentException.class, () -> PriceUtils.mostExpensivePrice(empty));
     }
+
+    @Test
+    void findBestWindowStartShouldReturnCheapestFor2hWindow() {
+        List<PricePoint> prices = List.of(
+                new PricePoint("00:00", 1.0),
+                new PricePoint("01:00", 0.8),
+                new PricePoint("02:00", 3.0),
+                new PricePoint("03:00", 2.0),
+                new PricePoint("04:00", 1.5)
+        );
+
+        int bestWindowStart = PriceUtils.findBestWindowStart(prices, 2);
+
+        assertEquals(0, bestWindowStart);
+    }
+
+    @Test
+    void findBestWindowStartShouldReturnCheapestFor4hWindow() {
+        List<PricePoint> prices = List.of(
+                new PricePoint("00:00", 1.0),
+                new PricePoint("01:00", 0.8),
+                new PricePoint("02:00", 3.0),
+                new PricePoint("03:00", 2.0),
+                new PricePoint("04:00", 1.5)
+        );
+
+        int bestWindowStart = PriceUtils.findBestWindowStart(prices, 4);
+
+        assertEquals(0, bestWindowStart);
+    }
+
+    @Test
+    void findBestWindowStartShouldReturnCheapestFor8hWindow() {
+        List<PricePoint> prices = List.of(
+                new PricePoint("00:00", 1.0),
+                new PricePoint("01:00", 1.8),
+                new PricePoint("02:00", 1.0),
+                new PricePoint("03:00", 2.0),
+                new PricePoint("04:00", 1.5),
+                new PricePoint("05:00", 1.2),
+                new PricePoint("06:00", 1.0),
+                new PricePoint("07:00", 0.8),
+                new PricePoint("08:00", 1.5),
+                new PricePoint("09:00", 1.2)
+        );
+
+        int bestWindowStart = PriceUtils.findBestWindowStart(prices, 8);
+
+        assertEquals(2, bestWindowStart);
+    }
+
+    @Test
+    void findBestWindowStartShouldPreferFirstBlockWhenTie() {
+        List<PricePoint> prices = List.of(
+                new PricePoint("00:00", 0.8),
+                new PricePoint("01:00", 1.0),
+                new PricePoint("02:00", 3.0),
+                new PricePoint("03:00", 1.0),
+                new PricePoint("04:00", 0.8)
+        );
+
+        int bestWindowStart = PriceUtils.findBestWindowStart(prices, 3);
+
+        assertEquals(0, bestWindowStart);
+    }
+
+    @Test
+    void findBestWindowStartOnTooShortListShouldThrowException() {
+        List<PricePoint> prices = List.of(
+                new PricePoint("00:00", 1.0),
+                new PricePoint("01:00", 0.8)
+        );
+
+        assertThrows(IllegalArgumentException.class,
+                () -> PriceUtils.findBestWindowStart(prices, 3));
+    }
 }

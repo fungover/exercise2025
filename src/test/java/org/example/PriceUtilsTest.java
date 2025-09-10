@@ -134,4 +134,19 @@ public class PriceUtilsTest {
         assertThrows(IllegalArgumentException.class,
                 () -> PriceUtils.findBestWindowStart(prices, 3));
     }
+
+    // OBS: Vi visar starttiden för första och sista timmen i blocket.
+    // Exempel: Ett 2h-block som täcker 00:00–02:00 skrivs ut som "00:00–01:00".
+    @Test
+    void windowSummaryShouldReturnCorrectSummaryFor2hWindow() {
+        List<PricePoint> prices = List.of(
+                new PricePoint("00:00", 1.0),
+                new PricePoint("01:00", 0.5),
+                new PricePoint("02:00", 1.5)
+        );
+
+        String summary = PriceUtils.windowSummary(prices, 0, 2);
+
+        assertEquals("Bästa 2h-blocket: 00:00–02:00 (0,75 kr/kWh)", summary);
+    }
 }

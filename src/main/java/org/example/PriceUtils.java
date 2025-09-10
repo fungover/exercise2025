@@ -1,6 +1,8 @@
 package org.example;
 
 import java.util.List;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class PriceUtils {
     public static double averagePrice(List<PricePoint> prices) {
@@ -58,5 +60,29 @@ public class PriceUtils {
             }
         }
         return bestIndex;
+    }
+
+    public static String windowSummary(List<PricePoint> prices, int start, int windowSize) {
+        if (prices == null || start < 0 || start + windowSize > prices.size()) {
+            throw new IllegalArgumentException("Ogiltigt fönster");
+        }
+
+        double sum = 0;
+        for (int i = 0; i < windowSize; i++) {
+            sum += prices.get(start + i).getPrice();
+        }
+        double avg = sum / windowSize;
+
+        // Hämta starttid
+        String startHour = prices.get(start).getHour();
+
+        // Hämta sluttid (sista timmen + 1 timme)
+        String lastHour = prices.get(start + windowSize - 1).getHour();
+        LocalTime endTime = LocalTime.parse(lastHour).plusHours(1);
+        String endHour = endTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+
+        return "Bästa " + windowSize + "h-blocket: "
+                + startHour + "–" + endHour
+                + " (" + String.format("%.2f", avg) + " kr/kWh)";
     }
 }

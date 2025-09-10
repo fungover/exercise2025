@@ -168,7 +168,7 @@ private MovementLogic movementLogic;
                 System.out.println("You picked up a " + item.getName() + "!");
             }
 
-            if (currentTile.getEnemy() != null) {
+            if (playerInput.startsWith("move") && currentTile.getEnemy() != null) {
                 System.out.println("There is a " + currentTile.getEnemy().getType() + " here!");
                 System.out.println("Type 'attack' to fight or 'move back' to retreat.");
             }

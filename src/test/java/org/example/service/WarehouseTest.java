@@ -356,7 +356,6 @@ public class WarehouseTest {
         Product testProduct5 = addProductToWarehouse(warehouse, "5", "Sushi", Category.FOOD, 1);
 
         Map<Character, Integer> expectedMap = warehouse.getProductInitialsMap();
-        System.out.println(expectedMap);
 
         assertThat(expectedMap.size()).isEqualTo(3);
         assertThat(expectedMap.get('L')).isEqualTo(1);

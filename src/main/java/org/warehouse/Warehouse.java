@@ -5,7 +5,9 @@ import org.warehouse.entities.Product;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Warehouse {
   private final String name;
@@ -52,5 +54,16 @@ public class Warehouse {
       }
     }
     throw new IllegalArgumentException("Product with id " + id + " not found");
+  }
+
+  public List<Product> getProductsByCategorySorted(Category category) {
+    return products.stream()
+            .filter(product -> product.getCategory().equals(category))
+            .sorted(Comparator.comparing(Product::getName))
+            .collect(Collectors.toList());
+  }
+
+  public List<Product> getProductsCreatedAfter(LocalDate date) {
+    return products.stream().filter(product -> product.getCreatedDate().isAfter(date)).collect(Collectors.toList());
   }
 }

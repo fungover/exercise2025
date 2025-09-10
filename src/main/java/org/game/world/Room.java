@@ -41,7 +41,7 @@ public class Room {
                 if (Roll == 0){
                     System.out.println("The chest is empty");
                 }
-                loot.add(new Item("coins","currency",1,RandomGenerator.randomInt(0,10)));
+                loot.add(new Item("coin","currency",1,RandomGenerator.randomInt(0,10)));
                 loot.add(new Item("bread","consumable",1,1,true,5));
 
                 break;

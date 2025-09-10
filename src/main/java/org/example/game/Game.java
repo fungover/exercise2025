@@ -8,6 +8,7 @@ import org.example.service.Combat;
 import org.example.service.MovementLogic;
 import org.example.map.Tile;
 import org.example.service.PotionLogic;
+import org.example.utils.Command;
 import org.example.utils.Spawner;
 import java.util.Random;
 import java.util.Scanner;
@@ -55,34 +56,44 @@ public class Game {
         while (true) {
             System.out.print("> ");
             String playerInput = scanner.nextLine();
+
+
+            Command command;
+            try {
+                command = Command.valueOf(playerInput.trim().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Unknown command...");
+                continue;
+            }
+
             Tile currentTile = dungeon.getTile(player.getRow(), player.getCol());
 
-            switch (playerInput) {
-                case "move up":
+            switch (command) {
+                case UP:
                     previousRow = player.getRow();
                     previousCol = player.getCol();
                     movementLogic.movePlayer(player, "up", dungeon);
                     break;
 
-                case "move down":
+                case DOWN:
                     previousRow = player.getRow();
                     previousCol = player.getCol();
                     movementLogic.movePlayer(player, "down", dungeon);
                     break;
 
-                case "move left":
+                case LEFT:
                     previousRow = player.getRow();
                     previousCol = player.getCol();
                     movementLogic.movePlayer(player, "left", dungeon);
                     break;
 
-                case "move right":
+                case RIGHT:
                     previousRow = player.getRow();
                     previousCol = player.getCol();
                     movementLogic.movePlayer(player, "right", dungeon);
                     break;
 
-                case "look":
+                case LOOK:
                     currentTile = dungeon.getTile(player.getRow(), player.getCol());
                     System.out.println("You are standing on a: " + currentTile.getTileType() + " tile");
                     if (currentTile.getEnemy() != null) {
@@ -90,7 +101,7 @@ public class Game {
                     }
                     break;
 
-                case "inventory":
+                case INVENTORY:
                     if (player.getInventory().isEmpty()) {
                         System.out.println("Nothing in the inventory");
                     } else {
@@ -101,7 +112,7 @@ public class Game {
                     }
                     break;
 
-                case "attack":
+                case ATTACK:
                     Enemy enemy = currentTile.getEnemy();
                     if (enemy != null) {
                         if (player.hasWeapon()) {
@@ -117,15 +128,15 @@ public class Game {
                     }
                     break;
 
-                case "use potion":
+                case USE:
                     potionLogic.usePotion(player);
                     break;
-                case "move back":
+                case BACK:
                     player.moveTo(previousRow, previousCol);
                     System.out.println("You moved back to the previous tile.");
                     break;
 
-                case "quit":
+                case QUIT:
                     System.out.println("Thanks for playing!");
                     return;
 
@@ -142,7 +153,8 @@ public class Game {
                 System.out.println("You picked up a " + item.getName() + "!");
             }
 
-            if (playerInput.startsWith("move") && currentTile.getEnemy() != null) {
+            if ((command == Command.UP || command == Command.DOWN ||
+                    command == Command.LEFT || command == Command.RIGHT) && currentTile.getEnemy() != null) {
                 System.out.println("There is a " + currentTile.getEnemy().getType() + " here!");
                 System.out.println("Type 'attack' to fight or 'move back' to retreat.");
             }

@@ -150,6 +150,15 @@ public class WarehouseTest {
     }
 
     @Test
+    void shouldReturnEmptyListWhenNoModifiedProducts() {
+        warehouse.addProduct(new Product("1", "Test product", Category.ELECTRONICS, 3, LocalDate.of(2025, 1, 1)));
+
+        List<Product> result = warehouse.getModifiedProducts();
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
     void shouldUpdateExistingProduct() {
         Product originalProduct = new Product("1", "Old Product", Category.ELECTRONICS, 8, LocalDate.of(2025, 9, 1));
 

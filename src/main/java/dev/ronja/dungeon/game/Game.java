@@ -28,7 +28,7 @@ public class Game {
     public Game() {
         this.player = new Player("Ronja");
         this.enemy = null;
-        this.playerPos = dungeon.anyFloor();
+        this.playerPos = dungeon.anyOpenFloor();
         this.enemyPos = dungeon.anyFloor();
     }
 
@@ -157,7 +157,7 @@ public class Game {
 
         // Players hit on the enemy
         enemy.takeDamage(strike);
-        System.out.println(player.getName() + "strikes with " + weaponName + " for " + strike + " damage.");
+        System.out.println(player.getName() + " strikes with " + weaponName + " for " + strike + " damage.");
 
         if (!enemy.isAlive()) {
             System.out.println("You defeated the " + enemy.getName() + " use 'next or 'spawn to continue ");
@@ -181,11 +181,11 @@ public class Game {
         System.out.println("""
                 Commands:
                 map - Show dungeon
-                attack - Combat
                 w/a/s/d - Move (up, left, down, right)
+                next / spawn <type|random> - Enemies
+                attack - Combat
                 status - Show player + enemy health status
                 who - Show your current enemy
-                next / spawn <type|random> - Enemies
                 potion / mother - Heals
                 help - Show the commands of this Game
                 quit - QUIT the Game
@@ -244,14 +244,15 @@ public class Game {
     private void placeEnemyOnMap() {
         for (int tries = 0; tries < 500; tries++) {
             Position p = dungeon.anyFloor();
-            if (!p.equals(playerPos) && isReachable(playerPos, p)) {
-                enemyPos = p;
-                return;
-            }
+            if (p.equals(playerPos)) continue;
+            if (!isReachable(playerPos, p)) continue;
+            if (!hasOpenNeighborPos(p)) continue;
+            enemyPos = p;
+            return;
         }
 
         /** Fallback
-         * placing enemy close to the player **/
+         * placing enemy close or ON to the player **/
         int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
         for (int[] d : dirs) {
             Position cand = playerPos.add(d[0], d[1]);
@@ -262,6 +263,15 @@ public class Game {
         }
         enemyPos = playerPos;
     }
+
+    private boolean hasOpenNeighborPos(Position p) {
+        int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        for (int[] d : dirs) {
+            if (dungeon.isWalkable(p.add(d[0], d[1]))) return true;
+        }
+        return false;
+    }
+
 
     private boolean isReachable(Position start, Position goal) {
         java.util.ArrayDeque<Position> q = new java.util.ArrayDeque<>();
@@ -301,9 +311,12 @@ public class Game {
     }
 
     private void movePlayer(int dx, int dy) {
+        if (!dungeon.hasOpenNeighbor(playerPos)) {
+            System.out.println("You are trapped. Passage opens for you!");
+            dungeon.carveExitAround(playerPos);
+        }
         var next = mover.tryMove(playerPos, dx, dy);
-
-        if (next == null || playerPos.equals(next)) {
+        if (playerPos.equals(next)) {
             System.out.println("You bumped into a wall!");
         } else {
             playerPos = next;

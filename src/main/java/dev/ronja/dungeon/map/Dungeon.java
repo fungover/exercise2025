@@ -44,17 +44,62 @@ public class Dungeon {
     public boolean isWalkable(Position p) {
         return inBounds(p) && grid[p.y()][p.x()].isWalkable();
     }
+    /** Get tile object **/
+    public Tile tileAt(Position p) { return grid[p.y()][p.x()];}
+
+    /** To get rid of wall bug I need at least one open neighbor tile **/
+    public boolean hasOpenNeighbor(Position p) {
+        int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+        for (int[] d : dirs) {
+            int nx = p.x() + d[0], ny = p.y() + d[1];
+            if (nx <= 0 || ny <= 0 || nx >= w-1 || ny >= h-1) continue;
+            if (grid[ny][nx].getType() == TileType.FLOOR) return true;
+        }
+        return false;
+    }
+
+    public void carveExitAround(Position p) {
+        int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+        for (int i = 0; i < dirs.length; i++) {
+            int j = r.nextInt(dirs.length);
+            int[] tmp = dirs[i]; dirs[i] = dirs[j]; dirs[j] = tmp;
+        }
+
+        for (int [] d : dirs) {
+            int nx = p.x() + d[0], ny = p.y() + d[1];
+            if (nx <= 0 || ny <= 0 || nx >= w-1 || ny >= h-1) continue;
+            if (grid[ny][nx].getType() == TileType.WALL) {
+                grid[ny][nx].setType(TileType.FLOOR);
+                return;
+            }
+
+        }
+    }
 
     /**
      * Return a FLOOR tile with fallback
      **/
-    public Position anyFloor() {
+    public Position anyOpenFloor() {
         for (int tries = 0; tries < 200; tries++) {
             int x = r.nextInt(w - 2) + 1;
             int y = r.nextInt(h - 2) + 1;
-            if (grid[y][x].getType() == TileType.FLOOR) return new Position(x, y);
+            if (grid[y][x].getType() == TileType.FLOOR) {
+                Position p = new Position(x, y);
+                if (!hasOpenNeighbor(p)) carveExitAround(p);
+                return p;
+            }
         }
 
+        Position p = anyFloor();
+        if (!hasOpenNeighbor(p)) carveExitAround(p);
+        return p;
+    }
+    public Position anyFloor() {
+        for (int tries = 0; tries < 200; tries++) {
+            int x = r.nextInt(w -2) + 1;
+            int y = r.nextInt(h -2) + 1;
+            if (grid[y][x].getType() == TileType.FLOOR) return new Position(x, y);
+        }
         for (int y = 1; y < h - 1; y++) {
             for (int x = 1; x < w - 1; x++) {
                 if (grid[y][x].getType() == TileType.FLOOR) return new Position(x, y);

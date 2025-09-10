@@ -4,6 +4,7 @@ import org.example.entities.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Warehouse {
 
@@ -20,4 +21,9 @@ public class Warehouse {
         return products;
     }
 
+    public Optional<Product> getProductById(String id) {
+        return products.stream()
+                .filter(product -> product.id().equals(id))
+                .findFirst();
+    }
 }

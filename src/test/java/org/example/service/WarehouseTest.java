@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,5 +57,23 @@ public class WarehouseTest {
         Product productWithNullName = new Product("1", null, Category.ELECTRONICS, 8, LocalDate.now());
 
         assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(productWithNullName));
+    }
+
+    @Test
+    void shouldFindProductWithId() {
+        Product product = new Product("213", "Test product", Category.ELECTRONICS, 8, LocalDate.now());
+        warehouse.addProduct(product);
+
+        Optional<Product> foundProduct = warehouse.getProductById("213");
+
+        assertTrue(foundProduct.isPresent());
+        assertEquals(product, foundProduct.get());
+    }
+
+    @Test
+    void shouldReturnEmptyOptionalWhenProductNotFound() {
+        Optional<Product> foundProduct = warehouse.getProductById("999");
+
+        assertTrue(foundProduct.isEmpty());
     }
 }

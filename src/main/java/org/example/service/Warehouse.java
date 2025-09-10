@@ -17,7 +17,7 @@ public class Warehouse {
     }
 
     public Optional<Product> getProductById(String id) {
-        if (id == null || id.isBlank()) {
+        if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("Product id cannot be null or blank");
         }
 
@@ -28,7 +28,7 @@ public class Warehouse {
 
     // Methods
     public void addProduct(Product product) {
-        if (product == null || product.getName().isBlank()) {
+        if (product == null || product.getName().isEmpty()) {
             throw new IllegalArgumentException("Product name cannot be null or blank");
         }
         if (product.getCategory() == null) {
@@ -47,10 +47,10 @@ public class Warehouse {
     }
 
     public void updateProduct(String id, String name, Category category, int rating) {
-        if (id == null || id.isBlank()) {
+        if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("Product id cannot be null or blank");
         }
-        if (name == null || name.isBlank()) {
+        if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Product name cannot be null or blank");
         }
         if (category == null) {
@@ -58,6 +58,10 @@ public class Warehouse {
         }
         if (rating < 1 || rating > 10) {
             throw new IllegalArgumentException("Rating must be between 1 and 10");
+        }
+        if (products.stream().anyMatch(p ->
+                !p.getId().equals(id) && p.getName().equalsIgnoreCase(name))) {
+            throw new IllegalArgumentException("Product with name " + name + " already exists");
         }
 
         int index = IntStream.range(0, products.size())

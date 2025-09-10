@@ -34,7 +34,7 @@ public class Warehouse {
         if (product.getCategory() == null) {
             throw new IllegalArgumentException("Category cannot be null");
         }
-        if (product.getRating() < 1 || product.getRating() > 10){
+        if (product.getRating() < 1 || product.getRating() > 10) {
             throw new IllegalArgumentException("Rating must be between 1 and 10");
         }
         if (products.stream().anyMatch(p -> p.getId().equals(product.getId()))) {
@@ -56,7 +56,7 @@ public class Warehouse {
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null");
         }
-        if (rating < 1 || rating > 10){
+        if (rating < 1 || rating > 10) {
             throw new IllegalArgumentException("Rating must be between 1 and 10");
         }
 
@@ -125,12 +125,15 @@ public class Warehouse {
 
 
     public List<Product> getTopRatedProductsThisMonth() {
+        LocalDateTime now = LocalDateTime.now();
         int maxRating = products.stream()
-                .filter(p -> p.getCreatedDate().getMonth().equals(LocalDateTime.now().getMonth()))
+                .filter(p -> p.getCreatedDate().getMonth().equals(now.getMonth())
+                        && p.getCreatedDate().getYear() == now.getYear())
                 .map(Product::getRating).max(Integer::compareTo).orElse(0);
 
         return products.stream()
-                .filter(p -> p.getCreatedDate().getMonth().equals(LocalDateTime.now().getMonth()))
+                .filter(p -> p.getCreatedDate().getMonth().equals(now.getMonth())
+                        && p.getCreatedDate().getYear() == now.getYear())
                 .filter(p -> p.getRating() == maxRating)
                 .sorted((p1, p2) -> p2.getCreatedDate().compareTo(p1.getCreatedDate()))
                 .toList();

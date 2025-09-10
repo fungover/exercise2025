@@ -420,4 +420,22 @@ public class WarehouseTest {
         }
     }
 
+    @Test
+    @DisplayName("getTopRatedProductsThisMonth(): excludes product from the same month but a different year")
+    public void getTopRatedProductsThisMonthExcludesProductFromDifferentYear() {
+        Warehouse warehouse = new Warehouse();
+        Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 2024, 1, 1, 13, 59, 59);
+        warehouse.addProduct(testProduct1);
+
+        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
+            LocalDateTime date1 = LocalDateTime.of(2025, 1, 1, 13, 00, 00, 0);
+            mockedStatic.when(LocalDateTime::now)
+                    .thenReturn(date1);
+
+            List<Product> expectedProducts = warehouse.getTopRatedProductsThisMonth();
+
+            assertThat(expectedProducts).isEmpty();
+        }
+    }
+
 }

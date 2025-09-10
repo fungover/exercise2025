@@ -39,8 +39,15 @@ public class Tile {
         if(this.tileType == TileType.WALL){
             return "#";
         }
-        else{
+        else if(this.tileType == TileType.FLOOR){
             return ".";
         }
+        else if(this.tileType == TileType.ROOM) {
+            return "R";
+        }
+        else{
+            return "D";
+        }
+
     }
 }

@@ -56,6 +56,12 @@ public class Player {
         return inventory;
     }
 
+    public boolean hasWeapon() {
+        for (Item item : inventory) {
+            if (item.getType().equals("weapon")) return true;
+        }
+        return false;
+    }
 
     public void usePotion() {
         for (Item item : inventory) {

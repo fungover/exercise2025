@@ -8,6 +8,7 @@ import org.example.entities.Player;
 import org.example.entities.items.Potion;
 import org.example.entities.items.Weapon;
 import org.example.map.Dungeon;
+import org.example.service.Combat;
 import org.example.service.MovementLogic;
 import org.example.map.Tile;
 import org.example.utils.Spawner;
@@ -56,9 +57,13 @@ private MovementLogic movementLogic;
 
     player = new Player(name);
     dungeon = new Dungeon(5, 5);
+    Combat combat = new Combat();
     Random random = new Random();
     movementLogic = new MovementLogic();
     Spawner.spawnAll(dungeon);
+
+    int previousRow = player.getRow();
+    int previousCol = player.getCol();
 
     System.out.println("Well Hello, " + player.getName() + ". Step inside and see what happens...");
     System.out.println("Your health is " + player.getHealth());
@@ -67,32 +72,42 @@ private MovementLogic movementLogic;
 
 
         while (true) {
+
             System.out.print("> ");
             String playerInput = scanner.nextLine();
+            Tile currentTile = dungeon.getTile(player.getRow(), player.getCol());
 
             switch (playerInput) {
                 case "move up":
+                    previousRow = player.getRow();
+                    previousCol = player.getCol();
                     movementLogic.movePlayer(player, "up", dungeon);
                     //  Flytta spelaren upp (north) om nästa tile är walkable
                     break;
 
                     case "move down":
+                        previousRow = player.getRow();
+                        previousCol = player.getCol();
                         movementLogic.movePlayer(player, "down", dungeon);
                     //  Flytta spelaren ner (south) om nästa tile är walkable
                     break;
 
                 case "move left":
+                    previousRow = player.getRow();
+                    previousCol = player.getCol();
                     movementLogic.movePlayer(player, "left", dungeon);
                     //  Flytta spelaren vänster (west) om nästa tile är walkable
                     break;
 
                 case "move right":
+                    previousRow = player.getRow();
+                    previousCol = player.getCol();
                     movementLogic.movePlayer(player, "right", dungeon);
                     //  Flytta spelaren höger (east) om nästa tile är walkable
                     break;
 
                 case "look":
-                    Tile currentTile = dungeon.getTile(player.getRow(), player.getCol());
+                    currentTile = dungeon.getTile(player.getRow(), player.getCol());
                     System.out.println("You are standing on a: " + currentTile.getTileType() + " tile");
                     if (currentTile.getEnemy() != null) {
                         System.out.println("There is a " + currentTile.getEnemy().getType() + " here!");
@@ -112,12 +127,28 @@ private MovementLogic movementLogic;
                     break;
 
                 case "attack":
-                    //  Hantera attack om det finns en fiende på tile
+                    Enemy enemy = currentTile.getEnemy();
+                    if (enemy != null) {
+                        if (player.hasWeapon()) {  // Du behöver en metod i Player: hasWeapon()
+                            combat.fight(player, enemy);
+                            if (!enemy.isAlive()) {
+                                currentTile.setEnemy(null); // Ta bort fienden när den dör
+                            }
+                        } else {
+                            System.out.println("You have no weapon! Go and find one first.");
+                        }
+                    } else {
+                        System.out.println("There is no enemy here to attack!");
+                    }
                     break;
 
                 case "use potion":
                     player.usePotion();
                     //  Använd en potion från inventory
+                    break;
+                case "move back":
+                    player.moveTo(previousRow, previousCol);
+                    System.out.println("You moved back to the previous tile.");
                     break;
 
                 case "quit":
@@ -128,6 +159,20 @@ private MovementLogic movementLogic;
                     System.out.println("Nothing happens... maybe try another move?");
 
             }
+            currentTile = dungeon.getTile(player.getRow(), player.getCol());
+
+            if (currentTile.getItem() != null) {
+                Item item = currentTile.getItem();
+                player.addItem(item);
+                currentTile.setItem(null);
+                System.out.println("You picked up a " + item.getName() + "!");
+            }
+
+            if (currentTile.getEnemy() != null) {
+                System.out.println("There is a " + currentTile.getEnemy().getType() + " here!");
+                System.out.println("Type 'attack' to fight or 'move back' to retreat.");
+            }
+
         }
 
 //För OOP = låta Player eller en MovementService hantera förflyttning - inte i Game

@@ -36,19 +36,6 @@ public class MovementLogic {
             Tile newTile = dungeon.getTile(newRow, newCol);
             System.out.println("You moved to a new tile.");
 
-            if (newTile.getEnemy() != null) {
-                System.out.println(" There is a  " + newTile.getEnemy().getType() + " here!");
-            } else {
-                System.out.println();
-            }
-
-            if (newTile.getItem() != null) {
-                Item item = newTile.getItem();
-                player.addItem(item);
-                newTile.setItem(null);
-                System.out.println("You picked up a " + item.getName() + "!");
-            }
-
         } else {
             System.out.println("Can't move there!");
         }

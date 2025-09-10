@@ -66,4 +66,9 @@ public class Warehouse {
   public List<Product> getProductsCreatedAfter(LocalDate date) {
     return products.stream().filter(product -> product.getCreatedDate().isAfter(date)).collect(Collectors.toList());
   }
+
+
+  public List<Product> getModifiedProduct() {
+    return List.of();
+  }
 }

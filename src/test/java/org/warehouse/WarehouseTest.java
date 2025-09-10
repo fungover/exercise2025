@@ -45,7 +45,7 @@ public class WarehouseTest {
 
   Product newProduct = new Product(
           "5", "NewFilm", Category.THRILLER, 8,
-          LocalDate.of(2025, 9, 10), LocalDate.of(2025, 9, 10)
+          LocalDate.of(2025, 9, 10), LocalDate.of(2025, 9, 11)
   );
 
   @Test
@@ -122,5 +122,18 @@ public class WarehouseTest {
 
     assertThat(createdAfter).hasSize(1);
     assertThat(createdAfter.getFirst().getCreatedDate()).isEqualTo(LocalDate.of(2025, 9, 10));
+  }
+
+  @Test
+  public void canGetProductsWithModifiedDates() {
+    warehouse.addProduct(newProduct);
+    warehouse.addProduct(oldProduct);
+    warehouse.addProduct(product2);
+    warehouse.addProduct(product3);
+
+    var modifiedProduct = warehouse.getModifiedProduct();
+
+    assertThat(modifiedProduct).hasSize(2);
+
   }
 }

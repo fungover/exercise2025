@@ -6,8 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -248,9 +248,10 @@ class WarehouseTest {
         long amountOfProductsInFood = warehouse.countProductsInCategory(
           Category.FOOD);
 
-        System.out.println(amountOfProductsInFood);
 
         assertEquals(2, amountOfProductsInFood);
+        assertEquals(2, warehouse.countProductsInCategory(Category.ELECTRONICS));
+        assertEquals(1, warehouse.countProductsInCategory(Category.GAMES));
 
     }
 
@@ -264,6 +265,82 @@ class WarehouseTest {
         assertThrows(IllegalArgumentException.class,
           () -> warehouse.countProductsInCategory(Category.valueOf("Toys")));
 
+    }
+
+    @Test void getProductInitialsMap() {
+        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
+        Product LargePc = new Product("LargePC", Category.ELECTRONICS, 4);
+        Product hotdog = new Product("HotDog", Category.FOOD, 4);
+        Product angryFish = new Product("AngryFish", Category.FOOD, 6);
+        Product sillyBirds = new Product("SillyBirds", Category.GAMES, 9);
+        warehouse.addProduct(lamp);
+        warehouse.addProduct(LargePc);
+        warehouse.addProduct(hotdog);
+        warehouse.addProduct(angryFish);
+        warehouse.addProduct(sillyBirds);
+
+        Map<Character, Integer> FirstLetterAndCountOfItem =
+          warehouse.getProductInitialsMap();
+        assertEquals(4, FirstLetterAndCountOfItem.size());
+
+    }
+
+    @Test void getProductInitialsMap_invalid_nonLetterInitials() {
+        Product emptyNameProduct = new Product("1Lamp", Category.ELECTRONICS, 4);
+        warehouse.addProduct(emptyNameProduct);
+        Map<Character, Integer> initialsMap = warehouse.getProductInitialsMap();
+        System.out.println(initialsMap);
+        assertTrue(initialsMap.containsKey('1'));
+    }
+
+    @Test void getTopRatedProductsThisMonth_valid_CheckCorrectOrder() {
+        LocalDate today = LocalDate.now();
+
+
+        Product lamp = new Product("lamp", Category.ELECTRONICS, 10,
+          today.minusMonths(1));
+        Product LargePc = new Product("LargePC", Category.ELECTRONICS, 8);
+        Product hotdog = new Product("HotDog", Category.FOOD, 10,
+          today.plusMonths(1));
+        //this should be the last one cuz we  create that 3 days before everyone else
+        Product angryFish = new Product("AngryFish", Category.FOOD, 10,
+          today.minusDays(3));
+        //this should be the first one cuz we create it 4 days in the future
+        Product sillyBirds = new Product("SillyBirds", Category.GAMES, 10,
+          today.plusDays(4));
+        Product sadBirds = new Product("SadBirds", Category.GAMES, 10, today);
+        Product heavyBirds = new Product("HeavyBirds", Category.GAMES, 10, today);
+        warehouse.addProduct(lamp);
+        warehouse.addProduct(LargePc);
+        warehouse.addProduct(hotdog);
+        warehouse.addProduct(angryFish);
+        warehouse.addProduct(sillyBirds);
+        warehouse.addProduct(sadBirds);
+        warehouse.addProduct(heavyBirds);
+
+        List<Product> result = warehouse.getTopRatedProductsThisMonth();
+
+        assertEquals(4, result.size());
+        assertEquals("SillyBirds", result.get(0)
+                                         .name());
+        assertEquals("AngryFish", result.get(3)
+                                        .name());
+    }
+
+    @Test void getTopRatedProductsThisMonth_invalid_nonMatching() {
+        LocalDate lastMonth = LocalDate.now()
+                                       .minusMonths(1);
+
+        Product lamp = new Product("lamp", Category.ELECTRONICS, 10, lastMonth);
+        Product LargePc = new Product("LargePC", Category.ELECTRONICS, 8, lastMonth);
+        Product hotdog = new Product("HotDog", Category.FOOD, 10, lastMonth);
+        warehouse.addProduct(lamp);
+        warehouse.addProduct(LargePc);
+        warehouse.addProduct(hotdog);
+
+        List<Product> result = warehouse.getTopRatedProductsThisMonth();
+
+        assertTrue(result.isEmpty());
     }
 
 }

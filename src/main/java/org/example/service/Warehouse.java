@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -102,5 +103,38 @@ public class Warehouse {
         return inventory.stream()
                         .filter(p -> p.category() == category)
                         .count();
+    }
+
+    public Map<Character, Integer> getProductInitialsMap() {
+        return inventory.stream()
+                        //for each p get first char, make char toUpperCase to
+                        // avoid H and h to be different
+                        .map(p -> Character.toUpperCase(p.name()
+                                                         .charAt(0)))
+                        //group identical chars together,count how many times each
+                        // appears
+                        .collect(
+                          Collectors.groupingBy(c -> c, Collectors.counting()))
+                        //convert map char,long -> map.Entry char,long
+                        .entrySet()
+                        .stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey,
+                          i -> i.getValue()
+                                .intValue()));
+    }
+
+    public List<Product> getTopRatedProductsThisMonth() {
+        LocalDate currentDate = LocalDate.now();
+
+        return inventory.stream()
+                        .filter(p -> p.rating() == 10)
+                        .filter(p -> p.createdDate()
+                                      .getMonth() == currentDate.getMonth() &&
+                          p.createdDate()
+                           .getYear() == currentDate.getYear())
+                        .sorted(Comparator.comparing(Product::createdDate)
+                                          .reversed())
+                        .collect(Collectors.toUnmodifiableList());
+
     }
 }

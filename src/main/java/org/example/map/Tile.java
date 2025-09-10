@@ -17,6 +17,9 @@ public Tile(String tileType) {
     this.col = col;
 }
 
+    public boolean isWalkable() {
+        return true;
+    }
 
 public String getTileType() {
     return tileType;
@@ -38,9 +41,6 @@ public void setItem(Item item) {
     this.item = item;
 }
 
-public boolean isWalkable() {
-    return true;
-    }
 
     public int getRow() {
         return row;

@@ -10,6 +10,7 @@ import org.example.entities.items.Weapon;
 import org.example.map.Dungeon;
 import org.example.service.MovementLogic;
 import org.example.map.Tile;
+import org.example.utils.Spawner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,60 +25,45 @@ private Player player;
 private Dungeon dungeon;
 private MovementLogic movementLogic;
 
+    public void printDungeonDebug() {
+        System.out.println("=== Dungeon Debug Map ===");
+        for (int row = 0; row < dungeon.getRows(); row++) {
+            for (int col = 0; col < dungeon.getCols(); col++) {
+                Tile tile = dungeon.getTile(row, col);
+
+                if (player.getRow() == row && player.getCol() == col) {
+                    System.out.print("P "); // Player
+                } else if (tile.getEnemy() != null) {
+                    System.out.print("E "); // Enemy
+                } else if (tile.getItem() != null) {
+                    System.out.print("I "); // Item
+                } else {
+                    System.out.print(". "); // Tom tile
+                }
+            }
+            System.out.println();
+        }
+        System.out.println("=========================");
+    }
+
 
     public void startGame() {
-    System.out.println("Welcome to the Dungeon.... I have been waiting for an adventurer..");
+
+
+        System.out.println("Welcome to the Dungeon.... I have been waiting for an adventurer..");
     System.out.print("Please, tell me your name ");
     String name = scanner.nextLine();
 
     player = new Player(name);
     dungeon = new Dungeon(5, 5);
     Random random = new Random();
-
-    List<Enemy> enemies = List.of(
-            new Troll(0,0),
-            new Orc(0,0)
-    );
-
-    List<Tile> emptyTiles =
-            IntStream.range(0, dungeon.getRows())
-                    .boxed()
-                    .flatMap(row -> IntStream.range(0,dungeon.getCols())
-                            .mapToObj(col ->dungeon.getTile(row,col)))
-                    .filter(Tile::isWalkable)
-                    .collect(Collectors.toCollection(ArrayList::new));
-
-    for (Enemy enemy: enemies) {
-        Tile tile = emptyTiles.remove(random.nextInt(emptyTiles.size()));
-        tile.setEnemy(enemy);
-        enemy.moveTo(tile.getRow(), tile.getCol());
-    }
-
-        movementLogic = new MovementLogic();
-
-        List<Item> items = List.of(
-                new Potion("Small Potion", 20),
-                new Potion("Large Potion", 50),
-                new Weapon("Wooden Sword", 10),
-                new Weapon("Fire Sword", 20)
-        );
-
-        List<Tile> emptyTilesForItems =
-                IntStream.range(0, dungeon.getRows())
-                        .boxed()
-                        .flatMap(row -> IntStream.range(0, dungeon.getCols())
-                                .mapToObj(col -> dungeon.getTile(row, col)))
-                        .filter(Tile::isWalkable)
-                        .collect(Collectors.toCollection(ArrayList::new));
-
-        for (Item item : items) {
-            Tile tile = emptyTilesForItems.remove(random.nextInt(emptyTilesForItems.size()));
-            tile.setItem(item);
-        }
+    movementLogic = new MovementLogic();
+    Spawner.spawnAll(dungeon);
 
     System.out.println("Well Hello, " + player.getName() + ". Step inside and see what happens...");
     System.out.println("Your health is " + player.getHealth());
     System.out.println("Lets go!");
+        printDungeonDebug();
 
 
         while (true) {

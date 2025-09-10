@@ -247,6 +247,7 @@ public class Game {
             if (p.equals(playerPos)) continue;
             if (!isReachable(playerPos, p)) continue;
             if (!hasOpenNeighborPos(p)) continue;
+            if (!canEnter(p)) continue;
             enemyPos = p;
             return;
         }
@@ -256,12 +257,11 @@ public class Game {
         int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
         for (int[] d : dirs) {
             Position cand = playerPos.add(d[0], d[1]);
-            if (dungeon.isWalkable(cand)) {
-                enemyPos = cand;
-                return;
+            if (canEnter(cand)) { enemyPos = cand; return; }
+            {
+                enemyPos = playerPos;
             }
         }
-        enemyPos = playerPos;
     }
 
     private boolean hasOpenNeighborPos(Position p) {
@@ -272,6 +272,15 @@ public class Game {
         return false;
     }
 
+    private boolean isOccupied(Position p) {
+        if (p.equals(playerPos)) return true;
+        return enemy != null && p.equals(enemyPos);
+    }
+
+    private boolean canEnter(Position p) {
+        if (p.equals(playerPos)) return true;
+        return dungeon.isWalkable(p) && !isOccupied(p);
+    }
 
     private boolean isReachable(Position start, Position goal) {
         java.util.ArrayDeque<Position> q = new java.util.ArrayDeque<>();

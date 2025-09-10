@@ -6,9 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
 
@@ -30,7 +30,17 @@ public class WarehouseTest {
     @Test
     void shouldAddProduct() {
         warehouse.addProduct(product);
-
         assertDoesNotThrow(() -> warehouse.addProduct(product));
+    }
+
+    @Test
+    void shouldStoreAddedProduct() {
+        Product product = new Product("1", "Test product", Category.ELECTRONICS, 8, LocalDate.now());
+
+        warehouse.addProduct(product);
+
+        List<Product> products = warehouse.getAllProducts();
+        assertEquals(1, products.size());
+        assertEquals(product, products.getFirst());
     }
 }

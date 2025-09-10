@@ -47,7 +47,7 @@ public class WarehouseTest {
 
     warehouse.addProduct(product);
 
-    warehouse.updateProduct("2", "Film2", Category.DRAMA, 9);
+    warehouse.updateProduct("1", "Film2", Category.DRAMA, 9);
     Product updated = warehouse.getAllProducts().getFirst();
 
     assertThat(updated.getName()).isEqualTo("Film2");

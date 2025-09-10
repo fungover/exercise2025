@@ -3,6 +3,7 @@ package org.warehouse;
 import org.warehouse.entities.Category;
 import org.warehouse.entities.Product;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,20 @@ public class Warehouse {
   }
 
   public void updateProduct(String id, String name, Category category, int rating) {
-    
+    for (int i = 0; i < products.size(); i++) {
+      Product current = products.get(i);
+      if (current.getId().equals(id)) {
+        Product updated = new Product(
+                current.getId(),
+                name,
+                category,
+                rating,
+                current.getCreatedDate(),
+                LocalDate.now()
+        );
+        products.set(i, updated);
+        return;
+      }
+    }
   }
 }

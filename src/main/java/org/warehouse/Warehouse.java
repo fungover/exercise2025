@@ -44,4 +44,13 @@ public class Warehouse {
       }
     }
   }
+
+  public Product getProductById(String id) {
+    for (Product product : products) {
+      if (product.getId().equals(id)) {
+        return product;
+      }
+    }
+    throw new IllegalArgumentException("Product with id " + id + " not found");
+  }
 }

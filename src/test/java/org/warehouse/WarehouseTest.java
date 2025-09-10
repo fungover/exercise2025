@@ -60,4 +60,16 @@ public class WarehouseTest {
   public void canGetAllProducts() {
     List<Product> products = warehouse.getAllProducts();
   }
+
+  @Test
+  public void canGetProductById() {
+    warehouse.addProduct(product);
+    var product  = warehouse.getProductById("1");
+
+    assertThat(product).isNotNull();
+    assertThat(product.getId()).isEqualTo("1");
+    assertThat(product.getName()).isEqualTo("Film");
+    assertThat(product.getCategory()).isEqualTo(Category.THRILLER);
+    assertThat(product.getCreatedDate()).isEqualTo(LocalDate.now());
+  }
 }

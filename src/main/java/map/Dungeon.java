@@ -1,6 +1,8 @@
 package map;
 
 
+import entities.Player;
+
 public class Dungeon {
 
     private final int width, height;
@@ -30,10 +32,10 @@ public class Dungeon {
         }
 
         //Random placed walls
-        for(int x = 2; x < 7; x++){
+        for (int x = 2; x < 7; x++) {
             map[3][x] = new Tile(TileType.WALL);
         }
-        for(int x = 5; x < 9; x++){
+        for (int x = 5; x < 9; x++) {
             map[6][x] = new Tile(TileType.WALL);
         }
         map[7][3] = new Tile(TileType.WALL);
@@ -45,14 +47,19 @@ public class Dungeon {
         map[7][4] = new Tile(TileType.ROOM);
         map[2][1] = new Tile(TileType.ROOM);
 
-        printDungeon();
+        printDungeon(new Player());
     }
 
     //If you want to print the map
-    private void printDungeon() {
+    private void printDungeon(Player player) {
         for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++)
-                System.out.print(map[y][x] + "  ");
+            for (int x = 0; x < width; x++) {
+                if (player.getX() == x && player.getY() == y) {
+                    System.out.print(player + "  ");
+                } else {
+                    System.out.print(map[y][x] + "  ");
+                }
+            }
             System.out.println();
         }
     }

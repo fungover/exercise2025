@@ -6,6 +6,8 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public final class Warehouse {
     private final Map<String, Product> store = new HashMap<>();
@@ -86,10 +88,17 @@ public final class Warehouse {
                 .count();
     }
 
+    public Map<Character, Integer> getProductInitialsMap() {
+        Map<Character, Integer> counts = store.values().stream()
+                .map(product -> Character.toUpperCase(product.name().charAt(0)))
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.collectingAndThen(Collectors.counting(), Long::intValue)
+                ));
+        return Map.copyOf(counts);
+    }
+
     /*
-    getProductInitialsMap(): Return a Map<Character, Integer> of first letters in product names and their counts
-
     getTopRatedProductsThisMonth(): Products with max rating, created this month, sorted by newest first
-
- */
+*/
 }

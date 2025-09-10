@@ -296,4 +296,28 @@ public class WarehouseTest {
                 () -> warehouse.countProductsInCategory(null));
         assertEquals("category", ex.getMessage());
     }
+
+    /** getProductInitialsMap method */
+    @Test
+    void getProductInitialsMap_success_countsUppercased_andIsUnmodifiable() {
+        LocalDateTime t = LocalDateTime.of(2025, 9, 1, 12, 0);
+
+        Product a1 = Product.createNew("id1", "alpha",  Category.BOOKS, 5, t);
+        Product a2 = Product.createNew("id2", "Apple",  Category.TOYS,  6, t.plusMinutes(1));
+        Product b1 = Product.createNew("id3", "banana", Category.FOOD,  7, t.plusMinutes(2));
+
+        warehouse.addProduct(a1);
+        warehouse.addProduct(a2);
+        warehouse.addProduct(b1);
+
+        var initials = warehouse.getProductInitialsMap();
+
+        assertEquals(2, initials.get('A'));
+        assertEquals(1, initials.get('B'));
+    }
+
+    @Test
+    void getProductInitialsMap_empty_returnsEmptyMap() {
+        assertTrue(warehouse.getProductInitialsMap().isEmpty());
+    }
 }

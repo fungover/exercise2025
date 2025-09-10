@@ -42,7 +42,7 @@ public class Room {
                     System.out.println("The chest is empty");
                 }
                 loot.add(new Item("coins","currency",1,RandomGenerator.randomInt(0,10)));
-                loot.add(new Item("bread","consumable",1,1));
+                loot.add(new Item("bread","consumable",1,1,true,5));
 
                 break;
             case "boss":

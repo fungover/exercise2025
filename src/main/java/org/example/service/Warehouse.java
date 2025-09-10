@@ -31,6 +31,18 @@ public class Warehouse {
         if (product == null || product.getName().isBlank()) {
             throw new IllegalArgumentException("Product name cannot be null or blank");
         }
+        if (product.getCategory() == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+        }
+        if (product.getRating() < 1 || product.getRating() > 10){
+            throw new IllegalArgumentException("Rating must be between 1 and 10");
+        }
+        if (products.stream().anyMatch(p -> p.getId().equals(product.getId()))) {
+            throw new IllegalArgumentException("Product with id " + product.getId() + " already exists");
+        }
+        if (products.stream().anyMatch(p -> p.getName().equalsIgnoreCase(product.getName()))) {
+            throw new IllegalArgumentException("Product with name " + product.getName() + " already exists");
+        }
         products.add(product);
     }
 

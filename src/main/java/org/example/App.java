@@ -33,7 +33,6 @@ public class App {
                         Printers.printPricesForDay(day, zone, json);
                     }
                 }
-
                 case "2" -> {
                     System.out.println("==========================================================");
                     System.out.println(" Show average price for a day ");

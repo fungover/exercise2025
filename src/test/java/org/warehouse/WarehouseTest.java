@@ -55,4 +55,9 @@ public class WarehouseTest {
     assertThat(product.getCreatedDate()).isEqualTo(updated.getCreatedDate());
     assertThat(product.getModifiedDate()).isEqualTo(LocalDate.now());
   }
+
+  @Test
+  public void canGetAllProducts() {
+    List<Product> products = warehouse.getAllProducts();
+  }
 }

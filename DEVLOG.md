@@ -26,6 +26,12 @@ a straight path, since I am learning by doing all the time.
 [x] create entities 
 
 [] create a map, I need a UI loop
+_*I need to understand how to move from Primitive chars in a 2D array to Tile Objects.
+The thing with Tile objects is that every object represents a tile with different properties.
+Chars is basically a chase after # and . all over the map.
+
+!*_
+
 
 [x] create weapons
 

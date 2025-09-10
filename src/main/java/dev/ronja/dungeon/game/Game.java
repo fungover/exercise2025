@@ -8,15 +8,6 @@ import java.util.Scanner;
 
 /**
  * The {@code Game} class represents the main game loop for my dungeon crawler
- * <p>It manages:
- * <ul>
- *     <li>reading user input from console</li>
- *     <li>creating and keeping track of the player</li>
- *     <li>starting and running the game logic</li>
- * </ul>
- * at the moment, the game only welcomes the player and shows their health, but it will later be extended
- * with commands, combats and exploration.
- * </p>
  **/
 public class Game {
     private final Scanner in = new Scanner(System.in);
@@ -50,7 +41,14 @@ public class Game {
 
         while (player.isAlive()) {
             System.out.print("> ");
-            String line = in.nextLine().trim().toLowerCase();
+            String line;
+            try {
+                line = in.nextLine();
+            } catch (java.util.NoSuchElementException e) {
+                System.out.println("Goodbye!");
+                break;
+            }
+            line = line.trim().toLowerCase();
             if (line.isEmpty()) continue;
 
             String[] parts = line.split("\\s+");
@@ -159,7 +157,7 @@ public class Game {
 
         // Players hit on the enemy
         enemy.takeDamage(strike);
-        System.out.println(player.getName() + " strikes with " + weaponName + " for " + strike + " damage.");
+        System.out.println(player.getName() + "strikes with " + weaponName + " for " + strike + " damage.");
 
         if (!enemy.isAlive()) {
             System.out.println("You defeated the " + enemy.getName() + " use 'next or 'spawn to continue ");

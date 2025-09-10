@@ -24,9 +24,15 @@ import java.util.List;
 public class ElprisCLI {
     public void start() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Välj priszon (SE1, SE2, SE3, SE4): ");
-        String zon = scanner.nextLine().trim().toUpperCase();
-
+       /* System.out.print("Välj priszon (SE1, SE2, SE3, SE4): ");
+        String zon = scanner.nextLine().trim().toUpperCase();*/
+        String zon;
+        while (true) {
+            System.out.print(("Välj priszon (SE1, SE2, SE3, SE4): "));
+            zon = scanner.nextLine().trim().toUpperCase();
+            if (zon.matches("SE[1-4]")) break;
+            System.out.println("Ogiltig zon. Försök igen.");
+        }
         ElprisFetch fetcher = new ElprisFetch();
 
         LocalDate today = LocalDate.now();

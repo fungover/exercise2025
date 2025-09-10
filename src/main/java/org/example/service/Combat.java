@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.entities.Player;
 import org.example.entities.enemies.Enemy;
 import org.example.entities.items.Item;
+import org.example.entities.items.Weapon;
 
 import java.util.List;
 import java.util.Scanner;
@@ -13,24 +14,22 @@ public class Combat {
     private Scanner scanner = new Scanner(System.in);
 
     public void fight(Player player, Enemy enemy) {
-        // Hämta alla vapen i inventory
+
         List<Item> weapons = player.getInventory().stream()
                 .filter(item -> item.getType().equals("weapon"))
                 .collect(Collectors.toList());
 
         if (weapons.isEmpty()) {
             System.out.println("You have no weapon! Go and find one first.");
-            return; // stoppar fighten
+            return;
         }
 
-        // Visa alla vapen
         System.out.println("You have the following weapons:");
         for (int i = 0; i < weapons.size(); i++) {
             Item w = weapons.get(i);
             System.out.println((i + 1) + ") " + w.getName() + " (" + w.getEffect() + " dmg)");
         }
 
-        // Låt spelaren välja vapen
         int choice = -1;
         while (choice < 1 || choice > weapons.size()) {
             System.out.print("Which weapon do you want to use? ");
@@ -44,12 +43,11 @@ public class Combat {
 
         Item weapon = weapons.get(choice - 1);
 
-        // Spelarens attack
-        int playerDamage = weapon.getEffect();
+        Weapon weaponItem = (Weapon) weapon;
+        int playerDamage = weaponItem.getDamage();
         enemy.takeDamage(playerDamage);
         System.out.println("You attack the " + enemy.getType() + " with " + weapon.getName() + " for " + playerDamage + " damage.");
 
-        // Fiendens counterattack om den fortfarande lever
         if (enemy.isAlive()) {
             int enemyDamage = enemy.getDamage();
             player.setHealth(player.getHealth() - enemyDamage);

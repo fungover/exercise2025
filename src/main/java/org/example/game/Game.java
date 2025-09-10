@@ -1,24 +1,17 @@
 package org.example.game;
 
 import org.example.entities.enemies.Enemy;
-import org.example.entities.enemies.Orc;
-import org.example.entities.enemies.Troll;
 import org.example.entities.items.Item;
 import org.example.entities.Player;
-import org.example.entities.items.Potion;
-import org.example.entities.items.Weapon;
 import org.example.map.Dungeon;
 import org.example.service.Combat;
 import org.example.service.MovementLogic;
 import org.example.map.Tile;
 import org.example.utils.Spawner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
 
 public class Game {
 private Scanner scanner = new Scanner(System.in);
@@ -33,18 +26,30 @@ private MovementLogic movementLogic;
                 Tile tile = dungeon.getTile(row, col);
 
                 if (player.getRow() == row && player.getCol() == col) {
-                    System.out.print("P "); // Player
+                    System.out.print("P ");
                 } else if (tile.getEnemy() != null) {
-                    System.out.print("E "); // Enemy
+                    System.out.print("E ");
                 } else if (tile.getItem() != null) {
-                    System.out.print("I "); // Item
+                    System.out.print("I ");
                 } else {
-                    System.out.print(". "); // Tom tile
+                    System.out.print(". ");
                 }
             }
             System.out.println();
         }
         System.out.println("=========================");
+    }
+
+    private boolean allEnemiesDefeated() {
+        for (int row = 0; row < dungeon.getRows(); row++) {
+            for (int col = 0; col < dungeon.getCols(); col++) {
+                Tile tile = dungeon.getTile(row, col);
+                if (tile.getEnemy() != null && tile.getEnemy().isAlive()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 
@@ -82,21 +87,18 @@ private MovementLogic movementLogic;
                     previousRow = player.getRow();
                     previousCol = player.getCol();
                     movementLogic.movePlayer(player, "up", dungeon);
-                    //  Flytta spelaren upp (north) om nästa tile är walkable
                     break;
 
                     case "move down":
                         previousRow = player.getRow();
                         previousCol = player.getCol();
                         movementLogic.movePlayer(player, "down", dungeon);
-                    //  Flytta spelaren ner (south) om nästa tile är walkable
                     break;
 
                 case "move left":
                     previousRow = player.getRow();
                     previousCol = player.getCol();
                     movementLogic.movePlayer(player, "left", dungeon);
-                    //  Flytta spelaren vänster (west) om nästa tile är walkable
                     break;
 
                 case "move right":
@@ -123,16 +125,16 @@ private MovementLogic movementLogic;
                             System.out.println("- " + item.getName());
                         }
                     }
-                    //  Visa spelarens inventory
+
                     break;
 
                 case "attack":
                     Enemy enemy = currentTile.getEnemy();
                     if (enemy != null) {
-                        if (player.hasWeapon()) {  // Du behöver en metod i Player: hasWeapon()
+                        if (player.hasWeapon()) {
                             combat.fight(player, enemy);
                             if (!enemy.isAlive()) {
-                                currentTile.setEnemy(null); // Ta bort fienden när den dör
+                                currentTile.setEnemy(null);
                             }
                         } else {
                             System.out.println("You have no weapon! Go and find one first.");
@@ -144,7 +146,6 @@ private MovementLogic movementLogic;
 
                 case "use potion":
                     player.usePotion();
-                    //  Använd en potion från inventory
                     break;
                 case "move back":
                     player.moveTo(previousRow, previousCol);
@@ -152,7 +153,6 @@ private MovementLogic movementLogic;
                     break;
 
                 case "quit":
-                    //  Avsluta
                     break;
 
                 default:
@@ -173,12 +173,11 @@ private MovementLogic movementLogic;
                 System.out.println("Type 'attack' to fight or 'move back' to retreat.");
             }
 
+            if (allEnemiesDefeated()) {
+                System.out.println("Congratulations! You defeated all enemies and won the game!");
+                break;
+            }
+
         }
-
-//För OOP = låta Player eller en MovementService hantera förflyttning - inte i Game
-
     }
-
-
-
 }

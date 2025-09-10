@@ -1,8 +1,6 @@
 package org.example.service;
 
 import org.example.entities.Player;
-import org.example.entities.enemies.Enemy;
-import org.example.entities.items.Item;
 import org.example.map.Dungeon;
 import org.example.map.Tile;
 

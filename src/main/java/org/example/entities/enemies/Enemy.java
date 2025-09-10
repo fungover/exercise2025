@@ -1,6 +1,5 @@
 package org.example.entities.enemies;
 
-//fiendens typ, hälsa, damage, position (använd arv för olika fiendetyper).
 public class Enemy {
     String type;
     int health;
@@ -26,14 +25,6 @@ public class Enemy {
 
     public int getDamage() {
         return damage;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public int getCol() {
-        return col;
     }
 
     public void takeDamage(int amount) {

@@ -10,4 +10,3 @@ public class Potion extends Item {
         return getEffect();
     }
 }
-// potion är en subklass av Item

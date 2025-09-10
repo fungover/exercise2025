@@ -1,7 +1,5 @@
 package org.example.entities.items;
 
-
-//namn, typ (vapen, potion osv), effekt.
 public class Item {
     private String name;
     private String type; // t.ex. "potion" eller "weapon"
@@ -13,7 +11,6 @@ public class Item {
         this.effect = effect;
     }
 
-    // Getters
     public String getName() {
         return name;
     }

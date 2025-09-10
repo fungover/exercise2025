@@ -1,12 +1,9 @@
 package org.example.entities;
 
-
 import org.example.entities.items.Item;
-
 import java.util.ArrayList;
 import java.util.List;
 
-// hanterar spelarens namn, hälsa, position, inventory.
 public class Player {
     private String name;
     private int health;
@@ -25,28 +22,28 @@ public class Player {
 
     public String getName() {
         return name;
-    } // returns players name
+    }
 
     public int getHealth() {
         return health;
-    } // returns players health
+    }
 
     public void setHealth(int health) {
         this.health = health;
-    }  // updating players health
+    }
 
     public int getRow() {
         return row;
-    } // return player row position
+    }
 
     public int getCol() {
         return col;
-    } //returns player column position
+    }
 
     public void moveTo(int newRow, int newCol) {
         this.row = newRow;
         this.col = newCol;
-    } // updating positions
+    }
 
     public void addItem(Item item) {
         inventory.add(item);

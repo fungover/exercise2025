@@ -19,23 +19,20 @@ public class Spawner {
 
     private static final Random random = new Random();
 
-
     public static void spawnAll(Dungeon dungeon) {
         spawnEnemies(dungeon);
         spawnItems(dungeon);
     }
 
     private static void spawnEnemies(Dungeon dungeon) {
-        // Skapa enemies
+
         List<Enemy> enemies = List.of(
                 new Troll(0, 0),
                 new Orc(0, 0)
         );
 
-        //alla walkable tiles
         List<Tile> emptyTiles = getWalkableTiles(dungeon);
 
-        // Placera fiender slumpmässigt
         for (Enemy enemy : enemies) {
             Tile tile = emptyTiles.remove(random.nextInt(emptyTiles.size()));
             tile.setEnemy(enemy);

@@ -16,15 +16,18 @@ I suddenly realized the huge benefits of interfaces!!*_
 
 [x] Know when to use javadoc-tool or just "///"
 
-[x] test what I have built to this point and ask myself if I will embrace a TDD approach from here ??? 
+[x] test what I have built to this point and ask myself if I will embrace a TDD approach from here ???
+_*I initially was inspired to methodically work my way through this game, but I am struggling to keep
+a straight path, since I am learning by doing all the time.
+!*_
 
 [x] add commands, to get the game moving. 
 
 [x] create entities 
 
-[] create a map
+[] create a map, I need a UI loop
 
-[x] create items
+[x] create weapons
 
 
 ### THE ASSIGNMENT / _ISSUE_

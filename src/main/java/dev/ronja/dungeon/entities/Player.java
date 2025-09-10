@@ -25,13 +25,14 @@ public class Player {
 
     /**
      * Constructs a new player with given name and default max HP
+     *
      * @param name the player`s chosen name
      **/
     public Player(String name) {
         this.name = name;
         this.maxHp = 100;
         this.hp = maxHp;
-        this.weapon = new ExplosiveBanana(); // default
+        this.weapon = null;
     }
 
     public void setWeapon(Weapon weapon) {
@@ -61,6 +62,7 @@ public class Player {
 
     /**
      * Sets the players HP directly, but restricted between 0 and maxHp
+     *
      * @param newHp the new HP value
      **/
     public void setHp(int newHp) {
@@ -71,19 +73,21 @@ public class Player {
 
     /**
      * Method: Applies damage to the player
+     *
      * @param amount how much HP to subtract (must be >=0 )
      *               if amount is larger than current HP, HP is set to 0
      **/
     public void takeDamage(int amount) {
         setHp(this.hp - amount); //Reusing setHp
         if (!isAlive()) {
-            System.out.println(name + " has fallen in battle ! ");
+            System.out.println(name + " has fallen in battle! ");
         }
         System.out.println(name + " Took " + amount + " in damage! HP: " + hp + " / " + maxHp);
     }
 
     /**
      * Method: Heals the player
+     *
      * @param amount how much HP to restore (must be >= 0)
      *               healing cannot raise HP above maxHp
      **/
@@ -95,7 +99,7 @@ public class Player {
     /// Returns a human-readable string
     @Override
     public String toString() {
-        return name + " HP: " + hp + " / " + maxHp + " / ";
+        return name + " HP: " + hp + " / " + maxHp;
     }
 }
 

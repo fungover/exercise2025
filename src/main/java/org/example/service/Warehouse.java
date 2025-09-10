@@ -58,6 +58,10 @@ public class Warehouse {
         if (existingProduct.isEmpty()) {
             throw new IllegalArgumentException("Product with id " + id + " not found");
         }
+
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product name cannot be empty");
+        }
         // Remove old product
         products.removeIf(product -> product.id().equals(id));
 

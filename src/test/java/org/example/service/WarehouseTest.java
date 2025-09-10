@@ -154,4 +154,13 @@ public class WarehouseTest {
         assertThrows(IllegalArgumentException.class, () ->
                 warehouse.updateProduct("999", "Name", Category.ELECTRONICS, 5));
     }
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingProductWithEmptyName() {
+        Product product = new Product("1", "Test product", Category.ELECTRONICS, 8, LocalDate.now());
+        warehouse.addProduct(product);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                warehouse.updateProduct("1", "", Category.ELECTRONICS, 5));
+    }
 }

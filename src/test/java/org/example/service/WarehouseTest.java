@@ -95,6 +95,15 @@ public class WarehouseTest {
     }
 
     @Test
+    void shouldReturnEmptyListWhenNoCategoryMatches() {
+        warehouse.addProduct(new Product("1", "Test product", Category.ELECTRONICS, 8, LocalDate.now()));
+
+        List<Product> result = warehouse.getProductsByCategorySorted(Category.SPORTS);
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
     void shouldGetProductsCreatedAfterGivenDate() {
         LocalDate cutoffDate = LocalDate.of(2025, 9, 8);
         Product oldProduct = new Product("1", "Test product", Category.ELECTRONICS, 3, LocalDate.of(2025, 9, 1));

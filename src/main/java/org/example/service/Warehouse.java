@@ -29,6 +29,16 @@ public class Warehouse {
     public void updateProduct(String id, String name, Category category,
                               int rating) {
 
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("name cannot be null/blank");
+        }
+        if (category == null) {
+            throw new IllegalArgumentException("category cannot be null");
+        }
+        if (rating < 0 || rating > 10) {
+            throw new IllegalArgumentException("rating should be between 0 and 10");
+        }
+
         //gets our product from id
         Product existing = getProductById(id);
 

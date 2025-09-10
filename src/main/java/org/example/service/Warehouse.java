@@ -118,6 +118,7 @@ public class Warehouse {
     public Map<Character, Integer> getProductInitialsMap() {
         return products.stream()
                 .map(Product::getName)
+                .filter(name -> !name.isEmpty())
                 .map(name -> name.charAt(0))
                 .collect(Collectors.toMap(name -> name, name -> 1, Integer::sum));
     }

@@ -69,6 +69,6 @@ public class Warehouse {
 
 
   public List<Product> getModifiedProduct() {
-    return List.of();
+    return products.stream().filter(product -> product.getCreatedDate().equals(product.getModifiedDate())).collect(Collectors.toList());
   }
 }

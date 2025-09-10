@@ -73,7 +73,8 @@ public class Printers {
         System.out.println("| 1 | Show electrical prices for a day");
         System.out.println("| 2 | Show average price for a day");
         System.out.println("| 3 | Show best charging hours for a day");
-        System.out.println("| 4 | Exit");
+        System.out.println("| 4 | Calculate total cost from consumption CSV");
+        System.out.println("| 5 | Exit");
         System.out.println("==========================================================");
         System.out.print("> ");
     }

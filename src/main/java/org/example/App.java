@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Map;
 import java.util.Scanner;
 
 public class App {
@@ -65,8 +66,31 @@ public class App {
                         }
                     }
                 }
-
                 case "4" -> {
+                    System.out.println("==========================================================");
+                    System.out.println(" Calculate cost from consumption CSV ");
+                    System.out.println("==========================================================");
+
+                    LocalDate day = askForDate(scanner);
+                    String zone = askForZone(scanner);
+
+                    String json = fetchJsonForDay(day, zone);
+                    if (json != null) {
+                        try {
+                            PriceEntry[] prices = parseEntries(json);
+
+                            System.out.print("Enter path to consumption CSV (e.g., consumption.csv): ");
+                            String path = scanner.nextLine().trim();
+
+                            Map<String, Double> consumption = ConsumptionCsvReader.loadConsumption(path);
+                            ConsumptionCalculator.calculateTotalCost(prices, consumption);
+
+                        } catch (Exception e) {
+                            System.out.println("Failed: " + e.getMessage());
+                        }
+                    }
+                }
+                case "5" -> {
                     System.out.println("You have exited the CLI!");
                     cliActive = false;
                 }
@@ -74,7 +98,7 @@ public class App {
                 default -> System.out.println("Invalid choice");
             }
         }
-        }
+    }
 
     private static LocalDate askForDate(Scanner scanner) {
         while (true) {

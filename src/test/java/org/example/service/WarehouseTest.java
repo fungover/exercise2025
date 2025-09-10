@@ -86,7 +86,14 @@ public class WarehouseTest {
         Product testProduct = createProductWithMockedDate("1", "Test Product", Category.GENERAL, 1, 2024, 1, 5, 18, 0, 0);
         warehouse.addProduct(testProduct);
 
-        assertThat(warehouse.getProductById("1").get().getCreatedDate()).isEqualTo(testProduct.getCreatedDate());
+        warehouse.updateProduct("1", "Updated Product", Category.GENERAL, 2);
+
+        Product updated = warehouse.getProductById("1").get();
+        assertThat(updated.getCreatedDate()).isEqualTo(testProduct.getCreatedDate());
+        assertThat(updated.getModifiedDate()).isAfter(updated.getCreatedDate());
+        assertThat(updated.getName()).isEqualTo("Updated Product");
+        assertThat(updated.getCategory()).isEqualTo(Category.GENERAL);
+        assertThat(updated.getRating()).isEqualTo(2);
     }
 
     @Test

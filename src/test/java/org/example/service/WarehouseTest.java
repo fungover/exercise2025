@@ -43,4 +43,18 @@ public class WarehouseTest {
         assertEquals(1, products.size());
         assertEquals(product, products.getFirst());
     }
+
+    @Test
+    void shouldNotAddProductWithEmptyName() {
+        Product productWithEmptyName = new Product("1", "", Category.ELECTRONICS, 8, LocalDate.now());
+
+        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(productWithEmptyName));
+    }
+
+    @Test
+    void shouldNotAddProductWithNullName() {
+        Product productWithNullName = new Product("1", null, Category.ELECTRONICS, 8, LocalDate.now());
+
+        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(productWithNullName));
+    }
 }

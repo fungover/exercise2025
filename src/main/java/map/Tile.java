@@ -33,4 +33,14 @@ public class Tile {
     public boolean hasItem() {
         return item != null;
     }
+
+    @Override
+    public String toString(){
+        if(this.tileType == TileType.WALL){
+            return "#";
+        }
+        else{
+            return ".";
+        }
+    }
 }

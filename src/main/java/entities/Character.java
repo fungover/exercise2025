@@ -3,14 +3,15 @@ package entities;
 public abstract class Character {
 
     private int health;
-    private int attack;
+    private final int damage;
 
     public Character(int health, int attack){
         this.health = health;
-        this.attack = attack;
+        this.damage = attack;
     }
 
     public int getHealth() { return health; }
-    public int getAttack() { return attack; }
+    public void setHealth(int health) { this.health = health; }
+    public int attack() { return damage; }
 
 }

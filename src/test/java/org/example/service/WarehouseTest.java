@@ -263,11 +263,37 @@ public class WarehouseTest {
         assertFalse(categories.contains(Category.ELECTRONICS));
     }
 
-    /** getCategoriesWithProducts method */
     @Test
     void getCategoriesWithProducts_emptyWarehouse_returnsEmptyList() {
         var categories = warehouse.getCategoriesWithProducts();
         assertTrue(categories.isEmpty());
     }
 
+    /** countProductsInCategory method */
+    @Test
+    void countProductsInCategory_success_returnsNumberOfProductsInACategory() {
+        LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
+
+        Product book1 = Product.createNew("id1", "Book 1", Category.BOOKS, 5, createdAt);
+        Product book2 = Product.createNew("id2", "Book 2", Category.BOOKS, 6, createdAt.plusMinutes(1));
+        Product toy1 = Product.createNew("id3", "Toy 1", Category.TOYS, 6, createdAt.plusMinutes(2));
+
+
+        warehouse.addProduct(book1);
+        warehouse.addProduct(book2);
+        warehouse.addProduct(toy1);
+
+        var booksTotal = warehouse.countProductsInCategory(Category.BOOKS);
+        var toysTotal = warehouse.countProductsInCategory(Category.TOYS);
+
+        assertEquals(2, booksTotal);
+        assertEquals(1, toysTotal);
+    }
+
+    @Test
+    void countProductsInCategory_nullCategory_throwsNullPointerException() {
+        NullPointerException ex = assertThrows(NullPointerException.class,
+                () -> warehouse.countProductsInCategory(null));
+        assertEquals("category", ex.getMessage());
+    }
 }

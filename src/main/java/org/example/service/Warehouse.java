@@ -79,10 +79,14 @@ public final class Warehouse {
                 .toList();
     }
 
+    public long countProductsInCategory(Category category) {
+        Objects.requireNonNull(category, "category");
+        return store.values().stream()
+                .filter(product -> product.category() == category)
+                .count();
+    }
 
-/*
-    countProductsInCategory(Category category): Return number of products in a category
-
+    /*
     getProductInitialsMap(): Return a Map<Character, Integer> of first letters in product names and their counts
 
     getTopRatedProductsThisMonth(): Products with max rating, created this month, sorted by newest first

@@ -66,7 +66,7 @@ public class Game {
 
                         System.out.println("You moved " + dir);
                         System.out.println("Press enter to continue...");
-                        new java.util.Scanner(System.in).nextLine();
+                        InputHandler.getInput("");
                         ClearConsole.clearConsole();
                     } else {
                         System.out.println("You run into a wall! You should try another way...");

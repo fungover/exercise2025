@@ -88,7 +88,7 @@ public class ElprisCLI {
         String answer = scanner.nextLine().trim().toLowerCase();
         if (answer.equals("j")) {
             System.out.print("Ange sökväg till CSV: ");
-            String path = scanner.nextLine().trim().toLowerCase();
+            String path = scanner.nextLine().trim();
 
             try {
                 List<Consumption> usage = ConsumptionCSVReader.readCSV(path);

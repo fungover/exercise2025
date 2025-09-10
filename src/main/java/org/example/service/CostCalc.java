@@ -16,13 +16,15 @@ public class CostCalc {
         for (Consumption consumption : usage) {
             for (Elpris elpris : prices) {
                 if (elpris.getTimeStart().getHour() == consumption.timestamp().getHour() &&
-                elpris.getTimeStart().toLocalDate().equals(consumption.timestamp().toLocalDate())) {
+                        elpris.getTimeStart().toLocalDate().equals(consumption.timestamp().toLocalDate())) {
                     total += elpris.getSEK() * consumption.kWh();
                     break;
 
+                }
             }
         }
-    }
+
+
         return total;
     }
 }

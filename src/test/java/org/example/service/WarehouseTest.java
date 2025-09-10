@@ -76,4 +76,23 @@ public class WarehouseTest {
 
         assertTrue(foundProduct.isEmpty());
     }
+
+    @Test
+    void shouldGetProductsByCategorySortedByName() {
+        Product electronics1 = new Product("1","Nokia 3310", Category.ELECTRONICS, 8, LocalDate.now());
+        Product electronics2 = new Product("2", "Apple iMac G3", Category.ELECTRONICS, 2, LocalDate.now());
+        Product sports = new Product("3", "Football - World Cup 1994", Category.SPORTS, 10, LocalDate.now());
+
+        warehouse.addProduct(electronics1);
+        warehouse.addProduct(electronics2);
+        warehouse.addProduct(sports);
+
+        List<Product> electronicsProducts = warehouse.getProductsByCategorySorted(Category.ELECTRONICS);
+
+        assertEquals(2, electronicsProducts.size());
+        assertEquals("Apple iMac G3", electronicsProducts.get(0).name());
+        assertEquals("Nokia 3310", electronicsProducts.get(1).name());
+        // Temporary debug
+        electronicsProducts.forEach(p -> System.out.println(p.name()));
+    }
 }

@@ -105,4 +105,29 @@ public class WarehouseTest {
         assertNotEquals(sortedList,
                 warehouse.getProductsByCategorySorted(Category.CLOTHES));
     }
+
+    @Test
+    public void testGetProductsCreatedAfterSpecifiedDate() {
+        warehouse.addProduct(new Product("53", "Raisins",
+                Category.PROVISIONS, 7, LocalDateTime.of(2025,
+                9, 10, 12, 0), null));
+
+        LocalDateTime beforeProduct = LocalDateTime.of(2025,
+                9, 10, 11, 59);
+
+        assertThat(warehouse.getProductsCreatedAfter(beforeProduct))
+                .isEqualTo(warehouse.getAllProducts());
+    }
+    @Test
+    public void testNoProductsCreatedAfterSpecifiedDate() {
+        warehouse.addProduct(new Product("53", "Raisins",
+                Category.PROVISIONS, 7, LocalDateTime.of(2025,
+                9, 10, 12, 0), null));
+
+        LocalDateTime afterProduct = LocalDateTime.of(2025,
+                9, 10, 12, 1);
+
+        assertThat(warehouse.getProductsCreatedAfter(afterProduct))
+                .isNotEqualTo(warehouse.getAllProducts());
+    }
 }

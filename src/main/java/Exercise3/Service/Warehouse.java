@@ -3,18 +3,30 @@ package Exercise3.Service;
 import Exercise3.Entities.Category;
 import Exercise3.Entities.Product;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface Warehouse {
 
     //Lägg till kontroll av uniq id
-    public void addProduct(Product product);
+    void addProduct(Product product);
 
-    public void updateProduct(String id, String name, Category category, int rating);
+    void updateProduct(String id, String name, Category category, int rating);
 
-    public List<Product> getAllProducts();
+    List<Product> getAllProducts();
 
-    public Product getProductById(String id);
+    Product getProductById(String id);
 
-    public List<Product> getProductsByCategorySorted(Category category);
+    List<Product> getProductsByCategorySorted(Category category);
+
+    List<Product> getProductsCreatedAfter(LocalDate after);
+
+    List<Product> getModifiedProducts();
+
+    List<Category> getCategoriesWithProducts();
+
+    Long countProductsInCategory(Category category);
+
+    Map<Character, Integer> getProductsInitialsMap();
 }

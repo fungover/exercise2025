@@ -27,7 +27,7 @@ public class WarehouseTest {
         warehouse.addProduct(product);
 
         assertEquals(1, warehouse.getAllProducts().size());
-        assertEquals("Car", warehouse.getAllProducts().getFirst().name());
+        assertEquals("Car", warehouse.getAllProducts().get(0).name());
     }
 
     @Test

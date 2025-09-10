@@ -2,6 +2,10 @@ package org.example.entities;
 
 import java.time.LocalDate;
 
+/**
+ * Immutable record representing a product in the warehouse.
+ * Validates id, name, category, rating, and dates.
+ */
 public record Product (
         String id,
         String name,

@@ -71,4 +71,21 @@ public final class Warehouse {
                 .filter(p -> !p.createdDate().equals(p.modifiedDate()))
                 .toList();
     }
+
+    public List<Category> getCategoriesWithProducts() {
+        return store.values().stream()
+                .map(Product::category)
+                .distinct()
+                .toList();
+    }
+
+
+/*
+    countProductsInCategory(Category category): Return number of products in a category
+
+    getProductInitialsMap(): Return a Map<Character, Integer> of first letters in product names and their counts
+
+    getTopRatedProductsThisMonth(): Products with max rating, created this month, sorted by newest first
+
+ */
 }

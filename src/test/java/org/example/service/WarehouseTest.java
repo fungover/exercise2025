@@ -6,9 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.*;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -245,4 +243,31 @@ public class WarehouseTest {
         var result = warehouse.getModifiedProducts();
         assertTrue(result.isEmpty());
     }
+
+    /** getCategoriesWithProducts method */
+    @Test
+    void getCategoriesWithProducts_success_returnsDistinctOnlyPresentCategories() {
+        LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
+
+        Product book1 = Product.createNew("id1", "Book 1", Category.BOOKS, 5, createdAt);
+        Product book2 = Product.createNew("id2", "Book 2", Category.BOOKS, 6, createdAt.plusMinutes(1));
+        Product toy1  = Product.createNew("id3", "Toy 1",  Category.TOYS,  7, createdAt.plusMinutes(2));
+
+        warehouse.addProduct(book1);
+        warehouse.addProduct(book2);
+        warehouse.addProduct(toy1);
+
+        var categories = warehouse.getCategoriesWithProducts();
+
+        assertEquals(Set.of(Category.BOOKS, Category.TOYS), new HashSet<>(categories));
+        assertFalse(categories.contains(Category.ELECTRONICS));
+    }
+
+    /** getCategoriesWithProducts method */
+    @Test
+    void getCategoriesWithProducts_emptyWarehouse_returnsEmptyList() {
+        var categories = warehouse.getCategoriesWithProducts();
+        assertTrue(categories.isEmpty());
+    }
+
 }

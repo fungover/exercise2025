@@ -24,6 +24,9 @@ public record Product(
         if (modifiedDate == null) {
             throw new IllegalArgumentException("Modified date cannot be null.");
         }
+        if (modifiedDate.isBefore(createdDate)) {
+            throw new IllegalArgumentException("Modified date cannot be before created date.");
+        }
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Product ID cannot be null or empty.");
         }

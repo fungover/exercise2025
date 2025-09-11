@@ -10,9 +10,7 @@ import org.example.map.Tile;
 import org.example.service.PotionLogic;
 import org.example.utils.Command;
 import org.example.utils.Spawner;
-import java.util.Random;
 import java.util.Scanner;
-
 
 public class Game {
     private Scanner scanner = new Scanner(System.in);
@@ -41,7 +39,6 @@ public class Game {
         dungeon = new Dungeon(5, 5);
         Combat combat = new Combat();
         PotionLogic potionLogic = new PotionLogic();
-        Random random = new Random();
         movementLogic = new MovementLogic();
         Spawner.spawnAll(dungeon);
 
@@ -56,7 +53,6 @@ public class Game {
         while (true) {
             System.out.print("> ");
             String playerInput = scanner.nextLine();
-
 
             Command command;
             try {

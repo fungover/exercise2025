@@ -1,6 +1,5 @@
 package org.example;
 
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -8,8 +7,30 @@ import java.util.List;
 public class App {
     public static void main(String[] args) throws Exception {
 
-        // Välj vilken zon du vill hämta priser för (SE1, SE2, SE3, SE4)
+        // Lista med zoner som är tillåtna, defaultzon SE1
+        String[] validZones = {"SE1", "SE2", "SE3", "SE4"};
         String zone = "SE1";
+
+        // Om användaren skickat in argument, använd det istället
+        if (args.length > 0) {
+            zone = args[0].toUpperCase();
+        }
+
+        // Kontroller att zonen är giltig, annars återställ till SE1
+        boolean isValid = false;
+        for (String z : validZones) {
+            if (z.equals(zone)) {
+                isValid = true;
+                break;
+            }
+        }
+
+        if (!isValid) {
+            System.out.println("Ogiltig zon: " + zone + ". Använder SE1.");
+        }
+
+        System.out.println("Zon: " + zone);
+
 
         // Skapar dagens datum i formatet MM-dd
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd"));

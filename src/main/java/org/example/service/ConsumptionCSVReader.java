@@ -26,7 +26,8 @@ public class ConsumptionCSVReader {
              lineNo++;
              line = line.trim();
              if (line.isEmpty()) continue; //Skip blanks
-         String[] parts = line.split(",");
+             // Split only on the first commas so decimal commas in kWh are preserved
+         String[] parts = line.split(",", 2);
          if (parts.length < 2) continue; // Skip malformed
              String ts = parts[0].trim();
              String kWhStr = parts[1].trim().replace(",", "."); // Allow Swedish commas

@@ -7,7 +7,14 @@
 package org.example.model;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 public record Consumption(ZonedDateTime timestamp, double kWh)  {
+    public Consumption {
+        Objects.requireNonNull(timestamp, "timestamp must not be null");
+        if (Double.isNaN(kWh) || kWh < 0d) {
+            throw new IllegalArgumentException("kWh must be >= 0");
+        }
+    }
 }
 

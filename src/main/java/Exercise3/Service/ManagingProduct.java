@@ -13,11 +13,11 @@ public class ManagingProduct implements Warehouse {
 
     @Override
     public void addProduct(Product product) {
-        Product exist = listOfProducts.stream()
-                .filter(item -> item.id().equals(product.id()))
-                .findFirst().orElse(null);
 
-        if(exist != null && product.modifiedDate().equals(LocalDate.now())){
+        boolean exists = listOfProducts.stream()
+                        .anyMatch(item -> item.id().equals(product.id()));
+
+        if(exists) {
             throw new IllegalArgumentException("Product already exists");
         }
 
@@ -43,7 +43,8 @@ public class ManagingProduct implements Warehouse {
 
         Product productById = listOfProducts.stream()
                 .filter(item -> item.id().equals(id))
-                .findFirst().orElse(null);
+                .max(Comparator.comparing(Product::modifiedDate))
+                .orElse(null);
 
         if(productById == null){
             throw new IllegalArgumentException("Product doesn't exist");
@@ -92,7 +93,9 @@ public class ManagingProduct implements Warehouse {
 
         return countedProducts.entrySet().stream()
                 .filter(entry -> entry.getValue() > 0)
+                .sorted(Map.Entry.comparingByKey())
                 .map(Map.Entry::getKey).toList();
+
     }
 
     @Override
@@ -109,12 +112,8 @@ public class ManagingProduct implements Warehouse {
 
         checkIsListIsEmpty();
 
-        Map<Category, Long> listOfCategoryWithCount = listOfProducts.stream()
-                .collect(Collectors.groupingBy(Product::category, Collectors.counting()));
-
-        return listOfCategoryWithCount.entrySet().stream()
-                .collect(Collectors.toMap(letter -> letter.getKey().name().charAt(0),
-                        count -> count.getValue().intValue()));
+        return listOfProducts.stream()
+                .collect(Collectors.groupingBy(item -> item.category().name().charAt(0),Collectors.collectingAndThen(Collectors.counting(), Long::intValue)));
     }
 
     @Override

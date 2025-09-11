@@ -153,10 +153,9 @@ class ManagingProductTest {
         List<Category> categories = managingProduct.getCategoriesWithProducts();
 
         assertEquals(3,categories.size());
-        assertEquals(Category.PANTS,categories.getFirst());
-        assertEquals(Category.JEANS,categories.get(1));
+        assertEquals(Category.JEANS,categories.getFirst());
+        assertEquals(Category.PANTS,categories.get(1));
         assertEquals(Category.DRESS,categories.getLast());
-
     }
 
     @Test

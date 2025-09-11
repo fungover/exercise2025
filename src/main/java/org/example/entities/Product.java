@@ -17,8 +17,8 @@ public final class Product {
         this.category = Objects.requireNonNull(category);
         if (rating < 0 || rating > 10) throw new IllegalArgumentException("Rating must be between 0 and 10");
         this.rating = rating;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+        this.createdDate = Objects.requireNonNull(createdDate, "createdDate");
+        this.modifiedDate = Objects.requireNonNull(modifiedDate, "modifiedDate");
     }
 
     public String getId() { return id; }

@@ -12,17 +12,24 @@ public class Warehouse {
     private final Map<String, Product> productMap = new ConcurrentHashMap<>();
 
     public void addProduct(Product product) {
-        if (product.getName().isEmpty())
-            throw new IllegalArgumentException("Product name cannot be empty");
-        productMap.put(product.getId(), product);
+        Objects.requireNonNull(product, "product");
+        if (product.getId() == null || product.getId().isBlank())
+            throw new IllegalArgumentException("Product id cannot be blank");
+        if (product.getName().isBlank())
+           throw new IllegalArgumentException("Product name cannot be blank");
+        if (productMap.putIfAbsent(product.getId(), product) != null)
+           throw new IllegalStateException("Product with ID already exists: " + product.getId());
     }
 
     public void updateProduct(String id, String name, Category category, int rating) {
-        Product existing = productMap.get(id);
-        if (existing == null)
-            throw new NoSuchElementException("Product with ID not found: " + id);
-        Product updated = existing.withUpdatedValues(name, category, rating, LocalDate.now());
-        productMap.put(id, updated);
+        Objects.requireNonNull(id, "id");
+         if (name == null || name.isBlank())
+             throw new IllegalArgumentException("Product name cannot be blank");
+         productMap.compute(id, (k, existing) -> {
+             if (existing == null)
+                 throw new NoSuchElementException("Product with ID not found: " + id);
+             return existing.withUpdatedValues(name, category, rating, LocalDate.now());
+         });
     }
 
     public List<Product> getAllProducts() {

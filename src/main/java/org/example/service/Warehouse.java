@@ -4,10 +4,8 @@ import org.example.entities.Category;
 import org.example.entities.Product;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Warehouse {
@@ -91,5 +89,21 @@ public class Warehouse {
                 .map(Product::category)
                 // Collect to Set to remove duplicates, no need to use distinct() on Set
                 .collect(Collectors.toSet());
+    }
+
+    public Map<Character, Integer> getProductInitialsMap() {
+        return products.stream()
+                // Group products by first letter in name
+                .collect(Collectors.groupingBy(
+                        // Key: First letter
+                        product -> product.name().charAt(0),
+                        // Wrapper to transform result
+                        Collectors.collectingAndThen(
+                                // Count (gives Long)
+                                Collectors.counting(),
+                                // Convert Long to Integer
+                                Math::toIntExact
+                        )
+                ));
     }
 }

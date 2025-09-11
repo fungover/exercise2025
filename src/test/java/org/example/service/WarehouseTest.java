@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -219,5 +220,21 @@ public class WarehouseTest {
         assertTrue(categories.contains(Category.ELECTRONICS));
         assertTrue(categories.contains(Category.SPORTS));
         assertFalse(categories.contains(Category.CLOTHING));
+    }
+
+    @Test
+    void shouldGetProductsInitialMap() {
+        warehouse.addProduct(new Product("1", "Mobile phone", Category.ELECTRONICS, 3, LocalDate.now()));
+        warehouse.addProduct(new Product("2", "TV 49-inch", Category.ELECTRONICS, 6, LocalDate.now()));
+        warehouse.addProduct(new Product("3", "Basketball", Category.SPORTS, 8, LocalDate.now()));
+        warehouse.addProduct(new Product("4", "Blue T-shirt", Category.CLOTHING, 2, LocalDate.now()));
+
+        Map<Character, Integer> initialsMap = warehouse.getProductInitialsMap();
+
+        assertEquals(3, initialsMap.size());
+        assertEquals(1, initialsMap.get('M'));
+        assertEquals(1, initialsMap.get('T'));
+        assertEquals(2, initialsMap.get('B'));
+        assertNull(initialsMap.get('Z'));
     }
 }

@@ -26,7 +26,4 @@ public class Dungeon {
     public int getCols() {
         return tiles[0].length;
     }
-
-
-
 }

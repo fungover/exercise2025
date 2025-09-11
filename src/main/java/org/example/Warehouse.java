@@ -11,7 +11,7 @@ public class Warehouse {
 		products = new ArrayList<>();
 	}
 	public boolean addProduct(Product product) {
-		if  (product == null || product.getName() == null || product.getName().isEmpty()) {
+		if  (product == null || product.name() == null || product.name().isEmpty()) {
 			return false;
 		}
 		else {

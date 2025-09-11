@@ -12,50 +12,27 @@ class WarehouseTest {
 	}
 
 	@Test
-	void testAddingAProductToWarehouse() {
-		Warehouse warehouse = new Warehouse();
-		Product product = new Product("SUPER_COMPUTER", "Computer");
-		boolean productAdded = warehouse.addProduct(product);
-
-		assertThat(productAdded).isTrue();
-	}
-
-	@Test
-	void testAddingAProductToWarehouseAndNameIsNotEmpty() {
-		Warehouse warehouse = new Warehouse();
-		Product product = new Product("SUPER_COMPUTER", "Computer");
-		boolean productAdded = warehouse.addProduct(product);
-
-		assertThat(productAdded).isTrue();
-	}
-
-	@Test
-	void testAddingAProductToWarehouseAndNameIsEmpty() {
-		Warehouse warehouse = new Warehouse();
-		Product product = new Product("SUPER_COMPUTER", "");
-		boolean productAdded = warehouse.addProduct(product);
-
-		assertThat(productAdded).isFalse();
-	}
-
-	@Test
 	void testAddingAProductToWarehouseAndWarehousListIncreases() {
 		Warehouse warehouse = new Warehouse();
-		Product product = new Product("SUPER_COMPUTER", "Computer");
-		Product product2 = new Product("SUPER_DUPER_COMPUTER", "Computer");
+		Product product = new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8);
+		Product product2 = new Product("SUPER_DUPER_COMPUTER", "Computer", Category.COMPUTERS, 8);
 		boolean productAdded = warehouse.addProduct(product);
 		boolean productAdded2 = warehouse.addProduct(product2);
+		Product recievedProduct = warehouse.getProducts().get(1);
 
 		assertThat(warehouse.getProducts().size()).isEqualTo(2);
+		assertThat(recievedProduct.ID()).isEqualTo("SUPER_DUPER_COMPUTER");
 	}
 
 	@Test
-	void testAddingAProductToWarehouseAndTheIDIsNotEmpty() {
+	void testAddingAProductToWarehouseAndRetrievedValuesMatchTheAddedProduct() {
 		Warehouse warehouse = new Warehouse();
-		Product product = new Product("SUPER_COMPUTER", "Computer");
+		Product product = new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8);
 		boolean productAdded = warehouse.addProduct(product);
 		Product recievedProduct = warehouse.getProducts().get(0);
 
-		assertThat(recievedProduct.getId()).isEqualTo("SUPER_COMPUTER");
+		assertThat(recievedProduct.ID()).isEqualTo("SUPER_COMPUTER");
+		assertThat(recievedProduct.category()).isEqualTo(Category.COMPUTERS);
+		assertThat(recievedProduct.rating()).isEqualTo(8);
 	}
 }

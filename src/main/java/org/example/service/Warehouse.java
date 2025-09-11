@@ -32,7 +32,7 @@ public class Warehouse {
     public List<Product> getProductsByCategorySorted(Category category) {
         return products.stream()
                 .filter(product -> product.category().equals(category))
-                .sorted((p1, p2) -> p1.name().compareTo(p2.name()))
+                .sorted(Comparator.comparing(Product::name))
                 .collect(Collectors.toList());
     }
 

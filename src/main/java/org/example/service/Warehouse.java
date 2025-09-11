@@ -116,7 +116,7 @@ public class Warehouse {
         // Find products from this month
         List<Product> thisMonthProducts = products.stream()
                 .filter(product -> YearMonth.from(product.createdDate()).equals(thisMonth))
-                .collect(Collectors.toList());
+                .toList();
 
         // Find max rating from these products
         OptionalInt maxRating = thisMonthProducts.stream()

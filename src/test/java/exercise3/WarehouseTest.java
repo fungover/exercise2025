@@ -50,9 +50,6 @@ public class WarehouseTest {
         warehouse.addProduct(product);
         warehouse.updateProduct(id, "Pink soap", Category.Soap, 8);
         assertEquals("Rose soap", warehouse.getAllProducts().getFirst().getName());
-        //assertEquals(Soap, warehouse.getAllProducts().getFirst().getCategory());
-        //assertEquals(8, warehouse.getAllProducts().getFirst().getRating());
-        //assertEquals(LocalDate.now(), warehouse.getAllProducts().getFirst().getModifiedDate());
     }
 
     @Test

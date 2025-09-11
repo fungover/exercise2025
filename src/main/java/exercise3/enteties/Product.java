@@ -38,7 +38,11 @@ public final class Product {
         return name;
     }
     public void setName(String name){
-        this.name = name;
+        if(name == null){
+            System.out.println("Name cannot be null");
+        }else{
+            this.name = name;
+        }
     }
 
     public Category getCategory() {
@@ -46,7 +50,11 @@ public final class Product {
     }
 
     public void setCategory(Category category) {
-        this.category = category;
+        if(category == null){
+            System.out.println("Category cannot be null");
+        }else{
+            this.category = category;
+        }
     }
 
     public Integer getRating() {

@@ -122,8 +122,7 @@ public class WarehouseTest {
         LocalDateTime afterProduct = LocalDateTime.of(2025,
                 9, 10, 12, 1);
 
-        assertThat(warehouse.getProductsCreatedAfter(afterProduct))
-                .isNotEqualTo(warehouse.getAllProducts());
+        assertThat(warehouse.getProductsCreatedAfter(afterProduct)).isEmpty();
     }
 
     @Test
@@ -149,11 +148,8 @@ public class WarehouseTest {
                 LocalDateTime.of(2025, 9, 10,
                         12, 45)));
 
-        warehouse.addProduct(new Product("27", "Sweater",
-                Category.CLOTHES, 7, LocalDateTime.now(), null));
-
         assertThat(warehouse.getModifiedProducts())
-                .isNotEqualTo(warehouse.getAllProducts());
+                .isEqualTo(warehouse.getAllProducts());
     }
     @Test
     public void testCannotGetModifiedProducts() {

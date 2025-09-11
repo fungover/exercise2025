@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -35,7 +36,7 @@ public class Warehouse {
         if (product.createdDate() == null || product.modifiedDate() == null) {
             throw new IllegalArgumentException("Product dates cannot be null");
         }
-        if (products.stream().anyMatch(p -> java.util.Objects.equals(p.id(), product.id()))) {
+        if (products.stream().anyMatch(p -> Objects.equals(p.id(), product.id()))) {
             throw new IllegalArgumentException("Product id already exists");
         }
         products.add(product);
@@ -77,11 +78,15 @@ public class Warehouse {
         throw new IllegalArgumentException("Product not found");
     }
     public Product getProductById(String id) {
-        return products.stream()
-                .filter(p -> p.id().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-    }
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("Product id cannot be empty");
+        }
+            return products.stream()
+                    .filter(p -> Objects.equals(p.id(), id))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+        }
+
     public List<Product> getProductsByCategorySorted(Category category) {
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null");

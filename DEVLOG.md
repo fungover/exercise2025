@@ -1,5 +1,12 @@
 ## Development Documentation
+### Reflections/Learning process
+IDE hints about my compact constructor in Product.java.
+IntelliJ can’t visually distinguish whether category is 
+the parameter or the field, since both have the same name. 
 
+'this.category' is the field and 'category' the parameter. 
+This is more evident when using canonical constructors, not 
+compact like I do. 
 
 
 

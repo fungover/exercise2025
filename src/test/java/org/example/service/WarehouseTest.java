@@ -130,4 +130,22 @@ public class WarehouseTest {
         assertThat(warehouse.getProductsCreatedAfter(afterProduct))
                 .isNotEqualTo(warehouse.getAllProducts());
     }
+
+    @Test
+    public void testUpdatingAProduct() {
+        warehouse.addProduct(new Product("53", "Raisins",
+                Category.PROVISIONS, 7, LocalDateTime.now(), null));
+
+        assertThat(warehouse.updateProduct("53", "Banana",
+                Category.PROVISIONS, 8)).isEqualTo(warehouse.getAllProducts());
+    }
+    @Test
+    public void testCannotUpdateAProduct() {
+        warehouse.addProduct(new Product("53", "Raisins",
+                Category.PROVISIONS, 7, LocalDateTime.now(), null));
+
+        assertThatThrownBy(() -> warehouse.updateProduct("54", "Banana",
+                Category.PROVISIONS, 8))
+                .isInstanceOf(NoSuchElementException.class);
+    }
 }

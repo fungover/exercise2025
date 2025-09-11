@@ -19,7 +19,16 @@ public class Warehouse {
         }
     }
 
-    public void updateProduct(String id, String name, Category category, int rating) {}
+    public List<Product> updateProduct(String id, String name,
+                                       Category category, int rating) {
+        Product oldProduct = getProductById(id);
+        products.add(new Product(id, name, category, rating,
+                oldProduct.createdDate(), LocalDateTime.now()));
+        products.remove(oldProduct);
+
+        return products;
+    }
+
 
     public List<Product> getAllProducts() {
         return products;

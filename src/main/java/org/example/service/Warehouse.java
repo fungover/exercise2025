@@ -15,11 +15,28 @@ public class Warehouse {
     private final List<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+        if (product.id() == null || product.id().isBlank()) {
+            throw new IllegalArgumentException("Product id cannot be empty");
+
+        }
         if (product.name() == null || product.name().isBlank()) {
             throw new IllegalArgumentException("Product name cannot be empty");
         }
+        if (product.category() == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+
+        }
         if (product.rating() < 0 || product.rating() > 10) {
             throw new IllegalArgumentException("Product rating must be between 0 and 10");
+        }
+        if (product.createdDate() == null || product.modifiedDate() == null) {
+            throw new IllegalArgumentException("Product dates cannot be null");
+        }
+        if (products.stream().anyMatch(p -> java.util.Objects.equals(p.id(), product.id()))) {
+            throw new IllegalArgumentException("Product id already exists");
         }
         products.add(product);
     }

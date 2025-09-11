@@ -32,6 +32,18 @@ void playerGoToRight() {
 
        assertThat(player.getRow()).isEqualTo(0);
        assertThat(player.getCol()).isEqualTo(1);
-
 }
+
+    @Test
+    void playerGoesUp() {
+        Dungeon dungeon = new Dungeon(2, 2);
+        Player player = new Player("TestPlayer");
+        MovementLogic logic = new MovementLogic();
+
+        player.moveTo(2, 0);
+        logic.movePlayer(player, "up", dungeon);
+
+        assertThat(player.getRow()).isEqualTo(1);
+        assertThat(player.getCol()).isEqualTo(0);
+    }
 }

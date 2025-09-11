@@ -7,7 +7,7 @@ public class ElectricityPriceParser {
 
     public static List<ElectricityPrice> parseJsonToElectricityPrice(String jsonString) {
         try {
-            // Ta bort hakparenteser och dela upp objekten
+            // Remove square brackets and split the objects
             String cleanJson = jsonString.trim()
                     .replaceFirst("^\\[", "")
                     .replaceFirst("\\]$", "");

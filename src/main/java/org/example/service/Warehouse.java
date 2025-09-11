@@ -69,6 +69,9 @@ public class Warehouse {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Product name cannot be empty");
         }
+        if (category == null) {
+            throw new IllegalArgumentException("Product category cannot be null");
+        }
         // Remove old product
         products.removeIf(product -> product.id().equals(id));
 

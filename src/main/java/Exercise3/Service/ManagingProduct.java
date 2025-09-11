@@ -14,6 +14,8 @@ public class ManagingProduct implements Warehouse {
     @Override
     public void addProduct(Product product) {
 
+        Objects.requireNonNull(product, "Product cannot be null");
+
         boolean exists = listOfProducts.stream()
                         .anyMatch(item -> item.id().equals(product.id()));
 
@@ -41,8 +43,10 @@ public class ManagingProduct implements Warehouse {
     @Override
     public Product getProductById(String id) {
 
+        Objects.requireNonNull(id, "Product id cannot be null");
+
         Product productById = listOfProducts.stream()
-                .filter(item -> item.id().equals(id))
+                .filter(item -> item.id().equals(id.trim()))
                 .max(Comparator.comparing(Product::modifiedDate))
                 .orElse(null);
 
@@ -57,6 +61,7 @@ public class ManagingProduct implements Warehouse {
     public List<Product> getProductsByCategorySorted(Category category) {
 
         checkIsListIsEmpty();
+        Objects.requireNonNull(category, "Category cannot be null");
 
         return listOfProducts.stream()
                 .filter(item -> item.category().equals(category))
@@ -67,6 +72,7 @@ public class ManagingProduct implements Warehouse {
     public List<Product> getProductsCreatedAfter(LocalDate after) {
 
         checkIsListIsEmpty();
+        Objects.requireNonNull(after, "Date cannot be null");
 
         return listOfProducts.stream()
                 .filter(item -> item.createdDate().isAfter(after)).toList();
@@ -102,6 +108,7 @@ public class ManagingProduct implements Warehouse {
     public Long countProductsInCategory(Category category) {
 
         checkIsListIsEmpty();
+        Objects.requireNonNull(category, "Category cannot be null");
 
         return listOfProducts.stream()
                 .filter(item -> item.category().equals(category)).count();
@@ -120,7 +127,8 @@ public class ManagingProduct implements Warehouse {
     public List<Product> getTopProductsThisMonth() {
         LocalDate today = LocalDate.now();
         List<Product> listFilteredByMonth = listOfProducts.stream()
-                .filter(item -> item.createdDate().getMonth().equals(today.getMonth())).toList();
+                .filter(item -> item.createdDate().getYear() == today.getYear() &&
+                        item.createdDate().getMonth().equals(today.getMonth())).toList();
 
         return listFilteredByMonth.stream()
                 .filter(item -> item.rating() == 10)

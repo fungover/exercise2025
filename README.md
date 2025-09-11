@@ -39,7 +39,7 @@ All methods use Java Streams where appropriate.
 ## Testing
 Each public method is tested with:
 - At least one test for successful execution
-- At least one test for expected failure (e.g. invalid input)
+- At least one test for expected failure (e,g, invalid input)
 
 Tests are written using JUnit 5 and cover both typical and edge cases.
 
@@ -47,5 +47,3 @@ Tests are written using JUnit 5 and cover both typical and edge cases.
 - The application avoids exposing internal mutable structures.
 - Creation and modification dates are handled using `ZoneDateTime`.
 - The application uses  UUIDs for product IDs.
-
-

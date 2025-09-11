@@ -28,7 +28,7 @@ public class Warehouse {
     }
 
     public List<Product> getAllProducts() {
-        return products;
+        return Collections.unmodifiableList(new ArrayList<>(products));
     }
 
     public Optional<Product> getProductById(String id) {

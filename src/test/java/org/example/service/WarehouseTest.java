@@ -237,4 +237,27 @@ public class WarehouseTest {
         assertEquals(2, initialsMap.get('B'));
         assertNull(initialsMap.get('Z'));
     }
+
+    @Test
+    void shouldGetTopRatedProductsThisMonth() {
+        LocalDate thisMonth = LocalDate.now();
+        LocalDate lastMonth = thisMonth.minusMonths(1);
+
+        Product product1 = new Product("1", "Test product 1", Category.ELECTRONICS, 10, thisMonth.minusDays(5));
+        Product product2 = new Product("2", "Test product 2", Category.CLOTHING, 5, thisMonth.minusDays(2));
+        Product product3 = new Product("3", "Test product 3", Category.SPORTS, 10, thisMonth.minusDays(1));
+
+        Product oldProduct = new Product("4", "Test product 4", Category.ELECTRONICS, 9, lastMonth);
+
+        warehouse.addProduct(product1);
+        warehouse.addProduct(product2);
+        warehouse.addProduct(product3);
+        warehouse.addProduct(oldProduct);
+
+        List<Product> topRated = warehouse.getTopRatedProductsThisMonth();
+
+        assertEquals(2, topRated.size());
+        assertEquals(product3, topRated.get(0));
+        assertEquals(product1, topRated.get(1));
+    }
 }

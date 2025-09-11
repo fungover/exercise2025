@@ -4,8 +4,10 @@ import org.example.entities.Category;
 import org.example.entities.Product;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.Map;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 public class Warehouse {
@@ -105,5 +107,31 @@ public class Warehouse {
                                 Math::toIntExact
                         )
                 ));
+    }
+
+    public List<Product> getTopRatedProductsThisMonth() {
+        LocalDate now = LocalDate.now();
+        YearMonth thisMonth = YearMonth.from(now);
+
+        // Find products from this month
+        List<Product> thisMonthProducts = products.stream()
+                .filter(product -> YearMonth.from(product.createdDate()).equals(thisMonth))
+                .collect(Collectors.toList());
+
+        // Find max rating from these products
+        OptionalInt maxRating = thisMonthProducts.stream()
+                .mapToInt(Product::rating)
+                .max();
+
+        // If no products from this month return empty list
+        if (maxRating.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // Filter on max rating and sort
+        return thisMonthProducts.stream()
+                .filter(product -> product.rating() == maxRating.getAsInt())
+                .sorted((p1, p2) -> p2.createdDate().compareTo(p1.createdDate()))
+                .collect(Collectors.toList());
     }
 }

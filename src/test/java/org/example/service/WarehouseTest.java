@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -204,5 +205,19 @@ public class WarehouseTest {
         assertEquals(2, electronicsCount);
         assertEquals(1, sportsCount);
         assertEquals(0, clothingCount);
+    }
+
+    @Test
+    void shouldGetCategoriesWithProductsIn() {
+        warehouse.addProduct(new Product("1", "Test Product 1", Category.ELECTRONICS, 8, LocalDate.now()));
+        warehouse.addProduct(new Product("2", "Test Product 2", Category.ELECTRONICS, 8, LocalDate.now()));
+        warehouse.addProduct(new Product("3", "Test Product 3", Category.SPORTS, 8, LocalDate.now()));
+
+        Set<Category> categories = warehouse.getCategoriesWithProducts();
+
+        assertEquals(2, categories.size());
+        assertTrue(categories.contains(Category.ELECTRONICS));
+        assertTrue(categories.contains(Category.SPORTS));
+        assertFalse(categories.contains(Category.CLOTHING));
     }
 }

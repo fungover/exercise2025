@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Warehouse {
@@ -82,5 +83,13 @@ public class Warehouse {
         return (int) products.stream()
                 .filter(product -> product.category().equals(category))
                 .count();
+    }
+
+    public Set<Category> getCategoriesWithProducts() {
+        return products.stream()
+                // Extract category from every product
+                .map(Product::category)
+                // Collect to Set to remove duplicates, no need to use distinct() on Set
+                .collect(Collectors.toSet());
     }
 }

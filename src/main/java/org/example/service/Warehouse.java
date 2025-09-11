@@ -125,7 +125,7 @@ public class Warehouse {
         // Find products from this month
         List<Product> thisMonthProducts = products.stream()
                 .filter(product -> YearMonth.from(product.createdDate()).equals(thisMonth))
-                .toList();
+                .collect(Collectors.toList());
 
         // Find max rating from these products
         OptionalInt maxRating = thisMonthProducts.stream()
@@ -134,13 +134,14 @@ public class Warehouse {
 
         // If no products from this month return empty list
         if (maxRating.isEmpty()) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         // Filter on max rating and sort
         return thisMonthProducts.stream()
                 .filter(product -> product.rating() == maxRating.getAsInt())
-                .sorted((p1, p2) -> p2.createdDate().compareTo(p1.createdDate()))
+                .sorted(Comparator.comparing(Product::createdDate).reversed()
+                        .thenComparing(Product::id))
                 .collect(Collectors.toList());
     }
 }

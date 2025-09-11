@@ -44,7 +44,7 @@ public class WarehouseTest {
 
         List<Product> products = warehouse.getAllProducts();
         assertEquals(1, products.size());
-        assertEquals(product, products.getFirst());
+        assertEquals(product, products.get(0));
     }
 
     @Test

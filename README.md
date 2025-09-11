@@ -1,36 +1,51 @@
-## 🧪 How to Work on the Exercises
+# Warehouse Product Manager
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+## Overview
+This project is a Java application for managing warehouse products.
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
+At the moment it has a dog warehouse theme but can be easily extended to support other types of products.
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+The application uses Java 8 Streams for functional programming and JUnit 5 for unit testing.
 
-Example for user githubuser working on Exercise 1:
+## Structure
+- `entities/Product.java`: Defines the product model using an immutable record.
+- `entities/Category.java`: Enum representing product categories.
+- `service/Warehouse.java`: Main service class containing business logic.
+- `App.java`: Main application class.
+- `test/WarehouseTest.java`: Unit tests for all public methods using JUnit 5.
 
-```bash
-git checkout -b githubuser/exercise1
-```
+## Product Entity
+The `Product` class includes:
+- `id`: Unique identifier
+- `name`: Product name (must not be empty)
+- `category`: Enum value
+- `rating`: Integer between 0–10
+- `createdDate`: Date of creation
+- `modifiedDate`: Date of last modification
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
+## Implemented Functionality
+The following public methods are implemented in `Warehouse`:
 
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
+- `addProduct(Product product)`: Adds a new product.
+- `updateProduct(String id, String name, Category category, int rating)`: Updates an existing product.
+- `getAllProducts()`: Returns all products.
+- `getProductById(String id)`: Retrieves a product by its ID.
+- `getProductsByCategorySorted(Category category)`: Returns products in a category, sorted alphabetically.
+- `getProductsCreatedAfter(ZonedDateTime)`: Returns products created after the given date.
+- `getModifiedProducts()`: Returns products where `createdDate` and `modifiedDate` differ.
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
+All methods use Java Streams where appropriate.
 
-Link the PR to the issue you're solving.
+## Testing
+Each public method is tested with:
+- At least one test for successful execution
+- At least one test for expected failure (e.g. invalid input)
 
-Include a clear description of your solution.
+Tests are written using JUnit 5 and cover both typical and edge cases.
 
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+## Notes
+- The application avoids exposing internal mutable structures.
+- Creation and modification dates are handled using `ZoneDateTime`.
+- The application uses  UUIDs for product IDs.
+
+

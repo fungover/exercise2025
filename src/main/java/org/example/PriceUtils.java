@@ -85,7 +85,8 @@ public class PriceUtils {
         }
         double avg = sum / windowSize;
 
-        // Starttid = första timmen i blocket
+        // Startdatum och starttid = första timmen i blocket
+        String date = prices.get(start).getDate();
         String startHour = prices.get(start).getHour();
 
         // Sluttid = sista timmen i blocket + 1h (för att visa som ett intervall)
@@ -93,7 +94,8 @@ public class PriceUtils {
         LocalTime endTime = LocalTime.parse(lastHour).plusHours(1);
         String endHour = endTime.format(DateTimeFormatter.ofPattern("HH:mm"));
 
-        return "Bästa " + windowSize + "h-blocket: "
+
+        return "Bästa " + windowSize + "h-blocket (" + date + "): "
                 + startHour + "–" + endHour
                 + " (" + String.format("%.2f", avg) + "kr/kWh)";
     }

@@ -61,11 +61,11 @@ public class PriceUtilsTest {
     @Test
     void findBestWindowStartShouldReturnCheapestFor2hWindow() {
         List<PricePoint> prices = List.of(
-                new PricePoint("00:00", 1.0),
-                new PricePoint("01:00", 0.8),
-                new PricePoint("02:00", 3.0),
-                new PricePoint("03:00", 2.0),
-                new PricePoint("04:00", 1.5)
+                new PricePoint("2025-09-11","00:00", 1.0),
+                new PricePoint("2025-09-11","01:00", 0.8),
+                new PricePoint("2025-09-11","02:00", 3.0),
+                new PricePoint("2025-09-11","03:00", 2.0),
+                new PricePoint("2025-09-11","04:00", 1.5)
         );
 
         int bestWindowStart = PriceUtils.findBestWindowStart(prices, 2);
@@ -76,11 +76,11 @@ public class PriceUtilsTest {
     @Test
     void findBestWindowStartShouldReturnCheapestFor4hWindow() {
         List<PricePoint> prices = List.of(
-                new PricePoint("00:00", 1.0),
-                new PricePoint("01:00", 0.8),
-                new PricePoint("02:00", 3.0),
-                new PricePoint("03:00", 2.0),
-                new PricePoint("04:00", 1.5)
+                new PricePoint("2025-09-11","00:00", 1.0),
+                new PricePoint("2025-09-11","01:00", 0.8),
+                new PricePoint("2025-09-11","02:00", 3.0),
+                new PricePoint("2025-09-11","03:00", 2.0),
+                new PricePoint("2025-09-11","04:00", 1.5)
         );
 
         int bestWindowStart = PriceUtils.findBestWindowStart(prices, 4);
@@ -91,16 +91,16 @@ public class PriceUtilsTest {
     @Test
     void findBestWindowStartShouldReturnCheapestFor8hWindow() {
         List<PricePoint> prices = List.of(
-                new PricePoint("00:00", 1.0),
-                new PricePoint("01:00", 1.8),
-                new PricePoint("02:00", 1.0),
-                new PricePoint("03:00", 2.0),
-                new PricePoint("04:00", 1.5),
-                new PricePoint("05:00", 1.2),
-                new PricePoint("06:00", 1.0),
-                new PricePoint("07:00", 0.8),
-                new PricePoint("08:00", 1.5),
-                new PricePoint("09:00", 1.2)
+                new PricePoint("2025-09-11","03:00", 1.0),
+                new PricePoint("2025-09-11","01:00", 1.8),
+                new PricePoint("2025-09-11","03:00", 1.0),
+                new PricePoint("2025-09-11","03:00", 2.0),
+                new PricePoint("2025-09-11","04:00", 1.5),
+                new PricePoint("2025-09-11","05:00", 1.2),
+                new PricePoint("2025-09-11","03:00", 1.0),
+                new PricePoint("2025-09-11","07:00", 0.8),
+                new PricePoint("2025-09-11","08:00", 1.5),
+                new PricePoint("2025-09-11","09:00", 1.2)
         );
 
         int bestWindowStart = PriceUtils.findBestWindowStart(prices, 8);
@@ -111,11 +111,11 @@ public class PriceUtilsTest {
     @Test
     void findBestWindowStartShouldPreferFirstBlockWhenTie() {
         List<PricePoint> prices = List.of(
-                new PricePoint("00:00", 0.8),
-                new PricePoint("01:00", 1.0),
-                new PricePoint("02:00", 3.0),
-                new PricePoint("03:00", 1.0),
-                new PricePoint("04:00", 0.8)
+                new PricePoint("2025-09-11", "00:00", 0.8),
+                new PricePoint("2025-09-11", "01:00" ,1.0),
+                new PricePoint("2025-09-11", "02:00", 3.0),
+                new PricePoint("2025-09-11", "03:00", 1.0),
+                new PricePoint("2025-09-11", "04:00", 0.8)
         );
 
         int bestWindowStart = PriceUtils.findBestWindowStart(prices, 3);
@@ -126,8 +126,8 @@ public class PriceUtilsTest {
     @Test
     void findBestWindowStartOnTooShortListShouldThrowException() {
         List<PricePoint> prices = List.of(
-                new PricePoint("00:00", 1.0),
-                new PricePoint("01:00", 0.8)
+                new PricePoint("2025-09-11", "00:00", 0.8),
+                new PricePoint("2025-09-11", "01:00", 0.8)
         );
 
         assertThrows(IllegalArgumentException.class,
@@ -139,13 +139,33 @@ public class PriceUtilsTest {
     @Test
     void windowSummaryShouldReturnCorrectSummaryFor2hWindow() {
         List<PricePoint> prices = List.of(
-                new PricePoint("00:00", 1.0),
-                new PricePoint("01:00", 0.5),
-                new PricePoint("02:00", 1.5)
+                new PricePoint("2025-09-11", "00:00", 1.0),
+                new PricePoint("2025-09-11", "01:00", 0.5),
+                new PricePoint("2025-09-11", "02:00", 1.5)
         );
 
         String summary = PriceUtils.windowSummary(prices, 0, 2);
 
-        assertEquals("Bästa 2h-blocket: 00:00–02:00 (0,75 kr/kWh)", summary);
+        assertEquals("Bästa 2h-blocket (2025-09-11): 00:00–02:00 (0,75kr/kWh)", summary);
+    }
+
+    @Test
+    void findBestWindowShouldHandleTodayAndTomorrow() {
+        List<PricePoint> prices = List.of(
+                // Idag (2025-09-11)
+                new PricePoint("2025-09-11", "00:00", 1.0),
+                new PricePoint("2025-09-11", "01:00", 0.8),
+                new PricePoint("2025-09-11", "02:00", 1.5),
+
+                // Imorgon (2025-09-12)
+                new PricePoint("2025-09-12", "00:00", 0.5),
+                new PricePoint("2025-09-12", "01:00", 0.6),
+                new PricePoint("2025-09-12", "02:00", 2.0)
+        );
+
+        int bestStart = PriceUtils.findBestWindowStart(prices, 2);
+        String summary = PriceUtils.windowSummary(prices, bestStart, 2);
+
+        assertEquals("Bästa 2h-blocket (2025-09-12): 00:00–02:00 (0,55kr/kWh)", summary);
     }
 }

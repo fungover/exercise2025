@@ -67,7 +67,7 @@ public class WarehouseTest {
     void testGetAllProductsFail() {
         Warehouse warehouse = new Warehouse();
         List<Product> allProducts = warehouse.getAllProducts();
-        assertNull(allProducts);
+        assertEquals(0, allProducts.size());
     }
 
     @Test
@@ -104,7 +104,7 @@ public class WarehouseTest {
         Product product = new Product("Vanilla shampoo", Shampoo, 4);
         warehouse.addProduct(product);
         List<Product> productsInCategory = warehouse.getProductsByCategorySorted(Soap);
-        assertNull(productsInCategory);
+        assertEquals(0, productsInCategory.size());
     }
     @Test
     void testGetProductsCreatedAfterSuccess(){
@@ -120,7 +120,7 @@ public class WarehouseTest {
         Warehouse warehouse = new Warehouse();
         LocalDate date = LocalDate.of(2025,6,10);
         List<Product> productsCreatedAfter = warehouse.getProductsCreatedAfter(date);
-        assertNull(productsCreatedAfter);
+        assertEquals(0, productsCreatedAfter.size());
     }
     @Test
     void testGetModifiedProductsSuccess(){
@@ -141,6 +141,6 @@ public class WarehouseTest {
         Product product = new Product("Rose soap");
         warehouse.addProduct(product);
         List<Product> modifiedProducts = warehouse.getModifiedProducts();
-        assertNull(modifiedProducts);
+        assertEquals(0, modifiedProducts.size());
     }
 }

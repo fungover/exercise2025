@@ -62,9 +62,15 @@ public final class Product {
     }
 
     public void setRating(Integer rating) {
-        if(rating >= 0 && rating <= 10){
-            this.rating = rating;
+        if(rating == null){
+            System.out.println("Rating cannot be null");
+            return;
         }
+        if(rating < 0 || rating > 10){
+            System.out.println("Rating must be between 0 and 10");
+            return;
+        }
+        this.rating = rating;
     }
 
     public LocalDate getCreatedDate() {
@@ -76,6 +82,10 @@ public final class Product {
     }
 
     public void setModifiedDate(LocalDate modifiedDate) {
+        if(modifiedDate == null){
+            System.out.println("ModifiedDate cannot be null");
+            return;
+        }
         this.modifiedDate = modifiedDate;
     }
 

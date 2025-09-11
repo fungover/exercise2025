@@ -5,7 +5,7 @@ This project is a Java application for managing warehouse products.
 
 At the moment it has a dog warehouse theme but can be easily extended to support other types of products.
 
-The application uses Java 8 Streams for functional programming and JUnit 5 for unit testing.
+The application targets Java 17+ (uses records and Stream.toList()) and JUnit 5 for unit testing.
 
 ## Structure
 - `entities/Product.java`: Defines the product model using an immutable record.
@@ -39,11 +39,11 @@ All methods use Java Streams where appropriate.
 ## Testing
 Each public method is tested with:
 - At least one test for successful execution
-- At least one test for expected failure (e,g, invalid input)
+- At least one test for expected failure (e.g., invalid input)
 
 Tests are written using JUnit 5 and cover both typical and edge cases.
 
 ## Notes
 - The application avoids exposing internal mutable structures.
-- Creation and modification dates are handled using `ZoneDateTime`.
-- The application uses  UUIDs for product IDs.
+- Creation and modification dates are handled using `ZonedDateTime`.
+- The application uses UUIDs for product IDs.

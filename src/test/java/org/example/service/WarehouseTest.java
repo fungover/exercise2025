@@ -260,4 +260,14 @@ public class WarehouseTest {
         assertEquals(product3, topRated.get(0));
         assertEquals(product1, topRated.get(1));
     }
+
+    @Test
+    void shouldReturnEmptyListWhenNoTopRatedProductsThisMonth() {
+        LocalDate lastMonth = LocalDate.now().minusMonths(1);
+        warehouse.addProduct(new Product("1", "Old Product", Category.ELECTRONICS, 3, lastMonth));
+
+        List<Product> topRated = warehouse.getTopRatedProductsThisMonth();
+
+        assertTrue(topRated.isEmpty());
+    }
 }

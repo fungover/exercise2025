@@ -190,4 +190,19 @@ public class WarehouseTest {
         assertThrows(IllegalArgumentException.class, () ->
                 warehouse.updateProduct("1", "", Category.ELECTRONICS, 5));
     }
+
+    @Test
+    void shouldCountNumberOfProductsInCategory() {
+        warehouse.addProduct(new Product("1", "Test Product 1", Category.ELECTRONICS, 8, LocalDate.now()));
+        warehouse.addProduct(new Product("2", "Test Product 2", Category.ELECTRONICS, 8, LocalDate.now()));
+        warehouse.addProduct(new Product("3", "Test Product 3", Category.SPORTS, 8, LocalDate.now()));
+
+        int electronicsCount = warehouse.countProductsInCategory(Category.ELECTRONICS);
+        int sportsCount = warehouse.countProductsInCategory(Category.SPORTS);
+        int clothingCount = warehouse.countProductsInCategory(Category.CLOTHING);
+
+        assertEquals(2, electronicsCount);
+        assertEquals(1, sportsCount);
+        assertEquals(0, clothingCount);
+    }
 }

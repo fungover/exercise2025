@@ -77,4 +77,10 @@ public class Warehouse {
 
         products.add(updatedProduct);
     }
+
+    public int countProductsInCategory(Category category) {
+        return (int) products.stream()
+                .filter(product -> product.category().equals(category))
+                .count();
+    }
 }

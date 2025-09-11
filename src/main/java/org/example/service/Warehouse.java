@@ -19,7 +19,9 @@ public class Warehouse {
     }
 
     public void addProduct(Product product) {
-
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
         UUID productId = parseUuid(product.id());
 
         if (products.containsKey(productId)) {
@@ -72,6 +74,9 @@ public class Warehouse {
     }
 
     public List<Product> getProductsCreatedAfter(ZonedDateTime dateTime) {
+        if (dateTime == null) {
+            throw new IllegalArgumentException("dateTime cannot be null");
+        }
         return List.copyOf(
                 products.values().stream()
                         .filter(product -> product.createdDate().isAfter(dateTime))

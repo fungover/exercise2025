@@ -56,11 +56,6 @@ public class WarehouseTest {
     }
     @Test
     public void testCannotFindProductById() {
-        warehouse.addProduct(new Product("23", "Pants",
-                Category.CLOTHES, 9, LocalDateTime.now(), null));
-        warehouse.addProduct(new Product("24", "Shirt",
-                Category.CLOTHES, 8, LocalDateTime.now(), null));
-
         assertThatThrownBy(() -> warehouse.getProductById("25"))
                 .isInstanceOf(NoSuchElementException.class);
     }
@@ -141,11 +136,30 @@ public class WarehouseTest {
     }
     @Test
     public void testCannotUpdateAProduct() {
-        warehouse.addProduct(new Product("53", "Raisins",
-                Category.PROVISIONS, 7, LocalDateTime.now(), null));
-
         assertThatThrownBy(() -> warehouse.updateProduct("54", "Banana",
                 Category.PROVISIONS, 8))
                 .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    public void testGettingModifiedProducts() {
+        warehouse.addProduct(new Product("53", "Raisins",
+                Category.PROVISIONS, 7, LocalDateTime.of(2025,
+                9, 10, 12, 0),
+                LocalDateTime.of(2025, 9, 10,
+                        12, 45)));
+
+        warehouse.addProduct(new Product("27", "Sweater",
+                Category.CLOTHES, 7, LocalDateTime.now(), null));
+
+        assertThat(warehouse.getModifiedProducts())
+                .isNotEqualTo(warehouse.getAllProducts());
+    }
+    @Test
+    public void testCannotGetModifiedProducts() {
+        warehouse.addProduct(new Product("27", "Sweater",
+                Category.CLOTHES, 7, LocalDateTime.now(), null));
+
+        assertThat(warehouse.getModifiedProducts()).isEmpty();
     }
 }

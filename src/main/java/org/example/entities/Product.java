@@ -12,6 +12,7 @@ public class Product {
 
 
     public Product(String id, String name, Category category, int rating, LocalDate createdDate) {
+        validateRating(rating);
         this.id = id;
         this.name = name;
         this.category = category;
@@ -21,12 +22,19 @@ public class Product {
     }
 
     public Product(String id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate) {
+        validateRating(rating);
         this.id = id;
         this.name = name;
         this.category = category;
         this.rating = rating;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+    }
+
+    private void validateRating(int rating) {
+        if (rating < 0 || rating > 10) {
+            throw new IllegalArgumentException("Rating must be between 0 and 10, it was: " + rating);
+        }
     }
 
     public String id() {

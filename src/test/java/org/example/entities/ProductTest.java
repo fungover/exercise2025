@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ProductTest {
 
@@ -80,5 +81,17 @@ public class ProductTest {
         assertEquals(createdDate, product.createdDate());
         assertEquals(modifiedDate, product.modifiedDate());
         assertEquals(product.createdDate(), product.modifiedDate());
+    }
+
+    @Test
+    void shouldThrowExceptionForInvalidRatingInFiveParamConstructor() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Product("1", "Test", Category.ELECTRONICS, 11, LocalDate.now()));
+    }
+
+    @Test
+    void shouldThrowExceptionForInvalidRatingInSixParamConstructor() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Product("1", "Test", Category.ELECTRONICS, -1, LocalDate.now(), LocalDate.now()));
     }
 }

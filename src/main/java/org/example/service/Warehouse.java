@@ -15,8 +15,14 @@ public class Warehouse {
     private final List<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
         if (product.name() == null || product.name().trim().isEmpty()) {
             throw new IllegalArgumentException("Product name cannot be empty");
+        }
+        if (product.category() == null) {
+            throw new IllegalArgumentException("Product category cannot be null");
         }
         products.add(product);
     }

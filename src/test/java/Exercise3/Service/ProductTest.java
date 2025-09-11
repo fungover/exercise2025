@@ -21,4 +21,21 @@ class ProductTest {
         assertEquals(LocalDate.now(),product.createdDate());
         assertEquals(LocalDate.now(),product.modifiedDate());
     }
+
+    @Test
+    public void throwsIllegalArgumentExceptionIfRatingIsOutOfRange() {
+
+        assertThrows(IllegalArgumentException.class, ()->  new Product("Ella", "Flared jeans", Category.JEANS,12,LocalDate.now(), LocalDate.now()));
+    }
+
+    @Test
+    public void throwsIllegalArgumentExceptionIfRatingIsNegative() {
+
+        assertThrows(IllegalArgumentException.class, ()->  new Product("Ella", "Flared jeans", Category.JEANS,-2,LocalDate.now(), LocalDate.now()));
+    }
+
+    @Test
+    public void throwsIllegalArgumentExceptionIfProductIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> new Product(" ", "Flared jeans", Category.JEANS,8,LocalDate.now(), LocalDate.now()));
+    }
 }

@@ -3,6 +3,7 @@ package exercise3.service;
 import exercise3.enteties.Product;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Warehouse {
             productToUpdate.ifPresent(product -> product.setName(name));
             productToUpdate.ifPresent(product -> product.setCategory(category));
             productToUpdate.ifPresent(product -> product.setRating(rating));
-            productToUpdate.ifPresent(product -> product.setModifiedDate(LocalDate.now()));
+            productToUpdate.ifPresent(product -> product.setModifiedDate(LocalDateTime.now()));
         }else{
             System.out.println("Product not found");
         }
@@ -49,7 +50,7 @@ public class Warehouse {
         return List.copyOf(productsInCategory);
     }
 
-    public List<Product> getProductsCreatedAfter(LocalDate date){
+    public List<Product> getProductsCreatedAfter(LocalDateTime date){
         if(date == null){
             System.out.println("Date cannot be null");
             return null;

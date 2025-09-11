@@ -1,8 +1,7 @@
 package exercise3.enteties;
 
 import exercise3.service.Category;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -11,12 +10,12 @@ public final class Product {
     private String name;
     private Category category;
     private Integer rating;
-    private final LocalDate createdDate;
-    private LocalDate modifiedDate;
+    private final LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 
     public Product(String name) {
-        this.createdDate = LocalDate.now();
-        this.modifiedDate = LocalDate.now();
+        this.createdDate = LocalDateTime.now();
+        this.modifiedDate = LocalDateTime.now();
         this.name = name;
         this.id = UUID.randomUUID().toString();
     }
@@ -25,8 +24,8 @@ public final class Product {
         this.name = name;
         this.category = category;
         this.rating = rating;
-        createdDate = LocalDate.now();
-        modifiedDate = LocalDate.now();
+        createdDate = LocalDateTime.now();
+        modifiedDate = LocalDateTime.now();
         this.id = UUID.randomUUID().toString();
     }
 
@@ -73,15 +72,15 @@ public final class Product {
         this.rating = rating;
     }
 
-    public LocalDate getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public LocalDate getModifiedDate() {
+    public LocalDateTime getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(LocalDate modifiedDate) {
+    public void setModifiedDate(LocalDateTime modifiedDate) {
         if(modifiedDate == null){
             System.out.println("ModifiedDate cannot be null");
             return;

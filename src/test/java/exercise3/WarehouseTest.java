@@ -4,7 +4,7 @@ import exercise3.enteties.Product;
 import exercise3.service.Category;
 import exercise3.service.Warehouse;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import static exercise3.service.Category.Shampoo;
 import static exercise3.service.Category.Soap;
@@ -39,7 +39,7 @@ public class WarehouseTest {
         assertEquals("Pink soap", warehouse.getAllProducts().getFirst().getName());
         assertEquals(Soap, warehouse.getAllProducts().getFirst().getCategory());
         assertEquals(8, warehouse.getAllProducts().getFirst().getRating());
-        assertEquals(LocalDate.now(), warehouse.getAllProducts().getFirst().getModifiedDate());
+        assertEquals(LocalDateTime.now(), warehouse.getAllProducts().getFirst().getModifiedDate());
     }
 
     @Test
@@ -111,14 +111,14 @@ public class WarehouseTest {
         Product product = new Product("Rose soap");
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(product);
-        LocalDate date = LocalDate.of(2025,6,10);
+        LocalDateTime date = LocalDateTime.of(2025,6,10, 12, 0, 0);
         List<Product> productsCreatedAfter = warehouse.getProductsCreatedAfter(date);
         assertEquals(1, productsCreatedAfter.size());
     }
     @Test
     void testGetProductsCreatedAfterFail(){
         Warehouse warehouse = new Warehouse();
-        LocalDate date = LocalDate.of(2025,6,10);
+        LocalDateTime date = LocalDateTime.of(2025,6,10, 12, 0, 0);
         List<Product> productsCreatedAfter = warehouse.getProductsCreatedAfter(date);
         assertEquals(0, productsCreatedAfter.size());
     }
@@ -130,7 +130,7 @@ public class WarehouseTest {
         warehouse.addProduct(product);
         warehouse.addProduct(product2);
         warehouse.updateProduct(product.getId(), "Pink soap", Soap, 8);
-        LocalDate modifiedDate = LocalDate.of(2025,12,12);
+        LocalDateTime modifiedDate = LocalDateTime.of(2025,12,12, 12,0,0);
         product.setModifiedDate(modifiedDate);
         List<Product> modifiedProducts = warehouse.getModifiedProducts();
         assertEquals(1, modifiedProducts.size());

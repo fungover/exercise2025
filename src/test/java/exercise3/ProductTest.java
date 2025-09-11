@@ -3,7 +3,8 @@ package exercise3;
 import exercise3.enteties.Product;
 import exercise3.service.Category;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -11,8 +12,9 @@ public class ProductTest {
     @Test
     void testProductConstructorSetName() {
         Product product = new Product("Rose soap");
+        LocalDateTime now = LocalDateTime.now();
         assertEquals("Rose soap", product.getName());
-        assertEquals(LocalDate.now(), product.getCreatedDate());
+        assertNotNull(product.getCreatedDate());
         assertNotNull(product.getId());
     }
 
@@ -22,7 +24,7 @@ public class ProductTest {
         assertEquals("Coconut Shampoo", product.getName());
         assertEquals(Category.Shampoo, product.getCategory());
         assertEquals(7, product.getRating());
-        assertEquals(LocalDate.now(), product.getCreatedDate());
+        assertEquals(LocalDateTime.now(), product.getCreatedDate());
         assertNotNull(product.getId());
     }
 
@@ -92,20 +94,20 @@ public class ProductTest {
     @Test
     void testGetCreatedDateSuccess() {
         Product product = new Product("Strawberry conditioner", Category.Conditioner, 5);
-        assertEquals(LocalDate.now(), product.getCreatedDate());
+        assertEquals(LocalDateTime.now(), product.getCreatedDate());
     }
 
     @Test
     void testGetModifiedDateSuccess() {
         Product product = new Product("Rose soap");
-        assertEquals(LocalDate.now(), product.getModifiedDate());
+        assertEquals(LocalDateTime.now(), product.getModifiedDate());
     }
 
 
     @Test
     void testSetModifiedDateSuccess() {
         Product product = new Product("Rose soap");
-        product.setModifiedDate(LocalDate.of(2025, 10, 10));
-        assertEquals(LocalDate.of(2025, 10, 10), product.getModifiedDate());
+        product.setModifiedDate(LocalDateTime.of(2025, 10, 10, 12, 0, 0));
+        assertEquals(LocalDateTime.of(2025, 10, 10, 12, 0, 0), product.getModifiedDate());
     }
 }

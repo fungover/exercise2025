@@ -11,14 +11,17 @@ public class Warehouse {
 
     private final Map<UUID, Product> products = new LinkedHashMap<>();
 
-    public void addProduct(Product product) {
-
-        UUID productId;
+    private UUID parseUuid(String id) {
         try {
-            productId = UUID.fromString(product.id());
+            return UUID.fromString(id);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Product ID must be a valid UUID");
         }
+    }
+
+    public void addProduct(Product product) {
+
+        UUID productId = parseUuid(product.id());
 
         if (products.containsKey(productId)) {
             throw new IllegalArgumentException("Product ID already exists");
@@ -57,12 +60,7 @@ public class Warehouse {
 
     public Optional<Product> updateProduct(String id, String name, Category category, int rating) {
 
-        UUID productId;
-        try {
-            productId = UUID.fromString(id);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Product ID must be a valid UUID");
-        }
+        UUID productId = parseUuid(id);
 
         return Optional.ofNullable(products.computeIfPresent(productId, (key, existingProduct) ->
                 new Product(
@@ -79,7 +77,7 @@ public class Warehouse {
     public List<Product> getProductsCreatedAfter(ZonedDateTime dateTime) {
         return products.values().stream()
                 .filter(product -> product.createdDate().isAfter(dateTime))
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
     }
 
     //returns products that have been modified since the given date

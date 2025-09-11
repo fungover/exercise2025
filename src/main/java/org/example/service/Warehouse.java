@@ -31,9 +31,7 @@ public class Warehouse {
     }
 
     public List<Product> getAllProducts() {
-        return products.values()
-                .stream()
-                .collect(Collectors.toUnmodifiableList());
+        return List.copyOf(products.values());
     }
 
     public Optional<Product> getProductById(String id) {
@@ -51,15 +49,15 @@ public class Warehouse {
             throw new IllegalArgumentException("Category cannot be null");
         }
 
-        return products.values()
-                .stream()
-                .filter(product -> category.equals(product.category()))
-                .sorted(Comparator.comparing(Product::name))
-                .collect(Collectors.toUnmodifiableList());
+        return List.copyOf(
+                products.values().stream()
+                        .filter(product -> category.equals(product.category()))
+                        .sorted(Comparator.comparing(Product::name))
+                        .toList()
+        );
     }
 
     public Optional<Product> updateProduct(String id, String name, Category category, int rating) {
-
         UUID productId = parseUuid(id);
 
         return Optional.ofNullable(products.computeIfPresent(productId, (key, existingProduct) ->
@@ -75,15 +73,19 @@ public class Warehouse {
     }
 
     public List<Product> getProductsCreatedAfter(ZonedDateTime dateTime) {
-        return products.values().stream()
-                .filter(product -> product.createdDate().isAfter(dateTime))
-                .collect(Collectors.toUnmodifiableList());
+        return List.copyOf(
+                products.values().stream()
+                        .filter(product -> product.createdDate().isAfter(dateTime))
+                        .toList()
+        );
     }
 
     //returns products that have been modified since the given date
     public List<Product> getModifiedProducts() {
-        return products.values().stream()
-                .filter(product -> !product.createdDate().isEqual(product.modifiedDate()))
-                .collect(Collectors.toUnmodifiableList());
+        return List.copyOf(
+                products.values().stream()
+                        .filter(product -> !product.createdDate().isEqual(product.modifiedDate()))
+                        .toList()
+        );
     }
 }

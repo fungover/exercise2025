@@ -158,4 +158,26 @@ public class WarehouseTest {
 
         assertThat(warehouse.getModifiedProducts()).isEmpty();
     }
+
+    @Test
+    public void testGettingCategoriesWithProducts() {
+        LocalDateTime mockTime = LocalDateTime.of(2025, 9,
+                10, 12, 45);
+
+        Product raisins = new Product("53", "Raisins",
+                Category.PROVISIONS, 7, mockTime, null);
+        Product pants = new Product("23", "Pants",
+                Category.CLOTHES, 8, mockTime, null);
+        Product sweater = new Product("27", "Sweater",
+                Category.CLOTHES, 7, mockTime, null);
+
+        warehouse.addProduct(raisins);
+        warehouse.addProduct(pants);
+        warehouse.addProduct(sweater);
+
+        assertThat(warehouse.getCategoriesWithProducts())
+                .hasSize(2)
+                .containsEntry(Category.CLOTHES, pants)
+                .containsEntry(Category.PROVISIONS, raisins);
+    }
 }

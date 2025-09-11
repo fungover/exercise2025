@@ -29,4 +29,6 @@ public interface Warehouse {
     Long countProductsInCategory(Category category);
 
     Map<Character, Integer> getProductsInitialsMap();
+
+    List<Product> getTopProductsThisMonth();
 }

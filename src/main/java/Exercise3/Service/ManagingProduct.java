@@ -117,6 +117,17 @@ public class ManagingProduct implements Warehouse {
                         count -> count.getValue().intValue()));
     }
 
+    @Override
+    public List<Product> getTopProductsThisMonth() {
+        LocalDate today = LocalDate.now();
+        List<Product> listFilteredByMonth = listOfProducts.stream()
+                .filter(item -> item.createdDate().getMonth().equals(today.getMonth())).toList();
+
+        return listFilteredByMonth.stream()
+                .filter(item -> item.rating() == 10)
+                .sorted(Comparator.comparing(Product::createdDate)).toList();
+    }
+
     private void checkIsListIsEmpty() {
         if (listOfProducts.isEmpty()) {
             throw new IllegalArgumentException("Product list is empty");

@@ -17,8 +17,8 @@ class ManagingProductTest {
     @Test
     public void productIsAddedToListWhenCreated() {
 
-        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9));
-        //, LocalDate.now(), LocalDate.now()
+        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9, LocalDate.now(), LocalDate.now()));
+
         assertEquals(1,managingProduct.getAllProducts().size());
         assertEquals("Knitted shirt",managingProduct.getAllProducts().getFirst().name());
         assertEquals(Category.SHIRT, managingProduct.getAllProducts().getFirst().category());
@@ -28,9 +28,9 @@ class ManagingProductTest {
 
     @Test
     public void throwsIllegalArgumentExceptionIfProductAlreadyExist() {
-        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 1));
+        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 1,LocalDate.now(), LocalDate.now()));
 
-        assertThrows(IllegalArgumentException.class, () -> managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 1)));
+        assertThrows(IllegalArgumentException.class, () -> managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 1,LocalDate.now(), LocalDate.now())));
     }
 
     @Test
@@ -45,16 +45,16 @@ class ManagingProductTest {
 
     @Test
     public void throwsIllegalArgumentExceptionWhenProductToUpdateDoseNotExist(){
-        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9));
+        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9, LocalDate.now(), LocalDate.now()));
 
         assertThrows(IllegalArgumentException.class, () -> managingProduct.updateProduct("Tina", "Dressed Shirt",  Category.SHIRT, 9));
     }
 
     @Test
     public void allProductsAreAddedToList(){
-        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9));
-        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.JEANS, 9));
-        managingProduct.addProduct(new Product("Joell", "Dressed pants", Category.PANTS, 9));
+        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.JEANS, 9,  LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Joell", "Dressed pants", Category.PANTS, 9,  LocalDate.now(), LocalDate.now()));
 
         assertEquals(3,managingProduct.getAllProducts().size());
     }
@@ -67,8 +67,8 @@ class ManagingProductTest {
 
     @Test
     public void returnsCorrectIdWhenSearchingProductById(){
-        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9));
-        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.JEANS, 9));
+        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.JEANS, 9,  LocalDate.now(), LocalDate.now()));
 
         assertEquals("Bella", managingProduct.getProductById("Bella").id());
     }
@@ -80,12 +80,12 @@ class ManagingProductTest {
 
     @Test
     public void returnsListSortedByCategoryInAlphabeticOrder(){
-        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10));
+        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10, LocalDate.now(), LocalDate.now()));
 
         List <Product> sortedProducts = managingProduct.getProductsByCategorySorted(Category.DRESS);
 
@@ -104,12 +104,12 @@ class ManagingProductTest {
     @Test
     public void returnProductsCreatedAfterAGivenDate(){
 
-        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.DRESS, 9, LocalDate.of(2025,9,1)));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.of(2025,9,2)));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.of(2025,9,5)));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10,  LocalDate.of(2025,9,7)));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10,  LocalDate.of(2025,9,8)));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now()));
+        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.DRESS, 9, LocalDate.of(2025,9,1), LocalDate.of(2025,9,1)));
+        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.of(2025,9,2), LocalDate.of(2025,9,2)));
+        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.of(2025,9,5), LocalDate.of(2025,9,5)));
+        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10,  LocalDate.of(2025,9,7), LocalDate.of(2025,9,7)));
+        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10,  LocalDate.of(2025,9,8), LocalDate.of(2025,9,8)));
+        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(),LocalDate.now()));
 
         List<Product>  sortedProducts = managingProduct.getProductsCreatedAfter(LocalDate.of(2025,9,3));
 
@@ -127,9 +127,9 @@ class ManagingProductTest {
         managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.DRESS, 9, LocalDate.of(2025,9,1), LocalDate.of(2025,9,1)));
         managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.of(2025,9,2), LocalDate.of(2025,9,2)));
         managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.of(2025,9,5), LocalDate.of(2025,9,5)));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10,  LocalDate.of(2025,9,7)));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10,  LocalDate.of(2025,9,8)));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now()));
+        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10,  LocalDate.of(2025,9,7), LocalDate.now()));
+        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10,  LocalDate.of(2025,9,8), LocalDate.now()));
+        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(), LocalDate.now()));
 
         List<Product>  sortedProducts = managingProduct.getModifiedProducts();
 
@@ -143,12 +143,12 @@ class ManagingProductTest {
 
     @Test
     public void returnsAllProductsWithAtLeastOneProduct(){
-        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10));
+        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9,LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6,LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10, LocalDate.now(), LocalDate.now()));
 
         List<Category> categories = managingProduct.getCategoriesWithProducts();
 
@@ -156,6 +156,7 @@ class ManagingProductTest {
         assertEquals(Category.PANTS,categories.getFirst());
         assertEquals(Category.JEANS,categories.get(1));
         assertEquals(Category.DRESS,categories.getLast());
+
     }
 
     @Test
@@ -165,12 +166,12 @@ class ManagingProductTest {
 
     @Test
     public void returnNumberOfProductsInACategory(){
-        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10));
+        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10, LocalDate.now(), LocalDate.now()));
 
         assertEquals(4, managingProduct.countProductsInCategory(Category.DRESS));
     }
@@ -182,12 +183,12 @@ class ManagingProductTest {
 
     @Test
     public void returnsAMapWithFirstLetterInProductAndTheirCount(){
-        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10));
+        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10, LocalDate.now(), LocalDate.now()));
 
         Map<Character, Integer> products = managingProduct.getProductsInitialsMap();
 
@@ -204,5 +205,22 @@ class ManagingProductTest {
     }
 
     @Test
-    public void returnsProductsWithMaxRatingSortedForThisMonth(){}
+    public void returnsProductsWithMaxRatingSortedForThisMonth(){
+
+        LocalDate today = LocalDate.now();
+        LocalDate firstDay = today.withDayOfMonth(1);
+        LocalDate secondDay = today.withDayOfMonth(2);
+
+        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.DRESS, 9, LocalDate.of(2025,8,1), LocalDate.of(2025,8,1)));
+        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.of(2025,8,2), LocalDate.of(2025,8,2)));
+        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 7, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10, firstDay, LocalDate.now()));
+        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10, secondDay, LocalDate.now()));
+
+        assertEquals(2, managingProduct.getTopProductsThisMonth().size());
+        assertEquals("Milo", managingProduct.getTopProductsThisMonth().getFirst().id());
+        assertEquals("Leon", managingProduct.getTopProductsThisMonth().getLast().id());
+
+    }
 }

@@ -1,3 +1,8 @@
+## Development Documentation
+
+
+
+
 ### Assignment
 Exercise 3 – Java Programming: Warehouse Product Manager 
 🧠 Objective Implement a small Java application for managing 

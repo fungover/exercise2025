@@ -1,9 +1,12 @@
 package map;
 
 import entities.Player;
+import entities.Item;
+import entities.Enemy;
+import enemies.EnemyFactory;
 
 /**
- * PirateCave representerar hela vår karta
+ * PirateCave representerar hela vår karta med fiender och föremål
  */
 public class PirateCave {
     private Tile[][] map;
@@ -65,7 +68,7 @@ public class PirateCave {
     }
 
     private boolean isVerticalLine(int row, int col) {
-        return (row % 2 == 1) && (col % 2 == 0);
+        return (row % 2 == 0) && (col % 2 == 1);
     }
 
     private boolean isCrossing(int row, int col) {
@@ -74,7 +77,7 @@ public class PirateCave {
     }
 
     public void displayMap(Player player) {
-        System.out.println("\n🏴‍☠️ === PIRATGROTTAN === 🏴‍☠️");
+        System.out.println("\n⚔️ === PIRATGROTTAN === ⚔️");
 
         int playerDisplayX = -1;
         int playerDisplayY = -1;
@@ -90,7 +93,7 @@ public class PirateCave {
                     // Visa spelaren (spelaren har högst prioritet)
                     System.out.print(player.getSymbol());
                 } else {
-                    // Visa tile (som kan vara föremål eller normal symbol)
+                    // Visa tile (som kan vara fiende, föremål eller normal symbol)
                     System.out.print(map[row][col].getDisplaySymbol());
                 }
             }
@@ -104,38 +107,24 @@ public class PirateCave {
         System.out.println("🗺️  Rutnät: " + gridWidth + "x" + gridHeight + " spelrutor");
     }
 
-    /**
-     * Placerar ett föremål på kartan vid spelkoordinater
-     * @param item Föremålet att placera
-     * @param gameX X-koordinat (spelkoordinater)
-     * @param gameY Y-koordinat (spelkoordinater)
-     * @return true om föremålet placerades, false om positionen är ogiltig
-     */
-    public boolean placeItem(entities.Item item, int gameX, int gameY) {
+    // === FÖREMÅLSHANTERING ===
+    public boolean placeItem(Item item, int gameX, int gameY) {
         if (!isValidGamePosition(gameX, gameY)) {
             return false;
         }
 
-        // Konvertera till display-koordinater
         int displayX = gameX * 2 + 1;
         int displayY = gameY * 2 + 1;
 
         Tile tile = getTile(displayX, displayY);
-        if (tile != null && tile.canWalkOn()) {
+        if (tile != null && tile.canPlaceThings()) {
             tile.placeItem(item);
             return true;
         }
-
         return false;
     }
 
-    /**
-     * Hämtar föremål från en spelposition
-     * @param gameX X-koordinat (spelkoordinater)
-     * @param gameY Y-koordinat (spelkoordinater)
-     * @return Föremålet eller null om inget finns
-     */
-    public entities.Item getItemAt(int gameX, int gameY) {
+    public Item getItemAt(int gameX, int gameY) {
         if (!isValidGamePosition(gameX, gameY)) {
             return null;
         }
@@ -147,13 +136,7 @@ public class PirateCave {
         return tile != null ? tile.getItem() : null;
     }
 
-    /**
-     * Tar bort föremål från en spelposition
-     * @param gameX X-koordinat (spelkoordinater)
-     * @param gameY Y-koordinat (spelkoordinater)
-     * @return Föremålet som togs bort, eller null
-     */
-    public entities.Item removeItemAt(int gameX, int gameY) {
+    public Item removeItemAt(int gameX, int gameY) {
         if (!isValidGamePosition(gameX, gameY)) {
             return null;
         }
@@ -165,18 +148,59 @@ public class PirateCave {
         return tile != null ? tile.removeItem() : null;
     }
 
-    /**
-     * Kontrollerar om det finns ett föremål på en spelposition
-     */
     public boolean hasItemAt(int gameX, int gameY) {
-        entities.Item item = getItemAt(gameX, gameY);
+        Item item = getItemAt(gameX, gameY);
         return item != null;
     }
 
-    public void displayMap() {
-        displayMap(null);
+    // === FIENDEHANTERING ===
+    public boolean placeEnemy(Enemy enemy, int gameX, int gameY) {
+        if (!isValidGamePosition(gameX, gameY)) {
+            return false;
+        }
+
+        int displayX = gameX * 2 + 1;
+        int displayY = gameY * 2 + 1;
+
+        Tile tile = getTile(displayX, displayY);
+        if (tile != null && tile.canPlaceThings() && !tile.hasEnemy()) {
+            tile.placeEnemy(enemy);
+            enemy.setPosition(gameX, gameY); // Sätt fiendens position
+            return true;
+        }
+        return false;
     }
 
+    public Enemy getEnemyAt(int gameX, int gameY) {
+        if (!isValidGamePosition(gameX, gameY)) {
+            return null;
+        }
+
+        int displayX = gameX * 2 + 1;
+        int displayY = gameY * 2 + 1;
+
+        Tile tile = getTile(displayX, displayY);
+        return tile != null ? tile.getEnemy() : null;
+    }
+
+    public Enemy removeEnemyAt(int gameX, int gameY) {
+        if (!isValidGamePosition(gameX, gameY)) {
+            return null;
+        }
+
+        int displayX = gameX * 2 + 1;
+        int displayY = gameY * 2 + 1;
+
+        Tile tile = getTile(displayX, displayY);
+        return tile != null ? tile.removeEnemy() : null;
+    }
+
+    public boolean hasEnemyAt(int gameX, int gameY) {
+        Enemy enemy = getEnemyAt(gameX, gameY);
+        return enemy != null && enemy.isAlive();
+    }
+
+    // === KOLLISIONSDETEKTERING ===
     public boolean canPlayerMoveTo(int gameX, int gameY) {
         if (!isValidGamePosition(gameX, gameY)) {
             return false;
@@ -186,7 +210,58 @@ public class PirateCave {
         int displayY = gameY * 2 + 1;
 
         Tile tile = getTile(displayX, displayY);
-        return tile != null && tile.canWalkOn();
+        return tile != null && tile.canWalkOn(); // canWalkOn kollar redan efter fiender
+    }
+
+    // === SLUMPMÄSSIG GENERERING ===
+    public void populateWithEnemies(int enemyCount) {
+        System.out.println("🏴‍☠️ Placerar " + enemyCount + " fiender i grottan...");
+
+        int placed = 0;
+        int attempts = 0;
+        int maxAttempts = enemyCount * 10; // Undvik oändlig loop
+
+        while (placed < enemyCount && attempts < maxAttempts) {
+            int randomX = (int)(Math.random() * gridWidth);
+            int randomY = (int)(Math.random() * gridHeight);
+
+            // Undvik att placera fiender nära startpositionen (0,0)
+            if (randomX <= 1 && randomY <= 1) {
+                attempts++;
+                continue;
+            }
+
+            // Kolla om positionen är ledig
+            if (canPlaceEnemyAt(randomX, randomY)) {
+                Enemy enemy = EnemyFactory.createRandomEnemy();
+                if (placeEnemy(enemy, randomX, randomY)) {
+                    placed++;
+                    System.out.println("   Placerade " + enemy.getName() +
+                            " på position (" + randomX + ", " + randomY + ")");
+                }
+            }
+            attempts++;
+        }
+
+        System.out.println("✅ Placerade " + placed + " fiender totalt.");
+    }
+
+    private boolean canPlaceEnemyAt(int gameX, int gameY) {
+        if (!isValidGamePosition(gameX, gameY)) {
+            return false;
+        }
+
+        int displayX = gameX * 2 + 1;
+        int displayY = gameY * 2 + 1;
+
+        Tile tile = getTile(displayX, displayY);
+        return tile != null && tile.canPlaceThings() &&
+                !tile.hasEnemy() && !tile.hasItem();
+    }
+
+    // === HJÄLPMETODER ===
+    public void displayMap() {
+        displayMap(null);
     }
 
     public Tile getTile(int x, int y) {
@@ -200,6 +275,7 @@ public class PirateCave {
         return gameX >= 0 && gameX < gridWidth && gameY >= 0 && gameY < gridHeight;
     }
 
+    // Getters
     public int getGridWidth() { return gridWidth; }
     public int getGridHeight() { return gridHeight; }
     public int getDisplayWidth() { return displayWidth; }

@@ -98,6 +98,10 @@ public class InputHandler {
         System.out.println("   use [föremål]   - Använd ett föremål");
         System.out.println("                     Exempel: 'use rom', 'use svärd'");
 
+        System.out.println("\n⚔️ Strid:");
+        System.out.println("   attack/fight    - Attackera en fiende");
+        System.out.println("   flee/run        - Fly från strid");
+
         System.out.println("\n🔍 Information:");
         System.out.println("   look/examine    - Undersök området");
 

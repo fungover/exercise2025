@@ -15,7 +15,7 @@ public final class Product {
 
     public Product(String name) {
         this.createdDate = LocalDateTime.now();
-        this.modifiedDate = LocalDateTime.now();
+        this.modifiedDate = createdDate;
         this.name = name;
         this.id = UUID.randomUUID().toString();
     }
@@ -25,7 +25,7 @@ public final class Product {
         this.category = category;
         this.rating = rating;
         createdDate = LocalDateTime.now();
-        modifiedDate = LocalDateTime.now();
+        modifiedDate = createdDate;
         this.id = UUID.randomUUID().toString();
     }
 

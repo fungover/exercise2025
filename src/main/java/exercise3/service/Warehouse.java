@@ -1,8 +1,6 @@
 package exercise3.service;
 
 import exercise3.enteties.Product;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,7 +22,9 @@ public class Warehouse {
         products.add(product);
     }
     public void updateProduct(String id, String name, Category category, int rating) {
-        Optional<Product> productToUpdate = products.stream().filter(product -> product.getId().equals(id)).findFirst();
+        Optional<Product> productToUpdate = products.stream().
+                filter(product -> product.getId().equals(id)).
+                findFirst();
         if(productToUpdate.isPresent()){
             productToUpdate.ifPresent(product -> product.setName(name));
             productToUpdate.ifPresent(product -> product.setCategory(category));
@@ -38,7 +38,9 @@ public class Warehouse {
         return List.copyOf(products);
     }
     public Product getProductById(String id){
-        Optional<Product> productToUpdate = products.stream().filter(product -> product.getId().equals(id)).findFirst();
+        Optional<Product> productToUpdate = products.stream()
+                .filter(product -> product.getId().equals(id)).
+                findFirst();
         return productToUpdate.orElse(null);
     }
 
@@ -62,7 +64,10 @@ public class Warehouse {
     }
 
     public List<Product> getModifiedProducts(){
-        List<Product> modifiedProducts = products.stream().filter(param -> !param.getModifiedDate().equals(param.getCreatedDate())).toList();
+        List<Product> modifiedProducts = products.stream().
+                filter(param -> param.getModifiedDate()
+                        .isAfter(param.getCreatedDate()))
+                        .toList();
         return List.copyOf(modifiedProducts);
     }
 }

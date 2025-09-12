@@ -14,7 +14,9 @@ public class ProductTest {
         Product product = new Product("Rose soap");
         LocalDateTime now = LocalDateTime.now();
         assertEquals("Rose soap", product.getName());
-        assertNotNull(product.getCreatedDate());
+        assertEquals(LocalDateTime.now().getYear(), product.getCreatedDate().getYear());
+        assertEquals(LocalDateTime.now().getMonth(), product.getCreatedDate().getMonth());
+        assertEquals(LocalDateTime.now().getDayOfMonth(), product.getCreatedDate().getDayOfMonth());
         assertNotNull(product.getId());
     }
 
@@ -24,7 +26,9 @@ public class ProductTest {
         assertEquals("Coconut Shampoo", product.getName());
         assertEquals(Category.Shampoo, product.getCategory());
         assertEquals(7, product.getRating());
-        assertEquals(LocalDateTime.now(), product.getCreatedDate());
+        assertEquals(LocalDateTime.now().getYear(), product.getCreatedDate().getYear());
+        assertEquals(LocalDateTime.now().getMonth(), product.getCreatedDate().getMonth());
+        assertEquals(LocalDateTime.now().getDayOfMonth(), product.getCreatedDate().getDayOfMonth());
         assertNotNull(product.getId());
     }
 
@@ -94,13 +98,17 @@ public class ProductTest {
     @Test
     void testGetCreatedDateSuccess() {
         Product product = new Product("Strawberry conditioner", Category.Conditioner, 5);
-        assertEquals(LocalDateTime.now(), product.getCreatedDate());
+        assertEquals(LocalDateTime.now().getYear(), product.getCreatedDate().getYear());
+        assertEquals(LocalDateTime.now().getMonth(), product.getCreatedDate().getMonth());
+        assertEquals(LocalDateTime.now().getDayOfMonth(), product.getCreatedDate().getDayOfMonth());
     }
 
     @Test
     void testGetModifiedDateSuccess() {
         Product product = new Product("Rose soap");
-        assertEquals(LocalDateTime.now(), product.getModifiedDate());
+        assertEquals(LocalDateTime.now().getYear(), product.getModifiedDate().getYear());
+        assertEquals(LocalDateTime.now().getMonth(), product.getModifiedDate().getMonth());
+        assertEquals(LocalDateTime.now().getDayOfMonth(), product.getModifiedDate().getDayOfMonth());
     }
 
 

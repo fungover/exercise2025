@@ -39,7 +39,9 @@ public class WarehouseTest {
         assertEquals("Pink soap", warehouse.getAllProducts().getFirst().getName());
         assertEquals(Soap, warehouse.getAllProducts().getFirst().getCategory());
         assertEquals(8, warehouse.getAllProducts().getFirst().getRating());
-        assertEquals(LocalDateTime.now(), warehouse.getAllProducts().getFirst().getModifiedDate());
+        assertEquals(LocalDateTime.now().getYear(), warehouse.getAllProducts().getFirst().getModifiedDate().getYear());
+        assertEquals(LocalDateTime.now().getMonth(), warehouse.getAllProducts().getFirst().getModifiedDate().getMonth());
+        assertEquals(LocalDateTime.now().getDayOfMonth(), warehouse.getAllProducts().getFirst().getModifiedDate().getDayOfMonth());
     }
 
     @Test
@@ -50,6 +52,7 @@ public class WarehouseTest {
         warehouse.addProduct(product);
         warehouse.updateProduct(id, "Pink soap", Category.Soap, 8);
         assertEquals("Rose soap", warehouse.getAllProducts().getFirst().getName());
+        assertEquals(product.getCreatedDate(), product.getModifiedDate());
     }
 
     @Test

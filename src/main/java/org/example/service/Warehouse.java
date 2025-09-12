@@ -66,7 +66,7 @@ public class Warehouse {
                 .collect(Collectors.toMap(
                         Product::category,
                         Function.identity(),
-                        (firstProduct, _) -> firstProduct
+                        (firstProduct, ignored) -> firstProduct
                 ));
     }
 

@@ -146,7 +146,7 @@ public class PriceUtilsTest {
 
         String summary = PriceUtils.windowSummary(prices, 0, 2);
 
-        assertEquals("Bästa 2h-blocket (2025-09-11): 00:00–02:00 (0,75kr/kWh)", summary);
+        assertEquals("Bästa 2h-blocket (2025-09-11): 00:00–02:00 (0,7500kr/kWh)", summary);
     }
 
     @Test
@@ -166,6 +166,6 @@ public class PriceUtilsTest {
         int bestStart = PriceUtils.findBestWindowStart(prices, 2);
         String summary = PriceUtils.windowSummary(prices, bestStart, 2);
 
-        assertEquals("Bästa 2h-blocket (2025-09-12): 00:00–02:00 (0,55kr/kWh)", summary);
+        assertEquals("Bästa 2h-blocket (2025-09-12): 00:00–02:00 (0,5500kr/kWh)", summary);
     }
 }

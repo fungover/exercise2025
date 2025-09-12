@@ -32,7 +32,10 @@ public class PriceFetcher {
                 .build();
 
         // Skickar anropet med den gemensamma klienten och får svaret som text (JSON-format)
-        HttpResponse<String> response = CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = CLIENT.send(
+                request,
+                HttpResponse.BodyHandlers.ofString(java.nio.charset.StandardCharsets.UTF_8)
+        );
 
         // Om svaret är OK (200) → tolka JSON som en lista av PricePoint
         if (response.statusCode() == 200) {
@@ -54,7 +57,10 @@ public class PriceFetcher {
                     .build();
 
             // Skickar anropet med den gemensamma klienten
-            HttpResponse<String> response = CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = CLIENT.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString(java.nio.charset.StandardCharsets.UTF_8)
+            );
 
             // Om morgondagens priser inte finns ännu → returnera tom lista
             if (response.statusCode() == 404) {

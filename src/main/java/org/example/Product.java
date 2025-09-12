@@ -32,7 +32,7 @@ public class Product {
 		return name;
 	}
 
-	public String ID() {
+	public String id() {
 		return id;
 	}
 

@@ -3,7 +3,6 @@ package org.example;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
 	@Test
@@ -29,7 +28,7 @@ class ProductTest {
 		Thread.sleep(5000);
 
 		product.updateProduct("SUPER_DUPER_GAME", "Little Leafy Lizard", Category.COMPUTERS, 8);
-		assertThat(product.ID()).isEqualTo("SUPER_DUPER_GAME");
+		assertThat(product.id()).isEqualTo("SUPER_DUPER_GAME");
 		assertThat(product.createdAt()).isNotEqualTo(product.modifiedAt());
 	}
 }

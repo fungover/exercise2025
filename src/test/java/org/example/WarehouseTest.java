@@ -22,7 +22,7 @@ class WarehouseTest {
 		Product recievedProduct = warehouse.getAllProducts().get(1);
 
 		assertThat(warehouse.getAllProducts().size()).isEqualTo(2);
-		assertThat(recievedProduct.ID()).isEqualTo("SUPER_DUPER_COMPUTER");
+		assertThat(recievedProduct.id()).isEqualTo("SUPER_DUPER_COMPUTER");
 	}
 
 	@Test
@@ -32,7 +32,7 @@ class WarehouseTest {
 		warehouse.addProduct(product);
 		Product recievedProduct = warehouse.getAllProducts().get(0);
 
-		assertThat(recievedProduct.ID()).isEqualTo("SUPER_COMPUTER");
+		assertThat(recievedProduct.id()).isEqualTo("SUPER_COMPUTER");
 		assertThat(recievedProduct.category()).isEqualTo(Category.COMPUTERS);
 		assertThat(recievedProduct.rating()).isEqualTo(8);
 	}
@@ -62,6 +62,7 @@ class WarehouseTest {
 		warehouse.addProduct(new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8));
 
 		Product gameProduct = warehouse.getProductById("SUPER_GAME");
+		System.out.println(gameProduct.name());
 
 		assertThat(gameProduct.category()).isEqualTo(Category.GAMES);
 	}

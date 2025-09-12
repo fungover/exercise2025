@@ -10,11 +10,11 @@ public class Warehouse {
 	public Warehouse() {
 		products = new ArrayList<>();
 	}
+
 	public void addProduct(Product product) {
-		if  (product == null || product.name() == null || product.name().isEmpty()) {
+		if (product == null || product.name() == null || product.name().isEmpty()) {
 			System.out.println("ERROR: Product name is null or empty");
-		}
-		else {
+		} else {
 			products.add(product);
 		}
 	}
@@ -23,6 +23,8 @@ public class Warehouse {
 		return Collections.unmodifiableList(products);
 	}
 
-
+	public Product getProductById(String id) {
+		return products.stream().filter(product -> product.id().equals(id)).findFirst().get();
+	}
 
 }

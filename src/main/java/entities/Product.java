@@ -38,7 +38,7 @@ public record Product(String id, String name, Category category, int rating, Loc
      * If I want to change the object in the future, without breaking immutability
      **/
     public Product withName(String newName, LocalDate newModifiedDate) {
-        return new Product(id, newName, category, rating, createdDate, modifiedDate);
+        return new Product(id, newName, category, rating, createdDate, newModifiedDate);
     }
 
     //
@@ -47,7 +47,7 @@ public record Product(String id, String name, Category category, int rating, Loc
     }
 
     public Product withRating(int newRating, LocalDate newModifiedDate) {
-        return new Product(id, name, category, rating, createdDate, modifiedDate);
+        return new Product(id, name, category, rating, createdDate, newModifiedDate);
     }
 
 

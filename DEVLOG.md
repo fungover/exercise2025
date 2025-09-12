@@ -6,7 +6,8 @@ the parameter or the field, since both have the same name.
 
 'this.category' is the field and 'category' the parameter. 
 This is more evident when using canonical constructors, not 
-compact like I do. 
+compact like I do. Validation is taken care of only in the constructor, 
+so my with methods does not need any checks. 
 
 
 

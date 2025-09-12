@@ -12,7 +12,7 @@ public final class Product {
     private final ZonedDateTime createdDate;
     private final ZonedDateTime modifiedDate;
 
-    // Private constructor, can only be called by Builder
+    // Private constructor, it can only be called by Builder
     private Product(String id, String name, Category category, int rating,
                     ZonedDateTime createdDate, ZonedDateTime modifiedDate) {
         this.id = id;

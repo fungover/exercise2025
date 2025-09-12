@@ -47,7 +47,7 @@ public record Product(String id, String name, Category category, int rating, Loc
     }
 
     public Product withRating(int newRating, LocalDate newModifiedDate) {
-        return new Product(id, name, category, rating, createdDate, newModifiedDate);
+        return new Product(id, name, category, newRating, createdDate, newModifiedDate);
     }
 
 

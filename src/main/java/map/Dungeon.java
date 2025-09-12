@@ -91,7 +91,13 @@ public class Dungeon {
         }
     }
 
+    public Item getItemAt(int x, int y) {
+        return map[y][x].getItem();
+    }
 
+    public void removeItemAt(int x, int y) {
+        map[y][x].setItem(null);
+    }
 }
 
 

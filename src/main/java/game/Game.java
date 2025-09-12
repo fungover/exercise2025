@@ -1,7 +1,9 @@
 package game;
 
 import entities.Enemy;
+import entities.Item;
 import entities.Player;
+import entities.Potion;
 import map.Dungeon;
 
 import java.util.ArrayList;
@@ -16,11 +18,21 @@ public class Game {
 
     public Game(){
 
-        enemyList.add(new Enemy(5, 5, 50, 10));
+        Potion potion = new Potion("Potion", 50);
+        dungeon.placeItem(4, 5, potion);
+        dungeon.placeItem(5, 3, potion);
+        dungeon.placeItem(5, 3, potion);
+        dungeon.placeItem(7, 2, potion);
+        dungeon.placeItem(5, 4, potion);
+        dungeon.placeItem(4, 8, potion);
+
+        enemyList.add(new Enemy(5, 5, 100, 30));
         enemyList.add(new Enemy(2, 4, 100, 30));
-        enemyList.add(new Enemy(4, 2, 20, 20));
-        enemyList.add(new Enemy(5, 3, 50, 5));
-        enemyList.add(new Enemy(8, 7, 50, 5));
+        enemyList.add(new Enemy(4, 2, 100, 30));
+        enemyList.add(new Enemy(5, 3, 100, 30));
+        enemyList.add(new Enemy(8, 7, 100, 30));
+        enemyList.add(new Enemy(5, 8, 100, 30));
+        enemyList.add(new Enemy(2, 8, 100, 30));
 
         while(true){
             dungeon.printDungeon(player, enemyList);
@@ -32,20 +44,33 @@ public class Game {
             switch (input) {
                 case "w":
                     player.move(0, -1, dungeon);
+                    checkForItem();
                     break;
                 case "s":
                     player.move(0, 1, dungeon);
+                    checkForItem();
                     break;
                 case "a":
                     player.move(-1, 0, dungeon);
+                    checkForItem();
                     break;
                 case "d":
                     player.move(1, 0, dungeon);
+                    checkForItem();
                     break;
                 default:
                     System.out.println("No valid command!");
                     break;
             }
+        }
+
+    }
+
+    private void checkForItem() {
+        Item item = dungeon.getItemAt(player.getX(), player.getY());
+        if (item != null) {
+            System.out.println("You found a " + item.getName() + "!");
+            dungeon.removeItemAt(player.getX(), player.getY());
         }
     }
 

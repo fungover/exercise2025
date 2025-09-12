@@ -1,6 +1,6 @@
 package entities;
 
-public class Potion extends Item{
+public class Potion extends Item {
     private int healAmount;
 
     public Potion(String name, int healAmount) {
@@ -8,7 +8,7 @@ public class Potion extends Item{
         this.healAmount = healAmount;
     }
 
-    public int heal(){
+    public int heal() {
         return healAmount;
     }
 

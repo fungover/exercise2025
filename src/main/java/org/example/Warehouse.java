@@ -10,17 +10,19 @@ public class Warehouse {
 	public Warehouse() {
 		products = new ArrayList<>();
 	}
-	public boolean addProduct(Product product) {
+	public void addProduct(Product product) {
 		if  (product == null || product.name() == null || product.name().isEmpty()) {
-			return false;
+			System.out.println("ERROR: Product name is null or empty");
 		}
 		else {
 			products.add(product);
-			return true;
 		}
 	}
 
-	public List<Product> getProducts() {
+	public List<Product> getAllProducts() {
 		return Collections.unmodifiableList(products);
 	}
+
+
+
 }

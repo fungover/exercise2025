@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 //
 //Item effects - check
 //
-//Map generation (basic validation)
+//Map generation (basic validation) - check
 class AppTest {
 
     @DisplayName("Checking if player walks in correct direction")

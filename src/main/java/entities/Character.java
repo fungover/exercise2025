@@ -5,7 +5,7 @@ import map.Dungeon;
 public abstract class Character {
 
     private int health;
-    private final int damage;
+    private int damage;
     private int x;
     private int y;
 
@@ -24,8 +24,12 @@ public abstract class Character {
         this.health = health;
     }
 
-    public int attack() {
+    public int getDamage() {
         return this.damage;
+    }
+
+    public void increaseDamage(int amount) {
+        this.damage += amount;
     }
 
     public void setPosition(int x, int y){

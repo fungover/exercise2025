@@ -6,6 +6,7 @@ public class Player extends Character{
         super(x, y, health, damage);
     }
 
+
     @Override
     public String toString() {
         return "P";

@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Game {
     Dungeon dungeon = new Dungeon(10, 10);
-    Player player = new Player(1, 1, 100, 10);
+    Player player = new Player(1, 1, 100, 50);
     List<Enemy> enemyList = new ArrayList<Enemy>();
     Scanner scanner = new Scanner(System.in);
 
@@ -66,12 +66,11 @@ public class Game {
     }
 
     private void checkForItem() {
-        Item item = dungeon.getItemAt(player.getX(), player.getY());
+       Item item = dungeon.getItemAt(player.getX(), player.getY());
         if (item != null) {
             System.out.println("You found a " + item.getName() + "!");
             item.use(player);
             dungeon.removeItemAt(player.getX(), player.getY());
         }
     }
-
 }

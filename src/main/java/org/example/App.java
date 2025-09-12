@@ -109,7 +109,7 @@ public class App {
             Set<LocalDate> csvDates = new HashSet<>();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             for (ConsumptionPoint c : consumptionData) {
-                LocalDate date = LocalDate.parse(c.getTime(), formatter);
+                LocalDate date = java.time.LocalDateTime.parse(c.getTime(), formatter).toLocalDate();
                 csvDates.add(date);
             }
 

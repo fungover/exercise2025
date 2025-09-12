@@ -14,5 +14,9 @@ public class Enemy {
         this.positionX = positionX;
         this.positionY = positionY;
     }
+
+    public String getType() {
+      return this.type;
+    };
 }
 

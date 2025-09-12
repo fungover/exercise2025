@@ -1,9 +1,15 @@
 package entities;
 
+import interfaces.Combatable;
+import interfaces.Displayable;
+import interfaces.Positionable;
+import utils.Constants;
+import utils.RandomGenerator;
+
 /**
  * Basklass för alla fiender i spelet
  */
-public abstract class Enemy extends Entity {
+public abstract class Enemy extends Entity implements Combatable, Displayable, Positionable {
     private boolean isAlive;
     private char displaySymbol;
     private String attackMessage;
@@ -47,8 +53,8 @@ public abstract class Enemy extends Entity {
             return getName() + " är redan besegrad och kan inte attackera.";
         }
 
-        // 30% chans för specialattack
-        if (Math.random() < 0.3) {
+        // Använd Constants för chans
+        if (RandomGenerator.rollPercent(Constants.SPECIAL_ATTACK_CHANCE)) {
             return getSpecialAttack(player);
         }
 
@@ -76,13 +82,18 @@ public abstract class Enemy extends Entity {
         return isAlive && getCurrentHealth() > 0;
     }
 
-    // Getters
-    public char getDisplaySymbol() {
-        return displaySymbol;
+    // Implementerar Combatable interface
+    public int attack() {
+        if (!isAlive()) {
+            return 0;
+        }
+        return getDamage();
     }
 
+    // Implementerar Displayable interface
+    @Override
     public char getSymbol() {
-        return isAlive() ? displaySymbol : 'x'; // x för död fiende
+        return isAlive() ? displaySymbol : Constants.DEAD_ENEMY_SYMBOL;
     }
 
     public String getAttackMessage() {

@@ -2,6 +2,8 @@ package service;
 
 import entities.Player;
 import entities.Enemy;
+import utils.Constants;
+import utils.RandomGenerator;
 
 /**
  * CombatService hanterar all strid mellan spelaren och fiender
@@ -75,8 +77,8 @@ public class CombatService {
      * Spelaren försöker fly från striden
      */
     public CombatResult attemptFlee(Player player, Enemy enemy) {
-        // 70% chans att lyckas fly
-        boolean success = Math.random() < 0.7;
+        // Använd konstant för fly-chans
+        boolean success = RandomGenerator.rollPercent(Constants.FLEE_SUCCESS_CHANCE);
 
         if (success) {
             return new CombatResult(false, false,

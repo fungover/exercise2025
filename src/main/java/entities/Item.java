@@ -1,10 +1,13 @@
 package entities;
 
+import interfaces.Usable;
+import interfaces.Displayable;
+
 /**
  * Basklass för alla föremål i spelet
- * Här definierar vi vad ALLA föremål ska ha gemensamt
+ * Implementerar Usable och Displayable interfaces
  */
-public abstract class Item {
+public abstract class Item implements Usable, Displayable {
     // Privata attribut - bara denna klass kan komma åt dem direkt
     private String name;        // Föremålets namn
     private String description; // Beskrivning av föremålet

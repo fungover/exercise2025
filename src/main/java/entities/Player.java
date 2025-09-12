@@ -1,6 +1,10 @@
 package entities;
 
 import items.MagicKey;
+import interfaces.Combatable;
+import interfaces.Displayable;
+import interfaces.Positionable;
+import utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,7 +148,15 @@ public class Player extends Entity {
         return new int[]{displayX, displayY};
     }
 
-    public char getSymbol() {
-        return '@'; // Spelaren visas som @
+    // Implementerar Combatable interface
+    public int attack() {
+        return getTotalDamage();
     }
+
+    // Implementerar Displayable interface
+    public char getSymbol() {
+        return Constants.PLAYER_SYMBOL;
+    }
+
+    // Implementerar Positionable interface (ärvs redan från Entity, men för tydlighet)
 }

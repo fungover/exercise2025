@@ -9,6 +9,7 @@ import service.MovementService;
 import service.InventoryService;
 import service.CombatService;
 import enemies.EnemyFactory;
+import utils.Constants;
 
 /**
  * GameManager är "chefen" som styr hela spelet
@@ -27,25 +28,52 @@ public class GameManager {
     private CombatService.CombatResult currentCombat; // Pågående strid
 
     public GameManager() {
-        cave = new PirateCave(5, 4);
-        player = new Player("Kapten Morgan", 100, 15); // namn, maxHealth, damage
+        // Fråga efter användarens namn
+        String playerName = askForPlayerName();
+
+        cave = new PirateCave(Constants.DEFAULT_MAP_WIDTH, Constants.DEFAULT_MAP_HEIGHT);
+        player = new Player("Kapten " + playerName, Constants.PLAYER_STARTING_HEALTH, Constants.PLAYER_STARTING_DAMAGE);
         inputHandler = new InputHandler();
         movementService = new MovementService();
         inventoryService = new InventoryService();
         combatService = new CombatService();
         gameRunning = true;
-        currentCombat = null; // Ingen strid pågår
+        currentCombat = null;
 
         System.out.println("🎮 GameManager startad!");
-        System.out.println("📍 Piratgrotta skapad: 5x4 spelrutor med komplett rutnät");
+        System.out.println("📍 Piratgrotta skapad: " + Constants.DEFAULT_MAP_WIDTH + "x" + Constants.DEFAULT_MAP_HEIGHT + " spelrutor");
 
-        // Placera ut några föremål för testning
+        // Placera ut föremål och fiender
         placeInitialItems();
-
-        // Placera ut fiender i grottan
         placeInitialEnemies();
     }
 
+    /**
+     * Frågar användaren efter deras namn
+     */
+    private String askForPlayerName() {
+        java.util.Scanner nameScanner = new java.util.Scanner(System.in);
+
+        System.out.println("🏴‍☠️ Välkommen till Piratgrottans Äventyr! 🏴‍☠️");
+        System.out.println("═".repeat(50));
+        System.out.print("Skriv ditt förnamn för att börja ditt äventyr: ");
+
+        String firstName = nameScanner.nextLine().trim();
+
+        // Kontrollera att namnet inte är tomt
+        while (firstName.isEmpty()) {
+            System.out.print("Du måste ange ett namn. Försök igen: ");
+            firstName = nameScanner.nextLine().trim();
+        }
+
+        // Gör första bokstaven stor
+        firstName = firstName.substring(0, 1).toUpperCase() +
+                firstName.substring(1).toLowerCase();
+
+        System.out.println("\nVälkommen, Du är nu Kapten " + firstName + "! Ditt äventyr börjar här och nu...");
+
+        return firstName;
+    }
     /**
      * Placerar ut några föremål på kartan för att testa systemet
      */
@@ -74,8 +102,7 @@ public class GameManager {
     }
 
     public void startGame() {
-        System.out.println("\n🏴‍☠️ Välkommen till Piratgrottans Äventyr! 🏴‍☠️");
-        System.out.println("═".repeat(50));
+        System.out.println("\n" + "═".repeat(50));
 
         showPlayerInfo();
         showMap();

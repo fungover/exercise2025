@@ -10,12 +10,14 @@ import org.example.map.Tile;
 import org.example.service.PotionLogic;
 import org.example.utils.Command;
 import org.example.utils.Spawner;
+import org.example.utils.Text;
+
 import java.util.Scanner;
 
 public class Game {
     private Scanner scanner = new Scanner(System.in);
     private Player player;
-    private Dungeon dungeon;
+    public Dungeon dungeon;
     private MovementLogic movementLogic;
 
     private boolean allEnemiesDefeated() {
@@ -31,6 +33,8 @@ public class Game {
     }
 
     public void startGame() {
+        Text.printRules();
+        System.out.println();
         System.out.println("Welcome to the Dungeon.... I have been waiting for an adventurer..");
         System.out.print("Please, tell me your name ");
         String name = scanner.nextLine();
@@ -46,9 +50,8 @@ public class Game {
         int previousCol = player.getCol();
 
         System.out.println("Well Hello, " + player.getName() + ". Step inside and see what happens...");
-        System.out.println("Your health is " + player.getHealth());
-        System.out.println("Lets go!");
 
+        dungeon.printDungeon();
 
         while (true) {
             System.out.print("> ");

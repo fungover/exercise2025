@@ -4,6 +4,7 @@ import org.example.entities.Player;
 import org.example.entities.enemies.Enemy;
 import org.example.entities.items.Item;
 import org.example.entities.items.Weapon;
+import org.example.game.Game;
 import org.example.map.Dungeon;
 import org.example.service.MovementLogic;
 import org.example.service.Combat;
@@ -18,9 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 //
 //Movement logic - Check
 //
-//Combat calculations
+//Combat calculations - Check
 //
-//Item effects
+//Item effects - check
 //
 //Map generation (basic validation)
 class AppTest {
@@ -106,7 +107,7 @@ class AppTest {
     }
 
     @Test
-    void testEnemyDies() {
+    void enemyDies() {
 
         Player player = new Player("Hundis Pilotosh");
         Weapon sword = new Weapon("Fire Sword", 40);
@@ -119,5 +120,12 @@ class AppTest {
         assertThat(enemy.getHealth()).isEqualTo(0);
         assertThat(enemy.isAlive()).isFalse();
         assertThat(player.getHealth()).isEqualTo(100);
+    }
+
+    // tests for map generation
+
+    @Test
+    void dungeonIsExpectedSize() {
+
     }
 }

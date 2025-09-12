@@ -26,4 +26,26 @@ public class Dungeon {
     public int getCols() {
         return tiles[0].length;
     }
+
+    public void printDungeon() {
+        System.out.println("~~~~~~~~~~");
+        System.out.println(" DUNGEON");
+        System.out.println("~~~~~~~~~~");
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getCols(); j++) {
+                Tile tile = tiles[i][j];
+                char symbol;
+
+                if (tile.getEnemy() != null) {
+                    symbol = 'E';
+                } else if (tile.getItem() != null) {
+                    symbol = 'I';
+                } else {
+                    symbol = '.';
+                }
+                System.out.print(symbol + " ");
+            }
+            System.out.println();
+        }
+    }
 }

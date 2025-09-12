@@ -54,7 +54,8 @@ public class Combat {
             System.out.println(enemy.getType() + " attacks back for " + enemyDamage + " damage.");
             System.out.println("Your health is now " + player.getHealth() + ".");
             System.out.println(enemy.getType() + " health is now " + enemy.getHealth() + ".");
-        } else {
+        }
+        else {
             System.out.println("You have defeated the " + enemy.getType() + "!");
         }
     }

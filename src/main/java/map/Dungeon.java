@@ -1,19 +1,24 @@
 package map;
 
 
+import entities.Enemy;
+import entities.Item;
 import entities.Player;
+import entities.Potion;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Dungeon {
 
     private final int width, height;
     private final Tile[][] map;
-    private final int start = 0;
+    private Potion potion;
 
     public Dungeon(int width, int height) {
         this.width = width;
         this.height = height;
         map = new Tile[height][width];
-
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -43,22 +48,34 @@ public class Dungeon {
         map[5][2] = new Tile(TileType.WALL);
         map[5][1] = new Tile(TileType.WALL);
         map[1][4] = new Tile(TileType.WALL);
-        map[4][7] = new Tile(TileType.ROOM);
-        map[7][4] = new Tile(TileType.ROOM);
-        map[2][1] = new Tile(TileType.ROOM);
 
-        printDungeon(new Player());
     }
 
-    //If you want to print the map
-    private void printDungeon(Player player) {
+    public void printDungeon(Player player, List<Enemy> enemies) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
+
                 if (player.getX() == x && player.getY() == y) {
                     System.out.print(player + "  ");
-                } else {
-                    System.out.print(map[y][x] + "  ");
+                    continue;
                 }
+
+                boolean enemyFound = false;
+                for (Enemy e : enemies) {
+                    if (e.getX() == x && e.getY() == y) {
+                        System.out.print(e + "  ");
+                        enemyFound = true;
+                        break;
+                    }
+                }
+                if (enemyFound) continue;
+
+                if (map[y][x].hasItem()) {
+                    System.out.print("I  ");
+                    continue;
+                }
+
+                System.out.print(map[y][x] + "  ");
             }
             System.out.println();
         }
@@ -67,6 +84,13 @@ public class Dungeon {
     public boolean isWalkable(int x, int y) {
         return map[y][x].getType() == TileType.FLOOR || map[y][x].getType() == TileType.ROOM;
     }
+
+    public void placeItem(int x, int y, Item item) {
+        if (map[y][x].getType() == TileType.FLOOR && !map[y][x].hasItem()) {
+            map[y][x].setItem(item);
+        }
+    }
+
 
 }
 

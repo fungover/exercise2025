@@ -1,5 +1,7 @@
 package entities;
 
+import map.Dungeon;
+
 public abstract class Character {
 
     private int health;
@@ -26,6 +28,11 @@ public abstract class Character {
         return this.damage;
     }
 
+    public void setPosition(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
     public int getX(){
         return x;
     }
@@ -34,9 +41,15 @@ public abstract class Character {
         return y;
     }
 
-    public void move(int dx, int dy){
-        this.x += dx;
-        this.y += dy;
+    public void move(int dx, int dy, Dungeon dungeon){
+        int newX = getX() + dx;
+        int newY = getY() + dy;
+
+        if (dungeon.isWalkable(newX, newY)) {
+            setPosition(newX, newY);
+        } else {
+            System.out.println("You bump into a wall. Ouch!");
+        }
     }
 
 }

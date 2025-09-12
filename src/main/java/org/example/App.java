@@ -1,9 +1,10 @@
 package org.example;
 
-import map.Dungeon;
+
+import game.Game;
 
 public class App {
     public static void main(String[] args) {
-        Dungeon d = new Dungeon(10, 10);
+        Game game = new Game();
     }
 }

@@ -114,7 +114,7 @@ public class PriceUtils {
         double avg = sum / windowSize;
 
         // Formatera med svenskt decimalkomma
-        String formattedAvg = String.format(java.util.Locale.forLanguageTag("sv-SE"), "%.2f", avg);
+        String formattedAvg = String.format(java.util.Locale.forLanguageTag("sv-SE"), "%.4f", avg);
 
         // Bygg upp resultattexten
         return "Bästa " + windowSize + "h-blocket (" + dateSpan + "): "

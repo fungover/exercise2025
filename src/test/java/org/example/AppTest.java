@@ -6,6 +6,7 @@ import org.example.entities.items.Item;
 import org.example.entities.items.Weapon;
 import org.example.game.Game;
 import org.example.map.Dungeon;
+import org.example.map.Tile;
 import org.example.service.MovementLogic;
 import org.example.service.Combat;
 import org.junit.jupiter.api.DisplayName;
@@ -125,7 +126,18 @@ class AppTest {
     // tests for map generation
 
     @Test
-    void dungeonIsExpectedSize() {
+    void dungeonBasicMapGeneration() {
+        Dungeon dungeon = new Dungeon(5, 5);
 
+        assertThat(dungeon.getRows()).isEqualTo(5);
+        assertThat(dungeon.getCols()).isEqualTo(5);
+
+        for (int i = 0; i < dungeon.getRows(); i++) {
+            for (int j = 0; j < dungeon.getCols(); j++) {
+                Tile tile = dungeon.getTile(i, j);
+                assertThat(tile).isNotNull();
+                assertThat(tile.getTileType()).isEqualTo("Empty");
+            }
+        }
     }
 }

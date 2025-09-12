@@ -62,14 +62,14 @@ public class Warehouse {
         UUID productId = parseUuid(id);
 
         return Optional.ofNullable(products.computeIfPresent(productId, (key, existingProduct) ->
-                new Product(
-                        existingProduct.id(),
-                        name,
-                        category,
-                        rating,
-                        existingProduct.createdDate(),
-                        ZonedDateTime.now()
-                )
+                Product.builder()
+                        .id(existingProduct.id())
+                        .name(name)
+                        .category(category)
+                        .rating(rating)
+                        .createdDate(existingProduct.createdDate())
+                        .modifiedDate(ZonedDateTime.now())
+                        .build()
         ));
     }
 

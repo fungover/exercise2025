@@ -14,32 +14,32 @@ public class App {
         Warehouse warehouse = new Warehouse();
 
         // Add some demo products
-        Product chewBone = new Product(
-                UUID.randomUUID().toString(),
-                "Chew Bone",
-                Category.FOOD,
-                8,
-                ZonedDateTime.now().minusDays(5),
-                ZonedDateTime.now().minusDays(5)
-        );
+        Product chewBone = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Chew Bone")
+                .category(Category.FOOD)
+                .rating(8)
+                .createdDate(ZonedDateTime.now().minusDays(5))
+                .modifiedDate(ZonedDateTime.now().minusDays(5))
+                .build();
 
-        Product squeakyBall = new Product(
-                UUID.randomUUID().toString(),
-                "Squeaky Ball",
-                Category.TOYS,
-                6,
-                ZonedDateTime.now().minusDays(2),
-                ZonedDateTime.now().minusDays(2)
-        );
+        Product squeakyBall = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Squeaky Ball")
+                .category(Category.TOYS)
+                .rating(6)
+                .createdDate(ZonedDateTime.now().minusDays(2))
+                .modifiedDate(ZonedDateTime.now().minusDays(2))
+                .build();
 
-        Product dogBed = new Product(
-                UUID.randomUUID().toString(),
-                "Comfy Dog Bed",
-                Category.BEDDING,
-                9,
-                ZonedDateTime.now().minusDays(10),
-                ZonedDateTime.now().minusDays(3) // modified later
-        );
+        Product dogBed = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Comfy Dog Bed")
+                .category(Category.BEDDING)
+                .rating(9)
+                .createdDate(ZonedDateTime.now().minusDays(10))
+                .modifiedDate(ZonedDateTime.now().minusDays(3)) // modified later
+                .build();
 
         warehouse.addProduct(chewBone);
         warehouse.addProduct(squeakyBall);

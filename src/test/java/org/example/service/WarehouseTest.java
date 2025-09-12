@@ -29,14 +29,14 @@ class WarehouseTest {
     @DisplayName( "Adds a product to the warehouse")
     void addProductToWarehouse(){
         ZonedDateTime now = ZonedDateTime.now();
-        Product clicker = ( new Product(
-                UUID.randomUUID().toString(),
-                "Clicker",
-                Category.TRAINING,
-                5,
-                now,
-                now
-        ));
+        Product clicker = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Clicker")
+                .category(Category.TRAINING)
+                .rating(5)
+                .createdDate(now)
+                .modifiedDate(now)
+                .build();
 
         warehouse.addProduct(clicker);
 
@@ -51,16 +51,17 @@ class WarehouseTest {
     @DisplayName("Throws an exception when name is empty")
     void addProductToWarehouseWithEmptyName_throwsException(){
         assertThatThrownBy(() -> warehouse.addProduct(
-                new Product(
-                        UUID.randomUUID().toString(),
-                        "",
-                        Category.FOOD,
-                        3,
-                        ZonedDateTime.now(),
-                        ZonedDateTime.now()
-                )))
+                Product.builder()
+                        .id(UUID.randomUUID().toString())
+                        .name("")
+                        .category(Category.FOOD)
+                        .rating(3)
+                        .createdDate(ZonedDateTime.now())
+                        .modifiedDate(ZonedDateTime.now())
+                        .build()
+        ))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Product name cannot be empty or null.");
+                .hasMessage("name required");
 
     }
 
@@ -69,57 +70,62 @@ class WarehouseTest {
     @Test
     @DisplayName("Returns all added products to  the warehouse")
     public void getAllProducts_returnsAllAddedProducts() {
-        Warehouse warehouse = new Warehouse();
 
-        Product chewBone = new Product(
-                UUID.randomUUID().toString(),
-                "Chew Bone",
-                Category.FOOD,
-                4,
-                ZonedDateTime.now(),
-                ZonedDateTime.now());
+        Product chewBone = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Chew Bone")
+                .category(Category.FOOD)
+                .rating(4)
+                .createdDate(ZonedDateTime.now())
+                .modifiedDate(ZonedDateTime.now())
+                .build();
 
-        Product SqueakyBanana = new Product(
-                UUID.randomUUID().toString(),
-                "Squeaky Banana",
-                Category.TOYS,
-                3,
-                ZonedDateTime.now(),
-                ZonedDateTime.now());
+        Product squeakyBanana = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Squeaky Banana")
+                .category(Category.TOYS)
+                .rating(3)
+                .createdDate(ZonedDateTime.now())
+                .modifiedDate(ZonedDateTime.now())
+                .build();
 
         warehouse.addProduct(chewBone);
-        warehouse.addProduct(SqueakyBanana);
+        warehouse.addProduct(squeakyBanana);
 
         List<Product> allProducts = warehouse.getAllProducts();
 
         assertThat(allProducts)
                 .hasSize(2)
-                .containsExactly(chewBone, SqueakyBanana);
+                .containsExactly(chewBone, squeakyBanana);
     }
 
     @Test
     @DisplayName("Throws an exception when trying to modify returned list")
     public void getAllProducts_throwsException_whenTryingToModifyReturnedList() {
-        Warehouse warehouse = new Warehouse();
-        Product redBlanket = new Product(
-                UUID.randomUUID().toString(),
-                "Red Blanket",
-                Category.BEDDING,
-                4,
-                ZonedDateTime.now(),
-                ZonedDateTime.now());
+
+        Product redBlanket = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Red Blanket")
+                .category(Category.BEDDING)
+                .rating(4)
+                .createdDate(ZonedDateTime.now())
+                .modifiedDate(ZonedDateTime.now())
+                .build();
 
         warehouse.addProduct(redBlanket);
 
         List<Product> allProducts = warehouse.getAllProducts();
 
-        assertThatThrownBy(() -> allProducts.add(new Product(
-                UUID.randomUUID().toString(),
-                "Squeaky Banana",
-                Category.TOYS,
-                3,
-                ZonedDateTime.now(),
-                ZonedDateTime.now())))
+        assertThatThrownBy(() -> allProducts.add(
+                Product.builder()
+                        .id(UUID.randomUUID().toString())
+                        .name("Squeaky Banana")
+                        .category(Category.TOYS)
+                        .rating(3)
+                        .createdDate(ZonedDateTime.now())
+                        .modifiedDate(ZonedDateTime.now())
+                        .build()
+        ))
                 .isInstanceOf(UnsupportedOperationException.class);
 
         assertThat(allProducts)
@@ -133,13 +139,14 @@ class WarehouseTest {
     @Test
     @DisplayName("Returns product by valid ID")
     void getProductById_returnsProduct_whenIdExists() {
-        Product chewBone = new Product(
-                UUID.randomUUID().toString(),
-                "Chew Bone",
-                Category.FOOD,
-                4,
-                ZonedDateTime.now(),
-                ZonedDateTime.now());
+        Product chewBone = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Chew Bone")
+                .category(Category.FOOD)
+                .rating(4)
+                .createdDate(ZonedDateTime.now())
+                .modifiedDate(ZonedDateTime.now())
+                .build();
 
         warehouse.addProduct(chewBone);
 
@@ -175,37 +182,41 @@ class WarehouseTest {
     void getProductsByCategorySorted_returnsProductsSortedByName() {
         ZonedDateTime now = ZonedDateTime.now();
 
-        Product premiumFood = new Product(
-                UUID.randomUUID().toString(),
-                "Zebra Premium Dog Food",
-                Category.FOOD,
-                5,
-                now,
-                now);
+        Product premiumFood = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Zebra Premium Dog Food")
+                .category(Category.FOOD)
+                .rating(5)
+                .createdDate(now)
+                .modifiedDate(now)
+                .build();
 
-        Product alfaFood = new Product(
-                UUID.randomUUID().toString(),
-                "Alpha Dog Food",
-                Category.FOOD,
-                4,
-                now,
-                now);
+        Product alfaFood = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Alpha Dog Food")
+                .category(Category.FOOD)
+                .rating(4)
+                .createdDate(now)
+                .modifiedDate(now)
+                .build();
 
-        Product betaFood = new Product(
-                UUID.randomUUID().toString(),
-                "Beta Premium Food",
-                Category.FOOD,
-                5,
-                now,
-                now);
+        Product betaFood = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Beta Premium Food")
+                .category(Category.FOOD)
+                .rating(5)
+                .createdDate(now)
+                .modifiedDate(now)
+                .build();
 
-        Product toy = new Product(
-                UUID.randomUUID().toString(),
-                "Ball",
-                Category.TOYS,
-                3,
-                now,
-                now);
+        Product toy = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Ball")
+                .category(Category.TOYS)
+                .rating(3)
+                .createdDate(now)
+                .modifiedDate(now)
+                .build();
 
         warehouse.addProduct(premiumFood);
         warehouse.addProduct(alfaFood );
@@ -243,13 +254,14 @@ class WarehouseTest {
     void updateProduct_updatesExistingProduct_whenValidInputProvided() {
         ZonedDateTime createdTime = ZonedDateTime.now().minusDays(1);
 
-        Product originalProduct = new Product(
-                UUID.randomUUID().toString(),
-                "Old Dog Food",
-                Category.FOOD,
-                3,
-                createdTime,
-                createdTime);
+        Product originalProduct = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Old Dog Food")
+                .category(Category.FOOD)
+                .rating(3)
+                .createdDate(createdTime)
+                .modifiedDate(createdTime)
+                .build();
 
         warehouse.addProduct(originalProduct);
 
@@ -281,13 +293,14 @@ class WarehouseTest {
     @DisplayName("Update throws exception when rating is below valid range")
     void updateProduct_throwsException_whenRatingIsBelowZero() {
         ZonedDateTime now = ZonedDateTime.now();
-        Product originalProduct = new Product(
-                UUID.randomUUID().toString(),
-                "Original Name",
-                Category.FOOD,
-                5,
-                now,
-                now);
+        Product originalProduct = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Original Name")
+                .category(Category.FOOD)
+                .rating(5)
+                .createdDate(now)
+                .modifiedDate(now)
+                .build();
 
         warehouse.addProduct(originalProduct);
 
@@ -297,7 +310,7 @@ class WarehouseTest {
                 Category.FOOD,
                 -1))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Rating must be between 0 and 10.");
+                .hasMessage("rating must be between 0 and 10");
     }
     @Test
     @DisplayName("Update returns empty optional when product ID does not exist")
@@ -318,23 +331,25 @@ class WarehouseTest {
     @Test
     @DisplayName("Returns products created AFTER given ZonedDateTime")
     void getProductsCreatedAfter_returnsMatchingProducts() {
-        Warehouse warehouse = new Warehouse();
 
         ZonedDateTime now = ZonedDateTime.now();
-        Product oldProduct = new Product(
-                UUID.randomUUID().toString(),
-                "Old",
-                Category.FOOD,
-                5, now.minusDays(2),
-                now.minusDays(2));
+        Product oldProduct = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Old")
+                .category(Category.FOOD)
+                .rating(5)
+                .createdDate(now.minusDays(2))
+                .modifiedDate(now.minusDays(2))
+                .build();
 
-        Product newProduct = new Product(
-                UUID.randomUUID().toString(),
-                "New",
-                Category.FOOD,
-                8,
-                now.plusHours(1),
-                now.plusHours(1));
+        Product newProduct = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("New")
+                .category(Category.FOOD)
+                .rating(8)
+                .createdDate(now.plusHours(1))
+                .modifiedDate(now.plusHours(1))
+                .build();
 
         warehouse.addProduct(oldProduct);
         warehouse.addProduct(newProduct);
@@ -358,20 +373,21 @@ class WarehouseTest {
                 0,
                 ZoneId.systemDefault()); // 1 Sep 2025 12:00
 
-        Product oldProduct = new Product(
-                UUID.randomUUID().toString(),
-                "Old conditioner",
-                Category.GROOMING,
-                7,
-                baseDateTime.minusDays(2), // Created 30 Aug 2025
-                baseDateTime.minusDays(2)
-        );
+        Product oldProduct = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Old conditioner")
+                .category(Category.GROOMING)
+                .rating(7)
+                .createdDate(baseDateTime.minusDays(2))
+                .modifiedDate(baseDateTime.minusDays(2))
+                .build();
 
         warehouse.addProduct(oldProduct);
 
         List<Product> recentProducts = warehouse.getProductsCreatedAfter(baseDateTime);
 
-        assertThat(recentProducts).isEmpty();
+        assertThat(recentProducts)
+                .isEmpty();
     }
 
     //TEST GET MODIFIED PRODUCTS
@@ -380,22 +396,23 @@ class WarehouseTest {
     @DisplayName("Returns products where createdDate is NOT the same as modifiedDate")
     void getModifiedProducts_returnsModifiedProducts() {
         ZonedDateTime now = ZonedDateTime.now();
-        Product modified = new Product(
-                UUID.randomUUID().toString(),
-                "Modified Toy",
-                Category.TOYS,
-                7,
-                now,
-                now.plusDays(1) // modified 1 day later
-        );
-        Product unmodified = new Product(
-                UUID.randomUUID().toString(),
-                "Unmodified Toy",
-                Category.TOYS,
-                5,
-                now,
-                now // same date as created date
-        );
+        Product modified = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Modified Toy")
+                .category(Category.TOYS)
+                .rating(7)
+                .createdDate(now)
+                .modifiedDate(now.plusDays(1))
+                .build();
+
+        Product unmodified = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Unmodified Toy")
+                .category(Category.TOYS)
+                .rating(5)
+                .createdDate(now)
+                .modifiedDate(now)//same date as created date
+                .build();
 
         warehouse.addProduct(modified);
         warehouse.addProduct(unmodified);
@@ -411,19 +428,20 @@ class WarehouseTest {
     @DisplayName("Returns empty list when no products are modified")
     void getModifiedProducts_returnsEmpty_whenNoProductsModified() {
         ZonedDateTime now = ZonedDateTime.now();
-        Product product = new Product(
-                UUID.randomUUID().toString(),
-                "Chew Bone",
-                Category.FOOD,
-                4,
-                now,
-                now // not modified
-        );
+        Product product = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Chew Bone")
+                .category(Category.FOOD)
+                .rating(4)
+                .createdDate(now)
+                .modifiedDate(now)//not modified
+                .build();
 
         warehouse.addProduct(product);
 
         List<Product> result = warehouse.getModifiedProducts();
 
-        assertThat(result).isEmpty();
+        assertThat(result)
+                .isEmpty();
     }
 }

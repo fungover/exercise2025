@@ -1,5 +1,6 @@
 package org.example;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Warehouse {
@@ -24,13 +25,20 @@ public class Warehouse {
 	public Product getProductById(String id) {
 		return products.stream()
 						.filter(product -> product.id().equals(id))
-						.findFirst().orElseThrow(() -> new NoSuchElementException("Product not found"));
+						.findFirst()
+						.orElseThrow(() -> new NoSuchElementException("Product not found"));
 	}
 
 	public List<Product> getProductsByCategorySorted(Category category) {
 		return products.stream()
 						.sorted(Comparator.comparing(Product::name))
 						.filter(product -> product.category().equals(category))
+						.toList();
+	}
+
+	public List<Product> getProductsCreatedAfter(LocalDateTime now) {
+		return products.stream().filter(product -> product.createdAt()
+						.isAfter(now))
 						.toList();
 	}
 }

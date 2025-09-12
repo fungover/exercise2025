@@ -1,6 +1,8 @@
 package org.example;
 
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -78,5 +80,22 @@ class WarehouseTest {
 		assertThat(products.size()).isEqualTo(2);
 		assertThat(products.get(0).rating()).isEqualTo(8);
 		assertThat(products.get(1).rating()).isEqualTo(9);
+	}
+
+	@Test
+	void testRetrieveAllProductsCreatedAfterACertainDate() throws InterruptedException {
+		Warehouse warehouse = new Warehouse();
+		warehouse.addProduct(new Product("SUPER_GAME", "BGame", Category.GAMES, 9));
+		warehouse.addProduct(new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8));
+		LocalDateTime now = LocalDateTime.now();
+		Thread.sleep(1000);
+		warehouse.addProduct(new Product("ASUPER_GAME", "AGame", Category.GAMES, 8));
+		warehouse.addProduct(new Product("SUPER_ACCESSORY", "Accessory", Category.ACCESSORIES, 6));
+
+		List<Product> products = warehouse.getProductsCreatedAfter(now);
+
+		assertThat(products.size()).isEqualTo(2);
+		assertThat(products.get(0).id()).isEqualTo("ASUPER_GAME");
+		assertThat(products.get(1).id()).isEqualTo("SUPER_ACCESSORY");
 	}
 }

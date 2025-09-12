@@ -43,7 +43,12 @@ public class Warehouse {
     }
 
     public Product getProductById(String id) {
-        return null;
+        if (id == null) throw new IllegalArgumentException("ID must not be null");
+        if (id.trim().isEmpty()) throw new IllegalArgumentException("ID must not be empty");
+        return products.stream()
+                .filter(p -> p.id().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Product> getProductsByCategorySorted(Category category) {

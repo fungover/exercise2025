@@ -1,7 +1,6 @@
 package org.example;
 
 import org.junit.jupiter.api.Test;
-
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -61,9 +60,23 @@ class WarehouseTest {
 		warehouse.addProduct(new Product("SUPER_ACCESSORY", "Accessory", Category.ACCESSORIES, 6));
 		warehouse.addProduct(new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8));
 
-		Product gameProduct = warehouse.getProductById("SUPER_GAME");
-		System.out.println(gameProduct.name());
+		var gameProduct = warehouse.getProductById("SUPER_GAME");
 
 		assertThat(gameProduct.category()).isEqualTo(Category.GAMES);
+	}
+
+	@Test
+	void testRetrieveAllProductsInWarehouseByCategory() {
+		Warehouse warehouse = new Warehouse();
+		warehouse.addProduct(new Product("SUPER_GAME", "BGame", Category.GAMES, 9));
+		warehouse.addProduct(new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8));
+		warehouse.addProduct(new Product("A" + "SUPER_GAME", "AGame", Category.GAMES, 8));
+		warehouse.addProduct(new Product("SUPER_ACCESSORY", "Accessory", Category.ACCESSORIES, 6));
+
+		List<Product> products = warehouse.getProductsByCategorySorted(Category.GAMES);
+
+		assertThat(products.size()).isEqualTo(2);
+		assertThat(products.get(0).rating()).isEqualTo(8);
+		assertThat(products.get(1).rating()).isEqualTo(9);
 	}
 }

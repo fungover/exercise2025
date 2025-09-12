@@ -1,8 +1,6 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Warehouse {
 	private final ArrayList<Product> products;
@@ -24,7 +22,15 @@ public class Warehouse {
 	}
 
 	public Product getProductById(String id) {
-		return products.stream().filter(product -> product.id().equals(id)).findFirst().get();
+		return products.stream()
+						.filter(product -> product.id().equals(id))
+						.findFirst().orElseThrow(() -> new NoSuchElementException("Product not found"));
 	}
 
+	public List<Product> getProductsByCategorySorted(Category category) {
+		return products.stream()
+						.sorted(Comparator.comparing(Product::name))
+						.filter(product -> product.category().equals(category))
+						.toList();
+	}
 }

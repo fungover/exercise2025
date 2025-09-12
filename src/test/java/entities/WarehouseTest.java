@@ -127,4 +127,30 @@ public class WarehouseTest {
         assertTrue(all.isEmpty(), "Should return an empty List if no products present");
     }
 
+    @Test
+    void updateProduct_success() {
+        Product p = new Product(
+                "U-001",
+                "coffee",
+                Category.FOOD,
+                7,
+                LocalDate.now().minusDays(3),
+                LocalDate.now().minusDays(3));
+        wh.addProduct(p);
+
+        Product updated = wh.updateProduct("U-001", "Mascara", Category.BEAUTY, 10);
+
+        assertEquals("Mascara", updated.name());
+        assertEquals(Category.BEAUTY, updated.category());
+        assertEquals(10, updated.rating());
+        assertEquals(p.id(), updated.id(), "Id should not change");
+        assertEquals(p.createdDate(), updated.createdDate(), "Should not change");
+        assertTrue(updated.modifiedDate().isAfter(p.modifiedDate()), "modifiedDate should be updated now");
+
+        assertEquals(updated, wh.getProductById("U-001"));
+    }
+    @Test
+    void updateProduct_failsOnMissingId() {
+        /** soon **/
+    }
 }

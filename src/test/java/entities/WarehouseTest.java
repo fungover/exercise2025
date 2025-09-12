@@ -149,8 +149,66 @@ public class WarehouseTest {
 
         assertEquals(updated, wh.getProductById("U-001"));
     }
+
     @Test
     void updateProduct_failsOnMissingId() {
-        /** soon **/
+        assertThrows(IllegalArgumentException.class,
+                () -> wh.updateProduct(
+                        "NOPE",
+                        "X",
+                        Category.FOOD,
+                        5),
+                "Should throw if product id does not exist");
     }
+
+    @Test
+    void updateProduct_failsOnEmptyName() {
+        Product p = new Product(
+                "U-010",
+                "Coffee",
+                Category.FOOD,
+                7,
+                LocalDate.now(),
+                LocalDate.now());
+
+        wh.addProduct(p);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> wh.updateProduct(
+                        "U-010",
+                        " ",
+                        Category.FOOD,
+                        5),
+                "Name can not be empty");
+    }
+
+    @Test
+    void updateProduct_failsOnBadRating() {
+        Product p = new Product(
+                "U-011",
+                "Coffee",
+                Category.FOOD,
+                7,
+                LocalDate.now(),
+                LocalDate.now());
+
+        wh.addProduct(p);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> wh.updateProduct(
+                        "U-011",
+                        "Coffee",
+                        Category.FOOD,
+                        11),
+                "Rating must be between 0-10");
+
+        assertThrows(IllegalArgumentException.class,
+                () -> wh.updateProduct(
+                        "U-011",
+                        "Coffee",
+                        Category.FOOD,
+                        -1),
+                "Rating must be between 0-10");
+    }
+
 }

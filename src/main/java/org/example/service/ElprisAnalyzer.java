@@ -38,24 +38,31 @@ public class ElprisAnalyzer {
     }
 
     public static Elpris bestPeriod(List<Elpris> prices, int hours) {
-        double minSum = Double.MAX_VALUE;
-        int bestStart = 0;
-
-
-        for (int i = 0; i <= prices.size() - hours; i++) {
-            double sum = 0;
-            for (int j = 0; j < hours; j++) {
-                sum += prices.get(i + j).getSEK();
-            }
-            if (sum < minSum) {
-                minSum = sum;
-                bestStart = i;
-            }
+        if (hours <= 0 || prices == null || prices.size() < hours) {
+            return null;
         }
+        double windowSum = 0d;
+        for (int i = 0; i < hours; i++) {
+            windowSum += prices.get(i).getSEK();
+    }
+            double minSum = windowSum;
+            int bestStart = 0;
+            for (int i = hours; i < prices.size(); i++) {
+                windowSum += prices.get(i).getSEK() - prices.get(i - hours).getSEK();
+                if (windowSum < minSum) {
+                    minSum = windowSum;
+                    bestStart = i - hours + 1;
+                }
+            }
+
         return prices.get(bestStart);
     }
     public static double periodAverage(List<Elpris> prices, Elpris start, int hours) {
+        if (start == null || prices == null || hours <= 0)
+            return 0;
     int index = prices.indexOf(start);
+        if (index < 0 || index + hours > prices.size())
+            return 0;
     return prices.subList(index, index + hours).stream()
             .mapToDouble(Elpris::getSEK)
             .average()

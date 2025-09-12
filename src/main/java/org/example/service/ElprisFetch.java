@@ -12,13 +12,21 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import com.google.gson.Gson;
 import org.example.model.Elpris;
+import java.time.Duration;
+import java.util.Locale;
+
 
 import java.time.LocalDate;
 import java.util.*;
 
+
 public class ElprisFetch {
 
+private static final HttpClient HTTP = HttpClient.newBuilder().build();
+private static final Gson GSON = new Gson();
+
     public List<Elpris> getPrice(String zon, LocalDate datum) {
+        final String zone = zon == null ? "" : zon.trim().toUpperCase(Locale.ROOT);
         String url = String.format(
                 "https://www.elprisetjustnu.se/api/v1/prices/%d/%02d-%02d_%s.json",
                 datum.getYear(),
@@ -28,24 +36,37 @@ public class ElprisFetch {
         );
 
         try {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .timeout(Duration.ofSeconds(10))
+                    .header("User-Agent", "exercise2025/1.0 (+https://github.com/fungover/exercise2025)")
+                    .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HTTP.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 404) {
+                // no prices for tomorrow
+                System.out.printf("Inga priser publicerade ännu för %s (%s). Hoppar över.%n", datum, zone);
+                return Collections.emptyList();
+            }
+                if (response.statusCode() != 200) {
+                System.err.printf("HTTP %d for %s%n", response.statusCode(), url);
+                return Collections.emptyList();
 
+
+            }
             String json = response.body().trim();
 
             if (!json.startsWith("[")) {
-                System.out.println("Ingen data för " + datum + " (" + zon + ")");
+                System.out.println("Ingen data för " + datum + " (" + zon + "): " + url);
                 return Collections.emptyList();
             }
 
-            Gson gson = new Gson();
-            Elpris[] prices = gson.fromJson(response.body(), Elpris[].class);
+
+            Elpris[] prices = GSON.fromJson(json, Elpris[].class);
 
             return Arrays.asList(prices);
         } catch (Exception e) {
-            System.out.println("Error when fetching: " + e.getMessage());
+            System.out.println("Error when fetching " + url + e.getMessage());
             return Collections.emptyList();
 
         }

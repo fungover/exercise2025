@@ -63,13 +63,13 @@ public class Game {
                     break;
             }
         }
-
     }
 
     private void checkForItem() {
         Item item = dungeon.getItemAt(player.getX(), player.getY());
         if (item != null) {
             System.out.println("You found a " + item.getName() + "!");
+            item.use(player);
             dungeon.removeItemAt(player.getX(), player.getY());
         }
     }

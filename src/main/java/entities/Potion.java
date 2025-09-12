@@ -16,4 +16,11 @@ public class Potion extends Item {
     public String toString() {
         return "I";
     }
+
+    @Override
+    public void use(Player player) {
+        player.setHealth(player.getHealth() + healAmount);
+        System.out.println("You healed " + healAmount + " hp");
+        System.out.println("Current health: " + player.getHealth() + " hp");
+    }
 }

@@ -11,4 +11,8 @@ public class Item {
         return this.name;
     }
 
+    public void use(Player player) {
+
+    }
+
 }

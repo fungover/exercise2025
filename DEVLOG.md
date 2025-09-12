@@ -41,13 +41,13 @@ Avoid returning internal references like ArrayList directly.
 🛠️ Warehouse Functionality Implement the following public 
 methods in Warehouse with corresponding unit tests (success + failure cases where applicable): 
 
-* addProduct (Product product): Add a new product(validate name is not empty) 
-* updateProduct(String id, String name, Category category, int rating): Modify an existing product 
-* getAllProducts(): Retrieve all products 
-* getProductById(String id): Retrieve product by ID 
-* getProductsByCategorySorted(Category category): Products in a category, sorted A–Z by name 
-* getProductsCreatedAfter(LocalDate date): Products created after a given date 
-* getModifiedProducts(): Products where createdDate != modifiedDate 
+[x] addProduct (Product product): Add a new product(validate name is not empty) 
+[] updateProduct(String id, String name, Category category, int rating): Modify an existing product 
+[x] getAllProducts(): Retrieve all products 
+[x] getProductById(String id): Retrieve product by ID 
+[] getProductsByCategorySorted(Category category): Products in a category, sorted A–Z by name 
+[] getProductsCreatedAfter(LocalDate date): Products created after a given date 
+[] getModifiedProducts(): Products where createdDate != modifiedDate 
 
 Use Java 8 streams where appropriate. 
 

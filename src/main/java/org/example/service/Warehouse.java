@@ -52,7 +52,11 @@ public class Warehouse {
     }
 
     public List<Product> getProductsByCategorySorted(Category category) {
-        return Collections.emptyList();
+        if (category == null) return Collections.emptyList();
+        return products.stream()
+                .filter(p -> p.category().equals(category))
+                .sorted((p1, p2) -> p1.name().compareTo(p2.name()))
+                .toList();
     }
 
     public List<Product> getProductsCreatedAfter(LocalDate date) {

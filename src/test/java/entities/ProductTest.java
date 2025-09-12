@@ -62,4 +62,29 @@ public class ProductTest {
         assertEquals(p1.createdDate(), p2.createdDate(), "CreatedDate should not change");
     }
 
+    @Test
+    void withCategory_updatesCategoryAndModifiedDate() {
+        Product p1 = new Product(
+                "C-001",
+                "LEGO Duplo", Category.TOYS,
+                9,
+                LocalDate.now(),
+                LocalDate.now());
+
+        LocalDate newModified = LocalDate.now().plusDays(3);
+        Product p2 = p1.withCategory(Category.BOOKS, newModified);
+
+        // category should be updated
+        assertEquals(Category.BOOKS, p2.category(), "Category should be updated");
+
+        // modifiedDate should be updated
+        assertEquals(newModified, p2.modifiedDate(), "ModifiedDate should be updated");
+
+        /* NOT SUPPOSED TO CHANGE */
+        assertEquals(p1.id(), p2.id(), "ID should not change");
+        assertEquals(p1.name(), p2.name(), "Name should not change");
+        assertEquals(p1.rating(), p2.rating(), "Rating should not change");
+        assertEquals(p1.createdDate(), p2.createdDate(), "CreatedDate should not change");
+    }
+
 }

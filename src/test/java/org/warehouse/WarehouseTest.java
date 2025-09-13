@@ -174,6 +174,13 @@ public class WarehouseTest {
   }
 
   @Test
+  public void cantGetProductCreatedAfterDateIfProductNotExist() {
+    assertThatThrownBy(() -> warehouse.getProductsCreatedAfter(LocalDate.of(2025, 8, 2)))
+    .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("No products found");
+  }
+
+  @Test
   public void canGetProductsWithModifiedDates() {
     warehouse.addProduct(newProduct);
     warehouse.addProduct(oldProduct);

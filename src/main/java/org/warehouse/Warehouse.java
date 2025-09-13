@@ -80,7 +80,15 @@ public class Warehouse {
   }
 
   public List<Product> getProductsCreatedAfter(LocalDate date) {
-    return products.stream().filter(product -> product.getCreatedDate().isAfter(date)).collect(Collectors.toList());
+    List<Product> result = products.stream()
+            .filter(product -> product.getCreatedDate().isAfter(date))
+            .collect(Collectors.toList());
+
+    if(result.isEmpty()) {
+      throw new IllegalArgumentException("No products found on this date: " + date);
+    }
+
+    return result;
   }
 
 

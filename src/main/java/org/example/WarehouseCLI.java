@@ -99,4 +99,44 @@ public class WarehouseCLI {
         List<Product> products = warehouse.getAllProducts();
         printProducts(products);
     }
+
+    private void getProductById() {
+        try {
+            System.out.print("Enter ID: ");
+            String id = scanner.nextLine().trim();
+            Product product = warehouse.getProductById(id);
+            if (product != null) {
+                System.out.println("Product: " + product);
+            } else {
+                System.out.println("Product not found");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void listProductsByCategory() {
+        try {
+            System.out.print("Enter Category (ELECTRONICS, BOOKS, CLOTHING, FOOD, TOYS): ");
+            String categoryInput = scanner.nextLine().trim().toUpperCase();
+            Category category = Category.valueOf(categoryInput);
+            List<Product> products = warehouse.getProductsByCategorySorted(category);
+            printProducts(products);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void listProductsCreatedAfter() {
+        try {
+            System.out.print("Enter Date (YYYY-MM-DD): ");
+            LocalDate date = LocalDate.parse(scanner.nextLine().trim());
+            List<Product> products = warehouse.getProductsCreatedAfter(date);
+            printProducts(products);
+        } catch (DateTimeParseException e) {
+            System.out.println("Error: Invalid date format");
+        }
+    }
+
+
 }

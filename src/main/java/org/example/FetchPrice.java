@@ -13,6 +13,11 @@ public class FetchPrice {
     private final String today = dates.getToday();
     private final String tomorrowDay = dates.getTomorrowDay();
     private final String tomorrowMonth = dates.getTomorrowMonth();
+    private final String zone;
+
+    public FetchPrice(String zone) {
+        this.zone = zone;
+    }
 
     private String fetchPrice(String day, String month) {
         String payload;
@@ -35,7 +40,7 @@ public class FetchPrice {
 
     private String createUri(String day, String month) {
         return "https://www.elprisetjustnu.se/api/v1/prices/" + year +
-                "/" + month + "-" + day + "_SE3.json";
+                "/" + month + "-" + day + "_SE" + zone + ".json";
     }
 
     public String fetchTodayPrices() {

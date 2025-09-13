@@ -5,9 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class PriceMapper {
+    private final String zone;
     private Price[] todayPrices;
     private Price[] tomorrowPrices;
     private final ObjectMapper mapper = new ObjectMapper();
+
+    public PriceMapper(String zone) {
+        this.zone = zone;
+    }
 
     public Price[] getAllPrices() {
         this.todayPrices = getTodayPrices();
@@ -21,7 +26,7 @@ public class PriceMapper {
 
     public Price[] getTodayPrices() {
         try {
-            FetchPrice fetch = new FetchPrice();
+            FetchPrice fetch = new FetchPrice(zone);
             String firstPayload = fetch.fetchTodayPrices();
             todayPrices = mapper.readValue(firstPayload, Price[].class);
         } catch (JsonProcessingException e) {
@@ -32,7 +37,7 @@ public class PriceMapper {
 
     public Price[] getTomorrowPrices() {
         try {
-            FetchPrice fetch = new FetchPrice();
+            FetchPrice fetch = new FetchPrice(zone);
             String secondPayload = fetch.fetchTomorrowPrices();
             tomorrowPrices = mapper.readValue(secondPayload, Price[].class);
         } catch (JsonProcessingException _) {

@@ -1,71 +1,167 @@
 package org.example;
 
+import org.example.entities.Category;
+import org.example.entities.Product;
+import org.example.service.Warehouse;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.Scanner;
+
 public class App {
+    private final Warehouse warehouse;
+    private final Scanner scanner;
+
+    public App() {
+        this.warehouse = new Warehouse();
+        this.scanner = new Scanner(System.in);
+    }
+
+    private void returnMessage() {
+        System.out.println(" ");
+        System.out.println("Press any key to return to main menu...");
+        scanner.nextLine();
+    }
+
+    public void start() {
+        while (true) {
+            displayMenu();
+            String input = scanner.nextLine().trim();
+            switch (input) {
+                case "1" -> addProduct();
+                case "2" -> updateProduct();
+                case "3" -> listAllProducts();
+                case "4" -> getProductById();
+                case "5" -> listProductsByCategory();
+                case "6" -> listProductsCreatedAfter();
+                case "7" -> listModifiedProducts();
+                case "8" -> { System.out.println("Exiting..."); return; }
+                default -> System.out.println("Invalid option. Please enter 1-8.");
+                }
+            }
+        }
+
+    private void displayMenu() {
+        System.out.println("");
+        System.out.println("     Warehouse Management System");
+        System.out.println("======================================");
+        System.out.println("1. Add Product");
+        System.out.println("2. Update Product");
+        System.out.println("3. List All Products");
+        System.out.println("4. Get Product By ID");
+        System.out.println("5. List Products By Category");
+        System.out.println("6. List Products Created After Date");
+        System.out.println("7. List Modified Products");
+        System.out.println("8. Exit");
+        System.out.println("=======================================");
+        System.out.println("Enter menu selection: ");
+    }
+
+    private void addProduct() {
+        try {
+            System.out.print("Enter ID: ");
+            String id = scanner.nextLine().trim();
+            System.out.print("Enter Name: ");
+            String name = scanner.nextLine().trim();
+            System.out.print("Enter Category (ELECTRONICS, BOOKS, CLOTHING, FOOD, TOYS): ");
+            String categoryInput = scanner.nextLine().trim().toUpperCase();
+            Category category = Category.valueOf(categoryInput);
+            System.out.print("Enter Rating (0-10): ");
+            int rating = Integer.parseInt(scanner.nextLine().trim());
+            System.out.print("Enter Created Date (YYYY-MM-DD): ");
+            LocalDate createdDate = LocalDate.parse(scanner.nextLine().trim());
+            Product product = new Product(id, name, category, rating, createdDate, createdDate);
+            warehouse.addProduct(product);
+            System.out.println("Product added: " + product);
+
+        } catch (IllegalArgumentException | DateTimeParseException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        returnMessage();
+    }
+
+    private void updateProduct() {
+        try {
+            System.out.print("Enter ID: ");
+            String id = scanner.nextLine().trim();
+            System.out.print("Enter New Name: ");
+            String name = scanner.nextLine().trim();
+            System.out.print("Enter New Category (ELECTRONICS, BOOKS, CLOTHING, FOOD, TOYS): ");
+            String categoryInput = scanner.nextLine().trim().toUpperCase();
+            Category category = Category.valueOf(categoryInput);
+            System.out.print("Enter New Rating (0-10): ");
+            int rating = Integer.parseInt(scanner.nextLine().trim());
+            boolean updated = warehouse.updateProduct(id, name, category, rating);
+            System.out.println(updated ? "Product updated" : "Product not found");
+        } catch (IllegalArgumentException | DateTimeParseException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        returnMessage();
+    }
+
+    private void printProducts(List<Product> products) {
+        if (products.isEmpty()) {
+            System.out.println("No products found.");
+        } else {
+            products.forEach(System.out::println);
+        }
+    }
+
+    private void listAllProducts() {
+        List<Product> products = warehouse.getAllProducts();
+        printProducts(products);
+        returnMessage();
+    }
+
+    private void getProductById() {
+        try {
+            System.out.print("Enter ID: ");
+            String id = scanner.nextLine().trim();
+            Product product = warehouse.getProductById(id);
+            if (product != null) {
+                System.out.println("Product: " + product);
+            } else {
+                System.out.println("Product not found");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        returnMessage();
+    }
+
+    private void listProductsByCategory() {
+        try {
+            System.out.print("Enter Category (ELECTRONICS, BOOKS, CLOTHING, FOOD, TOYS): ");
+            String categoryInput = scanner.nextLine().trim().toUpperCase();
+            Category category = Category.valueOf(categoryInput);
+            List<Product> products = warehouse.getProductsByCategorySorted(category);
+            printProducts(products);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: Invalid category type");
+        }
+        returnMessage();
+    }
+
+    private void listProductsCreatedAfter() {
+        try {
+            System.out.print("Enter Date (YYYY-MM-DD): ");
+            LocalDate date = LocalDate.parse(scanner.nextLine().trim());
+            List<Product> products = warehouse.getProductsCreatedAfter(date);
+            printProducts(products);
+        } catch (DateTimeParseException e) {
+            System.out.println("Error: Invalid date format");
+        }
+        returnMessage();
+    }
+
+    private void listModifiedProducts() {
+        List<Product> products = warehouse.getModifiedProducts();
+        printProducts(products);
+        returnMessage();
+    }
+
     public static void main(String[] args) {
-        System.out.println("Hello There!");
+        new App().start();
     }
 }
-
-/*
-📦 Exercise 3 – Java Programming: Warehouse Product Manager
-🧠 Objective
-
-Implement a small Java application for managing products using Java 8 streams and JUnit 5 for unit testing. The public interface will be a class called Warehouse in the service package. All public methods must be covered by unit tests.
-
-        Use this Maven template as the project base: maven-java-template
-
-        ✅ Requirements for Pass (G)
-📁 Entities
-
-Create a Product class in the entities package with the following attributes:
-
-id: Unique identifier
-
-name: Product name
-
-category: Enum type
-
-rating: Integer (0–10)
-
-createdDate: Immutable creation date
-
-modifiedDate: Last modified date
-
-Use Java records or immutable objects to prevent external mutation. Avoid returning internal references like ArrayList directly.
-🛠️ Warehouse Functionality
-
-Implement the following public methods in Warehouse with corresponding unit tests (success + failure cases where applicable):
-
-addProduct(Product product): Add a new product (validate name is not empty)
-
-updateProduct(String id, String name, Category category, int rating): Modify an existing product
-
-getAllProducts(): Retrieve all products
-
-getProductById(String id): Retrieve product by ID
-
-getProductsByCategorySorted(Category category): Products in a category, sorted A–Z by name
-
-getProductsCreatedAfter(LocalDate date): Products created after a given date
-
-getModifiedProducts(): Products where createdDate != modifiedDate
-
-Use Java 8 streams where appropriate.
-🌟 Requirements for Distinction (VG)
-
-Extend Warehouse with the following methods:
-
-getCategoriesWithProducts(): Return all categories with at least one product
-
-countProductsInCategory(Category category): Return number of products in a category
-
-getProductInitialsMap(): Return a Map<Character, Integer> of first letters in product names and their counts
-
-getTopRatedProductsThisMonth(): Products with max rating, created this month, sorted by newest first
-🧪 Testing
-
-Use JUnit 5 for all unit tests. Each public method must have:
-
-At least one test for successful execution
-
-At least one test for failure (e.g. invalid input)*/

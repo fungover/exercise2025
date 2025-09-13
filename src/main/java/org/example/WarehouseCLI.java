@@ -6,6 +6,7 @@ import org.example.service.Warehouse;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Scanner;
 
 public class WarehouseCLI {
@@ -84,5 +85,18 @@ public class WarehouseCLI {
         } catch (IllegalArgumentException | DateTimeParseException e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+
+    private void printProducts(List<Product> products) {
+        if (products.isEmpty()) {
+            System.out.println("No products found");
+        } else {
+            products.forEach(System.out::println);
+        }
+    }
+
+    private void listAllProducts() {
+        List<Product> products = warehouse.getAllProducts();
+        printProducts(products);
     }
 }

@@ -22,10 +22,10 @@ public class Warehouse {
   }
 
   public void addProduct(Product product) {
-    boolean duplicate = products.stream().anyMatch(p -> p.getId() == product.getId());
+    boolean duplicate = products.stream().anyMatch(p -> p.id() == product.id());
 
     if (duplicate) {
-      throw new IllegalArgumentException("Product with id " + product.getId() + " already exists");
+      throw new IllegalArgumentException("Product with id " + product.id() + " already exists");
     }
 
     products.add(product);
@@ -41,13 +41,13 @@ public class Warehouse {
   public void updateProduct(String id, String name, Category category, int rating) {
     for (int i = 0; i < products.size(); i++) {
       Product current = products.get(i);
-      if (current.getId().equals(id)) {
+      if (current.id().equals(id)) {
         Product updated = new Product(
-                current.getId(),
+                current.id(),
                 name,
                 category,
                 rating,
-                current.getCreatedDate(),
+                current.createdDate(),
                 LocalDate.now()
         );
         products.set(i, updated);
@@ -59,7 +59,7 @@ public class Warehouse {
 
   public Product getProductById(String id) {
     for (Product product : products) {
-      if (product.getId().equals(id)) {
+      if (product.id().equals(id)) {
         return product;
       }
     }
@@ -68,8 +68,8 @@ public class Warehouse {
 
   public List<Product> getProductsByCategorySorted(Category category) {
     List<Product> result = products.stream()
-            .filter(product -> product.getCategory().equals(category))
-            .sorted(Comparator.comparing(Product::getName))
+            .filter(product -> product.category().equals(category))
+            .sorted(Comparator.comparing(Product::name))
             .collect(Collectors.toList());
 
     if (result.isEmpty()) {
@@ -81,7 +81,7 @@ public class Warehouse {
 
   public List<Product> getProductsCreatedAfter(LocalDate date) {
     List<Product> result = products.stream()
-            .filter(product -> product.getCreatedDate().isAfter(date))
+            .filter(product -> product.createdDate().isAfter(date))
             .collect(Collectors.toList());
 
     if(result.isEmpty()) {
@@ -94,7 +94,7 @@ public class Warehouse {
 
   public List<Product> getModifiedProduct() {
     var result = products.stream()
-            .filter(product -> !product.getCreatedDate().equals(product.getModifiedDate()))
+            .filter(product -> !product.createdDate().equals(product.modifiedDate()))
             .collect(Collectors.toList());
 
     if(result.isEmpty()) {

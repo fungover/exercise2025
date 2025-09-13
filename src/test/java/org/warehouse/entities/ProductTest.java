@@ -1,7 +1,6 @@
 package org.warehouse.entities;
 
 import org.junit.jupiter.api.Test;
-import org.warehouse.Warehouse;
 
 import java.time.LocalDate;
 
@@ -18,8 +17,8 @@ public class ProductTest {
             LocalDate.now(),
             LocalDate.now());
 
-    assertEquals("1", product.getId());
-    assertEquals("Film", product.getName());
-    assertEquals(Category.THRILLER, product.getCategory());
+    assertEquals("1", product.id());
+    assertEquals("Film", product.name());
+    assertEquals(Category.THRILLER, product.category());
   }
 }

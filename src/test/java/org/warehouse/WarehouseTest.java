@@ -96,10 +96,10 @@ public class WarehouseTest {
     warehouse.updateProduct("1", "Film2", Category.DRAMA, 9);
     Product updated = warehouse.getAllProducts().getFirst();
 
-    assertThat(updated.getName()).isEqualTo("Film2");
-    assertThat(updated.getCategory()).isEqualTo(Category.DRAMA);
-    assertThat(product.getCreatedDate()).isEqualTo(updated.getCreatedDate());
-    assertThat(product.getModifiedDate()).isEqualTo(LocalDate.now());
+    assertThat(updated.name()).isEqualTo("Film2");
+    assertThat(updated.category()).isEqualTo(Category.DRAMA);
+    assertThat(product.createdDate()).isEqualTo(updated.createdDate());
+    assertThat(product.modifiedDate()).isEqualTo(LocalDate.now());
   }
 
   @Test
@@ -128,10 +128,10 @@ public class WarehouseTest {
     var product  = warehouse.getProductById("1");
 
     assertThat(product).isNotNull();
-    assertThat(product.getId()).isEqualTo("1");
-    assertThat(product.getName()).isEqualTo("Film");
-    assertThat(product.getCategory()).isEqualTo(Category.THRILLER);
-    assertThat(product.getCreatedDate()).isEqualTo(LocalDate.now());
+    assertThat(product.id()).isEqualTo("1");
+    assertThat(product.name()).isEqualTo("Film");
+    assertThat(product.category()).isEqualTo(Category.THRILLER);
+    assertThat(product.createdDate()).isEqualTo(LocalDate.now());
   }
 
   @Test
@@ -150,7 +150,7 @@ public class WarehouseTest {
 
     var sorted = warehouse.getProductsByCategorySorted(Category.THRILLER);
 
-    assertThat(sorted).isSortedAccordingTo(Comparator.comparing(Product::getName));
+    assertThat(sorted).isSortedAccordingTo(Comparator.comparing(Product::name));
 
   }
 
@@ -170,7 +170,7 @@ public class WarehouseTest {
     var createdAfter = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 8, 2));
 
     assertThat(createdAfter).hasSize(1);
-    assertThat(createdAfter.getFirst().getCreatedDate()).isEqualTo(LocalDate.of(2025, 9, 10));
+    assertThat(createdAfter.getFirst().createdDate()).isEqualTo(LocalDate.of(2025, 9, 10));
   }
 
   @Test

@@ -62,13 +62,16 @@ public class App {
         try {
             System.out.print("Enter ID: ");
             String id = scanner.nextLine().trim();
+            if (id.isEmpty()) { System.out.println("Error: ID must not be empty"); returnMessage(); return; }
             System.out.print("Enter Name: ");
             String name = scanner.nextLine().trim();
+            if (name.isEmpty()) { System.out.println("Error: Name must not be empty"); returnMessage(); return; }
             System.out.print("Enter Category (ELECTRONICS, BOOKS, CLOTHING, FOOD, TOYS): ");
             String categoryInput = scanner.nextLine().trim().toUpperCase();
             Category category = Category.valueOf(categoryInput);
             System.out.print("Enter Rating (0-10): ");
             int rating = Integer.parseInt(scanner.nextLine().trim());
+            if (rating < 0 || rating > 10) { System.out.println("Error: Rating must be between 0 and 10"); returnMessage(); return; }
             System.out.print("Enter Created Date (YYYY-MM-DD): ");
             LocalDate createdDate = LocalDate.parse(scanner.nextLine().trim());
             Product product = new Product(id, name, category, rating, createdDate, createdDate);

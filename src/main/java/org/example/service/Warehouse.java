@@ -17,6 +17,8 @@ public class Warehouse {
 
     public void addProduct(Product product) {
         if (product == null) throw new IllegalArgumentException("Product must not be null");
+        boolean exists = products.stream().anyMatch(p -> p.id().equals(product.id()));
+        if (exists) throw new IllegalArgumentException("Product with ID " + product.id() + " already exists");
         products.add(product);
     }
 

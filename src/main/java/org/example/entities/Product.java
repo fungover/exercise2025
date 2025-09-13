@@ -7,11 +7,13 @@ public record Product(String id, String name, Category category, int rating, Loc
 
     public Product {
         Objects.requireNonNull(id, "ID must not be null");
-        if (id.trim().isEmpty()) {
+        id = id.trim();
+        if (id.isEmpty()) {
             throw new IllegalArgumentException("ID must not be empty");
         }
         Objects.requireNonNull(name, "Name must not be null");
-        if (name.trim().isEmpty()) {
+        name = name.trim();
+        if (name.isEmpty()) {
             throw new IllegalArgumentException("Name must not be empty");
         }
         Objects.requireNonNull(category, "Category must not be null");

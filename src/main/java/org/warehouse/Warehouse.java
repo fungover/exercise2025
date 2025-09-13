@@ -67,10 +67,16 @@ public class Warehouse {
   }
 
   public List<Product> getProductsByCategorySorted(Category category) {
-    return products.stream()
+    List<Product> result = products.stream()
             .filter(product -> product.getCategory().equals(category))
             .sorted(Comparator.comparing(Product::getName))
             .collect(Collectors.toList());
+
+    if (result.isEmpty()) {
+      throw new IllegalArgumentException("No products found in category " + category);
+    }
+
+    return result;
   }
 
   public List<Product> getProductsCreatedAfter(LocalDate date) {

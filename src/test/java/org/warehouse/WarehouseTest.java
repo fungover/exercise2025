@@ -155,6 +155,14 @@ public class WarehouseTest {
   }
 
   @Test
+  public void cantGetProductsByCategorySortedWithEmptyList() {
+    assertThatThrownBy(() -> warehouse.getProductsByCategorySorted(Category.DRAMA))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("No products found in category");
+
+  }
+
+  @Test
   public void canGetProductCreatedAfterDate() {
     warehouse.addProduct(oldProduct);
     warehouse.addProduct(newProduct);

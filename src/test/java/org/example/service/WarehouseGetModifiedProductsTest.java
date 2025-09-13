@@ -27,15 +27,13 @@ class WarehouseGetModifiedProductsTest {
     void getModifiedProducts_HasModifiedProducts_ReturnsModifiedProducts() {
         warehouse.addProduct(unmodifiedProduct);
         warehouse.addProduct(modifiedProduct);
-        assertThat(modifiedProduct.createdDate()).isNotEqualTo(modifiedProduct.modifiedDate());
-        assertThat(unmodifiedProduct.createdDate()).isEqualTo(unmodifiedProduct.modifiedDate());
+        assertThat(warehouse.getModifiedProducts()).containsExactly(modifiedProduct);
     }
 
     @Test
     void getModifiedProducts_DoesNotHaveModifiedProducts_ReturnsEmptyList() {
         warehouse.addProduct(unmodifiedProduct);
-        warehouse.addProduct(modifiedProduct);
-        assertThat(unmodifiedProduct.createdDate()).isEqualTo(unmodifiedProduct.modifiedDate());
+        assertThat(warehouse.getModifiedProducts()).isEmpty();
     }
 
     @Test

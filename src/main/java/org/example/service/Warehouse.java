@@ -69,6 +69,10 @@ public class Warehouse {
     }
 
     public List<Product> getModifiedProducts(LocalDate date) {
-        return Collections.emptyList();
+        if (date == null) return Collections.emptyList();
+
+        return products.stream()
+                .filter(p -> p.modifiedDate() != null && p.modifiedDate().isAfter(date))
+                .toList();
     }
 }

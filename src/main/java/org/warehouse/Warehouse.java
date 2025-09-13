@@ -51,6 +51,7 @@ public class Warehouse {
         return;
       }
     }
+    throw new IllegalArgumentException("Product with id " + id + " not found");
   }
 
   public Product getProductById(String id) {

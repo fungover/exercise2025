@@ -103,6 +103,13 @@ public class WarehouseTest {
   }
 
   @Test
+  public void cantUpdateProductIfIdNotFound() {
+    assertThatThrownBy(() -> warehouse.updateProduct("100", "Film", Category.DRAMA, 10))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("not found");
+  }
+
+  @Test
   public void canGetAllProducts() {
     List<Product> products = warehouse.getAllProducts();
   }

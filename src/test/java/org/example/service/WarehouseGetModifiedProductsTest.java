@@ -36,12 +36,11 @@ class WarehouseGetModifiedProductsTest {
         warehouse.addProduct(unmodifiedProduct);
         warehouse.addProduct(modifiedProduct);
         assertThat(unmodifiedProduct.createdDate()).isEqualTo(unmodifiedProduct.modifiedDate());
-        assertThat(warehouse.getModifiedProducts(null)).isEmpty();
     }
 
     @Test
     void getModifiedProducts_EmptyWarehouse_ReturnsEmptyList() {
-        assertThat(warehouse.getModifiedProducts(null)).isEmpty();
+        assertThat(warehouse.getModifiedProducts()).isEmpty();
     }
 
 }

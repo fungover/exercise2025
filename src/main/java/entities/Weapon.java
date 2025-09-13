@@ -8,7 +8,7 @@ public class Weapon extends Item{
         this.bonusDamage = bonusDamage;
 
     }
-    
+
     @Override
     public void use(Player player) {
         player.increaseDamage(bonusDamage);

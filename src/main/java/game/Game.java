@@ -6,6 +6,7 @@ import entities.Player;
 import entities.Potion;
 import map.Dungeon;
 
+import java.awt.datatransfer.SystemFlavorMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -45,23 +46,59 @@ public class Game {
                 case "w":
                     player.move(0, -1, dungeon);
                     checkForItem();
+                    checkForEnemy();
                     break;
                 case "s":
                     player.move(0, 1, dungeon);
                     checkForItem();
+                    checkForEnemy();
                     break;
                 case "a":
                     player.move(-1, 0, dungeon);
                     checkForItem();
+                    checkForEnemy();
                     break;
                 case "d":
                     player.move(1, 0, dungeon);
                     checkForItem();
+                    checkForEnemy();
                     break;
                 default:
                     System.out.println("No valid command!");
                     break;
             }
+        }
+    }
+
+    private void checkForEnemy() {
+        for (Enemy enemy : enemyList){
+            if(enemy.getX() == player.getX() && enemy.getY() == player.getY());
+            System.out.println("You encountered an enemy!");
+            startBattle(enemy);
+        }
+    }
+
+    public void startBattle(Enemy enemy){
+        while(player.getHealth() > 0 && enemy.getHealth() > 0){
+            System.out.println("You attack the enemy...");
+            enemy.setHealth(enemy.getHealth() - player.getDamage());
+            System.out.println("Enemy now has " + enemy.getHealth() + " hp");
+            System.out.println("Press ENTER for the enemies round");
+            scanner.nextLine();
+            System.out.println("Enemy attacks you!");
+            player.setHealth(player.getHealth() - enemy.getDamage());
+            System.out.println("You now have " + player.getHealth());
+            System.out.println("Press ENTER for your round.");
+            scanner.nextLine();
+        }
+        if(player.getHealth() > 0 && enemy.getHealth() < 0){
+            System.out.println("You killed the enemy! Lets continue.");
+            enemyList.remove(enemy);
+        }
+        else if(enemy.getHealth() > 0 && player.getHealth() < 0){
+            System.out.println("Oh no! You died. Better luck next time. THE END!");
+            scanner.nextLine();
+            System.exit(0);
         }
     }
 
@@ -73,4 +110,6 @@ public class Game {
             dungeon.removeItemAt(player.getX(), player.getY());
         }
     }
+
+
 }

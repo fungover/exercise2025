@@ -99,7 +99,8 @@ public class WarehouseTest {
     assertThat(updated.name()).isEqualTo("Film2");
     assertThat(updated.category()).isEqualTo(Category.DRAMA);
     assertThat(product.createdDate()).isEqualTo(updated.createdDate());
-    assertThat(product.modifiedDate()).isEqualTo(LocalDate.now());
+    assertThat(updated.modifiedDate()).isEqualTo(LocalDate.now());
+    assertThat(updated.rating()).isEqualTo(9);
   }
 
   @Test
@@ -113,6 +114,9 @@ public class WarehouseTest {
   public void canGetAllProducts() {
     warehouse.addProduct(product);
     List<Product> products = warehouse.getAllProducts();
+    assertThat(products)
+            .hasSize(1)
+            .contains(product);
   }
 
   @Test
@@ -125,13 +129,13 @@ public class WarehouseTest {
   @Test
   public void canGetProductById() {
     warehouse.addProduct(product);
-    var product  = warehouse.getProductById("1");
+    var found  = warehouse.getProductById("1");
 
-    assertThat(product).isNotNull();
-    assertThat(product.id()).isEqualTo("1");
-    assertThat(product.name()).isEqualTo("Film");
-    assertThat(product.category()).isEqualTo(Category.THRILLER);
-    assertThat(product.createdDate()).isEqualTo(LocalDate.now());
+    assertThat(found).isNotNull();
+    assertThat(found.id()).isEqualTo("1");
+    assertThat(found.name()).isEqualTo("Film");
+    assertThat(found.category()).isEqualTo(Category.THRILLER);
+    assertThat(found.createdDate()).isEqualTo(LocalDate.now());
   }
 
   @Test
@@ -186,7 +190,7 @@ public class WarehouseTest {
     warehouse.addProduct(oldProduct);
     warehouse.addProduct(product2);
 
-    var modifiedProduct = warehouse.getModifiedProduct();
+    var modifiedProduct = warehouse.getModifiedProducts();
 
     assertThat(modifiedProduct).hasSize(2);
   }
@@ -196,8 +200,8 @@ public class WarehouseTest {
     warehouse.addProduct(product);
     warehouse.addProduct(product2);
 
-    assertThatThrownBy(() -> warehouse.getModifiedProduct())
+    assertThatThrownBy(() -> warehouse.getModifiedProducts())
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("No modified products was found");
+            .hasMessageContaining("No modified products were found");
   }
 }

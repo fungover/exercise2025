@@ -22,7 +22,10 @@ public class Warehouse {
   }
 
   public void addProduct(Product product) {
-    boolean duplicate = products.stream().anyMatch(p -> p.id() == product.id());
+    if (product == null || product.id() == null) {
+      throw new IllegalArgumentException("Product and product.id must not be null");
+      }
+    boolean duplicate = products.stream().anyMatch(p -> p.id().equals(product.id()));
 
     if (duplicate) {
       throw new IllegalArgumentException("Product with id " + product.id() + " already exists");
@@ -39,6 +42,15 @@ public class Warehouse {
   }
 
   public void updateProduct(String id, String name, Category category, int rating) {
+    if (name == null || name.isBlank()) {
+      throw new IllegalArgumentException("name must not be blank");
+      }
+    if (category == null) {
+      throw new IllegalArgumentException("category must not be null");
+      }
+    if (rating < 0 || rating > 10) {
+      throw new IllegalArgumentException("rating must be between 0 and 10");
+      }
     for (int i = 0; i < products.size(); i++) {
       Product current = products.get(i);
       if (current.id().equals(id)) {
@@ -92,13 +104,13 @@ public class Warehouse {
   }
 
 
-  public List<Product> getModifiedProduct() {
+  public List<Product> getModifiedProducts() {
     var result = products.stream()
             .filter(product -> !product.createdDate().equals(product.modifiedDate()))
             .collect(Collectors.toList());
 
     if(result.isEmpty()) {
-      throw new IllegalArgumentException("No modified products was found");
+      throw new IllegalArgumentException("No modified products were found");
     }
 
     return result;

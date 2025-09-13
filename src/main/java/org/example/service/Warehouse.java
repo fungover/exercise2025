@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.w3c.dom.ls.LSOutput;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -60,10 +61,14 @@ public class Warehouse {
     }
 
     public List<Product> getProductsCreatedAfter(LocalDate date) {
-        return Collections.emptyList();
+        if (date == null) return Collections.emptyList();
+
+        return products.stream()
+                .filter(p -> p.createdDate() != null && p.createdDate().isAfter(date))
+                .toList();
     }
 
-    public List<Product> getModifiedProducts() {
+    public List<Product> getModifiedProducts(LocalDate date) {
         return Collections.emptyList();
     }
 }

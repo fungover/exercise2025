@@ -4,16 +4,13 @@ package map;
 import entities.Enemy;
 import entities.Item;
 import entities.Player;
-import entities.Potion;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Dungeon {
 
     private final int width, height;
     private final Tile[][] map;
-    private Potion potion;
 
     public Dungeon(int width, int height) {
         this.width = width;
@@ -49,6 +46,10 @@ public class Dungeon {
         map[5][1] = new Tile(TileType.WALL);
         map[1][4] = new Tile(TileType.WALL);
 
+    }
+
+    public int getHeight(){
+        return this.height;
     }
 
     public void printDungeon(Player player, List<Enemy> enemies) {

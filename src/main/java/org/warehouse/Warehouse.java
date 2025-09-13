@@ -93,6 +93,14 @@ public class Warehouse {
 
 
   public List<Product> getModifiedProduct() {
-    return products.stream().filter(product -> product.getCreatedDate().equals(product.getModifiedDate())).collect(Collectors.toList());
+    var result = products.stream()
+            .filter(product -> !product.getCreatedDate().equals(product.getModifiedDate()))
+            .collect(Collectors.toList());
+
+    if(result.isEmpty()) {
+      throw new IllegalArgumentException("No modified products was found");
+    }
+
+    return result;
   }
 }

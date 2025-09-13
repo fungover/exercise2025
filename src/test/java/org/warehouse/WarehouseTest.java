@@ -185,11 +185,19 @@ public class WarehouseTest {
     warehouse.addProduct(newProduct);
     warehouse.addProduct(oldProduct);
     warehouse.addProduct(product2);
-    warehouse.addProduct(product3);
 
     var modifiedProduct = warehouse.getModifiedProduct();
 
     assertThat(modifiedProduct).hasSize(2);
+  }
 
+  @Test
+  public void cantFindProductsWithModifiedDates() {
+    warehouse.addProduct(product);
+    warehouse.addProduct(product2);
+
+    assertThatThrownBy(() -> warehouse.getModifiedProduct())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("No modified products was found");
   }
 }

@@ -2,7 +2,6 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
-import org.w3c.dom.ls.LSOutput;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -68,11 +67,9 @@ public class Warehouse {
                 .toList();
     }
 
-    public List<Product> getModifiedProducts(LocalDate date) {
-        if (date == null) return Collections.emptyList();
-
+    public List<Product> getModifiedProducts() {
         return products.stream()
-                .filter(p -> p.modifiedDate() != null && p.modifiedDate().isAfter(date))
+                .filter(p -> p.modifiedDate() != null && !p.modifiedDate().equals(p.createdDate()))
                 .toList();
     }
 }

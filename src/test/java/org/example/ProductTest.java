@@ -21,14 +21,4 @@ class ProductTest {
 		Product product = new Product("SUPER_GAME", "", Category.GAMES, 10);
 		assertThat(product.name()).isEmpty();
 	}
-
-	@Test
-	void testUpdatingAProduct() throws InterruptedException {
-		Product product = new Product("SUPER_GAME", "Little Leaf Lizards", Category.GAMES, 10);
-		Thread.sleep(5000);
-
-		product.updateProduct("SUPER_DUPER_GAME", "Little Leafy Lizard", Category.COMPUTERS, 8);
-		assertThat(product.id()).isEqualTo("SUPER_DUPER_GAME");
-		assertThat(product.createdAt()).isNotEqualTo(product.modifiedAt());
-	}
 }

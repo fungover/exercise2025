@@ -18,6 +18,14 @@ public class Warehouse {
 		}
 	}
 
+	public void updateProduct(String id, String name, Category category, int rating) {
+		products.forEach(product -> {
+			if (product.id().equals(id)) {
+				product.updateProduct(name, category, rating);
+			}
+		});
+	}
+
 	public List<Product> getAllProducts() {
 		return Collections.unmodifiableList(products);
 	}
@@ -39,6 +47,12 @@ public class Warehouse {
 	public List<Product> getProductsCreatedAfter(LocalDateTime now) {
 		return products.stream().filter(product -> product.createdAt()
 						.isAfter(now))
+						.toList();
+	}
+
+	public List<Product> getModifiedProducts() {
+		return products.stream()
+						.filter(product -> !product.createdAt().equals(product.modifiedAt()))
 						.toList();
 	}
 }

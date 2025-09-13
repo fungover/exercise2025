@@ -17,14 +17,13 @@ public class Product {
 		this.category = category;
 		this.rating = rating;
 		this.createdAt = LocalDateTime.now();
-		this.modifiedAt = LocalDateTime.now();
+		this.modifiedAt = this.createdAt;
 	}
 
-	public void updateProduct(String id, String name, Category category, int rating) {
-		this.id = id;
+	public void updateProduct(String name, Category category, int rating) {
 		this.name = name;
-		this.rating = rating;
 		this.category = category;
+		this.rating = rating;
 		setModifiedAt();
 	}
 

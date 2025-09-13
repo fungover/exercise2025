@@ -39,6 +39,19 @@ class WarehouseTest {
 	}
 
 	@Test
+	void testUpdatingAProduct() {
+		Warehouse warehouse = new Warehouse();
+		Product product = new Product("SUPER_GAME", "Mage", Category.GAMES, 8);
+		warehouse.addProduct(product);
+
+		assertThat(warehouse.getAllProducts().get(0).name()).isEqualTo("Mage");
+
+		warehouse.updateProduct("SUPER_GAME", "Game", Category.GAMES, 10);
+
+		assertThat(warehouse.getAllProducts().get(0).name()).isEqualTo("Game");
+	}
+
+	@Test
 	void testRetrieveAllProductsInWarehouse() {
 		Warehouse warehouse = new Warehouse();
 
@@ -97,5 +110,21 @@ class WarehouseTest {
 		assertThat(products.size()).isEqualTo(2);
 		assertThat(products.get(0).id()).isEqualTo("ASUPER_GAME");
 		assertThat(products.get(1).id()).isEqualTo("SUPER_ACCESSORY");
+	}
+
+	@Test
+	void testRetrieveAllProductsWhereModifiedIsNotEqualsToCreated() throws InterruptedException {
+		Warehouse warehouse = new Warehouse();
+
+		warehouse.addProduct(new Product("SUPER_GAMEE", "BGame", Category.GAMES, 9));
+		warehouse.addProduct(new Product("SUPER_GAME", "AGame", Category.GAMES, 8));
+		warehouse.addProduct(new Product("ASUPER_GAME", "AC Game", Category.GAMES, 8));
+		Thread.sleep(5000);
+		warehouse.updateProduct("SUPER_GAMEE", "B: Game", Category.GAMES, 7);
+		warehouse.updateProduct("ASUPER_GAME", "Assassin's Creed - Game", Category.GAMES, 10);
+
+		List<Product> modifiedProducts = warehouse.getModifiedProducts();
+		assertThat(modifiedProducts.size()).isEqualTo(2);
+
 	}
 }

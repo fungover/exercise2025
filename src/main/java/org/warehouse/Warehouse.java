@@ -32,6 +32,9 @@ public class Warehouse {
   }
 
   public List<Product> getAllProducts() {
+    if(products.isEmpty()) {
+      throw new IllegalArgumentException("No products found");
+    }
     return new ArrayList<>(products);
   }
 

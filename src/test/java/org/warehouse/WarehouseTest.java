@@ -111,7 +111,15 @@ public class WarehouseTest {
 
   @Test
   public void canGetAllProducts() {
+    warehouse.addProduct(product);
     List<Product> products = warehouse.getAllProducts();
+  }
+
+  @Test
+  public void cantReturnProductIfIdNotFound() {
+    assertThatThrownBy(() -> warehouse.getAllProducts().getFirst())
+    .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("No products found");
   }
 
   @Test

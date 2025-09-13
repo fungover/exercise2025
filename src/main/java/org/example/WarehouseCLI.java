@@ -67,4 +67,22 @@ public class WarehouseCLI {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+    private void updateProduct() {
+        try {
+            System.out.print("Enter ID: ");
+            String id = scanner.nextLine().trim();
+            System.out.print("Enter New Name: ");
+            String name = scanner.nextLine().trim();
+            System.out.print("Enter New Category (ELECTRONICS, BOOKS, CLOTHING, FOOD, TOYS): ");
+            String categoryInput = scanner.nextLine().trim().toUpperCase();
+            Category category = Category.valueOf(categoryInput);
+            System.out.print("Enter New Rating (0-10): ");
+            int rating = Integer.parseInt(scanner.nextLine().trim());
+            boolean updated = warehouse.updateProduct(id, name, category, rating);
+            System.out.println(updated ? "Product updated" : "Product not found");
+        } catch (IllegalArgumentException | DateTimeParseException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
 }

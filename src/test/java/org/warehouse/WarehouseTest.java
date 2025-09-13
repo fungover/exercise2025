@@ -48,6 +48,14 @@ public class WarehouseTest {
           LocalDate.of(2025, 9, 10), LocalDate.of(2025, 9, 11)
   );
 
+  Product productSameId = new Product(
+          "1",
+          "Film2",
+          Category.THRILLER,
+          10,
+          LocalDate.now(),
+          LocalDate.now());
+
   @Test
   public void canCreateWarehouseAndGetName() {
 
@@ -67,6 +75,14 @@ public class WarehouseTest {
 //    assertEquals(1, warehouse.getAllProducts().size());
 //    assertEquals("Film", warehouse.getAllProducts().getFirst().getName());
 //    assertEquals(Category.THRILLER, warehouse.getAllProducts().getFirst().getCategory());
+  }
+
+  @Test
+  public void canSeeIfProductIdIsUnique() {
+    warehouse.addProduct(product);
+    warehouse.addProduct(productSameId);
+
+    assertThat(warehouse.getAllProducts()).extracting(Product::getId).doesNotHaveDuplicates();
   }
 
   @Test

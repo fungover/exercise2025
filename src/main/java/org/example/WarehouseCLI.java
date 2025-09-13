@@ -1,7 +1,10 @@
 package org.example;
 
+import org.example.entities.Category;
+import org.example.entities.Product;
 import org.example.service.Warehouse;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
@@ -38,7 +41,7 @@ public class WarehouseCLI {
         System.out.println("3. List All Products");
         System.out.println("4. Get Product By ID");
         System.out.println("5. List Products By Category");
-        System.out.println("6. List Products Created After");
+        System.out.println("6. List Products Created After Date");
         System.out.println("7. List Modified Products");
         System.out.println("8. Exit");
         System.out.print("Enter your choice: ");
@@ -46,18 +49,20 @@ public class WarehouseCLI {
 
     private void addProduct() {
         try {
-            System.out.print("Enter product ID: ");
+            System.out.print("Enter ID: ");
             String id = scanner.nextLine().trim();
-            System.out.print("Enter product name: ");
+            System.out.print("Enter Name: ");
             String name = scanner.nextLine().trim();
-            System.out.print("Enter product category: ");
-            String category = scanner.nextLine().trim();
-            System.out.print("Enter product rating: ");
-            int rating = scanner.nextInt();
-            System.out.print("Enter product release date (YYYY-MM-DD): ");
-            String listedDate = scanner.nextLine().trim();
-            System.out.print("Enter product last update date (YYYY-MM-DD): ");
-            String lastUpdateDate = scanner.nextLine().trim();
+            System.out.print("Enter Category (ELECTRONICS, BOOKS, CLOTHING, FOOD, TOYS): ");
+            String categoryInput = scanner.nextLine().trim().toUpperCase();
+            Category category = Category.valueOf(categoryInput);
+            System.out.print("Enter Rating (0-10): ");
+            int rating = Integer.parseInt(scanner.nextLine().trim());
+            System.out.print("Enter Created Date (YYYY-MM-DD): ");
+            LocalDate createdDate = LocalDate.parse(scanner.nextLine().trim());
+            Product product = new Product(id, name, category, rating, createdDate, createdDate);
+            warehouse.addProduct(product);
+            System.out.println("Product added: " + product);
         } catch (IllegalArgumentException | DateTimeParseException e) {
             System.out.println("Error: " + e.getMessage());
         }

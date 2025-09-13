@@ -135,6 +135,13 @@ public class WarehouseTest {
   }
 
   @Test
+  public void cantGetProductByIdIfIdNotFound() {
+    assertThatThrownBy(() -> warehouse.getProductById("100"))
+    .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("not found");
+  }
+
+  @Test
   public void canGetProductsByCategorySorted() {
 
     warehouse.addProduct(product);

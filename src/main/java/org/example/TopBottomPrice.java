@@ -3,12 +3,16 @@ package org.example;
 import java.math.BigDecimal;
 
 class TopBottomPrice {
-    private final PriceMapper prices = new PriceMapper();
-    private final Price[] allPrices = prices.getAllPrices();
+    private final PriceMapper prices;
     private final PriceDates date1 = new PriceDates();
     private final PriceDates date2 = new PriceDates();
 
+    public TopBottomPrice(PriceMapper prices) {
+        this.prices = prices;
+    }
+
     private HighLowValues getTopBottomPrice() {
+        Price[] allPrices = prices.getAllPrices();
         BigDecimal[] priceArray = new BigDecimal[allPrices.length];
         for (int i = 0; i < allPrices.length; i++)
             priceArray[i] = allPrices[i].getSekPerKWh();
@@ -19,6 +23,7 @@ class TopBottomPrice {
     }
 
     public void printTopBottomPrice() {
+        Price[] allPrices = prices.getAllPrices();
         HighLowValues topBottomPrice = getTopBottomPrice();
 
         date1.setDates(topBottomPrice.lowestVal, allPrices);

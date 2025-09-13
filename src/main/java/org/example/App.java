@@ -2,9 +2,10 @@ package org.example;
 
 class App {
     static void main() {
-        MeanPrice meanPrice = new MeanPrice();
-        TopBottomPrice topBottomPrice = new TopBottomPrice();
-        ChargingPrice chargingPrice = new ChargingPrice();
+        PriceMapper mapper = new PriceMapper();
+        MeanPrice meanPrice = new MeanPrice(mapper);
+        TopBottomPrice topBottomPrice = new TopBottomPrice(mapper);
+        ChargingPrice chargingPrice = new ChargingPrice(mapper);
 
         System.out.println();
         meanPrice.printMeanPrice();

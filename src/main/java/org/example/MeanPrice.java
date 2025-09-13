@@ -4,12 +4,16 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 class MeanPrice {
-    private final PriceMapper prices = new PriceMapper();
-    private final Price[] todayPrices = prices.getTodayPrices();
+    private final PriceMapper prices;
     private BigDecimal totalSek = BigDecimal.ZERO;
     private BigDecimal totalEur = BigDecimal.ZERO;
 
+    public MeanPrice(PriceMapper prices) {
+        this.prices = prices;
+    }
+
     private MeanPrices calculateMeanPrice() {
+        Price[] todayPrices = prices.getTodayPrices();
         int count = todayPrices.length;
         if (count == 0)
             return new MeanPrices(BigDecimal.ZERO, BigDecimal.ZERO);

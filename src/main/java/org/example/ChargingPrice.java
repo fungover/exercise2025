@@ -5,13 +5,16 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class ChargingPrice {
-    private final PriceMapper priceMapper = new PriceMapper();
-    private final Price[] allPrices = priceMapper.getAllPrices();
-    private final Price[] prices = currentPrices();
+    private final PriceMapper priceMapper;
     private final int hours = LocalDateTime.now().getHour();
     private final int minutes = LocalDateTime.now().getMinute();
 
+    public ChargingPrice(PriceMapper priceMapper) {
+        this.priceMapper = priceMapper;
+    }
+
     private Price[] currentPrices() {
+        Price[] allPrices = priceMapper.getAllPrices();
         int newIndex = 0;
         String now = setHour();
         for (Price price : allPrices) {
@@ -66,18 +69,21 @@ public class ChargingPrice {
     }
 
     private void printChargingPrice(int k) {
+        Price[] prices = currentPrices();
         int n = prices.length;
 
-        ChargingPriceDates chargingPriceDates = chargingPrices(prices, n, k);
-        Price startPrice = prices[chargingPriceDates.startIndex];
-        Price endPrice = prices[chargingPriceDates.endIndex];
+        if (k < n) {
+            ChargingPriceDates chargingPriceDates = chargingPrices(prices, n, k);
+            Price startPrice = prices[chargingPriceDates.startIndex];
+            Price endPrice = prices[chargingPriceDates.endIndex];
 
-        System.out.println("For " + k + " hours: " +
-                chargingPriceDates.minSum + " SEK");
-        System.out.println("Starts: " + startPrice.getStartDate() + " / " +
-                startPrice.getStartHour());
-        System.out.println("Ends: " + endPrice.getEndDate() + " / " +
-                endPrice.getEndHour());
+            System.out.println("For " + k + " hours: " +
+                    chargingPriceDates.minSum + " SEK");
+            System.out.println("Starts: " + startPrice.getStartDate() + " / " +
+                    startPrice.getStartHour());
+            System.out.println("Ends: " + endPrice.getEndDate() + " / " +
+                    endPrice.getEndHour());
+        }
     }
 
     public void printCharge2() {

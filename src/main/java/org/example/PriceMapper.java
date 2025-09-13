@@ -4,10 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.ArrayUtils;
 
-class PriceMapper {
+public class PriceMapper {
     private Price[] todayPrices;
     private Price[] tomorrowPrices;
-    private final FetchPrice fetch = new FetchPrice();
     private final ObjectMapper mapper = new ObjectMapper();
 
     public Price[] getAllPrices() {
@@ -22,7 +21,8 @@ class PriceMapper {
 
     public Price[] getTodayPrices() {
         try {
-            String firstPayload = fetch.getTodayPrices();
+            FetchPrice fetch = new FetchPrice();
+            String firstPayload = fetch.fetchTodayPrices();
             todayPrices = mapper.readValue(firstPayload, Price[].class);
         } catch (JsonProcessingException e) {
             System.out.println(e.getMessage());
@@ -32,7 +32,8 @@ class PriceMapper {
 
     public Price[] getTomorrowPrices() {
         try {
-            String secondPayload = fetch.getTomorrowPrices();
+            FetchPrice fetch = new FetchPrice();
+            String secondPayload = fetch.fetchTomorrowPrices();
             tomorrowPrices = mapper.readValue(secondPayload, Price[].class);
         } catch (JsonProcessingException _) {
         }

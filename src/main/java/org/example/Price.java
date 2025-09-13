@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Price {
+public class Price {
     @JsonProperty("SEK_per_kWh")
     private BigDecimal sekPerKWh;
 

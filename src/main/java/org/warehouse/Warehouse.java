@@ -22,6 +22,12 @@ public class Warehouse {
   }
 
   public void addProduct(Product product) {
+    boolean duplicate = products.stream().anyMatch(p -> p.getId() == product.getId());
+
+    if (duplicate) {
+      throw new IllegalArgumentException("Product with id " + product.getId() + " already exists");
+    }
+
     products.add(product);
   }
 

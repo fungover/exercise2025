@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WarehouseTest {
@@ -80,9 +81,11 @@ public class WarehouseTest {
   @Test
   public void canSeeIfProductIdIsUnique() {
     warehouse.addProduct(product);
-    warehouse.addProduct(productSameId);
 
-    assertThat(warehouse.getAllProducts()).extracting(Product::getId).doesNotHaveDuplicates();
+    assertThatThrownBy(() -> warehouse.addProduct(productSameId))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("already exists");
+
   }
 
   @Test

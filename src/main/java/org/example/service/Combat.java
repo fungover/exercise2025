@@ -15,9 +15,8 @@ public class Combat {
         Weapon w = inventory.getItem(Weapon.class);
         HealthPotion hp = inventory.getItem(HealthPotion.class);
 
-        boolean isFighting = true;
         System.out.println("It's a " + e.getName() + "!");
-        while (isFighting) {
+        while (true) {
             System.out.println("What would you like to do?");
             System.out.println("1. Fight");
             System.out.println("2. Use an item");
@@ -30,12 +29,12 @@ public class Combat {
                     attackEnemy(w, e);
                     if (e.getHealth() <= 0) {
                         System.out.println("You won!");
-                        isFighting = false;
+                        return;
                     }
                     attackByEnemy(p, e);
                     if (p.getHealth() <= 0) {
                         System.out.println("You died!");
-                        isFighting = false;
+                        return;
                     }
                     break;
                 case "2":
@@ -48,7 +47,8 @@ public class Combat {
                     }
                     break;
                 case "3":
-                    isFighting = tryRunAway(p, e);
+                    if(tryRunAway(p, e))
+                        return;
                 default:
                     System.out.println("That is not an option!");
             }
@@ -59,12 +59,12 @@ public class Combat {
         int randInt = rand.generateNumber(1, 10);
         if (randInt < 5) {
             System.out.println("You run away!");
-            return false;
+            return true;
         } else {
             System.out.println("You can't get away!");
             attackByEnemy(p, e);
         }
-        return true;
+        return false;
     }
 
     private void attackEnemy(Weapon w, Enemy e) {

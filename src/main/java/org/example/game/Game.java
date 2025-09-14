@@ -2,7 +2,6 @@ package org.example.game;
 
 import org.example.entities.Enemy;
 import org.example.entities.Player;
-import org.example.entities.items.HealthPotion;
 import org.example.entities.items.Item;
 import org.example.utils.Enemies;
 import org.example.entities.items.Inventory;

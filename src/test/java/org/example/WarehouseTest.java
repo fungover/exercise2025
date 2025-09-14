@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class WarehouseTest {
 	@Test
@@ -49,6 +51,18 @@ class WarehouseTest {
 		warehouse.updateProduct("SUPER_GAME", "Game", Category.GAMES, 10);
 
 		assertThat(warehouse.getAllProducts().get(0).name()).isEqualTo("Game");
+	}
+
+	@Test
+	void testUpdatingAProductWithAnIdThatDoesNotExist() {
+		Warehouse warehouse = new Warehouse();
+		Product product = new Product("SUPER_GAME", "Game", Category.GAMES, 8);
+		warehouse.addProduct(product);
+
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			warehouse.updateProduct("SUPER_GAMER", "Mage", Category.GAMES, 10);
+		});
+		assertThat(exception.getMessage()).isEqualTo("Product ID does not exist");
 	}
 
 	@Test
@@ -115,13 +129,16 @@ class WarehouseTest {
 	@Test
 	void testRetrieveAllProductsWhereModifiedIsNotEqualsToCreated() throws InterruptedException {
 		Warehouse warehouse = new Warehouse();
+		Product product = new Product("SUPER_GAMER", "Mage", Category.GAMES, 8);
+		Product product2 = new Product("ASUPER_GAME", "AGame", Category.GAMES, 7);
+		Product product3 = new Product("SUPER_GAME", "Game", Category.GAMES, 10);
+		warehouse.addProduct(product);
+		warehouse.addProduct(product2);
+		warehouse.addProduct(product3);
 
-		warehouse.addProduct(new Product("SUPER_GAMEE", "BGame", Category.GAMES, 9));
-		warehouse.addProduct(new Product("SUPER_GAME", "AGame", Category.GAMES, 8));
-		warehouse.addProduct(new Product("ASUPER_GAME", "AC Game", Category.GAMES, 8));
 		Thread.sleep(5000);
-		warehouse.updateProduct("SUPER_GAMEE", "B: Game", Category.GAMES, 7);
-		warehouse.updateProduct("ASUPER_GAME", "Assassin's Creed - Game", Category.GAMES, 10);
+		warehouse.updateProduct("SUPER_GAME", "Mage", Category.GAMES, 10);
+		warehouse.updateProduct("ASUPER_GAME", "Assassin's Creed", Category.GAMES, 10);
 
 		List<Product> modifiedProducts = warehouse.getModifiedProducts();
 		assertThat(modifiedProducts.size()).isEqualTo(2);

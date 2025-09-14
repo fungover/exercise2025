@@ -11,19 +11,25 @@ public class Warehouse {
 	}
 
 	public void addProduct(Product product) {
-		if (product == null || product.name() == null || product.name().isEmpty()) {
-			System.out.println("ERROR: Product name is null or empty");
+		if (product == null) {
+		throw new IllegalArgumentException("Product cannot be null or empty");
 		} else {
 			products.add(product);
 		}
 	}
 
 	public void updateProduct(String id, String name, Category category, int rating) {
-		products.forEach(product -> {
+		boolean updated = false;
+		for (Product product : products) {
 			if (product.id().equals(id)) {
 				product.updateProduct(name, category, rating);
+				updated = true;
+				break;
 			}
-		});
+		}
+		if (!updated) {
+			throw new IllegalArgumentException("Product ID does not exist");
+		}
 	}
 
 	public List<Product> getAllProducts() {

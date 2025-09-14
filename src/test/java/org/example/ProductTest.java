@@ -17,13 +17,35 @@ class ProductTest {
 	@Test
 	void testNameIsNotEmpty() {
 		Product product = new Product("SUPER_GAME", "Little Leaf Lizards", Category.GAMES, 10);
-		assertThat(product.name()).isNotEmpty();
+		assertThat(product.name()).isEqualTo("Little Leaf Lizards");
 	}
 
 	@Test
 	void testNameIsEmpty() {
-		Product product = new Product("SUPER_GAME", "", Category.GAMES, 10);
-		assertThat(product.name()).isEmpty();
+		Exception exception =  assertThrows(IllegalArgumentException.class, () -> {
+			Product product = new Product("SUPER_GAME", "", Category.GAMES, 10);
+		});
+		assertThat(exception.getMessage()).isEqualTo("Name cannot be empty");
+	}
+
+	@Test
+	void testIdIsNotEmpty() {
+		Product product = new Product("SUPER_GAME", "Little Leaf Lizards", Category.GAMES, 10);
+		assertThat(product.id()).isEqualTo("SUPER_GAME");
+	}
+
+	@Test
+	void testIdIsEmpty() {
+		Exception exception =  assertThrows(IllegalArgumentException.class, () -> {
+			new Product("", "Little Leaf Lizard", Category.GAMES, 10);
+		});
+		assertThat(exception.getMessage()).isEqualTo("ID cannot be empty");
+	}
+
+	@Test
+	void testCategoryIsNotEmpty() {
+		Product product = new Product("GAME",  "Little Leaf Lizards", Category.GAMES, 10);
+		assertThat(product.category()).isEqualTo(Category.GAMES);
 	}
 
 	@ParameterizedTest

@@ -15,6 +15,13 @@ public class Product {
 		if (rating > 10 || rating < 0) {
 			throw new IllegalArgumentException("Invalid rating");
 		}
+		if (name == null || name.isEmpty()) {
+			throw new IllegalArgumentException("Name cannot be empty");
+		}
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("ID cannot be empty");
+		}
+
 		this.id = id;
 		this.name = name;
 		this.category = category;

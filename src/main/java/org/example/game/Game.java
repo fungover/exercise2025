@@ -26,7 +26,7 @@ public class Game {
         final Player player = new Player(name, 70);
         final Inventory inventory = new Inventory();
         final GameLogic logic = new GameLogic();
-        Dungeon dungeon = new Dungeon(player);
+        final Dungeon dungeon = new Dungeon(player);
 
         // Items
         inventory.addItem(new Weapon("Sword", 20));
@@ -56,8 +56,8 @@ public class Game {
             }
             logic.moveInput(dungeon, player, userInput);
 
-            logic.renderPlayerPosition(dungeon, player);
-            pause(); // This makes it possible to read messages before rerender
+            dungeon.renderPlayerPosition(player);
+            pause(); // This makes it possible to read messages before re-render
         }
     }
 

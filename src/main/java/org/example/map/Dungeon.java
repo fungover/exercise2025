@@ -64,6 +64,20 @@ public class Dungeon {
         inventory.displayInventory();
     }
 
+    public void renderPlayerPosition(Player p) {
+        char playerTile = Tile.PLAYER.getTile();
+        char floorTile = Tile.FLOOR.getTile();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                if (getTile(i, j) == playerTile) {
+                    setTile(i, j, floorTile);
+                }
+            }
+        }
+        setTile(p.getY(), p.getX(), playerTile);
+    }
+
     public int getRows() {
         return rows;
     }

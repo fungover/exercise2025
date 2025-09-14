@@ -136,7 +136,7 @@ class WarehouseTest {
 		warehouse.addProduct(product2);
 		warehouse.addProduct(product3);
 
-		Thread.sleep(5000);
+		Thread.sleep(100);
 		warehouse.updateProduct("SUPER_GAME", "Mage", Category.GAMES, 10);
 		warehouse.updateProduct("ASUPER_GAME", "Assassin's Creed", Category.GAMES, 10);
 

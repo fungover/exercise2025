@@ -45,8 +45,8 @@ public class Warehouse {
 
 	public List<Product> getProductsByCategorySorted(Category category) {
 		return products.stream()
-						.sorted(Comparator.comparing(Product::name))
 						.filter(product -> product.category().equals(category))
+						.sorted(Comparator.comparing(Product::name))
 						.toList();
 	}
 

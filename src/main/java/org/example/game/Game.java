@@ -1,12 +1,16 @@
 package org.example.game;
 
+import org.example.entities.Enemy;
 import org.example.entities.Player;
 import org.example.entities.items.HealthPotion;
+import org.example.entities.items.Item;
+import org.example.utils.Enemies;
 import org.example.entities.items.Inventory;
 import org.example.entities.items.Weapon;
 import org.example.map.Dungeon;
 import org.example.service.Combat;
 import org.example.service.GameLogic;
+import org.example.utils.ItemsOnFloor;
 
 import java.util.Scanner;
 
@@ -25,27 +29,33 @@ public class Game {
 
         final Player player = new Player(name, 70);
         final Inventory inventory = new Inventory();
+        final Enemies enemies = new Enemies(); // Enemy List
+        final ItemsOnFloor itemsOnFloor = new ItemsOnFloor(); // Item List
         final GameLogic logic = new GameLogic();
-        final Dungeon dungeon = new Dungeon(player);
+        final Dungeon dungeon = new Dungeon(player, enemies, itemsOnFloor);
 
         // Items
         inventory.addItem(new Weapon("Sword", 20));
 
         // Game loop
         while (true) {
-            // "Clear" the terminal
-            for (int i = 0; i < 50; i++) {
-                System.out.println();
-            }
             dungeon.printDungeon(inventory);
 
             if (logic.wishToPickUpItem(dungeon, player, scan)) {
-                logic.pickUpItem(new HealthPotion(1), inventory, HealthPotion.class);
+                Item item = logic.getItemFromList(dungeon, player, itemsOnFloor);
+                logic.pickUpItem(item, inventory);
+                dungeon.removeItemTile(item);
+                pause();
+                dungeon.printDungeon(inventory);
             }
 
             if (logic.wishToFightEnemy(dungeon, player, scan)) {
                 Combat combat = new Combat();
-                combat.startFight(player, inventory, scan);
+                Enemy enemy = logic.getEnemyFromList(dungeon, player, enemies);
+                combat.startFight(player, inventory, enemy, scan);
+                dungeon.removeEnemyTile(enemy);
+                pause();
+                dungeon.printDungeon(inventory);
             }
 
             System.out.print("Enter command (or 'q' to quit game): ");

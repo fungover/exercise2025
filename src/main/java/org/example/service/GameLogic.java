@@ -1,10 +1,13 @@
 package org.example.service;
 
+import org.example.entities.Enemy;
 import org.example.entities.Player;
+import org.example.utils.Enemies;
 import org.example.entities.items.Inventory;
 import org.example.entities.items.Item;
 import org.example.map.Dungeon;
 import org.example.map.Tile;
+import org.example.utils.ItemsOnFloor;
 
 import java.util.Scanner;
 
@@ -74,6 +77,40 @@ public class GameLogic {
         System.out.println("There is a wall blocking " + p.getName() + " from going further.");
     }
 
+    public Enemy getEnemyFromList(Dungeon d, Player p, Enemies enemies) {
+        int x = p.getX();
+        int y = p.getY();
+
+        if (d.getTile(y, x + 1) == enemyTile) {
+            return enemies.getEnemyOnFloor(x + 1, y);
+        } else if (d.getTile(y, x - 1) == enemyTile) {
+            return enemies.getEnemyOnFloor(x - 1, y);
+        } else if (d.getTile(y + 1, x) == enemyTile) {
+            return enemies.getEnemyOnFloor(x, y + 1);
+        } else if (d.getTile(y - 1, x) == enemyTile) {
+            return enemies.getEnemyOnFloor(x, y - 1);
+        }
+        System.out.println("There is no enemy here.");
+        return null;
+    }
+
+    public Item getItemFromList(Dungeon d, Player p, ItemsOnFloor items) {
+        int x = p.getX();
+        int y = p.getY();
+
+        if (d.getTile(y, x + 1) == itemTile) {
+            return items.getItemOnFloor(x + 1, y);
+        } else if (d.getTile(y, x - 1) == itemTile) {
+            return items.getItemOnFloor(x - 1, y);
+        } else if (d.getTile(y + 1, x) == itemTile) {
+            return items.getItemOnFloor(x, y + 1);
+        } else if (d.getTile(y - 1, x) == itemTile) {
+            return items.getItemOnFloor(x, y - 1);
+        }
+        System.out.println("There is no item here.");
+        return null;
+    }
+
     public boolean wishToFightEnemy(Dungeon d, Player p, Scanner scan) {
         if (d.getTile(p.getY(), p.getX() + 1) == enemyTile ||
                 d.getTile(p.getY(), p.getX() - 1) == enemyTile ||
@@ -113,15 +150,9 @@ public class GameLogic {
         }
     }
 
-    public void pickUpItem(Item newItem, Inventory inventory, Class<? extends Item> itemClass) {
-        Item pickedUpItem;
-        if (inventory.getItem(itemClass) != null) {
-            pickedUpItem = inventory.getItem(itemClass);
-        } else {
-            pickedUpItem = newItem;
-        }
-        inventory.addItem(pickedUpItem);
-        System.out.println("A " + pickedUpItem.getType() + " has been picked up!");
+    public void pickUpItem(Item newItem, Inventory inventory) {
+        inventory.addItem(newItem);
+        System.out.println("A " + newItem.getType() + " has been picked up!");
     }
 
 }

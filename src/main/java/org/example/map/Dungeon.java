@@ -1,7 +1,12 @@
 package org.example.map;
 
+import org.example.entities.Enemy;
 import org.example.entities.Player;
+import org.example.entities.items.HealthPotion;
+import org.example.utils.Enemies;
 import org.example.entities.items.Inventory;
+import org.example.entities.items.Item;
+import org.example.utils.ItemsOnFloor;
 import org.example.utils.RandomGenerator;
 
 public class Dungeon {
@@ -11,14 +16,14 @@ public class Dungeon {
     private final char[][] grid;
     private boolean printedPlayer = false;
 
-    public Dungeon(Player player) {
+    public Dungeon(Player p, Enemies e, ItemsOnFloor i) {
         this.rows = 7;
         this.columns = rand.generateNumber(10, 20);
         this.grid = new char[rows][columns];
-        generateDungeon(player);
+        generateDungeon(p, e, i);
     }
 
-    private void generateDungeon(Player player) {
+    private void generateDungeon(Player p, Enemies e, ItemsOnFloor i) {
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
 
@@ -28,29 +33,40 @@ public class Dungeon {
                         && rand.generateNumber(1, 10) < 7) {
                     grid[y][x] = Tile.WALL.getTile();
                 } else {
-                    grid[y][x] = getRandomProp(player, x, y);
+                    grid[y][x] = setRandomProp(p, e, i, x, y);
                 }
             }
         }
         grid[rows / 2][columns - 1] = Tile.DOOR.getTile();
     }
 
-    private char getRandomProp(Player player, int x, int y) {
+    private char setRandomProp(Player p, Enemies e, ItemsOnFloor items, int x, int y) {
         int randomNum = rand.generateNumber(3, 10);
-        if (randomNum == 6) {
-            return Tile.ITEM.getTile();
-        } else if (!printedPlayer) {
+        if (!printedPlayer) {
             printedPlayer = true;
-            player.setPosition(x, y);
+            p.setPosition(x, y);
             return Tile.PLAYER.getTile();
+        } else if (randomNum == 6) {
+            Item item = new HealthPotion(1);
+            item.setPosition(x, y);
+            items.addToList(item);
+            return Tile.ITEM.getTile();
         } else if (randomNum > 3) {
             return Tile.FLOOR.getTile();
         } else {
+            Enemy enemy = rand.randomEnemy(rand);
+            enemy.setPosition(x, y);
+            e.addToList(enemy);
             return Tile.ENEMY.getTile();
         }
     }
 
-    public void printDungeon(Inventory inventory) {
+    public void printDungeon(Inventory i) {
+        // "Clear" the terminal
+        for (int n = 0; n < 50; n++) {
+            System.out.println();
+        }
+
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
                 System.out.print(grid[y][x]);
@@ -61,7 +77,7 @@ public class Dungeon {
         System.out.println("Move Down (D)");
         System.out.println("Move Right (R)");
         System.out.println("Move Left (L)");
-        inventory.displayInventory();
+        i.displayInventory();
     }
 
     public void renderPlayerPosition(Player p) {
@@ -76,6 +92,14 @@ public class Dungeon {
             }
         }
         setTile(p.getY(), p.getX(), playerTile);
+    }
+
+    public void removeEnemyTile(Enemy e) {
+        setTile(e.getY(), e.getX(), Tile.FLOOR.getTile());
+    }
+
+    public void removeItemTile(Item i) {
+        setTile(i.getY(), i.getX(), Tile.FLOOR.getTile());
     }
 
     public int getRows() {

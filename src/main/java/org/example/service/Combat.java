@@ -9,9 +9,9 @@ import org.example.utils.RandomGenerator;
 import java.util.Scanner;
 
 public class Combat {
+    private final RandomGenerator rand = new RandomGenerator();
 
-    public void startFight(Player p, Inventory inventory, Scanner scan) {
-        Enemy e = randomEnemy();
+    public void startFight(Player p, Inventory inventory, Enemy e, Scanner scan) {
         Weapon w = inventory.getItem(Weapon.class);
         HealthPotion hp = inventory.getItem(HealthPotion.class);
 
@@ -56,8 +56,8 @@ public class Combat {
     }
 
     private boolean tryRunAway(Player p, Enemy e) {
-        int rand = new RandomGenerator().generateNumber(1, 10);
-        if (rand < 5) {
+        int randInt = rand.generateNumber(1, 10);
+        if (randInt < 5) {
             System.out.println("You run away!");
             return false;
         } else {
@@ -68,17 +68,17 @@ public class Combat {
     }
 
     private void attackEnemy(Weapon w, Enemy e) {
-        int rand = new RandomGenerator().generateNumber(1, 10);
+        int randInt = rand.generateNumber(1, 10);
         int damage;
 
         // If player has no weapon in hand.
         if (w == null) {
-            damage = rand;
+            damage = randInt;
         } else {
             damage = w.getDamage();
         }
 
-        if (rand < 7) {
+        if (randInt < 7) {
             System.out.println("You swing your sword!\nDealing " +
                     damage + " damage!");
             damageGiven(e, damage);
@@ -88,24 +88,13 @@ public class Combat {
     }
 
     private void attackByEnemy(Player p, Enemy e) {
-        int rand = new RandomGenerator().generateNumber(1, 10);
-        if (rand < 7) {
+        int randInt = rand.generateNumber(1, 10);
+        if (randInt < 7) {
             System.out.println("The " + e.getName() + " strikes at you!"
                     + "\nThey dealt " + e.getDamage() + " damage!");
             damageTaken(p, e);
         } else {
             System.out.println(e.getName() + " missed!");
-        }
-    }
-
-    private Enemy randomEnemy() {
-        int rand = new RandomGenerator().generateNumber(1, 10);
-        if  (rand < 4) {
-            return new Goblin();
-        } else if (rand < 7) {
-            return new Troll();
-        } else {
-            return new Dragon();
         }
     }
 

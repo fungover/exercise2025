@@ -32,10 +32,18 @@ public class Game {
         enemyList.add(new Enemy(5, 3, 100, 30));
         enemyList.add(new Enemy(8, 7, 100, 30));
         enemyList.add(new Enemy(5, 8, 100, 30));
-        enemyList.add(new Enemy(2, 8, 100, 30));
+        enemyList.add(new Enemy(2, 8, 100, 50));
+
+        System.out.println("\n*** Welcome to this Dungeon Crawler! ***\n " +
+                "Your are trapped i a dark cave where you can´t see anything.\n " +
+                "Your goal is to find you way to the south side to escape.\n" +
+                "You might have to fight some enemies to get there. But I´ve heard there is some\n" +
+                "potions laying around to heal your wounds if you need to. Good luck!\n");
 
         while (true) {
-            dungeon.printDungeon(player, enemyList);
+            // Below method shows the map and all placements for testing purposes.
+            // dungeon.printDungeon(player, enemyList);
+
             System.out.println("Move (W: go up, S: go down, A: go left, D: go right, Q: quit): ");
             String input = scanner.nextLine();
 
@@ -91,7 +99,7 @@ public class Game {
             scanner.nextLine();
             System.out.println("Enemy attacks you!");
             player.setHealth(player.getHealth() - enemy.getDamage());
-            System.out.println("You now have " + player.getHealth());
+            System.out.println("You now have " + player.getHealth() + " hp");
 
             if (enemy.getHealth() <= 0)
                 break;
@@ -108,28 +116,29 @@ public class Game {
             System.exit(0);
         }
     }
-        public void handleInput(String input){
-            switch (input) {
-                case "w":
-                    player.move(0, -1, dungeon);
-                    break;
-                case "s":
-                    player.move(0, 1, dungeon);
-                    break;
-                case "a":
-                    player.move(-1, 0, dungeon);
-                    break;
-                case "d":
-                    player.move(1, 0, dungeon);
-                    break;
-                default:
-                    System.out.println("No valid command!");
-                    break;
-            }
-            checkForItem();
-            checkForEnemy();
-            checkForWin();
 
+    public void handleInput(String input) {
+        switch (input) {
+            case "w":
+                player.move(0, -1, dungeon);
+                break;
+            case "s":
+                player.move(0, 1, dungeon);
+                break;
+            case "a":
+                player.move(-1, 0, dungeon);
+                break;
+            case "d":
+                player.move(1, 0, dungeon);
+                break;
+            default:
+                System.out.println("No valid command!");
+                break;
         }
+        checkForItem();
+        checkForEnemy();
+        checkForWin();
+
+    }
 
 }

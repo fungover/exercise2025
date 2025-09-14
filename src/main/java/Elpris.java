@@ -19,7 +19,15 @@ public class Elpris {
     public static void main(String[] args) {
         String api = "https://www.elprisetjustnu.se/api/v1/prices/2025/09-13_SE3.json";
         String json = fetchJson(api);
-        System.out.println(json);
+
+        List<HourData> hours = jsonHourDataList(json);
+
+        for (int i = 0; i < Math.min(3, hours.size()); i++) {
+            HourData h = hours.get(i);
+            System.out.println(h.time_start + " - " + h.time_end + " : " + h.SEK_per_kWh + "kr/kWh");
+        }
+
+        printMeanPrice(hours);
     }
 
     public static String fetchJson(String urlString) {
@@ -55,4 +63,20 @@ public class Elpris {
         }.getType();
         return gson.fromJson(json, listType);
     }
+
+
+    public static void printMeanPrice(List<HourData> hours) {
+        double sum = 0;
+
+        for (HourData h : hours) {
+            sum += h.SEK_per_kWh;
+        }
+
+        double mean = sum / hours.size();
+        System.out.println("Medelpris för perioden: " + mean + " kr/kWh");
+    }
+
+
+
+
 }

@@ -32,14 +32,33 @@ class WareHouseTest {
         LocalDate today = LocalDate.now();
 
         // Success case
-        Product validProduct = new Product("5", "Valid", Category.FOOD, 5, today, today);
+        Product validProduct = new Product.Builder()
+                .id("5")
+                .name("Valid")
+                .category(Category.FOOD)
+                .rating(5)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build();
+
         warehouse.addProduct(validProduct);
         assertTrue(warehouse.getAllProducts().contains(validProduct), "Valid product should be added");
 
         // Failure: empty name
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                warehouse.addProduct(new Product("1", "", Category.FOOD, 2, today, today)));
-        assertEquals("Name cannot be empty", exception.getMessage());
+                warehouse.addProduct(new Product.Builder()
+                        .id("1")
+                        .name("") // tomt namn
+                        .category(Category.FOOD)
+                        .rating(2)
+                        .createdDate(today)
+                        .modifiedDate(today)
+                        .price(5.0)
+                        .build())
+        );
+
+                        //(new Product("1", "", Category.FOOD, 2, today, today)));
+        assertEquals("Name cannot be null or empty", exception.getMessage());
 
         // Failure: null product
         exception = assertThrows(IllegalArgumentException.class, () ->
@@ -47,14 +66,16 @@ class WareHouseTest {
         assertEquals("Product cannot be null", exception.getMessage());
 
         // Failure: duplicate ID
-        Product duplicateIdProduct = new Product(
-                validProduct.id(),
-                "Duplicate",
-                Category.ELECTRONICS,
-                5,
-                today,
-                today
-        );
+        Product duplicateIdProduct = new Product.Builder()
+                .id(validProduct.id())
+                .name("Duplicate")
+                .category(Category.ELECTRONICS)
+                .rating(5)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(20.0)
+                .build();
+
         exception = assertThrows(IllegalArgumentException.class, () ->
                 warehouse.addProduct(duplicateIdProduct));
         assertEquals("Product with this ID already exists", exception.getMessage());
@@ -70,7 +91,17 @@ class WareHouseTest {
         );
         LocalDate today = LocalDate.now(fixedClock);
 
-        Product beforeUpdate = new Product("5", "Valid", Category.FOOD, 5, today, today);
+        Product beforeUpdate = new Product.Builder()
+                .id("5")
+                .name("VaLid")
+                .category(Category.FOOD)
+                .rating(5)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(2)
+                .build();
+
+                //("5", "Valid", Category.FOOD, 5, today, today);
 
         warehouse.addProduct(beforeUpdate);
         warehouse.updateProduct("5", "Updated", Category.ELECTRONICS, 9);
@@ -97,13 +128,37 @@ class WareHouseTest {
         );
         LocalDate today = LocalDate.now(fixedClock);
 
-        Product product1 = new Product("97", "Product97", Category.FOOD, 5, today, today);
+        Product product1 = new Product.Builder()
+                .id("97")
+                .name("Product97")
+                .category(Category.FOOD)
+                .rating(5)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(2)
+                .build();
         warehouse.addProduct(product1);
 
-        Product product2 = new Product("98", "Product98", Category.ELECTRONICS, 10, today, today);
+        Product product2 = new Product.Builder()
+                .id("98")
+                .name("Product99")
+                .category(Category.ELECTRONICS)
+                .rating(10)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(2)
+                .build();
         warehouse.addProduct(product2);
 
-        Product product3 = new Product("99", "Product99", Category.TOYS, 8, today, today);
+        Product product3 = new Product.Builder()
+                .id("99")
+                .name("Product99")
+                .category(Category.TOYS)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(2)
+                .build();
         warehouse.addProduct(product3);
 
         List <Product> copyWarehouse = warehouse.getAllProducts();
@@ -131,8 +186,25 @@ class WareHouseTest {
         );
         LocalDate today = LocalDate.now(fixedClock);
 
-        Product product1 = new Product("97", "Product1", Category.FOOD, 5, today, today);
-        Product product2 = new Product("98", "Product2", Category.TOYS, 8, today, today);
+        Product product1 = new Product.Builder()
+                .id("97")
+                .name("Product97")
+                .category(Category.FOOD)
+                .rating(5)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(2)
+                .build();
+
+        Product product2 = new Product.Builder()
+                .id("98")
+                .name("Product98")
+                .category(Category.TOYS)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(2)
+                .build();
 
         warehouse.addProduct(product1);
         warehouse.addProduct(product2);
@@ -160,12 +232,65 @@ class WareHouseTest {
         );
         LocalDate today = LocalDate.now(fixedClock);
 
-        Product product1 = new Product("1", "Product1", Category.ELECTRONICS, 1, today, today);
-        Product product2 = new Product("2", "Socks", Category.CLOTHING, 2, today, today);
-        Product product3 = new Product("3", "Product1", Category.FOOD, 3, today, today);
-        Product product4 = new Product("4", "Hoodie", Category.CLOTHING, 4, today, today);
-        Product product5 = new Product("5", "Trousers", Category.CLOTHING, 4, today, today);
-        Product product6 = new Product("6", "Pants", Category.CLOTHING, 4, today, today);
+        Product product1 = new Product.Builder()
+                .id("1")
+                .name("USB-Cable")
+                .category(Category.ELECTRONICS)
+                .rating(1)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(1)
+                .build();
+
+        Product product2 = new Product.Builder()
+                .id("2")
+                .name("Socks")
+                .category(Category.CLOTHING)
+                .rating(2)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(2)
+                .build();
+
+        Product product3 = new Product.Builder()
+                .id("3")
+                .name("Hamburger")
+                .category(Category.FOOD)
+                .rating(3)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(3)
+                .build();
+
+        Product product4 = new Product.Builder()
+                .id("4")
+                .name("Hoodie")
+                .category(Category.CLOTHING)
+                .rating(4)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(2)
+                .build();
+
+        Product product5 = new Product.Builder()
+                .id("5")
+                .name("Trousers")
+                .category(Category.CLOTHING)
+                .rating(4)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(4)
+                .build();
+
+        Product product6 = new Product.Builder()
+                .id("6")
+                .name("Pants")
+                .category(Category.CLOTHING)
+                .rating(4)
+                .createdDate(today)
+                .modifiedDate(today)
+                .price(6)
+                .build();
 
         warehouse.addProduct(product1);
         warehouse.addProduct(product2);
@@ -204,10 +329,35 @@ class WareHouseTest {
         LocalDate dateSep9 = LocalDate.now(editedDate);
         LocalDate dateSep11 = LocalDate.now(oneMoreEditedDate);
 
-        Product product1 = new Product("1", "Product1", Category.ELECTRONICS, 1, defaultDay, defaultDay);
-        Product product2 = new Product("2", "Product2", Category.ELECTRONICS, 1, dateSep9, dateSep9
-        );
-        Product product3 = new Product("3", "Product3", Category.ELECTRONICS, 1, dateSep11, dateSep11);
+        Product product1 = new Product.Builder()
+                .id("1")
+                .name("Product1")
+                .category(Category.ELECTRONICS)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(defaultDay)
+                .price(1)
+                .build();
+
+        Product product2 = new Product.Builder()
+                .id("97")
+                .name("Product97")
+                .category(Category.FOOD)
+                .rating(5)
+                .createdDate(dateSep9)
+                .modifiedDate(dateSep9)
+                .price(2)
+                .build();
+
+        Product product3 = new Product.Builder()
+                .id("3")
+                .name("Product3")
+                .category(Category.ELECTRONICS)
+                .rating(1)
+                .createdDate(dateSep11)
+                .modifiedDate(dateSep11)
+                .price(3)
+                .build();
 
         warehouse.addProduct(product1);
         warehouse.addProduct(product2);
@@ -243,9 +393,35 @@ class WareHouseTest {
         LocalDate dateSep9 = LocalDate.now(editedDate);
         LocalDate dateSep11 = LocalDate.now(oneMoreEditedDate);
 
-        Product normalProduct = new Product("1", "Product1", Category.ELECTRONICS, 1, defaultDay, defaultDay);
-        Product modifiedProduct1 = new Product("2", "Product2", Category.ELECTRONICS, 1, defaultDay, dateSep9);
-        Product modifiedProduct2 = new Product("3", "Product3", Category.ELECTRONICS, 1, defaultDay, dateSep11);
+        Product normalProduct = new Product.Builder()
+                .id("1")
+                .name("Product1")
+                .category(Category.ELECTRONICS)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(defaultDay)
+                .price(2)
+                .build();
+
+        Product modifiedProduct1 = new Product.Builder()
+                .id("2")
+                .name("Product2")
+                .category(Category.ELECTRONICS)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(dateSep9)
+                .price(2)
+                .build();
+
+        Product modifiedProduct2 = new Product.Builder()
+                .id("3")
+                .name("Product3")
+                .category(Category.ELECTRONICS)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(dateSep11)
+                .price(2)
+                .build();
 
         warehouse.addProduct(normalProduct);
         warehouse.addProduct(modifiedProduct1);
@@ -279,9 +455,35 @@ class WareHouseTest {
         LocalDate dateSep9 = LocalDate.now(editedDate);
         LocalDate dateSep11 = LocalDate.now(oneMoreEditedDate);
 
-        Product normalProduct = new Product("1", "Product1", Category.ELECTRONICS, 1, defaultDay, defaultDay);
-        Product modifiedProduct1 = new Product("2", "Product2", Category.ELECTRONICS, 1, defaultDay, dateSep9);
-        Product modifiedProduct2 = new Product("3", "Product3", Category.CLOTHING, 1, defaultDay, dateSep11);
+        Product normalProduct = new Product.Builder()
+                .id("1")
+                .name("Product1")
+                .category(Category.ELECTRONICS)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(defaultDay)
+                .price(1)
+                .build();
+
+        Product modifiedProduct1 = new Product.Builder()
+                .id("2")
+                .name("Product2")
+                .category(Category.ELECTRONICS)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(dateSep9)
+                .price(1)
+                .build();
+
+        Product modifiedProduct2 = new Product.Builder()
+                .id("3")
+                .name("Product3")
+                .category(Category.CLOTHING)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(dateSep11)
+                .price(1)
+                .build();
 
         warehouse.addProduct(normalProduct);
         warehouse.addProduct(modifiedProduct1);
@@ -317,9 +519,35 @@ class WareHouseTest {
         LocalDate dateSep9 = LocalDate.now(editedDate);
         LocalDate dateSep11 = LocalDate.now(oneMoreEditedDate);
 
-        Product normalProduct = new Product("1", "Product1", Category.ELECTRONICS, 1, defaultDay, defaultDay);
-        Product modifiedProduct1 = new Product("2", "Product2", Category.ELECTRONICS, 1, defaultDay, dateSep9);
-        Product modifiedProduct2 = new Product("3", "Product3", Category.CLOTHING, 1, defaultDay, dateSep11);
+        Product normalProduct = new Product.Builder()
+                .id("1")
+                .name("Product1")
+                .category(Category.ELECTRONICS)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(defaultDay)
+                .price(2)
+                .build();
+
+        Product modifiedProduct1 = new Product.Builder()
+                .id("2")
+                .name("Product2")
+                .category(Category.ELECTRONICS)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(dateSep9)
+                .price(2)
+                .build();
+
+        Product modifiedProduct2 = new Product.Builder()
+                .id("3")
+                .name("Product3")
+                .category(Category.CLOTHING)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(dateSep11)
+                .price(2)
+                .build();
 
         warehouse.addProduct(normalProduct);
         warehouse.addProduct(modifiedProduct1);
@@ -357,10 +585,45 @@ class WareHouseTest {
         LocalDate dateSep9 = LocalDate.now(editedDate);
         LocalDate dateSep11 = LocalDate.now(oneMoreEditedDate);
 
-        Product normalProduct = new Product("1", "Apple", Category.FOOD, 1, defaultDay, defaultDay);
-        Product modifiedProduct1 = new Product("2", "Avocado", Category.FOOD, 1, defaultDay, dateSep9);
-        Product modifiedProduct2 = new Product("3", "Pants", Category.CLOTHING, 1, defaultDay, dateSep11);
-        Product modifiedProduct3 = new Product("4", "Wobbler", Category.TOYS, 1, defaultDay, dateSep11);
+        Product normalProduct = new Product.Builder()
+                .id("1")
+                .name("Apple")
+                .category(Category.FOOD)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(defaultDay)
+                .price(2)
+                .build();
+
+        Product modifiedProduct1 = new Product.Builder()
+                .id("2")
+                .name("Avocado")
+                .category(Category.FOOD)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(dateSep9)
+                .price(2)
+                .build();
+
+        Product modifiedProduct2 = new Product.Builder()
+                .id("3")
+                .name("Pants")
+                .category(Category.CLOTHING)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(dateSep11)
+                .price(2)
+                .build();
+
+        Product modifiedProduct3 = new Product.Builder()
+                .id("4")
+                .name("Wobbler")
+                .category(Category.TOYS)
+                .rating(1)
+                .createdDate(defaultDay)
+                .modifiedDate(dateSep11)
+                .price(2)
+                .build();
 
         warehouse.addProduct(normalProduct);
         warehouse.addProduct(modifiedProduct1);
@@ -390,12 +653,65 @@ class WareHouseTest {
         LocalDate dateAug20 = LocalDate.of(2025, 8, 20);
         LocalDate dateSep20LastYear = LocalDate.of(2024, 9, 20);
 
-        Product product1 = new Product("1", "Apple", Category.FOOD, 10, dateSep11, dateSep11);
-        Product product2 = new Product("2", "Avocado", Category.FOOD, 8, dateSep9, dateSep9);
-        Product product3 = new Product("3", "Pants", Category.CLOTHING, 7, defaultDay, dateSep11);
-        Product product4 = new Product("4", "Pants", Category.CLOTHING, 7, defaultDay, dateSep11);
-        Product product5 = new Product("5", "Wobbler", Category.TOYS, 10, dateSep11, dateSep11);
-        Product product6 = new Product("6", "Wobbler", Category.TOYS, 10, dateSep20LastYear, dateAug20);
+        Product product1 = new Product.Builder()
+                .id("1")
+                .name("Apple")
+                .category(Category.FOOD)
+                .rating(10)
+                .createdDate(dateSep11)
+                .modifiedDate(dateSep11)
+                .price(15.0)
+                .build();
+
+        Product product2 = new Product.Builder()
+                .id("2")
+                .name("Avocado")
+                .category(Category.FOOD)
+                .rating(8)
+                .createdDate(dateSep9)
+                .modifiedDate(dateSep9)
+                .price(12.0)
+                .build();
+
+        Product product3 = new Product.Builder()
+                .id("3")
+                .name("Pants")
+                .category(Category.CLOTHING)
+                .rating(7)
+                .createdDate(defaultDay)
+                .modifiedDate(dateSep11)
+                .price(25.0)
+                .build();
+
+        Product product4 = new Product.Builder()
+                .id("4")
+                .name("Pants")
+                .category(Category.CLOTHING)
+                .rating(7)
+                .createdDate(defaultDay)
+                .modifiedDate(dateSep11)
+                .price(30.0)
+                .build();
+
+        Product product5 = new Product.Builder()
+                .id("5")
+                .name("Wobbler")
+                .category(Category.TOYS)
+                .rating(10)
+                .createdDate(dateSep11)
+                .modifiedDate(dateSep11)
+                .price(50.0)
+                .build();
+
+        Product product6 = new Product.Builder()
+                .id("6")
+                .name("Wobbler")
+                .category(Category.TOYS)
+                .rating(10)
+                .createdDate(dateSep20LastYear)
+                .modifiedDate(dateAug20)
+                .price(55.0)
+                .build();
 
         // test for empty list
         assertThat(warehouse.getTopRatedProductsThisMonth().size()).isEqualTo(0);

@@ -53,7 +53,16 @@ public class Warehouse {
             throw new IllegalArgumentException("Product with id " + id + " does not exist");
         }
 
-        Product updated  = new Product(existing.id(), name, category, rating, existing.createdDate(), LocalDate.now());
+        Product updated = new Product.Builder()
+                .id(existing.id())
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .createdDate(existing.createdDate())
+                .modifiedDate(LocalDate.now())
+                .price(existing.price())
+                .build();
+
         products.put(id, updated);
     }
 

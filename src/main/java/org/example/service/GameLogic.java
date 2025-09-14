@@ -111,7 +111,7 @@ public class GameLogic {
         return null;
     }
 
-    public boolean wishToFightEnemy(Dungeon d, Player p, Scanner scan) {
+    public boolean wishToFightEnemy(Dungeon d, Player p, Inventory i, Scanner scan) {
         if (d.getTile(p.getY(), p.getX() + 1) == enemyTile ||
                 d.getTile(p.getY(), p.getX() - 1) == enemyTile ||
                 d.getTile(p.getY() + 1, p.getX()) == enemyTile ||
@@ -120,10 +120,11 @@ public class GameLogic {
             System.out.println("Do you wish to fight it, yes or no?");
             return validAnswer(scan);
         }
+        d.printDungeon(i); // Re-render
         return false;
     }
 
-    public boolean wishToPickUpItem(Dungeon d, Player p, Scanner scan) {
+    public boolean wishToPickUpItem(Dungeon d, Player p, Inventory i, Scanner scan) {
         if (d.getTile(p.getY(), p.getX() + 1) == itemTile ||
                 d.getTile(p.getY(), p.getX() - 1) == itemTile ||
                 d.getTile(p.getY() + 1, p.getX()) == itemTile ||
@@ -132,6 +133,7 @@ public class GameLogic {
             System.out.println("Do you wish to pick it up, yes or no?");
             return validAnswer(scan);
         }
+        d.printDungeon(i); // Re-render
         return false;
     }
 

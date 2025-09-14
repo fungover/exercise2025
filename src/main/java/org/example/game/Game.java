@@ -40,7 +40,7 @@ public class Game {
         while (true) {
             dungeon.printDungeon(inventory);
 
-            if (logic.wishToPickUpItem(dungeon, player, scan)) {
+            if (logic.wishToPickUpItem(dungeon, player, inventory, scan)) {
                 Item item = logic.getItemFromList(dungeon, player, itemsOnFloor);
                 logic.pickUpItem(item, inventory);
                 dungeon.removeItemTile(item);
@@ -48,7 +48,7 @@ public class Game {
                 dungeon.printDungeon(inventory);
             }
 
-            if (logic.wishToFightEnemy(dungeon, player, scan)) {
+            if (logic.wishToFightEnemy(dungeon, player, inventory, scan)) {
                 Combat combat = new Combat();
                 Enemy enemy = logic.getEnemyFromList(dungeon, player, enemies);
                 combat.startFight(player, inventory, enemy, scan);

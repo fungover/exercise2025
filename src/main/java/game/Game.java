@@ -41,36 +41,8 @@ public class Game {
 
             if (input.equals("q")) break;
 
-            switch (input) {
-                case "w":
-                    player.move(0, -1, dungeon);
-                    checkForItem();
-                    checkForEnemy();
-                    checkForWin();
-                    break;
-                case "s":
-                    player.move(0, 1, dungeon);
-                    checkForItem();
-                    checkForEnemy();
-                    checkForWin();
-                    break;
-                case "a":
-                    player.move(-1, 0, dungeon);
-                    checkForItem();
-                    checkForEnemy();
-                    checkForWin();
-                    break;
-                case "d":
-                    player.move(1, 0, dungeon);
-                    checkForItem();
-                    checkForEnemy();
-                    checkForWin();
+            handleInput(input);
 
-                    break;
-                default:
-                    System.out.println("No valid command!");
-                    break;
-            }
         }
     }
 
@@ -136,6 +108,28 @@ public class Game {
             System.exit(0);
         }
     }
+        public void handleInput(String input){
+            switch (input) {
+                case "w":
+                    player.move(0, -1, dungeon);
+                    break;
+                case "s":
+                    player.move(0, 1, dungeon);
+                    break;
+                case "a":
+                    player.move(-1, 0, dungeon);
+                    break;
+                case "d":
+                    player.move(1, 0, dungeon);
+                    break;
+                default:
+                    System.out.println("No valid command!");
+                    break;
+            }
+            checkForItem();
+            checkForEnemy();
+            checkForWin();
 
+        }
 
 }

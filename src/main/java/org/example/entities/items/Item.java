@@ -1,8 +1,12 @@
 package org.example.entities.items;
 
-public abstract class Item {
+import org.example.entities.Position;
+
+public abstract class Item implements Position {
     private String type;
     private int quantity;
+    private int x;
+    private int y;
 
     public Item(String type, int quantity) {
         this.type = type;
@@ -27,5 +31,21 @@ public abstract class Item {
 
     public void removeQuantity() {
         this.quantity -= 1;
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
+    @Override
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }

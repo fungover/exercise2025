@@ -4,7 +4,7 @@ package org.example;
 import java.time.LocalDateTime;
 
 public class Product {
-	private String id;
+	private final String id;
 	private String name;
 	private Category category;
 	private int rating;
@@ -12,6 +12,9 @@ public class Product {
 	private LocalDateTime modifiedAt;
 
 	public Product(String id, String name, Category category, int rating) {
+		if (rating > 10 || rating < 0) {
+			throw new IllegalArgumentException("Invalid rating");
+		}
 		this.id = id;
 		this.name = name;
 		this.category = category;
@@ -21,6 +24,12 @@ public class Product {
 	}
 
 	public void updateProduct(String name, Category category, int rating) {
+		if (rating > 10 || rating < 0 ) {
+			throw new IllegalArgumentException("Invalid rating");
+		}
+		if (name.isEmpty()) {
+			throw new IllegalArgumentException("Product name cannot be empty");
+		}
 		this.name = name;
 		this.category = category;
 		this.rating = rating;

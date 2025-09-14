@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;     //Denna plus ovan hjälper till att autmatiskt bygga rätt datum.
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -17,18 +19,33 @@ class HourData {
 
 public class Elpris {
     public static void main(String[] args) {
-        String api = "https://www.elprisetjustnu.se/api/v1/prices/2025/09-13_SE3.json";
-        String json = fetchJson(api);
+        String zone = "SE3";
 
-        List<HourData> hours = jsonHourDataList(json);
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
 
-        for (int i = 0; i < Math.min(3, hours.size()); i++) {
-            HourData h = hours.get(i);
-            System.out.println(h.time_start + " - " + h.time_end + " : " + h.SEK_per_kWh + "kr/kWh");
+        String todayApi = buildApiUrl(today, zone);
+        String tomorrowApi = buildApiUrl(tomorrow, zone);
+
+        String todayJson = fetchJson(todayApi);
+        List<HourData> todayHours = jsonHourDataList(todayJson);
+
+        String tomorrowJson = fetchJson(tomorrowApi);
+        List<HourData> tomorrowHours = jsonHourDataList(tomorrowJson);
+
+        System.out.println("=== Idag ===");
+        printMeanPrice(todayHours);
+        printCheapestAndMostExpensive(todayHours);
+
+        if (tomorrowHours != null && !tomorrowHours.isEmpty()){
+            System.out.println("\n=== Imorgon ===");
+            printMeanPrice(tomorrowHours);
+            printCheapestAndMostExpensive(tomorrowHours);
+        } else {
+            System.out.println("\nMorgondagen är ännu inte publicerad.");
         }
 
-        printMeanPrice(hours);
-        printCheapestAndMostExpensive(hours);
+    
     }
 
     public static String fetchJson(String urlString) {
@@ -107,5 +124,10 @@ public class Elpris {
     }
 
 
+    public static String buildApiUrl (LocalDate date, String zone) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM-dd");
+        String formattedDate = date.format(formatter);
+        return "https://www.elprisetjustnu.se/api/v1/prices/" + formattedDate + "_" + zone + ".json";
+    }
 
 }

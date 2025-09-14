@@ -18,6 +18,31 @@ public class Game {
 
     public Game() {
 
+        mapSetup();
+
+    }
+
+    public void run() {
+        while (true) {
+            // Below method shows the map and all placements for testing purposes and visualisation.
+            // dungeon.printDungeon(player, enemyList);
+            System.out.println("\n*** Welcome to this Dungeon Crawler! ***\n " +
+                    "Your are trapped i a dark cave where you can´t see anything.\n " +
+                    "Your goal is to find you way to the south side to escape.\n" +
+                    "You might have to fight some enemies to get there. But I´ve heard there is some\n" +
+                    "potions laying around to heal your wounds if you need to. Good luck!\n");
+
+            System.out.println("Move (W: go up, S: go down, A: go left, D: go right, Q: quit): ");
+            String input = scanner.nextLine();
+
+            if (input.equals("q")) break;
+
+            handleInput(input);
+
+        }
+    }
+
+    public void mapSetup() {
         Potion potion = new Potion("Potion", 50);
         dungeon.placeItem(4, 5, potion);
         dungeon.placeItem(5, 3, potion);
@@ -33,25 +58,6 @@ public class Game {
         enemyList.add(new Enemy(8, 7, 100, 30));
         enemyList.add(new Enemy(5, 8, 100, 30));
         enemyList.add(new Enemy(2, 8, 100, 50));
-
-        System.out.println("\n*** Welcome to this Dungeon Crawler! ***\n " +
-                "Your are trapped i a dark cave where you can´t see anything.\n " +
-                "Your goal is to find you way to the south side to escape.\n" +
-                "You might have to fight some enemies to get there. But I´ve heard there is some\n" +
-                "potions laying around to heal your wounds if you need to. Good luck!\n");
-
-        while (true) {
-            // Below method shows the map and all placements for testing purposes.
-            // dungeon.printDungeon(player, enemyList);
-
-            System.out.println("Move (W: go up, S: go down, A: go left, D: go right, Q: quit): ");
-            String input = scanner.nextLine();
-
-            if (input.equals("q")) break;
-
-            handleInput(input);
-
-        }
     }
 
     public void checkForEnemy() {

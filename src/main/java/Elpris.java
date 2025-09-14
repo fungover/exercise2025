@@ -28,6 +28,7 @@ public class Elpris {
         }
 
         printMeanPrice(hours);
+        printCheapestAndMostExpensive(hours);
     }
 
     public static String fetchJson(String urlString) {
@@ -76,6 +77,34 @@ public class Elpris {
         System.out.println("Medelpris för perioden: " + mean + " kr/kWh");
     }
 
+
+
+    public static void printCheapestAndMostExpensive(List<HourData> hours) {
+        if (hours.isEmpty()) {
+            System.out.println("Ingen data tillgänglig.");
+            return;
+        }
+
+        HourData cheapest = hours.get(0);
+        HourData mostExpensive = hours.get(0);
+
+        for (HourData h : hours) {
+            if (h.SEK_per_kWh < cheapest.SEK_per_kWh) {
+                cheapest = h;
+            }
+            if (h.SEK_per_kWh > mostExpensive.SEK_per_kWh) {
+                mostExpensive = h;
+            }
+        }
+
+        System.out.println("Billigaste timmen: " + cheapest.time_start +
+                " - " + cheapest.time_end + " : " +
+                cheapest.SEK_per_kWh + " kr/kWh");
+
+        System.out.println("Dyraste timmen: " + mostExpensive.time_start +
+                           " - " + mostExpensive.time_end + " : " +
+                mostExpensive.SEK_per_kWh + " kr/kWh");
+    }
 
 
 

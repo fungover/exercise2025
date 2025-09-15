@@ -123,25 +123,4 @@ public class Warehouse {
                 .sorted(Comparator.comparing(Product::createdDate).reversed()) // Sort by created date in descending order (newest first)
                 .collect(Collectors.toList());
     }
-
-    /*
-    HELPER METHODS FOR CREATING PRODUCTS WITH DIFFERENT DATES FOR TESTING PURPOSES
-     */
-    public static Product createProduct(String id, String name, Category category, int rating) {
-        LocalDate now = LocalDate.now();
-        return new Product(id, name, category, rating, now, now);
-    }
-
-    //Helper method to create a product with old dates for testing purposes
-    public static Product createOldProduct(String id, String name, Category category, int rating, int daysAgo) {
-        LocalDate oldDate = LocalDate.now().minusDays(daysAgo);
-        return new Product(id, name, category, rating, oldDate, oldDate);
-    }
-
-    //Helper method to create a product with specific created and modified dates for testing purposes
-    public static Product createProductWithDate(String id, String name, Category category, int rating, LocalDate createdDate) {
-        return new Product(id, name, category, rating, createdDate, createdDate);
-    }
-
-
 }

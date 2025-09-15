@@ -25,6 +25,10 @@ public class Elpris {
     public static void main(String[] args) {
         String zone = "SE3";
 
+        if (args.length > 0) {
+            zone = args[0].toUpperCase();
+        }
+
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = today.plusDays(1);
 
@@ -37,7 +41,7 @@ public class Elpris {
         String tomorrowJson = fetchJson(tomorrowApi);
         List<HourData> tomorrowHours = jsonHourDataList(tomorrowJson);
 
-        System.out.println("=== Idag ===");
+        System.out.println("=== Idag (" + zone + ") ===");
         printMeanPrice(todayHours);
         printCheapestAndMostExpensive(todayHours);
 
@@ -47,7 +51,7 @@ public class Elpris {
 
 
         if (tomorrowHours != null && !tomorrowHours.isEmpty()){
-            System.out.println("\n=== Imorgon ===");
+            System.out.println("\n=== Imorgon (" + zone + ") ===");
             printMeanPrice(tomorrowHours);
             printCheapestAndMostExpensive(tomorrowHours);
 

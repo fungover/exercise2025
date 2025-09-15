@@ -37,15 +37,53 @@ public class App {
         List<Product> products = new ArrayList<>();
         LocalDate yesterday = LocalDate.now()
                                        .plusDays(4);
-        products.add(new Product("laptop", Category.ELECTRONICS, 4, yesterday));
-        products.add(new Product("SlaughterBoat", Category.GAMES, 7));
-        products.add(new Product("Cake", Category.FOOD, 10));
-        products.add(new Product("DuckDetective", Category.GAMES, 8, yesterday));
-        products.add(new Product("lamp", Category.ELECTRONICS, 10));
-        products.add(new Product("PC", Category.ELECTRONICS, 4));
-        products.add(new Product("DogFood", Category.FOOD, 2));
-        products.add(new Product("CatFood", Category.FOOD, 7));
 
+        products.add(new Product.Builder().name("builder")
+                                          .category(Category.GAMES)
+                                          .rating(4)
+                                          .build());
+
+        products.add(new Product.Builder().name("laptop")
+                                          .category(Category.ELECTRONICS)
+                                          .rating(4)
+                                          .createdDate(yesterday)
+                                          .build());
+
+        products.add(new Product.Builder().name("SlaughterBoat")
+                                          .category(Category.GAMES)
+                                          .rating(7)
+                                          .build());
+
+        products.add(new Product.Builder().name("Cake")
+                                          .category(Category.FOOD)
+                                          .rating(10)
+                                          .build());
+
+        products.add(new Product.Builder().name("DuckDetective")
+                                          .category(Category.GAMES)
+                                          .rating(8)
+                                          .createdDate(yesterday)
+                                          .build());
+
+        products.add(new Product.Builder().name("lamp")
+                                          .category(Category.ELECTRONICS)
+                                          .rating(10)
+                                          .build());
+
+        products.add(new Product.Builder().name("PC")
+                                          .category(Category.ELECTRONICS)
+                                          .rating(4)
+                                          .build());
+
+        products.add(new Product.Builder().name("DogFood")
+                                          .category(Category.FOOD)
+                                          .rating(2)
+                                          .build());
+
+        products.add(new Product.Builder().name("CatFood")
+                                          .category(Category.FOOD)
+                                          .rating(7)
+                                          .build());
 
         return products;
     }

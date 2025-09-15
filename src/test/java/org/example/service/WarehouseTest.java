@@ -592,19 +592,27 @@ class WarehouseTest {
         assertEquals("Older Product", topRated.get(2).name()); // Verify that the older product is last
     }
 
-//    @Test
-//    @DisplayName("Should return empty list when no products are created this month.")
-//    void getTopRatedProductsWhenThereAreNoTopRatedProducts() {
-//
-//        LocalDate augustDate = LocalDate.of(2025, 8, 15); // A date in August 2025
-//        Product oldProduct = Warehouse.createProductWithDate("1", "Old Product", Category.BOOKS, 10, augustDate); // Created in August 2025
-//        warehouse.addProduct(oldProduct);
-//
-//        List<Product> topRated = warehouse.getTopRatedProductsThisMonth(); // Attempt to retrieve top-rated products created this month (September 2025)
-//
-//        assertTrue(topRated.isEmpty()); // Verify that the result is an empty list since no products were created this month
-//    }
-//
+    @Test
+    @DisplayName("Should return empty list when no products are created this month.")
+    void getTopRatedProductsWhenThereAreNoTopRatedProducts() {
+
+        LocalDate augustDate = LocalDate.of(2025, 8, 15); // A date in August 2025
+        Product oldProduct = new Product.Builder()
+                .id("1")
+                .name("Old Product")
+                .category(Category.BOOKS)
+                .rating(10)
+                .createdDate(augustDate) // Created in August 2025
+                .modifiedDate(augustDate)
+                .build();
+
+        warehouse.addProduct(oldProduct);
+
+        List<Product> topRated = warehouse.getTopRatedProductsThisMonth(); // Attempt to retrieve top-rated products created this month (September 2025)
+
+        assertTrue(topRated.isEmpty()); // Verify that the result is an empty list since no products were created this month
+    }
+
 //    // ========================================
 //    // TESTS for Product creation validations
 //    // ========================================

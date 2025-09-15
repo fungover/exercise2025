@@ -304,7 +304,6 @@ class WareHouseTest {
 
         assertThat(warehouse.getAllProducts().size()).isEqualTo(6);
 
-        System.out.println(warehouse.getProductsByCategorySorted(Category.CLOTHING));
         assertThat(filteredList.size()).isEqualTo(4);
         assertThat(filteredListToys.size()).isEqualTo(0);
     }
@@ -633,8 +632,6 @@ class WareHouseTest {
         // run
         Map<Character, Integer> result = warehouse.getProductInitialsMap();
 
-        System.out.println(result);
-
         // tests
         assertThat(result).containsEntry('A', 2);
         assertThat(result).containsEntry('P', 1);
@@ -725,7 +722,6 @@ class WareHouseTest {
 
         // run
         List<Product> result = warehouse.getTopRatedProductsThisMonth();
-        System.out.println(result);
 
         // tests
         assertThat(result.size()).isEqualTo(3);

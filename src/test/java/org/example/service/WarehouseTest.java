@@ -353,18 +353,24 @@ class WarehouseTest {
         assertEquals("Modified Product", modifiedProducts.get(0).name()); // Verify that the modified product has the updated name
     }
 
-//    @Test
-//    @DisplayName("Should return empty when when no products have been modified")
-//    void getModifiedProductsWhenNoProductsHaveBeenModified() {
-//
-//        Product testProduct = Warehouse.createProduct("1", "Test Product", Category.ELECTRONICS, 8);
-//        warehouse.addProduct(testProduct); // Add the product to the warehouse
-//
-//        List<Product> modifiedProducts = warehouse.getModifiedProducts(); // Attempt to retrieve modified products when none have been modified
-//
-//        assertTrue(modifiedProducts.isEmpty()); // Verify that the result is an empty list
-//    }
-//
+    @Test
+    @DisplayName("Should return empty when when no products have been modified")
+    void getModifiedProductsWhenNoProductsHaveBeenModified() {
+
+        Product testProduct = new Product.Builder()
+                .id("1")
+                .name("Test Product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .build();
+
+        warehouse.addProduct(testProduct); // Add the product to the warehouse
+
+        List<Product> modifiedProducts = warehouse.getModifiedProducts(); // Attempt to retrieve modified products when none have been modified
+
+        assertTrue(modifiedProducts.isEmpty()); // Verify that the result is an empty list
+    }
+
 //    // ========================================
 //    // TESTS FOR getCategoriesWithProducts()
 //    // ========================================

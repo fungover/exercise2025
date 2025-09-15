@@ -28,13 +28,14 @@ public class Warehouse {
 
 
         //Since records are immutable, we need to create a new instance of the Product record with the updated values.
-        Product updatedProduct = new Product(
-                id,
-                name,
-                category,
-                rating,
-                existingProduct.createdDate(),
-                LocalDate.now());
+        Product updatedProduct = new Product.Builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .createdDate(existingProduct.createdDate()) // Keep the original created date
+                .modifiedDate(LocalDate.now()) // Update the modified date to the current date
+                .build();
 
         products.put(id, updatedProduct); // Update the product in the map
     }

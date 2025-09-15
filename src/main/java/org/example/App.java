@@ -5,6 +5,8 @@ import org.example.entities.Player;
 
 import java.util.Scanner;
 
+import static org.example.game.Game.GameStart;
+
 public class App {
     public static void main(String[] args) {
         Player user = new Player("x", 10, 10, 10);
@@ -17,5 +19,7 @@ public class App {
         user.setName(playerName);
 
         System.out.println("Welcome " + playerName + ". Let your adventure begin!");
+
+        GameStart(user, userInventory);
     }
 }

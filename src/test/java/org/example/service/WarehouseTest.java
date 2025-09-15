@@ -111,21 +111,27 @@ class WarehouseTest {
         );
         assertEquals("Product with id 999 not found", exception.getMessage()); // Verify the exception message
     }
-//
-//    @Test
-//    @DisplayName("Should throw exception when updating with empty name")
-//    void updateProductWithEmptyName() {
-//
-//        Product testProduct = Warehouse.createProduct("1", "Test Product", Category.ELECTRONICS, 8);
-//        warehouse.addProduct(testProduct); // Add the product to the warehouse
-//
-//        IllegalArgumentException exception = assertThrows(
-//                IllegalArgumentException.class, // Expect an IllegalArgumentException
-//                () -> warehouse.updateProduct("1", "   ", Category.BOOKS, 8) // Attempt to update with an empty name
-//        );
-//        assertEquals("Name cannot be empty", exception.getMessage()); // Verify the exception message
-//    }
-//
+
+    @Test
+    @DisplayName("Should throw exception when updating with empty name")
+    void updateProductWithEmptyName() {
+
+        Product testProduct = new Product.Builder()
+                .id("1")
+                .name("Test Product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .build();
+
+        warehouse.addProduct(testProduct); // Add the product to the warehouse
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, // Expect an IllegalArgumentException
+                () -> warehouse.updateProduct("1", "   ", Category.BOOKS, 8) // Attempt to update with an empty name
+        );
+        assertEquals("Name is required", exception.getMessage()); // Verify the exception message
+    }
+
 //    // ========================================
 //    // TESTS FOR getAllProducts()
 //    // ========================================

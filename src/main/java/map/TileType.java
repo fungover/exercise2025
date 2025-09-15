@@ -3,7 +3,7 @@ package map;
 public enum TileType {
     FLOOR,
     WALL,
-    ROOM,
+    //ROOM,
 
 
 }

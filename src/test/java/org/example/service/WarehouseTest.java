@@ -317,26 +317,42 @@ class WarehouseTest {
         assertTrue(recentProducts.isEmpty()); // Verify that the result is an empty list
     }
 
-//    // ========================================
-//    // TESTS FOR getModifiedProducts()
-//    // ========================================
-//
-//    @Test
-//    @DisplayName("Should return modified products when products are modified")
-//    void getModifiedProductsSuccessfullyWhenThereAreModifiedProducts() {
-//
-//        Product originalProduct = Warehouse.createOldProduct("1", "Original Product", Category.ELECTRONICS, 8, 3); // Create a product with a created date 3 days ago
-//        Product unmodifiedProduct = Warehouse.createProduct("2", "Unmodified Product", Category.BOOKS, 7); // Create a product that will not be modified
-//        warehouse.addProduct(originalProduct);
-//        warehouse.addProduct(unmodifiedProduct);
-//
-//        warehouse.updateProduct("1", "Modified Product", Category.ELECTRONICS, 9); // Modify the first product
-//        List<Product> modifiedProducts = warehouse.getModifiedProducts(); // Retrieve the list of modified products
-//
-//        assertEquals(1, modifiedProducts.size()); // Verify that there is 1 modified product
-//        assertEquals("Modified Product", modifiedProducts.get(0).name()); // Verify that the modified product has the updated name
-//    }
-//
+    // ========================================
+    // TESTS FOR getModifiedProducts()
+    // ========================================
+
+    @Test
+    @DisplayName("Should return modified products when products are modified")
+    void getModifiedProductsSuccessfullyWhenThereAreModifiedProducts() {
+
+        LocalDate threeDaysAgo = LocalDate.now().minusDays(3);
+
+        Product originalProduct = new Product.Builder()
+                .id("1")
+                .name("Original Product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(threeDaysAgo) // Set created date to 3 days ago
+                .modifiedDate(threeDaysAgo) // Set modified date to 3 days ago
+                .build();
+
+        Product unmodifiedProduct = new Product.Builder()
+                .id("2")
+                .name("Unmodified Product")
+                .category(Category.BOOKS)
+                .rating(7)
+                .build();
+
+        warehouse.addProduct(originalProduct);
+        warehouse.addProduct(unmodifiedProduct);
+
+        warehouse.updateProduct("1", "Modified Product", Category.ELECTRONICS, 9); // Modify the first product
+        List<Product> modifiedProducts = warehouse.getModifiedProducts(); // Retrieve the list of modified products
+
+        assertEquals(1, modifiedProducts.size()); // Verify that there is 1 modified product
+        assertEquals("Modified Product", modifiedProducts.get(0).name()); // Verify that the modified product has the updated name
+    }
+
 //    @Test
 //    @DisplayName("Should return empty when when no products have been modified")
 //    void getModifiedProductsWhenNoProductsHaveBeenModified() {

@@ -240,19 +240,25 @@ class WarehouseTest {
         assertEquals("Gaming Laptop", electronics.get(0).name()); // Verify that the first product is "Gaming Laptop" (L comes before M
         assertEquals("Gaming Mouse", electronics.get(1).name()); // Verify that the second product is "Gaming Mouse"
     }
-//
-//    @Test
-//    @DisplayName("Should return empty list when no products in the specified category")
-//    void getProductsByCategorySortedWhenNoProductsInCategory() {
-//
-//        Product electronicsProduct = Warehouse.createProduct("1", "Laptop", Category.ELECTRONICS, 8);
-//        warehouse.addProduct(electronicsProduct);
-//
-//        List<Product> toys = warehouse.getProductsByCategorySorted(Category.TOYS); // Attempt to retrieve products in the TOYS category when none exist
-//
-//        assertTrue(toys.isEmpty()); // Verify that the result is an empty list
-//    }
-//
+
+    @Test
+    @DisplayName("Should return empty list when no products in the specified category")
+    void getProductsByCategorySortedWhenNoProductsInCategory() {
+
+        Product electronicsProduct = new Product.Builder()
+                .id("1")
+                .name("Laptop")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .build();
+
+        warehouse.addProduct(electronicsProduct);
+
+        List<Product> toys = warehouse.getProductsByCategorySorted(Category.TOYS); // Attempt to retrieve products in the TOYS category when none exist
+
+        assertTrue(toys.isEmpty()); // Verify that the result is an empty list
+    }
+
 //    // ========================================
 //    // TESTS FOR getProductsCreatedAfter()
 //    // ========================================

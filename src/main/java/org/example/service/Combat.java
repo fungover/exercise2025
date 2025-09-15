@@ -13,10 +13,10 @@ public class Combat {
             String cmd = scanner.nextLine().toLowerCase().trim();
 
             if (cmd.equals("attack")) {
-                // enemy.setHealth(enemy.getHealth() - player.getAttackDamage());
-                enemy.receiveDamage(player.getAttackDamage());
+                int playerDamage = player.getAttackDamage();
+                enemy.receiveDamage(playerDamage);
                 System.out.println("You hit the " + enemy.getName() + " for "
-                        + player.getAttackDamage() + " damage!");
+                        + playerDamage + " damage!");
                 // Check if Enemy is defeated
                 if (!enemy.isAlive()) {
                     System.out.println("Enemy defeated!");
@@ -24,9 +24,10 @@ public class Combat {
                 }
 
                 enemy.takeTurn();
-                player.receiveDamage(enemy.getAttackDamage());
+                int enemyDamage = enemy.getAttackDamage();
+                player.receiveDamage(enemyDamage);
                 System.out.println(enemy.getName() + " hits you for "
-                        + enemy.getAttackDamage() + " damage!");
+                        + enemyDamage + " damage!");
             } else if (cmd.equals("run")) {
                 System.out.println("You fled!");
                 break;
@@ -43,3 +44,4 @@ public class Combat {
 
     }
 }
+

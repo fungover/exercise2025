@@ -12,8 +12,18 @@ public record Product(
         LocalDate modifiedDate
 ) {
 
-    public Product {
+    private Product(Builder builder) {
+        this(
+                builder.id,
+                builder.name,
+                builder.category,
+                builder.rating,
+                builder.createdDate,
+                builder.modifiedDate
+        );
+    }
 
+    public Product {
         Objects.requireNonNull(id, "ID cannot be null");
         Objects.requireNonNull(name, "Name cannot be null");
         Objects.requireNonNull(category, "Category cannot be null");
@@ -31,5 +41,15 @@ public record Product(
         if (rating < 0 || rating > 10) {
             throw new IllegalArgumentException("Rating must be between 0 and 10");
         }
+    }
+
+    public static class Builder {
+        private String name;
+        private String id;
+        private Category category;
+        private int rating;
+        private LocalDate createdDate;
+        private LocalDate modifiedDate;
+
     }
 }

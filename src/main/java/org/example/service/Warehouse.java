@@ -26,28 +26,9 @@ public class Warehouse {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
-        if (product.id() == null || product.id().isBlank()) {
-            throw new IllegalArgumentException("Product ID cannot be null or blank");
+        if (products.stream().anyMatch(p -> p.getId().equals(product.getId()))) {
+            throw new IllegalArgumentException("Product with ID " + product.getId() + " already exists");
         }
-        if (product.name() == null || product.name().isBlank()) {
-            throw new IllegalArgumentException("Product name cannot be null or blank");
-        }
-        if (product.category() == null) {
-            throw new IllegalArgumentException("Product category cannot be null");
-        }
-        if (product.rating() < 0 || product.rating() > 10) {
-            throw new IllegalArgumentException("Product rating must be between 0 and 10");
-        }
-        if (product.createdDate() == null || product.modifiedDate() == null) {
-            throw new IllegalArgumentException("Product dates cannot be null");
-        }
-        if (product.modifiedDate().isBefore(product.createdDate())) {
-            throw new IllegalArgumentException("Modified date cannot be before created date");
-        }
-        if (products.stream().anyMatch(p -> p.id().equals(product.id()))) {
-            throw new IllegalArgumentException("Product with ID " + product.id() + " already exists");
-        }
-
         products.add(product);
     }
 
@@ -87,14 +68,15 @@ public class Warehouse {
 
         Product existing = getProductById(id);
 
-        Product updated = new Product(
-                id,
-                name,
-                category,
-                rating,
-                existing.createdDate(),
-                LocalDate.now()
-        );
+        Product updated = new Product.Builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .createdDate(existing.getCreatedDate())
+                .modifiedDate(LocalDate.now())
+                .price(existing.getPrice())
+                .build();
 
         int index = products.indexOf(existing);
         products.set(index, updated);
@@ -114,7 +96,7 @@ public class Warehouse {
             throw new IllegalArgumentException("id cannot be null/blank");
         }
         return products.stream()
-                .filter(p -> Objects.equals(p.id(), id))
+                .filter(p -> Objects.equals(p.getId(), id))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Product with ID " + id + " not found"));
     }
@@ -127,8 +109,8 @@ public class Warehouse {
      */
     public List<Product> getProductsByCategorySorted(Category category) {
         return products.stream()
-                .filter(p -> p.category() == category)
-                .sorted((p1, p2) -> p1.name().compareToIgnoreCase(p2.name()))
+                .filter(p -> p.getCategory()== category)
+                .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
                 .toList();
     }
 
@@ -143,7 +125,7 @@ public class Warehouse {
             throw new IllegalArgumentException("date cannot be null");
         }
         return products.stream()
-                .filter(p -> p.createdDate().isAfter(date))
+                .filter(p -> p.getCreatedDate().isAfter(date))
                 .toList();
     }
 
@@ -154,7 +136,7 @@ public class Warehouse {
      */
     public List<Product> getModifiedProducts() {
         return products.stream()
-                .filter(p -> !p.createdDate().equals(p.modifiedDate()))
+                .filter(p -> !p.getCreatedDate().equals(p.getModifiedDate()))
                 .toList();
     }
 
@@ -165,7 +147,7 @@ public class Warehouse {
      */
     public List<Category> getCategoriesWithProducts() {
         return products.stream()
-                .map(Product::category)
+                .map(Product::getCategory)
                 .distinct()
                 .toList();
     }
@@ -178,7 +160,7 @@ public class Warehouse {
      */
     public long countProductsInCategory(Category category) {
         return products.stream()
-                .filter(p -> p.category() == category)
+                .filter(p -> p.getCategory()== category)
                 .count();
     }
 
@@ -189,7 +171,7 @@ public class Warehouse {
      */
     public Map<Character, Integer> getProductInitialsMap() {
         return products.stream()
-                .map(p -> Character.toUpperCase(p.name().charAt(0)))
+                .map(p -> Character.toUpperCase(p.getName().charAt(0)))
                 .collect(Collectors.groupingBy(
                         c -> c,
                         Collectors.counting()
@@ -209,22 +191,22 @@ public class Warehouse {
     public List<Product> getTopRatedProductsThisMonth() {
         LocalDate now = LocalDate.now();
         List<Product> thisMonth = products.stream()
-                .filter(p -> p.createdDate().getMonth() == now.getMonth()
-                        && p.createdDate().getYear() == now.getYear())
+                .filter(p -> p.getCreatedDate().getMonth() == now.getMonth()
+                        && p.getCreatedDate().getYear() == now.getYear())
                 .toList();
 
         OptionalInt maxRating = thisMonth.stream()
-                .mapToInt(Product::rating)
+                .mapToInt(Product::getRating)
                 .max();
 
         if (maxRating.isEmpty()) return Collections.emptyList();
 
         return thisMonth.stream()
-                .filter(p -> p.rating() == maxRating.getAsInt())
+                .filter(p -> p.getRating() == maxRating.getAsInt())
                 .sorted((p1, p2) -> {
-                    int cmp = p2.createdDate().compareTo(p1.createdDate());
+                    int cmp = p2.getCreatedDate().compareTo(p1.getCreatedDate());
                     if (cmp != 0) return cmp;
-                    return p1.name().compareToIgnoreCase(p2.name());
+                    return p1.getName().compareToIgnoreCase(p2.getName());
                 })
                 .toList();
     }

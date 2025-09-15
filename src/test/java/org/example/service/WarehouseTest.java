@@ -457,17 +457,23 @@ class WarehouseTest {
         assertEquals(1, booksCount); // Verify that there is 1 product in the BOOKS category
     }
 
-//    @Test
-//    @DisplayName("Should return 0 when no products exists in the specified category")
-//    void countProductsInCategoryWhenThereIsNoProductsInTheSpecifiedCategory() {
-//        Product laptop = Warehouse.createProduct("1", "Laptop", Category.ELECTRONICS, 8);
-//        warehouse.addProduct(laptop);
-//
-//        long toysCount = warehouse.countProductsInCategory(Category.TOYS); // Attempt to count products in the TOYS category when none exist
-//
-//        assertEquals(0, toysCount); // Verify that the count is 0
-//    }
-//
+    @Test
+    @DisplayName("Should return 0 when no products exists in the specified category")
+    void countProductsInCategoryWhenThereIsNoProductsInTheSpecifiedCategory() {
+        Product laptop = new Product.Builder()
+                .id("1")
+                .name("Laptop")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .build();
+
+        warehouse.addProduct(laptop);
+
+        long toysCount = warehouse.countProductsInCategory(Category.TOYS); // Attempt to count products in the TOYS category when none exist
+
+        assertEquals(0, toysCount); // Verify that the count is 0
+    }
+
 //    // ========================================
 //    // TESTS FOR getProductsInitialsMap()
 //    // ========================================

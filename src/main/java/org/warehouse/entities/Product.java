@@ -10,15 +10,8 @@ public record Product(String id,
                       LocalDate createdDate,
                       LocalDate modifiedDate) {
   public Product {
-    Objects.requireNonNull(id, "id must not be null");
-    Objects.requireNonNull(name, "name must not be null");
-    if (name.isBlank()) throw new IllegalArgumentException("name must not be blank");
-    Objects.requireNonNull(category, "category must not be null");
     Objects.requireNonNull(createdDate, "createdDate must not be null");
     Objects.requireNonNull(modifiedDate, "modifiedDate must not be null");
-    if (rating < 0 || rating > 10) {
-      throw new IllegalArgumentException("rating must be between 0 and 10");
-      }
     if (modifiedDate.isBefore(createdDate)) {
       throw new IllegalArgumentException("modifiedDate must not be before createdDate");
       }
@@ -63,6 +56,19 @@ public record Product(String id,
     }
 
     public Product build() {
+      if (id == null) throw new IllegalArgumentException("id must not be null");
+      if(name == null || name.isBlank()) throw new IllegalArgumentException("name must not be null or be blank");
+      if(category == null) throw new IllegalArgumentException("category must not be null");
+      if(rating < 0 || rating > 10) {
+        throw new IllegalArgumentException("rating must be between 0 and 10");
+      }
+      if(modifiedDate.isBefore(createdDate)) {
+        throw new IllegalArgumentException("modifiedDate must not be before createdDate");
+      }
+      LocalDate now = LocalDate.now();
+      if(createdDate == null) createdDate = now;
+      if(modifiedDate == null) modifiedDate = now;
+
       return new Product(id, name, category, rating, createdDate, modifiedDate);
     }
     }

@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.Repository.ProductRepository;
 import org.example.entities.Category;
 import org.example.entities.Product;
 
@@ -10,35 +11,34 @@ import java.util.stream.Collectors;
 
 /**
  * Service class for managing warehouse products.
- * Provides methods to add, update, and retrieve products.
+ * Delegates data access to ProductRepository.
+ * Provides methods for CRUD operations and various queries.
  */
-public class Warehouse {
+public class ProductService {
 
-    private final List<Product> products = new ArrayList<>();
+    private final ProductRepository productRepository;
 
-    /**
-     * Adds a product to the warehouse after validation.
-     *
-     * @param product the product to add
-     * @throws IllegalArgumentException if the product is invalid or duplicate
-     */
-    public void addProduct(Product product) {
-        if (product == null) {
-            throw new IllegalArgumentException("Product cannot be null");
-        }
-        if (products.stream().anyMatch(p -> p.getId().equals(product.getId()))) {
-            throw new IllegalArgumentException("Product with ID " + product.getId() + " already exists");
-        }
-        products.add(product);
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = Objects.requireNonNull(productRepository, "Repository cannot be null");
     }
 
     /**
-     * Returns all products in the warehouse.
+     * Adds a product to the repository.
      *
-     * @return unmodifiable list of products
      */
-    public List<Product> getAllProducts() {
-        return Collections.unmodifiableList(products);
+    public void addProduct(Product product) {
+        if (product == null) throw new IllegalArgumentException("Product cannot be null");
+        productRepository.addProduct(product);
+    }
+
+    /**
+     * Gets a product by ID.
+     *
+     */
+    public Product getProductById(String id) {
+        if (id == null || id.isBlank()) throw new IllegalArgumentException("id cannot be null/blank");
+        return productRepository.getProduct(id)
+                .orElseThrow(() -> new IllegalArgumentException("Product with ID " + id + " not found"));
     }
 
     /**
@@ -52,20 +52,6 @@ public class Warehouse {
      * @throws IllegalArgumentException if input is invalid or product not found
      */
     public Product updateProduct(String id, String name, Category category, int rating) {
-        if (id == null || id.isBlank()) {
-            throw new IllegalArgumentException("Product ID cannot be null or blank");
-        }
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Product name cannot be null or blank");
-        }
-        name = name.trim();
-        if (category == null) {
-            throw new IllegalArgumentException("Product category cannot be null");
-        }
-        if (rating < 0 || rating > 10) {
-            throw new IllegalArgumentException("Product rating must be between 0 and 10");
-        }
-
         Product existing = getProductById(id);
 
         Product updated = new Product.Builder()
@@ -78,44 +64,31 @@ public class Warehouse {
                 .price(existing.getPrice())
                 .build();
 
-        int index = products.indexOf(existing);
-        products.set(index, updated);
-
+        productRepository.updateProduct(updated);
         return updated;
     }
 
     /**
-     * Retrieves a product by ID.
+     * Gets all products.
      *
-     * @param id the product ID
-     * @return the product with the given ID
-     * @throws IllegalArgumentException if id is invalid or not found
      */
-    public Product getProductById(String id) {
-        if (id == null || id.isBlank()) {
-            throw new IllegalArgumentException("id cannot be null/blank");
-        }
-        return products.stream()
-                .filter(p -> Objects.equals(p.getId(), id))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Product with ID " + id + " not found"));
+    public List<Product> getAllProducts() {
+        return Collections.unmodifiableList(productRepository.getAllProducts());
     }
 
     /**
-     * Retrieves products in a category, sorted by name.
+     * Gets product in a category.
      *
-     * @param category the category to filter by
-     * @return list of products in the category
      */
     public List<Product> getProductsByCategorySorted(Category category) {
-        return products.stream()
-                .filter(p -> p.getCategory()== category)
-                .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
+        return productRepository.getAllProducts().stream()
+                .filter(p -> p.getCategory() == category)
+                .sorted(Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER))
                 .toList();
     }
 
     /**
-     * Retrieves products created after a given date.
+     * Gets products created after a given date.
      *
      * @param date the date threshold
      * @return list of products created after the date
@@ -124,7 +97,7 @@ public class Warehouse {
         if (date == null) {
             throw new IllegalArgumentException("date cannot be null");
         }
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 .filter(p -> p.getCreatedDate().isAfter(date))
                 .toList();
     }
@@ -135,7 +108,7 @@ public class Warehouse {
      * @return list of modified products
      */
     public List<Product> getModifiedProducts() {
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 .filter(p -> !p.getCreatedDate().equals(p.getModifiedDate()))
                 .toList();
     }
@@ -146,7 +119,7 @@ public class Warehouse {
      * @return list of categories
      */
     public List<Category> getCategoriesWithProducts() {
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 .map(Product::getCategory)
                 .distinct()
                 .toList();
@@ -159,7 +132,7 @@ public class Warehouse {
      * @return number of products in the category
      */
     public long countProductsInCategory(Category category) {
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 .filter(p -> p.getCategory()== category)
                 .count();
     }
@@ -170,7 +143,7 @@ public class Warehouse {
      * @return map of initials to counts
      */
     public Map<Character, Integer> getProductInitialsMap() {
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 .map(p -> Character.toUpperCase(p.getName().charAt(0)))
                 .collect(Collectors.groupingBy(
                         c -> c,
@@ -190,7 +163,7 @@ public class Warehouse {
      */
     public List<Product> getTopRatedProductsThisMonth() {
         LocalDate now = LocalDate.now();
-        List<Product> thisMonth = products.stream()
+        List<Product> thisMonth = productRepository.getAllProducts().stream()
                 .filter(p -> p.getCreatedDate().getMonth() == now.getMonth()
                         && p.getCreatedDate().getYear() == now.getYear())
                 .toList();

@@ -4,6 +4,11 @@ import org.example.entities.Product;
 
 import java.util.*;
 
+/**
+ * In-memory implementation of ProductRepository.
+ * Stores products in a HashMap for quick access by ID.
+ */
+
 public class InMemoryProductRepository implements ProductRepository {
 
     private final Map<String, Product> productMap = new HashMap<>();

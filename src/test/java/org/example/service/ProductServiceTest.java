@@ -2,6 +2,9 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
+import org.example.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,13 +17,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-class WarehouseTest {
+class ProductServiceTest {
 
-    private Warehouse warehouse;
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
-        warehouse = new Warehouse();
+        ProductRepository repo = new InMemoryProductRepository();
+        productService = new ProductService(repo);
     }
 
     //TEST ADD PRODUCT
@@ -38,9 +42,9 @@ class WarehouseTest {
                 .modifiedDate(now)
                 .build();
 
-        warehouse.addProduct(clicker);
+        productService.addProduct(clicker);
 
-        List<Product> products = warehouse.getAllProducts();
+        List<Product> products = productService.getAllProducts();
 
         assertThat(products)
                 .hasSize(1)
@@ -50,7 +54,7 @@ class WarehouseTest {
     @Test
     @DisplayName("Throws an exception when name is empty")
     void addProductToWarehouseWithEmptyName_throwsException(){
-        assertThatThrownBy(() -> warehouse.addProduct(
+        assertThatThrownBy(() -> productService.addProduct(
                 Product.builder()
                         .id(UUID.randomUUID().toString())
                         .name("")
@@ -89,10 +93,10 @@ class WarehouseTest {
                 .modifiedDate(ZonedDateTime.now())
                 .build();
 
-        warehouse.addProduct(chewBone);
-        warehouse.addProduct(squeakyBanana);
+        productService.addProduct(chewBone);
+        productService.addProduct(squeakyBanana);
 
-        List<Product> allProducts = warehouse.getAllProducts();
+        List<Product> allProducts = productService.getAllProducts();
 
         assertThat(allProducts)
                 .hasSize(2)
@@ -112,9 +116,9 @@ class WarehouseTest {
                 .modifiedDate(ZonedDateTime.now())
                 .build();
 
-        warehouse.addProduct(redBlanket);
+        productService.addProduct(redBlanket);
 
-        List<Product> allProducts = warehouse.getAllProducts();
+        List<Product> allProducts = productService.getAllProducts();
 
         assertThatThrownBy(() -> allProducts.add(
                 Product.builder()
@@ -148,9 +152,9 @@ class WarehouseTest {
                 .modifiedDate(ZonedDateTime.now())
                 .build();
 
-        warehouse.addProduct(chewBone);
+        productService.addProduct(chewBone);
 
-        Optional<Product> result = warehouse.getProductById(chewBone.id());
+        Optional<Product> result = productService.getProductById(chewBone.id());
 
         assertThat(result)
                 .isPresent()
@@ -160,7 +164,7 @@ class WarehouseTest {
     @Test
     @DisplayName("Returns empty when product ID does not exist")
     void getProductById_returnsEmpty_whenIdDoesNotExist() {
-        Optional<Product> result = warehouse.getProductById(UUID.randomUUID().toString());
+        Optional<Product> result = productService.getProductById(UUID.randomUUID().toString());
 
         assertThat(result)
                 .isEmpty();
@@ -169,7 +173,7 @@ class WarehouseTest {
     @Test
     @DisplayName("Returns empty when ID is not a valid UUID")
     void getProductById_returnsEmpty_whenIdIsInvalidFormat() {
-        Optional<Product> result = warehouse.getProductById("not-a-uuid");
+        Optional<Product> result = productService.getProductById("not-a-uuid");
 
         assertThat(result)
                 .isEmpty();
@@ -218,12 +222,12 @@ class WarehouseTest {
                 .modifiedDate(now)
                 .build();
 
-        warehouse.addProduct(premiumFood);
-        warehouse.addProduct(alfaFood );
-        warehouse.addProduct(betaFood);
-        warehouse.addProduct(toy);
+        productService.addProduct(premiumFood);
+        productService.addProduct(alfaFood );
+        productService.addProduct(betaFood);
+        productService.addProduct(toy);
 
-        List<Product> foodProducts = warehouse.getProductsByCategorySorted(Category.FOOD);
+        List<Product> foodProducts = productService.getProductsByCategorySorted(Category.FOOD);
 
         assertThat(foodProducts)
                 .hasSize(3)
@@ -233,7 +237,7 @@ class WarehouseTest {
     @Test
     @DisplayName("Sorting category returns empty list when warehouse is empty")
     void getProductsByCategorySorted_returnsEmptyList_whenWarehouseIsEmpty() {
-        List<Product> products = warehouse.getProductsByCategorySorted(Category.FOOD);
+        List<Product> products = productService.getProductsByCategorySorted(Category.FOOD);
 
         assertThat(products)
                 .isEmpty();
@@ -242,7 +246,7 @@ class WarehouseTest {
     @Test
     @DisplayName("Sorting category throws exception when category is null")
     void getProductsByCategorySorted_throwsException_whenCategoryIsNull() {
-        assertThatThrownBy(() -> warehouse.getProductsByCategorySorted(null))
+        assertThatThrownBy(() -> productService.getProductsByCategorySorted(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Category cannot be null");
     }
@@ -263,13 +267,15 @@ class WarehouseTest {
                 .modifiedDate(createdTime)
                 .build();
 
-        warehouse.addProduct(originalProduct);
+        productService.addProduct(originalProduct);
 
-        Optional<Product> updatedProduct = warehouse.updateProduct(
+        productService.updateProduct(
                 originalProduct.id(),
                 "Premium Dog Food",
                 Category.FOOD,
                 5);
+
+        Optional<Product> updatedProduct = productService.getProductById(originalProduct.id());
 
         assertThat(updatedProduct)
                 .isPresent();
@@ -282,8 +288,8 @@ class WarehouseTest {
         assertThat(updated.createdDate()).isEqualTo(originalProduct.createdDate());
         assertThat(updated.modifiedDate()).isAfter(originalProduct.modifiedDate());
 
-        // Verify that the product is updated in the warehouse
-        Optional<Product> retrievedProduct = warehouse.getProductById(originalProduct.id());
+        // Verify that the product was successfully updated via ProductService
+        Optional<Product> retrievedProduct = productService.getProductById(originalProduct.id());
         assertThat(retrievedProduct)
                 .isPresent()
                 .contains(updated);
@@ -302,9 +308,9 @@ class WarehouseTest {
                 .modifiedDate(now)
                 .build();
 
-        warehouse.addProduct(originalProduct);
+        productService.addProduct(originalProduct);
 
-        assertThatThrownBy(() -> warehouse.updateProduct(
+        assertThatThrownBy(() -> productService.updateProduct(
                 originalProduct.id(),
                 "Product Name",
                 Category.FOOD,
@@ -313,18 +319,19 @@ class WarehouseTest {
                 .hasMessage("rating must be between 0 and 10");
     }
     @Test
-    @DisplayName("Update returns empty optional when product ID does not exist")
-    void updateProduct_returnsEmpty_whenProductIdDoesNotExist() {
+    @DisplayName("Throws exception when trying to update non-existent product")
+    void updateProduct_throwsException_whenProductIdDoesNotExist() {
         String nonExistentId = UUID.randomUUID().toString();
 
-        Optional<Product> result = warehouse.updateProduct(
+        assertThatThrownBy(() -> productService.updateProduct(
                 nonExistentId,
                 "New Name",
                 Category.FOOD,
-                5);
-
-        assertThat(result).isEmpty();
+                5))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("does not exist");
     }
+
 
     //TEST GET PRODUCTS CREATED AFTER
 
@@ -351,10 +358,10 @@ class WarehouseTest {
                 .modifiedDate(now.plusHours(1))
                 .build();
 
-        warehouse.addProduct(oldProduct);
-        warehouse.addProduct(newProduct);
+        productService.addProduct(oldProduct);
+        productService.addProduct(newProduct);
 
-        List<Product> result = warehouse.getProductsCreatedAfter(now);
+        List<Product> result = productService.getProductsCreatedAfter(now);
 
         assertEquals(1, result.size());
         assertEquals("New", result.get(0).name());
@@ -382,9 +389,9 @@ class WarehouseTest {
                 .modifiedDate(baseDateTime.minusDays(2))
                 .build();
 
-        warehouse.addProduct(oldProduct);
+        productService.addProduct(oldProduct);
 
-        List<Product> recentProducts = warehouse.getProductsCreatedAfter(baseDateTime);
+        List<Product> recentProducts = productService.getProductsCreatedAfter(baseDateTime);
 
         assertThat(recentProducts)
                 .isEmpty();
@@ -414,10 +421,10 @@ class WarehouseTest {
                 .modifiedDate(now)//same date as created date
                 .build();
 
-        warehouse.addProduct(modified);
-        warehouse.addProduct(unmodified);
+        productService.addProduct(modified);
+        productService.addProduct(unmodified);
 
-        List<Product> result = warehouse.getModifiedProducts();
+        List<Product> result = productService.getModifiedProducts();
 
         assertThat(result)
                 .hasSize(1)
@@ -437,11 +444,12 @@ class WarehouseTest {
                 .modifiedDate(now)//not modified
                 .build();
 
-        warehouse.addProduct(product);
+        productService.addProduct(product);
 
-        List<Product> result = warehouse.getModifiedProducts();
+        List<Product> result = productService.getModifiedProducts();
 
         assertThat(result)
                 .isEmpty();
     }
 }
+

@@ -13,15 +13,6 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public void addProduct(Product product) {
-        if (product == null || product.getName().isEmpty()) {
-            throw new IllegalArgumentException("Product name cannot be null or blank");
-        }
-        if (product.getCategory() == null) {
-            throw new IllegalArgumentException("Category cannot be null");
-        }
-        if (product.getRating() < 1 || product.getRating() > 10) {
-            throw new IllegalArgumentException("Rating must be between 1 and 10");
-        }
         if (products.stream().anyMatch(p -> p.getId().equals(product.getId()))) {
             throw new IllegalArgumentException("Product with id " + product.getId() + " already exists");
         }
@@ -49,6 +40,10 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public void updateProduct(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+
         int index = IntStream.range(0, products.size())
                 .filter(i -> products.get(i).getId().equals(product.getId()))
                 .findFirst()

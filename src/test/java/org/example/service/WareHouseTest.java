@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +13,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,10 +23,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WareHouseTest {
 
-    private Warehouse warehouse;
+    /*private Warehouse warehouse;*/
+    private ProductService productService;
 
-    @BeforeEach void setUpTest() {
-        warehouse = new Warehouse();
+    @BeforeEach
+    void setUpTest() {
+
+        /*warehouse = new Warehouse();*/
+        // create a new ProductRepository and ProductService instances every time
+        ProductRepository repository = new InMemoryProductRepository();
+        productService = new ProductService(repository);
     }
 
     @Test
@@ -41,14 +50,15 @@ class WareHouseTest {
                 .modifiedDate(today)
                 .build();
 
-        warehouse.addProduct(validProduct);
-        assertTrue(warehouse.getAllProducts().contains(validProduct), "Valid product should be added");
+        /*warehouse.addProduct(validProduct);*/
+        productService.addProduct(validProduct);
+        assertTrue(productService.getAllProducts().contains(validProduct), "Valid product should be added");
 
         // Failure: empty name
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                warehouse.addProduct(new Product.Builder()
+                productService.addProduct(new Product.Builder()
                         .id("1")
-                        .name("") // tomt namn
+                        .name("") // empty name
                         .category(Category.FOOD)
                         .rating(2)
                         .createdDate(today)
@@ -57,12 +67,12 @@ class WareHouseTest {
                         .build())
         );
 
-                        //(new Product("1", "", Category.FOOD, 2, today, today)));
+        //(new Product("1", "", Category.FOOD, 2, today, today)));
         assertEquals("Name cannot be null or empty", exception.getMessage());
 
         // Failure: null product
         exception = assertThrows(IllegalArgumentException.class, () ->
-                warehouse.addProduct(null));
+                productService.addProduct(null));
         assertEquals("Product cannot be null", exception.getMessage());
 
         // Failure: duplicate ID
@@ -77,7 +87,7 @@ class WareHouseTest {
                 .build();
 
         exception = assertThrows(IllegalArgumentException.class, () ->
-                warehouse.addProduct(duplicateIdProduct));
+                productService.addProduct(duplicateIdProduct));
         assertEquals("Product with this ID already exists", exception.getMessage());
     }
 
@@ -101,12 +111,23 @@ class WareHouseTest {
                 .price(2)
                 .build();
 
-                //("5", "Valid", Category.FOOD, 5, today, today);
+        //("5", "Valid", Category.FOOD, 5, today, today);
 
-        warehouse.addProduct(beforeUpdate);
-        warehouse.updateProduct("5", "Updated", Category.ELECTRONICS, 9);
+        productService.addProduct(beforeUpdate);
+        /*productService.updateProduct("5", "Updated", Category.ELECTRONICS, 9);*/
 
-        Product afterUpdate = warehouse.getProductById("5");
+        productService.updateProduct(new Product.Builder()
+                .id("5") // same id as before update
+                .name("Updated")
+                .category(Category.ELECTRONICS)
+                .rating(9)
+                /*.price(24.99)*/ // TODO: maybe update something here? How do we do with dates?
+                .modifiedDate(LocalDate.now())
+                .build());
+
+        Product afterUpdate = productService.getProductByID("5")
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+        System.out.println(afterUpdate);
 
         assertThat(afterUpdate).isNotNull();
         assertThat(afterUpdate.id()).isEqualTo("5"); // Same id
@@ -137,7 +158,7 @@ class WareHouseTest {
                 .modifiedDate(today)
                 .price(2)
                 .build();
-        warehouse.addProduct(product1);
+        productService.addProduct(product1);
 
         Product product2 = new Product.Builder()
                 .id("98")
@@ -148,7 +169,7 @@ class WareHouseTest {
                 .modifiedDate(today)
                 .price(2)
                 .build();
-        warehouse.addProduct(product2);
+        productService.addProduct(product2);
 
         Product product3 = new Product.Builder()
                 .id("99")
@@ -159,9 +180,9 @@ class WareHouseTest {
                 .modifiedDate(today)
                 .price(2)
                 .build();
-        warehouse.addProduct(product3);
+        productService.addProduct(product3);
 
-        List <Product> copyWarehouse = warehouse.getAllProducts();
+        List<Product> copyWarehouse = productService.getAllProducts();
 
         assertThat(copyWarehouse).isNotNull();
         assertThat(copyWarehouse.size()).isEqualTo(3);
@@ -172,7 +193,7 @@ class WareHouseTest {
     @Test
     @DisplayName("Test when list is empty in getAllProducts method, should return empty list")
     void getAllProductsEmptyListTest() {
-        List <Product> productList = warehouse.getAllProducts();
+        List<Product> productList = productService.getAllProducts();
         assertThat(productList.size()).isEqualTo(0);
     }
 
@@ -206,18 +227,20 @@ class WareHouseTest {
                 .price(2)
                 .build();
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
+        productService.addProduct(product1);
+        productService.addProduct(product2);
 
-        Product found1 = warehouse.getProductById("97");
-        Product found2 = warehouse.getProductById("98");
+        Product found1 = productService.getProductByID("97")
+                .orElseThrow(() -> new IllegalArgumentException("Product with id 97 not found"));
+        Product found2 = productService.getProductByID("98")
+                .orElseThrow(() -> new IllegalArgumentException("Product with id 97 not found"));
 
         assertThat(found1).isNotNull();
         assertThat(found2).isNotNull();
         assertThat(found1.id()).isEqualTo("97");
         assertThat(found2.id()).isEqualTo("98");
 
-        assertThatThrownBy(() -> warehouse.getProductById("1000"))
+        assertThatThrownBy(() -> productService.getProductByID("1000"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Product with id 1000 does not exist");
     }
@@ -292,17 +315,17 @@ class WareHouseTest {
                 .price(6)
                 .build();
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
-        warehouse.addProduct(product3);
-        warehouse.addProduct(product4);
-        warehouse.addProduct(product5);
-        warehouse.addProduct(product6);
+        productService.addProduct(product1);
+        productService.addProduct(product2);
+        productService.addProduct(product3);
+        productService.addProduct(product4);
+        productService.addProduct(product5);
+        productService.addProduct(product6);
 
-        List <Product> filteredList =  warehouse.getProductsByCategorySorted(Category.CLOTHING);
-        List <Product> filteredListToys =  warehouse.getProductsByCategorySorted(Category.TOYS);
+        List<Product> filteredList = productService.getProductsByCategorySorted(Category.CLOTHING);
+        List<Product> filteredListToys = productService.getProductsByCategorySorted(Category.TOYS);
 
-        assertThat(warehouse.getAllProducts().size()).isEqualTo(6);
+        assertThat(productService.getAllProducts().size()).isEqualTo(6);
 
         assertThat(filteredList.size()).isEqualTo(4);
         assertThat(filteredListToys.size()).isEqualTo(0);
@@ -358,16 +381,16 @@ class WareHouseTest {
                 .price(3)
                 .build();
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
-        warehouse.addProduct(product3);
+        productService.addProduct(product1);
+        productService.addProduct(product2);
+        productService.addProduct(product3);
 
-        List <Product> filteredList =  warehouse.getProductsCreatedAfter(defaultDay);
-        List <Product> filteredList2 =  warehouse.getProductsCreatedAfter(dateSep9);
-        List <Product> filteredList3 =  warehouse.getProductsCreatedAfter(LocalDate.of(2025, 12, 20));
+        List<Product> filteredList = productService.getProductsCreatedAfter(defaultDay);
+        List<Product> filteredList2 = productService.getProductsCreatedAfter(dateSep9);
+        List<Product> filteredList3 = productService.getProductsCreatedAfter(LocalDate.of(2025, 12, 20));
 
         // tests
-        assertThat(warehouse.getAllProducts().size()).isEqualTo(3);
+        assertThat(productService.getAllProducts().size()).isEqualTo(3);
         assertThat(filteredList.size()).isEqualTo(2);
         assertThat(filteredList2.size()).isEqualTo(1);
         assertThat(filteredList3).isEmpty();
@@ -422,21 +445,21 @@ class WareHouseTest {
                 .price(2)
                 .build();
 
-        warehouse.addProduct(normalProduct);
-        warehouse.addProduct(modifiedProduct1);
-        warehouse.addProduct(modifiedProduct2);
+        productService.addProduct(normalProduct);
+        productService.addProduct(modifiedProduct1);
+        productService.addProduct(modifiedProduct2);
 
-        List <Product> result =  warehouse.getModifiedProducts();
+        List<Product> result = productService.getModifiedProducts();
 
         // tests
-        assertThat(warehouse.getAllProducts().size()).isEqualTo(3);
+        assertThat(productService.getAllProducts().size()).isEqualTo(3);
         assertThat(result).doesNotContain(normalProduct);
-        assertThat(warehouse.getModifiedProducts().size()).isEqualTo(2);
+        assertThat(productService.getModifiedProducts().size()).isEqualTo(2);
     }
 
     @Test
     @DisplayName("Tests for getCategoriesWithProducts method")
-    void getCategoriesWithProductsTest(){
+    void getCategoriesWithProductsTest() {
         Clock fixedClock = Clock.fixed(
                 LocalDate.of(2025, 9, 1).atStartOfDay(ZoneOffset.UTC).toInstant(),
                 ZoneOffset.UTC
@@ -484,12 +507,12 @@ class WareHouseTest {
                 .price(1)
                 .build();
 
-        warehouse.addProduct(normalProduct);
-        warehouse.addProduct(modifiedProduct1);
-        warehouse.addProduct(modifiedProduct2);
+        productService.addProduct(normalProduct);
+        productService.addProduct(modifiedProduct1);
+        productService.addProduct(modifiedProduct2);
 
         // run method
-        Set<Category> categories = warehouse.getCategoriesWithProducts();
+        Set<Category> categories = productService.getCategoriesWithProducts();
 
         // tests
         assertThat(categories.size()).isEqualTo(2);
@@ -548,14 +571,14 @@ class WareHouseTest {
                 .price(2)
                 .build();
 
-        warehouse.addProduct(normalProduct);
-        warehouse.addProduct(modifiedProduct1);
-        warehouse.addProduct(modifiedProduct2);
+        productService.addProduct(normalProduct);
+        productService.addProduct(modifiedProduct1);
+        productService.addProduct(modifiedProduct2);
 
         // run method
-        int countCategoryElectronics = warehouse.countProductsInCategory(Category.ELECTRONICS);
-        int countCategoryClothing = warehouse.countProductsInCategory(Category.CLOTHING);
-        int countCategoryToys = warehouse.countProductsInCategory(Category.TOYS);
+        int countCategoryElectronics = productService.countProductsInCategory(Category.ELECTRONICS);
+        int countCategoryClothing = productService.countProductsInCategory(Category.CLOTHING);
+        int countCategoryToys = productService.countProductsInCategory(Category.TOYS);
 
         // tests
         assertThat(countCategoryElectronics).isEqualTo(2);
@@ -624,13 +647,13 @@ class WareHouseTest {
                 .price(2)
                 .build();
 
-        warehouse.addProduct(normalProduct);
-        warehouse.addProduct(modifiedProduct1);
-        warehouse.addProduct(modifiedProduct2);
-        warehouse.addProduct(modifiedProduct3);
+        productService.addProduct(normalProduct);
+        productService.addProduct(modifiedProduct1);
+        productService.addProduct(modifiedProduct2);
+        productService.addProduct(modifiedProduct3);
 
         // run
-        Map<Character, Integer> result = warehouse.getProductInitialsMap();
+        Map<Character, Integer> result = productService.getProductInitialsMap();
 
         // tests
         assertThat(result).containsEntry('A', 2);
@@ -711,17 +734,17 @@ class WareHouseTest {
                 .build();
 
         // test for empty list
-        assertThat(warehouse.getTopRatedProductsThisMonth().size()).isEqualTo(0);
+        assertThat(productService.getTopRatedProductsThisMonth().size()).isEqualTo(0);
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
-        warehouse.addProduct(product3);
-        warehouse.addProduct(product4);
-        warehouse.addProduct(product5);
-        warehouse.addProduct(product6);
+        productService.addProduct(product1);
+        productService.addProduct(product2);
+        productService.addProduct(product3);
+        productService.addProduct(product4);
+        productService.addProduct(product5);
+        productService.addProduct(product6);
 
         // run
-        List<Product> result = warehouse.getTopRatedProductsThisMonth();
+        List<Product> result = productService.getTopRatedProductsThisMonth();
 
         // tests
         assertThat(result.size()).isEqualTo(3);

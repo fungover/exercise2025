@@ -45,7 +45,7 @@ public class ProductService /*Warehouse*/ {
      * Get products by category sorted by name A-Z
      *
      * @param category the category to filter by
-     * @return list of products in the specified category sorted by name*/
+     * @return a list of products in the specified category sorted by name*/
     public List<Product> getProductsByCategorySorted(Category category) {
         return getAllProducts()
                 .stream()
@@ -114,7 +114,7 @@ public class ProductService /*Warehouse*/ {
     }
 
     /**
-     * Get top 3 highest rated products created in the current month
+     * Get the top 3 highest rated products created in the current month
      *
      * @return list of top 3 highest rated products created this month
      */

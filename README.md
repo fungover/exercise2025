@@ -1,9 +1,9 @@
 # Warehouse Product Manager
 
 ## Overview
-This project is a Java application for managing warehouse products.
+This project is a Java application for managing productService products.
 
-At the moment it has a dog warehouse theme but can be easily extended to support other types of products.
+At the moment it has a dog productService theme but can be easily extended to support other types of products.
 
 The application targets Java 17+ (uses records and Stream.toList()) and JUnit 5 for unit testing.
 

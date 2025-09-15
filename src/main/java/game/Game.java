@@ -23,16 +23,18 @@ public class Game {
     }
 
     public void run() {
+        System.out.println("\n*** Welcome to this Dungeon Crawler! ***\n " +
+                "Your are trapped i a dark cave where you can´t see anything.\n " +
+                "Your goal is to find you way to the south side to escape.\n" +
+                "You might have to fight some enemies to get there. But I´ve heard there is some\n" +
+                "potions laying around to heal your wounds if you need to. Good luck!\n");
+
         while (true) {
             // Below method prints the map and shows all placements for testing purposes.
             //dungeon.printDungeon(player, enemyList);
-            System.out.println("\n*** Welcome to this Dungeon Crawler! ***\n " +
-                    "Your are trapped i a dark cave where you can´t see anything.\n " +
-                    "Your goal is to find you way to the south side to escape.\n" +
-                    "You might have to fight some enemies to get there. But I´ve heard there is some\n" +
-                    "potions laying around to heal your wounds if you need to. Good luck!\n");
+
             System.out.println("Move (W: go up, S: go down, A: go left, D: go right, Q: quit): ");
-            
+
             String input = scanner.nextLine();
 
             if (input.equals("q")) break;

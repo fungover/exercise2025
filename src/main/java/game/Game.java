@@ -24,7 +24,7 @@ public class Game {
 
     public void run() {
         while (true) {
-            // Below method shows the map and all placements for testing purposes and visualisation.
+            // Below method shows the map and all placements for testing purposes.
             // dungeon.printDungeon(player, enemyList);
             System.out.println("\n*** Welcome to this Dungeon Crawler! ***\n " +
                     "Your are trapped i a dark cave where you can´t see anything.\n " +

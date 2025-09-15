@@ -27,7 +27,13 @@ public class WarehouseTest {
 
     // Helper methods
     private Product addProductToWarehouse(Warehouse warehouse, String id, String name, Category category, int rating) {
-        Product product = new Product(id, name, category, rating);
+        Product product = new Product.Builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .build();
+
         warehouse.addProduct(product);
         return product;
     }
@@ -36,7 +42,12 @@ public class WarehouseTest {
         LocalDateTime mockedDate = LocalDateTime.of(year, month, day, hour, minute, second, 0);
         try (MockedStatic<LocalDateTime> mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
             mockedStatic.when(LocalDateTime::now).thenReturn(mockedDate);
-            return new Product(id, name, category, rating);
+            return new Product.Builder()
+                    .id(id)
+                    .name(name)
+                    .category(category)
+                    .rating(rating)
+                    .build();
         }
     }
 
@@ -45,7 +56,13 @@ public class WarehouseTest {
     @DisplayName("addProduct: adds a new Product to Warehouse")
     public void addProduct() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
+        Product testProduct = new Product.Builder()
+                .id("1")
+                .name("Test Product")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
+
         warehouse.addProduct(testProduct);
 
         assertThat(warehouse.getAllProducts()).contains(testProduct);
@@ -55,9 +72,12 @@ public class WarehouseTest {
     @DisplayName("addProduct: throws IllegalArgumentException if Product name is blank")
     public void throwExceptionIfNoProductNameProvided() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product("1", "", Category.GENERAL, 1);
-
-        assertThatThrownBy(() -> warehouse.addProduct(testProduct))
+        assertThatThrownBy(() -> new Product.Builder()
+                .id("1")
+                .name("")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build())
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -65,9 +85,14 @@ public class WarehouseTest {
     @DisplayName("updateProduct: updates an existing Product by ID")
     public void updateProduct() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
-        warehouse.addProduct(testProduct);
+        Product testProduct = new Product.Builder()
+                .id("1")
+                .name("Test Product")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
 
+        warehouse.addProduct(testProduct);
 
         warehouse.updateProduct("1", "Updated Test Product", ELECTRONICS, 5);
 
@@ -100,7 +125,13 @@ public class WarehouseTest {
     @DisplayName("updateProduct: throws IllegalArgumentException if Product ID is not found")
     public void throwExceptionIfNoProductFoundToUpdate() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product("1", "Test Product", Category.GENERAL, 1);
+        Product testProduct = new Product.Builder()
+                .id("1")
+                .name("Test Product")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
+
         warehouse.addProduct(testProduct);
 
         assertThatThrownBy(() -> warehouse.updateProduct("2", "Updated Product", Category.GENERAL, 2))
@@ -112,7 +143,13 @@ public class WarehouseTest {
     @DisplayName("updateProduct: throws IllegalArgumentException for invalid inputs")
     void throwExceptionIfInvalidInputToUpdate(String id, String name, Category category, int rating) {
         Warehouse warehouse = new Warehouse();
-        warehouse.addProduct(new Product("1", "Laptop", Category.GENERAL, 1));
+        warehouse.addProduct(new Product.Builder()
+                .id("1")
+                .name("Laptop")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build()
+        );
 
         assertThatThrownBy(() -> warehouse.updateProduct(id, name, category, rating))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -144,10 +181,20 @@ public class WarehouseTest {
     public void getAllProducts() {
         Warehouse warehouse = new Warehouse();
 
-        Product testProduct1 = new Product("1", "Test Product", Category.GENERAL, 1);
+        Product testProduct1 = new Product.Builder()
+                .id("1")
+                .name("Test Product")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
         warehouse.addProduct(testProduct1);
 
-        Product testProduct2 = new Product("2", "Test Product2", Category.GENERAL, 1);
+        Product testProduct2 = new Product.Builder()
+                .id("2")
+                .name("Test Product2")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
         warehouse.addProduct(testProduct2);
 
         assertThat(warehouse.getAllProducts()).contains(testProduct1, testProduct2);
@@ -165,7 +212,12 @@ public class WarehouseTest {
     @DisplayName("getProductById: returns a Product by id")
     public void getProductById() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product("99", "Test Product", Category.GENERAL, 1);
+        Product testProduct = new Product.Builder()
+                .id("99")
+                .name("Test Product")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
         warehouse.addProduct(testProduct);
 
         assertThat(warehouse.getProductById("99")).contains(testProduct);
@@ -175,7 +227,12 @@ public class WarehouseTest {
     @DisplayName("getProductById: returns empty Optional if Product ID is not found")
     public void returnsEmptyOptionalIfNoProductFound() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product("99", "Test Product", Category.GENERAL, 1);
+        Product testProduct = new Product.Builder()
+                .id("99")
+                .name("Test Product")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
         warehouse.addProduct(testProduct);
 
         assertThat(warehouse.getProductById("100")).isEmpty();
@@ -185,7 +242,12 @@ public class WarehouseTest {
     @DisplayName("getProductById: throws exception if invalid input")
     public void throwsExceptionIfNoProductIdProvided() {
         Warehouse warehouse = new Warehouse();
-        Product testProduct = new Product("99", "Test Product", Category.GENERAL, 1);
+        Product testProduct = new Product.Builder()
+                .id("99")
+                .name("Test Product")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
         warehouse.addProduct(testProduct);
 
         assertThatThrownBy(() -> warehouse.getProductById(""))

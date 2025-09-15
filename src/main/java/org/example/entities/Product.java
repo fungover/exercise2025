@@ -11,19 +11,19 @@ public class Product {
     private final LocalDateTime modifiedDate;
 
     // Constructors
-    public Product(String id) {
+    private Product(String id) {
         this(id, "");
     }
 
-    public Product(String id, String name) {
+    private Product(String id, String name) {
         this(id, name, Category.GENERAL);
     }
 
-    public Product(String id, String name, Category category) {
+    private Product(String id, String name, Category category) {
         this(id, name, category, 0);
     }
 
-    public Product(String id, String name, Category category, int rating) {
+    private Product(String id, String name, Category category, int rating) {
         LocalDateTime now = LocalDateTime.now();
         this.id = id;
         this.name = name;

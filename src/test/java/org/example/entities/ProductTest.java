@@ -15,28 +15,48 @@ public class ProductTest {
     @Test
     @DisplayName("Product constructor: sets unique ID")
     public void canCreateProductWithId() {
-        Product product = new Product("1");
+        Product product = new Product.Builder()
+                .id("1")
+                .name("Required Name")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
         assertThat(product.getId()).isEqualTo("1");
     }
 
     @Test
     @DisplayName("Product constructor: sets name")
     public void canCreateProductWithName() {
-        Product product = new Product("1", "Laptop");
+        Product product = new Product.Builder()
+                .id("1")
+                .name("Laptop")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
         assertThat(product.getName()).isEqualTo("Laptop");
     }
 
     @Test
     @DisplayName("Product constructor: sets category")
     public void canCreateProductWithCategory() {
-        Product product = new Product("1", "Laptop", Category.GENERAL);
+        Product product = new Product.Builder()
+                .id("1")
+                .name("Laptop")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
         assertThat(product.getCategory()).isEqualTo(Category.GENERAL);
     }
 
     @Test
     @DisplayName("Product constructor: sets rating")
     public void canCreateProductWithRating() {
-        Product product = new Product("1", "Laptop", Category.GENERAL, 1);
+        Product product = new Product.Builder()
+                .id("1")
+                .name("Laptop")
+                .category(Category.GENERAL)
+                .rating(1)
+                .build();
         assertThat(product.getRating()).isEqualTo(1);
     }
 
@@ -47,7 +67,12 @@ public class ProductTest {
             LocalDateTime currentDate = LocalDateTime.of(2025, 1, 1, 18, 0, 0, 0);
             mockedStatic.when(LocalDateTime::now).thenReturn(currentDate);
 
-            Product product = new Product("1", "Laptop", Category.GENERAL, 1);
+            Product product = new Product.Builder()
+                    .id("1")
+                    .name("Laptop")
+                    .category(Category.GENERAL)
+                    .rating(1)
+                    .build();
             assertThat(product.getCreatedDate()).isEqualTo(currentDate);
         }
     }
@@ -61,7 +86,12 @@ public class ProductTest {
         try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
             LocalDateTime currentDate = LocalDateTime.of(2025, 1, 1, 18, 0, 0, 0);
             mockedStatic.when(LocalDateTime::now).thenReturn(currentDate);
-            product = new Product("1", "Laptop", Category.GENERAL, 1);
+            product = new Product.Builder()
+                    .id("1")
+                    .name("Laptop")
+                    .category(Category.GENERAL)
+                    .rating(1)
+                    .build();
         }
 
         try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {

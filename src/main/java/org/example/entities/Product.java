@@ -4,14 +4,13 @@ import java.time.LocalDate;
 
 public class Product{
 
-            private final String id;
-            private final String name;
-            private final Category category;
-            private final int rating;
-            private final LocalDate createdDate;
-            private final LocalDate modifiedDate;
-            private final double price;
-
+    private final String id;
+    private final String name;
+    private final Category category;
+    private final int rating;
+    private final LocalDate createdDate;
+    private final LocalDate modifiedDate;
+    private final double price;
 
     private Product(Builder builder) {
 
@@ -28,7 +27,6 @@ public class Product{
         if (category == null) throw new IllegalArgumentException("Category cannot be null");
         if (rating < 0 || rating > 10) throw new IllegalArgumentException("Rating should be between 0 and 10");
         if (modifiedDate.isBefore(createdDate)) throw new IllegalArgumentException("Modified date cannot be before created date");
-
     }
 
     // Getters
@@ -39,7 +37,6 @@ public class Product{
     public LocalDate createdDate() {return createdDate;}
     public LocalDate modifiedDate() {return modifiedDate;}
     public double price() {return price;}
-
 
     // Builder
     public static class Builder {
@@ -63,7 +60,5 @@ public class Product{
             return new Product(this);
         }
     }
-
-
 }
 

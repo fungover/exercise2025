@@ -80,7 +80,7 @@ public class Dungeon {
         i.displayInventory();
     }
 
-    public void renderPlayerPosition(Player p) {
+    public void setPlayerPosition(Player p) {
         char playerTile = Tile.PLAYER.getTile();
         char floorTile = Tile.FLOOR.getTile();
 

@@ -23,6 +23,12 @@ public class Player implements Health, Position {
         return health;
     }
 
+    public void displayHealth() {
+        System.out.println("-------------------------");
+        System.out.println(name + "'s Health: " + health);
+        System.out.println("-------------------------");
+    }
+
     @Override
     public int getX() {
         return x;

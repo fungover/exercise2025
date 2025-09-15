@@ -42,7 +42,7 @@ public class Game {
 
             if (logic.wishToPickUpItem(dungeon, player, inventory, scan)) {
                 Item item = logic.getItemFromList(dungeon, player, itemsOnFloor);
-                logic.pickUpItem(item, inventory);
+                logic.pickUpItem(item, inventory, item.getClass());
                 dungeon.removeItemTile(item);
                 pause();
                 dungeon.printDungeon(inventory);
@@ -52,6 +52,10 @@ public class Game {
                 Combat combat = new Combat();
                 Enemy enemy = logic.getEnemyFromList(dungeon, player, enemies);
                 combat.startFight(player, inventory, enemy, scan);
+                if (player.getHealth() <= 0) {
+                    System.out.println("Game Over!");
+                    break;
+                }
                 dungeon.removeEnemyTile(enemy);
                 pause();
                 dungeon.printDungeon(inventory);
@@ -65,7 +69,14 @@ public class Game {
             }
             logic.moveInput(dungeon, player, userInput);
 
-            dungeon.renderPlayerPosition(player);
+            // Game Complete
+            if(logic.isDoor(dungeon, player.getY(), player.getX())) {
+                System.out.println(player.getName() + " opens the door to freedom!");
+                System.out.println("Well played " + player.getName() + "...");
+                break;
+            }
+
+            dungeon.setPlayerPosition(player);
             pause(); // This makes it possible to read messages before re-render
         }
     }

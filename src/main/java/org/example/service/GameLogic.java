@@ -66,11 +66,15 @@ public class GameLogic {
     }
 
     private boolean isWalkable(Dungeon d, int y, int x) {
-        return d.getTile(y, x) == floorTile;
+        return d.getTile(y, x) == floorTile || d.getTile(y, x) == doorTile;
     }
 
     private boolean isWall(Dungeon d, int y, int x) {
         return d.getTile(y, x) == wallTile;
+    }
+
+    public boolean isDoor(Dungeon d, int y, int x) {
+        return d.getTile(y, x) == doorTile;
     }
 
     private void wallMessage(Player p) {
@@ -120,7 +124,6 @@ public class GameLogic {
             System.out.println("Do you wish to fight it, yes or no?");
             return validAnswer(scan);
         }
-        d.printDungeon(i); // Re-render
         return false;
     }
 
@@ -133,7 +136,6 @@ public class GameLogic {
             System.out.println("Do you wish to pick it up, yes or no?");
             return validAnswer(scan);
         }
-        d.printDungeon(i); // Re-render
         return false;
     }
 
@@ -152,9 +154,15 @@ public class GameLogic {
         }
     }
 
-    public void pickUpItem(Item newItem, Inventory inventory) {
-        inventory.addItem(newItem);
-        System.out.println("A " + newItem.getType() + " has been picked up!");
+    public void pickUpItem(Item newItem, Inventory inventory, Class<? extends Item> itemClass) {
+        Item pickedUpItem;
+        if (inventory.getItem(itemClass) != null) {
+            pickedUpItem = inventory.getItem(itemClass);
+        } else {
+            pickedUpItem = newItem;
+        }
+        inventory.addItem(pickedUpItem);
+        System.out.println("A " + pickedUpItem.getType() + " has been picked up!");
     }
 
 }

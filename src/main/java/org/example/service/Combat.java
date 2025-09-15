@@ -17,6 +17,7 @@ public class Combat {
 
         System.out.println("It's a " + e.getName() + "!");
         while (true) {
+            p.displayHealth();
             System.out.println("What would you like to do?");
             System.out.println("1. Fight");
             System.out.println("2. Use an item");
@@ -47,8 +48,12 @@ public class Combat {
                     }
                     break;
                 case "3":
-                    if(tryRunAway(p, e))
+                    if (tryRunAway(p, e)) {
                         return;
+                    } else {
+                        System.out.println("You can't get away!");
+                        attackByEnemy(p, e);
+                    }
                 default:
                     System.out.println("That is not an option!");
             }
@@ -60,9 +65,6 @@ public class Combat {
         if (randInt < 5) {
             System.out.println("You run away!");
             return true;
-        } else {
-            System.out.println("You can't get away!");
-            attackByEnemy(p, e);
         }
         return false;
     }
@@ -100,7 +102,7 @@ public class Combat {
 
     private void damageTaken(Player player, Enemy enemy) {
         int damageReceived = enemy.getDamage();
-        player.setHealth(damageReceived);
+        player.setHealth(player.getHealth() - damageReceived);
     }
 
     private void damageGiven(Enemy enemy, int damage) {

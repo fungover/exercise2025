@@ -15,10 +15,22 @@ public class Player implements Health, Position {
         return name;
     }
 
+    @Override
     public void setHealth(int health) {
         this.health = health;
     }
 
+    @Override
+    public void increaseHealth(int amount) {
+        this.health += amount;
+    }
+
+    @Override
+    public void decreaseHealth(int amount) {
+        this.health -= amount;
+    }
+
+    @Override
     public int getHealth() {
         return health;
     }

@@ -27,6 +27,7 @@ public class Combat {
 
             switch (userInput) {
                 case "1":
+                    System.out.println(); // Line Break
                     attackEnemy(w, e);
                     if (e.getHealth() <= 0) {
                         System.out.println("You won!");
@@ -39,21 +40,21 @@ public class Combat {
                     }
                     break;
                 case "2":
+                    System.out.println();
                     if (hp == null) {
                         System.out.println("You have no potions!");
                     } else {
                         System.out.println("You use a health potion!");
-                        p.setHealth(hp.restoreHealth());
+                        p.increaseHealth(hp.restoreHealth());
                         inventory.removeItem(hp);
                     }
                     break;
                 case "3":
+                    System.out.println();
                     if (tryRunAway(p, e)) {
                         return;
-                    } else {
-                        System.out.println("You can't get away!");
-                        attackByEnemy(p, e);
                     }
+                    break;
                 default:
                     System.out.println("That is not an option!");
             }
@@ -65,25 +66,21 @@ public class Combat {
         if (randInt < 5) {
             System.out.println("You run away!");
             return true;
+        } else {
+            System.out.println("You can't get away!");
+            attackByEnemy(p, e);
         }
         return false;
     }
 
     private void attackEnemy(Weapon w, Enemy e) {
         int randInt = rand.generateNumber(1, 10);
-        int damage;
-
-        // If player has no weapon in hand.
-        if (w == null) {
-            damage = randInt;
-        } else {
-            damage = w.getDamage();
-        }
+        int damage = w.getDamage();
 
         if (randInt < 7) {
             System.out.println("You swing your sword!\nDealing " +
                     damage + " damage!");
-            damageGiven(e, damage);
+            damageDealt(e, damage);
         } else {
             System.out.println("You missed!");
         }
@@ -91,7 +88,7 @@ public class Combat {
 
     private void attackByEnemy(Player p, Enemy e) {
         int randInt = rand.generateNumber(1, 10);
-        if (randInt < 7) {
+        if (randInt <= 7) {
             System.out.println("The " + e.getName() + " strikes at you!"
                     + "\nThey dealt " + e.getDamage() + " damage!");
             damageTaken(p, e);
@@ -100,13 +97,12 @@ public class Combat {
         }
     }
 
-    private void damageTaken(Player player, Enemy enemy) {
-        int damageReceived = enemy.getDamage();
-        player.setHealth(player.getHealth() - damageReceived);
+    private void damageTaken(Player p, Enemy e) {
+        int damageReceived = e.getDamage();
+        p.decreaseHealth(damageReceived);
     }
 
-    private void damageGiven(Enemy enemy, int damage) {
-        int damageDealt = enemy.getHealth() - damage;
-        enemy.setHealth(damageDealt);
+    private void damageDealt(Enemy e, int damage) {
+        e.decreaseHealth(damage);
     }
 }

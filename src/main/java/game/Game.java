@@ -29,7 +29,7 @@ public class Game {
     public void run() {
         while (true) {
             // Below method prints the map and shows all placements for testing purposes.
-            // dungeon.printDungeon(player, enemyList);
+            //dungeon.printDungeon(player, enemyList);
 
             System.out.println("Move (W: go up, S: go down, A: go left, D: go right, Q: quit): ");
             String input = scanner.nextLine();
@@ -44,7 +44,6 @@ public class Game {
     public void mapSetup() {
         Potion potion = new Potion("Potion", 50);
         dungeon.placeItem(4, 5, potion);
-        dungeon.placeItem(5, 3, potion);
         dungeon.placeItem(5, 3, potion);
         dungeon.placeItem(7, 2, potion);
         dungeon.placeItem(5, 4, potion);

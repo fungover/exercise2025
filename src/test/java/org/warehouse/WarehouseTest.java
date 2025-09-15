@@ -15,47 +15,59 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class WarehouseTest {
   Warehouse warehouse = new Warehouse("Test warehouse");
 
-  Product product = new Product(
-          "1",
-          "Film",
-          Category.THRILLER,
-          10,
-          LocalDate.now(),
-          LocalDate.now());
+  Product product = new Product.Builder()
+          .setId("1")
+          .setName("Film")
+          .setCategory(Category.THRILLER)
+          .setRating(10)
+          .setCreatedDate(LocalDate.now())
+          .setModifiedDate(LocalDate.now())
+          .build();
 
-  Product product2 = new Product(
-          "2",
-          "A",
-          Category.THRILLER,
-          10,
-          LocalDate.now(),
-          LocalDate.now());
+  Product product2 = new Product.Builder()
+          .setId("2")
+          .setName("Film2")
+          .setCategory(Category.THRILLER)
+          .setRating(10)
+          .setCreatedDate(LocalDate.now())
+          .setModifiedDate(LocalDate.now())
+          .build();
 
-  Product product3 = new Product(
-          "3",
-          "B",
-          Category.THRILLER,
-          10,
-          LocalDate.now(),
-          LocalDate.now());
+  Product product3 = new Product.Builder()
+          .setId("3")
+          .setName("Film3")
+          .setCategory(Category.THRILLER)
+          .setRating(10)
+          .setCreatedDate(LocalDate.now())
+          .setModifiedDate(LocalDate.now())
+          .build();
 
-  Product oldProduct = new Product(
-          "4", "OldFilm", Category.THRILLER, 7,
-          LocalDate.of(2025, 8, 1), LocalDate.of(2025, 9, 9)
-  );
+  Product oldProduct = new Product.Builder()
+          .setId("4")
+          .setName("OldFilm")
+          .setCategory(Category.THRILLER)
+          .setRating(7)
+          .setCreatedDate(LocalDate.of(2025, 8, 1))
+          .setModifiedDate(LocalDate.of(2025, 9, 9))
+          .build();
 
-  Product newProduct = new Product(
-          "5", "NewFilm", Category.THRILLER, 8,
-          LocalDate.of(2025, 9, 10), LocalDate.of(2025, 9, 11)
-  );
+  Product newProduct = new Product.Builder()
+          .setId("5")
+          .setName("NewFilm")
+          .setCategory(Category.THRILLER)
+          .setRating(7)
+          .setCreatedDate(LocalDate.of(2025, 9, 10))
+          .setModifiedDate(LocalDate.of(2025, 9, 11))
+          .build();
 
-  Product productSameId = new Product(
-          "1",
-          "Film2",
-          Category.THRILLER,
-          10,
-          LocalDate.now(),
-          LocalDate.now());
+  Product productSameId = new Product.Builder()
+          .setId("1")
+          .setName("Film2")
+          .setCategory(Category.THRILLER)
+          .setRating(10)
+          .setCreatedDate(LocalDate.now())
+          .setModifiedDate(LocalDate.now())
+          .build();
 
   @Test
   public void canCreateWarehouseAndGetName() {

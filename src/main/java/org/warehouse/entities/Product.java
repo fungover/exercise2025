@@ -3,19 +3,54 @@ package org.warehouse.entities;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public record Product(String id,
-                      String name,
-                      Category category,
-                      int rating,
-                      LocalDate createdDate,
-                      LocalDate modifiedDate) {
-  public Product {
-    Objects.requireNonNull(createdDate, "createdDate must not be null");
-    Objects.requireNonNull(modifiedDate, "modifiedDate must not be null");
-    if (modifiedDate.isBefore(createdDate)) {
-      throw new IllegalArgumentException("modifiedDate must not be before createdDate");
-      }
-    }
+public final class Product {
+  private final String id;
+  private final String name;
+  private final Category category;
+  private final int rating;
+  private final LocalDate createdDate;
+  private final LocalDate modifiedDate;
+
+  private Product(String id,
+                  String name,
+                  Category category,
+                  int rating,
+                  LocalDate createdDate,
+                  LocalDate modifiedDate) {
+    if (id == null) throw new IllegalArgumentException("id must not be null");
+    if (name == null || name.isBlank()) throw new IllegalArgumentException("name must not be null or blank");
+    if (category == null) throw new IllegalArgumentException("category must not be null");
+    if (rating < 0 || rating > 10) throw new IllegalArgumentException("rating must be between 0 and 10");
+    if (createdDate == null) throw new IllegalArgumentException("createdDate must not be null");
+    if (modifiedDate == null) throw new IllegalArgumentException("modifiedDate must not be null");
+    if (modifiedDate.isBefore(createdDate)) throw new IllegalArgumentException("modifiedDate must not be before createdDate");
+
+    this.id = id;
+    this.name = name;
+    this.category = category;
+    this.rating = rating;
+    this.createdDate = createdDate;
+    this.modifiedDate = modifiedDate;
+  }
+
+  public String id() {
+    return id;
+  }
+  public String name() {
+    return name;
+  }
+  public Category category() {
+    return category;
+  }
+  public int rating() {
+    return rating;
+  }
+  public LocalDate createdDate() {
+    return createdDate;
+  }
+  public LocalDate modifiedDate() {
+    return modifiedDate;
+  }
 
     public static class Builder {
     private String id;
@@ -56,20 +91,11 @@ public record Product(String id,
     }
 
     public Product build() {
-      if (id == null) throw new IllegalArgumentException("id must not be null");
-      if(name == null || name.isBlank()) throw new IllegalArgumentException("name must not be null or be blank");
-      if(category == null) throw new IllegalArgumentException("category must not be null");
-      if(rating < 0 || rating > 10) {
-        throw new IllegalArgumentException("rating must be between 0 and 10");
-      }
-      if(modifiedDate.isBefore(createdDate)) {
-        throw new IllegalArgumentException("modifiedDate must not be before createdDate");
-      }
       LocalDate now = LocalDate.now();
       if(createdDate == null) createdDate = now;
       if(modifiedDate == null) modifiedDate = now;
 
       return new Product(id, name, category, rating, createdDate, modifiedDate);
     }
-    }
+  }
 }

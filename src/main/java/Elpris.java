@@ -8,6 +8,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 
 class HourData {
@@ -37,15 +41,31 @@ public class Elpris {
         printMeanPrice(todayHours);
         printCheapestAndMostExpensive(todayHours);
 
+        BestChargingTime(todayHours, 2);
+        BestChargingTime(todayHours, 4);
+        BestChargingTime(todayHours, 8);
+
+
         if (tomorrowHours != null && !tomorrowHours.isEmpty()){
             System.out.println("\n=== Imorgon ===");
             printMeanPrice(tomorrowHours);
             printCheapestAndMostExpensive(tomorrowHours);
+
+            BestChargingTime(tomorrowHours, 2);
+            BestChargingTime(tomorrowHours, 4);
+            BestChargingTime(tomorrowHours, 8);
+
         } else {
             System.out.println("\nMorgondagen är ännu inte publicerad.");
         }
 
-    
+
+
+
+
+
+
+
     }
 
     public static String fetchJson(String urlString) {
@@ -114,13 +134,13 @@ public class Elpris {
             }
         }
 
-        System.out.println("Billigaste timmen: " + cheapest.time_start +
-                " - " + cheapest.time_end + " : " +
-                cheapest.SEK_per_kWh + " kr/kWh");
+        System.out.println("Billigaste timmen: " + formatTime(cheapest.time_start) +
+                " - " + formatTime(cheapest.time_end) + " : " +
+                String.format("%.3f", cheapest.SEK_per_kWh) + " kr/kWh");
 
-        System.out.println("Dyraste timmen: " + mostExpensive.time_start +
-                           " - " + mostExpensive.time_end + " : " +
-                mostExpensive.SEK_per_kWh + " kr/kWh");
+        System.out.println("Dyraste timmen: " + formatTime(mostExpensive.time_start) +
+                           " - " + formatTime(mostExpensive.time_end) + " : " +
+                           String.format("%.3f", mostExpensive.SEK_per_kWh) + " kr/kWh");
     }
 
 
@@ -129,5 +149,51 @@ public class Elpris {
         String formattedDate = date.format(formatter);
         return "https://www.elprisetjustnu.se/api/v1/prices/" + formattedDate + "_" + zone + ".json";
     }
+
+
+
+    public static void BestChargingTime(List<HourData> hours, int duration) {
+        if (hours.size() < duration) {
+            System.out.println("Det finns förnärvarande inte tillräckligt många timmar i datan.");
+            return;
+
+        }
+
+        double bestAvg = Double.MAX_VALUE;
+        int bestStartIndex = 0;
+
+        for (int i = 0; i <= hours.size() - duration; i++) {
+            double sum = 0;
+            for (int j = 0; j <duration; j++) {
+                sum += hours.get(i + j).SEK_per_kWh;
+            }
+
+            double avg = sum / duration;
+
+            if (avg < bestAvg) {
+                bestAvg = avg;
+                bestStartIndex = i;
+            }
+        }
+
+        HourData start = hours.get(bestStartIndex);
+        HourData end = hours.get(bestStartIndex + duration -1);
+
+        System.out.println("Det här är bästa tiden för laddning (" + duration + "h): " +
+                formatTime(start.time_start) + " - " + formatTime(end.time_end) +
+                " med snittpris " + String.format("%.3f", bestAvg) + " kr/kWh");
+    }
+
+
+    public static String formatTime(String isoString) {
+      LocalDateTime time = OffsetDateTime.parse(isoString, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                                         .toLocalDateTime();
+      return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+
+
+
+
 
 }

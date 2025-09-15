@@ -419,29 +419,44 @@ class WarehouseTest {
         assertTrue(categories.isEmpty()); // Verify that the result is an empty set
     }
 
-//    // ========================================
-//    // TESTS FOR countProductsInCategory(Category category)
-//    // ========================================
-//
-//    @Test
-//    @DisplayName("Should count product in a category correctly")
-//    void countProductsInCategorySuccessfullyWhenThereAreProductsInCategory() {
-//
-//        Product laptop = Warehouse.createProduct("1", "Laptop", Category.ELECTRONICS, 9);
-//        Product mouse = Warehouse.createProduct("2", "Mouse", Category.ELECTRONICS, 7);
-//        Product book = Warehouse.createProduct("3", "Book", Category.BOOKS, 3);
-//
-//        warehouse.addProduct(laptop);
-//        warehouse.addProduct(mouse);
-//        warehouse.addProduct(book);
-//
-//        long electronicsCount = warehouse.countProductsInCategory(Category.ELECTRONICS); // Count products in the ELECTRONICS category
-//        long booksCount = warehouse.countProductsInCategory(Category.BOOKS); // Count products in the BOOKS category
-//
-//        assertEquals(2, electronicsCount); // Verify that there are 2 products in the ELECTRONICS category
-//        assertEquals(1, booksCount); // Verify that there is 1 product in the BOOKS category
-//    }
-//
+    // ========================================
+    // TESTS FOR countProductsInCategory(Category category)
+    // ========================================
+
+    @Test
+    @DisplayName("Should count product in a category correctly")
+    void countProductsInCategorySuccessfullyWhenThereAreProductsInCategory() {
+
+        Product laptop = new Product.Builder()
+                .id("1")
+                .name("Laptop")
+                .category(Category.ELECTRONICS)
+                .rating(9)
+                .build();
+        Product mouse = new Product.Builder()
+                .id("2")
+                .name("Mouse")
+                .category(Category.ELECTRONICS)
+                .rating(7)
+                .build();
+        Product book = new Product.Builder()
+                .id("3")
+                .name("Book")
+                .category(Category.BOOKS)
+                .rating(3)
+                .build();
+
+        warehouse.addProduct(laptop);
+        warehouse.addProduct(mouse);
+        warehouse.addProduct(book);
+
+        long electronicsCount = warehouse.countProductsInCategory(Category.ELECTRONICS); // Count products in the ELECTRONICS category
+        long booksCount = warehouse.countProductsInCategory(Category.BOOKS); // Count products in the BOOKS category
+
+        assertEquals(2, electronicsCount); // Verify that there are 2 products in the ELECTRONICS category
+        assertEquals(1, booksCount); // Verify that there is 1 product in the BOOKS category
+    }
+
 //    @Test
 //    @DisplayName("Should return 0 when no products exists in the specified category")
 //    void countProductsInCategoryWhenThereIsNoProductsInTheSpecifiedCategory() {

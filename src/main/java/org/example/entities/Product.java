@@ -80,4 +80,11 @@ public class Product {
         }
         return new Product(this.id, name, category, rating, this.createdDate, LocalDateTime.now());
     }
+
+    public static class Builder {
+        private String id;
+        private String name;
+        private Category category;
+        private int rating;
+    }
 }

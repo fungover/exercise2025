@@ -3,7 +3,7 @@ package map;
 import entities.Item;
 
 public class Tile {
-    private TileType tileType;
+    private final TileType tileType;
     private Item item;
 
     public Tile(TileType type) {
@@ -12,14 +12,6 @@ public class Tile {
 
     public TileType getType() {
         return this.tileType;
-    }
-
-    public void setType(TileType type) {
-        this.tileType = type;
-    }
-
-    public boolean isWalkable(TileType tileType) {
-        return this.tileType == TileType.FLOOR;
     }
 
     public Item getItem() {

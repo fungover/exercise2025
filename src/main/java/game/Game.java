@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Game {
-    Dungeon dungeon = new Dungeon(10, 10);
+    private final Dungeon dungeon = new Dungeon(10, 10);
     Player player = new Player(1, 1, 100, 50);
-    List<Enemy> enemyList = new ArrayList<Enemy>();
-    Scanner scanner = new Scanner(System.in);
+    private final List<Enemy> enemyList = new ArrayList<Enemy>();
+    private final Scanner scanner = new Scanner(System.in);
 
     public Game() {
 

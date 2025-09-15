@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class WarehouseTest {
 
@@ -42,17 +41,22 @@ class WarehouseTest {
         assertEquals(1, products.size()); // Check that the size of the product list is 1
         assertTrue(products.contains(testProduct)); // Check that the added product is in the list
     }
-//
-//    @Test
-//    @DisplayName("Should throw IllegalArgumentException when adding product with empty name")
-//    void addProductWithEmptyName() {
-//
-//        IllegalArgumentException exception = assertThrows(
-//                IllegalArgumentException.class,
-//                () -> new Product("2", "    ", Category.BOOKS, 5, LocalDate.now(), LocalDate.now())
-//        );
-//        assertEquals("Name cannot be empty", exception.getMessage());
-//    }
+
+    @Test
+    @DisplayName("Should throw IllegalArgumentException when adding product with empty name")
+    void addProductWithEmptyName() {
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> new Product.Builder()
+                        .id("2")
+                        .name("   ")
+                        .category(Category.BOOKS)
+                        .rating(5)
+                        .build()
+        );
+        assertEquals("Name is required", exception.getMessage());
+    }
 //
 //    @Test
 //    @DisplayName("Should throw eception when adding null product")

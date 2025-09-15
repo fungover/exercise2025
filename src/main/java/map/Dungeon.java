@@ -48,7 +48,7 @@ public class Dungeon {
 
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return this.height;
     }
 
@@ -83,6 +83,9 @@ public class Dungeon {
     }
 
     public boolean isWalkable(int x, int y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            return false;
+        }
         return map[y][x].getType() == TileType.FLOOR;
     }
 
@@ -98,11 +101,16 @@ public class Dungeon {
         }
         return map[y][x].getItem();
     }
+
     public void removeItemAt(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height) {
             return;
         }
         map[y][x].setItem(null);
+    }
+
+    public int getWidth() {
+        return this.width;
     }
 }
 

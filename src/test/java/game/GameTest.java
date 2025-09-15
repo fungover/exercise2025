@@ -13,4 +13,16 @@ class GameTest {
         game.handleInput("d");
         assertEquals(oldX + 1, game.player.getX());
     }
+
+    @Test
+    public void testHandleInput_MoveDown() {
+        Game game = new Game();
+        int oldY = game.player.getY();
+        game.handleInput("s");
+        assertEquals(oldY + 1, game.player.getY());
+    }
+
+    @Test
+    public void
+
 }

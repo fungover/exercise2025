@@ -68,7 +68,7 @@ public class Product implements Sellable {
         return "Product{" + "id='" + id + '\'' + ", name='" + name + '\'' + ", category=" + category + '}';
     }
 
-    // ---------- Builder ----------
+    // Builder
 
     public static class Builder {
         private String id;

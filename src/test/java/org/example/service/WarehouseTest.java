@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -371,29 +372,44 @@ class WarehouseTest {
         assertTrue(modifiedProducts.isEmpty()); // Verify that the result is an empty list
     }
 
-//    // ========================================
-//    // TESTS FOR getCategoriesWithProducts()
-//    // ========================================
-//
-//    @Test
-//    @DisplayName("Should return all categories with atleast one product.")
-//    void getCategoriesWithProductsSuccessfullyWhenThereAreProducts() {
-//
-//        Product laptop = Warehouse.createProduct("1", "Laptop", Category.ELECTRONICS, 9);
-//        Product book = Warehouse.createProduct("2", "Book", Category.BOOKS, 8);
-//        Product mouse = Warehouse.createProduct("3", "Mouse", Category.ELECTRONICS, 7);
-//
-//        warehouse.addProduct(laptop);
-//        warehouse.addProduct(book);
-//        warehouse.addProduct(mouse);
-//
-//        Set<Category> categories = warehouse.getCategoriesWithProducts(); // Retrieve the set of categories with at least one product
-//
-//        assertEquals(2, categories.size()); // Verify that there are 2 unique categories
-//        assertTrue(categories.contains(Category.ELECTRONICS)); // Verify that the ELECTRONICS category is included
-//        assertTrue(categories.contains(Category.BOOKS)); // Verify that the BOOKS category is included
-//    }
-//
+    // ========================================
+    // TESTS FOR getCategoriesWithProducts()
+    // ========================================
+
+    @Test
+    @DisplayName("Should return all categories with atleast one product.")
+    void getCategoriesWithProductsSuccessfullyWhenThereAreProducts() {
+
+        Product laptop = new Product.Builder()
+                .id("1")
+                .name("Laptop")
+                .category(Category.ELECTRONICS)
+                .rating(9)
+                .build();
+        Product book = new Product.Builder()
+                .id("2")
+                .name("Book")
+                .category(Category.BOOKS)
+                .rating(8)
+                .build();
+        Product mouse = new Product.Builder()
+                .id("3")
+                .name("Mouse")
+                .category(Category.ELECTRONICS)
+                .rating(7)
+                .build();
+
+        warehouse.addProduct(laptop);
+        warehouse.addProduct(book);
+        warehouse.addProduct(mouse);
+
+        Set<Category> categories = warehouse.getCategoriesWithProducts(); // Retrieve the set of categories with at least one product
+
+        assertEquals(2, categories.size()); // Verify that there are 2 unique categories
+        assertTrue(categories.contains(Category.ELECTRONICS)); // Verify that the ELECTRONICS category is included
+        assertTrue(categories.contains(Category.BOOKS)); // Verify that the BOOKS category is included
+    }
+
 //    @Test
 //    @DisplayName("Should return empty set when there are no products")
 //    void getCategoriesWithProductsWhenThereAreNoProducts() {

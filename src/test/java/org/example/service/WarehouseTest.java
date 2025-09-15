@@ -21,19 +21,36 @@ class WarehouseTest {
     }
 
     @Test void productAddedToWareHouseInventory() {
-        Product laptop = new Product("Laptop", Category.ELECTRONICS, 4);
+        Product laptop = new Product.Builder().name("Laptop")
+                                              .category(Category.ELECTRONICS)
+                                              .rating(4)
+                                              .build();
+
+
         assertTrue(warehouse.addProduct(laptop));
     }
 
     @Test void productAddedWithEmptyName() {
         Warehouse warehouse = new Warehouse();
-        Product laptop = new Product("", Category.ELECTRONICS, 4);
-        assertFalse(warehouse.addProduct(laptop));
+//        Product laptop = new Product.Builder().name("")
+//                                              .category(Category.ELECTRONICS)
+//                                              .rating(4)
+//                                              .build();
+        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(
+          new Product.Builder().name("")
+                               .category(Category.ELECTRONICS)
+                               .rating(4)
+                               .build()));
+//        assertFalse(warehouse.addProduct(laptop));
 
     }
 
     @Test void updateProduct_Valid() {
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .build();
+
         warehouse.addProduct(lamp);
 
         String idAsString = String.valueOf(lamp.id());
@@ -54,15 +71,27 @@ class WarehouseTest {
     }
 
     @Test void updateProduct_Invalid() {
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .build();
+
+
         warehouse.addProduct(lamp);
         assertThrows(IllegalArgumentException.class,
           () -> warehouse.updateProduct("3", "blueLaptop", Category.FOOD, 3));
     }
 
     @Test void getAllProducts_Valid() {
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
-        Product cpu = new Product("cpu", Category.ELECTRONICS, 2);
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .build();
+        Product cpu = new Product.Builder().name("cpu")
+                                           .category(Category.ELECTRONICS)
+                                           .rating(2)
+                                           .build();
+
 
         warehouse.addProduct(lamp);
         warehouse.addProduct(cpu);
@@ -73,8 +102,14 @@ class WarehouseTest {
     }
 
     @Test void getAllProducts_ShouldUpdateAfterRemoval() {
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
-        Product cpu = new Product("cpu", Category.ELECTRONICS, 2);
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .build();
+        Product cpu = new Product.Builder().name("cpu")
+                                           .category(Category.ELECTRONICS)
+                                           .rating(2)
+                                           .build();
 
         warehouse.addProduct(lamp);
         warehouse.addProduct(cpu);
@@ -97,10 +132,28 @@ class WarehouseTest {
     }
 
     @Test void getProductsByCategorySorted_valid() {
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
-        Product pc = new Product("PC", Category.ELECTRONICS, 4);
-        Product dogFood = new Product("DogFood", Category.FOOD, 2);
-        Product catFood = new Product("CatFood", Category.FOOD, 7);
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .build();
+
+        Product pc = new Product.Builder().name("PC")
+                                          .category(Category.ELECTRONICS)
+                                          .rating(4)
+                                          .build();
+
+
+        Product dogFood = new Product.Builder().name("DogFood")
+                                               .category(Category.FOOD)
+                                               .rating(2)
+                                               .build();
+
+        Product catFood = new Product.Builder().name("CatFood")
+                                               .category(Category.FOOD)
+                                               .rating(7)
+                                               .build();
+
+
         warehouse.addProduct(lamp);
         warehouse.addProduct(pc);
         warehouse.addProduct(dogFood);
@@ -118,8 +171,15 @@ class WarehouseTest {
     }
 
     @Test void getProductsByCategorySorted_invalid() {
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
-        Product pc = new Product("PC", Category.ELECTRONICS, 4);
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .build();
+
+        Product pc = new Product.Builder().name("PC")
+                                          .category(Category.ELECTRONICS)
+                                          .rating(4)
+                                          .build();
 
         warehouse.addProduct(lamp);
         warehouse.addProduct(pc);
@@ -138,9 +198,24 @@ class WarehouseTest {
         LocalDate daysFromCheck5 = LocalDate.now() // 5 After today
                                             .plusDays(5);
 
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10, daysFromCheck5);
-        Product pc = new Product("PC", Category.ELECTRONICS, 4, daysFromCheck5);
-        Product ps5 = new Product("Super Delux Playstaion", Category.ELECTRONICS, 4);
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .createdDate(daysFromCheck5)
+                                            .build();
+//          ("lamp", Category.ELECTRONICS, 10, daysFromCheck5);
+        Product pc = new Product.Builder().name("PC")
+                                          .category(Category.ELECTRONICS)
+                                          .rating(4)
+                                          .createdDate(daysFromCheck5)
+                                          .build();
+//          ("PC", Category.ELECTRONICS, 4, daysFromCheck5);
+
+        Product ps5 = new Product.Builder().name("Super Delux Playstaion")
+                                           .category(Category.ELECTRONICS)
+                                           .rating(4)
+                                           .build();
+//          ("Super Delux Playstaion", Category.ELECTRONICS, 4);
 
         warehouse.addProduct(lamp);
         warehouse.addProduct(pc);
@@ -153,12 +228,29 @@ class WarehouseTest {
     @Test void getProductsCreatedAfter_invalid() {
         LocalDate testDate = LocalDate.now(); // todays date
 
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10,
-          testDate.minusDays(1));
-        Product pc = new Product("PC", Category.ELECTRONICS, 4,
-          testDate.minusDays(2));
-        Product ps5 = new Product("Super Delux Playstaion", Category.ELECTRONICS, 6,
-          testDate.minusDays(3));
+        Product lamp = new Product.Builder().name("lmap")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .createdDate(testDate.minusDays(1))
+                                            .build();
+
+//          ("lamp", Category.ELECTRONICS, 10,
+//          testDate.minusDays(1));
+
+        Product pc = new Product.Builder().name("PC")
+                                          .category(Category.ELECTRONICS)
+                                          .rating(4)
+                                          .createdDate(testDate.minusDays(2))
+                                          .build();
+//          ("PC", Category.ELECTRONICS, 4,
+//          testDate.minusDays(2));
+        Product ps5 = new Product.Builder().name("Super Delux Playstaion")
+                                           .category(Category.ELECTRONICS)
+                                           .rating(6)
+                                           .createdDate(testDate.minusDays(3))
+                                           .build();
+//          ("Super Delux Playstaion", Category.ELECTRONICS, 6,
+//          testDate.minusDays(3));
 
         warehouse.addProduct(lamp);
         warehouse.addProduct(pc);
@@ -172,8 +264,22 @@ class WarehouseTest {
     @Test void getModifiedProducts_valid() {
         LocalDate testDate = LocalDate.now()
                                       .minusDays(2);
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10, testDate);
-        Product pc = new Product("PC", Category.ELECTRONICS, 4, testDate);
+        Product lamp = new Product.Builder().name("lmap")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .createdDate(testDate)
+                                            .modifiedDate(testDate)
+
+                                            .build();
+//          ("lamp", Category.ELECTRONICS, 10, testDate);
+        Product pc = new Product.Builder().name("PC")
+                                          .category(Category.ELECTRONICS)
+                                          .rating(4)
+                                          .createdDate(testDate)
+                                          .modifiedDate(testDate)
+                                          .build();
+//          ("PC", Category.ELECTRONICS, 4, testDate);
+
         warehouse.addProduct(lamp);
         warehouse.addProduct(pc);
 
@@ -187,8 +293,16 @@ class WarehouseTest {
     @Test void getModifiedProducts_invalid() {
         //when we modify a Product its modified date is set to the day its modified.
         //this can be changed by using LocalDateTime instead of LocalDate
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
-        Product pc = new Product("PC", Category.ELECTRONICS, 4);
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .build();
+//          ("lamp", Category.ELECTRONICS, 10);
+        Product pc = new Product.Builder().name("PC")
+                                          .category(Category.ELECTRONICS)
+                                          .rating(4)
+                                          .build();
+//          ("PC", Category.ELECTRONICS, 4);
         warehouse.addProduct(lamp);
         warehouse.addProduct(pc);
 
@@ -204,11 +318,29 @@ class WarehouseTest {
     //vg
     @Test void getCategoriesWithProducts_valid() {
         // 2 electronics 2 food 1 game
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
-        Product pc = new Product("PC", Category.ELECTRONICS, 4);
-        Product hotdog = new Product("HotDog", Category.FOOD, 4);
-        Product angryFish = new Product("AngryFish", Category.FOOD, 6);
-        Product sillyBirds = new Product("SillyBirds", Category.GAMES, 9);
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .build();
+        Product pc = new Product.Builder().name("PC")
+                                          .category(Category.ELECTRONICS)
+                                          .rating(4)
+                                          .build();
+        Product hotdog = new Product.Builder().name("HotDog")
+                                              .category(Category.FOOD)
+                                              .rating(4)
+                                              .build();
+//          ("HotDog", Category.FOOD, 4);
+        Product angryFish = new Product.Builder().name("AngryFish")
+                                                 .category(Category.FOOD)
+                                                 .rating(6)
+                                                 .build();
+//          ("AngryFish", Category.FOOD, 6);
+        Product sillyBirds = new Product.Builder().name("SillyBirds")
+                                                  .category(Category.GAMES)
+                                                  .rating(9)
+                                                  .build();
+//          ("SillyBirds", Category.GAMES, 9);
         warehouse.addProduct(lamp);
         warehouse.addProduct(pc);
         warehouse.addProduct(hotdog);
@@ -232,11 +364,28 @@ class WarehouseTest {
 
     @Test void countProductsInCategory_valid() {
         // 2 electronics 2 food 1 game
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
-        Product pc = new Product("PC", Category.ELECTRONICS, 4);
-        Product hotdog = new Product("HotDog", Category.FOOD, 4);
-        Product angryFish = new Product("AngryFish", Category.FOOD, 6);
-        Product sillyBirds = new Product("SillyBirds", Category.GAMES, 9);
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .build();
+        Product pc = new Product.Builder().name("PC")
+                                          .category(Category.ELECTRONICS)
+                                          .rating(4)
+                                          .build();
+        Product hotdog = new Product.Builder().name("HotDog")
+                                              .category(Category.FOOD)
+                                              .rating(4)
+                                              .build();
+//          ("HotDog", Category.FOOD, 4);
+        Product angryFish = new Product.Builder().name("AngryFish")
+                                                 .category(Category.FOOD)
+                                                 .rating(6)
+                                                 .build();
+//          ("AngryFish", Category.FOOD, 6);
+        Product sillyBirds = new Product.Builder().name("SillyBirds")
+                                                  .category(Category.GAMES)
+                                                  .rating(9)
+                                                  .build();
         warehouse.addProduct(lamp);
         warehouse.addProduct(pc);
         warehouse.addProduct(hotdog);
@@ -268,11 +417,30 @@ class WarehouseTest {
     }
 
     @Test void getProductInitialsMap() {
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10);
-        Product LargePc = new Product("LargePC", Category.ELECTRONICS, 4);
-        Product hotdog = new Product("HotDog", Category.FOOD, 4);
-        Product angryFish = new Product("AngryFish", Category.FOOD, 6);
-        Product sillyBirds = new Product("SillyBirds", Category.GAMES, 9);
+
+
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .build();
+        Product LargePc = new Product.Builder().name("LargePC")
+                                               .category(Category.ELECTRONICS)
+                                               .rating(4)
+                                               .build();
+        Product hotdog = new Product.Builder().name("HotDog")
+                                              .category(Category.FOOD)
+                                              .rating(4)
+                                              .build();
+//          ("HotDog", Category.FOOD, 4);
+        Product angryFish = new Product.Builder().name("AngryFish")
+                                                 .category(Category.FOOD)
+                                                 .rating(6)
+                                                 .build();
+//          ("AngryFish", Category.FOOD, 6);
+        Product sillyBirds = new Product.Builder().name("SillyBirds")
+                                                  .category(Category.GAMES)
+                                                  .rating(9)
+                                                  .build();
         warehouse.addProduct(lamp);
         warehouse.addProduct(LargePc);
         warehouse.addProduct(hotdog);
@@ -286,7 +454,12 @@ class WarehouseTest {
     }
 
     @Test void getProductInitialsMap_invalid_nonLetterInitials() {
-        Product emptyNameProduct = new Product("1Lamp", Category.ELECTRONICS, 4);
+        Product emptyNameProduct = new Product.Builder().name("1Lamp")
+                                                        .category(
+                                                          Category.ELECTRONICS)
+                                                        .rating(4)
+                                                        .build();
+//          ("1Lamp", Category.ELECTRONICS, 4);
         warehouse.addProduct(emptyNameProduct);
         Map<Character, Integer> initialsMap = warehouse.getProductInitialsMap();
         System.out.println(initialsMap);
@@ -295,21 +468,47 @@ class WarehouseTest {
 
     @Test void getTopRatedProductsThisMonth_valid_CheckCorrectOrder() {
         LocalDate today = LocalDate.now();
-
-
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10,
-          today.minusMonths(1));
-        Product LargePc = new Product("LargePC", Category.ELECTRONICS, 8);
-        Product hotdog = new Product("HotDog", Category.FOOD, 10,
-          today.plusMonths(1));
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .createdDate(today.minusMonths(1))
+                                            .build();
+        Product LargePc = new Product.Builder().name("LargePC")
+                                               .category(Category.ELECTRONICS)
+                                               .rating(8)
+                                               .build();
+        Product hotdog = new Product.Builder().name("HotDog")
+                                              .category(Category.FOOD)
+                                              .rating(10)
+                                              .createdDate(today.plusMonths(1))
+                                              .build();
+//          ("HotDog", Category.FOOD, 4);
         //this should be the last one cuz we  create that 3 days before everyone else
-        Product angryFish = new Product("AngryFish", Category.FOOD, 10,
-          today.minusDays(3));
-        //this should be the first one cuz we create it 4 days in the future
-        Product sillyBirds = new Product("SillyBirds", Category.GAMES, 10,
-          today.plusDays(4));
-        Product sadBirds = new Product("SadBirds", Category.GAMES, 10, today);
-        Product heavyBirds = new Product("HeavyBirds", Category.GAMES, 10, today);
+        Product angryFish = new Product.Builder().name("AngryFish")
+                                                 .category(Category.FOOD)
+                                                 .rating(10)
+                                                 .createdDate(today.minusDays(3))
+                                                 .build();
+//this should be the first one cuz we create it 4 days in the future
+        Product sillyBirds = new Product.Builder().name("SillyBirds")
+                                                  .category(Category.GAMES)
+                                                  .rating(10)
+                                                  .createdDate(today.plusDays(4))
+                                                  .build();
+
+
+        Product sadBirds = new Product.Builder().name("SadBirds")
+                                                .category(Category.GAMES)
+                                                .rating(10)
+                                                .createdDate(today)
+                                                .build();
+
+        Product heavyBirds = new Product.Builder().name("HeavyBirds")
+                                                  .category(Category.GAMES)
+                                                  .rating(10)
+                                                  .createdDate(today)
+                                                  .build();
+
         warehouse.addProduct(lamp);
         warehouse.addProduct(LargePc);
         warehouse.addProduct(hotdog);
@@ -331,9 +530,24 @@ class WarehouseTest {
         LocalDate lastMonth = LocalDate.now()
                                        .minusMonths(1);
 
-        Product lamp = new Product("lamp", Category.ELECTRONICS, 10, lastMonth);
-        Product LargePc = new Product("LargePC", Category.ELECTRONICS, 8, lastMonth);
-        Product hotdog = new Product("HotDog", Category.FOOD, 10, lastMonth);
+        Product lamp = new Product.Builder().name("lamp")
+                                            .category(Category.ELECTRONICS)
+                                            .rating(10)
+                                            .createdDate(lastMonth)
+                                            .build();
+
+        Product LargePc = new Product.Builder().name("largePC")
+                                               .category(Category.ELECTRONICS)
+                                               .rating(8)
+                                               .createdDate(lastMonth)
+                                               .build();
+
+        Product hotdog = new Product.Builder().name("HotDog")
+                                              .category(Category.FOOD)
+                                              .rating(10)
+                                              .createdDate(lastMonth)
+                                              .build();
+
         warehouse.addProduct(lamp);
         warehouse.addProduct(LargePc);
         warehouse.addProduct(hotdog);

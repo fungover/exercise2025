@@ -9,7 +9,7 @@ public record Product(Long id, String name, Category category, int rating,
     private static long idCounter = 1;
 
     //constructor
-    public Product(String name, Category category, int rating) {
+    private Product(String name, Category category, int rating) {
         if (rating < 0 || rating > 10) {
             throw new IllegalArgumentException("rating should be between 0 and 10");
 
@@ -18,8 +18,8 @@ public record Product(Long id, String name, Category category, int rating,
     }
 
     //test constructor to give other dates.
-    public Product(String name, Category category, int rating,
-                   LocalDate createdDate) {
+    private Product(String name, Category category, int rating,
+                    LocalDate createdDate) {
         if (rating < 0 || rating > 10) {
             throw new IllegalArgumentException("rating should be between 0 and 10");
         }
@@ -65,6 +65,12 @@ public record Product(Long id, String name, Category category, int rating,
             return this;
         }
 
+        /*this is like the new constructor.
+         Product laptop = new Product.Builder().name("Laptop")
+                                              .category(Category.ELECTRONICS)
+                                              .rating(4)
+                                              .build();
+         */
         public Product build() {
             //add validations
             if (name == null || name.isEmpty()) {

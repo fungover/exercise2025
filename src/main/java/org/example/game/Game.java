@@ -1,6 +1,7 @@
 package org.example.game;
 
 import org.example.entities.Inventory;
+import org.example.entities.Item;
 import org.example.entities.Player;
 import org.example.map.MapCreation;
 import org.example.service.MovementEnum;
@@ -12,6 +13,22 @@ public class Game {
         MapCreation map = new MapCreation(10, 10);
 
         Scanner scanner = new Scanner(System.in);
+
+        System.out.println("You wandered into a room and finds a health potion and a great sword");
+        System.out.println("Do you wish to pick it up? Y/N");
+        String itemChoice = scanner.next();
+
+        if (itemChoice.equalsIgnoreCase("Y")) {
+            Item sword = new Item("sword", "weapon");
+            Item healthPotion = new Item("healthPotion", "potion");
+
+            inventory.addItem(sword);
+            inventory.addItem(healthPotion);
+
+            System.out.println("You picked up the items and continued your journey.");
+        } else {
+            System.out.println("You chose to not pick up the items and continued your journey.");
+        }
 
         while (true) {
             System.out.println("Where do you want to go? (up, down, left, right)");

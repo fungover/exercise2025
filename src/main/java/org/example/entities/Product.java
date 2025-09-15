@@ -106,5 +106,22 @@ public class Product {
             this.rating = rating;
             return this;
         }
+
+        public Product build() {
+            if (id == null || id.isBlank()) {
+                throw new IllegalArgumentException("Product id cannot be null or blank");
+            }
+            if (name == null || name.isBlank()) {
+                throw new IllegalArgumentException("Product name cannot be null or blank");
+            }
+            if (category == null) {
+                throw new IllegalArgumentException("Category cannot be null");
+            }
+            if (rating < 1 || rating > 10){
+                throw new IllegalArgumentException("Rating must be between 1 and 10");
+            }
+
+            return new Product(id, name, category, rating);
+        }
     }
 }

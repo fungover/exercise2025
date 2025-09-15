@@ -197,7 +197,7 @@ class WarehouseTest {
 
 
         List<Product> getModifiedProductsList = warehouse.getModifiedProducts();
-        assertEquals(2, getModifiedProductsList.size());
+        assertEquals(0, getModifiedProductsList.size());
     }
 
 

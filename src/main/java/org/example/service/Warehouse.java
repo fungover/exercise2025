@@ -96,8 +96,8 @@ public class Warehouse {
 
     public List<Product> getModifiedProducts() {
         return inventory.stream()
-                        .filter(p -> p.createdDate()
-                                      .isEqual(p.modifiedDate()))
+                        .filter(p -> !p.createdDate()
+                                       .isEqual(p.modifiedDate()))
                         .collect(Collectors.toUnmodifiableList());
     }
 

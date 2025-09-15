@@ -167,13 +167,13 @@ class WarehouseTest {
         assertTrue(products.contains(product2)); // Verify that product2 is in the list
     }
 
-//    @Test
-//    @DisplayName("Should return empty list when no products exists")
-//    void getAllProductsWhenThereIsNoProducts() {
-//        List<Product> products = warehouse.getAllProducts(); // Retrieve all products from an empty warehouse
-//        assertTrue(products.isEmpty()); // Verify that the product list is empty
-//    }
-//
+    @Test
+    @DisplayName("Should return empty list when no products exists")
+    void getAllProductsWhenThereIsNoProducts() {
+        List<Product> products = warehouse.getAllProducts(); // Retrieve all products from an empty warehouse
+        assertTrue(products.isEmpty()); // Verify that the product list is empty
+    }
+
 //    // ========================================
 //    // TESTS FOR getProductById()
 //    // ========================================

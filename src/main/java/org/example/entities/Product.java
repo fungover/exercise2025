@@ -146,6 +146,5 @@ public record Product(
             }
             return new Product(this);
         }
-
     }
 }

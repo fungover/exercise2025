@@ -613,19 +613,23 @@ class WarehouseTest {
         assertTrue(topRated.isEmpty()); // Verify that the result is an empty list since no products were created this month
     }
 
-//    // ========================================
-//    // TESTS for Product creation validations
-//    // ========================================
-//
-//    @Test
-//    @DisplayName("Should throw exception when creating product with empty ID")
-//    void createProductWithEmptyIdThrowsException() {
-//
-//        IllegalArgumentException exception = assertThrows(
-//                IllegalArgumentException.class,
-//                () -> new Product("   ", "Test Product", Category.ELECTRONICS, 8, LocalDate.now(), LocalDate.now())
-//        );
-//        assertEquals("ID cannot be empty", exception.getMessage());
-//    }
+    // ========================================
+    // TESTS for Product creation validations
+    // ========================================
 
+    @Test
+    @DisplayName("Should throw exception when creating product with empty ID")
+    void createProductWithEmptyIdThrowsException() {
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> new Product.Builder()
+                        .id("   ")
+                        .name("Test Product")
+                        .category(Category.ELECTRONICS)
+                        .rating(8)
+                        .build()
+        );
+        assertEquals("ID is required", exception.getMessage());
+    }
 }

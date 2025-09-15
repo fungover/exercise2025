@@ -83,7 +83,7 @@ public class Game {
     public void checkForWin() {
         if (player.getY() >= dungeon.getHeight() - 2 && dungeon.isWalkable(player.getX(), player.getY())) {
             System.out.println(" *** Yay! You managed to find your way through the dungeon and win the game! ***");
-
+            System.exit(0);
         }
     }
 

@@ -2,9 +2,12 @@ package game;
 
 import entities.Enemy;
 import entities.Player;
+import entities.Potion;
+import map.Dungeon;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class GameTest {
 
@@ -42,6 +45,24 @@ class GameTest {
         player.setHealth(player.getHealth() - enemy.getDamage());
 
         assertEquals(70, player.getHealth());
+    }
+
+    @Test
+    public void testPlayerPicksUpPotion(){
+        Dungeon dungeon = new Dungeon(10,10);
+        Player player = new Player(1, 1, 100, 50);
+        Potion potion = new Potion("Potion", 20);
+
+        dungeon.placeItem(2, 1, potion);
+        player.move(1, 0, dungeon);
+
+        if (dungeon.getItemAt(player.getX(), player.getY()) != null) {
+            dungeon.getItemAt(player.getX(), player.getY()).use(player);
+            dungeon.removeItemAt(player.getX(), player.getY());
+        }
+
+        assertEquals(120, player.getHealth(), "should now be 120");
+        assertNull(dungeon.getItemAt(player.getX(), player.getY()));
     }
 
 }

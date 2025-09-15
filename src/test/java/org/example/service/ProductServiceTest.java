@@ -7,15 +7,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -24,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.example.entities.Category.ELECTRONICS;
 
-public class WarehouseTest {
+public class ProductServiceTest {
 
     // Helper methods
     private Product addProductToWarehouse(InMemoryProductRepository inMemoryProductRepository, String id, String name, Category category, int rating) {
@@ -73,7 +69,7 @@ public class WarehouseTest {
     @DisplayName("addProduct: throws IllegalArgumentException if Product name is blank")
     public void throwExceptionIfNoProductNameProvided() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
         assertThatThrownBy(() -> new Product.Builder()
                 .id("1")
                 .name("")
@@ -282,7 +278,7 @@ public class WarehouseTest {
     @DisplayName("getProductsByCategorySorted: returns Products in a category, sorted A-Z by name")
     public void getProductsByCategorySorted() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = addProductToWarehouse(inMemoryProductRepository, "1", "Laptop", Category.GENERAL, 1);
         Product testProduct2 = addProductToWarehouse(inMemoryProductRepository, "2", "Computer", Category.GENERAL, 1);
@@ -292,7 +288,7 @@ public class WarehouseTest {
         Product testProduct6 = addProductToWarehouse(inMemoryProductRepository, "6", "VR Glasses", Category.GENERAL, 1);
         Product testProduct7 = addProductToWarehouse(inMemoryProductRepository, "7", "Android TV", ELECTRONICS, 1);
 
-        assertThat(warehouse.getProductsByCategorySorted(Category.GENERAL))
+        assertThat(productService.getProductsByCategorySorted(Category.GENERAL))
                 .extracting(Product::getName)
                 .containsExactly("Candy", "Computer", "Laptop", "Sandwich", "Television", "VR Glasses");
     }
@@ -301,24 +297,24 @@ public class WarehouseTest {
     @DisplayName("getProductsByCategorySorted: returns empty list if Category is empty")
     public void getProductsByCategorySortedEmptyCategory() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = addProductToWarehouse(inMemoryProductRepository, "1", "Laptop", Category.GENERAL, 1);
         Product testProduct2 = addProductToWarehouse(inMemoryProductRepository, "2", "Computer", Category.GENERAL, 1);
         Product testProduct3 = addProductToWarehouse(inMemoryProductRepository, "3", "Television", Category.GENERAL, 1);
 
-        assertThat(warehouse.getProductsByCategorySorted(ELECTRONICS)).isEmpty();
+        assertThat(productService.getProductsByCategorySorted(ELECTRONICS)).isEmpty();
     }
 
     @Test
     @DisplayName("getProductsByCategorySorted: throws exception if invalid input")
     public void throwsExceptionIfNoCategoryProvided() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = addProductToWarehouse(inMemoryProductRepository, "1", "Laptop", Category.GENERAL, 1);
 
-        assertThatThrownBy(() -> warehouse.getProductsByCategorySorted(null))
+        assertThatThrownBy(() -> productService.getProductsByCategorySorted(null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -326,7 +322,7 @@ public class WarehouseTest {
     @DisplayName("getProductsCreatedAfter(LocalDateTime date): returns Products created after a given date")
     public void getProductsCreatedAfter() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5, 18, 0, 0);
         Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27, 18, 0, 0);
@@ -341,14 +337,14 @@ public class WarehouseTest {
         inMemoryProductRepository.addProduct(testProduct5);
 
         LocalDateTime testDate = LocalDateTime.of(1997, 2, 1, 18, 0, 0, 0);
-        assertThat(warehouse.getProductsCreatedAfter(testDate)).extracting(Product::getName).containsExactly("Laptop", "Desk Chair", "Pen Set");
+        assertThat(productService.getProductsCreatedAfter(testDate)).extracting(Product::getName).containsExactly("Laptop", "Desk Chair", "Pen Set");
     }
 
     @Test
     @DisplayName("getProductsCreatedAfter(LocalDate date): throws an exception if invalid input")
     public void getProductsCreatedAfterEmptyList() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5, 18, 0, 0);
         Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27, 18, 0, 0);
@@ -362,7 +358,7 @@ public class WarehouseTest {
         inMemoryProductRepository.addProduct(testProduct4);
         inMemoryProductRepository.addProduct(testProduct5);
 
-        assertThatThrownBy(() -> warehouse.getProductsCreatedAfter(null))
+        assertThatThrownBy(() -> productService.getProductsCreatedAfter(null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -370,7 +366,7 @@ public class WarehouseTest {
     @DisplayName("getModifiedProducts(): returns Products where createdDate != modifiedDate")
     public void getModifiedProductsNotEqualToCreatedDate() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = addProductToWarehouse(inMemoryProductRepository, "1", "Laptop", Category.GENERAL, 1);
         Product testProduct2 = addProductToWarehouse(inMemoryProductRepository, "2", "Computer", Category.GENERAL, 1);
@@ -390,78 +386,78 @@ public class WarehouseTest {
                 .rating(10)
                 .build());
 
-        assertThat(warehouse.getModifiedProducts()).extracting(Product::getName).containsExactly("Desktop");
-        assertThat(warehouse.getModifiedProducts().size()).isEqualTo(1);
+        assertThat(productService.getModifiedProducts()).extracting(Product::getName).containsExactly("Desktop");
+        assertThat(productService.getModifiedProducts().size()).isEqualTo(1);
     }
 
     @Test
     @DisplayName("getModifiedProducts(): returns an empty list if no products found")
     public void getModifiedProductsEmptyList() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = addProductToWarehouse(inMemoryProductRepository, "1", "Laptop", Category.GENERAL, 1);
         Product testProduct2 = addProductToWarehouse(inMemoryProductRepository, "2", "Computer", Category.GENERAL, 1);
 
-        assertThat(warehouse.getModifiedProducts()).isEmpty();
+        assertThat(productService.getModifiedProducts()).isEmpty();
     }
 
     @Test
     @DisplayName("getCategoriesWithProducts(): return all categories with at least one product")
     public void getCategoriesWithProducts() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = addProductToWarehouse(inMemoryProductRepository, "1", "Laptop", ELECTRONICS, 1);
         Product testProduct2 = addProductToWarehouse(inMemoryProductRepository, "2", "Television", ELECTRONICS, 1);
         Product testProduct3 = addProductToWarehouse(inMemoryProductRepository, "3", "Apple", Category.FOOD, 1);
 
-        assertThat(warehouse.getCategoriesWithProducts().size()).isEqualTo(2);
-        assertThat(warehouse.getCategoriesWithProducts()).containsExactlyInAnyOrder(ELECTRONICS, Category.FOOD);
+        assertThat(productService.getCategoriesWithProducts().size()).isEqualTo(2);
+        assertThat(productService.getCategoriesWithProducts()).containsExactlyInAnyOrder(ELECTRONICS, Category.FOOD);
     }
 
     @Test
     @DisplayName("getCategoriesWithProducts(): return empty list if no products found")
     public void getCategoriesWithProductsEmptyList() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
-        assertThat(warehouse.getCategoriesWithProducts()).isEmpty();
+        assertThat(productService.getCategoriesWithProducts()).isEmpty();
     }
 
     @Test
     @DisplayName("countProductsInCategory(): returns number of products in a category")
     public void countProductsInCategoryCountsProducts() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = addProductToWarehouse(inMemoryProductRepository, "1", "Laptop", ELECTRONICS, 1);
         Product testProduct2 = addProductToWarehouse(inMemoryProductRepository, "2", "Computer", Category.GENERAL, 1);
         Product testProduct3 = addProductToWarehouse(inMemoryProductRepository, "3", "Television", ELECTRONICS, 1);
         Product testProduct4 = addProductToWarehouse(inMemoryProductRepository, "4", "Sandwich", Category.FOOD, 1);
 
-        assertThat(warehouse.countProductsInCategory(Category.ELECTRONICS)).isEqualTo(2);
-        assertThat(warehouse.countProductsInCategory(Category.GENERAL)).isEqualTo(1);
-        assertThat(warehouse.countProductsInCategory(Category.FOOD)).isEqualTo(1);
+        assertThat(productService.countProductsInCategory(Category.ELECTRONICS)).isEqualTo(2);
+        assertThat(productService.countProductsInCategory(Category.GENERAL)).isEqualTo(1);
+        assertThat(productService.countProductsInCategory(Category.FOOD)).isEqualTo(1);
     }
 
     @Test
     @DisplayName("countProductsInCategory(): returns 0 if no products found")
     public void countProductsInCategoryEmptyList() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
-        assertThat(warehouse.countProductsInCategory(Category.ELECTRONICS)).isEqualTo(0);
+        ProductService productService = new ProductService(inMemoryProductRepository);
+        assertThat(productService.countProductsInCategory(Category.ELECTRONICS)).isEqualTo(0);
     }
 
     @Test
     @DisplayName("countProductsInCategory(): throws exception if invalid input")
     public void countProductsInCategoryThrowsException() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = addProductToWarehouse(inMemoryProductRepository, "1", "Laptop", ELECTRONICS, 1);
 
-        assertThatThrownBy(() -> warehouse.countProductsInCategory(null))
+        assertThatThrownBy(() -> productService.countProductsInCategory(null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -469,7 +465,7 @@ public class WarehouseTest {
     @DisplayName("getProductInitialsMap(): returns a Map<Character, Integer> of first letters in product names and their counts")
     public void getProductInitialsMap() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = addProductToWarehouse(inMemoryProductRepository, "1", "Laptop", ELECTRONICS, 1);
         Product testProduct2 = addProductToWarehouse(inMemoryProductRepository, "2", "Computer", Category.GENERAL, 1);
@@ -477,7 +473,7 @@ public class WarehouseTest {
         Product testProduct4 = addProductToWarehouse(inMemoryProductRepository, "4", "Sandwich", Category.FOOD, 1);
         Product testProduct5 = addProductToWarehouse(inMemoryProductRepository, "5", "Sushi", Category.FOOD, 1);
 
-        Map<Character, Integer> expectedMap = warehouse.getProductInitialsMap();
+        Map<Character, Integer> expectedMap = productService.getProductInitialsMap();
 
         assertThat(expectedMap.size()).isEqualTo(3);
         assertThat(expectedMap.get('L')).isEqualTo(1);
@@ -489,15 +485,15 @@ public class WarehouseTest {
     @DisplayName("getProductInitialsMap(): returns an empty Map if no products found")
     public void getProductInitialsMapEmptyList() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
-        assertThat(warehouse.getProductInitialsMap().size()).isEqualTo(0);
+        ProductService productService = new ProductService(inMemoryProductRepository);
+        assertThat(productService.getProductInitialsMap().size()).isEqualTo(0);
     }
 
     @Test
     @DisplayName("getTopRatedProductsThisMonth(): returns Products with max rating, created this month, sorted by newest first")
     public void getTopRatedProductsThisMonth() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 2002, 1, 1, 18, 0, 0);
         Product testProduct2 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 10, 1782, 8, 24, 18, 0, 0);
@@ -518,7 +514,7 @@ public class WarehouseTest {
             Product testProduct4 = addProductToWarehouse(inMemoryProductRepository, "2", "Television", ELECTRONICS, 10);
             Product testProduct5 = addProductToWarehouse(inMemoryProductRepository, "5", "Computer", Category.GENERAL, 9);
 
-            List<Product> expectedProducts = warehouse.getTopRatedProductsThisMonth();
+            List<Product> expectedProducts = productService.getTopRatedProductsThisMonth();
 
             assertThat(expectedProducts.size()).isEqualTo(2);
             assertThat(expectedProducts).containsExactly(testProduct4, testProduct3);
@@ -529,9 +525,9 @@ public class WarehouseTest {
     @DisplayName("getTopRatedProductsThisMonth(): returns an empty list if no products found")
     public void getTopRatedProductsThisMonthEmptyList() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
-        assertThat(warehouse.getTopRatedProductsThisMonth()).isEmpty();
+        assertThat(productService.getTopRatedProductsThisMonth()).isEmpty();
         Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 2025, 1, 31, 23, 59, 59);
         inMemoryProductRepository.addProduct(testProduct1);
 
@@ -541,7 +537,7 @@ public class WarehouseTest {
             mockedStatic.when(LocalDateTime::now)
                     .thenReturn(date1);
 
-            List<Product> expectedProducts = warehouse.getTopRatedProductsThisMonth();
+            List<Product> expectedProducts = productService.getTopRatedProductsThisMonth();
 
             assertThat(expectedProducts).isEmpty();
         }
@@ -551,7 +547,7 @@ public class WarehouseTest {
     @DisplayName("getTopRatedProductsThisMonth(): excludes product from the same month but a different year")
     public void getTopRatedProductsThisMonthExcludesProductFromDifferentYear() {
         InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        Warehouse warehouse = new Warehouse(inMemoryProductRepository);
+        ProductService productService = new ProductService(inMemoryProductRepository);
 
         Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 2024, 1, 1, 13, 59, 59);
         inMemoryProductRepository.addProduct(testProduct1);
@@ -561,7 +557,7 @@ public class WarehouseTest {
             mockedStatic.when(LocalDateTime::now)
                     .thenReturn(date1);
 
-            List<Product> expectedProducts = warehouse.getTopRatedProductsThisMonth();
+            List<Product> expectedProducts = productService.getTopRatedProductsThisMonth();
 
             assertThat(expectedProducts).isEmpty();
         }

@@ -7,12 +7,11 @@ import org.example.repository.InMemoryProductRepository;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class Warehouse {
+public class ProductService {
     private final InMemoryProductRepository products;
 
-    public Warehouse(InMemoryProductRepository inMemoryProductRepository) {
+    public ProductService(InMemoryProductRepository inMemoryProductRepository) {
     this.products = inMemoryProductRepository;
     }
 

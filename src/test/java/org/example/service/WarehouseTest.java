@@ -6,7 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,38 +59,48 @@ class WarehouseTest {
         );
         assertEquals("Name is required", exception.getMessage());
     }
-//
-//    @Test
-//    @DisplayName("Should throw eception when adding null product")
-//    void addNullProductThrowsException() {
-//        NullPointerException exception = assertThrows(
-//                NullPointerException.class,
-//                () -> warehouse.addProduct(null)
-//        );
-//        assertEquals("Product cannot be null", exception.getMessage());
-//    }
-//
-//    // ========================================
-//    // TESTS FOR updateProduct()
-//    // ========================================
-//
-//    @Test
-//    @DisplayName("Should update a product successfully")
-//    void updateProductSuccessfully() {
-//
-//        Product originalProduct = Warehouse.createOldProduct("1", "Original Product", Category.ELECTRONICS, 8, 3); // Create a product with a created date 3 days ago
-//        warehouse.addProduct(originalProduct);
-//
-//        warehouse.updateProduct("1", "Updated Product", Category.BOOKS, 9);
-//
-//        Optional<Product> updated = warehouse.getProductById("1"); // Retrieve the updated product
-//        assertTrue(updated.isPresent()); // Check that the product is present
-//        assertEquals("Updated Product", updated.get().name()); // Verify that the name has been updated
-//        assertEquals(Category.BOOKS, updated.get().category()); // Verify that the category has been updated
-//        assertEquals(9, updated.get().rating()); // Verify that the rating has been updated
-//        assertEquals(originalProduct.createdDate(), updated.get().createdDate()); // Verify that the created date remains unchanged
-//        assertNotEquals(originalProduct.modifiedDate(), updated.get().modifiedDate()); // Verify that the modified date has been updated
-//    }
+
+    @Test
+    @DisplayName("Should throw exception when adding null product")
+    void addNullProductThrowsException() {
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
+                () -> warehouse.addProduct(null)
+        );
+        assertEquals("Product cannot be null", exception.getMessage());
+    }
+
+    // ========================================
+    // TESTS FOR updateProduct()
+    // ========================================
+
+    @Test
+    @DisplayName("Should update a product successfully")
+    void updateProductSuccessfully() {
+
+        LocalDate threeDaysAgo = LocalDate.now().minusDays(3);
+        Product originalProduct = new Product.Builder()
+                .id("1")
+                .name("Original Product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(threeDaysAgo) // Set created date to 3 days ago
+                .modifiedDate(threeDaysAgo) // Set modified date to 3 days ago
+                .build();
+
+
+        warehouse.addProduct(originalProduct);
+
+        warehouse.updateProduct("1", "Updated Product", Category.BOOKS, 9);
+
+        Optional<Product> updated = warehouse.getProductById("1"); // Retrieve the updated product
+        assertTrue(updated.isPresent()); // Check that the product is present
+        assertEquals("Updated Product", updated.get().name()); // Verify that the name has been updated
+        assertEquals(Category.BOOKS, updated.get().category()); // Verify that the category has been updated
+        assertEquals(9, updated.get().rating()); // Verify that the rating has been updated
+        assertEquals(originalProduct.createdDate(), updated.get().createdDate()); // Verify that the created date remains unchanged
+        assertNotEquals(originalProduct.modifiedDate(), updated.get().modifiedDate()); // Verify that the modified date has been updated
+    }
 //
 //    @Test
 //    @DisplayName("Should throw IllegalArgumentException when updating a non-existent product")

@@ -505,7 +505,8 @@ class ProductServiceTest {
                 .rating(5)
                 .createdDate(now)
                 .modifiedDate(now)
-                .build())
+                .build()
+        )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("price must be greater than zero");
     }

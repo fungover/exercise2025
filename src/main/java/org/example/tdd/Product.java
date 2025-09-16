@@ -1,4 +1,4 @@
 package org.example.tdd;
 
-public record Product() {
+public record Product(String ID) {
 }

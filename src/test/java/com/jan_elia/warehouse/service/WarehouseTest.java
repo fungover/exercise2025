@@ -96,6 +96,28 @@ public class WarehouseTest {
     void getProductById_failure_notFound() {
         assertThrows(java.util.NoSuchElementException.class, () -> warehouse.getProductById("999"));
     }
+
+    // ---- getAllProducts ----
+    @Test
+    void getAllProducts_success() {
+        Product p1 = makeProduct("20", "A", Category.FOOD, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        Product p2 = makeProduct("21", "B", Category.FOOD, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+        List<Product> list = warehouse.getAllProducts();
+        assertEquals(2, list.size());
+    }
+
+    @Test
+    void getAllProducts_defensive() {
+        Product p1 = makeProduct("22", "C", Category.FOOD, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        warehouse.addProduct(p1);
+        List<Product> list = warehouse.getAllProducts();
+        assertThrows(UnsupportedOperationException.class, () -> list.add(p1));
+    }
 }
 
 // Test plan for Warehouse
@@ -107,15 +129,6 @@ public class WarehouseTest {
 // TODO: failure: category null -> IllegalArgumentException
 // TODO: failure: rating out of range -> IllegalArgumentException
 // TODO: failure: id null/blank -> IllegalArgumentException
-//
-// getAllProducts
-// TODO: success when all products are returned
-// TODO: failure when trying to modify the returned list
-//
-// getProductById
-// TODO: success when product id exists
-// TODO: failure when id is null or blank
-// TODO: failure when product id does not exist
 //
 // getProductsByCategorySorted
 // TODO: success: returns only this category

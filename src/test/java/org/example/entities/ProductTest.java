@@ -29,5 +29,4 @@ class ProductTest {
         assertEquals(now, product.createdDate());
         assertEquals(now, product.modifiedDate());
     }
-
 }

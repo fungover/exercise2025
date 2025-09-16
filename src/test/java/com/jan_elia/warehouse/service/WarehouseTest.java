@@ -118,6 +118,31 @@ public class WarehouseTest {
         List<Product> list = warehouse.getAllProducts();
         assertThrows(UnsupportedOperationException.class, () -> list.add(p1));
     }
+
+    // ---- getProductsByCategorySorted ----
+    @Test
+    void getProductsByCategorySorted_success_sorted() {
+        Product p1 = makeProduct("30", "Zebra", Category.TOYS, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        Product p2 = makeProduct("31", "apple", Category.TOYS, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+        List<Product> list = warehouse.getProductsByCategorySorted(Category.TOYS);
+        assertEquals("apple", list.get(0).getName());
+        assertEquals("Zebra", list.get(1).getName());
+    }
+
+    @Test
+    void getProductsByCategorySorted_emptyList() {
+        List<Product> list = warehouse.getProductsByCategorySorted(Category.ELECTRONICS);
+        assertTrue(list.isEmpty());
+    }
+
+    @Test
+    void getProductsByCategorySorted_nullCategory() {
+        assertThrows(IllegalArgumentException.class, () -> warehouse.getProductsByCategorySorted(null));
+    }
 }
 
 // Test plan for Warehouse
@@ -129,12 +154,6 @@ public class WarehouseTest {
 // TODO: failure: category null -> IllegalArgumentException
 // TODO: failure: rating out of range -> IllegalArgumentException
 // TODO: failure: id null/blank -> IllegalArgumentException
-//
-// getProductsByCategorySorted
-// TODO: success: returns only this category
-// TODO: success: sorted A–Z (case-insensitive)
-// TODO: success: empty list when none
-// TODO: failure: category is null -> IllegalArgumentException
 //
 // getProductsCreatedAfter
 // TODO: success: returns only products strictly after date

@@ -159,4 +159,27 @@ class WarehouseTest {
         assertEquals(1, result.size());
         assertEquals("New Book", result.get(0).name());
     }
+    @Test
+    void getModifiedProductsReturnsOnlyModified() {
+        LocalDateTime createdTime = LocalDateTime.now().minusMinutes(1);
+
+        Product product1 = new Product("1", "Original Book", Category.BOOKS, 7, createdTime, createdTime);
+        warehouse.addProduct(product1);
+
+        warehouse.updateProduct("1", "Updated Book", Category.BOOKS, 8);
+
+        Product product2 = new Product("2", "Fresh Food", Category.FOOD, 9, LocalDateTime.now(), LocalDateTime.now());
+        warehouse.addProduct(product2);
+
+        List<Product> modified = warehouse.getModifiedProducts();
+
+        System.out.println("Modified products:");
+        modified.forEach(p -> System.out.println(
+                p.name() + " created=" + p.createdDate() + " modified=" + p.modifiedDate()
+        ));
+
+        assertEquals(1, modified.size());
+        assertEquals("Updated Book", modified.get(0).name());
+    }
+
 }

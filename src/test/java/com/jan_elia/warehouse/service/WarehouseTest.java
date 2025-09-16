@@ -11,8 +11,12 @@ package com.jan_elia.warehouse.service;
 // TODO: failure when rating < 0 or > 10
 //
 // updateProduct
-// TODO: success when updating an existing product
-// TODO: failure when product id is missing
+// TODO: success: fields updated; createdDate unchanged; modifiedDate = now(clock)
+// TODO: failure: id not found -> NoSuchElementException
+// TODO: failure: name blank -> IllegalArgumentException
+// TODO: failure: category null -> IllegalArgumentException
+// TODO: failure: rating out of range -> IllegalArgumentException
+// TODO: failure: id null/blank -> IllegalArgumentException
 //
 // getAllProducts
 // TODO: success when all products are returned
@@ -24,13 +28,16 @@ package com.jan_elia.warehouse.service;
 // TODO: failure when product id does not exist
 //
 // getProductsByCategorySorted
-// TODO: success when products are sorted A–Z
-// TODO: failure when category is null
+// TODO: success: returns only this category
+// TODO: success: sorted A–Z (case-insensitive)
+// TODO: success: empty list when none
+// TODO: failure: category is null -> IllegalArgumentException
 //
 // getProductsCreatedAfter
-// TODO: success when products after a date are returned
-// TODO: failure when date is null
+// TODO: success: returns only products strictly after date
+// TODO: success: product on the same date is excluded
+// TODO: failure: date is null -> IllegalArgumentException
 //
 // getModifiedProducts
-// TODO: success when only modified products are returned
-// TODO: success when no products are modified (empty list)
+// TODO: success: returns only products where modifiedDate != createdDate
+// TODO: success: returns empty list when none are modified

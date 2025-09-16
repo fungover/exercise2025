@@ -143,23 +143,82 @@ public class WarehouseTest {
     void getProductsByCategorySorted_nullCategory() {
         assertThrows(IllegalArgumentException.class, () -> warehouse.getProductsByCategorySorted(null));
     }
+
+    // ---- getProductsCreatedAfter ----
+    @Test
+    void getProductsCreatedAfter_success_strictlyAfter() {
+        Product p = makeProduct("40", "X", Category.OTHER, 5,
+                LocalDate.of(2025, 1, 2), LocalDate.of(2025, 1, 2));
+        warehouse.addProduct(p);
+        List<Product> list = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 1, 1));
+        assertEquals(1, list.size());
+    }
+
+    @Test
+    void getProductsCreatedAfter_boundaryExcluded() {
+        Product p = makeProduct("41", "Y", Category.OTHER, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        warehouse.addProduct(p);
+        List<Product> list = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 1, 1));
+        assertTrue(list.isEmpty());
+    }
+
+    @Test
+    void getProductsCreatedAfter_nullDate() {
+        assertThrows(IllegalArgumentException.class, () -> warehouse.getProductsCreatedAfter(null));
+    }
+
+    // ---- updateProduct ----
+    @Test
+    void updateProduct_success() {
+        Product p = makeProduct("50", "Old", Category.FOOD, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        warehouse.addProduct(p);
+        warehouse.updateProduct("50", "New", Category.FOOD, 7);
+        Product updated = warehouse.getProductById("50");
+        assertEquals("New", updated.getName());
+        assertEquals(7, updated.getRating());
+        assertEquals(LocalDate.of(2025, 1, 1), updated.getCreatedDate()); // same createdDate
+        assertEquals(LocalDate.now(fixedClock), updated.getModifiedDate()); // modified updated
+    }
+
+    @Test
+    void updateProduct_failure_notFound() {
+        assertThrows(java.util.NoSuchElementException.class,
+                () -> warehouse.updateProduct("999", "X", Category.FOOD, 5));
+    }
+
+    @Test
+    void updateProduct_failure_blankName() {
+        Product p = makeProduct("51", "Test", Category.FOOD, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        warehouse.addProduct(p);
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.updateProduct("51", " ", Category.FOOD, 5));
+    }
+
+    @Test
+    void updateProduct_failure_nullCategory() {
+        Product p = makeProduct("52", "Test", Category.FOOD, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        warehouse.addProduct(p);
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.updateProduct("52", "New", null, 5));
+    }
+
+    @Test
+    void updateProduct_failure_invalidRating() {
+        Product p = makeProduct("53", "Test", Category.FOOD, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        warehouse.addProduct(p);
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.updateProduct("53", "New", Category.FOOD, 11));
+    }
+
 }
 
 // Test plan for Warehouse
 
-// updateProduct
-// TODO: success: fields updated; createdDate unchanged; modifiedDate = now(clock)
-// TODO: failure: id not found -> NoSuchElementException
-// TODO: failure: name blank -> IllegalArgumentException
-// TODO: failure: category null -> IllegalArgumentException
-// TODO: failure: rating out of range -> IllegalArgumentException
-// TODO: failure: id null/blank -> IllegalArgumentException
-//
-// getProductsCreatedAfter
-// TODO: success: returns only products strictly after date
-// TODO: success: product on the same date is excluded
-// TODO: failure: date is null -> IllegalArgumentException
-//
 // getModifiedProducts
 // TODO: success: returns only products where modifiedDate != createdDate
 // TODO: success: returns empty list when none are modified

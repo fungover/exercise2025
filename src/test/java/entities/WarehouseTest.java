@@ -2,8 +2,10 @@ package entities;
 
 /* Test Class where I declare Warehouses´ variable wh - this is private */
 
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.Warehouse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -209,6 +211,60 @@ public class WarehouseTest {
                         Category.FOOD,
                         -1),
                 "Rating must be between 0-10");
+    }
+
+    @Test
+    void getProductsByCategorySorted_ReturnsAZByName_caseInsensitive() {
+        Product a = new Product("S1", "alpha", Category.TOYS, 7, LocalDate.now(), LocalDate.now());
+        Product b = new Product("S2", "Beta", Category.TOYS, 6, LocalDate.now(), LocalDate.now());
+        Product c = new Product("S3", "car", Category.TOYS, 5, LocalDate.now(), LocalDate.now());
+        Product x = new Product("X1", "zest", Category.TOYS, 4, LocalDate.now(), LocalDate.now());
+
+        wh.addProduct(b);
+        wh.addProduct(c);
+        wh.addProduct(a);
+        wh.addProduct(x);
+
+        java.util.List<Product> toys = wh.getProductsByCategorySorted(Category.TOYS);
+
+        //Case-insensitive
+        assertEquals(4, toys.size());
+        assertEquals("alpha", toys.get(0).name());
+        assertEquals("Beta", toys.get(1).name());
+        assertEquals("car", toys.get(2).name());
+    }
+
+    @Test
+    void getProductsByCategorySorted_nullCategory_throws() {
+        assertThrows(NullPointerException.class, () -> wh.getProductsByCategorySorted(null),
+                "Category can not be null");
+    }
+
+    @Test
+    void getProductsCreatedAfter_FiltersByDate() {
+        LocalDate d0 = LocalDate.now().minusDays(10);
+        LocalDate d1 = LocalDate.now().minusDays(5);
+        LocalDate d2 = LocalDate.now();
+
+        Product p0 = new Product("C1", "Old", Category.FOOD, 5, d0, d0);
+        Product p1 = new Product("C2", "Middle", Category.FOOD, 5, d1, d1);
+        Product p2 = new Product("C3", "New", Category.FOOD, 5, d2, d2);
+
+        wh.addProduct(p0);
+        wh.addProduct(p1);
+        wh.addProduct(p2);
+
+        List<Product> out = wh.getProductsCreatedAfter(LocalDate.now().minusDays(7));
+
+        assertEquals(2, out.size());
+        assertTrue(out.stream().anyMatch(p -> p.id().equals("C2")));
+        assertTrue(out.stream().anyMatch(p -> p.id().equals("C3")));
+    }
+
+    @Test
+    void getProductsCreatedAfter_nullDate_throws() {
+        assertThrows(NullPointerException.class, () -> wh.getProductsCreatedAfter(null),
+                "date can not be null");
     }
 
 }

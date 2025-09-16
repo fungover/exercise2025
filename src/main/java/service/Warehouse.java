@@ -1,7 +1,11 @@
-package entities;
+package service;
+
+import entities.Category;
+import entities.Product;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Warehouse {
 
@@ -61,6 +65,28 @@ public class Warehouse {
 
         productById.put(id, updated);
         return updated;
+    }
+
+    // Sorted A-Ö, filters products from the same category that I send in. Is returned in alphabetical order, immutable copy
+    public List<Product> getProductsByCategorySorted(Category category) {
+        Objects.requireNonNull(category, "category can not be null");
+        return productById.values().stream().filter(p -> p.category() == category)
+                .sorted(Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+    }
+
+    // "Created at what date" - gets and filters through all product and returns which ones have a specific createdDate
+    public List<Product> getProductsCreatedAfter(LocalDate date) {
+        Objects.requireNonNull(date, "date can not be null");
+        return productById.values().stream()
+                .filter(p -> p.createdDate().isAfter(date))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+    }
+
+    // Gets all products, filters all products that are changed after creation
+    public List<Product> getModifiedProducts() {
+        return productById.values().stream().filter(p -> !p.createdDate().equals(p.modifiedDate()))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
 }

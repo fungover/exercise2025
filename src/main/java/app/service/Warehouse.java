@@ -36,5 +36,8 @@ private final List<Product> products = new ArrayList<>();
        products.set(id,updatedProduct);
     }
 
+    public List<Product> getAllProducts() {
+        return Collections.unmodifiableList(products);
+    }
 
 }

@@ -54,7 +54,22 @@ public class WarehouseTest {
         System.out.println("Rating: "+warehouse.products().get(0).rating());
     }
 
+    @Test
+    public void getAllProducts() {
+        Warehouse warehouse = new Warehouse();
+        warehouse.addProduct(new Product(0,"Bread",FOOD,5));
+        warehouse.addProduct(new Product(1,"Milk",FOOD,7));
+        List<Product> products = warehouse.getAllProducts();
 
+        assertThat(products)
+                .hasSize(2)
+                .contains(new Product(0,"Bread",FOOD,5,products.getFirst().createdDate(), products.getFirst().modifiedDate()),
+                        new Product(1,"Milk",FOOD,7,products.get(1).createdDate(), products.get(1).modifiedDate()));
+
+        System.out.println("Contains "+products.size()+" Items");
+        System.out.println("ID: "+products.get(0).ID() + " Name: "+products.get(0).name());
+        System.out.println("ID: "+products.get(1).ID() + " Name: "+products.get(1).name());
+    }
 
 
 

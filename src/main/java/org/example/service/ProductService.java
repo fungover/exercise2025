@@ -16,6 +16,22 @@ public class ProductService {
     }
 
     // Methods
+    public void addProduct(Product product) {
+        productRepository.addProduct(product);
+    }
+
+    public Optional<Product> getProductById(String id) {
+        return productRepository.getProductById(id);
+    }
+
+    public List<Product> getAllProducts() {
+        return productRepository.getAllProducts();
+    }
+
+    public void updateProduct(Product product) {
+        productRepository.updateProduct(product);
+    }
+
     public List<Product> getProductsByCategorySorted(Category category) {
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null");

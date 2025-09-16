@@ -470,5 +470,43 @@ class ProductServiceTest {
         assertThat(result)
                 .isEmpty();
     }
-}
 
+    //TESTS GET PRICE
+
+    @Test
+    @DisplayName("Returns correct price from getPrice")
+    void getPrice_returnsCorrectValue() {
+        Product toy = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Toy")
+                .category(Category.TOYS)
+                .price(BigDecimal.valueOf(15.75))
+                .rating(4)
+                .createdDate(ZonedDateTime.now())
+                .modifiedDate(ZonedDateTime.now())
+                .build();
+
+        assertEquals(
+                BigDecimal.valueOf(15.75),
+                toy.getPrice()
+        );
+    }
+
+    @Test
+    @DisplayName("Throws exception when price is zero")
+    void buildProduct_throwsException_whenPriceIsZero() {
+        ZonedDateTime now = ZonedDateTime.now();
+
+        assertThatThrownBy(() -> Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Free Sample")
+                .category(Category.FOOD)
+                .price(BigDecimal.ZERO)//Price is 0
+                .rating(5)
+                .createdDate(now)
+                .modifiedDate(now)
+                .build())
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("price must be greater than zero");
+    }
+}

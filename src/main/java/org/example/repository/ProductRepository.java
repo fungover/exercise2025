@@ -1,4 +1,4 @@
-package org.example.respository;
+package org.example.repository;
 
 import org.example.entities.Product;
 

@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,13 +16,14 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WarehouseTest {
+class ProductServiceTest {
 
-    private Warehouse warehouse;
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
-        warehouse = new Warehouse();
+        ProductRepository repository = new InMemoryProductRepository();
+        productService = new ProductService(repository);
 
     }
 
@@ -39,9 +42,9 @@ class WarehouseTest {
                 .rating(8)
                 .build();
 
-        warehouse.addProduct(testProduct); // Add the product to the warehouse
+        productService.addProduct(testProduct); // Add the product to the warehouse
 
-        List<Product> products = warehouse.getAllProducts(); // Retrieve all products to verify the addition
+        List<Product> products = productService.getAllProducts(); // Retrieve all products to verify the addition
         assertEquals(1, products.size()); // Check that the size of the product list is 1
         assertTrue(products.contains(testProduct)); // Check that the added product is in the list
     }
@@ -67,7 +70,7 @@ class WarehouseTest {
     void addNullProductThrowsException() {
         NullPointerException exception = assertThrows(
                 NullPointerException.class,
-                () -> warehouse.addProduct(null)
+                () -> productService.addProduct(null)
         );
         assertEquals("Product cannot be null", exception.getMessage());
     }
@@ -91,11 +94,11 @@ class WarehouseTest {
                 .build();
 
 
-        warehouse.addProduct(originalProduct);
+        productService.addProduct(originalProduct);
 
-        warehouse.updateProduct("1", "Updated Product", Category.BOOKS, 9);
+        productService.updateProduct("1", "Updated Product", Category.BOOKS, 9);
 
-        Optional<Product> updated = warehouse.getProductById("1"); // Retrieve the updated product
+        Optional<Product> updated = productService.getProductById("1"); // Retrieve the updated product
         assertTrue(updated.isPresent()); // Check that the product is present
         assertEquals("Updated Product", updated.get().name()); // Verify that the name has been updated
         assertEquals(Category.BOOKS, updated.get().category()); // Verify that the category has been updated
@@ -109,7 +112,7 @@ class WarehouseTest {
     void updateProductThatDoesNotExist() {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> warehouse.updateProduct("999", "New Name", Category.BOOKS, 8) // Attempt to update a product that doesn't exist
+                () -> productService.updateProduct("999", "New Name", Category.BOOKS, 8) // Attempt to update a product that doesn't exist
         );
         assertEquals("Product with id 999 not found", exception.getMessage()); // Verify the exception message
     }
@@ -125,11 +128,11 @@ class WarehouseTest {
                 .rating(8)
                 .build();
 
-        warehouse.addProduct(testProduct); // Add the product to the warehouse
+        productService.addProduct(testProduct); // Add the product to the warehouse
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class, // Expect an IllegalArgumentException
-                () -> warehouse.updateProduct("1", "   ", Category.BOOKS, 8) // Attempt to update with an empty name
+                () -> productService.updateProduct("1", "   ", Category.BOOKS, 8) // Attempt to update with an empty name
         );
         assertEquals("Name is required", exception.getMessage()); // Verify the exception message
     }
@@ -159,10 +162,10 @@ class WarehouseTest {
                 .modifiedDate(fiveDaysAgo)
                 .build();
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
+        productService.addProduct(product1);
+        productService.addProduct(product2);
 
-        List<Product> products = warehouse.getAllProducts();
+        List<Product> products = productService.getAllProducts();
 
         assertEquals(2, products.size()); // Verify that there are 2 products in the list
         assertTrue(products.contains(product1)); // Verify that product1 is in the list
@@ -172,7 +175,7 @@ class WarehouseTest {
     @Test
     @DisplayName("Should return empty list when no products exists")
     void getAllProductsWhenThereIsNoProducts() {
-        List<Product> products = warehouse.getAllProducts(); // Retrieve all products from an empty warehouse
+        List<Product> products = productService.getAllProducts(); // Retrieve all products from an empty warehouse
         assertTrue(products.isEmpty()); // Verify that the product list is empty
     }
 
@@ -190,9 +193,9 @@ class WarehouseTest {
                 .rating(8)
                 .build();
 
-        warehouse.addProduct(testProduct);
+        productService.addProduct(testProduct);
 
-        Optional<Product> result = warehouse.getProductById("1"); // Retrieve the product by its ID
+        Optional<Product> result = productService.getProductById("1"); // Retrieve the product by its ID
 
         assertTrue(result.isPresent()); // Verify that the product is found
         assertEquals(testProduct, result.get()); // Verify that the retrieved product matches the added product
@@ -201,7 +204,7 @@ class WarehouseTest {
     @Test
     @DisplayName("Should return empty Optional when product ID does not exist")
     void getProductByIdWhenIdDoesNotExist() {
-        Optional<Product> result = warehouse.getProductById("999"); // Attempt to retrieve a product with a non-existent ID
+        Optional<Product> result = productService.getProductById("999"); // Attempt to retrieve a product with a non-existent ID
         assertTrue(result.isEmpty()); // Verify that the result is an empty Optional
     }
 
@@ -232,11 +235,11 @@ class WarehouseTest {
                 .rating(10)
                 .build();
 
-        warehouse.addProduct(laptop);
-        warehouse.addProduct(mouse);
-        warehouse.addProduct(book);
+        productService.addProduct(laptop);
+        productService.addProduct(mouse);
+        productService.addProduct(book);
 
-        List<Product> electronics = warehouse.getProductsByCategorySorted(Category.ELECTRONICS); // Retrieve products in the ELECTRONICS category sorted by name
+        List<Product> electronics = productService.getProductsByCategorySorted(Category.ELECTRONICS); // Retrieve products in the ELECTRONICS category sorted by name
 
         assertEquals(2, electronics.size()); // Verify that there are 2 products in the ELECTRONICS category
         assertEquals("Gaming Laptop", electronics.get(0).name()); // Verify that the first product is "Gaming Laptop" (L comes before M
@@ -254,9 +257,9 @@ class WarehouseTest {
                 .rating(8)
                 .build();
 
-        warehouse.addProduct(electronicsProduct);
+        productService.addProduct(electronicsProduct);
 
-        List<Product> toys = warehouse.getProductsByCategorySorted(Category.TOYS); // Attempt to retrieve products in the TOYS category when none exist
+        List<Product> toys = productService.getProductsByCategorySorted(Category.TOYS); // Attempt to retrieve products in the TOYS category when none exist
 
         assertTrue(toys.isEmpty()); // Verify that the result is an empty list
     }
@@ -289,10 +292,10 @@ class WarehouseTest {
                 .modifiedDate(baseDate.plusDays(2))
                 .build();
 
-        warehouse.addProduct(oldProduct);
-        warehouse.addProduct(newProduct);
+        productService.addProduct(oldProduct);
+        productService.addProduct(newProduct);
 
-        List<Product> recentProducts = warehouse.getProductsCreatedAfter(baseDate); // Retrieve products created after baseDate (2025-09-02)
+        List<Product> recentProducts = productService.getProductsCreatedAfter(baseDate); // Retrieve products created after baseDate (2025-09-02)
 
         assertEquals(1, recentProducts.size()); // Verify that there is 1 product created after the specified date
         assertEquals("New Product", recentProducts.get(0).name()); // Verify that the product is "New Product"
@@ -312,9 +315,9 @@ class WarehouseTest {
                 .createdDate(baseDate.minusDays(3)) // Created 3 days before baseDate (2025-08-29)
                 .modifiedDate(baseDate.minusDays(3))
                 .build();
-        warehouse.addProduct(oldProduct);
+        productService.addProduct(oldProduct);
 
-        List<Product> recentProducts = warehouse.getProductsCreatedAfter(baseDate); // Attempt to retrieve products created after baseDate (2025-09-01)
+        List<Product> recentProducts = productService.getProductsCreatedAfter(baseDate); // Attempt to retrieve products created after baseDate (2025-09-01)
 
         assertTrue(recentProducts.isEmpty()); // Verify that the result is an empty list
     }
@@ -345,11 +348,11 @@ class WarehouseTest {
                 .rating(7)
                 .build();
 
-        warehouse.addProduct(originalProduct);
-        warehouse.addProduct(unmodifiedProduct);
+        productService.addProduct(originalProduct);
+        productService.addProduct(unmodifiedProduct);
 
-        warehouse.updateProduct("1", "Modified Product", Category.ELECTRONICS, 9); // Modify the first product
-        List<Product> modifiedProducts = warehouse.getModifiedProducts(); // Retrieve the list of modified products
+        productService.updateProduct("1", "Modified Product", Category.ELECTRONICS, 9); // Modify the first product
+        List<Product> modifiedProducts = productService.getModifiedProducts(); // Retrieve the list of modified products
 
         assertEquals(1, modifiedProducts.size()); // Verify that there is 1 modified product
         assertEquals("Modified Product", modifiedProducts.get(0).name()); // Verify that the modified product has the updated name
@@ -366,9 +369,9 @@ class WarehouseTest {
                 .rating(8)
                 .build();
 
-        warehouse.addProduct(testProduct); // Add the product to the warehouse
+        productService.addProduct(testProduct); // Add the product to the warehouse
 
-        List<Product> modifiedProducts = warehouse.getModifiedProducts(); // Attempt to retrieve modified products when none have been modified
+        List<Product> modifiedProducts = productService.getModifiedProducts(); // Attempt to retrieve modified products when none have been modified
 
         assertTrue(modifiedProducts.isEmpty()); // Verify that the result is an empty list
     }
@@ -400,11 +403,11 @@ class WarehouseTest {
                 .rating(7)
                 .build();
 
-        warehouse.addProduct(laptop);
-        warehouse.addProduct(book);
-        warehouse.addProduct(mouse);
+        productService.addProduct(laptop);
+        productService.addProduct(book);
+        productService.addProduct(mouse);
 
-        Set<Category> categories = warehouse.getCategoriesWithProducts(); // Retrieve the set of categories with at least one product
+        Set<Category> categories = productService.getCategoriesWithProducts(); // Retrieve the set of categories with at least one product
 
         assertEquals(2, categories.size()); // Verify that there are 2 unique categories
         assertTrue(categories.contains(Category.ELECTRONICS)); // Verify that the ELECTRONICS category is included
@@ -415,7 +418,7 @@ class WarehouseTest {
     @DisplayName("Should return empty set when there are no products")
     void getCategoriesWithProductsWhenThereAreNoProducts() {
 
-        Set<Category> categories = warehouse.getCategoriesWithProducts(); // Attempt to retrieve categories when no products exist
+        Set<Category> categories = productService.getCategoriesWithProducts(); // Attempt to retrieve categories when no products exist
 
         assertTrue(categories.isEmpty()); // Verify that the result is an empty set
     }
@@ -447,12 +450,12 @@ class WarehouseTest {
                 .rating(3)
                 .build();
 
-        warehouse.addProduct(laptop);
-        warehouse.addProduct(mouse);
-        warehouse.addProduct(book);
+        productService.addProduct(laptop);
+        productService.addProduct(mouse);
+        productService.addProduct(book);
 
-        long electronicsCount = warehouse.countProductsInCategory(Category.ELECTRONICS); // Count products in the ELECTRONICS category
-        long booksCount = warehouse.countProductsInCategory(Category.BOOKS); // Count products in the BOOKS category
+        long electronicsCount = productService.countProductsInCategory(Category.ELECTRONICS); // Count products in the ELECTRONICS category
+        long booksCount = productService.countProductsInCategory(Category.BOOKS); // Count products in the BOOKS category
 
         assertEquals(2, electronicsCount); // Verify that there are 2 products in the ELECTRONICS category
         assertEquals(1, booksCount); // Verify that there is 1 product in the BOOKS category
@@ -468,9 +471,9 @@ class WarehouseTest {
                 .rating(8)
                 .build();
 
-        warehouse.addProduct(laptop);
+        productService.addProduct(laptop);
 
-        long toysCount = warehouse.countProductsInCategory(Category.TOYS); // Attempt to count products in the TOYS category when none exist
+        long toysCount = productService.countProductsInCategory(Category.TOYS); // Attempt to count products in the TOYS category when none exist
 
         assertEquals(0, toysCount); // Verify that the count is 0
     }
@@ -504,11 +507,11 @@ class WarehouseTest {
                 .rating(9)
                 .build();
 
-        warehouse.addProduct(apple);
-        warehouse.addProduct(banana);
-        warehouse.addProduct(appleJuice);
+        productService.addProduct(apple);
+        productService.addProduct(banana);
+        productService.addProduct(appleJuice);
 
-        Map<Character, Integer> initials = warehouse.getProductInitialsMap(); // Retrieve the map of product initials and their counts
+        Map<Character, Integer> initials = productService.getProductInitialsMap(); // Retrieve the map of product initials and their counts
 
         assertEquals(2, initials.size()); // Verify that there are 2 unique initials
         assertEquals(2, initials.get('A')); // 'A' for Apple and Apple Juice
@@ -519,7 +522,7 @@ class WarehouseTest {
     @DisplayName("Should return empty map when there are no products")
     void getProductInitialsMapWhenThereAreNoProducts() {
 
-        Map<Character, Integer> initials = warehouse.getProductInitialsMap(); // Attempt to retrieve the map of product initials when no products exist
+        Map<Character, Integer> initials = productService.getProductInitialsMap(); // Attempt to retrieve the map of product initials when no products exist
         assertTrue(initials.isEmpty()); // Verify that the result is an empty map
     }
 
@@ -577,12 +580,12 @@ class WarehouseTest {
                 .modifiedDate(startOfMonth.plusDays(10))
                 .build();
 
-        warehouse.addProduct(olderProduct);
-        warehouse.addProduct(newerProduct);
-        warehouse.addProduct(newestProduct);
-        warehouse.addProduct(lowerRatedProduct);
+        productService.addProduct(olderProduct);
+        productService.addProduct(newerProduct);
+        productService.addProduct(newestProduct);
+        productService.addProduct(lowerRatedProduct);
 
-        List<Product> topRated = warehouse.getTopRatedProductsThisMonth(); // Retrieve the top-rated products created this month
+        List<Product> topRated = productService.getTopRatedProductsThisMonth(); // Retrieve the top-rated products created this month
 
         assertEquals(3, topRated.size());
         assertTrue(topRated.stream().allMatch(product -> product.rating() == 10)); // Verify that all returned products have the highest rating of 10
@@ -606,9 +609,9 @@ class WarehouseTest {
                 .modifiedDate(augustDate)
                 .build();
 
-        warehouse.addProduct(oldProduct);
+        productService.addProduct(oldProduct);
 
-        List<Product> topRated = warehouse.getTopRatedProductsThisMonth(); // Attempt to retrieve top-rated products created this month (September 2025)
+        List<Product> topRated = productService.getTopRatedProductsThisMonth(); // Attempt to retrieve top-rated products created this month (September 2025)
 
         assertTrue(topRated.isEmpty()); // Verify that the result is an empty list since no products were created this month
     }

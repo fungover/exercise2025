@@ -152,6 +152,20 @@ class WarehouseTest {
     }
 
     @Test
+    void getProductsByCategorySorted_emptyCategory_returnsEmptyList() {
+        LocalDateTime now = LocalDateTime.now();
+
+        warehouse.addProduct(new Product("1", "Apple", Category.FOOD, 5, now, now));
+        warehouse.addProduct(new Product("2", "Book", Category.BOOKS, 8, now, now));
+
+        List<Product> result = warehouse.getProductsByCategorySorted(Category.CLOTHES);
+
+        System.out.println("Products in empty category: " + result);
+
+        assertTrue(result.isEmpty(), "Expected empty list for category with no products");
+    }
+
+    @Test
     void getProductsCreatedAfterReturnsCorrectProducts() {
         LocalDateTime now = LocalDateTime.now();
 

@@ -30,28 +30,30 @@ import static org.junit.jupiter.api.Assertions.*;
      @Test
      void addProductShouldThrowExceptionIfNameEmpty() {
          Warehouse warehouse = new Warehouse();
-         Product product = new Product(
-                 "2",
-                 "",
-                 Category.Food,
-                 5,
-                 LocalDate.now(),
-                 LocalDate.now()
-         );
+         Product product = new Product.Builder()
+                 .id("2")
+                 .name("")
+                 .category(Category.Food)
+                .rating(5)
+                 .createdDate(LocalDate.now())
+                 .modifiedDate(LocalDate.now())
+                 .build();
+
          assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
      }
 
      @Test
      void addProductShouldThrowExceptionIfRatingOutOfRange() {
          Warehouse warehouse = new Warehouse();
-         Product product = new Product(
-                 "3",
-                 "Pear",
-                 Category.Food,
-                 11,
-                 LocalDate.now(),
-                 LocalDate.now()
-         );
+         Product product = new Product.Builder()
+                 .id("3")
+                 .name("Pear")
+                 .category(Category.Food)
+                 .rating(11)
+                 .createdDate(LocalDate.now())
+                 .modifiedDate(LocalDate.now())
+                 .build();
+
          assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
      }
 
@@ -59,14 +61,15 @@ import static org.junit.jupiter.api.Assertions.*;
      @Test
      void updateProductShouldUpdateSuccessfully() {
          Warehouse warehouse = new Warehouse();
-         Product product = new Product(
-                 "4",
-                 "Milk",
-                 Category.Food,
-                 7,
-                 LocalDate.now(),
-                 LocalDate.now()
-         );
+         Product product = new Product.Builder()
+                 .id("4")
+                 .name("Milk")
+                 .category(Category.Drink)
+                 .rating(7)
+                 .createdDate(LocalDate.now())
+                 .modifiedDate(LocalDate.now())
+                 .build();
+
          warehouse.addProduct(product);
 
          warehouse.updateProduct("4", "Apple", Category.Food, 9);
@@ -80,14 +83,15 @@ import static org.junit.jupiter.api.Assertions.*;
      @Test
      void getProductByIdShouldReturnProductWhenIdExists() {
          Warehouse warehouse = new Warehouse();
-         Product p = new Product(
-                 "1",
-                 "Kiwi",
-                 Category.Food,
-                 8,
-                 LocalDate.now(),
-                 LocalDate.now()
-         );
+         Product p = new Product.Builder()
+                 .id("1")
+                 .name("Kiwi")
+                 .category(Category.Food)
+                 .rating(8)
+                 .createdDate(LocalDate.now())
+                 .modifiedDate(LocalDate.now())
+                 .build();
+
          warehouse.addProduct(p);
          Product product = warehouse.getProductById("1");
          assertEquals(p, product); // p = product
@@ -103,10 +107,38 @@ import static org.junit.jupiter.api.Assertions.*;
      @Test
      void getProductsByCategorySortedShouldReturnSortedProductsByCategory() {
          Warehouse warehouse = new Warehouse();
-         warehouse.addProduct(new Product("a", "Orange", Category.Food, 5, LocalDate.now(), LocalDate.now()));
-         warehouse.addProduct(new Product("b", "Kiwi", Category.Food, 8, LocalDate.now(), LocalDate.now()));
-         warehouse.addProduct(new Product("c", "Apple", Category.Drink, 7, LocalDate.now(), LocalDate.now()));
-         warehouse.addProduct(new Product("d", "Milk", Category.Drink, 9, LocalDate.now(), LocalDate.now()));
+         warehouse.addProduct(new Product.Builder()
+                 .id("a")
+                 .name("Orange")
+                 .category(Category.Food)
+                 .rating(5)
+                 .createdDate(LocalDate.now())
+                 .modifiedDate(LocalDate.now())
+                 .build());
+         warehouse.addProduct(new Product.Builder()
+                 .id("b")
+                 .name("Kiwi")
+                 .category(Category.Food)
+                 .rating(8)
+                 .createdDate(LocalDate.now())
+                 .modifiedDate(LocalDate.now())
+                 .build());
+         warehouse.addProduct(new Product.Builder()
+                 .id("c")
+                 .name("Apple")
+                 .category(Category.Drink)
+                 .rating(7)
+                 .createdDate(LocalDate.now())
+                 .modifiedDate(LocalDate.now())
+                 .build());
+         warehouse.addProduct(new Product.Builder()
+                 .id("d")
+                 .name("Milk")
+                 .category(Category.Drink)
+                 .rating(9)
+                 .createdDate(LocalDate.now())
+                 .modifiedDate(LocalDate.now())
+                 .build());
 
          var foods = warehouse.getProductsByCategorySorted(Category.Food);
          assertEquals(2, foods.size());

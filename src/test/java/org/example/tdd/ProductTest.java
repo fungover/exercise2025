@@ -2,6 +2,8 @@ package org.example.tdd;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProductTest {
@@ -58,11 +60,39 @@ public class ProductTest {
         assertEquals(5,product.rating());
     }
 
+    @Test
+    public void canCreateZonedDateTime() {
+        Product product = new Product("ID","Name",Category.FOOD, 5);
+        assertEquals(ZonedDateTime.now(ZoneId.of("Europe/Stockholm")),product.createdDate());
+        System.out.println(product.createdDate().getZone());
+    }
 
+    @Test
+    public void cantCreateZonedDateTime() {
+        Product product = new Product("ID","Name",Category.FOOD, 5);
+        assertEquals(ZonedDateTime.now(ZoneId.of("")),product.createdDate());
+    }
 
+    @Test
+    public void canCreateProductDate() {
+        ZonedDateTime createdDate = ZonedDateTime.of(
+                2025, 9, 1, 12, 0, 0, 0,
+                ZoneId.of("Europe/Stockholm"));
+        Product product = new Product("ID","Name",Category.FOOD, 5, createdDate, null);
+        assertEquals(createdDate,product.createdDate());
+        System.out.println("Created Date: "+product.createdDate());
+    }
 
+    @Test
+    public void canCreateProductModifiedDate() {
 
-
+        ZonedDateTime createdDate = ZonedDateTime.of(
+                2025, 9, 1, 12, 0, 0, 0,
+                ZoneId.of("Europe/Stockholm"));
+        Product product = new Product("ID","Name",Category.FOOD, 5, createdDate, null);
+        assertEquals(createdDate,product.modifiedDate());
+        System.out.println("Modified Date: "+product.modifiedDate());
+    }
 
 
 

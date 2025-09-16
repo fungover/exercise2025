@@ -3,6 +3,7 @@ package org.example.Repository;
 import org.example.entities.Product;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * In-memory implementation of ProductRepository.
@@ -11,7 +12,7 @@ import java.util.*;
 
 public class InMemoryProductRepository implements ProductRepository {
 
-    private final Map<String, Product> productMap = new HashMap<>();
+    private final Map<String, Product> productMap = new ConcurrentHashMap<>();
 
     @Override
     public void addProduct(Product product) {

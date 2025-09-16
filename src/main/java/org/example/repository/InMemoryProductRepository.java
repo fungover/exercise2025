@@ -17,19 +17,19 @@ public class InMemoryProductRepository implements ProductRepository {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
-        if (product.id() == null || product.id().isBlank()) {
+        if (product.getId() == null || product.getId().isBlank()) {
             throw new IllegalArgumentException("Product id cannot be null or empty");
         }
-        if (product.name().isBlank()) {
+        if (product.getName().isBlank()) {
             throw new IllegalArgumentException("Product name cannot be empty");
         }
         if (product.category() == null) {
             throw new IllegalArgumentException("Category cannot be null");
         }
-        if (products.containsKey(product.id())) {
+        if (products.containsKey(product.getId())) {
             throw new IllegalArgumentException("Product with this ID already exists");
         }
-        products.put(product.id(), product);
+        products.put(product.getId(), product);
     }
 
     @Override
@@ -42,44 +42,43 @@ public class InMemoryProductRepository implements ProductRepository {
             throw new IllegalArgumentException("Product with id " + id + " does not exist");
         }
         return Optional.of(product);
-        /*return Optional.empty();*/
     }
 
     @Override
     public List<Product> getAllProducts() {
-        products.values().forEach(System.out::println); // Just to see the products in console, can be removed later
+        /*products.values().forEach(System.out::println);*/ // Just to see the products in console, can be removed later
         return Collections.unmodifiableList(new ArrayList<>(products.values()));
 
     }
 
     @Override
     public void updateProduct(Product product) {
-        if (product.id() == null || product.id().isBlank()) {
+        if (product.getId() == null || product.getId().isBlank()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
-        if (product.name() == null || product.name().isBlank()) {
+        if (product.getName() == null || product.getName().isBlank()) {
             throw new IllegalArgumentException("Name cannot be empty");
         }
         if (product.rating() < 0 || product.rating() > 10) {
             throw new IllegalArgumentException("Rating must be between 0 and 10");
         }
 
-        Product existing = products.get(product.id());
+        Product existing = products.get(product.getId());
 
         if (existing == null) {
-            throw new IllegalArgumentException("Product with id " + product.id() + " does not exist");
+            throw new IllegalArgumentException("Product with id " + product.getId() + " does not exist");
         }
 
         Product updated = new Product.Builder()
-                .id(existing.id())
-                .name(product.name())
+                .id(existing.getId())
+                .name(product.getName())
                 .category(product.category())
                 .rating(product.rating())
                 .createdDate(existing.createdDate())
                 .modifiedDate(LocalDate.now())
-                .price(existing.price())
+                .price(product.getPrice())
                 .build();
 
-        products.put(product.id(), updated);
+        products.put(product.getId(), updated);
     }
 }

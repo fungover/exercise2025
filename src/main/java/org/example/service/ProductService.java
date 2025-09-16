@@ -50,7 +50,7 @@ public class ProductService /*Warehouse*/ {
         return getAllProducts()
                 .stream()
                 .filter(p -> p.category() == category)
-                .sorted(Comparator.comparing(Product::name))
+                .sorted(Comparator.comparing(Product::getName))
                 .collect(Collectors.toList());
     }
 
@@ -105,7 +105,7 @@ public class ProductService /*Warehouse*/ {
     public Map<Character, Integer> getProductInitialsMap() {
         return getAllProducts()
                 .stream()
-                .map(p -> p.name().toUpperCase().charAt(0))
+                .map(p -> p.getName().toUpperCase().charAt(0))
                 .collect(Collectors.toMap(
                         initial -> initial,
                         initial -> 1,

@@ -13,7 +13,6 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,7 +76,7 @@ class WareHouseTest {
 
         // Failure: duplicate ID
         Product duplicateIdProduct = new Product.Builder()
-                .id(validProduct.id())
+                .id(validProduct.getId())
                 .name("Duplicate")
                 .category(Category.ELECTRONICS)
                 .rating(5)
@@ -121,19 +120,19 @@ class WareHouseTest {
                 .name("Updated")
                 .category(Category.ELECTRONICS)
                 .rating(9)
-                /*.price(24.99)*/ // TODO: maybe update something here? How do we do with dates?
+                .price(24.99)
                 .modifiedDate(LocalDate.now())
                 .build());
 
         Product afterUpdate = productService.getProductByID("5")
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-        System.out.println(afterUpdate);
 
         assertThat(afterUpdate).isNotNull();
-        assertThat(afterUpdate.id()).isEqualTo("5"); // Same id
-        assertThat(afterUpdate.name()).isEqualTo("Updated");
+        assertThat(afterUpdate.getId()).isEqualTo("5"); // Same id
+        assertThat(afterUpdate.getName()).isEqualTo("Updated");
         assertThat(afterUpdate.category()).isEqualTo(Category.ELECTRONICS);
         assertThat(afterUpdate.rating()).isEqualTo(9);
+        assertThat(afterUpdate.getPrice()).isEqualTo(24.99);
         assertThat(afterUpdate.createdDate()).isEqualTo(today); // createdDate should be unchanged
 
         assertThat(afterUpdate.modifiedDate()).isAfter(beforeUpdate.modifiedDate());
@@ -187,7 +186,7 @@ class WareHouseTest {
         assertThat(copyWarehouse).isNotNull();
         assertThat(copyWarehouse.size()).isEqualTo(3);
         assertThat(copyWarehouse).containsExactlyInAnyOrder(product1, product2, product3);
-        assertThat(copyWarehouse.stream().anyMatch(p -> p.id().equals("100"))).isFalse();
+        assertThat(copyWarehouse.stream().anyMatch(p -> p.getId().equals("100"))).isFalse();
     }
 
     @Test
@@ -237,8 +236,8 @@ class WareHouseTest {
 
         assertThat(found1).isNotNull();
         assertThat(found2).isNotNull();
-        assertThat(found1.id()).isEqualTo("97");
-        assertThat(found2.id()).isEqualTo("98");
+        assertThat(found1.getId()).isEqualTo("97");
+        assertThat(found2.getId()).isEqualTo("98");
 
         assertThatThrownBy(() -> productService.getProductByID("1000"))
                 .isInstanceOf(IllegalArgumentException.class)

@@ -2,7 +2,7 @@ package org.example.entities;
 
 import java.time.LocalDate;
 
-public class Product{
+public class Product implements Sellable{
 
     private final String id;
     private final String name;
@@ -30,13 +30,29 @@ public class Product{
     }
 
     // Getters
-    public String id() {return id;}
-    public String name() {return name;}
+    @Override
+    public String getId() {return id;}
+    @Override
+    public String getName() {return name;}
+    @Override
+    public double getPrice() {return price;}
     public Category category() {return category;}
     public int rating() {return rating;}
     public LocalDate createdDate() {return createdDate;}
     public LocalDate modifiedDate() {return modifiedDate;}
-    public double price() {return price;}
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", category=" + category +
+                ", rating=" + rating +
+                ", createdDate=" + createdDate +
+                ", modifiedDate=" + modifiedDate +
+                ", price=" + price +
+                '}';
+    }
 
     // Builder
     public static class Builder {

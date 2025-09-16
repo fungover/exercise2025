@@ -1,7 +1,9 @@
 package org.example;
 
 import org.example.entities.Category;
+import org.example.entities.DiscountDecorator;
 import org.example.entities.Product;
+import org.example.entities.Sellable;
 import org.example.repository.InMemoryProductRepository;
 import org.example.repository.ProductRepository;
 import org.example.service.ProductService;
@@ -38,5 +40,15 @@ public class App {
 
         /*System.out.println(productService.getAllProducts());*/
         System.out.println(productService.getProductsByCategorySorted(Category.ELECTRONICS));
+
+        Product laptop = productService.getProductByID("1").orElseThrow(() -> new IllegalArgumentException("Product with id 1 not found")); ; // Original price is 1000.0
+
+        Sellable discountedLaptop = new DiscountDecorator(laptop, 20);
+
+        System.out.println(laptop);
+        System.out.println(discountedLaptop.getPrice());
+
+
+
     }
 }

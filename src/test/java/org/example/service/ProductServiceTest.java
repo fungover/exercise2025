@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,22 +12,23 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class WarehouseTest {
+public class ProductServiceTest {
 
-    private Warehouse warehouse;
+    private ProductService productService;
     private Clock fixed;
 
     @BeforeEach
     void setup() {
         // Europe/Stockholm, 2025-09-08 12:00 local (10:00Z)
         fixed = Clock.fixed(Instant.parse("2025-09-08T10:00:00Z"), ZoneId.of("Europe/Stockholm"));
-        warehouse = new Warehouse(fixed);
+        ProductRepository inMemoryProductRepository = new InMemoryProductRepository();
+        productService = new ProductService(fixed, inMemoryProductRepository);
     }
 
     /** getAllProducts method */
     @Test
     void getAllProducts_returnsEmptyWhenNothingAdded() {
-        var all = warehouse.getAllProducts();
+        var all = productService.getAllProducts();
         assertTrue(all.isEmpty());
     }
 
@@ -52,10 +55,10 @@ public class WarehouseTest {
                 .modifiedDate(createdAt2)
                 .build();
 
-        warehouse.addProduct(testProduct1);
-        warehouse.addProduct(testProduct2);
+        productService.addProduct(testProduct1);
+        productService.addProduct(testProduct2);
 
-        var all = warehouse.getAllProducts();
+        var all = productService.getAllProducts();
         assertEquals(2, all.size());
         assertTrue(all.contains(testProduct1));
         assertTrue(all.contains(testProduct2));
@@ -63,7 +66,7 @@ public class WarehouseTest {
 
     /** addProduct method */
     @Test
-    void addProduct_success_addsToWarehouse() {
+    void addProduct_success_addsToService() {
         LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
 
         Product testProduct = Product.builder()
@@ -75,9 +78,9 @@ public class WarehouseTest {
                 .modifiedDate(createdAt)
                 .build();
 
-        warehouse.addProduct(testProduct);
+        productService.addProduct(testProduct);
 
-        var all = warehouse.getAllProducts();
+        var all = productService.getAllProducts();
         assertEquals(1, all.size());
         assertTrue(all.contains(testProduct));
     }
@@ -105,10 +108,10 @@ public class WarehouseTest {
                 .modifiedDate(createdAt2)
                 .build();
 
-        warehouse.addProduct(testProduct1);
+        productService.addProduct(testProduct1);
 
         IllegalArgumentException exception =
-                assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(testProduct2));
+                assertThrows(IllegalArgumentException.class, () -> productService.addProduct(testProduct2));
         assertTrue(exception.getMessage().contains("duplicate id"));
     }
 
@@ -126,9 +129,9 @@ public class WarehouseTest {
                 .modifiedDate(createdAt)
                 .build();
 
-        warehouse.addProduct(testProduct);
+        productService.addProduct(testProduct);
 
-        var testProductById = warehouse.getProductById(testProduct.id());
+        var testProductById = productService.getProductById(testProduct.id());
 
         assertEquals(Optional.of(testProduct), testProductById);
     }
@@ -136,14 +139,14 @@ public class WarehouseTest {
     @Test
     void getProductById_nullId_throwsNullPointerException() {
         NullPointerException exception =
-                assertThrows(NullPointerException.class, () -> warehouse.getProductById(null));
+                assertThrows(NullPointerException.class, () -> productService.getProductById(null));
         assertTrue(exception.getMessage().contains("id"));
     }
 
     @Test
     void getProductById_blankId_throwsIllegalArgumentException() {
         IllegalArgumentException exception =
-                assertThrows(IllegalArgumentException.class, () -> warehouse.getProductById("  "));
+                assertThrows(IllegalArgumentException.class, () -> productService.getProductById("  "));
         assertTrue(exception.getMessage().contains("id required"));
     }
 
@@ -161,9 +164,9 @@ public class WarehouseTest {
                 .modifiedDate(createdAt)
                 .build();
 
-        warehouse.addProduct(original);
+        productService.addProduct(original);
 
-        Product updated = warehouse.updateProduct("id1", "New Name", Category.TOYS, 9);
+        Product updated = productService.updateProduct("id1", "New Name", Category.TOYS, 9);
 
         assertEquals("id1", updated.id());
         assertEquals("New Name", updated.name());
@@ -171,25 +174,25 @@ public class WarehouseTest {
         assertEquals(9, updated.rating());
         assertEquals(createdAt, updated.createdDate());
         assertEquals(LocalDateTime.of(2025, 9, 8, 12, 0), updated.modifiedDate());
-        assertEquals(Optional.of(updated), warehouse.getProductById("id1"));
+        assertEquals(Optional.of(updated), productService.getProductById("id1"));
     }
 
     @Test
     void updateProduct_nullId_throwsNullPointerException() {
         assertThrows(NullPointerException.class,
-                () -> warehouse.updateProduct(null, "test", Category.BOOKS, 7));
+                () -> productService.updateProduct(null, "test", Category.BOOKS, 7));
     }
 
     @Test
     void updateProduct_blankId_throwsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class,
-                () -> warehouse.updateProduct("   ", "test", Category.BOOKS, 7));
+                () -> productService.updateProduct("   ", "test", Category.BOOKS, 7));
     }
 
     @Test
     void updateProduct_missingId_throwsNoSuchElementException() {
         assertThrows(NoSuchElementException.class,
-                () -> warehouse.updateProduct("missing-id", "test", Category.BOOKS, 7));
+                () -> productService.updateProduct("missing-id", "test", Category.BOOKS, 7));
     }
 
     /** getProductsByCategorySorted method */
@@ -226,11 +229,11 @@ public class WarehouseTest {
                 .modifiedDate(createdAt3)
                 .build();
 
-        warehouse.addProduct(testProduct1);
-        warehouse.addProduct(testProduct2);
-        warehouse.addProduct(testProduct3);
+        productService.addProduct(testProduct1);
+        productService.addProduct(testProduct2);
+        productService.addProduct(testProduct3);
 
-        var result = warehouse.getProductsByCategorySorted(Category.TOYS);
+        var result = productService.getProductsByCategorySorted(Category.TOYS);
 
         assertEquals(List.of("A", "B"),
                 result.stream().map(Product::name).toList());
@@ -259,10 +262,10 @@ public class WarehouseTest {
                 .modifiedDate(createdAt2)
                 .build();
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
+        productService.addProduct(product1);
+        productService.addProduct(product2);
 
-        var result = warehouse.getProductsByCategorySorted(Category.ELECTRONICS);
+        var result = productService.getProductsByCategorySorted(Category.ELECTRONICS);
 
         assertTrue(result.isEmpty());
     }
@@ -270,7 +273,7 @@ public class WarehouseTest {
     @Test
     void getProductsByCategorySorted_nullCategory_throwsNullPointerException() {
         assertThrows(NullPointerException.class,
-                () -> warehouse.getProductsByCategorySorted(null));
+                () -> productService.getProductsByCategorySorted(null));
     }
 
     /** getProductsCreatedAfter method */
@@ -307,11 +310,11 @@ public class WarehouseTest {
                 .modifiedDate(createdAt3)
                 .build();
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
-        warehouse.addProduct(product3);
+        productService.addProduct(product1);
+        productService.addProduct(product2);
+        productService.addProduct(product3);
 
-        var result = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 9, 2));
+        var result = productService.getProductsCreatedAfter(LocalDate.of(2025, 9, 2));
 
         assertEquals(List.of("sep03"), result.stream().map(Product::name).toList());
     }
@@ -329,15 +332,15 @@ public class WarehouseTest {
                 .modifiedDate(createdAt)
                 .build();
 
-        warehouse.addProduct(product);
+        productService.addProduct(product);
 
-        var result = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 9, 1));
+        var result = productService.getProductsCreatedAfter(LocalDate.of(2025, 9, 1));
         assertTrue(result.isEmpty());
     }
 
     @Test
     void getProductsCreatedAfter_nullDate_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> warehouse.getProductsCreatedAfter(null));
+        assertThrows(NullPointerException.class, () -> productService.getProductsCreatedAfter(null));
     }
 
     /** getModifiedProducts method */
@@ -363,12 +366,12 @@ public class WarehouseTest {
                 .modifiedDate(createdAt)
                 .build();
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
+        productService.addProduct(product1);
+        productService.addProduct(product2);
 
-        warehouse.updateProduct("id2", "updated product", Category.BOOKS, 7);
+        productService.updateProduct("id2", "updated product", Category.BOOKS, 7);
 
-        var result = warehouse.getModifiedProducts();
+        var result = productService.getModifiedProducts();
         assertEquals(List.of("id2"), result.stream().map(Product::id).toList());
     }
 
@@ -385,9 +388,9 @@ public class WarehouseTest {
                 .modifiedDate(createdAt)
                 .build();
 
-        warehouse.addProduct(product);
+        productService.addProduct(product);
 
-        var result = warehouse.getModifiedProducts();
+        var result = productService.getModifiedProducts();
         assertTrue(result.isEmpty());
     }
 
@@ -423,19 +426,19 @@ public class WarehouseTest {
                 .modifiedDate(createdAt.plusMinutes(2))
                 .build();
 
-        warehouse.addProduct(book1);
-        warehouse.addProduct(book2);
-        warehouse.addProduct(toy1);
+        productService.addProduct(book1);
+        productService.addProduct(book2);
+        productService.addProduct(toy1);
 
-        var categories = warehouse.getCategoriesWithProducts();
+        var categories = productService.getCategoriesWithProducts();
 
         assertEquals(Set.of(Category.BOOKS, Category.TOYS), new HashSet<>(categories));
         assertFalse(categories.contains(Category.ELECTRONICS));
     }
 
     @Test
-    void getCategoriesWithProducts_emptyWarehouse_returnsEmptyList() {
-        var categories = warehouse.getCategoriesWithProducts();
+    void getCategoriesWithProducts_emptyService_returnsEmptyList() {
+        var categories = productService.getCategoriesWithProducts();
         assertTrue(categories.isEmpty());
     }
 
@@ -471,12 +474,12 @@ public class WarehouseTest {
                 .modifiedDate(createdAt.plusMinutes(2))
                 .build();
 
-        warehouse.addProduct(book1);
-        warehouse.addProduct(book2);
-        warehouse.addProduct(toy1);
+        productService.addProduct(book1);
+        productService.addProduct(book2);
+        productService.addProduct(toy1);
 
-        var booksTotal = warehouse.countProductsInCategory(Category.BOOKS);
-        var toysTotal = warehouse.countProductsInCategory(Category.TOYS);
+        var booksTotal = productService.countProductsInCategory(Category.BOOKS);
+        var toysTotal = productService.countProductsInCategory(Category.TOYS);
 
         assertEquals(2, booksTotal);
         assertEquals(1, toysTotal);
@@ -485,7 +488,7 @@ public class WarehouseTest {
     @Test
     void countProductsInCategory_nullCategory_throwsNullPointerException() {
         NullPointerException ex = assertThrows(NullPointerException.class,
-                () -> warehouse.countProductsInCategory(null));
+                () -> productService.countProductsInCategory(null));
         assertEquals("category", ex.getMessage());
     }
 
@@ -521,11 +524,11 @@ public class WarehouseTest {
                 .modifiedDate(t.plusMinutes(2))
                 .build();
 
-        warehouse.addProduct(a1);
-        warehouse.addProduct(a2);
-        warehouse.addProduct(b1);
+        productService.addProduct(a1);
+        productService.addProduct(a2);
+        productService.addProduct(b1);
 
-        var initials = warehouse.getProductInitialsMap();
+        var initials = productService.getProductInitialsMap();
 
         assertEquals(2, initials.get('A'));
         assertEquals(1, initials.get('B'));
@@ -533,7 +536,7 @@ public class WarehouseTest {
 
     @Test
     void getProductInitialsMap_empty_returnsEmptyMap() {
-        assertTrue(warehouse.getProductInitialsMap().isEmpty());
+        assertTrue(productService.getProductInitialsMap().isEmpty());
     }
 
     /** getTopRatedProductsThisMonth method */
@@ -591,13 +594,13 @@ public class WarehouseTest {
                 .modifiedDate(sep04)
                 .build();
 
-        warehouse.addProduct(productOld);
-        warehouse.addProduct(product1Low);
-        warehouse.addProduct(product2Top);
-        warehouse.addProduct(product3Top);
-        warehouse.addProduct(product4Low);
+        productService.addProduct(productOld);
+        productService.addProduct(product1Low);
+        productService.addProduct(product2Top);
+        productService.addProduct(product3Top);
+        productService.addProduct(product4Low);
 
-        var result = warehouse.getTopRatedProductsThisMonth();
+        var result = productService.getTopRatedProductsThisMonth();
 
         assertEquals(List.of(product3Top, product2Top), result);
     }
@@ -625,10 +628,10 @@ public class WarehouseTest {
                 .modifiedDate(aug31)
                 .build();
 
-        warehouse.addProduct(product1Old);
-        warehouse.addProduct(product2Old);
+        productService.addProduct(product1Old);
+        productService.addProduct(product2Old);
 
-        var result = warehouse.getTopRatedProductsThisMonth();
+        var result = productService.getTopRatedProductsThisMonth();
 
         assertTrue(result.isEmpty());
     }

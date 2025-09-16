@@ -3,7 +3,9 @@ package org.example;
 import org.example.Repository.InMemoryProductRepository;
 import org.example.Repository.ProductRepository;
 import org.example.entities.Category;
+import org.example.entities.DiscountDecorator;
 import org.example.entities.Product;
+import org.example.entities.Sellable;
 import org.example.service.ProductService;
 
 import java.util.List;
@@ -28,24 +30,15 @@ public class App {
                 .name("Clue")
                 .category(Category.BOARDGAMES)
                 .rating(7)
-                .price(9.99)
+                .price(39.99)
                 .build();
 
         productService.addProduct(p1);
         productService.addProduct(p2);
 
-        Product retrieved = productService.getProductById("p001");
-        System.out.println("Retrieved product: " + retrieved);
+        Sellable discountedCar = new DiscountDecorator(p2, 20);
 
-        Product updated = productService.updateProduct("p002", "Clue", Category.BOARDGAMES, 9);
-        System.out.println("Updated product: " + updated);
-
-        List<Product> allProducts = productService.getAllProducts();
-        System.out.println("All products:");
-        allProducts.forEach(System.out::println);
-
-        List<Product> toys = productService.getProductsByCategorySorted(Category.TOYS);
-        System.out.println("Toys category products:");
-        toys.forEach(System.out::println);
+        System.out.println("Original price of Clue: " + p2.getPrice());
+        System.out.printf("Discounted price of Clue (20%% off): %.2f%n", discountedCar.getPrice());
     }
 }

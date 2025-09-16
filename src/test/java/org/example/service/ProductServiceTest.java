@@ -114,7 +114,7 @@ class ProductServiceTest {
                 IllegalArgumentException.class,
                 () -> productService.updateProduct("999", "New Name", Category.BOOKS, 8) // Attempt to update a product that doesn't exist
         );
-        assertEquals("Product with id 999 not found", exception.getMessage()); // Verify the exception message
+        assertEquals("Product with id: 999 not found", exception.getMessage()); // Verify the exception message
     }
 
     @Test

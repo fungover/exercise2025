@@ -11,7 +11,7 @@ public class Product {
     private final LocalDate createdDate;
     private final LocalDate modifiedDate;
 
-    // constructor is private so only Builder can create Product
+    // Private constructor - only Builder can create Product
     private Product(String id, String name, Category category, int rating,
                     LocalDate createdDate, LocalDate modifiedDate) {
         this.id = id;
@@ -30,7 +30,7 @@ public class Product {
     public LocalDate getCreatedDate() { return createdDate; }
     public LocalDate getModifiedDate() { return modifiedDate; }
 
-    // Builder class with fields + setter methods
+    // Builder class
     public static class Builder {
         private String id;
         private String name;
@@ -69,6 +69,30 @@ public class Product {
             return this;
         }
 
-        // build()
+        // build() method with validation + defaults
+        public Product build() {
+            if (id == null || id.isBlank()) {
+                throw new IllegalArgumentException("id cannot be null or blank");
+            }
+            if (name == null || name.isBlank()) {
+                throw new IllegalArgumentException("name cannot be null or blank");
+            }
+            if (category == null) {
+                throw new IllegalArgumentException("category cannot be null");
+            }
+            if (rating < 0 || rating > 10) {
+                throw new IllegalArgumentException("rating must be between 0 and 10");
+            }
+
+            LocalDate now = LocalDate.now();
+            if (createdDate == null) {
+                createdDate = now;
+            }
+            if (modifiedDate == null) {
+                modifiedDate = createdDate;
+            }
+
+            return new Product(id, name, category, rating, createdDate, modifiedDate);
+        }
     }
 }

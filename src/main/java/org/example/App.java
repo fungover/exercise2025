@@ -2,7 +2,9 @@ package org.example;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
-import org.example.service.Warehouse;
+import org.example.repository.ProductRepository;
+import org.example.repository.inMemoryProductRepository;
+import org.example.service.ProductService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,27 +12,30 @@ import java.util.List;
 
 public class App {
     public static void main(String[] args) {
-        Warehouse warehouse = new Warehouse();
+        // create repository
+        ProductRepository repository = new inMemoryProductRepository();
+        //create service with repository
+        ProductService productService = new ProductService(repository);
         var products = getWarehouseProducts();
         products.forEach(product -> {
-            warehouse.addProduct(product);
+            productService.addProduct(product);
         });
 
 
-//        iSeeBlackSheep(warehouse);
+//        iSeeBlackSheep(productService);
 
-//        warehouse.updateProduct("1", "blueLaptop", Category.FOOD, 3);
+//        productService.updateProduct("1", "blueLaptop", Category.FOOD, 3);
 
         System.out.println();
-        iSeeBlackSheep(warehouse);
+        iSeeBlackSheep(productService);
 
         System.out.println("-".repeat(20));
-//        warehouse.getProductsByCategorySorted(Category.FOOD)
+//        productService.getProductsByCategorySorted(Category.FOOD)
 //                 .forEach(System.out::println);
 
 //        System.out.println(products.get(0)
         LocalDate now = LocalDate.now();
-        System.out.println(warehouse.getProductsCreatedAfter(now));
+        System.out.println(productService.getProductsCreatedAfter(now));
     }
 
     private static List<Product> getWarehouseProducts() {
@@ -88,9 +93,9 @@ public class App {
         return products;
     }
 
-    private static void iSeeBlackSheep(Warehouse warehouse) {
-        warehouse.getAllProducts()
-                 .stream()
-                 .forEach(System.out::println);
+    private static void iSeeBlackSheep(ProductService productService) {
+        productService.getAllProducts()
+                      .stream()
+                      .forEach(System.out::println);
     }
 }

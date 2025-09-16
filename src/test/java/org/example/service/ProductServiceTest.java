@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.ProductRepository;
+import org.example.repository.inMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,12 +14,16 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class WarehouseTest {
+class ProductServiceTest {
 
-    private Warehouse warehouse;
+    private ProductService productService;
 
     @BeforeEach void warehouseSetup() {
-        warehouse = new Warehouse(); //before each test
+        // create repository
+        ProductRepository repository = new inMemoryProductRepository();
+
+        this.productService = new ProductService(repository);//before each test
+
     }
 
     @Test void productAddedToWareHouseInventory() {
@@ -27,21 +33,21 @@ class WarehouseTest {
                                               .build();
 
 
-        assertTrue(warehouse.addProduct(laptop));
+        assertTrue(productService.addProduct(laptop));
     }
 
     @Test void productAddedWithEmptyName() {
-        Warehouse warehouse = new Warehouse();
+//        ProductService productService = new ProductService();
 //        Product laptop = new Product.Builder().name("")
 //                                              .category(Category.ELECTRONICS)
 //                                              .rating(4)
 //                                              .build();
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(
+        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(
           new Product.Builder().name("")
                                .category(Category.ELECTRONICS)
                                .rating(4)
                                .build()));
-//        assertFalse(warehouse.addProduct(laptop));
+//        assertFalse(productService.addProduct(laptop));
 
     }
 
@@ -51,18 +57,18 @@ class WarehouseTest {
                                             .rating(10)
                                             .build();
 
-        warehouse.addProduct(lamp);
+        productService.addProduct(lamp);
 
         String idAsString = String.valueOf(lamp.id());
 
-        warehouse.getAllProducts()
-                 .forEach(System.out::println);
-        warehouse.updateProduct(idAsString, "blueLaptop", Category.FOOD, 3);
+        productService.getAllProducts()
+                      .forEach(System.out::println);
+        productService.updateProduct(idAsString, "blueLaptop", Category.FOOD, 3);
 
 
         //get our updated product
-        Product updated = warehouse.getProductById(lamp.id()
-                                                       .toString());
+        Product updated = productService.getProductById(lamp.id()
+                                                            .toString());
 
         assertEquals(lamp.id(), updated.id());
         assertEquals("blueLaptop", updated.name());
@@ -77,9 +83,9 @@ class WarehouseTest {
                                             .build();
 
 
-        warehouse.addProduct(lamp);
+        productService.addProduct(lamp);
         assertThrows(IllegalArgumentException.class,
-          () -> warehouse.updateProduct("3", "blueLaptop", Category.FOOD, 3));
+          () -> productService.updateProduct("3", "blueLaptop", Category.FOOD, 3));
     }
 
     @Test void getAllProducts_Valid() {
@@ -93,10 +99,10 @@ class WarehouseTest {
                                            .build();
 
 
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(cpu);
+        productService.addProduct(lamp);
+        productService.addProduct(cpu);
 
-        List<Product> products = warehouse.getAllProducts();
+        List<Product> products = productService.getAllProducts();
         assertEquals(2, products.size());
 
     }
@@ -111,20 +117,20 @@ class WarehouseTest {
                                            .rating(2)
                                            .build();
 
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(cpu);
+        productService.addProduct(lamp);
+        productService.addProduct(cpu);
 
-        warehouse.removeProductById(cpu.id()
-                                       .toString());
+        productService.removeProductById(cpu.id()
+                                            .toString());
 
-        List<Product> products = warehouse.getAllProducts();
+        List<Product> products = productService.getAllProducts();
         assertEquals(1, products.size());
         assertFalse(products.contains(cpu));
 
     }
 
     @Test void getAllProducts_WhenEmpty_ShouldReturnEmptyList() {
-        List<Product> products = warehouse.getAllProducts();
+        List<Product> products = productService.getAllProducts();
         assertEquals(0, products.size());
         assertNotNull(products);
         assertTrue(products.isEmpty());
@@ -154,12 +160,12 @@ class WarehouseTest {
                                                .build();
 
 
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(pc);
-        warehouse.addProduct(dogFood);
-        warehouse.addProduct(catFood);
+        productService.addProduct(lamp);
+        productService.addProduct(pc);
+        productService.addProduct(dogFood);
+        productService.addProduct(catFood);
 
-        List<Product> sortedByCategory = warehouse.getProductsByCategorySorted(
+        List<Product> sortedByCategory = productService.getProductsByCategorySorted(
           Category.FOOD);
 
         assertEquals(2, sortedByCategory.size());
@@ -181,10 +187,10 @@ class WarehouseTest {
                                           .rating(4)
                                           .build();
 
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(pc);
+        productService.addProduct(lamp);
+        productService.addProduct(pc);
 
-        List<Product> sortedByCategory = warehouse.getProductsByCategorySorted(
+        List<Product> sortedByCategory = productService.getProductsByCategorySorted(
           Category.FOOD);
 
         assertEquals(0, sortedByCategory.size(),
@@ -217,10 +223,11 @@ class WarehouseTest {
                                            .build();
 //          ("Super Delux Playstaion", Category.ELECTRONICS, 4);
 
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(pc);
-        warehouse.addProduct(ps5);
-        List<Product> productsCreaetedAfterList = warehouse.getProductsCreatedAfter(
+        productService.addProduct(lamp);
+        productService.addProduct(pc);
+        productService.addProduct(ps5);
+        List<Product> productsCreaetedAfterList =
+          productService.getProductsCreatedAfter(
           testDate);
         assertEquals(2, productsCreaetedAfterList.size());
     }
@@ -252,10 +259,11 @@ class WarehouseTest {
 //          ("Super Delux Playstaion", Category.ELECTRONICS, 6,
 //          testDate.minusDays(3));
 
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(pc);
-        warehouse.addProduct(ps5);
-        List<Product> productsCreatedAfterList = warehouse.getProductsCreatedAfter(
+        productService.addProduct(lamp);
+        productService.addProduct(pc);
+        productService.addProduct(ps5);
+        List<Product> productsCreatedAfterList =
+          productService.getProductsCreatedAfter(
           testDate);
         assertEquals(0, productsCreatedAfterList.size());
 
@@ -280,12 +288,12 @@ class WarehouseTest {
                                           .build();
 //          ("PC", Category.ELECTRONICS, 4, testDate);
 
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(pc);
+        productService.addProduct(lamp);
+        productService.addProduct(pc);
 
         String idAsString = String.valueOf(lamp.id());
-        warehouse.updateProduct(idAsString, "bed", Category.FOOD, 2);
-        List<Product> getModifiedProductsList = warehouse.getModifiedProducts();
+        productService.updateProduct(idAsString, "bed", Category.FOOD, 2);
+        List<Product> getModifiedProductsList = productService.getModifiedProducts();
 
         assertEquals(1, getModifiedProductsList.size());
     }
@@ -303,14 +311,14 @@ class WarehouseTest {
                                           .rating(4)
                                           .build();
 //          ("PC", Category.ELECTRONICS, 4);
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(pc);
+        productService.addProduct(lamp);
+        productService.addProduct(pc);
 
         String idAsString = String.valueOf(lamp.id());
-        warehouse.updateProduct(idAsString, "bed", Category.FOOD, 2);
+        productService.updateProduct(idAsString, "bed", Category.FOOD, 2);
 
 
-        List<Product> getModifiedProductsList = warehouse.getModifiedProducts();
+        List<Product> getModifiedProductsList = productService.getModifiedProducts();
         assertEquals(0, getModifiedProductsList.size());
     }
 
@@ -341,14 +349,14 @@ class WarehouseTest {
                                                   .rating(9)
                                                   .build();
 //          ("SillyBirds", Category.GAMES, 9);
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(pc);
-        warehouse.addProduct(hotdog);
-        warehouse.addProduct(angryFish);
-        warehouse.addProduct(sillyBirds);
+        productService.addProduct(lamp);
+        productService.addProduct(pc);
+        productService.addProduct(hotdog);
+        productService.addProduct(angryFish);
+        productService.addProduct(sillyBirds);
 
         List<Category> getCategoriesWithProductsList =
-          warehouse.getCategoriesWithProducts();
+          productService.getCategoriesWithProducts();
 
         assertEquals(3, getCategoriesWithProductsList.size());
         assertTrue(getCategoriesWithProductsList.contains(Category.FOOD));
@@ -357,7 +365,8 @@ class WarehouseTest {
     }
 
     @Test void getCategoriesWithProducts_isEmpty() {
-        List<Category> categories_emptyList = warehouse.getCategoriesWithProducts();
+        List<Category> categories_emptyList =
+          productService.getCategoriesWithProducts();
         assertEquals(0, categories_emptyList.size());
         assertTrue(categories_emptyList.isEmpty());
     }
@@ -386,21 +395,22 @@ class WarehouseTest {
                                                   .category(Category.GAMES)
                                                   .rating(9)
                                                   .build();
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(pc);
-        warehouse.addProduct(hotdog);
-        warehouse.addProduct(angryFish);
-        warehouse.addProduct(sillyBirds);
+        productService.addProduct(lamp);
+        productService.addProduct(pc);
+        productService.addProduct(hotdog);
+        productService.addProduct(angryFish);
+        productService.addProduct(sillyBirds);
 
 
         //when we ask for a Category food, we should get back 2
-        long amountOfProductsInFood = warehouse.countProductsInCategory(
+        long amountOfProductsInFood = productService.countProductsInCategory(
           Category.FOOD);
 
 
         assertEquals(2, amountOfProductsInFood);
-        assertEquals(2, warehouse.countProductsInCategory(Category.ELECTRONICS));
-        assertEquals(1, warehouse.countProductsInCategory(Category.GAMES));
+        assertEquals(2,
+          productService.countProductsInCategory(Category.ELECTRONICS));
+        assertEquals(1, productService.countProductsInCategory(Category.GAMES));
 
     }
 
@@ -410,9 +420,9 @@ class WarehouseTest {
          */
 
         assertThrows(IllegalArgumentException.class,
-          () -> warehouse.countProductsInCategory(null));
+          () -> productService.countProductsInCategory(null));
         assertThrows(IllegalArgumentException.class,
-          () -> warehouse.countProductsInCategory(Category.valueOf("Toys")));
+          () -> productService.countProductsInCategory(Category.valueOf("Toys")));
 
     }
 
@@ -441,14 +451,14 @@ class WarehouseTest {
                                                   .category(Category.GAMES)
                                                   .rating(9)
                                                   .build();
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(LargePc);
-        warehouse.addProduct(hotdog);
-        warehouse.addProduct(angryFish);
-        warehouse.addProduct(sillyBirds);
+        productService.addProduct(lamp);
+        productService.addProduct(LargePc);
+        productService.addProduct(hotdog);
+        productService.addProduct(angryFish);
+        productService.addProduct(sillyBirds);
 
         Map<Character, Integer> FirstLetterAndCountOfItem =
-          warehouse.getProductInitialsMap();
+          productService.getProductInitialsMap();
         assertEquals(4, FirstLetterAndCountOfItem.size());
 
     }
@@ -460,8 +470,8 @@ class WarehouseTest {
                                                         .rating(4)
                                                         .build();
 //          ("1Lamp", Category.ELECTRONICS, 4);
-        warehouse.addProduct(emptyNameProduct);
-        Map<Character, Integer> initialsMap = warehouse.getProductInitialsMap();
+        productService.addProduct(emptyNameProduct);
+        Map<Character, Integer> initialsMap = productService.getProductInitialsMap();
         System.out.println(initialsMap);
         assertTrue(initialsMap.containsKey('1'));
     }
@@ -509,15 +519,15 @@ class WarehouseTest {
                                                   .createdDate(today)
                                                   .build();
 
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(LargePc);
-        warehouse.addProduct(hotdog);
-        warehouse.addProduct(angryFish);
-        warehouse.addProduct(sillyBirds);
-        warehouse.addProduct(sadBirds);
-        warehouse.addProduct(heavyBirds);
+        productService.addProduct(lamp);
+        productService.addProduct(LargePc);
+        productService.addProduct(hotdog);
+        productService.addProduct(angryFish);
+        productService.addProduct(sillyBirds);
+        productService.addProduct(sadBirds);
+        productService.addProduct(heavyBirds);
 
-        List<Product> result = warehouse.getTopRatedProductsThisMonth();
+        List<Product> result = productService.getTopRatedProductsThisMonth();
 
         assertEquals(4, result.size());
         assertEquals("SillyBirds", result.get(0)
@@ -548,11 +558,11 @@ class WarehouseTest {
                                               .createdDate(lastMonth)
                                               .build();
 
-        warehouse.addProduct(lamp);
-        warehouse.addProduct(LargePc);
-        warehouse.addProduct(hotdog);
+        productService.addProduct(lamp);
+        productService.addProduct(LargePc);
+        productService.addProduct(hotdog);
 
-        List<Product> result = warehouse.getTopRatedProductsThisMonth();
+        List<Product> result = productService.getTopRatedProductsThisMonth();
 
         assertTrue(result.isEmpty());
     }

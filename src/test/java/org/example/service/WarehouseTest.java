@@ -35,4 +35,18 @@ class WarehouseTest {
         assertTrue(warehouse.getAllProducts().contains(product));
     }
 
+    @Test
+    void addProductEmptyNameThrowsException() {
+        LocalDateTime now = LocalDateTime.now();
+        Product product = new Product(
+                "2",
+                "",
+                Category.BOOKS,
+                9,
+                now,
+                now
+        );
+        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
+
+    }
 }

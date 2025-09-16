@@ -87,5 +87,13 @@ public class WarehouseTest {
         System.out.println("Found product info: "+ warehouse.getProductByID(2));
     }
 
-
+    @Test
+    void getWrongProductByID() {
+        Warehouse warehouse = new Warehouse();
+        warehouse.addProduct(new Product(0,"Bread",FOOD,5));
+        warehouse.addProduct(new Product(1,"Milk",FOOD,7));
+        warehouse.addProduct(new Product(2,"Coffee",FOOD,3));
+        Product product = warehouse.getProductByID(10);
+        assertEquals(null,product);
+    }
 }

@@ -46,7 +46,7 @@ private final List<Product> products = new ArrayList<>();
                 .findFirst().orElse(null);
 
         if (searchedProduct == null) {
-            throw new IllegalArgumentException("Product with id " + ID + " does not exist");
+            System.out.println("Product with id " + ID + " does not exist");
         }
     return searchedProduct;
     }

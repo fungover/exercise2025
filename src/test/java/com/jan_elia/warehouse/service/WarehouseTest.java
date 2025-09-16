@@ -6,6 +6,9 @@ package com.jan_elia.warehouse.service;
 // TODO: success when adding a valid product
 // TODO: failure when product name is empty
 // TODO: failure when product id already exists
+// TODO: failure when product is null
+// TODO: failure when category is null
+// TODO: failure when rating < 0 or > 10
 //
 // updateProduct
 // TODO: success when updating an existing product
@@ -17,6 +20,7 @@ package com.jan_elia.warehouse.service;
 //
 // getProductById
 // TODO: success when product id exists
+// TODO: failure when id is null or blank
 // TODO: failure when product id does not exist
 //
 // getProductsByCategorySorted

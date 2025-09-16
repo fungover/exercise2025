@@ -35,12 +35,20 @@ public class Product implements Sellable {
     }
 
     // Getters
+    @Override
     public String getId() {
+
         return this.id;
     }
 
+    @Override
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public double getPrice() {
+        return this.price;
     }
 
     public Category getCategory() {
@@ -57,10 +65,6 @@ public class Product implements Sellable {
 
     public LocalDateTime getModifiedDate() {
         return this.modifiedDate;
-    }
-
-    public double getPrice() {
-        return this.price;
     }
 
     // Methods

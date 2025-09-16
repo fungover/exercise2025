@@ -15,6 +15,18 @@ import java.util.Set;
 public class App {
     public static void main(String[] args) {
 
+        /**
+         *
+         * EXAMPLE USAGE
+         * - We create ProductRepository first (InMemory implementation).
+         * - Then we inject it into ProductService.
+         * <p>
+         * WHY THIS ORDER?
+         * <p>
+         * - ProductService depends on ProductRepository (needs it to function).
+         * - Dependencies must be created before the object that uses them.
+         * - This is called "Dependency Injection" (we inject the dependency from outside).
+         */
 
         ProductRepository repository = new InMemoryProductRepository();
         ProductService productService = new ProductService(repository);

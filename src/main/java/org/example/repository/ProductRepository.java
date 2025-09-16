@@ -32,8 +32,18 @@ import java.util.Optional;
 
 public interface ProductRepository {
 
-    void addProduct(Product product);
+    void addProduct(Product product); // Adds a new product to the repository.
 
+    /**
+     * Gets a specifik product based on ID.
+     * <p>
+     * Why optional?
+     * - The product with the given ID might not exist.
+     * - Optional forces the caller to handle the "not found" case explicitly.
+     * - Avoids NullPointerExceptions.
+     *
+     *
+     */
     Optional<Product> getProductById(String id);
 
     List<Product> getAllProducts();

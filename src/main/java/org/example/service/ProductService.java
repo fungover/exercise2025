@@ -8,13 +8,47 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * ProductService - Contains business logic for managing products.
+ * <p>
+ * BEFORE REPOSITORY PATTERN:
+ * - ProductService (previously Warehouse) had BOTH business logic and data storage (HashMap).
+ * - HashMap was directly in this class (Warehouse).
+ * - Hard to test (Could not mock data storage).
+ * - Hard to change storage technology (from example HashMap to Database).
+ * <p>
+ * AFTER REPOSITORY PATTERN:
+ * - ProductService focuses on business logic only.
+ * - Data storage now handled by ProductRepository interface.
+ * - Easy to test (Can mock ProductRepository).
+ * - Easy to change storage technology (swap ProductRepository implementation).
+ * <p>
+ * DEPENDENCY INJECTION:
+ * "Dependency" = Something the class needs to function.
+ * "Injection" = Providing the dependency from outside.
+ */
+
 
 public class ProductService {
 
-    private final ProductRepository productRepository;
+    /**
+     * Repository dependency injected via constructor.
+     * <p>
+     * WHY INTERFACE instead of concrete class?
+     * - ProductRepository (interface) instead of InMemoryProductRepository.
+     * - LOOSE COUPLING: Service does not care HOW data is stored.
+     * - FLEXIBILITY: Can use different implementations without changing code here.
+     * - TESTABILITY: Can easily mock ProductRepository for unit tests.
+     * <p>
+     * PRIVATE & FINAL:
+     * - Encapsulation: Not accessible from outside the class.
+     * - Immutability: Reference cannot be changed after construction.
+     */
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = Objects.requireNonNull(productRepository, "ProductRepository cannot be null");
+    private final ProductRepository productRepository; // Dependency on the repository interface.
+
+    public ProductService(ProductRepository productRepository) { // Constructor injection of the repository dependency.
+        this.productRepository = Objects.requireNonNull(productRepository, "ProductRepository cannot be null"); // Null check for safety.
     }
 
     //Method to add a new product.

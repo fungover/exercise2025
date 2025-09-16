@@ -40,4 +40,18 @@ private final List<Product> products = new ArrayList<>();
         return Collections.unmodifiableList(products);
     }
 
+    public Product getProductByID(int ID) {
+        Product searchedProduct = products.stream()
+                .filter(product -> product.ID() == ID)
+                .findFirst().orElse(null);
+
+        if (searchedProduct == null) {
+            throw new IllegalArgumentException("Product with id " + ID + " does not exist");
+        }
+    return searchedProduct;
+    }
+
+
+
+
 }

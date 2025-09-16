@@ -71,7 +71,21 @@ public class WarehouseTest {
         System.out.println("ID: "+products.get(1).ID() + " Name: "+products.get(1).name());
     }
 
+    @Test
+    void getProductByID() {
+        Warehouse warehouse = new Warehouse();
+        warehouse.addProduct(new Product(0,"Bread",FOOD,5));
+        warehouse.addProduct(new Product(1,"Milk",FOOD,7));
+        warehouse.addProduct(new Product(2,"Coffee",FOOD,3));
 
+        Product product = warehouse.getProductByID(2);
+        assertEquals(2,product.ID());
+        assertEquals("Coffee",product.name());
+        assertEquals(FOOD,product.category());
+        assertEquals(3,product.rating());
+
+        System.out.println("Found product info: "+ warehouse.getProductByID(2));
+    }
 
 
 }

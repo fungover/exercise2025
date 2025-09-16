@@ -14,13 +14,13 @@ public class WarehouseTest {
     @Test
     public void addProduct() {
         Warehouse warehouse = new Warehouse();
-        warehouse.addProduct(new Product("0","Bread",FOOD,5));
+        warehouse.addProduct(new Product(0,"Bread",FOOD,5));
         List<Product> products = warehouse.products();
 
 
         assertThat(products)
                 .hasSize(1)
-                .contains(new Product("0","Bread",FOOD,5,products.getFirst().createdDate(), products.getFirst().modifiedDate()));
+                .contains(new Product(0,"Bread",FOOD,5,products.getFirst().createdDate(), products.getFirst().modifiedDate()));
 
         System.out.println("Added "+products.size()+" Items to the warehouse");
         System.out.println("ID: "+products.getFirst().ID());

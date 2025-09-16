@@ -4,7 +4,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 public record Product(
-        String ID,
+        int ID,
         String name,
         Category category,
         int rating,
@@ -24,7 +24,7 @@ public record Product(
     }
 
     public Product(
-            String ID,
+            int ID,
             String Name,
             Category category,
             int rating

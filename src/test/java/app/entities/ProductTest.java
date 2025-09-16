@@ -10,66 +10,66 @@ public class ProductTest {
 
     @Test
     void canCreateProduct() {
-    Product product = new Product("ID","", Category.FOOD, 5);
+    Product product = new Product(0,"", Category.FOOD, 5);
     }
 
     @Test
     public void canCreateProductID() {
-        Product product = new Product("ID","", Category.FOOD, 5);
-        assertEquals("ID",product.ID());
+        Product product = new Product(0,"", Category.FOOD, 5);
+        assertEquals(0,product.ID());
     }
 
     @Test
     public void cantCreateProductID() {
-        Product product = new Product("","", Category.FOOD, 5);
-        assertEquals("ID",product.ID());
+        Product product = new Product(0,"", Category.FOOD, 5);
+        assertEquals(0,product.ID());
     }
 
     @Test
     public void canCreateProductName() {
-        Product product = new Product("ID","Name", Category.FOOD, 5);
+        Product product = new Product(0,"Name", Category.FOOD, 5);
         assertEquals("Name",product.name());
     }
 
     @Test
     public void cantCreateProductName() {
-        Product product = new Product("ID","", Category.FOOD, 5);
+        Product product = new Product(0,"", Category.FOOD, 5);
         assertEquals("Name",product.name());
     }
 
     @Test
     public void canCreateProductCategory() {
-        Product product = new Product("ID","Name",Category.FOOD, 5);
+        Product product = new Product(0,"Name",Category.FOOD, 5);
         assertEquals(Category.FOOD,product.category());
     }
 
     @Test
     public void cantCreateProductCategory() {
-        Product product = new Product("ID","Name",null, 5);
+        Product product = new Product(0,"Name",null, 5);
         assertEquals(Category.FOOD,product.category());
     }
 
     @Test
     public void canCreateProductRating() {
-        Product product = new Product("ID","Name",Category.FOOD, 5);
+        Product product = new Product(0,"Name",Category.FOOD, 5);
         assertEquals(5,product.rating());
     }
     @Test
     public void cantCreateProductRating() {
-        Product product = new Product("ID","Name",Category.FOOD,11);
+        Product product = new Product(0,"Name",Category.FOOD,11);
         assertEquals(5,product.rating());
     }
 
     @Test
     public void canCreateZonedDateTime() {
-        Product product = new Product("ID","Name",Category.FOOD, 5);
+        Product product = new Product(0,"Name",Category.FOOD, 5);
         assertEquals(ZonedDateTime.now(ZoneId.of("Europe/Stockholm")),product.createdDate());
         System.out.println(product.createdDate().getZone());
     }
 
     @Test
     public void cantCreateZonedDateTime() {
-        Product product = new Product("ID","Name",Category.FOOD, 5);
+        Product product = new Product(0,"Name",Category.FOOD, 5);
         assertEquals(ZonedDateTime.now(ZoneId.of("")),product.createdDate());
     }
 
@@ -78,7 +78,7 @@ public class ProductTest {
         ZonedDateTime createdDate = ZonedDateTime.of(
                 2025, 9, 1, 12, 0, 0, 0,
                 ZoneId.of("Europe/Stockholm"));
-        Product product = new Product("ID","Name",Category.FOOD, 5, createdDate, null);
+        Product product = new Product(0,"Name",Category.FOOD, 5, createdDate, null);
         assertEquals(createdDate,product.createdDate());
         System.out.println("Created Date: "+product.createdDate());
     }
@@ -89,7 +89,7 @@ public class ProductTest {
         ZonedDateTime createdDate = ZonedDateTime.of(
                 2025, 9, 1, 12, 0, 0, 0,
                 ZoneId.of("Europe/Stockholm"));
-        Product product = new Product("ID","Name",Category.FOOD, 5, createdDate, null);
+        Product product = new Product(0,"Name",Category.FOOD, 5, createdDate, null);
         assertEquals(createdDate,product.modifiedDate());
         System.out.println("Modified Date: "+product.modifiedDate());
     }

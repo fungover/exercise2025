@@ -5,16 +5,8 @@ import com.jan_elia.warehouse.entities.Product;
 
 import java.time.Clock;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Comparator;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
-
 
 public class Warehouse {
 
@@ -25,47 +17,64 @@ public class Warehouse {
         this.clock = clock;
     }
 
+    // ---- validation helpers ----
+    private void validateId(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("id cannot be empty");
+        }
+    }
+
+    private void validateName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("name cannot be empty");
+        }
+    }
+
+    private void validateCategory(Category category) {
+        if (category == null) {
+            throw new IllegalArgumentException("category cannot be null");
+        }
+    }
+
+    private void validateRating(int rating) {
+        if (rating < 0 || rating > 10) {
+            throw new IllegalArgumentException("rating must be 0..10");
+        }
+    }
+
+    private Product requireExisting(String id) {
+        Product p = products.get(id);
+        if (p == null) {
+            throw new NoSuchElementException("product not found");
+        }
+        return p;
+    }
+
+    // ---- public API methods ----
+
     // addProduct: validate and store
     public void addProduct(Product product) {
         if (product == null) {
             throw new IllegalArgumentException("product cannot be null");
         }
-        if (product.getName() == null || product.getName().isBlank()) {
-            throw new IllegalArgumentException("name cannot be empty");
-        }
-        if (product.getCategory() == null) {
-            throw new IllegalArgumentException("category cannot be null");
-        }
-        if (product.getRating() < 0 || product.getRating() > 10) {
-            throw new IllegalArgumentException("rating must be 0..10");
-        }
-        if (product.getId() == null || product.getId().isBlank()) {
-            throw new IllegalArgumentException("id cannot be empty");
-        }
+        validateId(product.getId());
+        validateName(product.getName());
+        validateCategory(product.getCategory());
+        validateRating(product.getRating());
         if (products.containsKey(product.getId())) {
             throw new IllegalArgumentException("id already exists");
         }
-
         products.put(product.getId(), product);
     }
-    public void updateProduct(String id, String name, Category category, int rating) {
-        if (id == null || id.isBlank()) {
-            throw new IllegalArgumentException("id cannot be empty");
-        }
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("name cannot be empty");
-        }
-        if (category == null) {
-            throw new IllegalArgumentException("category cannot be null");
-        }
-        if (rating < 0 || rating > 10) {
-            throw new IllegalArgumentException("rating must be 0..10");
-        }
 
-        Product old = products.get(id);
-        if (old == null) {
-            throw new NoSuchElementException("product not found");
-        }
+    // updateProduct: replace immutably, keep createdDate, update modifiedDate
+    public void updateProduct(String id, String name, Category category, int rating) {
+        validateId(id);
+        validateName(name);
+        validateCategory(category);
+        validateRating(rating);
+
+        Product old = requireExisting(id);
 
         Product updated = new Product(
                 old.getId(),
@@ -79,46 +88,41 @@ public class Warehouse {
         products.put(id, updated);
     }
 
-    // getAllProducts:
+    // getAllProducts: defensive return
     public List<Product> getAllProducts() {
         return Collections.unmodifiableList(new ArrayList<>(products.values()));
     }
 
     // getProductById: validate id and return, or throw if missing
     public Product getProductById(String id) {
-        if (id == null || id.isBlank()) {
-            throw new IllegalArgumentException("id cannot be empty");
-        }
-        Product found = products.get(id);
-        if (found == null) {
-            throw new NoSuchElementException("product not found");
-        }
-        return found;
+        validateId(id);
+        return requireExisting(id);
     }
 
+    // getProductsByCategorySorted: filter + sort A-Z case-insensitive
     public List<Product> getProductsByCategorySorted(Category category) {
-        if (category == null) {
-            throw new IllegalArgumentException("category cannot be null");
-        }
+        validateCategory(category);
         return Collections.unmodifiableList(
                 products.values().stream()
                         .filter(p -> p.getCategory().equals(category))
-                        .sorted(Comparator.comparing(p -> p.getName().toLowerCase(Locale.ROOT)))
+                        .sorted(Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER))
                         .collect(Collectors.toList())
         );
     }
 
+    // getProductsCreatedAfter: strictly after
     public List<Product> getProductsCreatedAfter(LocalDate date) {
         if (date == null) {
             throw new IllegalArgumentException("date cannot be null");
         }
         return Collections.unmodifiableList(
                 products.values().stream()
-                        .filter(p -> p.getCreatedDate().isAfter(date)) // strictly after
+                        .filter(p -> p.getCreatedDate().isAfter(date))
                         .collect(Collectors.toList())
         );
     }
 
+    // getModifiedProducts: where createdDate != modifiedDate
     public List<Product> getModifiedProducts() {
         return Collections.unmodifiableList(
                 products.values().stream()

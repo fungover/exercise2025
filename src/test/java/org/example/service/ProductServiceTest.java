@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -36,6 +37,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Clicker")
                 .category(Category.TRAINING)
+                .price(BigDecimal.valueOf(9.99))
                 .rating(5)
                 .createdDate(now)
                 .modifiedDate(now)
@@ -58,13 +60,14 @@ class ProductServiceTest {
                         .id(UUID.randomUUID().toString())
                         .name("")
                         .category(Category.FOOD)
+                        .price(BigDecimal.valueOf(1.00))
                         .rating(3)
                         .createdDate(ZonedDateTime.now())
                         .modifiedDate(ZonedDateTime.now())
                         .build()
         ))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("getName required");
+                .hasMessage("name required");
 
     }
 
@@ -78,6 +81,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Chew Bone")
                 .category(Category.FOOD)
+                .price(BigDecimal.valueOf(4.50))
                 .rating(4)
                 .createdDate(ZonedDateTime.now())
                 .modifiedDate(ZonedDateTime.now())
@@ -87,6 +91,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Squeaky Banana")
                 .category(Category.TOYS)
+                .price(BigDecimal.valueOf(7.25))
                 .rating(3)
                 .createdDate(ZonedDateTime.now())
                 .modifiedDate(ZonedDateTime.now())
@@ -110,6 +115,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Red Blanket")
                 .category(Category.BEDDING)
+                .price(BigDecimal.valueOf(19.99))
                 .rating(4)
                 .createdDate(ZonedDateTime.now())
                 .modifiedDate(ZonedDateTime.now())
@@ -124,6 +130,7 @@ class ProductServiceTest {
                         .id(UUID.randomUUID().toString())
                         .name("Squeaky Banana")
                         .category(Category.TOYS)
+                        .price(BigDecimal.valueOf(7.25))
                         .rating(3)
                         .createdDate(ZonedDateTime.now())
                         .modifiedDate(ZonedDateTime.now())
@@ -146,6 +153,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Chew Bone")
                 .category(Category.FOOD)
+                .price(BigDecimal.valueOf(3.99))
                 .rating(4)
                 .createdDate(ZonedDateTime.now())
                 .modifiedDate(ZonedDateTime.now())
@@ -189,6 +197,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Zebra Premium Dog Food")
                 .category(Category.FOOD)
+                .price(BigDecimal.valueOf(29.99))
                 .rating(5)
                 .createdDate(now)
                 .modifiedDate(now)
@@ -198,6 +207,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Alpha Dog Food")
                 .category(Category.FOOD)
+                .price(BigDecimal.valueOf(9.49))
                 .rating(4)
                 .createdDate(now)
                 .modifiedDate(now)
@@ -207,6 +217,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Beta Premium Food")
                 .category(Category.FOOD)
+                .price(BigDecimal.valueOf(14.75))
                 .rating(5)
                 .createdDate(now)
                 .modifiedDate(now)
@@ -216,6 +227,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Ball")
                 .category(Category.TOYS)
+                .price(BigDecimal.valueOf(2.50))
                 .rating(3)
                 .createdDate(now)
                 .modifiedDate(now)
@@ -261,6 +273,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Old Dog Food")
                 .category(Category.FOOD)
+                .price(BigDecimal.valueOf(10.00))
                 .rating(3)
                 .createdDate(createdTime)
                 .modifiedDate(createdTime)
@@ -302,6 +315,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Original Name")
                 .category(Category.FOOD)
+                .price(BigDecimal.valueOf(5.00))
                 .rating(5)
                 .createdDate(now)
                 .modifiedDate(now)
@@ -315,7 +329,7 @@ class ProductServiceTest {
                 Category.FOOD,
                 -1))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("getRating must be between 0 and 10");
+                .hasMessage("rating must be between 0 and 10");
     }
     @Test
     @DisplayName("Throws exception when trying to update non-existent product")
@@ -343,6 +357,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Old")
                 .category(Category.FOOD)
+                .price(BigDecimal.valueOf(1.10))
                 .rating(5)
                 .createdDate(now.minusDays(2))
                 .modifiedDate(now.minusDays(2))
@@ -352,6 +367,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("New")
                 .category(Category.FOOD)
+                .price(BigDecimal.valueOf(2.20))
                 .rating(8)
                 .createdDate(now.plusHours(1))
                 .modifiedDate(now.plusHours(1))
@@ -383,6 +399,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Old conditioner")
                 .category(Category.GROOMING)
+                .price(BigDecimal.valueOf(12.34))
                 .rating(7)
                 .createdDate(baseDateTime.minusDays(2))
                 .modifiedDate(baseDateTime.minusDays(2))
@@ -406,6 +423,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Modified Toy")
                 .category(Category.TOYS)
+                .price(BigDecimal.valueOf(6.66))
                 .rating(7)
                 .createdDate(now)
                 .modifiedDate(now.plusDays(1))
@@ -415,6 +433,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Unmodified Toy")
                 .category(Category.TOYS)
+                .price(BigDecimal.valueOf(5.55))
                 .rating(5)
                 .createdDate(now)
                 .modifiedDate(now)//same date as created date
@@ -438,6 +457,7 @@ class ProductServiceTest {
                 .id(UUID.randomUUID().toString())
                 .name("Chew Bone")
                 .category(Category.FOOD)
+                .price(BigDecimal.valueOf(4.44))
                 .rating(4)
                 .createdDate(now)
                 .modifiedDate(now)//not modified

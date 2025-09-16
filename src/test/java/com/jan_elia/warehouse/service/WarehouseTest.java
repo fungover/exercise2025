@@ -215,10 +215,24 @@ public class WarehouseTest {
                 () -> warehouse.updateProduct("53", "New", Category.FOOD, 11));
     }
 
+    // ---- getModifiedProducts ----
+    @Test
+    void getModifiedProducts_success_modified() {
+        Product p = makeProduct("60", "Test", Category.FOOD, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        warehouse.addProduct(p);
+        warehouse.updateProduct("60", "Updated", Category.FOOD, 6);
+        List<Product> list = warehouse.getModifiedProducts();
+        assertEquals(1, list.size());
+    }
+
+    @Test
+    void getModifiedProducts_success_noneModified() {
+        Product p = makeProduct("61", "Test", Category.FOOD, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        warehouse.addProduct(p);
+        List<Product> list = warehouse.getModifiedProducts();
+        assertTrue(list.isEmpty());
+    }
+
 }
-
-// Test plan for Warehouse
-
-// getModifiedProducts
-// TODO: success: returns only products where modifiedDate != createdDate
-// TODO: success: returns empty list when none are modified

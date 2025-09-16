@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
@@ -8,6 +9,7 @@ public final class Product {
     private final String id;
     private final String name;
     private final Category category;
+    private final BigDecimal price;
     private final int rating;
     private final ZonedDateTime createdDate;
     private final ZonedDateTime modifiedDate;
@@ -17,6 +19,7 @@ public final class Product {
             String id,
             String name,
             Category category,
+            BigDecimal price,
             int rating,
             ZonedDateTime createdDate,
             ZonedDateTime modifiedDate)
@@ -24,6 +27,7 @@ public final class Product {
         this.id = id;
         this.name = name;
         this.category = category;
+        this.price = price;
         this.rating = rating;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
@@ -40,6 +44,10 @@ public final class Product {
 
     public Category category() {
         return category;
+    }
+
+    public BigDecimal price() {
+        return price;
     }
 
     public int rating() {
@@ -80,6 +88,7 @@ public final class Product {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", category=" + category +
+                ", price=" + price +
                 ", rating=" + rating +
                 ", createdDate=" + createdDate +
                 ", modifiedDate=" + modifiedDate +
@@ -91,6 +100,7 @@ public final class Product {
         private String id;
         private String name;
         private Category category;
+        private BigDecimal price;
         private int rating;
         private ZonedDateTime createdDate;
         private ZonedDateTime modifiedDate;
@@ -107,6 +117,11 @@ public final class Product {
 
         public Builder category(Category category) {
             this.category = category;
+            return this;
+        }
+
+        public Builder price(BigDecimal price) {
+            this.price = price;
             return this;
         }
 
@@ -146,6 +161,9 @@ public final class Product {
             if (category == null) {
                 throw new IllegalArgumentException("category required");
             }
+            if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalArgumentException("price must be greater than zero");
+            }
             if (rating < 0 || rating > 10) {
                 throw new IllegalArgumentException("rating must be between 0 and 10");
             }
@@ -154,7 +172,15 @@ public final class Product {
             }
 
             // Create and returns new Product instance
-            return new Product(id, name, category, rating, createdDate, modifiedDate);
+            return new Product(
+                    id,
+                    name,
+                    category,
+                    price,
+                    rating,
+                    createdDate,
+                    modifiedDate
+            );
         }
     }
 

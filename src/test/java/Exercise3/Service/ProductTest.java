@@ -2,6 +2,7 @@ package Exercise3.Service;
 
 import Exercise3.Entities.Category;
 import Exercise3.Entities.Product;
+import Exercise3.Entities.ProductBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ class ProductTest {
     @Test
     void canCreateNewProduct() {
 
-        Product product = new Product("Ella", "Flared jeans", Category.JEANS,8, LocalDate.now(), LocalDate.now());
+        Product product = new ProductBuilder().setId("Ella").setName("Flared jeans").setCategory(Category.JEANS).setRating(8).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct();
         assertEquals("Ella", product.id());
         assertEquals("Flared jeans", product.name());
         assertEquals(Category.JEANS, product.category());
@@ -25,17 +26,17 @@ class ProductTest {
     @Test
     public void throwsIllegalArgumentExceptionIfRatingIsOutOfRange() {
 
-        assertThrows(IllegalArgumentException.class, ()->  new Product("Ella", "Flared jeans", Category.JEANS,12,LocalDate.now(), LocalDate.now()));
+        assertThrows(IllegalArgumentException.class, ()-> new ProductBuilder().setId("Ella").setName("Flared jeans").setCategory(Category.JEANS).setRating(12).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
     }
 
     @Test
     public void throwsIllegalArgumentExceptionIfRatingIsNegative() {
 
-        assertThrows(IllegalArgumentException.class, ()->  new Product("Ella", "Flared jeans", Category.JEANS,-2,LocalDate.now(), LocalDate.now()));
+        assertThrows(IllegalArgumentException.class, ()-> new ProductBuilder().setId("Ella").setName("Flared jeans").setCategory(Category.JEANS).setRating(-2).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
     }
 
     @Test
     public void throwsIllegalArgumentExceptionIfProductIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> new Product(" ", "Flared jeans", Category.JEANS,8,LocalDate.now(), LocalDate.now()));
+        assertThrows(IllegalArgumentException.class, () -> new ProductBuilder().setId(" ").setName("Flared jeans").setCategory(Category.JEANS).setRating(8).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
     }
 }

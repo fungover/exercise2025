@@ -2,6 +2,7 @@ package Exercise3.Service;
 
 import Exercise3.Entities.Category;
 import Exercise3.Entities.Product;
+import Exercise3.Entities.ProductBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ class ManagingProductTest {
     @Test
     public void productIsAddedToListWhenCreated() {
 
-        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
         assertEquals(1,managingProduct.getAllProducts().size());
         assertEquals("Knitted shirt",managingProduct.getAllProducts().getFirst().name());
@@ -28,14 +29,14 @@ class ManagingProductTest {
 
     @Test
     public void throwsIllegalArgumentExceptionIfProductAlreadyExist() {
-        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 1,LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(1).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
-        assertThrows(IllegalArgumentException.class, () -> managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 1,LocalDate.now(), LocalDate.now())));
+        assertThrows(IllegalArgumentException.class, () -> managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(1).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct()));
     }
 
     @Test
     public void productIsAddedToListWhenUpdated() {
-        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9, LocalDate.of(2025,9,1), LocalDate.of(2025,9,1)  ));
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(9).setCreatedDate(LocalDate.of(2025, 9, 1)).setModifiedDate(LocalDate.of(2025, 9, 1)).createProduct());
         managingProduct.updateProduct("Bella", "Knitted shirt", Category.SHIRT, 7);
 
        assertEquals(2,managingProduct.getAllProducts().size());
@@ -45,16 +46,16 @@ class ManagingProductTest {
 
     @Test
     public void throwsIllegalArgumentExceptionWhenProductToUpdateDoseNotExist(){
-        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
         assertThrows(IllegalArgumentException.class, () -> managingProduct.updateProduct("Tina", "Dressed Shirt",  Category.SHIRT, 9));
     }
 
     @Test
     public void allProductsAreAddedToList(){
-        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.JEANS, 9,  LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Joell", "Dressed pants", Category.PANTS, 9,  LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Tina").setName("Flared jeans").setCategory(Category.JEANS).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Joell").setName("Dressed pants").setCategory(Category.PANTS).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
         assertEquals(3,managingProduct.getAllProducts().size());
     }
@@ -67,8 +68,8 @@ class ManagingProductTest {
 
     @Test
     public void returnsCorrectIdWhenSearchingProductById(){
-        managingProduct.addProduct(new Product("Bella", "Knitted shirt", Category.SHIRT, 9, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.JEANS, 9,  LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Tina").setName("Flared jeans").setCategory(Category.JEANS).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
         assertEquals("Bella", managingProduct.getProductById("Bella").id());
     }
@@ -80,12 +81,12 @@ class ManagingProductTest {
 
     @Test
     public void returnsListSortedByCategoryInAlphabeticOrder(){
-        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Tina").setName("Knitted dress").setCategory(Category.DRESS).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Joell").setName("Dressed dress").setCategory(Category.DRESS).setRating(6).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Evening dress").setCategory(Category.DRESS).setRating(5).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Anna").setName("Cocktail dress").setCategory(Category.DRESS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
         List <Product> sortedProducts = managingProduct.getProductsByCategorySorted(Category.DRESS);
 
@@ -104,12 +105,12 @@ class ManagingProductTest {
     @Test
     public void returnProductsCreatedAfterAGivenDate(){
 
-        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.DRESS, 9, LocalDate.of(2025,9,1), LocalDate.of(2025,9,1)));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.of(2025,9,2), LocalDate.of(2025,9,2)));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.of(2025,9,5), LocalDate.of(2025,9,5)));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10,  LocalDate.of(2025,9,7), LocalDate.of(2025,9,7)));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10,  LocalDate.of(2025,9,8), LocalDate.of(2025,9,8)));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(),LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Tina").setName("Flared jeans").setCategory(Category.DRESS).setRating(9).setCreatedDate(LocalDate.of(2025, 9, 1)).setModifiedDate(LocalDate.of(2025, 9, 1)).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Joell").setName("Dressed dress").setCategory(Category.DRESS).setRating(6).setCreatedDate(LocalDate.of(2025, 9, 2)).setModifiedDate(LocalDate.of(2025, 9, 2)).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Evening dress").setCategory(Category.DRESS).setRating(5).setCreatedDate(LocalDate.of(2025, 9, 5)).setModifiedDate(LocalDate.of(2025, 9, 5)).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(LocalDate.of(2025, 9, 7)).setModifiedDate(LocalDate.of(2025, 9, 7)).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.of(2025, 9, 8)).setModifiedDate(LocalDate.of(2025, 9, 8)).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Anna").setName("Cocktail dress").setCategory(Category.DRESS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
         List<Product>  sortedProducts = managingProduct.getProductsCreatedAfter(LocalDate.of(2025,9,3));
 
@@ -124,12 +125,12 @@ class ManagingProductTest {
 
     @Test
     public void returnsProductsWhereCreatedDatedNotIsEqualToModifiedDate(){
-        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.DRESS, 9, LocalDate.of(2025,9,1), LocalDate.of(2025,9,1)));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.of(2025,9,2), LocalDate.of(2025,9,2)));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.of(2025,9,5), LocalDate.of(2025,9,5)));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10,  LocalDate.of(2025,9,7), LocalDate.now()));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10,  LocalDate.of(2025,9,8), LocalDate.now()));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Tina").setName("Flared jeans").setCategory(Category.DRESS).setRating(9).setCreatedDate(LocalDate.of(2025, 9, 1)).setModifiedDate(LocalDate.of(2025, 9, 1)).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Joell").setName("Dressed dress").setCategory(Category.DRESS).setRating(6).setCreatedDate(LocalDate.of(2025, 9, 2)).setModifiedDate(LocalDate.of(2025, 9, 2)).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Evening dress").setCategory(Category.DRESS).setRating(5).setCreatedDate(LocalDate.of(2025, 9, 5)).setModifiedDate(LocalDate.of(2025, 9, 5)).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(LocalDate.of(2025, 9, 7)).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.of(2025, 9, 8)).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Anna").setName("Cocktail dress").setCategory(Category.DRESS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
         List<Product>  sortedProducts = managingProduct.getModifiedProducts();
 
@@ -143,12 +144,12 @@ class ManagingProductTest {
 
     @Test
     public void returnsAllProductsWithAtLeastOneProduct(){
-        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9,LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6,LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Tina").setName("Knitted dress").setCategory(Category.DRESS).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Joell").setName("Dressed dress").setCategory(Category.DRESS).setRating(6).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Evening dress").setCategory(Category.DRESS).setRating(5).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Anna").setName("Cocktail dress").setCategory(Category.DRESS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
         List<Category> categories = managingProduct.getCategoriesWithProducts();
 
@@ -165,12 +166,12 @@ class ManagingProductTest {
 
     @Test
     public void returnNumberOfProductsInACategory(){
-        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Tina").setName("Knitted dress").setCategory(Category.DRESS).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Joell").setName("Dressed dress").setCategory(Category.DRESS).setRating(6).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Evening dress").setCategory(Category.DRESS).setRating(5).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Anna").setName("Cocktail dress").setCategory(Category.DRESS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
         assertEquals(4, managingProduct.countProductsInCategory(Category.DRESS));
     }
@@ -182,12 +183,12 @@ class ManagingProductTest {
 
     @Test
     public void returnsAMapWithFirstLetterInProductAndTheirCount(){
-        managingProduct.addProduct(new Product("Tina", "Knitted dress", Category.DRESS, 9, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 10, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10, LocalDate.now(), LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Tina").setName("Knitted dress").setCategory(Category.DRESS).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Joell").setName("Dressed dress").setCategory(Category.DRESS).setRating(6).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Evening dress").setCategory(Category.DRESS).setRating(5).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Anna").setName("Cocktail dress").setCategory(Category.DRESS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
         Map<Character, Integer> products = managingProduct.getProductsInitialsMap();
 
@@ -210,12 +211,12 @@ class ManagingProductTest {
         LocalDate firstDay = today.withDayOfMonth(1);
         LocalDate secondDay = today.withDayOfMonth(2);
 
-        managingProduct.addProduct(new Product("Tina", "Flared jeans", Category.DRESS, 9, LocalDate.of(2025,8,1), LocalDate.of(2025,8,1)));
-        managingProduct.addProduct(new Product("Joell", "Dressed dress", Category.DRESS, 6, LocalDate.of(2025,8,2), LocalDate.of(2025,8,2)));
-        managingProduct.addProduct(new Product("Bella", "Evening dress", Category.DRESS, 5, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Anna", "Cocktail dress", Category.DRESS, 7, LocalDate.now(), LocalDate.now()));
-        managingProduct.addProduct(new Product("Milo", "Flared jeans", Category.JEANS, 10, firstDay, LocalDate.now()));
-        managingProduct.addProduct(new Product("Leon", "Dressed pants", Category.PANTS, 10, secondDay, LocalDate.now()));
+        managingProduct.addProduct(new ProductBuilder().setId("Tina").setName("Flared jeans").setCategory(Category.DRESS).setRating(9).setCreatedDate(LocalDate.of(2025, 8, 1)).setModifiedDate(LocalDate.of(2025, 8, 1)).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Joell").setName("Dressed dress").setCategory(Category.DRESS).setRating(6).setCreatedDate(LocalDate.of(2025, 8, 2)).setModifiedDate(LocalDate.of(2025, 8, 2)).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Bella").setName("Evening dress").setCategory(Category.DRESS).setRating(5).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Anna").setName("Cocktail dress").setCategory(Category.DRESS).setRating(7).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(firstDay).setModifiedDate(LocalDate.now()).createProduct());
+        managingProduct.addProduct(new ProductBuilder().setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(secondDay).setModifiedDate(LocalDate.now()).createProduct());
 
         assertEquals(2, managingProduct.getTopProductsThisMonth().size());
         assertEquals("Milo", managingProduct.getTopProductsThisMonth().getFirst().id());

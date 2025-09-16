@@ -4,6 +4,9 @@ import app.entities.Category;
 import app.entities.Product;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static app.entities.Category.*;
@@ -127,6 +130,20 @@ public class WarehouseTest {
         updatedlist.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
     }
 
+    @Test
+    void getProductsCreatedAfter() {
+        Warehouse warehouse = new Warehouse();
+        warehouse.addProduct(new Product(0,"Bread",FOOD,5, ZonedDateTime.of(2025, 2, 1, 12, 0, 0, 0, ZoneId.of("Europe/Stockholm")), null));
+        warehouse.addProduct(new Product(1,"Milk",FOOD,7, ZonedDateTime.of(2024, 1, 1, 12, 0, 0, 0, ZoneId.of("Europe/Stockholm")), null));
+
+        LocalDate cutoff = LocalDate.of(2025, 1, 1);
+        List<Product> updatedlist = warehouse.getProductsCreatedAfter(cutoff);
+        assertEquals(1,updatedlist.size());
+        assertEquals("Bread",updatedlist.get(0).name());
+
+        System.out.println("Found "+updatedlist.size()+" Products created after "+cutoff);
+        updatedlist.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
+    }
 
 
 }

@@ -16,7 +16,7 @@ public record Product(
             throw new IllegalArgumentException("Rating must be between 0 and 10");
         }
         if (createdDate == null) {
-            createdDate = ZonedDateTime.now(ZoneId.of("Europe/Stockholm"));
+            System.out.println("Created date is null");
         }
         if (modifiedDate == null) {
             modifiedDate = createdDate;

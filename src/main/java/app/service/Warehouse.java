@@ -3,6 +3,7 @@ package app.service;
 import app.entities.Category;
 import app.entities.Product;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -57,6 +58,17 @@ private final List<Product> products = new ArrayList<>();
         return products.stream()
                 .filter(p->p.category()==category)
                 .sorted(Comparator.comparing(Product::name))
+                .collect(Collectors.toList());
+    }
+
+    public List<Product> getProductsCreatedAfter(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+        return products.stream()
+                .filter(product -> product.createdDate() != null &&
+                        product.createdDate().toLocalDate().isAfter(date))
+                .sorted(Comparator.comparing(Product::createdDate))
                 .collect(Collectors.toList());
     }
 }

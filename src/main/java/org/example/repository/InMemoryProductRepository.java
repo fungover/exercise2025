@@ -50,7 +50,7 @@ public class InMemoryProductRepository implements ProductRepository {
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
         Product existingProduct = products.get(index);
-        Product updatedProduct = existingProduct.update(product.getName(), product.getCategory(), product.getRating());
+        Product updatedProduct = existingProduct.update(product.getName(), product.getCategory(), product.getRating(), product.getPrice());
 
         products.set(index, updatedProduct);
     }

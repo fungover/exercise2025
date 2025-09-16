@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ProductTest {
 
     @Test
-    @DisplayName("Product constructor: sets unique ID")
+    @DisplayName("Product Builder: sets unique ID")
     public void canCreateProductWithId() {
         Product product = new Product.Builder()
                 .id("1")
@@ -25,7 +25,7 @@ public class ProductTest {
     }
 
     @Test
-    @DisplayName("Product constructor: sets name")
+    @DisplayName("Product Builder: sets name")
     public void canCreateProductWithName() {
         Product product = new Product.Builder()
                 .id("1")
@@ -37,7 +37,7 @@ public class ProductTest {
     }
 
     @Test
-    @DisplayName("Product constructor: sets category")
+    @DisplayName("Product Builder: sets category")
     public void canCreateProductWithCategory() {
         Product product = new Product.Builder()
                 .id("1")
@@ -49,7 +49,20 @@ public class ProductTest {
     }
 
     @Test
-    @DisplayName("Product constructor: sets rating")
+    @DisplayName("Product Builder: sets price")
+    public void canCreateProductWithPrice() {
+        Product product = new Product.Builder()
+                .id("1")
+                .name("Laptop")
+                .category(Category.GENERAL)
+                .rating(1)
+                .price(100)
+                .build();
+        assertThat(product.getPrice()).isEqualTo(100);
+    }
+
+    @Test
+    @DisplayName("Product Builder: sets rating")
     public void canCreateProductWithRating() {
         Product product = new Product.Builder()
                 .id("1")
@@ -61,7 +74,7 @@ public class ProductTest {
     }
 
     @Test
-    @DisplayName("Product constructor: sets createdDate")
+    @DisplayName("Product Builder: sets createdDate")
     public void canCreateProductWithGetCreatedDate() {
         try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
             LocalDateTime currentDate = LocalDateTime.of(2025, 1, 1, 18, 0, 0, 0);
@@ -97,7 +110,7 @@ public class ProductTest {
         try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
             LocalDateTime updateDate = LocalDateTime.of(2025, 1, 5, 18, 0, 0, 0);
             mockedStatic.when(LocalDateTime::now).thenReturn(updateDate);
-            updated = product.update("Notebook", Category.GENERAL, 2);
+            updated = product.update("Notebook", Category.GENERAL, 2, 1);
 
             assertThat(updated.getModifiedDate()).isEqualTo(updateDate);
             assertThat(product.getModifiedDate()).isNotEqualTo(updateDate);

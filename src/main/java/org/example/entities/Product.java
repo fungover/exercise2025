@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Product {
@@ -9,21 +10,10 @@ public class Product {
     private final int rating;
     private final LocalDateTime createdDate;
     private final LocalDateTime modifiedDate;
+    private final double price;
 
     // Constructors
-    private Product(String id) {
-        this(id, "");
-    }
-
-    private Product(String id, String name) {
-        this(id, name, Category.GENERAL);
-    }
-
-    private Product(String id, String name, Category category) {
-        this(id, name, category, 0);
-    }
-
-    private Product(String id, String name, Category category, int rating) {
+    private Product(String id, String name, Category category, int rating, double price) {
         LocalDateTime now = LocalDateTime.now();
         this.id = id;
         this.name = name;
@@ -31,15 +21,17 @@ public class Product {
         this.rating = rating;
         this.createdDate = now;
         this.modifiedDate = now;
+        this.price = price;
     }
 
-    private Product(String id, String name, Category category, int rating, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    private Product(String id, String name, Category category, int rating, LocalDateTime createdDate, LocalDateTime modifiedDate, double price) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.rating = rating;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+        this.price = price;
     }
 
     // Getters
@@ -67,18 +59,26 @@ public class Product {
         return this.modifiedDate;
     }
 
+    public double getPrice() {
+        return this.price;
+    }
+
     // Methods
-    public Product update(String name, Category category, int rating) {
+    public Product update(String name, Category category, int rating, double price) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Product name cannot be null or blank");
         }
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null");
         }
-        if (rating < 1 || rating > 10){
+        if (rating < 1 || rating > 10) {
             throw new IllegalArgumentException("Rating must be between 1 and 10");
         }
-        return new Product(this.id, name, category, rating, this.createdDate, LocalDateTime.now());
+        if (price < 0) {
+            throw new IllegalArgumentException("Price must be greater than or equal to zero");
+        }
+
+        return new Product(this.id, name, category, rating, this.createdDate, LocalDateTime.now(), price);
     }
 
     public static class Builder {
@@ -86,6 +86,7 @@ public class Product {
         private String name;
         private Category category;
         private int rating;
+        private double price;
 
         public Builder id(String id) {
             this.id = id;
@@ -107,6 +108,11 @@ public class Product {
             return this;
         }
 
+        public Builder price(double price) {
+            this.price = price;
+            return this;
+        }
+
         public Product build() {
             if (id == null || id.isBlank()) {
                 throw new IllegalArgumentException("Product id cannot be null or blank");
@@ -117,11 +123,14 @@ public class Product {
             if (category == null) {
                 throw new IllegalArgumentException("Category cannot be null");
             }
-            if (rating < 1 || rating > 10){
+            if (rating < 1 || rating > 10) {
                 throw new IllegalArgumentException("Rating must be between 1 and 10");
             }
+            if (price < 0) {
+                throw new IllegalArgumentException("Price must be greater than or equal to zero");
+            }
 
-            return new Product(id, name, category, rating);
+            return new Product(id, name, category, rating, price);
         }
     }
 }

@@ -63,14 +63,15 @@ public class Warehouse {
         for (int i = 0; i < products.size(); i++) {
             Product product = products.get(i);
             if (product.id().equals(id)) {
-                Product updated = new Product(
-                        product.id(),
-                        name,
-                        category,
-                        rating,
-                        product.createdDate(),
-                        LocalDate.now()
-                );
+                Product updated = new Product.Builder()
+                        .id(product.id())
+                        .name(name)
+                        .category(category)
+                        .rating(rating)
+                        .createdDate(product.createdDate())
+                        .modifiedDate(LocalDate.now())
+                        .build();
+
                 products.set(i, updated);
                 return;
             }

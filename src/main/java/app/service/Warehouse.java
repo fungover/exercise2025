@@ -1,17 +1,40 @@
 package app.service;
 
+import app.entities.Category;
 import app.entities.Product;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class Warehouse {
 private final List<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
+        if (product.name() == null) {
+            throw new IllegalArgumentException("Product name cannot be null");
+        }
     products.add(product);
     }
 
     public List<Product> products() {
         return Collections.unmodifiableList(products);
     }
+
+    public void updateProduct(int id, String name, Category category, int rating) {
+       Product productID = products.get(id);
+       if (productID == null) {
+           throw new IllegalArgumentException("Product with id " + id + " does not exist");
+       }
+       Product updatedProduct = new Product(
+               productID.ID(),
+               name,category,
+               rating,
+               productID.createdDate(),
+               ZonedDateTime.now(ZoneId.of("Europe/Stockholm"))
+       );
+       products.set(id,updatedProduct);
+    }
+
+
 }

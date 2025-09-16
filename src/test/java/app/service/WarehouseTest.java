@@ -31,6 +31,29 @@ public class WarehouseTest {
         System.out.println("Modified date: "+products.getFirst().modifiedDate());
     }
 
+    @Test
+    public void updateProduct() {
+        Warehouse warehouse = new Warehouse();
+        warehouse.addProduct(new Product(0,"Bread",FOOD,5));
+        System.out.println("Added "+warehouse.products().size()+" Items to the warehouse");
+        System.out.println("ID: "+warehouse.products().get(0).ID());
+        System.out.println("Name: "+warehouse.products().get(0).name());
+        System.out.println("Category: "+warehouse.products().get(0).category());
+        System.out.println("Rating: "+warehouse.products().get(0).rating());
+
+        System.out.println();
+        warehouse.updateProduct(0,"Milk",FOOD,7);
+
+
+
+        assertEquals(1,warehouse.products().size());
+        assertEquals("Milk",warehouse.products().get(0).name());
+        System.out.println("Updated "+warehouse.products().size()+" Items in the warehouse");
+        System.out.println("ID: "+warehouse.products().get(0).ID());
+        System.out.println("Name: "+warehouse.products().get(0).name());
+        System.out.println("Rating: "+warehouse.products().get(0).rating());
+    }
+
 
 
 

@@ -7,6 +7,7 @@ public class Player {
     private int maxHealth;
     private int positionX;
     private int positionY;
+    private Inventory inventory;
 
     public Player (String name,int damage,  int health, int maxHealth) {
         this.name = name;
@@ -63,5 +64,13 @@ public class Player {
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 }

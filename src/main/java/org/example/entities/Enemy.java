@@ -18,5 +18,17 @@ public class Enemy {
     public String getType() {
       return this.type;
     };
+
+    public void setHealth(int health) {
+        this.health = health;
+    };
+
+    public int getHealth() {
+        return this.health;
+    };
+
+    public int getDamage() {
+        return this.damage;
+    };
 }
 

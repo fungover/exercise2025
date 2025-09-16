@@ -17,9 +17,10 @@ public class App {
         String playerName = scanner.nextLine();
 
         user.setName(playerName);
+        user.setInventory(userInventory);
 
         System.out.println("Welcome " + playerName + ". Let your adventure begin!");
 
-        GameStart(user, userInventory);
+        GameStart(user);
     }
 }

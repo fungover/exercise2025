@@ -2,9 +2,10 @@ package org.example.map;
 
 import org.example.entities.Enemy;
 import org.example.entities.Player;
+import org.example.service.Combat;
 
 public class Tile {
-    private final TileEnum type;
+    private TileEnum type;
     private final Enemy enemy;
 
     public Tile(TileEnum type, Enemy enemy) {
@@ -12,11 +13,12 @@ public class Tile {
         this.enemy = enemy;
     }
 
-    public void onEnter(Player player) {
+    public void onEnter(Player player, Tile tile) {
         switch(type) {
             case ENEMY:
                 if (enemy != null) {
-                    System.out.println("Found " + enemy.getType() + " on tile");
+                    System.out.println("You stepped up on a " + enemy.getType() + " prepare to fight!");
+                    Combat.Fight(player, enemy, tile);
                 } else {
                     System.out.println("Found enemy without a type");
                 }
@@ -32,5 +34,9 @@ public class Tile {
                 System.out.println("Found empty tile");
 
         }
+    }
+
+    public void setType(TileEnum type) {
+        this.type = type;
     }
 }

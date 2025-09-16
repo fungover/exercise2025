@@ -27,4 +27,15 @@ public class Inventory {
             }
         }
     }
+
+    public boolean hasItem(String itemName) {
+        if (!items.isEmpty()) {
+            for (Item item : items) {
+                if (item.getName().equals(itemName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

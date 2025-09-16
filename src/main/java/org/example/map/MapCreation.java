@@ -13,7 +13,7 @@ public class MapCreation {
             }
         }
 
-        grid[2][5] = new Tile(TileEnum.ENEMY, new Enemy("Skeleton", 20, 4, 2, 2));
+        grid[1][1] = new Tile(TileEnum.ENEMY, new Enemy("Skeleton", 20, 4, 1, 1));
     }
 
     public Tile getTile(int x, int y) {

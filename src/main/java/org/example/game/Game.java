@@ -9,28 +9,31 @@ import org.example.service.MovementEnum;
 import java.util.Scanner;
 
 public class Game {
-    public static void GameStart(Player player, Inventory inventory) {
+    public static void GameStart(Player player) {
+        boolean gameWon = false;
         MapCreation map = new MapCreation(10, 10);
-
+        Inventory userInventory = player.getInventory();
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("You wandered into a room and finds a health potion and a great sword");
         System.out.println("Do you wish to pick it up? Y/N");
-        String itemChoice = scanner.next();
+        String itemChoice = scanner.nextLine().trim();
 
         if (itemChoice.equalsIgnoreCase("Y")) {
             Item sword = new Item("sword", "weapon");
             Item healthPotion = new Item("healthPotion", "potion");
 
-            inventory.addItem(sword);
-            inventory.addItem(healthPotion);
+            userInventory.addItem(sword);
+            userInventory.addItem(healthPotion);
+
+            player.setDamage(15);
 
             System.out.println("You picked up the items and continued your journey.");
         } else {
             System.out.println("You chose to not pick up the items and continued your journey.");
         }
 
-        while (true) {
+        while (player.getHealth() > 0 && !gameWon) {
             System.out.println("Where do you want to go? (up, down, left, right)");
 
             String choice = scanner.nextLine().trim();
@@ -52,7 +55,7 @@ public class Game {
             player.setPositionX(nextX);
             player.setPositionY(nextY);
 
-            map.getTile(player.getPositionX(), player.getPositionY()).onEnter(player);
+            map.getTile(player.getPositionX(), player.getPositionY()).onEnter(player, map.getTile(player.getPositionX(), player.getPositionY()));
         }
     }
 }

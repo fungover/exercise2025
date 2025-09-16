@@ -56,7 +56,7 @@ public class Combat {
                     }
                     break;
                 default:
-                    System.out.println("That is not an option!");
+                    System.out.println("Only write a number between 1 and 3.");
             }
         }
     }
@@ -97,12 +97,12 @@ public class Combat {
         }
     }
 
-    private void damageTaken(Player p, Enemy e) {
+    public void damageTaken(Player p, Enemy e) {
         int damageReceived = e.getDamage();
         p.decreaseHealth(damageReceived);
     }
 
-    private void damageDealt(Enemy e, int damage) {
+    public void damageDealt(Enemy e, int damage) {
         e.decreaseHealth(damage);
     }
 }

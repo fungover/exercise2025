@@ -46,11 +46,11 @@ public class ProductService {
         Product oldProduct = existing.get();
 
         Product updated = new Product.Builder()
-                .id(oldProduct.id())
+                .id(oldProduct.getId())
                 .name(name)
                 .category(category)
                 .rating(rating)
-                .createdDate(oldProduct.createdDate())
+                .createdDate(oldProduct.getCreatedDate())
                 .modifiedDate(ZonedDateTime.now())
                 .build();
 
@@ -58,15 +58,15 @@ public class ProductService {
     }
     //Business logic below
 
-    //sorted by name a-z
+    //sorted by getName a-z
     public List<Product> getProductsByCategorySorted(Category category) {
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null");
         }
 
         return productRepository.getAllProducts().stream()
-                .filter(product -> category.equals(product.category()))
-                .sorted(Comparator.comparing(Product::name))
+                .filter(product -> category.equals(product.getCategory()))
+                .sorted(Comparator.comparing(Product::getName))
                 .toList();
     }
 
@@ -75,14 +75,14 @@ public class ProductService {
             throw new IllegalArgumentException("dateTime cannot be null");
         }
         return productRepository.getAllProducts().stream()
-                .filter(product -> product.createdDate().isAfter(dateTime))
+                .filter(product -> product.getCreatedDate().isAfter(dateTime))
                 .toList();
     }
 
     //returns products that have been modified since the given date
     public List<Product> getModifiedProducts() {
         return productRepository.getAllProducts().stream()
-                .filter(product -> !product.createdDate().isEqual(product.modifiedDate()))
+                .filter(product -> !product.getCreatedDate().isEqual(product.getModifiedDate()))
                 .toList();
     }
 }

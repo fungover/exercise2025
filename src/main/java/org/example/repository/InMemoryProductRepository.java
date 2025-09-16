@@ -19,7 +19,7 @@ public class InMemoryProductRepository implements ProductRepository {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
-        UUID productId = parseUuid(product.id());
+        UUID productId = parseUuid(product.getId());
 
         if (products.containsKey(productId)) {
             throw new IllegalArgumentException("Product ID already exists");
@@ -45,10 +45,10 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public void updateProduct(Product product) {
-        UUID productId = parseUuid(product.id());
+        UUID productId = parseUuid(product.getId());
 
         if (!products.containsKey(productId)) {
-            throw new IllegalArgumentException("Product with ID " + product.id() + " does not exist");
+            throw new IllegalArgumentException("Product with ID " + product.getId() + " does not exist");
         }
 
         products.put(productId, product);

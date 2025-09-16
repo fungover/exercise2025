@@ -4,7 +4,6 @@ import org.example.entities.Category;
 import org.example.entities.Product;
 import org.example.repository.InMemoryProductRepository;
 import org.example.repository.ProductRepository;
-import org.example.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,8 +51,8 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("Throws an exception when name is empty")
-    void addProductToWarehouseWithEmptyName_throwsException(){
+    @DisplayName("Throws an exception when getName is empty")
+    void addProductToWarehouseWithEmptyGetName_throwsException(){
         assertThatThrownBy(() -> productService.addProduct(
                 Product.builder()
                         .id(UUID.randomUUID().toString())
@@ -65,7 +64,7 @@ class ProductServiceTest {
                         .build()
         ))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("name required");
+                .hasMessage("getName required");
 
     }
 
@@ -142,7 +141,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("Returns product by valid ID")
-    void getProductById_returnsProduct_whenIdExists() {
+    void getProductById_returnsProduct_whenGetIdExists() {
         Product chewBone = Product.builder()
                 .id(UUID.randomUUID().toString())
                 .name("Chew Bone")
@@ -154,7 +153,7 @@ class ProductServiceTest {
 
         productService.addProduct(chewBone);
 
-        Optional<Product> result = productService.getProductById(chewBone.id());
+        Optional<Product> result = productService.getProductById(chewBone.getId());
 
         assertThat(result)
                 .isPresent()
@@ -163,7 +162,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("Returns empty when product ID does not exist")
-    void getProductById_returnsEmpty_whenIdDoesNotExist() {
+    void getProductById_returnsEmpty_whenGetIdDoesNotExist() {
         Optional<Product> result = productService.getProductById(UUID.randomUUID().toString());
 
         assertThat(result)
@@ -172,7 +171,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("Returns empty when ID is not a valid UUID")
-    void getProductById_returnsEmpty_whenIdIsInvalidFormat() {
+    void getProductById_returnsEmpty_whenGetIdIsInvalidFormat() {
         Optional<Product> result = productService.getProductById("not-a-uuid");
 
         assertThat(result)
@@ -182,8 +181,8 @@ class ProductServiceTest {
     //TEST GET PRODUCTS BY CATEGORY SORTED
 
     @Test
-    @DisplayName("Returns products of specified category sorted alphabetically by name")
-    void getProductsByCategorySorted_returnsProductsSortedByName() {
+    @DisplayName("Returns products of specified getCategory sorted alphabetically by getName")
+    void getProductsByGetCategorySorted_returnsProductsSortedByGetName() {
         ZonedDateTime now = ZonedDateTime.now();
 
         Product premiumFood = Product.builder()
@@ -235,8 +234,8 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("Sorting category returns empty list when warehouse is empty")
-    void getProductsByCategorySorted_returnsEmptyList_whenWarehouseIsEmpty() {
+    @DisplayName("Sorting getCategory returns empty list when warehouse is empty")
+    void getProductsByGetCategorySorted_returnsEmptyList_whenWarehouseIsEmpty() {
         List<Product> products = productService.getProductsByCategorySorted(Category.FOOD);
 
         assertThat(products)
@@ -244,8 +243,8 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("Sorting category throws exception when category is null")
-    void getProductsByCategorySorted_throwsException_whenCategoryIsNull() {
+    @DisplayName("Sorting getCategory throws exception when getCategory is null")
+    void getProductsByCategorySorted_throwsException_whenGetCategoryIsNull() {
         assertThatThrownBy(() -> productService.getProductsByCategorySorted(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Category cannot be null");
@@ -270,34 +269,34 @@ class ProductServiceTest {
         productService.addProduct(originalProduct);
 
         productService.updateProduct(
-                originalProduct.id(),
+                originalProduct.getId(),
                 "Premium Dog Food",
                 Category.FOOD,
                 5);
 
-        Optional<Product> updatedProduct = productService.getProductById(originalProduct.id());
+        Optional<Product> updatedProduct = productService.getProductById(originalProduct.getId());
 
         assertThat(updatedProduct)
                 .isPresent();
 
         Product updated = updatedProduct.get();
-        assertThat(updated.id()).isEqualTo(originalProduct.id());
-        assertThat(updated.name()).isEqualTo("Premium Dog Food");
-        assertThat(updated.category()).isEqualTo(Category.FOOD);
-        assertThat(updated.rating()).isEqualTo(5);
-        assertThat(updated.createdDate()).isEqualTo(originalProduct.createdDate());
-        assertThat(updated.modifiedDate()).isAfter(originalProduct.modifiedDate());
+        assertThat(updated.getId()).isEqualTo(originalProduct.getId());
+        assertThat(updated.getName()).isEqualTo("Premium Dog Food");
+        assertThat(updated.getCategory()).isEqualTo(Category.FOOD);
+        assertThat(updated.getRating()).isEqualTo(5);
+        assertThat(updated.getCreatedDate()).isEqualTo(originalProduct.getCreatedDate());
+        assertThat(updated.getModifiedDate()).isAfter(originalProduct.getModifiedDate());
 
         // Verify that the product was successfully updated via ProductService
-        Optional<Product> retrievedProduct = productService.getProductById(originalProduct.id());
+        Optional<Product> retrievedProduct = productService.getProductById(originalProduct.getId());
         assertThat(retrievedProduct)
                 .isPresent()
                 .contains(updated);
     }
 
     @Test
-    @DisplayName("Update throws exception when rating is below valid range")
-    void updateProduct_throwsException_whenRatingIsBelowZero() {
+    @DisplayName("Update throws exception when getRating is below valid range")
+    void updateProduct_throwsException_whenGetRatingIsBelowZero() {
         ZonedDateTime now = ZonedDateTime.now();
         Product originalProduct = Product.builder()
                 .id(UUID.randomUUID().toString())
@@ -311,16 +310,16 @@ class ProductServiceTest {
         productService.addProduct(originalProduct);
 
         assertThatThrownBy(() -> productService.updateProduct(
-                originalProduct.id(),
+                originalProduct.getId(),
                 "Product Name",
                 Category.FOOD,
                 -1))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("rating must be between 0 and 10");
+                .hasMessage("getRating must be between 0 and 10");
     }
     @Test
     @DisplayName("Throws exception when trying to update non-existent product")
-    void updateProduct_throwsException_whenProductIdDoesNotExist() {
+    void updateProduct_throwsException_whenProductGetIdDoesNotExist() {
         String nonExistentId = UUID.randomUUID().toString();
 
         assertThatThrownBy(() -> productService.updateProduct(
@@ -364,7 +363,7 @@ class ProductServiceTest {
         List<Product> result = productService.getProductsCreatedAfter(now);
 
         assertEquals(1, result.size());
-        assertEquals("New", result.get(0).name());
+        assertEquals("New", result.get(0).getName());
     }
 
     @Test
@@ -400,7 +399,7 @@ class ProductServiceTest {
     //TEST GET MODIFIED PRODUCTS
 
     @Test
-    @DisplayName("Returns products where createdDate is NOT the same as modifiedDate")
+    @DisplayName("Returns products where getCreatedDate is NOT the same as getModifiedDate")
     void getModifiedProducts_returnsModifiedProducts() {
         ZonedDateTime now = ZonedDateTime.now();
         Product modified = Product.builder()

@@ -53,14 +53,14 @@ public class App {
         System.out.println("\nAll products in warehouse:");
         productService.getAllProducts().forEach(System.out::println);
 
-        // Show sorted products by category
-        System.out.println("\nCategory toys sorted by name:");
+        // Show sorted products by getCategory
+        System.out.println("\nCategory toys sorted by getName:");
         productService.getProductsByCategorySorted(Category.TOYS)
                 .forEach(System.out::println);
 
         // Get product by ID
         System.out.println("\nFetch product by ID:");
-        Optional<Product> fetched = productService.getProductById(squeakyBall.id());
+        Optional<Product> fetched = productService.getProductById(squeakyBall.getId());
         fetched.ifPresentOrElse(
                 System.out::println,
                 () -> System.out.println("Product not found")
@@ -72,9 +72,9 @@ public class App {
         modified.forEach(System.out::println);
 
         //Update product
-        System.out.println("\nUpdating product rating and name...");
-        productService.updateProduct(squeakyBall.id(), "Super Squeaky Ball", Category.TOYS, 10);
-        productService.getProductById(squeakyBall.id())
+        System.out.println("\nUpdating product getRating and getName...");
+        productService.updateProduct(squeakyBall.getId(), "Super Squeaky Ball", Category.TOYS, 10);
+        productService.getProductById(squeakyBall.getId())
                 .ifPresent(System.out::println);
 
         // Products created AFTER a given date

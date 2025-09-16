@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
-public final class Product {
+public final class Product implements Sellable {
     // Final fields for immutability
     private final String id;
     private final String name;
@@ -34,31 +34,31 @@ public final class Product {
     }
 
     // Getters with immutable access
-    public String id() {
+    public String getId() {
         return id;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
-    public Category category() {
+    public Category getCategory() {
         return category;
     }
 
-    public BigDecimal price() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public int rating() {
+    public int getRating() {
         return rating;
     }
 
-    public ZonedDateTime createdDate() {
+    public ZonedDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public ZonedDateTime modifiedDate() {
+    public ZonedDateTime getModifiedDate() {
         return modifiedDate;
     }
 

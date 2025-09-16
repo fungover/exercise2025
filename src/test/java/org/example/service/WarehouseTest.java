@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,5 +77,22 @@ class WarehouseTest {
         assertThrows(IllegalArgumentException.class, () ->
                 warehouse.updateProduct("99", "eleventyelevenonetyone", Category.BOOKS, 5)
         );
+    }
+
+    @Test
+    void getAllProductsReturnsAllProducts() {
+        LocalDateTime now = LocalDateTime.now();
+
+        Product product1 = new Product("1", "Pizza", Category.FOOD, 100, now, now);
+        Product product2 = new Product("2", "Tacos", Category.FOOD, 99, now, now);
+
+        warehouse.addProduct(product1);
+        warehouse.addProduct(product2);
+
+        List<Product> allProducts = warehouse.getAllProducts();
+
+        assertEquals(2, allProducts.size());
+        assertTrue(allProducts.contains(product1));
+        assertTrue(allProducts.contains(product2));
     }
 }

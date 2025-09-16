@@ -12,17 +12,17 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class WarehouseTest {
+public class ProductServiceTest {
 
     private final Clock fixedClock = Clock.fixed(
             LocalDate.of(2025, 1, 2).atStartOfDay(ZoneId.systemDefault()).toInstant(),
             ZoneId.systemDefault()
     );
-    private Warehouse warehouse;
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
-        warehouse = new Warehouse(fixedClock);
+        productService = new ProductService(fixedClock);
     }
 
     private Product makeProduct(String id, String name, Category category, int rating, LocalDate created, LocalDate modified) {
@@ -42,34 +42,34 @@ public class WarehouseTest {
     void addProduct_success() {
         Product p = makeProduct("1", "Apple", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p);
-        assertEquals(1, warehouse.getAllProducts().size());
+        productService.addProduct(p);
+        assertEquals(1, productService.getAllProducts().size());
     }
 
     @Test
     void addProduct_failure_nullProduct() {
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(null));
+        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(null));
     }
 
     @Test
     void addProduct_failure_blankName() {
         Product p = makeProduct("2", " ", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(p));
+        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(p));
     }
 
     @Test
     void addProduct_failure_nullCategory() {
         Product p = makeProduct("3", "Banana", null, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(p));
+        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(p));
     }
 
     @Test
     void addProduct_failure_invalidRating() {
         Product p = makeProduct("4", "Orange", Category.FOOD, 11,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(p));
+        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(p));
     }
 
     @Test
@@ -78,31 +78,31 @@ public class WarehouseTest {
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
         Product p2 = makeProduct("5", "Banana", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p1);
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(p2));
+        productService.addProduct(p1);
+        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(p2));
     }
     // ---- getProductById ----
     @Test
     void getProductById_success() {
         Product p = makeProduct("10", "Milk", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p);
-        assertEquals(p, warehouse.getProductById("10"));
+        productService.addProduct(p);
+        assertEquals(p, productService.getProductById("10"));
     }
 
     @Test
     void getProductById_failure_nullId() {
-        assertThrows(IllegalArgumentException.class, () -> warehouse.getProductById(null));
+        assertThrows(IllegalArgumentException.class, () -> productService.getProductById(null));
     }
 
     @Test
     void getProductById_failure_blankId() {
-        assertThrows(IllegalArgumentException.class, () -> warehouse.getProductById(" "));
+        assertThrows(IllegalArgumentException.class, () -> productService.getProductById(" "));
     }
 
     @Test
     void getProductById_failure_notFound() {
-        assertThrows(java.util.NoSuchElementException.class, () -> warehouse.getProductById("999"));
+        assertThrows(java.util.NoSuchElementException.class, () -> productService.getProductById("999"));
     }
 
     // ---- getAllProducts ----
@@ -112,9 +112,9 @@ public class WarehouseTest {
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
         Product p2 = makeProduct("21", "B", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
-        List<Product> list = warehouse.getAllProducts();
+        productService.addProduct(p1);
+        productService.addProduct(p2);
+        List<Product> list = productService.getAllProducts();
         assertEquals(2, list.size());
     }
 
@@ -122,8 +122,8 @@ public class WarehouseTest {
     void getAllProducts_defensive() {
         Product p1 = makeProduct("22", "C", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p1);
-        List<Product> list = warehouse.getAllProducts();
+        productService.addProduct(p1);
+        List<Product> list = productService.getAllProducts();
         assertThrows(UnsupportedOperationException.class, () -> list.add(p1));
     }
 
@@ -134,22 +134,22 @@ public class WarehouseTest {
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
         Product p2 = makeProduct("31", "apple", Category.TOYS, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
-        List<Product> list = warehouse.getProductsByCategorySorted(Category.TOYS);
+        productService.addProduct(p1);
+        productService.addProduct(p2);
+        List<Product> list = productService.getProductsByCategorySorted(Category.TOYS);
         assertEquals("apple", list.get(0).getName());
         assertEquals("Zebra", list.get(1).getName());
     }
 
     @Test
     void getProductsByCategorySorted_emptyList() {
-        List<Product> list = warehouse.getProductsByCategorySorted(Category.ELECTRONICS);
+        List<Product> list = productService.getProductsByCategorySorted(Category.ELECTRONICS);
         assertTrue(list.isEmpty());
     }
 
     @Test
     void getProductsByCategorySorted_nullCategory() {
-        assertThrows(IllegalArgumentException.class, () -> warehouse.getProductsByCategorySorted(null));
+        assertThrows(IllegalArgumentException.class, () -> productService.getProductsByCategorySorted(null));
     }
 
     // ---- getProductsCreatedAfter ----
@@ -157,8 +157,8 @@ public class WarehouseTest {
     void getProductsCreatedAfter_success_strictlyAfter() {
         Product p = makeProduct("40", "X", Category.OTHER, 5,
                 LocalDate.of(2025, 1, 2), LocalDate.of(2025, 1, 2));
-        warehouse.addProduct(p);
-        List<Product> list = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 1, 1));
+        productService.addProduct(p);
+        List<Product> list = productService.getProductsCreatedAfter(LocalDate.of(2025, 1, 1));
         assertEquals(1, list.size());
     }
 
@@ -166,14 +166,14 @@ public class WarehouseTest {
     void getProductsCreatedAfter_boundaryExcluded() {
         Product p = makeProduct("41", "Y", Category.OTHER, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p);
-        List<Product> list = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 1, 1));
+        productService.addProduct(p);
+        List<Product> list = productService.getProductsCreatedAfter(LocalDate.of(2025, 1, 1));
         assertTrue(list.isEmpty());
     }
 
     @Test
     void getProductsCreatedAfter_nullDate() {
-        assertThrows(IllegalArgumentException.class, () -> warehouse.getProductsCreatedAfter(null));
+        assertThrows(IllegalArgumentException.class, () -> productService.getProductsCreatedAfter(null));
     }
 
     // ---- updateProduct ----
@@ -181,9 +181,9 @@ public class WarehouseTest {
     void updateProduct_success() {
         Product p = makeProduct("50", "Old", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p);
-        warehouse.updateProduct("50", "New", Category.FOOD, 7);
-        Product updated = warehouse.getProductById("50");
+        productService.addProduct(p);
+        productService.updateProduct("50", "New", Category.FOOD, 7);
+        Product updated = productService.getProductById("50");
         assertEquals("New", updated.getName());
         assertEquals(7, updated.getRating());
         assertEquals(LocalDate.of(2025, 1, 1), updated.getCreatedDate()); // same createdDate
@@ -193,34 +193,34 @@ public class WarehouseTest {
     @Test
     void updateProduct_failure_notFound() {
         assertThrows(java.util.NoSuchElementException.class,
-                () -> warehouse.updateProduct("999", "X", Category.FOOD, 5));
+                () -> productService.updateProduct("999", "X", Category.FOOD, 5));
     }
 
     @Test
     void updateProduct_failure_blankName() {
         Product p = makeProduct("51", "Test", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p);
+        productService.addProduct(p);
         assertThrows(IllegalArgumentException.class,
-                () -> warehouse.updateProduct("51", " ", Category.FOOD, 5));
+                () -> productService.updateProduct("51", " ", Category.FOOD, 5));
     }
 
     @Test
     void updateProduct_failure_nullCategory() {
         Product p = makeProduct("52", "Test", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p);
+        productService.addProduct(p);
         assertThrows(IllegalArgumentException.class,
-                () -> warehouse.updateProduct("52", "New", null, 5));
+                () -> productService.updateProduct("52", "New", null, 5));
     }
 
     @Test
     void updateProduct_failure_invalidRating() {
         Product p = makeProduct("53", "Test", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p);
+        productService.addProduct(p);
         assertThrows(IllegalArgumentException.class,
-                () -> warehouse.updateProduct("53", "New", Category.FOOD, 11));
+                () -> productService.updateProduct("53", "New", Category.FOOD, 11));
     }
 
     // ---- getModifiedProducts ----
@@ -228,9 +228,9 @@ public class WarehouseTest {
     void getModifiedProducts_success_modified() {
         Product p = makeProduct("60", "Test", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p);
-        warehouse.updateProduct("60", "Updated", Category.FOOD, 6);
-        List<Product> list = warehouse.getModifiedProducts();
+        productService.addProduct(p);
+        productService.updateProduct("60", "Updated", Category.FOOD, 6);
+        List<Product> list = productService.getModifiedProducts();
         assertEquals(1, list.size());
     }
 
@@ -238,8 +238,8 @@ public class WarehouseTest {
     void getModifiedProducts_success_noneModified() {
         Product p = makeProduct("61", "Test", Category.FOOD, 5,
                 LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        warehouse.addProduct(p);
-        List<Product> list = warehouse.getModifiedProducts();
+        productService.addProduct(p);
+        List<Product> list = productService.getModifiedProducts();
         assertTrue(list.isEmpty());
     }
 

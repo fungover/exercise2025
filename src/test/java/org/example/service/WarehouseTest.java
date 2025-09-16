@@ -5,6 +5,7 @@ import org.example.entities.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -139,5 +140,23 @@ class WarehouseTest {
         assertEquals("Apple", sortedFood.get(0).name());
         assertEquals("Banana", sortedFood.get(1).name());
         assertEquals("Carrot", sortedFood.get(2).name());
+    }
+
+    @Test
+    void getProductsCreatedAfterReturnsCorrectProducts() {
+        LocalDateTime now = LocalDateTime.now();
+
+        Product oldProduct = new Product("1", "Old Book", Category.BOOKS, 5,
+                now.minusDays(10), now.minusDays(10));
+        Product recentProduct = new Product("2", "New Book", Category.BOOKS, 9,
+                now.minusDays(1), now.minusDays(1));
+
+        warehouse.addProduct(oldProduct);
+        warehouse.addProduct(recentProduct);
+
+        List<Product> result = warehouse.getProductsCreatedAfter(LocalDate.now().minusDays(5));
+
+        assertEquals(1, result.size());
+        assertEquals("New Book", result.get(0).name());
     }
 }

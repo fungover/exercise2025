@@ -4,6 +4,7 @@ package org.example.service;
 import org.example.entities.Category;
 import org.example.entities.Product;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -56,4 +57,11 @@ public class Warehouse {
                 .sorted(Comparator.comparing(Product::name))
                 .collect(Collectors.toList());
     }
+
+    public List<Product> getProductsCreatedAfter(LocalDate date) {
+        return products.values().stream()
+                .filter(p -> p.createdDate().toLocalDate().isAfter(date))
+                .collect(Collectors.toList());
+    }
+
 }

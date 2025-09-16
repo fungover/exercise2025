@@ -49,6 +49,7 @@ public class ProductService {
                 .id(oldProduct.getId())
                 .name(name)
                 .category(category)
+                .price(oldProduct.getPrice())
                 .rating(rating)
                 .createdDate(oldProduct.getCreatedDate())
                 .modifiedDate(ZonedDateTime.now())

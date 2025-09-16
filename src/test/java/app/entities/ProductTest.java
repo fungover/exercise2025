@@ -1,4 +1,4 @@
-package org.example.tdd;
+package app.entities;
 
 import org.junit.jupiter.api.Test;
 

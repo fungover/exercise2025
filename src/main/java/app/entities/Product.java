@@ -1,4 +1,4 @@
-package org.example.tdd;
+package app.entities;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

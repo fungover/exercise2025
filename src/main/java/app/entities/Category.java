@@ -1,4 +1,4 @@
-package org.example.tdd;
+package app.entities;
 
 public enum Category {
     FOOD,

@@ -6,6 +6,7 @@ import app.entities.Product;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Warehouse {
 private final List<Product> products = new ArrayList<>();
@@ -52,6 +53,10 @@ private final List<Product> products = new ArrayList<>();
     }
 
 
-
-
+    public List<Product> getProductsByCategory(Category category) {
+        return products.stream()
+                .filter(p->p.category()==category)
+                .sorted(Comparator.comparing(Product::name))
+                .collect(Collectors.toList());
+    }
 }

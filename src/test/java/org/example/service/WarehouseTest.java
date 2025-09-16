@@ -98,6 +98,15 @@ class WarehouseTest {
     }
 
     @Test
+    void getAllProductsEmptyWarehouseReturnsEmptyList() {
+        List<Product> allProducts = warehouse.getAllProducts();
+
+        System.out.println("All products in empty warehouse: " + allProducts);
+
+        assertTrue(allProducts.isEmpty(), "Expected empty list when no products are added");
+    }
+
+    @Test
     void getProductByIdReturnsCorrectProduct() {
         LocalDateTime now = LocalDateTime.now();
 

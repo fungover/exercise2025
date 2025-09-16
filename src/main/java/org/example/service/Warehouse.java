@@ -5,10 +5,8 @@ import org.example.entities.Category;
 import org.example.entities.Product;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Warehouse {
 
@@ -50,5 +48,12 @@ public class Warehouse {
             throw new IllegalArgumentException("Product not found");
         }
         return product;
+    }
+
+    public List<Product> getProductsByCategorySorted(Category category) {
+        return products.values().stream()
+                .filter(p -> p.category() == category)
+                .sorted(Comparator.comparing(Product::name))
+                .collect(Collectors.toList());
     }
 }

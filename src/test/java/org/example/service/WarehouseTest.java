@@ -95,4 +95,49 @@ class WarehouseTest {
         assertTrue(allProducts.contains(product1));
         assertTrue(allProducts.contains(product2));
     }
+
+    @Test
+    void getProductByIdReturnsCorrectProduct() {
+        LocalDateTime now = LocalDateTime.now();
+
+        Product product = new Product("1", "Peppa Pigs adventure", Category.BOOKS, 7, now, now);
+        warehouse.addProduct(product);
+
+        Product result = warehouse.getProductById("1");
+
+        assertEquals(product, result);
+    }
+
+    @Test
+    void getProductByIdNonExistingIdThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            System.out.println("Trying to get product with non existing ID"); // needed this for my understanding deleting later
+            warehouse.getProductById("99");
+        });
+    }
+
+    @Test
+    void getProductsByCategorySortedReturnsSortedProducts() {
+        LocalDateTime now = LocalDateTime.now();
+
+        Product p1 = new Product("1", "Banana", Category.FOOD, 5, now, now);
+        Product p2 = new Product("2", "Apple", Category.FOOD, 7, now, now);
+        Product p3 = new Product("3", "Carrot", Category.FOOD, 6, now, now);
+        Product p4 = new Product("4", "Bridget Jones diary", Category.BOOKS, 9, now, now);
+
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+        warehouse.addProduct(p3);
+        warehouse.addProduct(p4);
+
+        List<Product> sortedFood = warehouse.getProductsByCategorySorted(Category.FOOD);
+
+        System.out.println("Sorted Foods:");
+        sortedFood.forEach(p -> System.out.println(p.name()));
+
+        assertEquals(3, sortedFood.size());
+        assertEquals("Apple", sortedFood.get(0).name());
+        assertEquals("Banana", sortedFood.get(1).name());
+        assertEquals("Carrot", sortedFood.get(2).name());
+    }
 }

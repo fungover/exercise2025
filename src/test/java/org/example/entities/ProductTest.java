@@ -7,66 +7,98 @@ import static org.junit.jupiter.api.Assertions.*;
 /** Field-rule checks for "Product" */
 class ProductTest {
 
-    /** createNew: sets createdDate == modifiedDate */
+    /** builder: when dates are omitted, createdDate == modifiedDate (defaults) */
     @Test
-    void createNew_setsCreatedEqualsModified() {
-        LocalDateTime creationTime = LocalDateTime.of(2025, 9, 1, 12, 0);
+    void builder_setsCreatedEqualsModified_whenDatesOmitted() {
+        Product product = Product.builder()
+                .id("id1")
+                .name("Name")
+                .category(Category.BOOKS)
+                .rating(7)
+                .build();
 
-        Product product = Product.createNew("id1", "Name", Category.BOOKS, 7, creationTime);
-
-        assertEquals(creationTime, product.createdDate());
-        assertEquals(creationTime, product.modifiedDate());
+        assertNotNull(product.createdDate());
+        assertNotNull(product.modifiedDate());
+        assertEquals(product.createdDate(), product.modifiedDate());
     }
 
-    /** createNew: null id -> IllegalArgumentException("id required") */
+    /** builder: null id -> IllegalArgumentException("id required") */
     @Test
-    void createNew_nullId_throwsWithMessage() {
-        LocalDateTime creationTime = LocalDateTime.of(2025, 9, 1, 12, 0);
-
+    void builder_nullId_throwsWithMessage() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> Product.createNew(null, "Name", Category.BOOKS, 7, creationTime));
+                () -> Product.builder()
+                        .id(null)
+                        .name("Name")
+                        .category(Category.BOOKS)
+                        .rating(7)
+                        .build());
         assertEquals("id required", ex.getMessage());
     }
 
-    /** createNew: blank name -> IllegalArgumentException("name required") */
+    /** builder: blank name -> IllegalArgumentException("name required") */
     @Test
-    void createNew_blankName_throwsWithMessage() {
-        LocalDateTime creationTime = LocalDateTime.of(2025, 9, 1, 12, 0);
-
+    void builder_blankName_throwsWithMessage() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> Product.createNew("id1", "   ", Category.BOOKS, 7, creationTime));
+                () -> Product.builder()
+                        .id("id1")
+                        .name("   ")
+                        .category(Category.BOOKS)
+                        .rating(7)
+                        .build());
         assertEquals("name required", ex.getMessage());
     }
 
-    /** createNew: null category -> IllegalArgumentException("category required") */
+    /** builder: null category -> IllegalArgumentException("category required") */
     @Test
-    void createNew_nullCategory_throwsWithMessage() {
-        LocalDateTime creationTime = LocalDateTime.of(2025, 9, 1, 12, 0);
-
+    void builder_nullCategory_throwsWithMessage() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> Product.createNew("id1", "Name", null, 7, creationTime));
+                () -> Product.builder()
+                        .id("id1")
+                        .name("Name")
+                        .category(null)
+                        .rating(7)
+                        .build());
         assertEquals("category required", ex.getMessage());
     }
 
-    /** createNew: rating out of range -> IllegalArgumentException("rating 0–10") */
+    /** builder: rating out of range -> IllegalArgumentException("rating 0–10") */
     @Test
-    void createNew_invalidRating_throwsWithMessage() {
-        LocalDateTime creationTime = LocalDateTime.of(2025, 9, 1, 12, 0);
-
+    void builder_invalidRating_throwsWithMessage() {
         IllegalArgumentException exLow = assertThrows(IllegalArgumentException.class,
-                () -> Product.createNew("id1", "Name", Category.BOOKS, -1, creationTime));
+                () -> Product.builder()
+                        .id("id1")
+                        .name("Name")
+                        .category(Category.BOOKS)
+                        .rating(-1)
+                        .build());
         assertEquals("rating 0–10", exLow.getMessage());
 
         IllegalArgumentException exHigh = assertThrows(IllegalArgumentException.class,
-                () -> Product.createNew("id1", "Name", Category.BOOKS, 11, creationTime));
+                () -> Product.builder()
+                        .id("id1")
+                        .name("Name")
+                        .category(Category.BOOKS)
+                        .rating(11)
+                        .build());
         assertEquals("rating 0–10", exHigh.getMessage());
     }
 
-    /** createNew: null 'now' -> NullPointerException("createdDate") (constructor checks createdDate first) */
+    /** builder: explicit dates are respected (createdDate != modifiedDate when provided) */
     @Test
-    void createNew_nullNow_throwsWithMessage() {
-        NullPointerException ex = assertThrows(NullPointerException.class,
-                () -> Product.createNew("id1", "Name", Category.BOOKS, 7, null));
-        assertEquals("createdDate", ex.getMessage());
+    void builder_explicitDates_areRespected() {
+        LocalDateTime createdDate = LocalDateTime.of(2025, 9, 1, 12, 0);
+        LocalDateTime modifiedDate = createdDate.plusHours(2);
+
+        Product product = Product.builder()
+                .id("id1")
+                .name("Name")
+                .category(Category.BOOKS)
+                .rating(7)
+                .createdDate(createdDate)
+                .modifiedDate(modifiedDate)
+                .build();
+
+        assertEquals(createdDate, product.createdDate());
+        assertEquals(modifiedDate, product.modifiedDate());
     }
 }

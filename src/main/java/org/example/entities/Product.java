@@ -33,13 +33,6 @@ public final class Product {
     public LocalDateTime createdDate() { return createdDate; }
     public LocalDateTime modifiedDate() { return modifiedDate; }
 
-    public static Product createNew(String id, String name, Category category, int rating, LocalDateTime now) {
-        return builder()
-                .id(id).name(name).category(category).rating(rating)
-                .createdDate(now).modifiedDate(now)
-                .build();
-    }
-
     public Product withUpdated(String name, Category category, int rating, LocalDateTime now) {
         return toBuilder()
                 .name(name).category(category).rating(rating)
@@ -108,10 +101,11 @@ public final class Product {
             if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("name required");
             if (category == null) throw new IllegalArgumentException("category required");
             if (rating < 0 || rating > 10) throw new IllegalArgumentException("rating 0–10");
-            Objects.requireNonNull(createdDate, "createdDate");
-            Objects.requireNonNull(modifiedDate, "modifiedDate");
 
-            return new Product(this.id, this.name, this.category, this.rating, this.createdDate, this.modifiedDate);
+            LocalDateTime created = (createdDate != null) ? createdDate : LocalDateTime.now();
+            LocalDateTime modified = (modifiedDate != null) ? modifiedDate : created;
+
+            return new Product(id, name, category, rating, created, modified);
         }
     }
 }

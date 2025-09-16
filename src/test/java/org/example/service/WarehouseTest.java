@@ -34,8 +34,23 @@ public class WarehouseTest {
         LocalDateTime createdAt1 = LocalDateTime.of(2025, 9, 1, 12, 0);
         LocalDateTime createdAt2 = LocalDateTime.of(2025, 9, 2, 12, 0);
 
-        Product testProduct1 = Product.createNew("id1", "Product1", Category.BOOKS, 7, createdAt1);
-        Product testProduct2 = Product.createNew("id2", "Product2", Category.ELECTRONICS, 8, createdAt2);
+        Product testProduct1 = Product.builder()
+                .id("id1")
+                .name("Product1")
+                .category(Category.BOOKS)
+                .rating(7)
+                .createdDate(createdAt1)
+                .modifiedDate(createdAt1)
+                .build();
+
+        Product testProduct2 = Product.builder()
+                .id("id2")
+                .name("Product2")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(createdAt2)
+                .modifiedDate(createdAt2)
+                .build();
 
         warehouse.addProduct(testProduct1);
         warehouse.addProduct(testProduct2);
@@ -50,7 +65,15 @@ public class WarehouseTest {
     @Test
     void addProduct_success_addsToWarehouse() {
         LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
-        Product testProduct = Product.createNew("id1", "Product1", Category.BOOKS, 7, createdAt);
+
+        Product testProduct = Product.builder()
+                .id("id1")
+                .name("Product1")
+                .category(Category.BOOKS)
+                .rating(7)
+                .createdDate(createdAt)
+                .modifiedDate(createdAt)
+                .build();
 
         warehouse.addProduct(testProduct);
 
@@ -64,8 +87,23 @@ public class WarehouseTest {
         LocalDateTime createdAt1 = LocalDateTime.of(2025, 9, 1, 12, 0);
         LocalDateTime createdAt2 = LocalDateTime.of(2025, 9, 2, 12, 0);
 
-        Product testProduct1 = Product.createNew("id1", "Product1", Category.BOOKS, 5, createdAt1);
-        Product testProduct2 = Product.createNew("id1", "Product2", Category.TOYS, 8, createdAt2);
+        Product testProduct1 = Product.builder()
+                .id("id1")
+                .name("Product1")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt1)
+                .modifiedDate(createdAt1)
+                .build();
+
+        Product testProduct2 = Product.builder()
+                .id("id1")
+                .name("Product2")
+                .category(Category.TOYS)
+                .rating(8)
+                .createdDate(createdAt2)
+                .modifiedDate(createdAt2)
+                .build();
 
         warehouse.addProduct(testProduct1);
 
@@ -78,7 +116,16 @@ public class WarehouseTest {
     @Test
     void getProductById_success_getCorrectProductById() {
         LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
-        Product testProduct = Product.createNew("id1", "Product1", Category.BOOKS, 7, createdAt);
+
+        Product testProduct = Product.builder()
+                .id("id1")
+                .name("Product1")
+                .category(Category.BOOKS)
+                .rating(7)
+                .createdDate(createdAt)
+                .modifiedDate(createdAt)
+                .build();
+
         warehouse.addProduct(testProduct);
 
         var testProductById = warehouse.getProductById(testProduct.id());
@@ -104,7 +151,16 @@ public class WarehouseTest {
     @Test
     void updateProduct_success_updatesFields_andPersists() {
         LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 9, 0);
-        Product original = Product.createNew("id1", "Original", Category.BOOKS, 5, createdAt);
+
+        Product original = Product.builder()
+                .id("id1")
+                .name("Original")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt)
+                .modifiedDate(createdAt)
+                .build();
+
         warehouse.addProduct(original);
 
         Product updated = warehouse.updateProduct("id1", "New Name", Category.TOYS, 9);
@@ -143,9 +199,32 @@ public class WarehouseTest {
         LocalDateTime createdAt2 = LocalDateTime.of(2025, 9, 2, 12, 0);
         LocalDateTime createdAt3 = LocalDateTime.of(2025, 9, 3, 12, 0);
 
-        Product testProduct1 = Product.createNew("id1", "C", Category.BOOKS, 5, createdAt1);
-        Product testProduct2 = Product.createNew("id2", "B", Category.TOYS, 8, createdAt2);
-        Product testProduct3 = Product.createNew("id3", "A", Category.TOYS, 8, createdAt3);
+        Product testProduct1 = Product.builder()
+                .id("id1")
+                .name("C")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt1)
+                .modifiedDate(createdAt1)
+                .build();
+
+        Product testProduct2 = Product.builder()
+                .id("id2")
+                .name("B")
+                .category(Category.TOYS)
+                .rating(8)
+                .createdDate(createdAt2)
+                .modifiedDate(createdAt2)
+                .build();
+
+        Product testProduct3 = Product.builder()
+                .id("id3")
+                .name("A")
+                .category(Category.TOYS)
+                .rating(8)
+                .createdDate(createdAt3)
+                .modifiedDate(createdAt3)
+                .build();
 
         warehouse.addProduct(testProduct1);
         warehouse.addProduct(testProduct2);
@@ -162,8 +241,23 @@ public class WarehouseTest {
         LocalDateTime createdAt1 = LocalDateTime.of(2025, 9, 1, 12, 0);
         LocalDateTime createdAt2 = LocalDateTime.of(2025, 9, 2, 12, 0);
 
-        Product product1 = Product.createNew("id1", "A", Category.BOOKS, 5, createdAt1);
-        Product product2 = Product.createNew("id2", "B", Category.TOYS,  8, createdAt2);
+        Product product1 = Product.builder()
+                .id("id1")
+                .name("A")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt1)
+                .modifiedDate(createdAt1)
+                .build();
+
+        Product product2 = Product.builder()
+                .id("id2")
+                .name("B")
+                .category(Category.TOYS)
+                .rating(8)
+                .createdDate(createdAt2)
+                .modifiedDate(createdAt2)
+                .build();
 
         warehouse.addProduct(product1);
         warehouse.addProduct(product2);
@@ -172,7 +266,6 @@ public class WarehouseTest {
 
         assertTrue(result.isEmpty());
     }
-
 
     @Test
     void getProductsByCategorySorted_nullCategory_throwsNullPointerException() {
@@ -187,9 +280,33 @@ public class WarehouseTest {
         LocalDateTime createdAt2 = LocalDateTime.of(2025, 9, 2, 12, 0);
         LocalDateTime createdAt3 = LocalDateTime.of(2025, 9, 3, 12, 0);
 
-        Product product1 = Product.createNew("id1", "sep01",  Category.BOOKS, 5, createdAt1);
-        Product product2 = Product.createNew("id2", "sep02", Category.BOOKS, 5, createdAt2);
-        Product product3 = Product.createNew("id3", "sep03",  Category.BOOKS, 5, createdAt3);
+        Product product1 = Product.builder()
+                .id("id1")
+                .name("sep01")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt1)
+                .modifiedDate(createdAt1)
+                .build();
+
+        Product product2 = Product.builder()
+                .id("id2")
+                .name("sep02")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt2)
+                .modifiedDate(createdAt2)
+                .build();
+
+        Product product3 = Product.builder()
+                .id("id3")
+                .name("sep03")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt3)
+                .modifiedDate(createdAt3)
+                .build();
+
         warehouse.addProduct(product1);
         warehouse.addProduct(product2);
         warehouse.addProduct(product3);
@@ -203,9 +320,16 @@ public class WarehouseTest {
     void getProductsCreatedAfter_noMatches_returnsEmpty() {
         LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
 
-       Product product = Product.createNew("id1", "sep01", Category.BOOKS, 5, createdAt);
+        Product product = Product.builder()
+                .id("id1")
+                .name("sep01")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt)
+                .modifiedDate(createdAt)
+                .build();
 
-       warehouse.addProduct(product);
+        warehouse.addProduct(product);
 
         var result = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 9, 1));
         assertTrue(result.isEmpty());
@@ -220,8 +344,24 @@ public class WarehouseTest {
     @Test
     void getModifiedProducts_success_returnsOnlyUpdatedOnes() {
         LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 10, 0);
-        Product product1 = Product.createNew("id1", "A", Category.BOOKS, 5, createdAt);
-        Product product2 = Product.createNew("id2", "B", Category.BOOKS, 5, createdAt);
+
+        Product product1 = Product.builder()
+                .id("id1")
+                .name("A")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt)
+                .modifiedDate(createdAt)
+                .build();
+
+        Product product2 = Product.builder()
+                .id("id2")
+                .name("B")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt)
+                .modifiedDate(createdAt)
+                .build();
 
         warehouse.addProduct(product1);
         warehouse.addProduct(product2);
@@ -236,7 +376,14 @@ public class WarehouseTest {
     void getModifiedProducts_noneModified_returnsEmpty() {
         LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
 
-        Product product = Product.createNew("id1", "A", Category.BOOKS, 5, createdAt);
+        Product product = Product.builder()
+                .id("id1")
+                .name("A")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt)
+                .modifiedDate(createdAt)
+                .build();
 
         warehouse.addProduct(product);
 
@@ -249,9 +396,32 @@ public class WarehouseTest {
     void getCategoriesWithProducts_success_returnsDistinctOnlyPresentCategories() {
         LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
 
-        Product book1 = Product.createNew("id1", "Book 1", Category.BOOKS, 5, createdAt);
-        Product book2 = Product.createNew("id2", "Book 2", Category.BOOKS, 6, createdAt.plusMinutes(1));
-        Product toy1  = Product.createNew("id3", "Toy 1",  Category.TOYS,  7, createdAt.plusMinutes(2));
+        Product book1 = Product.builder()
+                .id("id1")
+                .name("Book 1")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt)
+                .modifiedDate(createdAt)
+                .build();
+
+        Product book2 = Product.builder()
+                .id("id2")
+                .name("Book 2")
+                .category(Category.BOOKS)
+                .rating(6)
+                .createdDate(createdAt.plusMinutes(1))
+                .modifiedDate(createdAt.plusMinutes(1))
+                .build();
+
+        Product toy1 = Product.builder()
+                .id("id3")
+                .name("Toy 1")
+                .category(Category.TOYS)
+                .rating(7)
+                .createdDate(createdAt.plusMinutes(2))
+                .modifiedDate(createdAt.plusMinutes(2))
+                .build();
 
         warehouse.addProduct(book1);
         warehouse.addProduct(book2);
@@ -274,10 +444,32 @@ public class WarehouseTest {
     void countProductsInCategory_success_returnsNumberOfProductsInACategory() {
         LocalDateTime createdAt = LocalDateTime.of(2025, 9, 1, 12, 0);
 
-        Product book1 = Product.createNew("id1", "Book 1", Category.BOOKS, 5, createdAt);
-        Product book2 = Product.createNew("id2", "Book 2", Category.BOOKS, 6, createdAt.plusMinutes(1));
-        Product toy1 = Product.createNew("id3", "Toy 1", Category.TOYS, 6, createdAt.plusMinutes(2));
+        Product book1 = Product.builder()
+                .id("id1")
+                .name("Book 1")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(createdAt)
+                .modifiedDate(createdAt)
+                .build();
 
+        Product book2 = Product.builder()
+                .id("id2")
+                .name("Book 2")
+                .category(Category.BOOKS)
+                .rating(6)
+                .createdDate(createdAt.plusMinutes(1))
+                .modifiedDate(createdAt.plusMinutes(1))
+                .build();
+
+        Product toy1 = Product.builder()
+                .id("id3")
+                .name("Toy 1")
+                .category(Category.TOYS)
+                .rating(6)
+                .createdDate(createdAt.plusMinutes(2))
+                .modifiedDate(createdAt.plusMinutes(2))
+                .build();
 
         warehouse.addProduct(book1);
         warehouse.addProduct(book2);
@@ -302,9 +494,32 @@ public class WarehouseTest {
     void getProductInitialsMap_success_countsUppercased_andIsUnmodifiable() {
         LocalDateTime t = LocalDateTime.of(2025, 9, 1, 12, 0);
 
-        Product a1 = Product.createNew("id1", "alpha",  Category.BOOKS, 5, t);
-        Product a2 = Product.createNew("id2", "Apple",  Category.TOYS,  6, t.plusMinutes(1));
-        Product b1 = Product.createNew("id3", "banana", Category.FOOD,  7, t.plusMinutes(2));
+        Product a1 = Product.builder()
+                .id("id1")
+                .name("alpha")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(t)
+                .modifiedDate(t)
+                .build();
+
+        Product a2 = Product.builder()
+                .id("id2")
+                .name("Apple")
+                .category(Category.TOYS)
+                .rating(6)
+                .createdDate(t.plusMinutes(1))
+                .modifiedDate(t.plusMinutes(1))
+                .build();
+
+        Product b1 = Product.builder()
+                .id("id3")
+                .name("banana")
+                .category(Category.FOOD)
+                .rating(7)
+                .createdDate(t.plusMinutes(2))
+                .modifiedDate(t.plusMinutes(2))
+                .build();
 
         warehouse.addProduct(a1);
         warehouse.addProduct(a2);
@@ -326,16 +541,55 @@ public class WarehouseTest {
     void getTopRatedProductsThisMonth_success_returnsTopRatedThisMonth_sortedByNewestFirst() {
         // Fixed clock in @BeforeEach makes "this month" = 2025-09 (Europe/Stockholm)
         LocalDateTime aug31 = LocalDateTime.of(2025, 8, 31, 12, 0);
-        LocalDateTime sep01 = LocalDateTime.of(2025, 9, 1,  9,  0);
-        LocalDateTime sep02 = LocalDateTime.of(2025, 9, 2, 10,  0);
-        LocalDateTime sep03 = LocalDateTime.of(2025, 9, 3, 11,  0);
-        LocalDateTime sep04 = LocalDateTime.of(2025, 9, 4, 12,  0);
+        LocalDateTime sep01 = LocalDateTime.of(2025, 9, 1, 9, 0);
+        LocalDateTime sep02 = LocalDateTime.of(2025, 9, 2, 10, 0);
+        LocalDateTime sep03 = LocalDateTime.of(2025, 9, 3, 11, 0);
+        LocalDateTime sep04 = LocalDateTime.of(2025, 9, 4, 12, 0);
 
-        Product productOld = Product.createNew("id1", "Old product", Category.BOOKS, 10, aug31);
-        Product product1Low = Product.createNew("id2", "new product low rated", Category.BOOKS, 7, sep01);
-        Product product2Top = Product.createNew("id3", "new product top rated", Category.TOYS,  9, sep02);
-        Product product3Top = Product.createNew("id4", "new product top rated", Category.FOOD,  9, sep03);
-        Product product4Low = Product.createNew("id5", "new product low rated", Category.BOOKS, 8, sep04);
+        Product productOld = Product.builder()
+                .id("id1")
+                .name("Old product")
+                .category(Category.BOOKS)
+                .rating(10)
+                .createdDate(aug31)
+                .modifiedDate(aug31)
+                .build();
+
+        Product product1Low = Product.builder()
+                .id("id2")
+                .name("new product low rated")
+                .category(Category.BOOKS)
+                .rating(7)
+                .createdDate(sep01)
+                .modifiedDate(sep01)
+                .build();
+
+        Product product2Top = Product.builder()
+                .id("id3")
+                .name("new product top rated")
+                .category(Category.TOYS)
+                .rating(9)
+                .createdDate(sep02)
+                .modifiedDate(sep02)
+                .build();
+
+        Product product3Top = Product.builder()
+                .id("id4")
+                .name("new product top rated")
+                .category(Category.FOOD)
+                .rating(9)
+                .createdDate(sep03)
+                .modifiedDate(sep03)
+                .build();
+
+        Product product4Low = Product.builder()
+                .id("id5")
+                .name("new product low rated")
+                .category(Category.BOOKS)
+                .rating(8)
+                .createdDate(sep04)
+                .modifiedDate(sep04)
+                .build();
 
         warehouse.addProduct(productOld);
         warehouse.addProduct(product1Low);
@@ -353,8 +607,24 @@ public class WarehouseTest {
         LocalDateTime aug30 = LocalDateTime.of(2025, 8, 30, 12, 0);
         LocalDateTime aug31 = LocalDateTime.of(2025, 8, 31, 12, 0);
 
-        Product product1Old = Product.createNew("id1", "Old product top rated", Category.BOOKS, 9, aug30);
-        Product product2Old = Product.createNew("id2", "Old product low rated", Category.TOYS,  8, aug31);
+        Product product1Old = Product.builder()
+                .id("id1")
+                .name("Old product top rated")
+                .category(Category.BOOKS)
+                .rating(9)
+                .createdDate(aug30)
+                .modifiedDate(aug30)
+                .build();
+
+        Product product2Old = Product.builder()
+                .id("id2")
+                .name("Old product low rated")
+                .category(Category.TOYS)
+                .rating(8)
+                .createdDate(aug31)
+                .modifiedDate(aug31)
+                .build();
+
         warehouse.addProduct(product1Old);
         warehouse.addProduct(product2Old);
 

@@ -23,10 +23,12 @@ public class Dragon extends Enemy {
         return health;
     }
 
+    @Override
     public int getDamage() {
         return 30;
     }
 
+    @Override
     public String getName() {
         return "Dragon";
     }

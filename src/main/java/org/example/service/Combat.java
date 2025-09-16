@@ -13,7 +13,6 @@ public class Combat {
 
     public void startFight(Player p, Inventory inventory, Enemy e, Scanner scan) {
         Weapon w = inventory.getItem(Weapon.class);
-        HealthPotion hp = inventory.getItem(HealthPotion.class);
 
         System.out.println("It's a " + e.getName() + "!");
         while (true) {
@@ -41,6 +40,7 @@ public class Combat {
                     break;
                 case "2":
                     System.out.println();
+                    HealthPotion hp = inventory.getItem(HealthPotion.class);
                     if (hp == null) {
                         System.out.println("You have no potions!");
                     } else {

@@ -3,7 +3,7 @@ package org.example.entities.items;
 import org.example.entities.Position;
 
 public abstract class Item implements Position {
-    private String type;
+    private final String type;
     private int quantity;
     private int x;
     private int y;

@@ -66,15 +66,19 @@ public class GameLogic {
     }
 
     private boolean isWalkable(Dungeon d, int y, int x) {
-        return d.getTile(y, x) == floorTile || d.getTile(y, x) == doorTile;
+        return inBounds(d, y, x) && (d.getTile(y, x) == floorTile || d.getTile(y, x) == doorTile);
     }
 
     private boolean isWall(Dungeon d, int y, int x) {
-        return d.getTile(y, x) == wallTile;
+        return !inBounds(d, y, x) && d.getTile(y, x) == wallTile;
     }
 
     public boolean isDoor(Dungeon d, int y, int x) {
-        return d.getTile(y, x) == doorTile;
+        return inBounds(d, y, x) && d.getTile(y, x) == doorTile;
+    }
+
+    private boolean inBounds(Dungeon d, int y, int x) {
+        return y >= 0 && y < d.getRows() && x >= 0 && x < d.getColumns();
     }
 
     private void wallMessage(Player p) {
@@ -85,14 +89,12 @@ public class GameLogic {
         int x = p.getX();
         int y = p.getY();
 
-        if (d.getTile(y, x + 1) == enemyTile) {
-            return enemies.getEnemyOnFloor(x + 1, y);
-        } else if (d.getTile(y, x - 1) == enemyTile) {
-            return enemies.getEnemyOnFloor(x - 1, y);
-        } else if (d.getTile(y + 1, x) == enemyTile) {
-            return enemies.getEnemyOnFloor(x, y + 1);
-        } else if (d.getTile(y - 1, x) == enemyTile) {
-            return enemies.getEnemyOnFloor(x, y - 1);
+        int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        for (int[] dxy : dirs) {
+            int ny = y + dxy[0], nx = x + dxy[1];
+            if (inBounds(d, ny, nx) && d.getTile(ny, nx) == enemyTile) {
+                return enemies.getEnemyOnFloor(nx, ny);
+            }
         }
         System.out.println("There is no enemy here.");
         return null;
@@ -102,24 +104,19 @@ public class GameLogic {
         int x = p.getX();
         int y = p.getY();
 
-        if (d.getTile(y, x + 1) == itemTile) {
-            return items.getItemOnFloor(x + 1, y);
-        } else if (d.getTile(y, x - 1) == itemTile) {
-            return items.getItemOnFloor(x - 1, y);
-        } else if (d.getTile(y + 1, x) == itemTile) {
-            return items.getItemOnFloor(x, y + 1);
-        } else if (d.getTile(y - 1, x) == itemTile) {
-            return items.getItemOnFloor(x, y - 1);
+        int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        for (int[] dxy : dirs) {
+            int ny = y + dxy[0], nx = x + dxy[1];
+            if (inBounds(d, ny, nx) && d.getTile(ny, nx) == itemTile) {
+                return items.getItemOnFloor(nx, ny);
+            }
         }
         System.out.println("There is no item here.");
         return null;
     }
 
     public boolean wishToFightEnemy(Dungeon d, Player p, Inventory i, Scanner scan) {
-        if (d.getTile(p.getY(), p.getX() + 1) == enemyTile ||
-                d.getTile(p.getY(), p.getX() - 1) == enemyTile ||
-                d.getTile(p.getY() + 1, p.getX()) == enemyTile ||
-                d.getTile(p.getY() - 1, p.getX()) == enemyTile) {
+        if (hasAdjacent(d, p, enemyTile)) {
             System.out.println("There's an enemy here!");
             System.out.println("Do you wish to fight it, yes or no?");
             return validAnswer(scan);
@@ -128,13 +125,22 @@ public class GameLogic {
     }
 
     public boolean wishToPickUpItem(Dungeon d, Player p, Inventory i, Scanner scan) {
-        if (d.getTile(p.getY(), p.getX() + 1) == itemTile ||
-                d.getTile(p.getY(), p.getX() - 1) == itemTile ||
-                d.getTile(p.getY() + 1, p.getX()) == itemTile ||
-                d.getTile(p.getY() - 1, p.getX()) == itemTile) {
+        if (hasAdjacent(d, p, itemTile)) {
             System.out.println("There's an item here!");
             System.out.println("Do you wish to pick it up, yes or no?");
             return validAnswer(scan);
+        }
+        return false;
+    }
+
+    private boolean hasAdjacent(Dungeon d, Player p, char targetTile) {
+        int x = p.getX(), y = p.getY();
+        int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        for (int[] dxy : dirs) {
+            int ny = y + dxy[0], nx = x + dxy[1];
+            if (inBounds(d, ny, nx) && d.getTile(ny, nx) == targetTile) {
+                return true;
+            }
         }
         return false;
     }

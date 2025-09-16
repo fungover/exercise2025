@@ -23,10 +23,12 @@ public class Goblin extends Enemy {
         return health;
     }
 
+    @Override
     public int getDamage() {
         return 5;
     }
 
+    @Override
     public String getName() {
         return "Goblin";
     }

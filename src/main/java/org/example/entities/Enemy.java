@@ -1,9 +1,7 @@
 package org.example.entities;
 
 public abstract class Enemy implements Health, Position {
-    private String name;
     private int health;
-    private int damage;
     private int x;
     private int y;
 
@@ -27,16 +25,9 @@ public abstract class Enemy implements Health, Position {
         return health;
     }
 
-    public String getName(){
-        return name;
-    }
+    public abstract String getName();
 
-    public int getDamage() {
-        if (damage == -1) {
-            damage = 0;
-        }
-        return damage;
-    }
+    public abstract int getDamage();
 
     @Override
     public int getX() {

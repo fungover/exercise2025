@@ -3,22 +3,26 @@ package org.example.entities.items;
 import java.util.ArrayList;
 
 public class Inventory {
-    private ArrayList<Item> items = new ArrayList<>();
+    private final ArrayList<Item> items = new ArrayList<>();
 
     public void addItem(Item item) {
-        if (items.contains(item)) {
-            item.addQuantity();
-        } else {
-            items.add(item);
+        for (Item existingItem : items) {
+            if (existingItem.equals(item)) {
+                existingItem.addQuantity();
+                return;
+            }
         }
+        items.add(item);
     }
 
     public void removeItem(Item item) {
-        if (items.contains(item)) {
-            item.removeQuantity();
-        } else {
-            items.add(item);
+        for (Item existingItem : items) {
+            if (existingItem.equals(item)) {
+                existingItem.removeQuantity();
+                return;
+            }
         }
+        items.remove(item);
     }
 
     public <T extends Item> T getItem(Class<T> itemClass) {

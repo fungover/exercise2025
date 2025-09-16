@@ -3,8 +3,7 @@ package org.example.entities.items;
 public class HealthPotion extends Item {
 
     public HealthPotion(int quantity) {
-        String name = "Health Potion";
-        super(name, quantity);
+        super("Health Potion", quantity);
     }
 
     public int restoreHealth() {

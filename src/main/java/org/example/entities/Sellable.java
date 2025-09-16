@@ -1,6 +1,8 @@
 package org.example.entities;
 
-// Something that can be sold at the warehouse
+/**
+ * Interface representing a sellable item.
+ */
 
 public interface Sellable {
     String getId();

@@ -29,8 +29,9 @@ public class Product implements Sellable {
         this.price = builder.price;
     }
 
-    // Public immutable getters
-
+    /**
+     * Public immutable getters
+    */
     @Override
     public String getId() { return id;}
 
@@ -48,8 +49,9 @@ public class Product implements Sellable {
     @Override
     public double getPrice() { return price;}
 
-    // equals/hashCode/toString (based on id)
-
+    /**
+     * equals/hashCode/toString (based on id)
+    */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,8 +70,9 @@ public class Product implements Sellable {
         return "Product{" + "id='" + id + '\'' + ", name='" + name + '\'' + ", category=" + category + '}';
     }
 
-    // Builder
-
+    /**
+     *  Builder
+    */
     public static class Builder {
         private String id;
         private String name;

@@ -1,5 +1,9 @@
 package org.example.entities;
 
+/**
+ * Abstract decorator for {@link Sellable} products.
+ */
+
 public abstract class ProductDecorator implements Sellable{
     protected final Sellable decoratedProduct;
 

@@ -1,5 +1,9 @@
 package org.example.entities;
 
+/**
+ * Decorator that applies a percentage discount to a product.
+ */
+
 public class DiscountDecorator extends ProductDecorator {
     private final double discountPercentage;
 

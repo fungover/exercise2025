@@ -1,8 +1,10 @@
 package org.example.service;
 
 
+import org.example.entities.Category;
 import org.example.entities.Product;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,5 +26,29 @@ public class Warehouse {
 
     public List<Product> getAllProducts() {
         return new ArrayList<>(products.values());
+    }
+
+    public void updateProduct(String id, String name, Category category, int rating) {
+        Product existing = products.get(id);
+        if (existing == null) {
+            throw new IllegalArgumentException("Product not found");
+        }
+        Product updated = new Product(
+                existing.id(),
+                name,
+                category,
+                rating,
+                existing.createdDate(),
+                LocalDateTime.now()
+        );
+        products.put(id, updated);
+    }
+
+    public Product getProductById(String id) {
+        Product product = products.get(id);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found");
+        }
+        return product;
     }
 }

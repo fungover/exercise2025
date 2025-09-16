@@ -47,6 +47,34 @@ class WarehouseTest {
                 now
         );
         assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
+    }
 
+    @Test
+    void updateProduct() {
+        LocalDateTime now = LocalDateTime.now();
+        Product product = new Product(
+                "1",
+                "Harry Potter and the deathly hollows",
+                Category.BOOKS,
+                9,
+                now,
+                now
+        );
+        warehouse.addProduct(product);
+
+        warehouse.updateProduct("1", "HOKA One One", Category.SHOES, 10);
+
+        Product updatedProduct = warehouse.getProductById("1");
+        assertEquals("HOKA One One", updatedProduct.name());
+        assertEquals(Category.SHOES, updatedProduct.category());
+        assertEquals(10, updatedProduct.rating());
+    }
+
+    @Test
+    void updateProductIdThatDontExistThrowsException() {
+
+        assertThrows(IllegalArgumentException.class, () ->
+                warehouse.updateProduct("99", "eleventyelevenonetyone", Category.BOOKS, 5)
+        );
     }
 }

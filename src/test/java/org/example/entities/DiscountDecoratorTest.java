@@ -1,0 +1,54 @@
+package org.example.entities;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
+class DiscountDecoratorTest {
+
+    @Test
+    @DisplayName("DiscountDecorator: returns discounted price")
+    void getPrice() {
+        Product testProduct = new Product.Builder()
+                .id("1")
+                .name("Test Product")
+                .category(Category.GENERAL)
+                .rating(1)
+                .price(100)
+                .build();
+
+        DiscountDecorator discountDecorator = new DiscountDecorator(testProduct, 10);
+        assertThat(discountDecorator.getPrice()).isEqualTo(90);
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidInputs")
+    @DisplayName("DiscountDecorator: throws an IllegalException if invalid input")
+    void throwsExceptionIfNoProductProvided(Sellable testProduct, double price) {
+        assertThrows(IllegalArgumentException.class, () -> new DiscountDecorator(testProduct, price));
+    }
+
+    static Stream<Arguments> invalidInputs() {
+        Product validProduct = new Product.Builder()
+                .id("1")
+                .name("Test Product")
+                .category(Category.GENERAL)
+                .rating(1)
+                .price(100)
+                .build();
+
+        return Stream.of(
+                Arguments.of(null, 10),
+                Arguments.of(validProduct, -5),
+                Arguments.of(validProduct, 101)
+        );
+    }
+
+}

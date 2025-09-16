@@ -28,45 +28,41 @@ public class GameLogic {
 
         switch (userInput) {
             case "u":
-                if (isWalkable(d, y - 1, x)) {
+                if (isWall(d, y - 1, x)) {
+                    wallMessage(p);
+                } else {
                     p.setPosition(x, y - 1);
                     System.out.println(p.getName() + " moved up.");
-                } else if (isWall(d, y - 1, x)) {
-                    wallMessage(p);
                 }
                 break;
             case "d":
-                if (isWalkable(d, y + 1, x)) {
+                if (isWall(d, y + 1, x)) {
+                    wallMessage(p);
+                } else {
                     p.setPosition(x, y + 1);
                     System.out.println(p.getName() + " moved down.");
-                } else if (isWall(d, y + 1, x)) {
-                    wallMessage(p);
                 }
                 break;
             case "r":
-                if (isWalkable(d, y, x + 1)) {
+                if (isWall(d, y, x + 1)) {
+                    wallMessage(p);
+                } else {
                     p.setPosition(x + 1, y);
                     System.out.println(p.getName() + " moved to the right.");
-                } else if (isWall(d, y, x + 1)) {
-                    wallMessage(p);
                 }
                 break;
             case "l":
-                if (isWalkable(d, y, x - 1)) {
+                if (isWall(d, y, x - 1)) {
+                    wallMessage(p);
+                } else {
                     p.setPosition(x - 1, y);
                     System.out.println(p.getName() + " moved to the left.");
-                } else if (isWall(d, y, x - 1)) {
-                    wallMessage(p);
                 }
                 break;
             default:
                 System.out.println("Invalid input, only type what is displayed.");
                 break;
         }
-    }
-
-    private boolean isWalkable(Dungeon d, int y, int x) {
-        return inBounds(d, y, x) && (d.getTile(y, x) == floorTile || d.getTile(y, x) == doorTile);
     }
 
     private boolean isWall(Dungeon d, int y, int x) {
@@ -78,7 +74,7 @@ public class GameLogic {
     }
 
     private boolean inBounds(Dungeon d, int y, int x) {
-        return y >= 0 && y < d.getRows() && x >= 0 && x < d.getColumns();
+        return y >= 1 && y < d.getRows() && x >= 1 && x < d.getColumns();
     }
 
     private void wallMessage(Player p) {

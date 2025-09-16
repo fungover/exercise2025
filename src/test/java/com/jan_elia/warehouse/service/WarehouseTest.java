@@ -73,6 +73,29 @@ public class WarehouseTest {
         warehouse.addProduct(p1);
         assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(p2));
     }
+    // ---- getProductById ----
+    @Test
+    void getProductById_success() {
+        Product p = makeProduct("10", "Milk", Category.FOOD, 5,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
+        warehouse.addProduct(p);
+        assertEquals(p, warehouse.getProductById("10"));
+    }
+
+    @Test
+    void getProductById_failure_nullId() {
+        assertThrows(IllegalArgumentException.class, () -> warehouse.getProductById(null));
+    }
+
+    @Test
+    void getProductById_failure_blankId() {
+        assertThrows(IllegalArgumentException.class, () -> warehouse.getProductById(" "));
+    }
+
+    @Test
+    void getProductById_failure_notFound() {
+        assertThrows(java.util.NoSuchElementException.class, () -> warehouse.getProductById("999"));
+    }
 }
 
 // Test plan for Warehouse

@@ -101,8 +101,6 @@ class WarehouseTest {
     void getAllProductsEmptyWarehouseReturnsEmptyList() {
         List<Product> allProducts = warehouse.getAllProducts();
 
-        System.out.println("All products in empty warehouse: " + allProducts);
-
         assertTrue(allProducts.isEmpty(), "Expected empty list when no products are added");
     }
 
@@ -121,7 +119,6 @@ class WarehouseTest {
     @Test
     void getProductByIdNonExistingIdThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            System.out.println("Trying to get product with non existing ID"); // needed this for my understanding deleting later
             warehouse.getProductById("99");
         });
     }
@@ -142,9 +139,6 @@ class WarehouseTest {
 
         List<Product> sortedFood = warehouse.getProductsByCategorySorted(Category.FOOD);
 
-        System.out.println("Sorted Foods:");
-        sortedFood.forEach(p -> System.out.println(p.name()));
-
         assertEquals(3, sortedFood.size());
         assertEquals("Apple", sortedFood.get(0).name());
         assertEquals("Banana", sortedFood.get(1).name());
@@ -152,15 +146,13 @@ class WarehouseTest {
     }
 
     @Test
-    void getProductsByCategorySorted_emptyCategory_returnsEmptyList() {
+    void getProductsByCategorySortedEmptyCategoryReturnsEmptyList() {
         LocalDateTime now = LocalDateTime.now();
 
         warehouse.addProduct(new Product("1", "Apple", Category.FOOD, 5, now, now));
         warehouse.addProduct(new Product("2", "Book", Category.BOOKS, 8, now, now));
 
         List<Product> result = warehouse.getProductsByCategorySorted(Category.CLOTHES);
-
-        System.out.println("Products in empty category: " + result);
 
         assertTrue(result.isEmpty(), "Expected empty list for category with no products");
     }
@@ -182,6 +174,20 @@ class WarehouseTest {
         assertEquals(1, result.size());
         assertEquals("New Book", result.get(0).name());
     }
+
+    @Test
+    void getProductsCreatedAfterNoProductsAfterDateReturnsEmptyList() {
+        LocalDateTime now = LocalDateTime.now();
+
+        warehouse.addProduct(new Product("1", "Old Book", Category.BOOKS, 5, now.minusDays(10), now.minusDays(10)));
+        warehouse.addProduct(new Product("2", "Older Food", Category.FOOD, 7, now.minusDays(5), now.minusDays(5)));
+
+        List<Product> result = warehouse.getProductsCreatedAfter(LocalDate.now());
+
+        assertTrue(result.isEmpty(), "Expected empty list when no products are created after the given date");
+    }
+
+
     @Test
     void getModifiedProductsReturnsOnlyModified() {
         LocalDateTime createdTime = LocalDateTime.now().minusMinutes(1);
@@ -195,11 +201,6 @@ class WarehouseTest {
         warehouse.addProduct(product2);
 
         List<Product> modified = warehouse.getModifiedProducts();
-
-        System.out.println("Modified products:");
-        modified.forEach(p -> System.out.println(
-                p.name() + " created=" + p.createdDate() + " modified=" + p.modifiedDate()
-        ));
 
         assertEquals(1, modified.size());
         assertEquals("Updated Book", modified.get(0).name());

@@ -76,14 +76,14 @@ public class Warehouse {
 
         Product old = requireExisting(id);
 
-        Product updated = new Product(
-                old.getId(),
-                name,
-                category,
-                rating,
-                old.getCreatedDate(),              // keep original createdDate
-                LocalDate.now(clock)               // set new modifiedDate
-        );
+        Product updated = new Product.Builder()
+                .id(old.getId())
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .createdDate(old.getCreatedDate())   // keep original createdDate
+                .modifiedDate(LocalDate.now(clock))  // set new modifiedDate
+                .build();
 
         products.put(id, updated);
     }

@@ -26,8 +26,16 @@ public class WarehouseTest {
     }
 
     private Product makeProduct(String id, String name, Category category, int rating, LocalDate created, LocalDate modified) {
-        return new Product(id, name, category, rating, created, modified);
+        return new Product.Builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .createdDate(created)
+                .modifiedDate(modified)
+                .build();
     }
+
 
     // ---- addProduct ----
     @Test

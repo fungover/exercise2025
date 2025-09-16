@@ -47,7 +47,16 @@ public class ProductTest {
         assertEquals(Category.FOOD,product.category());
     }
 
-
+    @Test
+    public void canCreateProductRating() {
+        Product product = new Product("ID","Name",Category.FOOD, 5);
+        assertEquals(5,product.rating());
+    }
+    @Test
+    public void cantCreateProductRating() {
+        Product product = new Product("ID","Name",Category.FOOD,11);
+        assertEquals(5,product.rating());
+    }
 
 
 

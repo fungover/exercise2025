@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class Game {
     private final Dungeon dungeon = new Dungeon(10, 10);
     Player player = new Player(1, 1, 100, 50);
-    private final List<Enemy> enemyList = new ArrayList<Enemy>();
+    private final List<Enemy> enemyList = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
 
     public Game() {

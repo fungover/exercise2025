@@ -14,14 +14,15 @@ import static org.junit.jupiter.api.Assertions.*;
      @Test
      void addProductShouldAddSuccessfully() {
          Warehouse warehouse = new Warehouse();
-         Product product = new Product(
-                 "1",
-                 "Kiwi",
-                 Category.Food,
-                 8,
-                 LocalDate.now(),
-                 LocalDate.now()
-         );
+         Product product = new Product.Builder()
+                 .id("1")
+                 .name("Kiwi")
+                 .category(Category.Food)
+                 .rating(8)
+                 .createdDate(LocalDate.now())
+                 .modifiedDate(LocalDate.now())
+                 .build();
+
          warehouse.addProduct(product);
          assertEquals(1, warehouse.getAllProducts().size());
      }

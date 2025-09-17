@@ -6,6 +6,7 @@ import org.example.entities.Product;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,7 +67,8 @@ public class Warehouse {
 
     public List<Product> getModifiedProducts() {
         return products.values().stream()
-                .filter(p -> !p.createdDate().equals(p.modifiedDate()))
+                .filter(p -> !p.createdDate().truncatedTo(ChronoUnit.SECONDS)
+                        .equals(p.modifiedDate().truncatedTo(ChronoUnit.SECONDS)))
                 .collect(Collectors.toList());
     }
 }

@@ -25,7 +25,7 @@ public record Product(String identifier, String name, int rating, Category categ
     }
 
     public Product updateFields(String id, String name, Category category, int rating) {
-        return new Product(id, name, rating, category, createdDate, Instant.now());
+        return new Product(id, validateName(name), validateRating(rating), category, createdDate, Instant.now());
     }
 
 }

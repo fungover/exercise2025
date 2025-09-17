@@ -7,6 +7,7 @@ public record Product(
         String name,
         Category category,
         int rating,
+        double price, // Price attribute added for decorator pattern (extra credit assignment).
         LocalDate createdDate,
         LocalDate modifiedDate
 ) {
@@ -31,6 +32,7 @@ public record Product(
                 builder.name,
                 builder.category,
                 builder.rating,
+                builder.price, // Price field added here aswell.
                 builder.createdDate,
                 builder.modifiedDate
         );
@@ -51,6 +53,7 @@ public record Product(
         private String name;
         private Category category;
         private int rating;
+        private double price;
         private LocalDate createdDate;
         private LocalDate modifiedDate;
 
@@ -96,6 +99,11 @@ public record Product(
             return this;
         }
 
+        public Builder price(double price) { // Price setter method added for decorator pattern (extra credit assignment).
+            this.price = price;
+            return this;
+        }
+
         public Builder rating(int rating) {
             this.rating = rating;
             return this;
@@ -136,6 +144,10 @@ public record Product(
 
             if (rating < 0 || rating > 10) {
                 throw new IllegalArgumentException("Rating must be between 0 and 10");
+            }
+
+            if (price < 0) {
+                throw new IllegalArgumentException("Price cannot be negative");
             }
 
             if (createdDate == null) {

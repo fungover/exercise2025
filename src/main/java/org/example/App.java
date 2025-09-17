@@ -41,7 +41,7 @@ public class App {
         /*System.out.println(productService.getAllProducts());*/
         System.out.println(productService.getProductsByCategorySorted(Category.ELECTRONICS));
 
-        Product laptop = productService.getProductByID("1").orElseThrow(() -> new IllegalArgumentException("Product with id 1 not found")); ; // Original price is 1000.0
+        Product laptop = productService.getProductByID("1").orElseThrow(() -> new IllegalArgumentException("Product with id 1 not found"));  // Original price is 1000.0
 
         Sellable discountedLaptop = new DiscountDecorator(laptop, 20);
 

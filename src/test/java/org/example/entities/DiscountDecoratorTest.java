@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.data.Offset.offset;
+
 
 class DiscountDecoratorTest {
     @Test
@@ -33,6 +35,6 @@ class DiscountDecoratorTest {
         Sellable discountedLaptop = new DiscountDecorator(laptop, 20);
 
         assertThat(product1.getPrice()).isEqualTo(1200.0);
-        assertThat(discountedLaptop.getPrice()).isEqualTo(960.0);
+        assertThat(discountedLaptop.getPrice()).isCloseTo(960.0, offset(1e-6));
     }
 }

@@ -16,6 +16,6 @@ public class DiscountDecorator extends ProductDecorator {
     @Override
     public double getPrice() {
         double originalPrice = decoratedProduct.getPrice();
-        return originalPrice - (originalPrice * (discountPercentage/100.0));
+        return Math.max(0.0, originalPrice - (originalPrice * (discountPercentage/100.0)));
     }
 }

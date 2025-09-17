@@ -11,13 +11,7 @@ import java.util.stream.Collectors;
 
 public class ProductService /*Warehouse*/ {
 
-    /*private final Map<String, Product> products = new HashMap<>();*/
-
     private final ProductRepository productRepository;
-
-/*    public ProductRepository(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }*/
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -41,11 +35,13 @@ public class ProductService /*Warehouse*/ {
         productRepository.updateProduct(product);
     }
 
-    /*    *
+    /**
      * Get products by category sorted by name A-Z
      *
      * @param category the category to filter by
-     * @return a list of products in the specified category sorted by name*/
+     * @return a list of products in the specified category sorted by name
+     */
+
     public List<Product> getProductsByCategorySorted(Category category) {
         return getAllProducts()
                 .stream()
@@ -60,6 +56,7 @@ public class ProductService /*Warehouse*/ {
      * @param date the date to filter by
      * @return list of products created after the specified date
      */
+
     public List<Product> getProductsCreatedAfter(LocalDate date) {
         if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");
@@ -83,6 +80,7 @@ public class ProductService /*Warehouse*/ {
      *
      * @return set of categories with products
      */
+
     public Set<Category> getCategoriesWithProducts() {
         return getAllProducts().stream()
                 .map(Product::category)
@@ -95,6 +93,7 @@ public class ProductService /*Warehouse*/ {
      * @param category the category to filter by
      * @return count of products in the specified category
      */
+
     public int countProductsInCategory(Category category) {
         return (int) getAllProducts()
                 .stream()
@@ -118,6 +117,7 @@ public class ProductService /*Warehouse*/ {
      *
      * @return list of top 3 highest rated products created this month
      */
+
     public List<Product> getTopRatedProductsThisMonth() {
         LocalDate now = LocalDate.now();
         return getAllProducts()
@@ -127,5 +127,4 @@ public class ProductService /*Warehouse*/ {
                 .limit(3)
                 .collect(Collectors.toList());
     }
-
 }

@@ -20,7 +20,7 @@ public class InMemoryProductRepository implements ProductRepository {
         if (product.getId() == null || product.getId().isBlank()) {
             throw new IllegalArgumentException("Product id cannot be null or empty");
         }
-        if (product.getName().isBlank()) {
+        if (product.getName() == null || product.getName().isBlank()) {
             throw new IllegalArgumentException("Product name cannot be empty");
         }
         if (product.category() == null) {
@@ -28,6 +28,9 @@ public class InMemoryProductRepository implements ProductRepository {
         }
         if (products.containsKey(product.getId())) {
             throw new IllegalArgumentException("Product with this ID already exists");
+        }
+        if (product.getPrice() < 0) {
+            throw new IllegalArgumentException("Price must be >= 0");
         }
         products.put(product.getId(), product);
     }
@@ -37,16 +40,11 @@ public class InMemoryProductRepository implements ProductRepository {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
-        Product product = products.get(id);
-        if (product == null) {
-            throw new IllegalArgumentException("Product with id " + id + " does not exist");
-        }
-        return Optional.of(product);
+        return Optional.ofNullable(products.get(id));
     }
 
     @Override
     public List<Product> getAllProducts() {
-        /*products.values().forEach(System.out::println);*/ // Just to see the products in console, can be removed later
         return Collections.unmodifiableList(new ArrayList<>(products.values()));
 
     }

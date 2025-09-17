@@ -22,14 +22,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WareHouseTest {
 
-    /*private Warehouse warehouse;*/
     private ProductService productService;
 
     @BeforeEach
     void setUpTest() {
-
-        /*warehouse = new Warehouse();*/
-        // create a new ProductRepository and ProductService instances every time
         ProductRepository repository = new InMemoryProductRepository();
         productService = new ProductService(repository);
     }
@@ -49,7 +45,6 @@ class WareHouseTest {
                 .modifiedDate(today)
                 .build();
 
-        /*warehouse.addProduct(validProduct);*/
         productService.addProduct(validProduct);
         assertTrue(productService.getAllProducts().contains(validProduct), "Valid product should be added");
 
@@ -66,7 +61,6 @@ class WareHouseTest {
                         .build())
         );
 
-        //(new Product("1", "", Category.FOOD, 2, today, today)));
         assertEquals("Name cannot be null or empty", exception.getMessage());
 
         // Failure: null product
@@ -110,10 +104,7 @@ class WareHouseTest {
                 .price(2)
                 .build();
 
-        //("5", "Valid", Category.FOOD, 5, today, today);
-
         productService.addProduct(beforeUpdate);
-        /*productService.updateProduct("5", "Updated", Category.ELECTRONICS, 9);*/
 
         productService.updateProduct(new Product.Builder()
                 .id("5") // same id as before update

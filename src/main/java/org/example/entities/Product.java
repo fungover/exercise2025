@@ -26,6 +26,7 @@ public class Product implements Sellable{
         if (name == null ||name.isBlank()) throw new IllegalArgumentException("Name cannot be null or empty");
         if (category == null) throw new IllegalArgumentException("Category cannot be null");
         if (rating < 0 || rating > 10) throw new IllegalArgumentException("Rating should be between 0 and 10");
+        if (price < 0) throw new IllegalArgumentException("Price should be bigger than 0");
         if (modifiedDate.isBefore(createdDate)) throw new IllegalArgumentException("Modified date cannot be before created date");
     }
 

@@ -17,7 +17,7 @@ public class Inventory {
 
     public void removeItem(Item item) {
         for (Item existingItem : items) {
-            if (existingItem.equals(item)) {
+            if (existingItem.equals(item) && existingItem.getQuantity() > 1) {
                 existingItem.removeQuantity();
                 return;
             }

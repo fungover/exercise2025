@@ -41,7 +41,7 @@ public class Combat {
                 case "2":
                     System.out.println();
                     HealthPotion hp = inventory.getItem(HealthPotion.class);
-                    if (hp == null) {
+                    if (hp == null || hp.getQuantity() == 0) {
                         System.out.println("You have no potions!");
                     } else {
                         System.out.println("You use a health potion!");

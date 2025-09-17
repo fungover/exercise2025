@@ -74,7 +74,11 @@ public class GameLogic {
     }
 
     private boolean inBounds(Dungeon d, int y, int x) {
-        return y >= 1 && y < d.getRows() && x >= 1 && x < d.getColumns();
+        // If walkable
+        if (d.getTile(y, x) == floorTile || d.getTile(y, x) == doorTile) {
+            return y >= 1 && y < d.getRows() && x >= 1 && x < d.getColumns();
+        }
+        return false;
     }
 
     private void wallMessage(Player p) {

@@ -21,4 +21,8 @@ public class DiscountDecorator extends ProductDecorator {
         return this.decoratedProduct.getPrice() * (1 - this.discountPercentage / 100.0);
     }
 
+    public double getDiscountPercentage() {
+        return this.discountPercentage;
+    }
+
 }

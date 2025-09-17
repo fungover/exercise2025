@@ -63,9 +63,9 @@ public class InMemoryProductRepositoryTest {
     private static Stream<Arguments> addProductTestData() {
         return Stream.of(
                 Arguments.of(new Product.Builder()
-                        .id("1").name("Othername").category(Category.GENERAL).rating(2).price(50).build()),
+                        .id("1").name("Test").category(Category.GENERAL).rating(2).price(50).build()),
                 Arguments.of(new Product.Builder()
-                        .id("2").name("Test").category(Category.GENERAL).rating(2).price(50).build())
+                        .id("2").name("test").category(Category.GENERAL).rating(2).price(50).build())
         );
     }
 

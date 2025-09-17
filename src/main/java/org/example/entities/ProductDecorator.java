@@ -1,10 +1,12 @@
 package org.example.entities;
 
+import java.util.Objects;
+
 public abstract class ProductDecorator implements Sellable {
-    protected Sellable decoratedProduct;
+    protected final Sellable decoratedProduct;
 
     public ProductDecorator(Sellable decoratedProduct) {
-        this.decoratedProduct = decoratedProduct;
+        this.decoratedProduct = Objects.requireNonNull(decoratedProduct, "decoratedProduct");
     }
 
     @Override

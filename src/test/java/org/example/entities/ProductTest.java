@@ -80,7 +80,7 @@ public class ProductTest {
     @Test
     @DisplayName("Product Builder: sets createdDate")
     public void canCreateProductWithGetCreatedDate() {
-        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
+         try (MockedStatic<LocalDateTime> mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
             LocalDateTime currentDate = LocalDateTime.of(2025, 1, 1, 18, 0, 0, 0);
             mockedStatic.when(LocalDateTime::now).thenReturn(currentDate);
 
@@ -101,7 +101,7 @@ public class ProductTest {
         Product product;
         Product updated;
 
-        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
+         try (MockedStatic<LocalDateTime> mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
             LocalDateTime currentDate = LocalDateTime.of(2025, 1, 1, 18, 0, 0, 0);
             mockedStatic.when(LocalDateTime::now).thenReturn(currentDate);
             product = new Product.Builder()
@@ -113,7 +113,7 @@ public class ProductTest {
                     .build();
         }
 
-        try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
+         try (MockedStatic<LocalDateTime> mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
             LocalDateTime updateDate = LocalDateTime.of(2025, 1, 5, 18, 0, 0, 0);
             mockedStatic.when(LocalDateTime::now).thenReturn(updateDate);
             updated = product.update("Notebook", Category.GENERAL, 2, 1);

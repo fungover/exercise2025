@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DiscountDecoratorTest {
@@ -25,13 +26,13 @@ class DiscountDecoratorTest {
                 .build();
 
         DiscountDecorator discountDecorator = new DiscountDecorator(testProduct, 10);
-        assertThat(discountDecorator.getPrice()).isEqualTo(90);
+        assertThat(discountDecorator.getPrice()).isCloseTo(90.0, within(1e-6));
     }
 
     @ParameterizedTest
     @MethodSource("invalidInputs")
-    @DisplayName("DiscountDecorator: throws an IllegalException if invalid input")
-    void throwsExceptionIfNoProductProvided(Sellable testProduct, double price) {
+    @DisplayName("DiscountDecorator: throws IllegalArgumentException on invalid input")
+    void throwsExceptionIfInvalidInputs(Sellable testProduct, double price) {
         assertThrows(IllegalArgumentException.class, () -> new DiscountDecorator(testProduct, price));
     }
 

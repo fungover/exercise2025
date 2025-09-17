@@ -3,7 +3,7 @@ package org.example.service;
 import org.example.entities.Category;
 import org.example.entities.Product;
 import org.example.repository.ProductRepository;
-import org.example.repository.inMemoryProductRepository;
+import org.example.repository.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +20,7 @@ class ProductServiceTest {
 
     @BeforeEach void warehouseSetup() {
         // create repository
-        ProductRepository repository = new inMemoryProductRepository();
+        ProductRepository repository = new InMemoryProductRepository();
 
         this.productService = new ProductService(repository);//before each test
 

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class inMemoryProductRepository implements ProductRepository {
+public class InMemoryProductRepository implements ProductRepository {
     //moved this from warehouse
     private final List<Product> inventory = new ArrayList<>();
 

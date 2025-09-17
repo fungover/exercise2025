@@ -5,6 +5,7 @@ import service.Warehouse;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,6 +59,25 @@ public class ProductTest {
         assertEquals(5, updated.getRating());
         assertEquals(Category.BOOKS, updated.getCategory());
     }
+
+    @Test
+    void getAllProducts() {
+        Warehouse warehouse = new Warehouse();
+        LocalDateTime now = LocalDateTime.now();
+
+        Product p1 = new Product(1, "Book", Category.BOOKS, 5, now, now);
+        Product p2 = new Product(2, "Movie", Category.MOVIES, 4, now, now);
+
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+
+        List<Product> products = warehouse.getAllProducts();
+
+        assertEquals(2, products.size());
+        assertTrue(products.contains(p1));
+        assertTrue(products.contains(p2));
+    }
+
 
 
 

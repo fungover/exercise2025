@@ -31,8 +31,12 @@ public class Warehouse {
                 .orElseThrow(() -> new NoSuchElementException(
                         "Product with id " + id + " not found"));
         product.setName(name);
-        product.setCategory(category); 
+        product.setCategory(category);
         product.setRating(rating);
 
+    }
+
+    public List<Product> getAllProducts() {
+        return new ArrayList<>(products);
     }
 }

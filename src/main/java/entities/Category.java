@@ -1,5 +1,5 @@
 package entities;
 
 public enum Category {
-    TOYS, BOOKS
+    TOYS, BOOKS, MOVIES
 }

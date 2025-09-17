@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import org.example.decorator.Sellable;
+
 import java.time.LocalDate;
 
 public record Product(
@@ -10,7 +12,7 @@ public record Product(
         double price, // Price attribute added for decorator pattern (extra credit assignment).
         LocalDate createdDate,
         LocalDate modifiedDate
-) {
+) implements Sellable {
     /**
      * Private contructor which takes a Builder-instance as parameter.
      * <p>
@@ -158,5 +160,20 @@ public record Product(
             }
             return new Product(this);
         }
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public double getPrice() {
+        return price;
     }
 }

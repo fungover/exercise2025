@@ -32,7 +32,6 @@ public class ProductTest {
         assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
     }
 
-    // updateProduct(String id, String name, Category category, int rating): Modify an existing product
     @Test
     void updateProduct_failsWhenProductNotFound() {
         Warehouse warehouse = new Warehouse();
@@ -42,6 +41,23 @@ public class ProductTest {
         );
     }
 
+    @Test
+    void updateProduct_updatesWhenProductExists() {
+        Warehouse warehouse = new Warehouse();
+
+        Product product = new Product(1, "Old Name", Category.BOOKS, 3, LocalDateTime.now(),
+                LocalDateTime.now());
+
+        warehouse.addProduct(product);
+
+        warehouse.updateProduct(1, "New Name", Category.BOOKS, 5);
+
+        Product updated = warehouse.getProducts().getFirst();
+
+        assertEquals("New Name", updated.getName());
+        assertEquals(5, updated.getRating());
+        assertEquals(Category.BOOKS, updated.getCategory());
+    }
 
 
 

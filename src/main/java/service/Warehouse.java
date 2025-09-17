@@ -5,10 +5,8 @@ import entities.Category;
 import entities.Product;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 public class Warehouse {
     private final List<Product> products = new ArrayList<>();
@@ -26,11 +24,15 @@ public class Warehouse {
     }
 
 
-    public void updateProduct(int number, String name, Category category, int id) {
-        products.stream()
-                .filter(product -> product.getId() == id)
+    public void updateProduct(int id, String name, Category category, int rating) {
+        Product product = products.stream()
+                .filter(p -> p.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException(
                         "Product with id " + id + " not found"));
+        product.setName(name);
+        product.setCategory(category); 
+        product.setRating(rating);
+
     }
 }

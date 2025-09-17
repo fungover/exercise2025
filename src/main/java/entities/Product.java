@@ -20,6 +20,10 @@ public class Product {
         return this.name;
     }
 
+    public void setName(String name){
+        this.name = name;
+    }
+
     public int getId() {
         return this.id;
     }
@@ -34,6 +38,10 @@ public class Product {
 
     public Category getCategory(){
         return this.category;
+    }
+
+    public Category setCategory(Category category){
+       return this.category;
     }
 
     @Override

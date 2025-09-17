@@ -20,6 +20,7 @@ public class ProductTest {
                 .name("Required Name")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
         assertThat(product.getId()).isEqualTo("1");
     }
@@ -32,6 +33,7 @@ public class ProductTest {
                 .name("Laptop")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
         assertThat(product.getName()).isEqualTo("Laptop");
     }
@@ -44,6 +46,7 @@ public class ProductTest {
                 .name("Laptop")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
         assertThat(product.getCategory()).isEqualTo(Category.GENERAL);
     }
@@ -69,6 +72,7 @@ public class ProductTest {
                 .name("Laptop")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
         assertThat(product.getRating()).isEqualTo(1);
     }
@@ -85,6 +89,7 @@ public class ProductTest {
                     .name("Laptop")
                     .category(Category.GENERAL)
                     .rating(1)
+                    .price(1)
                     .build();
             assertThat(product.getCreatedDate()).isEqualTo(currentDate);
         }
@@ -104,6 +109,7 @@ public class ProductTest {
                     .name("Laptop")
                     .category(Category.GENERAL)
                     .rating(1)
+                    .price(1)
                     .build();
         }
 

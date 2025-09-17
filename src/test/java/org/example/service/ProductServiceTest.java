@@ -32,19 +32,20 @@ public class ProductServiceTest {
     }
 
     // Helper methods
-    private Product addProductToWarehouse(String id, String name, Category category, int rating) {
+    private Product addProductToWarehouse(String id, String name, Category category, int rating, double price) {
         Product product = new Product.Builder()
                 .id(id)
                 .name(name)
                 .category(category)
                 .rating(rating)
+                .price(price)
                 .build();
 
         productService.addProduct(product);
         return product;
     }
 
-    private Product createProductWithMockedDate(String id, String name, Category category, int rating, int year, int month, int day, int hour, int minute, int second) {
+    private Product createProductWithMockedDate(String id, String name, Category category, int rating, double price, int year, int month, int day, int hour, int minute, int second) {
         LocalDateTime mockedDate = LocalDateTime.of(year, month, day, hour, minute, second, 0);
         try (MockedStatic<LocalDateTime> mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
             mockedStatic.when(LocalDateTime::now).thenReturn(mockedDate);
@@ -53,6 +54,7 @@ public class ProductServiceTest {
                     .name(name)
                     .category(category)
                     .rating(rating)
+                    .price(price)
                     .build();
         }
     }
@@ -66,6 +68,7 @@ public class ProductServiceTest {
                 .name("Test Product")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
 
         productService.addProduct(testProduct);
@@ -81,6 +84,7 @@ public class ProductServiceTest {
                 .name("")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build())
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -93,6 +97,7 @@ public class ProductServiceTest {
                 .name("Test Product")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
         productService.addProduct(testProduct);
 
@@ -101,6 +106,7 @@ public class ProductServiceTest {
                 .name("Updated Test Product")
                 .category(Category.ELECTRONICS)
                 .rating(5)
+                .price(1)
                 .build();
         productService.updateProduct(updatedProductData);
 
@@ -115,7 +121,7 @@ public class ProductServiceTest {
     @Test
     @DisplayName("updateProduct: updates an existing Product without changing createdDate")
     public void updateProductWithoutChangingCreatedDate() {
-        Product testProduct = createProductWithMockedDate("1", "Test Product", Category.GENERAL, 1, 2024, 1, 5, 18, 0, 0);
+        Product testProduct = createProductWithMockedDate("1", "Test Product", Category.GENERAL, 1, 1, 2024, 1, 5, 18, 0, 0);
         productService.addProduct(testProduct);
 
         Product updatedProductData = new Product.Builder()
@@ -123,6 +129,7 @@ public class ProductServiceTest {
                 .name("Updated Product")
                 .category(Category.ELECTRONICS)
                 .rating(5)
+                .price(1)
                 .build();
         productService.updateProduct(updatedProductData);
 
@@ -142,6 +149,7 @@ public class ProductServiceTest {
                 .name("Test Product")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
 
         productService.addProduct(testProduct);
@@ -159,12 +167,13 @@ public class ProductServiceTest {
     @ParameterizedTest
     @MethodSource("testBlankIncludeNull")
     @DisplayName("updateProduct: throws IllegalArgumentException for invalid inputs")
-    void throwExceptionIfInvalidInputToUpdate(String id, String name, Category category, int rating) {
+    void throwExceptionIfInvalidInputToUpdate(String id, String name, Category category, int rating, double price) {
         productService.addProduct(new Product.Builder()
                 .id("1")
                 .name("Laptop")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build()
         );
 
@@ -172,6 +181,7 @@ public class ProductServiceTest {
                 .name(name)
                 .category(category)
                 .rating(rating)
+                .price(price)
                 .build())
         )
                 .isInstanceOf(IllegalArgumentException.class);
@@ -180,21 +190,21 @@ public class ProductServiceTest {
     static Stream<Arguments> testBlankIncludeNull() {
         return Stream.of(
                 //Id
-                Arguments.of(null, "Test Product", Category.GENERAL, 5),
-                Arguments.of("", "Test Product", Category.GENERAL, 5),
-                Arguments.of(" ", "Test Product", Category.GENERAL, 5),
+                Arguments.of(null, "Test Product", Category.GENERAL, 5, 1),
+                Arguments.of("", "Test Product", Category.GENERAL, 5, 1),
+                Arguments.of(" ", "Test Product", Category.GENERAL, 5, 1),
 
                 //Name
-                Arguments.of("1", null, Category.GENERAL, 5),
-                Arguments.of("1", "", Category.GENERAL, 5),
-                Arguments.of("1", " ", Category.GENERAL, 5),
+                Arguments.of("1", null, Category.GENERAL, 5, 1),
+                Arguments.of("1", "", Category.GENERAL, 5, 1),
+                Arguments.of("1", " ", Category.GENERAL, 5, 1),
 
                 //Category
-                Arguments.of("1", "Test Product", null, 5),
+                Arguments.of("1", "Test Product", null, 5, 1),
 
                 //Rating
-                Arguments.of("1", "Test Product", Category.GENERAL, 11),
-                Arguments.of("1", "Test Product", Category.GENERAL, 0)
+                Arguments.of("1", "Test Product", Category.GENERAL, 11, 1),
+                Arguments.of("1", "Test Product", Category.GENERAL, 0, 1)
         );
     }
 
@@ -206,6 +216,7 @@ public class ProductServiceTest {
                 .name("Test Product")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
         productService.addProduct(testProduct1);
 
@@ -214,6 +225,7 @@ public class ProductServiceTest {
                 .name("Test Product2")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
         productService.addProduct(testProduct2);
 
@@ -236,6 +248,7 @@ public class ProductServiceTest {
                 .name("Test Product")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
         productService.addProduct(testProduct);
 
@@ -250,6 +263,7 @@ public class ProductServiceTest {
                 .name("Test Product")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
         productService.addProduct(testProduct);
 
@@ -264,6 +278,7 @@ public class ProductServiceTest {
                 .name("Test Product")
                 .category(Category.GENERAL)
                 .rating(1)
+                .price(1)
                 .build();
         productService.addProduct(testProduct);
 
@@ -274,13 +289,13 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getProductsByCategorySorted: returns Products in a category, sorted A-Z by name")
     public void getProductsByCategorySorted() {
-        Product testProduct1 = addProductToWarehouse( "1", "Laptop", Category.GENERAL, 1);
-        Product testProduct2 = addProductToWarehouse( "2", "Computer", Category.GENERAL, 1);
-        Product testProduct3 = addProductToWarehouse( "3", "Television", Category.GENERAL, 1);
-        Product testProduct4 = addProductToWarehouse( "4", "Sandwich", Category.GENERAL, 1);
-        Product testProduct5 = addProductToWarehouse( "5", "Candy", Category.GENERAL, 1);
-        Product testProduct6 = addProductToWarehouse( "6", "VR Glasses", Category.GENERAL, 1);
-        Product testProduct7 = addProductToWarehouse( "7", "Android TV", ELECTRONICS, 1);
+        Product testProduct1 = addProductToWarehouse("1", "Laptop", Category.GENERAL, 1, 1);
+        Product testProduct2 = addProductToWarehouse("2", "Computer", Category.GENERAL, 1, 1);
+        Product testProduct3 = addProductToWarehouse("3", "Television", Category.GENERAL, 1, 1);
+        Product testProduct4 = addProductToWarehouse("4", "Sandwich", Category.GENERAL, 1, 1);
+        Product testProduct5 = addProductToWarehouse("5", "Candy", Category.GENERAL, 1, 1);
+        Product testProduct6 = addProductToWarehouse("6", "VR Glasses", Category.GENERAL, 1, 1);
+        Product testProduct7 = addProductToWarehouse("7", "Android TV", ELECTRONICS, 1, 1);
 
         assertThat(productService.getProductsByCategorySorted(Category.GENERAL))
                 .extracting(Product::getName)
@@ -290,9 +305,9 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getProductsByCategorySorted: returns empty list if Category is empty")
     public void getProductsByCategorySortedEmptyCategory() {
-        Product testProduct1 = addProductToWarehouse( "1", "Laptop", Category.GENERAL, 1);
-        Product testProduct2 = addProductToWarehouse( "2", "Computer", Category.GENERAL, 1);
-        Product testProduct3 = addProductToWarehouse( "3", "Television", Category.GENERAL, 1);
+        Product testProduct1 = addProductToWarehouse("1", "Laptop", Category.GENERAL, 1, 1);
+        Product testProduct2 = addProductToWarehouse("2", "Computer", Category.GENERAL, 1, 1);
+        Product testProduct3 = addProductToWarehouse("3", "Television", Category.GENERAL, 1, 1);
 
         assertThat(productService.getProductsByCategorySorted(ELECTRONICS)).isEmpty();
     }
@@ -300,7 +315,7 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getProductsByCategorySorted: throws exception if invalid input")
     public void throwsExceptionIfNoCategoryProvided() {
-        Product testProduct1 = addProductToWarehouse( "1", "Laptop", Category.GENERAL, 1);
+        Product testProduct1 = addProductToWarehouse("1", "Laptop", Category.GENERAL, 1, 1);
 
         assertThatThrownBy(() -> productService.getProductsByCategorySorted(null))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -309,11 +324,11 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getProductsCreatedAfter(LocalDateTime date): returns Products created after a given date")
     public void getProductsCreatedAfter() {
-        Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5, 18, 0, 0);
-        Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27, 18, 0, 0);
-        Product testProduct3 = createProductWithMockedDate("3", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31, 18, 0, 0);
-        Product testProduct4 = createProductWithMockedDate("4", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24, 18, 0, 0);
-        Product testProduct5 = createProductWithMockedDate("5", "Pen Set", Category.GENERAL, 1, 2002, 1, 1, 18, 0, 0);
+        Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 1, 2025, 1, 5, 18, 0, 0);
+        Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1, 1997, 1, 27, 18, 0, 0);
+        Product testProduct3 = createProductWithMockedDate("3", "Desk Chair", Category.GENERAL, 1, 1, 1997, 3, 31, 18, 0, 0);
+        Product testProduct4 = createProductWithMockedDate("4", "Water Bottle", Category.GENERAL, 1, 1, 1782, 8, 24, 18, 0, 0);
+        Product testProduct5 = createProductWithMockedDate("5", "Pen Set", Category.GENERAL, 1, 1, 2002, 1, 1, 18, 0, 0);
 
         productService.addProduct(testProduct1);
         productService.addProduct(testProduct2);
@@ -328,11 +343,11 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getProductsCreatedAfter(LocalDate date): throws an exception if invalid input")
     public void getProductsCreatedAfterEmptyList() {
-        Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 2025, 1, 5, 18, 0, 0);
-        Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1997, 1, 27, 18, 0, 0);
-        Product testProduct3 = createProductWithMockedDate("3", "Desk Chair", Category.GENERAL, 1, 1997, 3, 31, 18, 0, 0);
-        Product testProduct4 = createProductWithMockedDate("4", "Water Bottle", Category.GENERAL, 1, 1782, 8, 24, 18, 0, 0);
-        Product testProduct5 = createProductWithMockedDate("5", "Pen Set", Category.GENERAL, 1, 2002, 1, 1, 18, 0, 0);
+        Product testProduct1 = createProductWithMockedDate("1", "Laptop", Category.GENERAL, 1, 1, 2025, 1, 5, 18, 0, 0);
+        Product testProduct2 = createProductWithMockedDate("2", "Notebook", Category.GENERAL, 1, 1, 1997, 1, 27, 18, 0, 0);
+        Product testProduct3 = createProductWithMockedDate("3", "Desk Chair", Category.GENERAL, 1, 1, 1997, 3, 31, 18, 0, 0);
+        Product testProduct4 = createProductWithMockedDate("4", "Water Bottle", Category.GENERAL, 1, 1, 1782, 8, 24, 18, 0, 0);
+        Product testProduct5 = createProductWithMockedDate("5", "Pen Set", Category.GENERAL, 1, 1, 2002, 1, 1, 18, 0, 0);
 
         productService.addProduct(testProduct1);
         productService.addProduct(testProduct2);
@@ -347,9 +362,9 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getModifiedProducts(): returns Products where createdDate != modifiedDate")
     public void getModifiedProductsNotEqualToCreatedDate() {
-        Product testProduct1 = addProductToWarehouse( "1", "Laptop", Category.GENERAL, 1);
-        Product testProduct2 = addProductToWarehouse( "2", "Computer", Category.GENERAL, 1);
-        Product testProduct3 = addProductToWarehouse( "3", "Television", Category.GENERAL, 1);
+        Product testProduct1 = addProductToWarehouse("1", "Laptop", Category.GENERAL, 1, 1);
+        Product testProduct2 = addProductToWarehouse("2", "Computer", Category.GENERAL, 1, 1);
+        Product testProduct3 = addProductToWarehouse("3", "Television", Category.GENERAL, 1, 1);
 
         //Delay a bit to make sure modifiedDate is different from createdDate
         try {
@@ -363,6 +378,7 @@ public class ProductServiceTest {
                 .name("Desktop")
                 .category(Category.GENERAL)
                 .rating(10)
+                .price(1)
                 .build());
 
         assertThat(productService.getModifiedProducts()).extracting(Product::getName).containsExactly("Desktop");
@@ -372,8 +388,8 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getModifiedProducts(): returns an empty list if no products found")
     public void getModifiedProductsEmptyList() {
-        Product testProduct1 = addProductToWarehouse( "1", "Laptop", Category.GENERAL, 1);
-        Product testProduct2 = addProductToWarehouse( "2", "Computer", Category.GENERAL, 1);
+        Product testProduct1 = addProductToWarehouse("1", "Laptop", Category.GENERAL, 1, 1);
+        Product testProduct2 = addProductToWarehouse("2", "Computer", Category.GENERAL, 1, 1);
 
         assertThat(productService.getModifiedProducts()).isEmpty();
     }
@@ -381,9 +397,9 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getCategoriesWithProducts(): return all categories with at least one product")
     public void getCategoriesWithProducts() {
-        Product testProduct1 = addProductToWarehouse( "1", "Laptop", ELECTRONICS, 1);
-        Product testProduct2 = addProductToWarehouse( "2", "Television", ELECTRONICS, 1);
-        Product testProduct3 = addProductToWarehouse( "3", "Apple", Category.FOOD, 1);
+        Product testProduct1 = addProductToWarehouse("1", "Laptop", ELECTRONICS, 1, 1);
+        Product testProduct2 = addProductToWarehouse("2", "Television", ELECTRONICS, 1, 1);
+        Product testProduct3 = addProductToWarehouse("3", "Apple", Category.FOOD, 1, 1);
 
         assertThat(productService.getCategoriesWithProducts().size()).isEqualTo(2);
         assertThat(productService.getCategoriesWithProducts()).containsExactlyInAnyOrder(ELECTRONICS, Category.FOOD);
@@ -398,10 +414,10 @@ public class ProductServiceTest {
     @Test
     @DisplayName("countProductsInCategory(): returns number of products in a category")
     public void countProductsInCategoryCountsProducts() {
-        Product testProduct1 = addProductToWarehouse( "1", "Laptop", ELECTRONICS, 1);
-        Product testProduct2 = addProductToWarehouse( "2", "Computer", Category.GENERAL, 1);
-        Product testProduct3 = addProductToWarehouse( "3", "Television", ELECTRONICS, 1);
-        Product testProduct4 = addProductToWarehouse( "4", "Sandwich", Category.FOOD, 1);
+        Product testProduct1 = addProductToWarehouse("1", "Laptop", ELECTRONICS, 1, 1);
+        Product testProduct2 = addProductToWarehouse("2", "Computer", Category.GENERAL, 1, 1);
+        Product testProduct3 = addProductToWarehouse("3", "Television", ELECTRONICS, 1, 1);
+        Product testProduct4 = addProductToWarehouse("4", "Sandwich", Category.FOOD, 1, 1);
 
         assertThat(productService.countProductsInCategory(Category.ELECTRONICS)).isEqualTo(2);
         assertThat(productService.countProductsInCategory(Category.GENERAL)).isEqualTo(1);
@@ -417,7 +433,7 @@ public class ProductServiceTest {
     @Test
     @DisplayName("countProductsInCategory(): throws exception if invalid input")
     public void countProductsInCategoryThrowsException() {
-        Product testProduct1 = addProductToWarehouse( "1", "Laptop", ELECTRONICS, 1);
+        Product testProduct1 = addProductToWarehouse("1", "Laptop", ELECTRONICS, 1, 1);
 
         assertThatThrownBy(() -> productService.countProductsInCategory(null))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -426,11 +442,11 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getProductInitialsMap(): returns a Map<Character, Integer> of first letters in product names and their counts")
     public void getProductInitialsMap() {
-        Product testProduct1 = addProductToWarehouse( "1", "Laptop", ELECTRONICS, 1);
-        Product testProduct2 = addProductToWarehouse( "2", "Computer", Category.GENERAL, 1);
-        Product testProduct3 = addProductToWarehouse( "3", "Camera", ELECTRONICS, 1);
-        Product testProduct4 = addProductToWarehouse( "4", "Sandwich", Category.FOOD, 1);
-        Product testProduct5 = addProductToWarehouse( "5", "Sushi", Category.FOOD, 1);
+        Product testProduct1 = addProductToWarehouse("1", "Laptop", ELECTRONICS, 1, 1);
+        Product testProduct2 = addProductToWarehouse("2", "Computer", Category.GENERAL, 1, 1);
+        Product testProduct3 = addProductToWarehouse("3", "Camera", ELECTRONICS, 1, 1);
+        Product testProduct4 = addProductToWarehouse("4", "Sandwich", Category.FOOD, 1, 1);
+        Product testProduct5 = addProductToWarehouse("5", "Sushi", Category.FOOD, 1, 1);
 
         Map<Character, Integer> expectedMap = productService.getProductInitialsMap();
 
@@ -449,8 +465,8 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getTopRatedProductsThisMonth(): returns Products with max rating, created this month, sorted by newest first")
     public void getTopRatedProductsThisMonth() {
-        Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 2002, 1, 1, 18, 0, 0);
-        Product testProduct2 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 10, 1782, 8, 24, 18, 0, 0);
+        Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 1, 2002, 1, 1, 18, 0, 0);
+        Product testProduct2 = createProductWithMockedDate("3", "Water Bottle", Category.GENERAL, 10, 1, 1782, 8, 24, 18, 0, 0);
         productService.addProduct(testProduct1);
         productService.addProduct(testProduct2);
 
@@ -464,9 +480,9 @@ public class ProductServiceTest {
                     .thenReturn(date2)
                     .thenReturn(date3);
 
-            Product testProduct3 = addProductToWarehouse( "1", "Laptop", ELECTRONICS, 10);
-            Product testProduct4 = addProductToWarehouse( "2", "Television", ELECTRONICS, 10);
-            Product testProduct5 = addProductToWarehouse( "5", "Computer", Category.GENERAL, 9);
+            Product testProduct3 = addProductToWarehouse("1", "Laptop", ELECTRONICS, 10, 1);
+            Product testProduct4 = addProductToWarehouse("2", "Television", ELECTRONICS, 10, 1);
+            Product testProduct5 = addProductToWarehouse("5", "Computer", Category.GENERAL, 9, 1);
 
             List<Product> expectedProducts = productService.getTopRatedProductsThisMonth();
 
@@ -479,7 +495,7 @@ public class ProductServiceTest {
     @DisplayName("getTopRatedProductsThisMonth(): returns an empty list if no products found")
     public void getTopRatedProductsThisMonthEmptyList() {
         assertThat(productService.getTopRatedProductsThisMonth()).isEmpty();
-        Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 2025, 1, 31, 23, 59, 59);
+        Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 1, 2025, 1, 31, 23, 59, 59);
         productService.addProduct(testProduct1);
 
         try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {
@@ -497,7 +513,7 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getTopRatedProductsThisMonth(): excludes product from the same month but a different year")
     public void getTopRatedProductsThisMonthExcludesProductFromDifferentYear() {
-        Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 2024, 1, 1, 13, 59, 59);
+        Product testProduct1 = createProductWithMockedDate("4", "Pen Set", Category.GENERAL, 9, 1, 2024, 1, 1, 13, 59, 59);
         productService.addProduct(testProduct1);
 
         try (MockedStatic mockedStatic = Mockito.mockStatic(LocalDateTime.class, Mockito.CALLS_REAL_METHODS)) {

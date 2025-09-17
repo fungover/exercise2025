@@ -41,7 +41,7 @@ public class InMemoryProductRepository implements ProductRepository {
     @Override
     public void updateProduct(Product product) {
         if (product == null) {
-            throw new IllegalArgumentException("Product cannot be null" + product.getId());
+            throw new IllegalArgumentException("Product cannot be null");
         }
 
         if (products.stream()

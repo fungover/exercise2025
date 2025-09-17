@@ -1,5 +1,5 @@
 package org.fungover.entities;
 
 public enum Category {
-    ELECTRONICS, CLOTHING, FOOD
+    ELECTRONICS, CLOTHING, FOOD, FURNITURE, OTHER
 }

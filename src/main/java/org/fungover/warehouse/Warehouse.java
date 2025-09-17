@@ -33,28 +33,22 @@ public class Warehouse {
     }
 
     public Product getProduct(String id) {
-       return products.stream().filter(p ->
-               p.identifier().equals(id)).findFirst().orElseThrow(() ->
-               new NoSuchElementException("Product not found"));
+        return products.stream().filter(p -> p.identifier().equals(id)).findFirst().orElseThrow(() -> new NoSuchElementException("Product not found"));
     }
 
     public List<Product> getProductsByCategory(Category category) {
-        return products.stream().filter(p -> p.category() == category)
-                .sorted(Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER))
-                .toList();
+        return products.stream().filter(p -> p.category() == category).sorted(Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER)).toList();
     }
 
     public List<Product> getProductsCreatedAfter(LocalDate date) {
         ZoneId zone = ZoneId.systemDefault();
         Instant threshold = date.atStartOfDay(zone).toInstant();
 
-        return products.stream().filter(p -> p.createdDate().isAfter(threshold))
-                .toList();
+        return products.stream().filter(p -> p.createdDate().isAfter(threshold)).toList();
     }
 
     public List<Product> getModifiedProducts() {
-        return products.stream().filter(p -> !p.createdDate().equals(p.lastModifiedDate()))
-                .toList();
+        return products.stream().filter(p -> !p.createdDate().equals(p.lastModifiedDate())).toList();
     }
 
 }

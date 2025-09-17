@@ -3,16 +3,11 @@ package org.fungover.entities;
 import java.util.UUID;
 import java.time.Instant;
 
-public record Product(
-        String identifier,
-        String name,
-        int rating,
-        Category category,
-        Instant createdDate,
-        Instant lastModifiedDate) {
+public record Product(String identifier, String name, int rating, Category category, Instant createdDate,
+                      Instant lastModifiedDate) {
 
     public Product(String name, Category category, int rating) {
-        this(UUID.randomUUID().toString(), validateName(name), validateRating(rating), category, Instant.now(), null);
+        this(UUID.randomUUID().toString(), validateName(name), validateRating(rating), category, Instant.now(), Instant.now());
     }
 
     private static String validateName(String name) {

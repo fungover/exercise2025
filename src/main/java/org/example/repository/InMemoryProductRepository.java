@@ -41,7 +41,12 @@ public class InMemoryProductRepository implements ProductRepository {
     @Override
     public void updateProduct(Product product) {
         if (product == null) {
-            throw new IllegalArgumentException("Product cannot be null");
+            throw new IllegalArgumentException("Product cannot be null" + product.getId());
+        }
+
+        if (products.stream()
+                .anyMatch(p -> p.getName().equalsIgnoreCase(product.getName()) && !p.getId().equals(product.getId()))) {
+            throw new IllegalArgumentException("Product with name " + product.getName() + " already exists");
         }
 
         int index = IntStream.range(0, products.size())

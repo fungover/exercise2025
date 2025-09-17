@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ProductTest {
 
@@ -109,5 +108,62 @@ public class ProductTest {
         assertEquals("Test Product 2", product.name());
         assertEquals(Category.ELECTRONICS, product.category());
         assertEquals(8, product.rating());
+    }
+    @Test
+    void shouldThrowExceptionForMissingIdInBuilder() {
+        assertThrows(IllegalArgumentException.class, () ->
+                Product.builder()
+                        .name("Test")
+                        .category(Category.ELECTRONICS)
+                        .rating(8)
+                        .createdDate(LocalDate.now())
+                        .build());
+    }
+
+    @Test
+    void shouldThrowExceptionForMissingNameInBuilder() {
+        assertThrows(IllegalArgumentException.class, () ->
+                Product.builder()
+                        .id("1")
+                        .category(Category.ELECTRONICS)
+                        .rating(8)
+                        .createdDate(LocalDate.now())
+                        .build());
+    }
+
+    @Test
+    void shouldThrowExceptionForMissingCategoryInBuilder() {
+        assertThrows(IllegalArgumentException.class, () ->
+                Product.builder()
+                        .id("1")
+                        .name("Test")
+                        .rating(8)
+                        .createdDate(LocalDate.now())
+                        .build());
+    }
+
+    @Test
+    void shouldThrowExceptionForInvalidRatingInBuilder() {
+        assertThrows(IllegalArgumentException.class, () ->
+                Product.builder()
+                        .id("1")
+                        .name("Test")
+                        .category(Category.ELECTRONICS)
+                        .rating(11)
+                        .createdDate(LocalDate.now())
+                        .build());
+    }
+
+    @Test
+    void shouldSetDefaultDatesWhenNotProvided() {
+        Product product = Product.builder()
+                .id("1")
+                .name("Test")
+                .category(Category.SPORTS)
+                .rating(10)
+                .build();
+
+        assertNotNull(product.createdDate());
+        assertEquals(product.createdDate(), product.modifiedDate());
     }
 }

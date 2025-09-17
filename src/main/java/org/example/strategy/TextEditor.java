@@ -18,7 +18,9 @@ public class TextEditor {
                 command, generalship" ) is a general plan to achieve one or more
                 long-term or overall goals under conditions of uncertainty
                 """;
-        TextEditor te = new TextEditor(new AllUppercaseFormatter());
+     //   TextEditor te = new TextEditor(new EveryWordUpperCaseFormatter());
+     //   TextEditor te = new TextEditor(s->s.toUpperCase());
+        TextEditor te = new TextEditor(String::toUpperCase);
         te.printFormattedText(text);
     }
 }

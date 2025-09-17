@@ -1,15 +1,18 @@
 package org.example.strategy;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 public class TextEditor {
 
-    TextFormatter formatter;
+    Function<String, String> formatter;
 
-    public TextEditor(TextFormatter formatter) {
+    public TextEditor(Function<String, String> formatter) {
         this.formatter = formatter;
     }
 
     public void printFormattedText(String text){
-        System.out.println(formatter.format(text));
+        System.out.println(formatter.apply(text));
     }
 
     static void main() {

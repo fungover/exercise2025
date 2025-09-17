@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.patterns.decorator.DiscountDecorator;
 import org.example.repository.InMemoryProductRepository;
 import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -509,5 +511,45 @@ class ProductServiceTest {
         )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("price must be greater than zero");
+    }
+
+    //TEST DISCOUNT
+
+    @Test
+    @DisplayName("Returns correct price after a 20% discount")
+    void discountDecorator_appliesTwentyPercent() {
+        Product chewBone = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Chew Bone")
+                .category(Category.FOOD)
+                .price(BigDecimal.valueOf(10.00))//Price before discount
+                .rating(4)
+                .createdDate(ZonedDateTime.now())
+                .modifiedDate(ZonedDateTime.now())
+                .build();
+
+        // Decorate with a 20% discount
+        DiscountDecorator discountedChewBone = new DiscountDecorator(chewBone, 20);
+
+        assertThat(discountedChewBone.getPrice())
+                .isEqualByComparingTo(BigDecimal.valueOf(8.00).setScale(2, RoundingMode.HALF_UP));
+    }
+
+    @Test
+    @DisplayName("Throws exception when discount is negative")
+    void discountDecorator_invalidDiscount_throwsException() {
+        Product squeakyBanana = Product.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Squeaky Banana")
+                .category(Category.TOYS)
+                .price(BigDecimal.valueOf(7.25))
+                .rating(3)
+                .createdDate(ZonedDateTime.now())
+                .modifiedDate(ZonedDateTime.now())
+                .build();
+
+        assertThatThrownBy(() -> new DiscountDecorator(squeakyBanana, -10))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("discount percentage must be between 0 and 100");
     }
 }

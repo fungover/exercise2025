@@ -10,7 +10,7 @@ public class DiscountDecorator extends ProductDecorator {
     public DiscountDecorator(Sellable decoratedProduct, double discountPercent) {
         super(decoratedProduct);
         if (discountPercent < 0 || discountPercent > 100) {
-            throw new IllegalArgumentException("Discount percentage must be between 0 and 100: " +
+            throw new IllegalArgumentException("discount percentage must be between 0 and 100: " +
                     discountPercent);
         }
 

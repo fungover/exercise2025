@@ -1,7 +1,6 @@
 package org.example.strategy;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class TextEditor {
 
@@ -11,7 +10,7 @@ public class TextEditor {
         this.formatter = formatter;
     }
 
-    public void printFormattedText(String text){
+    public void printFormattedText(String text) {
         System.out.println(formatter.apply(text));
     }
 
@@ -21,8 +20,8 @@ public class TextEditor {
                 command, generalship" ) is a general plan to achieve one or more
                 long-term or overall goals under conditions of uncertainty
                 """;
-     //   TextEditor te = new TextEditor(new EveryWordUpperCaseFormatter());
-     //   TextEditor te = new TextEditor(s->s.toUpperCase());
+        //   TextEditor te = new TextEditor(new EveryWordUpperCaseFormatter());
+        //   TextEditor te = new TextEditor(s->s.toUpperCase());
         TextEditor te = new TextEditor(String::toUpperCase);
         te.printFormattedText(text);
     }

@@ -1,9 +1,10 @@
 package org.example.entities.items;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Inventory {
-    private final ArrayList<Item> items = new ArrayList<>();
+    private final List<Item> items = new ArrayList<>();
 
     public void addItem(Item item) {
         for (Item existingItem : items) {

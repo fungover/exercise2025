@@ -94,5 +94,6 @@ public class App {
         // Decorated with a 25% discount
         var discountedBed = new DiscountDecorator(comfyBed, 25);
         System.out.println("The discounted price of Comfy Dog Bed: " + discountedBed.getPrice());
+        System.out.println("Original Comfy Dog bed still has price: " + comfyBed.getPrice());
     }
 }

@@ -5,6 +5,7 @@ import org.example.entities.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,11 +62,16 @@ class InMemoryProductRepositoryTest {
         repository.addProduct(original);
 
         Product updated = new Product.Builder().name("Updated")
+                                               .id(original.id())
                                                .category(Category.FOOD)
                                                .rating(8)
                                                .build();
 
+        repository.getAllProducts()
+                  .forEach(System.out::println);
         repository.updateProduct(updated);
+        repository.getAllProducts()
+                  .forEach(System.out::println);
 
         Optional<Product> found = repository.getProductById(updated.id()
                                                                    .toString());
@@ -73,6 +79,28 @@ class InMemoryProductRepositoryTest {
         assertEquals("Updated", found.get()
                                      .name());
 
+    }
+
+    @Test void findByCategory_ShouldReturnCorrectProducts() {
+        Product electronics = new Product.Builder().name("Laptop")
+                                                   .category(Category.ELECTRONICS)
+                                                   .rating(5)
+                                                   .build();
+
+        Product food = new Product.Builder().name("AngryFish")
+                                            .category(Category.FOOD)
+                                            .rating(4)
+                                            .build();
+
+
+        repository.addProduct(electronics);
+        repository.addProduct(food);
+
+        List<Product> products = repository.findByCategory(Category.FOOD);
+
+        assertEquals(1, products.size());
+        assertEquals("AngryFish", products.get(0)
+                                          .name());
     }
 
 

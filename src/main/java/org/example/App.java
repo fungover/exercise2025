@@ -2,10 +2,12 @@ package org.example;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.patterns.decorator.DiscountDecorator;
 import org.example.repository.InMemoryProductRepository;
 import org.example.repository.ProductRepository;
 import org.example.service.ProductService;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,7 @@ public class App {
                 .id(UUID.randomUUID().toString())
                 .name("Chew Bone")
                 .category(Category.FOOD)
+                .price(BigDecimal.valueOf(45))
                 .rating(8)
                 .createdDate(ZonedDateTime.now().minusDays(5))
                 .modifiedDate(ZonedDateTime.now().minusDays(5))
@@ -31,6 +34,7 @@ public class App {
                 .id(UUID.randomUUID().toString())
                 .name("Squeaky Ball")
                 .category(Category.TOYS)
+                .price(BigDecimal.valueOf(62))
                 .rating(6)
                 .createdDate(ZonedDateTime.now().minusDays(2))
                 .modifiedDate(ZonedDateTime.now().minusDays(2))
@@ -40,6 +44,7 @@ public class App {
                 .id(UUID.randomUUID().toString())
                 .name("Comfy Dog Bed")
                 .category(Category.BEDDING)
+                .price(BigDecimal.valueOf(499))
                 .rating(9)
                 .createdDate(ZonedDateTime.now().minusDays(10))
                 .modifiedDate(ZonedDateTime.now().minusDays(3)) // modified later
@@ -82,5 +87,12 @@ public class App {
         ZonedDateTime threeDaysAgo = ZonedDateTime.now().minusDays(3);
         productService.getProductsCreatedAfter(threeDaysAgo)
                 .forEach(System.out::println);
+
+        // Decorator Pattern demo
+        System.out.println("\nApplying discount with Decorator Pattern:");
+        System.out.println("The original price of Comfy Dog Bed: " + comfyBed.getPrice());
+        // Decorated with a 25% discount
+        var discountedBed = new DiscountDecorator(comfyBed, 25);
+        System.out.println("The discounted price of Comfy Dog Bed: " + discountedBed.getPrice());
     }
 }

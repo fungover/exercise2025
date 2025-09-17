@@ -24,7 +24,6 @@ public class Publisher {
         Subscriber subscriber = new PrintEverythingSubscriber();
         Subscriber subscriber2 = new PrintEverythingSubscriber();
 
-
         publisher.subscribe(subscriber);
         publisher.subscribe(subscriber2);
         publisher.notifySubscribers("Hello World");

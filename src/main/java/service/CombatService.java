@@ -41,7 +41,7 @@ public class CombatService {
         // Check if the enemy died
         if (!enemy.isAlive()) {
             result.append("\n🎉 Du besegrade ").append(enemy.getName()).append("!");
-            return new CombatResult(false, true, result.toString(), enemy);
+            return new CombatResult(false, false, result.toString(), enemy);
         }
 
         // The enemy strikes back.

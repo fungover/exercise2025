@@ -8,6 +8,11 @@ import java.util.Scanner;
 public class InputHandler {
     private Scanner scanner;
 
+
+    public InputHandler(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
     public enum Direction {
         NORTH(0, -1, "norrut"),
         SOUTH(0, 1, "söderut"),

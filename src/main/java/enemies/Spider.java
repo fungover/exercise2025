@@ -25,6 +25,7 @@ public class Spider extends Enemy {
             // Poison bite - less damage but does extra damage next turn
             int poisonDamage = getDamage() + 3;
             player.takeDamage(poisonDamage);
+            hasPoison = false;
             return "Spindeln biter dig med gift! Du tar " + poisonDamage +
                     " skada och känner giftet sprida sig genom kroppen!";
         } else {

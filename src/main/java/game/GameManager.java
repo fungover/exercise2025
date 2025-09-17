@@ -16,6 +16,8 @@ import service.CombatService;
 import enemies.EnemyFactory;
 import utils.Constants;
 
+import java.util.Scanner;
+
 public class GameManager {
     private PirateCave cave;
     private Player player;
@@ -25,15 +27,17 @@ public class GameManager {
     private CombatService combatService;
     private boolean gameRunning;
     private CombatService.CombatResult currentCombat; // Pågående strid
+    private java.util.Scanner sharedScanner;
 
     public GameManager() {
 
+        // Create shared input
+        sharedScanner = new java.util.Scanner(System.in);
+        inputHandler = new InputHandler(sharedScanner);
         // Ask for the user's name
-        String playerName = askForPlayerName();
-
+        String playerName = askForPlayerName(sharedScanner);
         cave = new PirateCave(Constants.DEFAULT_MAP_WIDTH, Constants.DEFAULT_MAP_HEIGHT);
         player = new Player("Kapten " + playerName, Constants.PLAYER_STARTING_HEALTH, Constants.PLAYER_STARTING_DAMAGE);
-        inputHandler = new InputHandler();
         movementService = new MovementService();
         inventoryService = new InventoryService();
         combatService = new CombatService();
@@ -48,19 +52,18 @@ public class GameManager {
     }
 
 
-    private String askForPlayerName() {
-        java.util.Scanner nameScanner = new java.util.Scanner(System.in);
+    private String askForPlayerName(Scanner scanner) {
 
         System.out.println("🏴‍☠️ Välkommen till Piratgrottans Äventyr! 🏴‍☠️");
         System.out.println("═".repeat(50));
         System.out.print("Skriv ditt förnamn för att börja ditt äventyr: ");
 
-        String firstName = nameScanner.nextLine().trim();
+        String firstName = scanner.nextLine().trim();
 
         // Place objects and enemies
         while (firstName.isEmpty()) {
             System.out.print("Du måste ange ett namn. Försök igen: ");
-            firstName = nameScanner.nextLine().trim();
+            firstName = scanner.nextLine().trim();
         }
 
         // Capitalize the first letter
@@ -80,7 +83,6 @@ public class GameManager {
         cave.placeItem(PirateTreasureFactory.createJewelBox(), 3, 3);
         cave.placeItem(PirateTreasureFactory.createPirateSaber(), 4, 0);
 
-        System.out.println("Föremål har blivit utplacerade på kartan!");
     }
 
 
@@ -270,7 +272,7 @@ public class GameManager {
         Item item = cave.removeItemAt(player.getX(), player.getY());
 
         if (item == null) {
-            System.out.println("❌ Det finns inget att plocka upp här.");
+            System.out.println("Det finns inget att plocka upp här.");
             return;
         }
 
@@ -323,7 +325,7 @@ public class GameManager {
 
 
     private void listNearbyItems() {
-        System.out.println("\n👀 Föremål i närheten:");
+        System.out.println("\nFöremål i närheten:");
         boolean foundAny = false;
 
         for (int dx = -1; dx <= 1; dx++) {

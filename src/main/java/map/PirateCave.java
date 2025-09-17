@@ -4,9 +4,11 @@ import entities.Player;
 import entities.Item;
 import entities.Enemy;
 import enemies.EnemyFactory;
+import utils.Constants;
+import utils.RandomGenerator;
 
 /**
- * PirateCave representerar hela vår karta med fiender och föremål
+ * PirateCave represents our entire map with enemies, items and walls
  */
 public class PirateCave {
     private Tile[][] map;
@@ -14,6 +16,7 @@ public class PirateCave {
     private int gridHeight;
     private int displayWidth;
     private int displayHeight;
+    private boolean[][] walls; // Track walls at game positions
 
     public PirateCave(int gridWidth, int gridHeight) {
         this.gridWidth = gridWidth;
@@ -21,7 +24,91 @@ public class PirateCave {
         this.displayWidth = gridWidth * 2 + 1;
         this.displayHeight = gridHeight * 2 + 1;
         this.map = new Tile[displayHeight][displayWidth];
+        this.walls = new boolean[gridWidth][gridHeight];
+
         createGridMap();
+        generateRandomWalls();
+    }
+
+    /**
+     * Generate random walls that players must navigate around
+     */
+    private void generateRandomWalls() {
+        System.out.println("Building walls in the cave...");
+
+        // Strategy 1: Create corridor walls in middle
+        if (gridWidth >= 3 && gridHeight >= 3) {
+            int wallY = gridHeight / 2;
+            for (int x = 1; x < gridWidth - 1; x++) {
+                if (RandomGenerator.rollPercent(40)) {
+                    // Leave at least one opening
+                    if (x != gridWidth / 2) {
+                        placeWall(x, wallY);
+                        System.out.println("  Wall at (" + x + ", " + wallY + ")");
+                    }
+                }
+            }
+        }
+
+        // Strategy 2: Scatter some random walls
+        int maxWalls = (gridWidth * gridHeight) / 6; // Max ~16% of map
+        int wallsPlaced = 0;
+        int attempts = 0;
+
+        while (wallsPlaced < maxWalls && attempts < maxWalls * 3) {
+            int x = RandomGenerator.randomInt(0, gridWidth);
+            int y = RandomGenerator.randomInt(0, gridHeight);
+            attempts++;
+
+            // Don't block starting position
+            if (x == 0 && y == 0) continue;
+
+            // Don't place if already a wall
+            if (hasWallAt(x, y)) continue;
+
+            placeWall(x, y);
+            wallsPlaced++;
+            System.out.println("  Random wall at (" + x + ", " + y + ")");
+        }
+
+        System.out.println("Placed " + getTotalWalls() + " walls total!");
+    }
+
+    /**
+     * Place a wall at game coordinates and update display
+     */
+    private void placeWall(int gameX, int gameY) {
+        if (isValidGamePosition(gameX, gameY)) {
+            walls[gameX][gameY] = true;
+
+            // Update the corresponding display tile
+            int displayX = gameX * 2 + 1;
+            int displayY = gameY * 2 + 1;
+            if (displayY < displayHeight && displayX < displayWidth) {
+                map[displayY][displayX] = new Tile(Constants.WALL_SYMBOL, "Wall");
+            }
+        }
+    }
+
+    /**
+     * Check if there's a wall at game coordinates
+     */
+    public boolean hasWallAt(int gameX, int gameY) {
+        if (!isValidGamePosition(gameX, gameY)) return true; // Outside = wall
+        return walls[gameX][gameY];
+    }
+
+    /**
+     * Count total walls
+     */
+    private int getTotalWalls() {
+        int count = 0;
+        for (int x = 0; x < gridWidth; x++) {
+            for (int y = 0; y < gridHeight; y++) {
+                if (walls[x][y]) count++;
+            }
+        }
+        return count;
     }
 
     private void createGridMap() {
@@ -64,11 +151,11 @@ public class PirateCave {
     }
 
     private boolean isHorizontalLine(int row, int col) {
-        return (row % 2 == 0) && (col % 2 == 1);
+        return (row % 2 == 0);
     }
 
     private boolean isVerticalLine(int row, int col) {
-        return (row % 2 == 0) && (col % 2 == 1);
+        return (row % 2 == 1) && (col % 2 == 0);
     }
 
     private boolean isCrossing(int row, int col) {
@@ -93,7 +180,7 @@ public class PirateCave {
                     // Show the player (the player has the highest priority)
                     System.out.print(player.getSymbol());
                 } else {
-                    // Show tile (which can be enemy, item or normal symbol)
+                    // Show tile (which can be wall, enemy, item or normal symbol)
                     System.out.print(map[row][col].getDisplaySymbol());
                 }
             }
@@ -109,7 +196,7 @@ public class PirateCave {
 
     // === OBJECT HANDLING ===
     public boolean placeItem(Item item, int gameX, int gameY) {
-        if (!isValidGamePosition(gameX, gameY)) {
+        if (!isValidGamePosition(gameX, gameY) || hasWallAt(gameX, gameY)) {
             return false;
         }
 
@@ -155,7 +242,7 @@ public class PirateCave {
 
     // === ENEMY MANAGEMENT ===
     public boolean placeEnemy(Enemy enemy, int gameX, int gameY) {
-        if (!isValidGamePosition(gameX, gameY)) {
+        if (!isValidGamePosition(gameX, gameY) || hasWallAt(gameX, gameY)) {
             return false;
         }
 
@@ -165,7 +252,7 @@ public class PirateCave {
         Tile tile = getTile(displayX, displayY);
         if (tile != null && tile.canPlaceThings() && !tile.hasEnemy()) {
             tile.placeEnemy(enemy);
-            enemy.setPosition(gameX, gameY); // Sätt fiendens position
+            enemy.setPosition(gameX, gameY);
             return true;
         }
         return false;
@@ -202,7 +289,7 @@ public class PirateCave {
 
     // === COLLISION DETECTION ===
     public boolean canPlayerMoveTo(int gameX, int gameY) {
-        if (!isValidGamePosition(gameX, gameY)) {
+        if (!isValidGamePosition(gameX, gameY) || hasWallAt(gameX, gameY)) {
             return false;
         }
 
@@ -219,11 +306,11 @@ public class PirateCave {
 
         int placed = 0;
         int attempts = 0;
-        int maxAttempts = enemyCount * 10; // Undvik oändlig loop
+        int maxAttempts = enemyCount * 10;
 
         while (placed < enemyCount && attempts < maxAttempts) {
-            int randomX = (int)(Math.random() * gridWidth);
-            int randomY = (int)(Math.random() * gridHeight);
+            int randomX = RandomGenerator.randomInt(0, gridWidth);
+            int randomY = RandomGenerator.randomInt(0, gridHeight);
 
             // Avoid placing enemies near the starting position (0,0)
             if (randomX <= 1 && randomY <= 1) {
@@ -247,7 +334,7 @@ public class PirateCave {
     }
 
     private boolean canPlaceEnemyAt(int gameX, int gameY) {
-        if (!isValidGamePosition(gameX, gameY)) {
+        if (!isValidGamePosition(gameX, gameY) || hasWallAt(gameX, gameY)) {
             return false;
         }
 

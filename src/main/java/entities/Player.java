@@ -12,17 +12,17 @@ import java.util.List;
 
 
 public class Player extends Entity {
-    // Inventarium - en lista av föremål
+    // Inventory - a list of items
     private List<Item> inventory;
     private int maxInventorySize;
-    private int damageBonus; // Extra skada från vapen
+    private int damageBonus; // Extra damage from weapons
 
     // Constructor
     public Player(String name, int maxHealth, int damage) {
         super(name, maxHealth, damage);
         this.inventory = new ArrayList<>();
-        this.maxInventorySize = 10; // Spelaren kan bära max 10 föremål
-        this.damageBonus = 0; // Börjar utan extra skada
+        this.maxInventorySize = Constants.PLAYER_MAX_INVENTORY;
+        this.damageBonus = 0;
     }
 
     // Implementing abstract metod from Entity
@@ -36,7 +36,7 @@ public class Player extends Entity {
     // Add items to inventory
     public boolean addItem(Item item) {
         if (inventory.size() >= maxInventorySize) {
-            return false; // Inventariet är fullt
+            return false; // The inventory is full.
         }
         inventory.add(item);
         return true;

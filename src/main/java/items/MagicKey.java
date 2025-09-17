@@ -16,8 +16,7 @@ public class MagicKey extends Item {
 
     @Override
     public String use(Player player) {
-        return "Du håller upp den magiska nyckeln. Den pulserar med blå energi. " +
-                "Använd 'unlock' kommandot framför magiska dörrar eller skrin.";
+        return "Nyckeln pulserar med blå energi. Ha den i ditt inventarium så används den automatiskt vid magiska lås.";
     }
 
 }

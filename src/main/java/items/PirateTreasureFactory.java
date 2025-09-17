@@ -3,12 +3,11 @@ package items;
 import entities.Item;
 
 /**
- * Factory-klass för att skapa piratskatter och föremål
- * Detta gör det enkelt att skapa standardföremål för ditt piratspel
+ * Factory class for creating pirate treasures and items
  */
 public class PirateTreasureFactory {
 
-    // === GULDMYNT ===
+    // === GOLD COIN ===
     public static GoldCoin createSmallGoldCoin() {
         return new GoldCoin(10);
     }
@@ -21,12 +20,12 @@ public class PirateTreasureFactory {
         return new GoldCoin(50);
     }
 
-    // === MAGISK NYCKEL ===
+    // === MAGIC KEY ===
     public static MagicKey createMagicKey() {
         return new MagicKey();
     }
 
-    // === ROM-FLASKOR (istället för health potions) ===
+    // === RUM BOTTLES ===
     public static RumBottle createWeakRum() {
         return new RumBottle("svag", 20);
     }
@@ -35,11 +34,7 @@ public class PirateTreasureFactory {
         return new RumBottle("stark", 40);
     }
 
-    public static RumBottle createCaptainsRum() {
-        return new RumBottle("kaptenens", 75);
-    }
-
-    // === PIRATSKATTER ===
+    // === PIRATE TREASURES ===
     public static PirateTreasure createJewelBox() {
         return new PirateTreasure(
                 "Juvelskrin",
@@ -64,15 +59,7 @@ public class PirateTreasureFactory {
         );
     }
 
-    public static PirateTreasure createCaptainsMedallion() {
-        return new PirateTreasure(
-                "Kaptenens medaljong",
-                "En tung guldmedaljong med en döskalle och korslagda ben",
-                300
-        );
-    }
-
-    // === GAMLA SVÄRD ===
+    // === OLD SWORDS ===
     public static OldSword createRustySword() {
         return new OldSword("Rostigt svärd", 5);
     }
@@ -81,15 +68,7 @@ public class PirateTreasureFactory {
         return new OldSword("Piratsabel", 12);
     }
 
-    public static OldSword createCaptainsCutlass() {
-        return new OldSword("Kaptenens enterkryssare", 20);
-    }
-
-    public static OldSword createLegendaryCutlass() {
-        return new OldSword("Legendarisk kaparsabel", 35);
-    }
-
-    // === SLUMPMÄSSIGT FÖREMÅL ===
+    // === RANDOM ITEMS ===
     public static Item createRandomTreasure() {
         int random = (int)(Math.random() * 12); // 0-11
 
@@ -107,30 +86,6 @@ public class PirateTreasureFactory {
             case 10: return createMagicKey(); // Sällsynt!
             case 11: return createTreasureMap(); // Mycket sällsynt!
             default: return createSmallGoldCoin();
-        }
-    }
-
-    // === FÖREMÅL FÖR SPECIFIKA PLATSER ===
-    public static Item createBossRoomTreasure() {
-        // Extra bra föremål för att besegra en boss
-        int random = (int)(Math.random() * 3);
-        switch (random) {
-            case 0: return createCaptainsCutlass();
-            case 1: return createCaptainsMedallion();
-            case 2: return createLegendaryCutlass();
-            default: return createCaptainsCutlass();
-        }
-    }
-
-    public static Item createSecretRoomTreasure() {
-        // Hemliga rum har alltid bra saker
-        int random = (int)(Math.random() * 4);
-        switch (random) {
-            case 0: return createMagicKey();
-            case 1: return createTreasureMap();
-            case 2: return createCaptainsRum();
-            case 3: return createRareGoldCoin();
-            default: return createMagicKey();
         }
     }
 }

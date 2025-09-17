@@ -5,53 +5,43 @@ import map.PirateCave;
 import game.InputHandler.Direction;
 
 /**
- * MovementService hanterar all rörelselogik för spelaren
+ * MovementService handles all movement logic for the player
  *
  * @author Jörgen Lindström
  * @version 1.0
  */
 public class MovementService {
 
-    /**
-     * Försöker flytta spelaren i en viss riktning
-     * @param player Spelaren som ska flyttas
-     * @param cave Kartan spelaren befinner sig på
-     * @param direction Riktningen att flytta åt
-     * @return MovementResult med information om rörelsen
-     */
     public MovementResult movePlayer(Player player, PirateCave cave, Direction direction) {
-        // Beräkna ny position
+        // Calculate new position
         int currentX = player.getX();
         int currentY = player.getY();
         int newX = currentX + direction.getDeltaX();
         int newY = currentY + direction.getDeltaY();
 
-        // Kontrollera om rörelsen är giltig
+        // Check if the movement is valid
         if (!cave.canPlayerMoveTo(newX, newY)) {
             return new MovementResult(false,
                     "Du kan inte gå " + direction.getDescription() + " - vägen är blockerad!",
                     currentX, currentY);
         }
 
-        // Utför rörelsen
+        // Perform the movement
         player.setPosition(newX, newY);
 
         String message = "Du går " + direction.getDescription() + ".";
         return new MovementResult(true, message, newX, newY);
     }
 
-    /**
-     * Kontrollerar om en rörelse är möjlig utan att utföra den
-     */
+     // Checks if a movement is possible without performing it
     public boolean canMove(Player player, PirateCave cave, Direction direction) {
         int newX = player.getX() + direction.getDeltaX();
         int newY = player.getY() + direction.getDeltaY();
         return cave.canPlayerMoveTo(newX, newY);
     }
 
-    /**
-     * Returnerar alla möjliga riktningar spelaren kan gå
-     */
+
+     //Returns all possible directions the player can go
     public java.util.List<Direction> getAvailableDirections(Player player, PirateCave cave) {
         java.util.List<Direction> available = new java.util.ArrayList<>();
 
@@ -64,9 +54,7 @@ public class MovementService {
         return available;
     }
 
-    /**
-     * Resultat av ett rörelseförsök
-     */
+     // Results of a movement attempt
     public static class MovementResult {
         private final boolean success;
         private final String message;

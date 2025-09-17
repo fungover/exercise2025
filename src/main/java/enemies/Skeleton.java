@@ -4,7 +4,7 @@ import entities.Enemy;
 import entities.Player;
 
 /**
- * Skelett - en undead fiende som vaktar gamla piratgravar
+ * Skeleton - an undead enemy that guards ancient pirate tombs
  */
 public class Skeleton extends Enemy {
 
@@ -19,7 +19,6 @@ public class Skeleton extends Enemy {
 
     @Override
     public String getSpecialAttack(Player player) {
-        // Bone Throw - gör extra skada
         int boneDamage = getDamage() + 5;
         player.takeDamage(boneDamage);
         return "Skelettet kastar ett ben mot dig! Du tar " + boneDamage + " skada!";

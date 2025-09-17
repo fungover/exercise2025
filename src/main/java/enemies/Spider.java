@@ -4,7 +4,7 @@ import entities.Enemy;
 import entities.Player;
 
 /**
- * Spider - snabb och giftig spindel som gömmer sig i grottans mörka hörn
+ * Spider - fast and poisonous spider hiding in the dark corners of the cave
  */
 public class Spider extends Enemy {
     private boolean hasPoison;
@@ -22,13 +22,13 @@ public class Spider extends Enemy {
     @Override
     public String getSpecialAttack(Player player) {
         if (hasPoison) {
-            // Poison bite - mindre skada men gör extra skada nästa tur
+            // Poison bite - less damage but does extra damage next turn
             int poisonDamage = getDamage() + 3;
             player.takeDamage(poisonDamage);
             return "Spindeln biter dig med gift! Du tar " + poisonDamage +
                     " skada och känner giftet sprida sig genom kroppen!";
         } else {
-            // Web attack - normal skada men skrämmande meddelande
+            // Web attack - normal damage but scary message
             player.takeDamage(getDamage());
             return "Spindeln kastar ett nät mot dig och biter! Du tar " +
                     getDamage() + " skada!";
@@ -46,11 +46,4 @@ public class Spider extends Enemy {
         return messages[(int)(Math.random() * messages.length)];
     }
 
-    public boolean hasPoison() {
-        return hasPoison;
-    }
-
-    public void usePoison() {
-        hasPoison = false;
-    }
 }

@@ -4,7 +4,7 @@ import entities.Item;
 import entities.Player;
 
 /**
- * Piratskatt - värdefull men mystisk
+ * Pirate treasure - valuable but mysterious
  */
 public class PirateTreasure extends Item {
     private String treasureType;
@@ -20,13 +20,5 @@ public class PirateTreasure extends Item {
     public String use(Player player) {
         return "Du undersöker " + treasureType + " noggrant. " + getDescription() +
                 " Den verkar vara värd omkring " + value + " guld, men du bör spara den för senare.";
-    }
-
-    public String getTreasureType() {
-        return treasureType;
-    }
-
-    public int getValue() {
-        return value;
     }
 }

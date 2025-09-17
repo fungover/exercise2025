@@ -1,7 +1,7 @@
 package interfaces;
 
 /**
- * Interface för objekt som kan visas på kartan
+ * Interface for objects that can be displayed on the map
  */
 public interface Displayable {
     char getSymbol();

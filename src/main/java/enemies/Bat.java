@@ -4,7 +4,7 @@ import entities.Enemy;
 import entities.Player;
 
 /**
- * Bat - snabb vampyrfladdermus som suger blod och läker sig själv
+ * Bat - fast vampire bat that sucks blood and heals itself
  */
 public class Bat extends Enemy {
 
@@ -19,11 +19,11 @@ public class Bat extends Enemy {
 
     @Override
     public String getSpecialAttack(Player player) {
-        // Blood drain - suger blod och läker sig själv
+        // Blood drain - sucks blood and heals itself
         int drainDamage = getDamage() + 2;
         player.takeDamage(drainDamage);
 
-        // Läk sig själv för hälften av skadan
+        // Heal yourself for half the damage
         int healAmount = drainDamage / 2;
         heal(healAmount);
 

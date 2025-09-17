@@ -33,31 +33,20 @@ public class InputHandler {
         scanner = new Scanner(System.in);
     }
 
-    /**
-     * Läser ett kommando från spelaren
-     */
     public String readCommand() {
         System.out.print("\n> ");
         return scanner.nextLine().trim().toLowerCase();
     }
 
-    /**
-     * Kontrollerar om kommandot är ett quit-kommando
-     */
     public boolean isQuitCommand(String command) {
         return command.equals("quit") || command.equals("exit") || command.equals("q");
     }
 
-    /**
-     * Kontrollerar om kommandot är ett help-kommando
-     */
     public boolean isHelpCommand(String command) {
         return command.equals("help") || command.equals("h") || command.equals("?");
     }
 
-    /**
-     * Parsar rörelsekommandon
-     */
+
     public Direction parseMovementCommand(String command) {
         switch (command) {
             case "north":
@@ -81,9 +70,6 @@ public class InputHandler {
         }
     }
 
-    /**
-     * Visar hjälptext med alla kommandon
-     */
     public void showHelp() {
         System.out.println("\n🎯 === KOMMANDON ===");
         System.out.println("📍 Rörelse:");
@@ -116,9 +102,6 @@ public class InputHandler {
         System.out.println("   - Undersök piratskatter för att se deras värde!");
     }
 
-    /**
-     * Stänger scanner
-     */
     public void close() {
         scanner.close();
     }

@@ -90,10 +90,10 @@ public class PirateCave {
         for (int row = 0; row < displayHeight; row++) {
             for (int col = 0; col < displayWidth; col++) {
                 if (player != null && col == playerDisplayX && row == playerDisplayY) {
-                    // Visa spelaren (spelaren har högst prioritet)
+                    // Show the player (the player has the highest priority)
                     System.out.print(player.getSymbol());
                 } else {
-                    // Visa tile (som kan vara fiende, föremål eller normal symbol)
+                    // Show tile (which can be enemy, item or normal symbol)
                     System.out.print(map[row][col].getDisplaySymbol());
                 }
             }
@@ -107,7 +107,7 @@ public class PirateCave {
         System.out.println("🗺️  Rutnät: " + gridWidth + "x" + gridHeight + " spelrutor");
     }
 
-    // === FÖREMÅLSHANTERING ===
+    // === OBJECT HANDLING ===
     public boolean placeItem(Item item, int gameX, int gameY) {
         if (!isValidGamePosition(gameX, gameY)) {
             return false;
@@ -117,7 +117,7 @@ public class PirateCave {
         int displayY = gameY * 2 + 1;
 
         Tile tile = getTile(displayX, displayY);
-        if (tile != null && tile.canPlaceThings()) {
+        if (tile != null && tile.canPlaceThings() && !tile.hasItem()) {
             tile.placeItem(item);
             return true;
         }
@@ -153,7 +153,7 @@ public class PirateCave {
         return item != null;
     }
 
-    // === FIENDEHANTERING ===
+    // === ENEMY MANAGEMENT ===
     public boolean placeEnemy(Enemy enemy, int gameX, int gameY) {
         if (!isValidGamePosition(gameX, gameY)) {
             return false;
@@ -200,7 +200,7 @@ public class PirateCave {
         return enemy != null && enemy.isAlive();
     }
 
-    // === KOLLISIONSDETEKTERING ===
+    // === COLLISION DETECTION ===
     public boolean canPlayerMoveTo(int gameX, int gameY) {
         if (!isValidGamePosition(gameX, gameY)) {
             return false;
@@ -210,10 +210,10 @@ public class PirateCave {
         int displayY = gameY * 2 + 1;
 
         Tile tile = getTile(displayX, displayY);
-        return tile != null && tile.canWalkOn(); // canWalkOn kollar redan efter fiender
+        return tile != null && tile.canWalkOn();
     }
 
-    // === SLUMPMÄSSIG GENERERING ===
+    // === RANDOM GENERATION ===
     public void populateWithEnemies(int enemyCount) {
         System.out.println("🏴‍☠️ Placerar " + enemyCount + " fiender i grottan...");
 
@@ -225,13 +225,13 @@ public class PirateCave {
             int randomX = (int)(Math.random() * gridWidth);
             int randomY = (int)(Math.random() * gridHeight);
 
-            // Undvik att placera fiender nära startpositionen (0,0)
+            // Avoid placing enemies near the starting position (0,0)
             if (randomX <= 1 && randomY <= 1) {
                 attempts++;
                 continue;
             }
 
-            // Kolla om positionen är ledig
+            // Check if the position is available
             if (canPlaceEnemyAt(randomX, randomY)) {
                 Enemy enemy = EnemyFactory.createRandomEnemy();
                 if (placeEnemy(enemy, randomX, randomY)) {
@@ -259,7 +259,7 @@ public class PirateCave {
                 !tile.hasEnemy() && !tile.hasItem();
     }
 
-    // === HJÄLPMETODER ===
+    // === HELP METHODS ===
     public void displayMap() {
         displayMap(null);
     }

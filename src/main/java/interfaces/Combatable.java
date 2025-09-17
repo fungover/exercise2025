@@ -1,7 +1,7 @@
 package interfaces;
 
 /**
- * Interface för entiteter som kan slåss
+ * Interface for entities that can fight
  */
 public interface Combatable {
     int attack();

@@ -7,7 +7,7 @@ import utils.Constants;
 import utils.RandomGenerator;
 
 /**
- * Basklass för alla fiender i spelet
+ * Base class for all enemies in the game
  */
 public abstract class Enemy extends Entity implements Combatable, Displayable, Positionable {
     private boolean isAlive;
@@ -23,7 +23,7 @@ public abstract class Enemy extends Entity implements Combatable, Displayable, P
         this.deathMessage = name + " faller till marken besegrad.";
     }
 
-    // Konstruktor med anpassade meddelanden
+    // Base class for all enemies in the game
     public Enemy(String name, int maxHealth, int damage, char displaySymbol,
                  String attackMessage, String deathMessage) {
         super(name, maxHealth, damage);
@@ -33,11 +33,11 @@ public abstract class Enemy extends Entity implements Combatable, Displayable, P
         this.deathMessage = deathMessage;
     }
 
-    // Abstract metoder som subklasser måste implementera
+    // Abstract methods that subclasses must implement
     public abstract String getSpecialAttack(Player player);
     public abstract String getIdleMessage();
 
-    // Implementerar abstract metod från Entity
+    // Implements abstract method from Entity
     @Override
     public String getDescription() {
         if (!isAlive()) {
@@ -47,13 +47,13 @@ public abstract class Enemy extends Entity implements Combatable, Displayable, P
                 getCurrentHealth() + "/" + getMaxHealth() + " hälsa stirrar på dig.";
     }
 
-    // Attackerar spelaren
+    // Attacks the player
     public String attack(Player player) {
         if (!isAlive()) {
             return getName() + " är redan besegrad och kan inte attackera.";
         }
 
-        // Använd Constants för chans
+        // Use Constants for Chance
         if (RandomGenerator.rollPercent(Constants.SPECIAL_ATTACK_CHANCE)) {
             return getSpecialAttack(player);
         }
@@ -63,7 +63,7 @@ public abstract class Enemy extends Entity implements Combatable, Displayable, P
         return attackMessage + " Du tar " + getDamage() + " skada!";
     }
 
-    // Ta skada och kolla om fienden dör
+    // Take damage and check if the enemy dies
     public String takeDamageAndCheck(int damage) {
         takeDamage(damage);
 
@@ -76,13 +76,13 @@ public abstract class Enemy extends Entity implements Combatable, Displayable, P
                 getCurrentHealth() + " hälsa kvar.";
     }
 
-    // Override isAlive från Entity
+    // Override isAlive from Entity
     @Override
     public boolean isAlive() {
         return isAlive && getCurrentHealth() > 0;
     }
 
-    // Implementerar Combatable interface
+    // Implement Combatable interface
     public int attack() {
         if (!isAlive()) {
             return 0;
@@ -90,7 +90,7 @@ public abstract class Enemy extends Entity implements Combatable, Displayable, P
         return getDamage();
     }
 
-    // Implementerar Displayable interface
+    // Implement Displayable interface
     @Override
     public char getSymbol() {
         return isAlive() ? displaySymbol : Constants.DEAD_ENEMY_SYMBOL;
@@ -104,7 +104,7 @@ public abstract class Enemy extends Entity implements Combatable, Displayable, P
         return deathMessage;
     }
 
-    // Metod för att få information om fienden
+    // Method of obtaining information about the enemy
     public String examine() {
         if (!isAlive()) {
             return "En död " + getName().toLowerCase() + ". " + getDeathMessage();

@@ -1,7 +1,7 @@
 package interfaces;
 
 /**
- * Interface för objekt som har position
+ * Interface for objects that have position
  */
 public interface Positionable {
     int getX();

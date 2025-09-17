@@ -5,14 +5,9 @@ import entities.Enemy;
 import utils.Constants;
 import utils.RandomGenerator;
 
-/**
- * CombatService hanterar all strid mellan spelaren och fiender
- */
 public class CombatService {
 
-    /**
-     * Initierar strid mellan spelare och fiende
-     */
+
     public CombatResult startCombat(Player player, Enemy enemy) {
         if (!enemy.isAlive()) {
             return new CombatResult(false, false,
@@ -27,9 +22,6 @@ public class CombatService {
         return new CombatResult(true, false, combatLog.toString(), enemy);
     }
 
-    /**
-     * Spelaren attackerar fienden
-     */
     public CombatResult playerAttack(Player player, Enemy enemy) {
         if (!enemy.isAlive()) {
             return new CombatResult(false, false,
@@ -38,7 +30,7 @@ public class CombatService {
 
         StringBuilder result = new StringBuilder();
 
-        // Spelaren attackerar
+        // Player attacks
         int playerDamage = player.getTotalDamage();
         result.append("👊 Du attackerar ").append(enemy.getName()).append(" för ")
                 .append(playerDamage).append(" skada!\n");
@@ -46,24 +38,24 @@ public class CombatService {
         String damageResult = enemy.takeDamageAndCheck(playerDamage);
         result.append(damageResult).append("\n");
 
-        // Kolla om fienden dog
+        // Check if the enemy died
         if (!enemy.isAlive()) {
             result.append("\n🎉 Du besegrade ").append(enemy.getName()).append("!");
-            return new CombatResult(true, true, result.toString(), enemy);
+            return new CombatResult(false, true, result.toString(), enemy);
         }
 
-        // Fienden slår tillbaka
+        // The enemy strikes back.
         result.append("\n");
         String enemyAttackResult = enemy.attack(player);
         result.append(enemyAttackResult).append("\n");
 
-        // Kolla om spelaren dog
+        // Check if the player died
         if (!player.isAlive()) {
             result.append("\n💀 Du blev besegrad! GAME OVER!");
             return new CombatResult(false, true, result.toString(), enemy);
         }
 
-        // Visa status
+        // Show status
         result.append("\n📊 Status:");
         result.append("\n   Din hälsa: ").append(player.getCurrentHealth())
                 .append("/").append(player.getMaxHealth());
@@ -73,18 +65,15 @@ public class CombatService {
         return new CombatResult(true, false, result.toString(), enemy);
     }
 
-    /**
-     * Spelaren försöker fly från striden
-     */
     public CombatResult attemptFlee(Player player, Enemy enemy) {
-        // Använd konstant för fly-chans
+        // Use constant for escape chance
         boolean success = RandomGenerator.rollPercent(Constants.FLEE_SUCCESS_CHANCE);
 
         if (success) {
             return new CombatResult(false, false,
                     "🏃 Du lyckas fly från " + enemy.getName() + "!", null);
         } else {
-            // Misslyckad flykt - fienden får attackera
+            // Failed escape - the enemy is allowed to attack
             StringBuilder result = new StringBuilder();
             result.append("❌ Du misslyckades att fly! ")
                     .append(enemy.getName()).append(" hinner ikapp dig!\n");
@@ -101,14 +90,12 @@ public class CombatService {
         }
     }
 
-    /**
-     * Resultat av en stridhandling
-     */
+
     public static class CombatResult {
-        private final boolean inCombat;      // Är striden fortfarande aktiv?
-        private final boolean gameEnded;     // Slutade spelet (spelare död)?
-        private final String message;       // Meddelande att visa
-        private final Enemy enemy;          // Fienden (null om striden är över)
+        private final boolean inCombat;
+        private final boolean gameEnded;
+        private final String message;
+        private final Enemy enemy;
 
         public CombatResult(boolean inCombat, boolean gameEnded, String message, Enemy enemy) {
             this.inCombat = inCombat;

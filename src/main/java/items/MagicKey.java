@@ -4,7 +4,7 @@ import entities.Item;
 import entities.Player;
 
 /**
- * Magisk nyckel - kan öppna magiska dörrar och skrin
+ * Magic key - can open magical doors and chests
  */
 public class MagicKey extends Item {
 
@@ -20,7 +20,4 @@ public class MagicKey extends Item {
                 "Använd 'unlock' kommandot framför magiska dörrar eller skrin.";
     }
 
-    public boolean canUnlockMagic() {
-        return true;
-    }
 }

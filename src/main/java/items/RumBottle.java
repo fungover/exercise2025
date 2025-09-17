@@ -4,7 +4,7 @@ import entities.Item;
 import entities.Player;
 
 /**
- * Rom-flaska - läker spelaren (piraternas hälsodryck!)
+ * Rum bottle - heals the player (pirate's health potion!)
  */
 public class RumBottle extends Item {
     private int healingAmount;

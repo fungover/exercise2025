@@ -1,23 +1,23 @@
 package entities;
 
+/**
+ * @author Jörgen Lindström
+ * @version 1.0
+ */
+
 import items.MagicKey;
-import interfaces.Combatable;
-import interfaces.Displayable;
-import interfaces.Positionable;
 import utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Spelarklassen utökad med inventarium och föremålshantering
- */
+
 public class Player extends Entity {
     // Inventarium - en lista av föremål
     private List<Item> inventory;
     private int maxInventorySize;
     private int damageBonus; // Extra skada från vapen
 
-    // Konstruktor
+    // Constructor
     public Player(String name, int maxHealth, int damage) {
         super(name, maxHealth, damage);
         this.inventory = new ArrayList<>();
@@ -25,15 +25,15 @@ public class Player extends Entity {
         this.damageBonus = 0; // Börjar utan extra skada
     }
 
-    // Implementerar abstract metod från Entity - DENNA ÄR VIKTIG!
+    // Implementing abstract metod from Entity
     @Override
     public String getDescription() {
-        return "En modig piratkapten vid namn " + getName() +
+        return "Du är nu en modig piratkapten vid namn " + getName() +
                 " med " + getCurrentHealth() + "/" + getMaxHealth() + " hälsa och " +
                 getTotalDamage() + " i total skada.";
     }
 
-    // Lägg till föremål i inventarium
+    // Add items to inventory
     public boolean addItem(Item item) {
         if (inventory.size() >= maxInventorySize) {
             return false; // Inventariet är fullt
@@ -42,22 +42,22 @@ public class Player extends Entity {
         return true;
     }
 
-    // Ta bort föremål från inventarium
+    // Remove items from inventory
     public boolean removeItem(Item item) {
         return inventory.remove(item);
     }
 
-    // Hitta föremål i inventarium baserat på namn
+    // Find items in inventory based on name
     public Item findItem(String itemName) {
         for (Item item : inventory) {
             if (item.getName().toLowerCase().contains(itemName.toLowerCase())) {
                 return item;
             }
         }
-        return null; // Föremålet hittades inte
+        return null;
     }
 
-    // Använd ett föremål
+    // Use an item
     public String useItem(String itemName) {
         Item item = findItem(itemName);
 
@@ -65,10 +65,10 @@ public class Player extends Entity {
             return "Du har inget föremål som heter '" + itemName + "' i ditt inventarium.";
         }
 
-        // Använd föremålet
+        // Use an item
         String result = item.use(this);
 
-        // Om föremålet är consumable (förbrukas), ta bort det från inventarium
+        // If the item is consumable, remove it from inventory.
         if (item.isConsumable()) {
             removeItem(item);
         }
@@ -76,7 +76,7 @@ public class Player extends Entity {
         return result;
     }
 
-    // Visa inventarium
+    // show inventory
     public String showInventory() {
         if (inventory.isEmpty()) {
             return "Ditt inventarium är tomt.";
@@ -92,19 +92,19 @@ public class Player extends Entity {
         return sb.toString();
     }
 
-    // Läk spelaren (används av rom-flaskor) - override från Entity för specifik logik
+    // Heal the player (used by rum bottles) - override from Entity for specific logic
     @Override
     public void heal(int amount) {
         int newHealth = Math.min(getCurrentHealth() + amount, getMaxHealth());
         setCurrentHealth(newHealth);
     }
 
-    // Lägg till skadebonus från vapen
+    // Add damage bonus from weapons
     public void addDamageBonus(int bonus) {
         this.damageBonus += bonus;
     }
 
-    // Ta bort skadebonus från vapen
+    // Remove damage bonus from weapons
     public void removeDamageBonus(int bonus) {
         this.damageBonus -= bonus;
         if (this.damageBonus < 0) {
@@ -112,7 +112,7 @@ public class Player extends Entity {
         }
     }
 
-    // Få total skada (bas + bonus)
+    // Receive total damage (base + bonus)
     public int getTotalDamage() {
         return getDamage() + damageBonus;
     }
@@ -130,7 +130,7 @@ public class Player extends Entity {
         return damageBonus;
     }
 
-    // Kontrollera om spelaren har en magisk nyckel
+    // Check if the player has a magic key
     public boolean hasMagicKey() {
         for (Item item : inventory) {
             if (item instanceof MagicKey) {
@@ -140,7 +140,7 @@ public class Player extends Entity {
         return false;
     }
 
-    // Metoder som PirateCave behöver
+    // Methods that PirateCave needs
     public int[] getDisplayPosition() {
         // Konverterar spelposition till display-koordinater
         int displayX = getX() * 2 + 1;
@@ -148,15 +148,14 @@ public class Player extends Entity {
         return new int[]{displayX, displayY};
     }
 
-    // Implementerar Combatable interface
+    // Implements Combatable interface
     public int attack() {
         return getTotalDamage();
     }
 
-    // Implementerar Displayable interface
+    // Implements Displayable interface
     public char getSymbol() {
         return Constants.PLAYER_SYMBOL;
     }
 
-    // Implementerar Positionable interface (ärvs redan från Entity, men för tydlighet)
 }

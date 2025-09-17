@@ -3,7 +3,7 @@ package interfaces;
 import entities.Player;
 
 /**
- * Interface för föremål som kan utrustas
+ * Interface for equippable items
  */
 public interface Equippable {
     void equip(Player player);

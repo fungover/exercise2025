@@ -4,7 +4,7 @@ import entities.Enemy;
 import entities.Player;
 
 /**
- * Pirate - en rival pirat med svärd och pistol
+ * Pirate - a rival pirate with sword and gun
  */
 public class Pirate extends Enemy {
     private boolean hasPistol;
@@ -22,14 +22,14 @@ public class Pirate extends Enemy {
     @Override
     public String getSpecialAttack(Player player) {
         if (hasPistol) {
-            // Pistol shot - mycket hög skada men pistolen blir tom
+            // Pistol shot - very high damage but the gun will be empty
             int pistolDamage = getDamage() + 8;
             player.takeDamage(pistolDamage);
             hasPistol = false;
             return "Piraten skjuter med sin pistol! BANG! Du tar " + pistolDamage +
                     " skada! (Pistolen är nu tom)";
         } else {
-            // Desperate slash - hög skada när han är desperat
+            // Desperate slash - high damage when he is desperate
             int slashDamage = getDamage() + 4;
             player.takeDamage(slashDamage);
             return "Piraten gör en desperat hugg med sabeln! Du tar " + slashDamage + " skada!";
@@ -47,7 +47,4 @@ public class Pirate extends Enemy {
         return messages[(int)(Math.random() * messages.length)];
     }
 
-    public boolean hasPistol() {
-        return hasPistol;
-    }
 }

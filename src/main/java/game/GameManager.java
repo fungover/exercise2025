@@ -1,5 +1,10 @@
 package game;
 
+/**
+ * @author Jörgen Lindström
+ * @version 1.0
+ */
+
 import entities.Player;
 import entities.Item;
 import entities.Enemy;
@@ -11,12 +16,6 @@ import service.CombatService;
 import enemies.EnemyFactory;
 import utils.Constants;
 
-/**
- * GameManager är "chefen" som styr hela spelet
- *
- * @author Jörgen Lindström
- * @version 1.0
- */
 public class GameManager {
     private PirateCave cave;
     private Player player;
@@ -28,7 +27,8 @@ public class GameManager {
     private CombatService.CombatResult currentCombat; // Pågående strid
 
     public GameManager() {
-        // Fråga efter användarens namn
+
+        // Ask for the user's name
         String playerName = askForPlayerName();
 
         cave = new PirateCave(Constants.DEFAULT_MAP_WIDTH, Constants.DEFAULT_MAP_HEIGHT);
@@ -40,17 +40,14 @@ public class GameManager {
         gameRunning = true;
         currentCombat = null;
 
-        System.out.println("🎮 GameManager startad!");
-        System.out.println("📍 Piratgrotta skapad: " + Constants.DEFAULT_MAP_WIDTH + "x" + Constants.DEFAULT_MAP_HEIGHT + " spelrutor");
+        System.out.println("📍 En skattkarta är skapad med: " + Constants.DEFAULT_MAP_WIDTH + "x" + Constants.DEFAULT_MAP_HEIGHT + " spelrutor");
 
-        // Placera ut föremål och fiender
+        // Place objects and enemies
         placeInitialItems();
         placeInitialEnemies();
     }
 
-    /**
-     * Frågar användaren efter deras namn
-     */
+
     private String askForPlayerName() {
         java.util.Scanner nameScanner = new java.util.Scanner(System.in);
 
@@ -60,44 +57,40 @@ public class GameManager {
 
         String firstName = nameScanner.nextLine().trim();
 
-        // Kontrollera att namnet inte är tomt
+        // Place objects and enemies
         while (firstName.isEmpty()) {
             System.out.print("Du måste ange ett namn. Försök igen: ");
             firstName = nameScanner.nextLine().trim();
         }
 
-        // Gör första bokstaven stor
+        // Capitalize the first letter
         firstName = firstName.substring(0, 1).toUpperCase() +
                 firstName.substring(1).toLowerCase();
 
-        System.out.println("\nVälkommen, Du är nu Kapten " + firstName + "! Ditt äventyr börjar här och nu...");
+        System.out.println("\nVälkommen, Kapten " + firstName + "! Ditt äventyr börjar här och nu...");
 
         return firstName;
     }
-    /**
-     * Placerar ut några föremål på kartan för att testa systemet
-     */
+
     private void placeInitialItems() {
-        // Använd PirateTreasureFactory för att skapa föremål
+        // Use PirateTreasureFactory to create items
         cave.placeItem(PirateTreasureFactory.createLargeGoldCoin(), 2, 1);
         cave.placeItem(PirateTreasureFactory.createMagicKey(), 4, 2);
         cave.placeItem(PirateTreasureFactory.createStrongRum(), 1, 3);
         cave.placeItem(PirateTreasureFactory.createJewelBox(), 3, 3);
         cave.placeItem(PirateTreasureFactory.createPirateSaber(), 4, 0);
 
-        System.out.println("💎 Föremål utplacerade på kartan!");
+        System.out.println("Föremål har blivit utplacerade på kartan!");
     }
 
-    /**
-     * Placerar fiender på kartan
-     */
+
     private void placeInitialEnemies() {
-        // Placera några specifika fiender
+        // Place some specific enemies
         cave.placeEnemy(EnemyFactory.createSkeleton(), 3, 1);
         cave.placeEnemy(EnemyFactory.createSpider(), 2, 3);
         cave.placeEnemy(EnemyFactory.createPirate(), 4, 3);
 
-        // Slumpmässigt placera ytterligare fiender
+        // Randomly place additional enemies
         cave.populateWithEnemies(2);
     }
 
@@ -110,25 +103,23 @@ public class GameManager {
         System.out.println("\n🎮 Du kan nu styra din spelare och plocka upp föremål!");
         inputHandler.showHelp();
 
-        // Starta spelloop
+        // Start game loop
         gameLoop();
 
-        // Stäng resurser
+        // Close resources
         inputHandler.close();
     }
 
-    /**
-     * Huvudspelloop - här händer magin!
-     */
+
     private void gameLoop() {
         while (gameRunning) {
             String command = inputHandler.readCommand();
 
-            // Om spelaren är i strid, hantera stridkommandon
+            // If the player is in combat, handle combat commands
             if (currentCombat != null && currentCombat.isInCombat()) {
                 handleCombatCommand(command);
             } else {
-                // Normal spelloop
+                // Normal game loop
                 if (inputHandler.isQuitCommand(command)) {
                     handleQuit();
                 }
@@ -156,39 +147,35 @@ public class GameManager {
                     if (direction != null) {
                         handleMovement(direction);
                     } else {
-                        System.out.println("❓ Okänt kommando: '" + command + "'. Skriv 'help' för hjälp.");
+                        System.out.println("Okänt kommando: '" + command + "'. Skriv 'help' för hjälp.");
                     }
                 }
             }
         }
     }
 
-    /**
-     * Hanterar rörelse med hjälp av MovementService
-     */
+
     private void handleMovement(InputHandler.Direction direction) {
         MovementService.MovementResult result = movementService.movePlayer(player, cave, direction);
 
         System.out.println(result.getMessage());
 
         if (result.isSuccess()) {
-            // Visa uppdaterad karta
+            //Show updated map
             showMap();
 
-            // Kolla om det finns föremål här
+            // Check if there are items here
             checkForItems();
 
-            // Kolla om det finns fiender här
+            // Check if there are enemies here.
             checkForEnemies();
 
-            // Visa möjliga riktningar
+            // Show possible directions
             showAvailableDirections();
         }
     }
 
-    /**
-     * Kontrollerar om det finns föremål på spelarens position
-     */
+
     private void checkForItems() {
         if (cave.hasItemAt(player.getX(), player.getY())) {
             Item item = cave.getItemAt(player.getX(), player.getY());
@@ -196,9 +183,7 @@ public class GameManager {
         }
     }
 
-    /**
-     * Kontrollerar om det finns fiender på spelarens position
-     */
+
     private void checkForEnemies() {
         if (cave.hasEnemyAt(player.getX(), player.getY())) {
             Enemy enemy = cave.getEnemyAt(player.getX(), player.getY());
@@ -206,18 +191,16 @@ public class GameManager {
         }
     }
 
-    /**
-     * Hanterar attack-kommando
-     */
+
     private void handleAttackCommand() {
         Enemy enemy = cave.getEnemyAt(player.getX(), player.getY());
 
         if (enemy == null) {
-            System.out.println("❌ Det finns ingen fiende här att attackera.");
+            System.out.println("Det finns ingen fiende här att attackera.");
             return;
         }
 
-        // Starta strid
+        // Start battle
         currentCombat = combatService.startCombat(player, enemy);
         System.out.println(currentCombat.getMessage());
 
@@ -228,9 +211,7 @@ public class GameManager {
         }
     }
 
-    /**
-     * Hanterar kommandon under strid
-     */
+
     private void handleCombatCommand(String command) {
         if (currentCombat == null || !currentCombat.isInCombat()) {
             return;
@@ -244,16 +225,16 @@ public class GameManager {
 
             if (currentCombat.isGameEnded()) {
                 if (player.isAlive()) {
-                    // Fienden dog - ta bort från kartan
+                    // Enemy died - remove from map
                     cave.removeEnemyAt(enemy.getX(), enemy.getY());
                     System.out.println("💀 " + enemy.getName() + " försvinner från kartan.");
                     currentCombat = null;
                 } else {
-                    // Spelaren dog - avsluta spelet
+                    // Player died - end the game
                     gameRunning = false;
                 }
             } else if (!currentCombat.isInCombat()) {
-                // Striden avslutades av annan anledning
+                // The battle ended for another reason
                 currentCombat = null;
             }
         }
@@ -281,13 +262,10 @@ public class GameManager {
             System.out.println("   'use [föremål]' - Använd föremål (t.ex. 'use rom')");
         }
         else {
-            System.out.println("❓ Ogiltigt stridkommando. Skriv 'help' för hjälp.");
+            System.out.println("Ogiltigt stridskomando. Skriv 'help' för hjälp.");
         }
     }
 
-    /**
-     * Hanterar upplockning av föremål
-     */
     private void handlePickup() {
         Item item = cave.removeItemAt(player.getX(), player.getY());
 
@@ -296,44 +274,39 @@ public class GameManager {
             return;
         }
 
-        // Försök lägga till i inventory med InventoryService
+        // Try adding to inventory with InventoryService
         InventoryService.InventoryResult result = inventoryService.addItem(player, item);
 
         if (result.isSuccess()) {
-            System.out.println("✅ Du plockar upp " + item.getName() + "!");
-            System.out.println("📦 " + item.getDescription());
+            System.out.println("Du plockar upp " + item.getName() + "!");
+            System.out.println(item.getDescription());
 
-            // Visa uppdaterad karta (föremålet är nu borta)
+            // Show updated map (the item is now gone)
             showMap();
         } else {
-            // Inventory fullt - lägg tillbaka föremålet
+            // Inventory full - put the item back
             cave.placeItem(item, player.getX(), player.getY());
             System.out.println(result.getMessage());
             System.out.println("Föremålet lämnades kvar på marken.");
         }
     }
 
-    /**
-     * Hanterar inventory-kommando
-     */
     private void handleInventory() {
         String inventoryDisplay = inventoryService.getInventoryDisplay(player);
         System.out.println("\n" + inventoryDisplay);
     }
 
-    /**
-     * Hanterar användning av föremål
-     */
+
     private void handleUseItem(String itemName) {
         String result = player.useItem(itemName);
         System.out.println("\n" + result);
     }
 
     /**
-     * Hanterar "look" kommando för att undersöka området
+     *  Handles "look" command to examine the area
      */
     private void handleLook() {
-        System.out.println("\n🔍 Du undersöker området...");
+        System.out.println("\nDu undersöker området...");
 
         // Beskrivning av nuvarande plats
         int displayX = player.getX() * 2 + 1;
@@ -344,13 +317,11 @@ public class GameManager {
             System.out.println("📍 " + tile.getFullDescription());
         }
 
-        // Lista föremål i närheten
+        // List nearby objects
         listNearbyItems();
     }
 
-    /**
-     * Listar föremål i närliggande rutor
-     */
+
     private void listNearbyItems() {
         System.out.println("\n👀 Föremål i närheten:");
         boolean foundAny = false;
@@ -375,7 +346,7 @@ public class GameManager {
     }
 
     /**
-     * Konverterar dx, dy till riktningsbeskrivning
+     * Converts dx, dy to direction description
      */
     private String getDirectionDescription(int dx, int dy) {
         if (dx == 0 && dy == 0) return "Här";
@@ -390,16 +361,14 @@ public class GameManager {
         return "Okänd riktning";
     }
 
-    /**
-     * Visar vilka riktningar spelaren kan gå
-     */
+
     private void showAvailableDirections() {
         var directions = movementService.getAvailableDirections(player, cave);
 
         if (directions.isEmpty()) {
-            System.out.println("🚫 Du är instängd!");
+            System.out.println("Tyvärr! Du är instängd!");
         } else {
-            System.out.print("🧭 Du kan gå: ");
+            System.out.print("Du kan gå: ");
             for (int i = 0; i < directions.size(); i++) {
                 if (i > 0) System.out.print(", ");
                 System.out.print(directions.get(i).name().toLowerCase());
@@ -409,10 +378,10 @@ public class GameManager {
     }
 
     /**
-     * Hanterar avslutning av spelet
+     * Handles game termination
      */
     private void handleQuit() {
-        System.out.println("👋 Tack för att du spelade! Farväl, " + player.getName() + "!");
+        System.out.println("👋 Tack för att du spelade! På återseende, " + player.getName() + "!");
         gameRunning = false;
     }
 

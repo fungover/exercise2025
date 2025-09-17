@@ -6,8 +6,8 @@ import entities.Enemy;
 public class Tile {
     private char symbol;
     private String description;
-    private Item item; // Föremål på denna tile (null om inget)
-    private Enemy enemy; // Fiende på denna tile (null om ingen)
+    private Item item;
+    private Enemy enemy;
 
     public Tile(char symbol, String description) {
         this.symbol = symbol;
@@ -16,7 +16,7 @@ public class Tile {
         this.enemy = null;
     }
 
-    // === FÖREMÅLSHANTERING ===
+    // === OBJECT HANDLING ===
     public void placeItem(Item item) {
         this.item = item;
     }
@@ -35,12 +35,11 @@ public class Tile {
         return item;
     }
 
-    // === FIENDEHANTERING ===
+    // === ENEMY MANAGEMENT ===
     public void placeEnemy(Enemy enemy) {
         this.enemy = enemy;
         if (enemy != null) {
-            // Sätt fiendens position till denna tiles koordinater
-            // (detta kommer att behövas senare för strid)
+            // Set the enemy's position to this tile's coordinates
         }
     }
 
@@ -58,9 +57,9 @@ public class Tile {
         return enemy;
     }
 
-    // === DISPLAY OCH NAVIGATION ===
+    // === DISPLAY AND NAVIGATION ===
     public char getDisplaySymbol() {
-        // Prioritetsordning: Fiende > Föremål > Normal symbol
+        // Priority order: Enemy > Item > Normal symbol
         if (hasEnemy()) {
             return enemy.getSymbol();
         } else if (hasItem()) {
@@ -89,12 +88,12 @@ public class Tile {
         return description;
     }
 
-    // Spelaren kan gå hit om det inte finns en levande fiende
+    // The player can go here if there is no living enemy
     public boolean canWalkOn() {
         return symbol == ' ' && !hasEnemy();
     }
 
-    // Kan placera föremål/fiender här
+    // Can place items/enemies here
     public boolean canPlaceThings() {
         return symbol == ' ';
     }

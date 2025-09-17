@@ -3,7 +3,7 @@ package interfaces;
 import entities.Player;
 
 /**
- * Interface för föremål som kan användas
+ * Interface for usable objects
  */
 public interface Usable {
     String use(Player player);

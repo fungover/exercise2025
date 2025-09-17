@@ -4,7 +4,7 @@ import entities.Item;
 import entities.Player;
 
 /**
- * Gammalt svärd - kan användas som vapen
+ * Old sword - can be used as a weapon
  */
 public class OldSword extends Item {
     private int damageBonus;
@@ -30,10 +30,6 @@ public class OldSword extends Item {
             player.removeDamageBonus(damageBonus);
             return "Du stoppar undan " + getName() + ". Du är inte längre beväpnad.";
         }
-    }
-
-    public int getDamageBonus() {
-        return damageBonus;
     }
 
     public boolean isEquipped() {

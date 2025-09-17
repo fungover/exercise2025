@@ -13,7 +13,7 @@ public abstract class Entity {
     public Entity(String name, int maxHealth, int damage) {
         this.name = name;
         this.maxHealth = maxHealth;
-        this.currentHealth = maxHealth; // Börjar vid full hälsa
+        this.currentHealth = maxHealth;
         this.damage = damage;
         this.x = 0;
         this.y = 0;

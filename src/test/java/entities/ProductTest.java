@@ -61,7 +61,7 @@ public class ProductTest {
     }
 
     @Test
-    void getAllProducts() {
+    void getAllProductsTest() {
         Warehouse warehouse = new Warehouse();
         LocalDateTime now = LocalDateTime.now();
 
@@ -76,6 +76,18 @@ public class ProductTest {
         assertEquals(2, products.size());
         assertTrue(products.contains(p1));
         assertTrue(products.contains(p2));
+    }
+
+    @Test
+    public void getProductsByIdTest(){
+        Warehouse warehouse = new Warehouse();
+        LocalDateTime now = LocalDateTime.now();
+        Product product = new Product(56, "Book", Category.BOOKS, 5, now, now);
+        Product product2 = new Product(78, "Book", Category.BOOKS, 5, now, now);
+
+        assertEquals(56, product.getId());
+        assertEquals(78, product2.getId());
+
     }
 
 

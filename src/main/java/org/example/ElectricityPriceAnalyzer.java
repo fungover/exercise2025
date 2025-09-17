@@ -21,7 +21,7 @@ public class ElectricityPriceAnalyzer {
 
     public static void printCheapestAndMostExpensiveToday(String zone) throws IOException, InterruptedException {
         Path csv = csvPathForZone(zone);
-        if (Files.exists(csv)) {
+        if (!Files.exists(csv)) {
             ElectricityPriceFetcher.downloadTodayAndTomorrow(zone);
         }
 

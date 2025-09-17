@@ -94,4 +94,20 @@ public class ProductTest {
         assertThrows(IllegalArgumentException.class, () ->
                 new Product("1", "Test", Category.ELECTRONICS, -1, LocalDate.now(), LocalDate.now()));
     }
+
+    @Test
+    void shouldCreateProductUsingBuilder() {
+        Product product = Product.builder()
+                .id("2")
+                .name("Test Product 2")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.of(2025, 9 , 25))
+                .build();
+
+        assertEquals("2", product.id());
+        assertEquals("Test Product 2", product.name());
+        assertEquals(Category.ELECTRONICS, product.category());
+        assertEquals(8, product.rating());
+    }
 }

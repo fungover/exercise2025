@@ -4,12 +4,13 @@ import org.example.entities.Category;
 import org.example.entities.DiscountDecorator;
 import org.example.entities.Product;
 import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
 import org.example.service.ProductService;
 
 public class App {
     public static void main(String[] args) {
-        InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
-        ProductService productService = new ProductService(inMemoryProductRepository);
+        ProductRepository repository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(repository);
 
         Product laptop = new Product.Builder()
                 .id("123")

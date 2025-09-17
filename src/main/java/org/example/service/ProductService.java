@@ -44,8 +44,15 @@ public class ProductService {
                                                 "Product not found"));
 
         //we keep id and createdDate, and update the rest
-        Product updated = new Product(existing.id(), name, category, rating,
-          existing.createdDate(), LocalDate.now());
+        Product updated = new Product.Builder().id(existing.id())
+                                               .name(name)
+                                               .category(category)
+                                               .rating(rating)
+                                               .createdDate(existing.createdDate())
+                                               .modifiedDate(LocalDate.now())
+                                               .build();
+//          (existing.id(), name, category, rating,
+//          existing.createdDate(), LocalDate.now());
 
         productRepository.updateProduct(updated);
     }

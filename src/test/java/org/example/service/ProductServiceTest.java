@@ -567,4 +567,13 @@ class ProductServiceTest {
         assertTrue(result.isEmpty());
     }
 
+    @Test void getPrice() {
+        Product hotdog = new Product.Builder().name("HotDog")
+                                              .category(Category.FOOD)
+                                              .rating(10)
+                                              .price(100)
+                                              .build();
+        System.out.println(hotdog.price());
+    }
+
 }

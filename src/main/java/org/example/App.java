@@ -3,7 +3,7 @@ package org.example;
 import org.example.entities.Category;
 import org.example.entities.Product;
 import org.example.repository.ProductRepository;
-import org.example.repository.inMemoryProductRepository;
+import org.example.repository.InMemoryProductRepository;
 import org.example.service.ProductService;
 
 import java.time.LocalDate;
@@ -13,7 +13,7 @@ import java.util.List;
 public class App {
     public static void main(String[] args) {
         // create repository
-        ProductRepository repository = new inMemoryProductRepository();
+        ProductRepository repository = new InMemoryProductRepository();
         //create service with repository
         ProductService productService = new ProductService(repository);
         var products = getWarehouseProducts();

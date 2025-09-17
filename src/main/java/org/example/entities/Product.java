@@ -4,7 +4,8 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record Product(Long id, String name, Category category, int rating,
-                      LocalDate createdDate, LocalDate modifiedDate) {
+                      LocalDate createdDate, LocalDate modifiedDate,
+                      double price) implements Sellable {
 
     private static long idCounter = 1;
 
@@ -12,9 +13,11 @@ public record Product(Long id, String name, Category category, int rating,
     private Product(String name, Category category, int rating) {
         if (rating < 0 || rating > 10) {
             throw new IllegalArgumentException("rating should be between 0 and 10");
-
         }
-        this(idCounter++, name, category, rating, LocalDate.now(), LocalDate.now());
+        double price = 0.0;
+
+        this(idCounter++, name, category, rating, LocalDate.now(), LocalDate.now(),
+          price);
     }
 
     //test constructor to give other dates.
@@ -23,7 +26,8 @@ public record Product(Long id, String name, Category category, int rating,
         if (rating < 0 || rating > 10) {
             throw new IllegalArgumentException("rating should be between 0 and 10");
         }
-        this(idCounter++, name, category, rating, createdDate, createdDate);
+        double price = 0.0;
+        this(idCounter++, name, category, rating, createdDate, createdDate, price);
     }
 
     //builder
@@ -34,6 +38,7 @@ public record Product(Long id, String name, Category category, int rating,
         private int rating;
         private LocalDate createdDate;
         private LocalDate modifiedDate;
+        private double price;
 
         public Builder id(Long id) {
             this.id = id;
@@ -42,6 +47,11 @@ public record Product(Long id, String name, Category category, int rating,
 
         public Builder name(String name) {
             this.name = name;
+            return this;
+        }
+
+        public Builder price(double price) {
+            this.price = price;
             return this;
         }
 
@@ -87,11 +97,25 @@ public record Product(Long id, String name, Category category, int rating,
             LocalDate created = (createdDate != null) ? createdDate : now;
             LocalDate modified = (modifiedDate != null) ? modifiedDate : now;
 
-            return new Product(newId, name, category, rating, created, modified);
+            return new Product(newId, name, category, rating, created, modified,
+              price);
         }
 
 
     }
+
+    @Override public String getName() {
+        return name;
+    }
+
+    @Override public double getPrice() {
+        return price;
+    }
+
+    @Override public String getId() {
+        return id.toString();
+    }
+
 
     @Override public String toString() {
         return String.format(

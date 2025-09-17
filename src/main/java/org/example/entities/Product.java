@@ -1,6 +1,5 @@
 package org.example.entities;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Product implements Sellable {
@@ -91,6 +90,7 @@ public class Product implements Sellable {
         private Category category;
         private int rating;
         private double price;
+        private boolean priceSet;
 
         public Builder id(String id) {
             this.id = id;
@@ -114,6 +114,7 @@ public class Product implements Sellable {
 
         public Builder price(double price) {
             this.price = price;
+            this.priceSet = true;
             return this;
         }
 
@@ -130,8 +131,8 @@ public class Product implements Sellable {
             if (rating < 1 || rating > 10) {
                 throw new IllegalArgumentException("Rating must be between 1 and 10");
             }
-            if (price < 0) {
-                throw new IllegalArgumentException("Price must be greater than or equal to zero");
+            if (!priceSet) {
+                throw new IllegalArgumentException("Price must be set");
             }
 
             return new Product(id, name, category, rating, price);

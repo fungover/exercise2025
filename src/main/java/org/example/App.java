@@ -38,7 +38,6 @@ public class App {
         productService.addProduct(product1);
         productService.addProduct(product2);
 
-        /*System.out.println(productService.getAllProducts());*/
         System.out.println(productService.getProductsByCategorySorted(Category.ELECTRONICS));
 
         Product laptop = productService.getProductByID("1").orElseThrow(() -> new IllegalArgumentException("Product with id 1 not found"));  // Original price is 1000.0

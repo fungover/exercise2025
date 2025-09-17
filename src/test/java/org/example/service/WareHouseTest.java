@@ -13,10 +13,10 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -229,10 +229,7 @@ class WareHouseTest {
         assertThat(found2).isNotNull();
         assertThat(found1.getId()).isEqualTo("97");
         assertThat(found2.getId()).isEqualTo("98");
-
-        assertThatThrownBy(() -> productService.getProductByID("1000"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Product with id 1000 does not exist");
+        assertThat(productService.getProductByID("1000")).isEqualTo(Optional.empty());
     }
 
     @Test

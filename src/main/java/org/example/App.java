@@ -1,11 +1,10 @@
 package org.example;
 
 
-import game.Game;
+import service.Warehouse;
 
 public class App {
     public static void main(String[] args) {
-        Game game = new Game();
-        game.run();
+        new Warehouse();
     }
 }

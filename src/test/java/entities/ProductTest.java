@@ -1,0 +1,50 @@
+package entities;
+
+import org.junit.jupiter.api.Test;
+import service.Warehouse;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ProductTest {
+
+    @Test
+    public void addProduct_sizeIncreasesByOne() {
+        Warehouse warehouse = new Warehouse();
+        LocalDateTime dateTime = LocalDateTime.now();
+        Product product = new Product(1, "Book", Category.BOOKS, 8, dateTime, dateTime);
+
+        warehouse.addProduct(product);
+
+        assertEquals(1, warehouse.getProducts().size());
+        assertEquals(product, warehouse.getProducts().getFirst());
+    }
+
+    @Test
+    public void addProduct_throwsExceptionWhenNameIsEmpty() {
+        Warehouse warehouse = new Warehouse();
+        LocalDateTime now = LocalDateTime.of(2023, 1, 1, 12, 0);
+        Product product = new Product(2, "", Category.BOOKS, 5, now, now);
+
+        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
+    }
+
+    // updateProduct(String id, String name, Category category, int rating): Modify an existing product
+    @Test
+    void updateProduct_failsWhenProductNotFound() {
+        Warehouse warehouse = new Warehouse();
+
+        assertThrows(NoSuchElementException.class, () ->
+                warehouse.updateProduct(99, "Name", Category.BOOKS, 5)
+        );
+    }
+
+
+
+
+
+}
+

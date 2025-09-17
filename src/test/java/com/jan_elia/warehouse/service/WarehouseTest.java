@@ -2,6 +2,8 @@ package com.jan_elia.warehouse.service;
 
 import com.jan_elia.warehouse.entities.Category;
 import com.jan_elia.warehouse.entities.Product;
+import com.jan_elia.warehouse.repository.InMemoryProductRepository;
+import com.jan_elia.warehouse.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,17 +14,19 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ProductServiceTest {
+public class WarehouseTest {
 
     private final Clock fixedClock = Clock.fixed(
             LocalDate.of(2025, 1, 2).atStartOfDay(ZoneId.systemDefault()).toInstant(),
             ZoneId.systemDefault()
     );
+
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(fixedClock);
+        ProductRepository repository = new InMemoryProductRepository();
+        productService = new ProductService(fixedClock, repository);
     }
 
     private Product makeProduct(String id, String name, Category category, int rating, LocalDate created, LocalDate modified) {
@@ -35,7 +39,6 @@ public class ProductServiceTest {
                 .modifiedDate(modified)
                 .build();
     }
-
 
     // ---- addProduct ----
     @Test
@@ -53,23 +56,44 @@ public class ProductServiceTest {
 
     @Test
     void addProduct_failure_blankName() {
-        Product p = makeProduct("2", " ", Category.FOOD, 5,
-                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(p));
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Product.Builder()
+                    .id("2")
+                    .name(" ") // invalid
+                    .category(Category.FOOD)
+                    .rating(5)
+                    .createdDate(LocalDate.of(2025, 1, 1))
+                    .modifiedDate(LocalDate.of(2025, 1, 1))
+                    .build();
+        });
     }
 
     @Test
     void addProduct_failure_nullCategory() {
-        Product p = makeProduct("3", "Banana", null, 5,
-                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(p));
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Product.Builder()
+                    .id("3")
+                    .name("Banana")
+                    .category(null) // invalid
+                    .rating(5)
+                    .createdDate(LocalDate.of(2025, 1, 1))
+                    .modifiedDate(LocalDate.of(2025, 1, 1))
+                    .build();
+        });
     }
 
     @Test
     void addProduct_failure_invalidRating() {
-        Product p = makeProduct("4", "Orange", Category.FOOD, 11,
-                LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 1));
-        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(p));
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Product.Builder()
+                    .id("4")
+                    .name("Orange")
+                    .category(Category.FOOD)
+                    .rating(11) // invalid
+                    .createdDate(LocalDate.of(2025, 1, 1))
+                    .modifiedDate(LocalDate.of(2025, 1, 1))
+                    .build();
+        });
     }
 
     @Test
@@ -81,6 +105,7 @@ public class ProductServiceTest {
         productService.addProduct(p1);
         assertThrows(IllegalArgumentException.class, () -> productService.addProduct(p2));
     }
+
     // ---- getProductById ----
     @Test
     void getProductById_success() {
@@ -186,8 +211,8 @@ public class ProductServiceTest {
         Product updated = productService.getProductById("50");
         assertEquals("New", updated.getName());
         assertEquals(7, updated.getRating());
-        assertEquals(LocalDate.of(2025, 1, 1), updated.getCreatedDate()); // same createdDate
-        assertEquals(LocalDate.now(fixedClock), updated.getModifiedDate()); // modified updated
+        assertEquals(LocalDate.of(2025, 1, 1), updated.getCreatedDate());
+        assertEquals(LocalDate.now(fixedClock), updated.getModifiedDate());
     }
 
     @Test
@@ -242,5 +267,4 @@ public class ProductServiceTest {
         List<Product> list = productService.getModifiedProducts();
         assertTrue(list.isEmpty());
     }
-
 }

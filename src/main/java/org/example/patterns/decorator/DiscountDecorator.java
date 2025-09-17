@@ -7,14 +7,14 @@ import java.math.RoundingMode;
 public class DiscountDecorator extends ProductDecorator {
     private final BigDecimal discountPercent;
 
-    public DiscountDecorator(Sellable decoratedProduct, double discountPercentage) {
+    public DiscountDecorator(Sellable decoratedProduct, double discountPercent) {
         super(decoratedProduct);
-        if (discountPercentage < 0 || discountPercentage > 100) {
+        if (discountPercent < 0 || discountPercent > 100) {
             throw new IllegalArgumentException("Discount percentage must be between 0 and 100: " +
-                    discountPercentage);
+                    discountPercent);
         }
 
-        this.discountPercent = BigDecimal.valueOf(discountPercentage);
+        this.discountPercent = BigDecimal.valueOf(discountPercent);
     }
 
     @Override

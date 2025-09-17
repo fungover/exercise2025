@@ -305,16 +305,19 @@ public class PirateCave {
     }
 
     // === COLLISION DETECTION ===
+
     public boolean canPlayerMoveTo(int gameX, int gameY) {
         if (!isValidGamePosition(gameX, gameY) || hasWallAt(gameX, gameY)) {
             return false;
         }
 
+        // Ta bort denna kontroll - låt spelaren gå till fiendens ruta
+        // if (hasEnemyAt(gameX, gameY)) return false;
+
         int displayX = gameX * 2 + 1;
         int displayY = gameY * 2 + 1;
-
         Tile tile = getTile(displayX, displayY);
-        return tile != null && tile.canWalkOn();
+        return tile != null;
     }
 
     // === RANDOM GENERATION ===

@@ -88,11 +88,6 @@ public class Tile {
         return description;
     }
 
-    // The player can go here if there is no living enemy
-    public boolean canWalkOn() {
-        return symbol == ' ' && !hasEnemy();
-    }
-
     // Can place items/enemies here
     public boolean canPlaceThings() {
         return symbol == ' ';

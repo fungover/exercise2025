@@ -18,12 +18,6 @@ public class Warehouse {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
-        if (product.name() == null || product.name().trim().isEmpty()) {
-            throw new IllegalArgumentException("Product name cannot be empty");
-        }
-        if (product.category() == null) {
-            throw new IllegalArgumentException("Product category cannot be null");
-        }
         products.add(product);
     }
 
@@ -65,25 +59,18 @@ public class Warehouse {
         if (existingProduct.isEmpty()) {
             throw new IllegalArgumentException("Product with id " + id + " not found");
         }
-
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Product name cannot be empty");
-        }
-        if (category == null) {
-            throw new IllegalArgumentException("Product category cannot be null");
-        }
         // Remove old product
         products.removeIf(product -> product.id().equals(id));
 
         // Create new product with updated values
-        Product updatedProduct = new Product(
-                id,
-                name,
-                category,
-                rating,
-                existingProduct.get().createdDate(),
-                LocalDate.now()
-        );
+        Product updatedProduct = Product.builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .createdDate(existingProduct.get().createdDate())
+                .modifiedDate(LocalDate.now())
+                .build();
 
         products.add(updatedProduct);
     }

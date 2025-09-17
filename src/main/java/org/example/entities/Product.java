@@ -78,7 +78,7 @@ public class Product {
     }
 
 
-    public Product(String id, String name, Category category, int rating, LocalDate createdDate) {
+    private Product(String id, String name, Category category, int rating, LocalDate createdDate) {
         validateRating(rating);
         this.id = id;
         this.name = name;
@@ -88,7 +88,7 @@ public class Product {
         this.modifiedDate = createdDate;
     }
 
-    public Product(String id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate) {
+    private Product(String id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate) {
         validateRating(rating);
         this.id = id;
         this.name = name;

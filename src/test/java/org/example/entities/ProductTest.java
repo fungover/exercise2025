@@ -26,7 +26,13 @@ public class ProductTest {
         createdDate = LocalDate.of(2025, 9, 8);
         modifiedDate = createdDate;
 
-        product = new Product(id, name, category, rating, createdDate);
+        product = Product.builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .createdDate(createdDate)
+                .build();
     }
 
     @Test
@@ -61,7 +67,13 @@ public class ProductTest {
         LocalDate createdDate = LocalDate.of(2025, 9, 8);
         modifiedDate = createdDate;
         // When
-        Product product = new Product(id, name, category, rating, createdDate);
+        product = Product.builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .createdDate(createdDate)
+                .build();
         // Then
         assertEquals(id, product.id());
         assertEquals(name, product.name());
@@ -85,13 +97,26 @@ public class ProductTest {
     @Test
     void shouldThrowExceptionForInvalidRatingInFiveParamConstructor() {
         assertThrows(IllegalArgumentException.class, () ->
-                new Product("1", "Test", Category.ELECTRONICS, 11, LocalDate.now()));
+                Product.builder()
+                        .id("1")
+                        .name("Test")
+                        .category(Category.ELECTRONICS)
+                        .rating(11)
+                        .createdDate(LocalDate.now())
+                        .build());
     }
 
     @Test
     void shouldThrowExceptionForInvalidRatingInSixParamConstructor() {
         assertThrows(IllegalArgumentException.class, () ->
-                new Product("1", "Test", Category.ELECTRONICS, -1, LocalDate.now(), LocalDate.now()));
+                Product.builder()
+                        .id("1")
+                        .name("Test")
+                        .category(Category.ELECTRONICS)
+                        .rating(-1)
+                        .createdDate(LocalDate.now())
+                        .modifiedDate(LocalDate.now())
+                        .build());
     }
 
     @Test
@@ -101,7 +126,7 @@ public class ProductTest {
                 .name("Test Product 2")
                 .category(Category.ELECTRONICS)
                 .rating(8)
-                .createdDate(LocalDate.of(2025, 9 , 25))
+                .createdDate(LocalDate.of(2025, 9, 25))
                 .build();
 
         assertEquals("2", product.id());
@@ -109,6 +134,7 @@ public class ProductTest {
         assertEquals(Category.ELECTRONICS, product.category());
         assertEquals(8, product.rating());
     }
+
     @Test
     void shouldThrowExceptionForMissingIdInBuilder() {
         assertThrows(IllegalArgumentException.class, () ->

@@ -21,7 +21,13 @@ public class WarehouseTest {
     @BeforeEach
     void setUp() {
         warehouse = new Warehouse();
-        product = new Product("1", "Test product", Category.ELECTRONICS, 8, LocalDate.now());
+        product = Product.builder()
+                .id("1")
+                .name("Test product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build();
     }
 
     @Test
@@ -38,7 +44,13 @@ public class WarehouseTest {
 
     @Test
     void shouldStoreAddedProduct() {
-        Product product = new Product("1", "Test product", Category.ELECTRONICS, 8, LocalDate.now());
+        product = Product.builder()
+                .id("1")
+                .name("Test product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build();
 
         warehouse.addProduct(product);
 
@@ -48,22 +60,15 @@ public class WarehouseTest {
     }
 
     @Test
-    void shouldNotAddProductWithEmptyName() {
-        Product productWithEmptyName = new Product("1", "", Category.ELECTRONICS, 8, LocalDate.now());
-
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(productWithEmptyName));
-    }
-
-    @Test
-    void shouldNotAddProductWithNullName() {
-        Product productWithNullName = new Product("1", null, Category.ELECTRONICS, 8, LocalDate.now());
-
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(productWithNullName));
-    }
-
-    @Test
     void shouldFindProductWithId() {
-        Product product = new Product("213", "Test product", Category.ELECTRONICS, 8, LocalDate.now());
+        Product product = Product.builder()
+                .id("213")
+                .name("Test product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build();
+
         warehouse.addProduct(product);
 
         Optional<Product> foundProduct = warehouse.getProductById("213");
@@ -81,9 +86,29 @@ public class WarehouseTest {
 
     @Test
     void shouldGetProductsByCategorySortedByName() {
-        Product electronics1 = new Product("1","Nokia 3310", Category.ELECTRONICS, 8, LocalDate.now());
-        Product electronics2 = new Product("2", "Apple iMac G3", Category.ELECTRONICS, 2, LocalDate.now());
-        Product sports = new Product("3", "Football - World Cup 1994", Category.SPORTS, 10, LocalDate.now());
+        Product electronics1 = Product.builder()
+                .id("1")
+                .name("Nokia 3310")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build();
+
+        Product electronics2 = Product.builder()
+                .id("2")
+                .name("Apple iMac G3")
+                .category(Category.ELECTRONICS)
+                .rating(2)
+                .createdDate(LocalDate.now())
+                .build();
+
+        Product sports = Product.builder()
+                .id("3")
+                .name("Football - World Cup 1994")
+                .category(Category.SPORTS)
+                .rating(10)
+                .createdDate(LocalDate.now())
+                .build();
 
         warehouse.addProduct(electronics1);
         warehouse.addProduct(electronics2);
@@ -98,7 +123,13 @@ public class WarehouseTest {
 
     @Test
     void shouldReturnEmptyListWhenNoCategoryMatches() {
-        warehouse.addProduct(new Product("1", "Test product", Category.ELECTRONICS, 8, LocalDate.now()));
+        warehouse.addProduct(Product.builder()
+                .id("1")
+                .name("Test product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build());
 
         List<Product> result = warehouse.getProductsByCategorySorted(Category.SPORTS);
 
@@ -108,9 +139,29 @@ public class WarehouseTest {
     @Test
     void shouldGetProductsCreatedAfterGivenDate() {
         LocalDate cutoffDate = LocalDate.of(2025, 9, 8);
-        Product oldProduct = new Product("1", "Test product", Category.ELECTRONICS, 3, LocalDate.of(2025, 9, 1));
-        Product newProduct1 = new Product("2", "New Product 1", Category.ELECTRONICS, 8, LocalDate.of(2025, 9, 10));
-        Product newProduct2 = new Product("3", "New Product 2", Category.SPORTS, 5, LocalDate.of(2025, 9, 15));
+        Product oldProduct = Product.builder()
+                .id("1")
+                .name("Old product")
+                .category(Category.ELECTRONICS)
+                .rating(3)
+                .createdDate(LocalDate.of(2025,9,1))
+                .build();
+
+        Product newProduct1 = Product.builder()
+                .id("2")
+                .name("New Product 1")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.of(2025,9,10))
+                .build();
+
+        Product newProduct2 = Product.builder()
+                .id("3")
+                .name("New Product 2")
+                .category(Category.SPORTS)
+                .rating(5)
+                .createdDate(LocalDate.of(2025,9,15))
+                .build();
 
         warehouse.addProduct(oldProduct);
         warehouse.addProduct(newProduct1);
@@ -126,7 +177,13 @@ public class WarehouseTest {
 
     @Test
     void shouldReturnEmptyListWhenNoProductsFoundAfterDate() {
-        warehouse.addProduct(new Product("1", "Test product", Category.ELECTRONICS, 3, LocalDate.of(2025, 1, 1)));
+        warehouse.addProduct(Product.builder()
+                .id("1")
+                .name("Test product")
+                .category(Category.ELECTRONICS)
+                .rating(3)
+                .createdDate(LocalDate.of(2025,1,1))
+                .build());
 
         List<Product> result = warehouse.getProductsCreatedAfter(LocalDate.of(2099, 12, 10));
 
@@ -138,8 +195,22 @@ public class WarehouseTest {
         LocalDate createdDate = LocalDate.of(2025, 9, 8);
         LocalDate modifiedDate = LocalDate.of(2025, 9, 15);
 
-        Product unmodifiedProduct = new Product("1", "Unmodified", Category.ELECTRONICS, 6, createdDate);
-        Product modifiedProduct = new Product("2", "Modified", Category.SPORTS, 7, createdDate, modifiedDate);
+        Product unmodifiedProduct = Product.builder()
+                .id("1")
+                .name("Unmodified")
+                .category(Category.ELECTRONICS)
+                .rating(6)
+                .createdDate(createdDate)
+                .build();
+
+        Product modifiedProduct = Product.builder()
+                .id("2")
+                .name("Modified")
+                .category(Category.SPORTS)
+                .rating(7)
+                .createdDate(createdDate)
+                .modifiedDate(modifiedDate)
+                .build();
 
         warehouse.addProduct(unmodifiedProduct);
         warehouse.addProduct(modifiedProduct);
@@ -153,7 +224,13 @@ public class WarehouseTest {
 
     @Test
     void shouldReturnEmptyListWhenNoModifiedProducts() {
-        warehouse.addProduct(new Product("1", "Test product", Category.ELECTRONICS, 3, LocalDate.of(2025, 1, 1)));
+        warehouse.addProduct(Product.builder()
+                .id("1")
+                .name("Test product")
+                .category(Category.ELECTRONICS)
+                .rating(3)
+                .createdDate(LocalDate.of(2025,1,1))
+                .build());
 
         List<Product> result = warehouse.getModifiedProducts();
 
@@ -162,7 +239,13 @@ public class WarehouseTest {
 
     @Test
     void shouldUpdateExistingProduct() {
-        Product originalProduct = new Product("1", "Old Product", Category.ELECTRONICS, 8, LocalDate.of(2025, 9, 1));
+        Product originalProduct = Product.builder()
+                .id("1")
+                .name("Old Product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.of(2025,9,1))
+                .build();
 
         warehouse.addProduct(originalProduct);
 
@@ -186,7 +269,14 @@ public class WarehouseTest {
 
     @Test
     void shouldThrowExceptionWhenUpdatingProductWithEmptyName() {
-        Product product = new Product("1", "Test product", Category.ELECTRONICS, 8, LocalDate.now());
+        Product product = Product.builder()
+                .id("1")
+                .name("Test product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build();
+
         warehouse.addProduct(product);
 
         assertThrows(IllegalArgumentException.class, () ->
@@ -195,9 +285,29 @@ public class WarehouseTest {
 
     @Test
     void shouldCountNumberOfProductsInCategory() {
-        warehouse.addProduct(new Product("1", "Test Product 1", Category.ELECTRONICS, 8, LocalDate.now()));
-        warehouse.addProduct(new Product("2", "Test Product 2", Category.ELECTRONICS, 8, LocalDate.now()));
-        warehouse.addProduct(new Product("3", "Test Product 3", Category.SPORTS, 8, LocalDate.now()));
+        warehouse.addProduct(Product.builder()
+                .id("1")
+                .name("Test Product 1")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("2")
+                .name("Test Product 2")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("3")
+                .name("Test Product 3")
+                .category(Category.SPORTS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build());
 
         int electronicsCount = warehouse.countProductsInCategory(Category.ELECTRONICS);
         int sportsCount = warehouse.countProductsInCategory(Category.SPORTS);
@@ -210,9 +320,29 @@ public class WarehouseTest {
 
     @Test
     void shouldGetCategoriesWithProductsIn() {
-        warehouse.addProduct(new Product("1", "Test Product 1", Category.ELECTRONICS, 8, LocalDate.now()));
-        warehouse.addProduct(new Product("2", "Test Product 2", Category.ELECTRONICS, 8, LocalDate.now()));
-        warehouse.addProduct(new Product("3", "Test Product 3", Category.SPORTS, 8, LocalDate.now()));
+        warehouse.addProduct(Product.builder()
+                .id("1")
+                .name("Test Product 1")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("2")
+                .name("Test Product 2")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("3")
+                .name("Test Product 3")
+                .category(Category.SPORTS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build());
 
         Set<Category> categories = warehouse.getCategoriesWithProducts();
 
@@ -224,10 +354,37 @@ public class WarehouseTest {
 
     @Test
     void shouldGetProductsInitialMap() {
-        warehouse.addProduct(new Product("1", "Mobile phone", Category.ELECTRONICS, 3, LocalDate.now()));
-        warehouse.addProduct(new Product("2", "TV 49-inch", Category.ELECTRONICS, 6, LocalDate.now()));
-        warehouse.addProduct(new Product("3", "Basketball", Category.SPORTS, 8, LocalDate.now()));
-        warehouse.addProduct(new Product("4", "Blue T-shirt", Category.CLOTHING, 2, LocalDate.now()));
+        warehouse.addProduct(Product.builder()
+                .id("1")
+                .name("Mobile phone")
+                .category(Category.ELECTRONICS)
+                .rating(3)
+                .createdDate(LocalDate.now())
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("2")
+                .name("TV 49-inch")
+                .category(Category.ELECTRONICS)
+                .rating(6)
+                .createdDate(LocalDate.now())
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("3")
+                .name("Basketball")
+                .category(Category.SPORTS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("4")
+                .name("Blue T-shirt")
+                .category(Category.CLOTHING)
+                .rating(2)
+                .createdDate(LocalDate.now())
+                .build());
 
         Map<Character, Integer> initialsMap = warehouse.getProductInitialsMap();
 
@@ -243,11 +400,37 @@ public class WarehouseTest {
         LocalDate thisMonth = LocalDate.now();
         LocalDate lastMonth = thisMonth.minusMonths(1);
 
-        Product product1 = new Product("1", "Test product 1", Category.ELECTRONICS, 10, thisMonth.minusDays(5));
-        Product product2 = new Product("2", "Test product 2", Category.CLOTHING, 5, thisMonth.minusDays(2));
-        Product product3 = new Product("3", "Test product 3", Category.SPORTS, 10, thisMonth.minusDays(1));
+        Product product1 = Product.builder()
+                .id("1")
+                .name("Test product 1")
+                .category(Category.ELECTRONICS)
+                .rating(10)
+                .createdDate(thisMonth.minusDays(5))
+                .build();
 
-        Product oldProduct = new Product("4", "Test product 4", Category.ELECTRONICS, 9, lastMonth);
+        Product product2 = Product.builder()
+                .id("2")
+                .name("Test product 2")
+                .category(Category.CLOTHING)
+                .rating(5)
+                .createdDate(thisMonth.minusDays(2))
+                .build();
+
+        Product product3 = Product.builder()
+                .id("3")
+                .name("Test product 3")
+                .category(Category.SPORTS)
+                .rating(10)
+                .createdDate(thisMonth.minusDays(1))
+                .build();
+
+        Product oldProduct = Product.builder()
+                .id("4")
+                .name("Test product 4")
+                .category(Category.ELECTRONICS)
+                .rating(9)
+                .createdDate(lastMonth)
+                .build();
 
         warehouse.addProduct(product1);
         warehouse.addProduct(product2);
@@ -264,7 +447,13 @@ public class WarehouseTest {
     @Test
     void shouldReturnEmptyListWhenNoTopRatedProductsThisMonth() {
         LocalDate lastMonth = LocalDate.now().minusMonths(1);
-        warehouse.addProduct(new Product("1", "Old Product", Category.ELECTRONICS, 3, lastMonth));
+        warehouse.addProduct(Product.builder()
+                .id("1")
+                .name("Old Product")
+                .category(Category.ELECTRONICS)
+                .rating(3)
+                .createdDate(lastMonth)
+                .build());
 
         List<Product> topRated = warehouse.getTopRatedProductsThisMonth();
 

@@ -37,7 +37,6 @@ public class App {
 
         //Not a factory method
         double sqrt = Math.sqrt(2.0);
-
     }
 
 

@@ -5,8 +5,12 @@ import entities.Category;
 import entities.Product;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collector;
+
+import static entities.Category.BOOK;
 
 public class Warehouse {
     private final List<Product> products = new ArrayList<>();
@@ -39,4 +43,18 @@ public class Warehouse {
     public List<Product> getAllProducts() {
         return new ArrayList<>(products);
     }
+
+    public List<Product> getProductsByCategorySorted(Category category) {
+        return products.stream()
+                .filter(p -> p.getCategory() == category)
+                .sorted(Comparator.comparing(Product::getName))
+                .toList();
+
+    }
+
+    public void getProductSorted(){
+
+    }
+
+
 }

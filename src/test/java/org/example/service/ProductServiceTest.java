@@ -282,6 +282,16 @@ class ProductServiceTest {
         assertTrue(toys.isEmpty()); // Verify that the result is an empty list
     }
 
+    @Test
+    @DisplayName("Should throw exception when getProductsByCategorySorted called with null category")
+    void getProductsByCategorySortedWithNullCategoryThrowsException() {
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
+                () -> productService.getProductsByCategorySorted(null)
+        );
+        assertEquals("category cannot be null", exception.getMessage());
+    }
+
     // ========================================
     // TESTS FOR getProductsCreatedAfter()
     // ========================================

@@ -25,8 +25,12 @@ public class InMemoryProductRepository implements ProductRepository {
      */
     @Override
     public void addProduct(Product product) {
-        Objects.requireNonNull(product, "Product cannot be null"); // Null check for product
-        products.put(product.id(), product); // Add product to the map, using product ID as the key.
+        Objects.requireNonNull(product, "Product cannot be null");
+        String id = product.id();
+        if (products.containsKey(id)) {
+            throw new IllegalArgumentException("Product with id " + id + " already exists");
+        }
+        products.put(id, product);
     }
 
     @Override

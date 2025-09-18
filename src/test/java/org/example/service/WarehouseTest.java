@@ -17,38 +17,31 @@ public class WarehouseTest {
 
     @Test
     public void testAddingProducts() {
-        warehouse.addProduct(new Product("23", "Pants",
-                Category.CLOTHES, 5, LocalDateTime.now(), null));
+        addNewProductToWarehouse("23", "Pants", Category.CLOTHES, 5);
 
         assertEquals(1, warehouse.getAllProducts().size());
     }
     @Test
     public void testAddingProductsWithoutName() {
         // A product's name attribute must not be empty.
-        warehouse.addProduct(new Product("34", "", Category.PROVISIONS,
-                0, LocalDateTime.now(), null));
-
-        assertEquals(0, warehouse.getAllProducts().size());
+        assertThatThrownBy(() -> addNewProductToWarehouse("34", "",
+                Category.PROVISIONS, 0))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     public void testGettingAllProducts() {
-        warehouse.addProduct(new Product("23", "Pants",
-                Category.CLOTHES, 9, LocalDateTime.now(), null));
-        warehouse.addProduct(new Product("24", "Shirt",
-                Category.CLOTHES, 8, LocalDateTime.now(), null));
-        warehouse.addProduct(new Product("25", "Hat",
-                Category.CLOTHES, 3, LocalDateTime.now(), null));
+        addNewProductToWarehouse("23", "Pants", Category.CLOTHES, 9);
+        addNewProductToWarehouse("24", "Shirt", Category.CLOTHES, 8);
+        addNewProductToWarehouse("25", "Hat", Category.CLOTHES, 3);
 
         assertEquals(3, warehouse.getAllProducts().size());
     }
 
     @Test
     public void testGettingProductById() {
-        warehouse.addProduct(new Product("23", "Pants",
-                Category.CLOTHES, 9, LocalDateTime.now(), null));
-        warehouse.addProduct(new Product("24", "Shirt",
-                Category.CLOTHES, 8, LocalDateTime.now(), null));
+        addNewProductToWarehouse("23", "Pants", Category.CLOTHES, 9);
+        addNewProductToWarehouse("24", "Shirt", Category.CLOTHES, 8);
 
         Product shirt = warehouse.getAllProducts().getLast();
 
@@ -63,12 +56,12 @@ public class WarehouseTest {
     @Test
     public void testGettingProductsByCategorySorted() {
         // Sorted by name A-Z.
-        Product pants = new Product("23", "Pants",
-                Category.CLOTHES, 9, LocalDateTime.now(), null);
-        Product shirt = new Product("24", "Shirt",
-                Category.CLOTHES, 8, LocalDateTime.now(), null);
-        Product hat = new Product("25", "Hat",
-                Category.CLOTHES, 3, LocalDateTime.now(), null);
+        Product pants =
+                returnNewProduct("23", "Pants", Category.CLOTHES, 9);
+        Product shirt =
+                returnNewProduct("24", "Shirt", Category.CLOTHES, 8);
+        Product hat =
+                returnNewProduct("25", "Hat", Category.CLOTHES, 3);
 
         warehouse.addProduct(pants); // index 0
         warehouse.addProduct(shirt); // index 1
@@ -84,10 +77,10 @@ public class WarehouseTest {
     }
     @Test
     public void testCannotFindProductsByCategory() {
-        Product raisins = new Product("53", "Raisins",
-                Category.PROVISIONS, 7, LocalDateTime.now(), null);
-        Product banana = new Product("54", "Banana",
-                Category.PROVISIONS, 8, LocalDateTime.now(), null);
+        Product raisins =
+                returnNewProduct("53", "Raisins", Category.PROVISIONS, 7);
+        Product banana =
+                returnNewProduct("54", "Banana", Category.PROVISIONS, 8);
 
         warehouse.addProduct(raisins); // index 0
         warehouse.addProduct(banana); // index 1
@@ -103,9 +96,7 @@ public class WarehouseTest {
 
     @Test
     public void testGetProductsCreatedAfterSpecifiedDate() {
-        warehouse.addProduct(new Product("53", "Raisins",
-                Category.PROVISIONS, 7, LocalDateTime.of(2025,
-                9, 10, 12, 0), null));
+        addNewProductToWarehouse("53", "Raisins", Category.PROVISIONS, 7);
 
         LocalDateTime beforeProduct = LocalDateTime.of(2025,
                 9, 10, 11, 59);
@@ -115,11 +106,9 @@ public class WarehouseTest {
     }
     @Test
     public void testNoProductsCreatedAfterSpecifiedDate() {
-        warehouse.addProduct(new Product("53", "Raisins",
-                Category.PROVISIONS, 7, LocalDateTime.of(2025,
-                9, 10, 12, 0), null));
+        addNewProductToWarehouse("53", "Raisins", Category.PROVISIONS, 7);
 
-        LocalDateTime afterProduct = LocalDateTime.of(2025,
+        LocalDateTime afterProduct = LocalDateTime.of(2030,
                 9, 10, 12, 1);
 
         assertThat(warehouse.getProductsCreatedAfter(afterProduct)).isEmpty();
@@ -127,8 +116,7 @@ public class WarehouseTest {
 
     @Test
     public void testUpdatingAProduct() {
-        warehouse.addProduct(new Product("53", "Raisins",
-                Category.PROVISIONS, 7, LocalDateTime.now(), null));
+        addNewProductToWarehouse("53", "Raisins", Category.PROVISIONS, 7);
 
         assertThat(warehouse.updateProduct("53", "Banana",
                 Category.PROVISIONS, 8)).isEqualTo(warehouse.getAllProducts());
@@ -142,34 +130,29 @@ public class WarehouseTest {
 
     @Test
     public void testGettingModifiedProducts() {
-        warehouse.addProduct(new Product("53", "Raisins",
-                Category.PROVISIONS, 7, LocalDateTime.of(2025,
-                9, 10, 12, 0),
-                LocalDateTime.of(2025, 9, 10,
-                        12, 45)));
+        addNewProductToWarehouse("53", "Raisins",
+                Category.PROVISIONS, 7);
+        warehouse.updateProduct("53", "Banana",
+                Category.PROVISIONS, 8);
 
         assertThat(warehouse.getModifiedProducts())
                 .isEqualTo(warehouse.getAllProducts());
     }
     @Test
     public void testCannotGetModifiedProducts() {
-        warehouse.addProduct(new Product("27", "Sweater",
-                Category.CLOTHES, 7, LocalDateTime.now(), null));
+        addNewProductToWarehouse("27", "Sweater", Category.CLOTHES, 7);
 
         assertThat(warehouse.getModifiedProducts()).isEmpty();
     }
 
     @Test
     public void testGettingCategoriesWithProducts() {
-        LocalDateTime mockTime = LocalDateTime.of(2025, 9,
-                10, 12, 45);
-
-        Product raisins = new Product("53", "Raisins",
-                Category.PROVISIONS, 7, mockTime, null);
-        Product pants = new Product("23", "Pants",
-                Category.CLOTHES, 8, mockTime, null);
-        Product sweater = new Product("27", "Sweater",
-                Category.CLOTHES, 7, mockTime, null);
+        Product raisins =
+                returnNewProduct("53", "Raisins", Category.PROVISIONS, 7);
+        Product pants =
+                returnNewProduct("23", "Pants", Category.CLOTHES, 8);
+        Product sweater =
+                returnNewProduct("27", "Sweater", Category.CLOTHES, 7);
 
         warehouse.addProduct(raisins);
         warehouse.addProduct(pants);
@@ -179,5 +162,27 @@ public class WarehouseTest {
                 .hasSize(2)
                 .containsEntry(Category.CLOTHES, pants)
                 .containsEntry(Category.PROVISIONS, raisins);
+    }
+
+    private void addNewProductToWarehouse(String id, String name,
+                                          Category category, int rating) {
+        warehouse.addProduct(
+                new Product.Builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .rating(9)
+                .build()
+        );
+    }
+
+    private Product returnNewProduct(String id, String name,
+                                     Category category, int rating) {
+        return new Product.Builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .build();
     }
 }

@@ -7,8 +7,8 @@ public class Product {
     private String name;
     private Category category;
     private int rating;
-    private final LocalDateTime createdDate = LocalDateTime.now();
-    private LocalDateTime modifiedDate = null;
+    private final LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 
     private Product(String id, String name, Category category,
                    int rating) {
@@ -16,6 +16,8 @@ public class Product {
         this.name = name;
         this.category = category;
         this.rating = rating;
+        this.createdDate = LocalDateTime.now();
+        this.modifiedDate = null;
     }
     public String id() {
         return id;
@@ -34,6 +36,9 @@ public class Product {
     }
     public LocalDateTime modifiedDate() {
         return modifiedDate;
+    }
+    public void setModifiedDate() {
+        this.modifiedDate = LocalDateTime.now();
     }
 
     public static class Builder {

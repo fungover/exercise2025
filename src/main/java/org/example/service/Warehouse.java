@@ -3,7 +3,6 @@ package org.example.service;
 import org.example.entities.Category;
 import org.example.entities.Product;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -23,8 +22,16 @@ public class Warehouse {
     public List<Product> updateProduct(String id, String name,
                                        Category category, int rating) {
         Product oldProduct = getProductById(id);
-        products.add(new Product(id, name, category, rating,
-                oldProduct.createdDate(), LocalDateTime.now()));
+        Product newProduct =
+                new Product.Builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .build();
+
+        products.add(newProduct);
+        newProduct.setModifiedDate();
         products.remove(oldProduct);
 
         return products;

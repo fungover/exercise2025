@@ -137,6 +137,24 @@ class ProductServiceTest {
         assertEquals("Name is required", exception.getMessage()); // Verify the exception message
     }
 
+    @Test
+    @DisplayName("Should preserve price when updating other fields")
+    void updateProductShouldPreservePrice() {
+        Product originalProduct = new Product.Builder()
+                .id("1")
+                .name("Original")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .price(299.99) // Set an initial price
+                .build();
+
+        productService.addProduct(originalProduct);
+        productService.updateProduct("1", "Updated Name", Category.BOOKS, 9); // Update other fields
+
+        Product updated = productService.getProductById("1").get();
+        assertEquals(299.99, updated.getPrice()); // Verify that the price remains unchanged
+    }
+
     // ========================================
     // TESTS FOR getAllProducts()
     // ========================================

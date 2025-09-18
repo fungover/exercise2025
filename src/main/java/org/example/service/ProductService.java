@@ -68,6 +68,7 @@ public class ProductService {
                 .name(name)
                 .category(category)
                 .rating(rating)
+                .price(existingProduct.getPrice())
                 .createdDate(existingProduct.createdDate()) // Keep the original created date
                 .modifiedDate(LocalDate.now()) // Update the modified date to the current date
                 .build();

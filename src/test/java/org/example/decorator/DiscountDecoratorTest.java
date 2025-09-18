@@ -5,6 +5,7 @@ import org.example.entities.Product;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DiscountDecoratorTest {
 
@@ -40,4 +41,39 @@ class DiscountDecoratorTest {
 
         assertEquals(135.0, secondDiscount.getPrice(), 0.01);
     }
+
+    @Test
+    void discountDecoratorShouldThrowExceptionForNegativeDiscount() {
+        Product product = new Product.Builder()
+                .id("test-1")
+                .name("Test Product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .price(100.0)
+                .build();
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> new DiscountDecorator(product, -10.0) // Negative discount
+        );
+        assertEquals("Discount percentage must be between 0 and 100", exception.getMessage()); // Check exception message
+    }
+
+    @Test
+    void discountDecoratorShouldThrowExceptionForDiscountOver100() {
+        Product product = new Product.Builder()
+                .id("test-1")
+                .name("Test Product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .price(100.0)
+                .build();
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> new DiscountDecorator(product, 150.0) // Discount over 100%
+        );
+        assertEquals("Discount percentage must be between 0 and 100", exception.getMessage()); // Check exception message
+    }
+
 }

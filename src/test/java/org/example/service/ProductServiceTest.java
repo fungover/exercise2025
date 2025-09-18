@@ -166,12 +166,13 @@ public class ProductServiceTest {
 
         productService.addProduct(original);
 
-        Product updated = productService.updateProduct("id1", "New Name", Category.TOYS, 9);
+        Product updated = productService.updateProduct("id1", "New Name", Category.TOYS, 9, 100);
 
         assertEquals("id1", updated.id());
         assertEquals("New Name", updated.name());
         assertEquals(Category.TOYS, updated.category());
         assertEquals(9, updated.rating());
+        assertEquals(100,updated.price());
         assertEquals(createdAt, updated.createdDate());
         assertEquals(LocalDateTime.of(2025, 9, 8, 12, 0), updated.modifiedDate());
         assertEquals(Optional.of(updated), productService.getProductById("id1"));
@@ -180,19 +181,19 @@ public class ProductServiceTest {
     @Test
     void updateProduct_nullId_throwsNullPointerException() {
         assertThrows(NullPointerException.class,
-                () -> productService.updateProduct(null, "test", Category.BOOKS, 7));
+                () -> productService.updateProduct(null, "test", Category.BOOKS, 7, 100));
     }
 
     @Test
     void updateProduct_blankId_throwsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class,
-                () -> productService.updateProduct("   ", "test", Category.BOOKS, 7));
+                () -> productService.updateProduct("   ", "test", Category.BOOKS, 7, 100));
     }
 
     @Test
     void updateProduct_missingId_throwsNoSuchElementException() {
         assertThrows(NoSuchElementException.class,
-                () -> productService.updateProduct("missing-id", "test", Category.BOOKS, 7));
+                () -> productService.updateProduct("missing-id", "test", Category.BOOKS, 7, 100));
     }
 
     /** getProductsByCategorySorted method */
@@ -369,7 +370,7 @@ public class ProductServiceTest {
         productService.addProduct(product1);
         productService.addProduct(product2);
 
-        productService.updateProduct("id2", "updated product", Category.BOOKS, 7);
+        productService.updateProduct("id2", "updated product", Category.BOOKS, 7, 100);
 
         var result = productService.getModifiedProducts();
         assertEquals(List.of("id2"), result.stream().map(Product::id).toList());

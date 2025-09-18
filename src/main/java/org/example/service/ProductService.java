@@ -33,7 +33,7 @@ public final class ProductService {
         return productRepository.getProductById(id);
     }
 
-    public Product updateProduct(String id, String name, Category category, int rating) {
+    public Product updateProduct(String id, String name, Category category, int rating, double price) {
         Objects.requireNonNull(id, "id");
         if (id.isBlank()) throw new IllegalArgumentException("id required");
 
@@ -41,7 +41,7 @@ public final class ProductService {
                 .orElseThrow(() -> new NoSuchElementException("not found: " + id));
 
         LocalDateTime now = LocalDateTime.now(clock);
-        Product updated = existing.withUpdated(name, category, rating, now);
+        Product updated = existing.withUpdated(name, category, rating, now, price);
         productRepository.updateProduct(updated);
         return updated;
     }

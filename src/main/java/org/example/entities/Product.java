@@ -1,22 +1,23 @@
 package org.example.entities;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
-public final class Product {
+public final class Product implements Sellable {
     private final String id;
     private final String name;
     private final Category category;
     private final int rating;
     private final LocalDateTime createdDate;
     private final LocalDateTime modifiedDate;
+    private final double price;
 
     private Product(String id,
                     String name,
                     Category category,
                     int rating,
                     LocalDateTime createdDate,
-                    LocalDateTime modifiedDate) {
+                    LocalDateTime modifiedDate,
+                    double price) {
 
         this.id = id;
         this.name = name;
@@ -24,6 +25,7 @@ public final class Product {
         this.rating = rating;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+        this.price = price;
     }
 
     public String id() { return id; }
@@ -32,11 +34,19 @@ public final class Product {
     public int rating() { return rating; }
     public LocalDateTime createdDate() { return createdDate; }
     public LocalDateTime modifiedDate() { return modifiedDate; }
+    public double price() { return price; }
 
-    public Product withUpdated(String name, Category category, int rating, LocalDateTime now) {
+    @Override public String getId() { return id; }
+    @Override public String getName() { return name; }
+    @Override public double getPrice() { return price; }
+
+    public Product withUpdated(String name, Category category, int rating, LocalDateTime now, double price) {
         return toBuilder()
-                .name(name).category(category).rating(rating)
+                .name(name)
+                .category(category)
+                .rating(rating)
                 .modifiedDate(now)
+                .price(price)
                 .build();
     }
 
@@ -55,6 +65,7 @@ public final class Product {
         private int rating;
         private LocalDateTime createdDate;
         private LocalDateTime modifiedDate;
+        private double price;
 
         public Builder id(String id) {
             this.id = id;
@@ -86,6 +97,11 @@ public final class Product {
             return this;
         }
 
+        public Builder price(double price) {
+            this.price = price;
+            return this;
+        }
+
         public static Builder from(Product product){
             return new Builder()
                     .id(product.id)
@@ -93,7 +109,8 @@ public final class Product {
                     .category(product.category)
                     .rating(product.rating)
                     .createdDate(product.createdDate)
-                    .modifiedDate(product.modifiedDate);
+                    .modifiedDate(product.modifiedDate)
+                    .price(product.price);
         }
 
         public Product build() {
@@ -101,11 +118,12 @@ public final class Product {
             if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("name required");
             if (category == null) throw new IllegalArgumentException("category required");
             if (rating < 0 || rating > 10) throw new IllegalArgumentException("rating 0–10");
+            if (price < 0) throw new IllegalArgumentException("price must be >= 0");
 
             LocalDateTime created = (createdDate != null) ? createdDate : LocalDateTime.now();
             LocalDateTime modified = (modifiedDate != null) ? modifiedDate : created;
 
-            return new Product(id, name, category, rating, created, modified);
+            return new Product(id, name, category, rating, created, modified, price);
         }
     }
 }

@@ -3,14 +3,27 @@ _______________________
 ### Assignment 4 (_Refactor previous exercise, by implementing design patterns_)
 
 ### Reflections/Learning process:
+## Builder pattern (Creational)
 By implementing the creational pattern called "Builder pattern" I will make my code 
 easier to read and modify. I will not have to remember the order of parameters in my constructor.
 Builder can be used to construct unrelated products that does not even share interface, but in my case
 builder will only be able to go through my Product constructor. It can therefore only build products.
 The builder will be a so called 'nested public static class' in my current Product class. 
 
+## Repository pattern (Structural)
+Repository pattern is not found in this documentation: https://refactoring.guru/design-patterns/structural-patterns
+But the main reason to use this pattern is to separate the way we store and retrieve data, 
+from how we internally work with the data. https://medium.com/@hunterfreas/repository-pattern-what-is-it-and-why-do-we-use-it-6a6a8e781711
+My first step is to separate the responsibilities (SRP) in my Warehouse. 
 
-
+I need: 
+[] an interface that defines a contract for storage. This will put a layer between my data and logic. Here
+I will define abstract operations. 
+[] to implement the above interface - this is the storage (HashMap). All data is handled here. I separate
+"CRUD" (create, read, update, delete) from business logic. This makes it easy for me to try different 
+implementations (Local or database)
+[] A product service that handles only business logic. Here is where the validation, Building and Streams
+happens.
 
 ### About Assignment 4:
 🎯 Objective

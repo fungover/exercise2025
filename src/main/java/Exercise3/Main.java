@@ -1,0 +1,33 @@
+package exercise3;
+
+import exercise3.entities.Category;
+import exercise3.entities.Product;
+import exercise3.repository.InMemoryProductRepository;
+import exercise3.service.ProductService;
+
+import java.time.LocalDate;
+import java.util.List;
+
+public class Main {
+
+    static void main() {
+
+        Product.ProductBuilder builder = new Product.ProductBuilder();
+        InMemoryProductRepository repository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(repository);
+
+        repository.addProduct(builder.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT)
+                .setRating(5).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        repository.addProduct(builder.setId("Tina").setName("Dressed pants").setCategory(Category.PANTS)
+                .setRating(7).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        repository.addProduct(builder.setId("Joel").setName("Flared Jeans").setCategory(Category.JEANS)
+                .setRating(5).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+
+        List<Product> products = repository.getAllProducts();
+
+        products.forEach(System.out::println);
+
+        System.out.println(productService.countProductsInCategory(Category.JEANS));
+
+    }
+}

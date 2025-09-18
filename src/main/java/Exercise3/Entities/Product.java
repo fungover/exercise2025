@@ -58,6 +58,17 @@ public final class Product {
         return Objects.hash(id, name, category, rating, createdDate, modifiedDate);
     }
 
+    @Override
+    public String toString() {
+        return "id: " + id +
+                ", name: " + name +
+                ", category: " + category +
+                ", rating: " + rating +
+                ", createdDate: " + createdDate +
+                ", modifiedDate: " + modifiedDate
+                ;
+    }
+
     public static class ProductBuilder {
         private String id;
         private String name;

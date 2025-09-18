@@ -12,7 +12,7 @@ public interface Warehouse {
     //Lägg till kontroll av uniq id
     void addProduct(Product product);
 
-    void updateProduct(String id, String name, Category category, int rating);
+    Product updateProduct(String id);
 
     List<Product> getAllProducts();
 

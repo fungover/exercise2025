@@ -16,21 +16,22 @@ public class ManagingProduct implements Warehouse {
 
         Objects.requireNonNull(product, "Product cannot be null");
 
-        boolean exists = listOfProducts.stream()
-                        .anyMatch(item -> item.getId().equals(product.getId()));
-
-        if(exists) {
-            throw new IllegalArgumentException("Product already exists");
-        }
-
         listOfProducts.add(product);
     }
 
     @Override
-    public void updateProduct(String id, String name, Category category, int rating) {
+    public Product updateProduct(String id) {
 
-        Product itemToUpdate = getProductById(id);
-        listOfProducts.add(itemToUpdate.updateProduct(id, name, category, rating));
+        Product productToUpdate = listOfProducts.stream()
+                .filter(item -> item.getId().equals(id))
+                .reduce((a, b) -> b)
+                .orElse(null);
+
+        if (productToUpdate == null) {
+                throw new IllegalArgumentException("Product dosen't exists");
+        }
+
+        return productToUpdate;
     }
 
     public List<Product> getAllProducts() {

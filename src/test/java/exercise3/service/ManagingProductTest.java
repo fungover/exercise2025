@@ -27,17 +27,13 @@ class ManagingProductTest {
         assertEquals(LocalDate.now(), managingProduct.getAllProducts().getFirst().getModifiedDate());
     }
 
-    @Test
-    public void throwsIllegalArgumentExceptionIfProductAlreadyExist() {
-        managingProduct.addProduct(builder.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(1).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
-
-        assertThrows(IllegalArgumentException.class, () -> managingProduct.addProduct(builder.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(1).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct()));
-    }
+//equals
 
     @Test
     public void productIsAddedToListWhenUpdated() {
         managingProduct.addProduct(builder.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(9).setCreatedDate(LocalDate.of(2025, 9, 1)).setModifiedDate(LocalDate.of(2025, 9, 1)).createProduct());
-        managingProduct.updateProduct("Bella", "Knitted shirt", Category.SHIRT, 7);
+        Product itemToUpdate = managingProduct.updateProduct("Bella");
+        managingProduct.addProduct(builder.from(itemToUpdate).setRating(3).createProduct());
 
        assertEquals(2,managingProduct.getAllProducts().size());
        assertEquals(1, managingProduct.getModifiedProducts().size());
@@ -48,7 +44,7 @@ class ManagingProductTest {
     public void throwsIllegalArgumentExceptionWhenProductToUpdateDoseNotExist(){
         managingProduct.addProduct(builder.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
-        assertThrows(IllegalArgumentException.class, () -> managingProduct.updateProduct("Tina", "Dressed Shirt",  Category.SHIRT, 9));
+        assertThrows(IllegalArgumentException.class, () -> managingProduct.updateProduct("Tina"));
     }
 
     @Test

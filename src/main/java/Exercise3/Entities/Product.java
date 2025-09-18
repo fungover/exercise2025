@@ -46,17 +46,13 @@ public final class Product {
         return modifiedDate;
     }
 
-    public Product updateProduct(String id, String name, Category category, int rating) {
-        return new ProductBuilder().setId(id).setName(name).setCategory(category).setRating(rating).setCreatedDate(this.createdDate).setModifiedDate(LocalDate.now()).createProduct();
-    }
-
     public static class ProductBuilder {
         private String id;
         private String name;
         private Category category;
         private int rating;
         private LocalDate createdDate;
-        private LocalDate modifiedDate;
+        private LocalDate modifiedDate = LocalDate.now();
 
         public ProductBuilder setId(String id) {
             this.id = id;
@@ -85,6 +81,16 @@ public final class Product {
 
         public ProductBuilder setModifiedDate(LocalDate modifiedDate) {
             this.modifiedDate = modifiedDate;
+            return this;
+        }
+
+        public ProductBuilder from(Product product) {
+            this.id = product.getId();
+            this.name = product.getName();
+            this.category = product.getCategory();
+            this.rating = product.getRating();
+            this.createdDate = product.getCreatedDate();
+            this.modifiedDate = LocalDate.now();
             return this;
         }
 

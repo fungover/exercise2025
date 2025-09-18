@@ -92,9 +92,9 @@ public class ProductTest {
     void getProductsByCategorySorted_noProductsInCategory_returnsEmptyList() {
         Warehouse warehouse = new Warehouse();
 
-        List<Product> electronics = warehouse.getProductsByCategorySorted(Category.valueOf("BOOK"));
+        List<Product> book1 = warehouse.getProductsByCategorySorted(Category.valueOf("BOOK"));
 
-        assertTrue(electronics.isEmpty());
+        assertTrue(book1.isEmpty());
     }
 
     @Test
@@ -198,6 +198,22 @@ public class ProductTest {
         assertFalse(modifiedProducts.contains(p1));
     }
 
+    @Test
+    void getProductsCreatedAfter_noProductsNewer_returnsEmptyList() {
+        Warehouse warehouse = new Warehouse();
 
+        LocalDateTime d1 = LocalDateTime.of(2023, 1, 1, 12, 0);
+        LocalDateTime d2 = LocalDateTime.of(2023, 2, 1, 12, 0);
+
+        Product p1 = new Product(1, "Old Book 1", Category.BOOK, 3, d1, d1);
+        Product p2 = new Product(2, "Old Book 2", Category.BOOK, 4, d2, d2);
+
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+
+        List<Product> products = warehouse.getProductsCreatedAfter(LocalDate.of(2023, 6, 1));
+
+        assertTrue(products.isEmpty(), "List should be empty if no products are newer than given date");
+    }
 }
 

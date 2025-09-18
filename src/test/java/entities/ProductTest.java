@@ -80,6 +80,24 @@ public class ProductTest {
     }
 
     @Test
+    void getAllProducts_emptyWarehouse_returnsEmptyList() {
+        Warehouse warehouse = new Warehouse();
+
+        List<Product> products = warehouse.getAllProducts();
+
+        assertTrue(products.isEmpty());
+    }
+
+    @Test
+    void getProductsByCategorySorted_noProductsInCategory_returnsEmptyList() {
+        Warehouse warehouse = new Warehouse();
+
+        List<Product> electronics = warehouse.getProductsByCategorySorted(Category.valueOf("BOOK"));
+
+        assertTrue(electronics.isEmpty());
+    }
+
+    @Test
     public void getProductsByIdTest() {
         Warehouse warehouse = new Warehouse();
         LocalDateTime now = LocalDateTime.now();

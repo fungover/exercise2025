@@ -226,6 +226,16 @@ class ProductServiceTest {
         assertTrue(result.isEmpty()); // Verify that the result is an empty Optional
     }
 
+    @Test
+    @DisplayName("Should throw exception when getProductById called with null id")
+    void getProductByIdWithNullIdThrowsException() {
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
+                () -> productService.getProductById(null)
+        );
+        assertEquals("id cannot be null", exception.getMessage());
+    }
+
     // ========================================
     // TESTS FOR getProductsByCategorySorted()
     // ========================================

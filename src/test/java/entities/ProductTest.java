@@ -215,5 +215,23 @@ public class ProductTest {
 
         assertTrue(products.isEmpty(), "List should be empty if no products are newer than given date");
     }
+
+    @Test
+    void getModifiedProducts_noModifiedProducts_returnsEmptyList() {
+        Warehouse warehouse = new Warehouse();
+
+        LocalDateTime created = LocalDateTime.of(2023, 1, 1, 12, 0);
+
+        Product p1 = new Product(1, "Book 1", Category.BOOK, 3, created, created);
+        Product p2 = new Product(2, "Book 2", Category.BOOK, 4, created, created);
+
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+
+        List<Product> modifiedProducts = warehouse.getModifiedProducts();
+
+        assertTrue(modifiedProducts.isEmpty(), "List should be empty if no products are modified");
+    }
+
 }
 

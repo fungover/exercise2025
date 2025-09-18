@@ -635,4 +635,36 @@ class ProductServiceTest {
         );
         assertEquals("ID is required", exception.getMessage());
     }
+
+    // ========================================
+    // TESTS for exception handling regarding prices
+    // ========================================
+
+    @Test
+    void builderShouldThrowExceptionForNegativePrice() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> new Product.Builder()
+                        .id("test-1")
+                        .name("Test Product")
+                        .category(Category.ELECTRONICS)
+                        .rating(8)
+                        .price(-10.0) //Setting a negative price here.
+                        .build()
+        );
+        assertEquals("Price cannot be negative", exception.getMessage()); // Verify the exception message
+    }
+
+    @Test
+    void builderShouldAcceptZeroPrice() {
+        Product freeProduct = new Product.Builder()
+                .id("free-1")
+                .name("Free Sample")
+                .category(Category.FOOD)
+                .rating(5)
+                .price(0.0) // Setting price to zero.
+                .build();
+
+        assertEquals(0.0, freeProduct.getPrice());
+    }
 }

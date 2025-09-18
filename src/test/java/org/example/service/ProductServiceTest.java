@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,14 +13,15 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class WarehouseTest {
+public class ProductServiceTest {
 
-    private Warehouse warehouse;
+    private ProductService service;
     private final LocalDate today = LocalDate.now();
 
     @BeforeEach
     void setUp() {
-        warehouse = new Warehouse();
+        ProductRepository repository = new InMemoryProductRepository();
+        service = new ProductService(repository);
     }
 
 
@@ -33,17 +36,17 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build();
 
-        warehouse.addProduct(tv);
+        service.addProduct(tv);
 
         // Kontrollera att produkten finns i lagret
-        List<Product> allProducts = warehouse.getAllProducts();
+        List<Product> allProducts = service.getAllProducts();
         assertThat(allProducts).hasSize(1);
         assertThat(allProducts).contains(tv);
     }
 
     @Test
     void addProduct_nullProduct_throwsException() {
-        assertThatThrownBy(() -> warehouse.addProduct(null))
+        assertThatThrownBy(() -> service.addProduct(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("product");
     }
@@ -68,9 +71,9 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build();
 
-        warehouse.addProduct(first);
+        service.addProduct(first);
 
-        assertThatThrownBy(() -> warehouse.addProduct(duplicateId))
+        assertThatThrownBy(() -> service.addProduct(duplicateId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("id");
 
@@ -96,16 +99,16 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build();
 
-        warehouse.addProduct(tv);
-        warehouse.addProduct(laptop);
+        service.addProduct(tv);
+        service.addProduct(laptop);
 
-        Product found = warehouse.getProductById("p-001");
+        Product found = service.getProductById("p-001");
         assertThat(found).isEqualTo(tv);
     }
 
     @Test
     void getProductById_unknownId_throwsException() {
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-001")
                 .name("Samsung 55\" 4K")
                 .category(Category.TV)
@@ -114,14 +117,14 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        assertThatThrownBy(() -> warehouse.getProductById("p-000"))
+        assertThatThrownBy(() -> service.getProductById("p-000"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("id");
     }
 
     @Test
     void getProductsByCategorySorted_returnsAtoZByName() {
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-001")
                 .name("Samsung 55\" 4K")
                 .category(Category.TV)
@@ -130,7 +133,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-002")
                 .name("Budget Laptop")
                 .category(Category.COMPUTER)
@@ -139,7 +142,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-003")
                 .name("Pro Laptop")
                 .category(Category.COMPUTER)
@@ -148,7 +151,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-004")
                 .name("Another Laptop")
                 .category(Category.COMPUTER)
@@ -157,7 +160,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        var computers = warehouse.getProductsByCategorySorted(Category.COMPUTER);
+        var computers = service.getProductsByCategorySorted(Category.COMPUTER);
 
         assertThat(computers)
                 .extracting(Product::name)
@@ -173,7 +176,7 @@ public class WarehouseTest {
         var d5 = LocalDate.of(2025, 1, 5);
         var d6 = LocalDate.of(2025, 1, 6);
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-001")
                 .name("Samsung 55\" 4K")
                 .category(Category.TV)
@@ -182,7 +185,7 @@ public class WarehouseTest {
                 .modifiedDate(d1)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-002")
                 .name("Budget Laptop")
                 .category(Category.COMPUTER)
@@ -191,7 +194,7 @@ public class WarehouseTest {
                 .modifiedDate(d2)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-003")
                 .name("Pro Laptop")
                 .category(Category.COMPUTER)
@@ -200,7 +203,7 @@ public class WarehouseTest {
                 .modifiedDate(d3)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-004")
                 .name("Another Laptop")
                 .category(Category.COMPUTER)
@@ -209,7 +212,7 @@ public class WarehouseTest {
                 .modifiedDate(d4)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-005")
                 .name("Iphone")
                 .category(Category.PHONE)
@@ -218,7 +221,7 @@ public class WarehouseTest {
                 .modifiedDate(d5)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-006")
                 .name("Refrigerator")
                 .category(Category.APPLIANCES)
@@ -227,7 +230,7 @@ public class WarehouseTest {
                 .modifiedDate(d6)
                 .build());
 
-        var afterJan3 = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 1, 3));
+        var afterJan3 = service.getProductsCreatedAfter(LocalDate.of(2025, 1, 3));
         assertThat(afterJan3)
                 .extracting(Product::id)
                 .containsExactly("p-004", "p-005", "p-006");
@@ -237,7 +240,7 @@ public class WarehouseTest {
     void getModifiedProducts_returnsWhereCreatedNotEqualModified() {
         var createdDate = LocalDate.of(2025, 1, 1);
         // CreatedDate är samma som ModifiedDate
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-001")
                 .name("Samsung 55\" 4K")
                 .category(Category.TV)
@@ -247,7 +250,7 @@ public class WarehouseTest {
                 .build());
 
         // CreatedDate är inte samma som ModifiedDate
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-002")
                 .name("Budget Laptop")
                 .category(Category.COMPUTER)
@@ -256,7 +259,7 @@ public class WarehouseTest {
                 .modifiedDate(createdDate.plusDays(1))
                 .build());
 
-        var modifiedDate = warehouse.getModifiedProducts();
+        var modifiedDate = service.getModifiedProducts();
 
         assertThat(modifiedDate)
                 .extracting(Product::id)
@@ -265,7 +268,7 @@ public class WarehouseTest {
 
     @Test
     void getCategoriesWithProducts_returnsOnlyCategoriesWithProducts() {
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-001")
                 .name("Samsung 55\" 4K")
                 .category(Category.TV)
@@ -274,7 +277,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-002")
                 .name("Budget Laptop")
                 .category(Category.COMPUTER)
@@ -283,7 +286,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        var categories = warehouse.getCategoriesWithProducts();
+        var categories = service.getCategoriesWithProducts();
 
         assertThat(categories)
                 .containsExactly(Category.TV, Category.COMPUTER)
@@ -292,7 +295,7 @@ public class WarehouseTest {
 
     @Test
     void countProductsInCategory_returnsCorrectCount() {
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-001")
                 .name("Samsung 55\" 4K")
                 .category(Category.TV)
@@ -301,7 +304,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-002")
                 .name("Budget Laptop")
                 .category(Category.COMPUTER)
@@ -310,7 +313,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-003")
                 .name("Pro Laptop")
                 .category(Category.COMPUTER)
@@ -319,7 +322,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-006")
                 .name("Refrigerator")
                 .category(Category.APPLIANCES)
@@ -328,9 +331,9 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        int tvCount = warehouse.countProductsInCategory(Category.TV);
-        int computerCount = warehouse.countProductsInCategory(Category.COMPUTER);
-        int appliancesCount = warehouse.countProductsInCategory(Category.APPLIANCES);
+        int tvCount = service.countProductsInCategory(Category.TV);
+        int computerCount = service.countProductsInCategory(Category.COMPUTER);
+        int appliancesCount = service.countProductsInCategory(Category.APPLIANCES);
 
         assertThat(tvCount).isEqualTo(1);
         assertThat(computerCount).isEqualTo(2);
@@ -339,7 +342,7 @@ public class WarehouseTest {
 
     @Test
     void countProductsInCategory_whenNoneExists_returnsZero() {
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-001")
                 .name("Samsung 55\" 4K")
                 .category(Category.TV)
@@ -348,7 +351,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-002")
                 .name("Budget Laptop")
                 .category(Category.COMPUTER)
@@ -357,14 +360,14 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        int phoneCount = warehouse.countProductsInCategory(Category.PHONE);
+        int phoneCount = service.countProductsInCategory(Category.PHONE);
 
         assertThat(phoneCount).isEqualTo(0);
     }
 
     @Test
     void getProductInitialsMap_CountsByFirstLetter_caseInsensitive() {
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-001")
                 .name("Samsung 55\" 4K")
                 .category(Category.TV)
@@ -373,7 +376,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-002")
                 .name("Budget Laptop")
                 .category(Category.COMPUTER)
@@ -382,7 +385,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-003")
                 .name("Pro Laptop")
                 .category(Category.COMPUTER)
@@ -391,7 +394,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-007")
                 .name("Samsung 65\" 4K")
                 .category(Category.TV)
@@ -401,7 +404,7 @@ public class WarehouseTest {
                 .build());
 
 
-        var map = warehouse.getProductInitialsMap();
+        var map = service.getProductInitialsMap();
 
         assertThat(map.get('S')).isEqualTo(2);
         assertThat(map.get('B')).isEqualTo(1);
@@ -450,19 +453,19 @@ public class WarehouseTest {
                 .modifiedDate(fixedNow.minusMonths(1))
                 .build();
 
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
-        warehouse.addProduct(p3);
-        warehouse.addProduct(p4);
+        service.addProduct(p1);
+        service.addProduct(p2);
+        service.addProduct(p3);
+        service.addProduct(p4);
 
-        var result = warehouse.getTopRatedProductsThisMonth(fixedNow);
+        var result = service.getTopRatedProductsThisMonth(fixedNow);
 
         assertThat(result).containsExactly(p2, p1);
     }
 
     @Test
     void getTopRatedProductsThisMonth_whenNoMatchingProducts_returnsEmptyList() {
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-003")
                 .name("Mid Phone")
                 .category(Category.PHONE)
@@ -471,7 +474,7 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        warehouse.addProduct(Product.builder()
+        service.addProduct(Product.builder()
                 .id("p-002")
                 .name("Mid Laptop")
                 .category(Category.COMPUTER)
@@ -480,8 +483,59 @@ public class WarehouseTest {
                 .modifiedDate(today)
                 .build());
 
-        var result = warehouse.getTopRatedProductsThisMonth(today);
+        var result = service.getTopRatedProductsThisMonth(today);
 
         assertThat(result).isEmpty();
     }
+
+    @Test
+    void updateProduct_replacesExistingProduct() {
+        Product original = Product.builder()
+                .id("p-001")
+                .name("Old Laptop")
+                .category(Category.COMPUTER)
+                .rating(5)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build();
+
+        service.addProduct(original);
+
+        Product updated = Product.builder()
+                .id("p-001")
+                .name("New Laptop")
+                .category(Category.COMPUTER)
+                .rating(9)
+                .createdDate(today)
+                .modifiedDate(today.plusDays(1))
+                .build();
+
+        service.updateProduct(updated);
+
+        Product found = service.getProductById("p-001");
+        assertThat(found.name()).isEqualTo("New Laptop");
+        assertThat(found.rating()).isEqualTo(9);
+        assertThat(found.modifiedDate()).isEqualTo(today.plusDays(1));
+    }
+
+    @Test
+    void deleteProduct_removesProductFromRepository() {
+        Product tv = Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build();
+
+        service.addProduct(tv);
+
+        service.deleteProduct(tv);
+
+        assertThatThrownBy(() -> service.getProductById("p-001"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("id");
+    }
+
 }

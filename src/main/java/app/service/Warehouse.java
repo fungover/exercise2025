@@ -71,4 +71,10 @@ private final List<Product> products = new ArrayList<>();
                 .sorted(Comparator.comparing(Product::createdDate))
                 .collect(Collectors.toList());
     }
+
+    public List<Product> getModifiedProducts() {
+        return products.stream()
+                .filter(product -> !product.createdDate().equals(product.modifiedDate()))
+                .collect(Collectors.toList());
+    }
 }

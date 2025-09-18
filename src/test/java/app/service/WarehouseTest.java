@@ -145,5 +145,23 @@ public class WarehouseTest {
         updatedlist.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
     }
 
+    @Test
+    void getModifiedProducts() {
+        Warehouse warehouse = new Warehouse();
+        warehouse.addProduct(new Product(0, "Bread", FOOD, 5,
+                ZonedDateTime.of(2025, 2, 1, 12, 0, 0, 0, ZoneId.of("Europe/Stockholm")),
+                null));
+        warehouse.addProduct(new Product(1, "Milk", FOOD, 7,
+                ZonedDateTime.of(2024, 1, 1, 12, 0, 0, 0, ZoneId.of("Europe/Stockholm")),
+                ZonedDateTime.of(2025, 1, 1, 12, 0, 0, 0, ZoneId.of("Europe/Stockholm"))));
+
+        List<Product> modified = warehouse.getModifiedProducts();
+        assertEquals(1,modified.size());
+        assertEquals("Milk",modified.get(0).name());
+        System.out.println("Found "+modified.size()+" Modified Products");
+        modified.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
+
+    }
+
 
 }

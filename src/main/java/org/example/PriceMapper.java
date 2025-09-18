@@ -38,6 +38,11 @@ public class PriceMapper {
         try {
             FetchPrice fetch = new FetchPrice(zone);
             String secondPayload = fetch.fetchTomorrowPrices();
+
+            if (secondPayload == null || secondPayload.trim().isEmpty()) {
+                return new Price[0];
+            }
+
             tomorrowPrices = mapper.readValue(secondPayload, Price[].class);
         } catch (JsonProcessingException e) {
             System.err.println("Failed to parse tomorrow's prices: " + e.getMessage());

@@ -10,7 +10,7 @@ public class Product {
     private final LocalDate modifiedDate;
 
     //Private constructor for builder
-    private Product(String id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate ) {
+    public Product(String id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate) {
     this.id = id;
     this.name = name;
     this.category = category;

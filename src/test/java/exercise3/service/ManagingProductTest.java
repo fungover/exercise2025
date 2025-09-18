@@ -27,24 +27,30 @@ class ManagingProductTest {
         assertEquals(LocalDate.now(), managingProduct.getAllProducts().getFirst().getModifiedDate());
     }
 
-//equals
+    @Test
+    public void throwsIllegalArgumentExceptionIfProductWithUniqIdAlreadyExist() {
+        managingProduct.addProduct(builder.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(1).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+
+        assertThrows(IllegalArgumentException.class, () -> managingProduct.addProduct(builder.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(1).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct()));
+    }
 
     @Test
     public void productIsAddedToListWhenUpdated() {
         managingProduct.addProduct(builder.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(9).setCreatedDate(LocalDate.of(2025, 9, 1)).setModifiedDate(LocalDate.of(2025, 9, 1)).createProduct());
-        Product itemToUpdate = managingProduct.updateProduct("Bella");
-        managingProduct.addProduct(builder.from(itemToUpdate).setRating(3).createProduct());
+        Product itemToUpdate = managingProduct.getProductById("Bella");
+        managingProduct.updateProduct(builder.from(itemToUpdate).setRating(3).setModifiedDate(LocalDate.now()).createProduct());
 
-       assertEquals(2,managingProduct.getAllProducts().size());
-       assertEquals(1, managingProduct.getModifiedProducts().size());
+        assertEquals(2,managingProduct.getAllProducts().size());
+        assertEquals(1, managingProduct.getModifiedProducts().size());
 
     }
 
     @Test
-    public void throwsIllegalArgumentExceptionWhenProductToUpdateDoseNotExist(){
+    public void throwsIllegalArgumentExceptionIfNothingIsUpdated() {
         managingProduct.addProduct(builder.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        Product itemToUpdate = managingProduct.getProductById("Bella");
 
-        assertThrows(IllegalArgumentException.class, () -> managingProduct.updateProduct("Tina"));
+        assertThrows(IllegalArgumentException.class, () -> managingProduct.updateProduct(builder.from(itemToUpdate).createProduct()));
     }
 
     @Test

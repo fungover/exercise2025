@@ -46,6 +46,18 @@ public final class Product {
         return modifiedDate;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return rating == product.rating && Objects.equals(id, product.id) && Objects.equals(name, product.name) && category == product.category && Objects.equals(createdDate, product.createdDate) && Objects.equals(modifiedDate, product.modifiedDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, category, rating, createdDate, modifiedDate);
+    }
+
     public static class ProductBuilder {
         private String id;
         private String name;
@@ -90,7 +102,7 @@ public final class Product {
             this.category = product.getCategory();
             this.rating = product.getRating();
             this.createdDate = product.getCreatedDate();
-            this.modifiedDate = LocalDate.now();
+            this.modifiedDate = product.getModifiedDate();
             return this;
         }
 

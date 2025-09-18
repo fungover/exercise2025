@@ -16,22 +16,25 @@ public class ManagingProduct implements Warehouse {
 
         Objects.requireNonNull(product, "Product cannot be null");
 
+        boolean exists = listOfProducts.stream()
+                .anyMatch(item -> item.getId().equals(product.getId()));
+
+        if(exists) {
+            throw new IllegalArgumentException("Product already exists");
+        }
+
         listOfProducts.add(product);
     }
 
     @Override
-    public Product updateProduct(String id) {
+    public void updateProduct(Product product) {
 
-        Product productToUpdate = listOfProducts.stream()
-                .filter(item -> item.getId().equals(id))
-                .reduce((a, b) -> b)
-                .orElse(null);
-
-        if (productToUpdate == null) {
-                throw new IllegalArgumentException("Product dosen't exists");
+        if(listOfProducts.contains(product)){
+            throw new IllegalArgumentException("Product already exists");
         }
 
-        return productToUpdate;
+        listOfProducts.add(product);
+
     }
 
     public List<Product> getAllProducts() {
@@ -50,7 +53,7 @@ public class ManagingProduct implements Warehouse {
                 .filter(item -> item.getId().equals(id.trim()))
                 .max(Comparator.comparing(Product::getModifiedDate))
                 .orElse(null);
-
+        //Returns the last product added by getModifiedDate
         if(productById == null){
             throw new IllegalArgumentException("Product doesn't exist");
         }

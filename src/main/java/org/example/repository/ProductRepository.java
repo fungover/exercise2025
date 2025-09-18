@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * ProductRepository interface that defined the contract for data access.
+ * ProductRepository interface that defines the contract for data access.
  * <p>
  * REPOSITORY PATTERN:
  * - Repository Pattern separates data access logic from business logic.

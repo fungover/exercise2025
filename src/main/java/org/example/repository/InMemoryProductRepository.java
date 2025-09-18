@@ -40,7 +40,7 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public List<Product> getAllProducts() {
-        return new ArrayList<>(products.values()); // Return all products as a list.
+        return List.copyOf(products.values()); // Return an unmodifiable list of all products.
     }
 
     @Override
@@ -48,8 +48,8 @@ public class InMemoryProductRepository implements ProductRepository {
         Objects.requireNonNull(product, "Product cannot be null"); // Null check for product
         if (!products.containsKey(product.id())) {
             throw new IllegalArgumentException("Product with id " + product.id() + " not found"); // If product doesn't exist, throw an exception.
-        } else {
-            products.put(product.id(), product); // Update the product in the map.
         }
+        products.put(product.id(), product); // Update the product in the map.
+
     }
 }

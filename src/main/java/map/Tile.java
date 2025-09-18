@@ -60,7 +60,7 @@ public class Tile {
     // === DISPLAY AND NAVIGATION ===
     public char getDisplaySymbol() {
         // Priority order: Enemy > Item > Normal symbol
-        if (hasEnemy()) {
+        if (enemy != null) {
             return enemy.getSymbol();
         } else if (hasItem()) {
             return item.getSymbol();
@@ -75,7 +75,7 @@ public class Tile {
     public String getFullDescription() {
         StringBuilder desc = new StringBuilder(description);
 
-        if (hasEnemy()) {
+        if (enemy != null) {
             desc.append(" ").append(enemy.examine());
         } else if (hasItem()) {
             desc.append(" Du ser ").append(item.getName()).append(" här.");
@@ -98,7 +98,7 @@ public class Tile {
         StringBuilder info = new StringBuilder();
         info.append("Tile[").append(symbol).append(": ").append(description);
 
-        if (hasEnemy()) {
+        if (enemy != null) {
             info.append(" | Enemy: ").append(enemy.getName());
         }
         if (hasItem()) {

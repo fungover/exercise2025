@@ -221,7 +221,7 @@ public class PirateCave {
         int displayY = gameY * 2 + 1;
 
         Tile tile = getTile(displayX, displayY);
-        if (tile != null && tile.canPlaceThings() && !tile.hasItem()) {
+        if (tile != null && tile.canPlaceThings() && !tile.hasItem() && !tile.hasEnemy()) {
             tile.placeItem(item);
             return true;
         }

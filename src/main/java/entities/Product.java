@@ -41,7 +41,6 @@ public record Product(
         name = name.trim();
     }
 
-
     // Create a new product with current time
     public static Product createNew(String id, String name, Category category, int rating) {
         LocalDateTime now = LocalDateTime.now();

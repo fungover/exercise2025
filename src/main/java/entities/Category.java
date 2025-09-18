@@ -1,6 +1,5 @@
 package entities;
 
-
     public enum Category {
         ELECTRONICS("Electronics"),
         CLOTHING("Clothing"),

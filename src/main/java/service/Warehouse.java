@@ -30,7 +30,6 @@ public class Warehouse {
         products.put(product.id(), product);
     }
 
-
      // Updating an existing product
     public void updateProduct(String id, String name, Category category, int rating) {
         // Find existing product

@@ -28,7 +28,7 @@ public class Game {
 
             player.setDamage(15);
 
-            System.out.println("You picked up the items and continued your journey.");
+            System.out.println("You picked up the items and continued your journey. Thanks to your sword your damage has been updated to 15dmg/hit");
         } else {
             System.out.println("You chose to not pick up the items and continued your journey.");
         }

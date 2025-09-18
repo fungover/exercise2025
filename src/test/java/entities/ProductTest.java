@@ -80,7 +80,7 @@ public class ProductTest {
     }
 
     @Test
-    public void getProductsByIdTest(){
+    public void getProductsByIdTest() {
         Warehouse warehouse = new Warehouse();
         LocalDateTime now = LocalDateTime.now();
 
@@ -96,7 +96,25 @@ public class ProductTest {
     }
 
     @Test
-    public void SortProductCategory_alphabetically(){
+    public void SortProductCategory_alphabeticallyMovies() {
+        Warehouse warehouse = new Warehouse();
+        LocalDateTime now = LocalDateTime.now();
+
+        Product p1 = new Product(5, "Clown Town", Category.MOVIE, 5, now, now);
+        Product p2 = new Product(6, "Bla bla bla", Category.MOVIE, 5, now, now);
+
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+
+        List<Product> movies = warehouse.getProductsByCategorySorted(Category.MOVIE);
+
+        assertEquals(2, movies.size());
+        assertEquals("Bla bla bla", movies.get(0).getName());
+        assertEquals("Clown Town", movies.get(1).getName());
+    }
+
+    @Test
+    public void SortProductCategory_alphabeticallyBooks() {
         Warehouse warehouse = new Warehouse();
         LocalDateTime now = LocalDateTime.now();
 
@@ -104,27 +122,18 @@ public class ProductTest {
         Product p2 = new Product(2, "Dominion", Category.BOOK, 1, now, now);
         Product p3 = new Product(3, "People Like Us", Category.BOOK, 3, now, now);
         Product p4 = new Product(4, "Clown Town", Category.BOOK, 5, now, now);
-        Product p5 = new Product(5, "Clown Town", Category.MOVIE, 5, now, now);
-        Product p6 = new Product(6, "Bla bla bla", Category.MOVIE, 5, now, now);
 
         warehouse.addProduct(p1);
         warehouse.addProduct(p2);
         warehouse.addProduct(p3);
         warehouse.addProduct(p4);
-        warehouse.addProduct(p5);
-        warehouse.addProduct(p6);
 
         List<Product> books = warehouse.getProductsByCategorySorted(Category.BOOK);
-        List<Product> movies = warehouse.getProductsByCategorySorted(Category.MOVIE);
 
         assertEquals(4, books.size());
         assertEquals("Clown Town", books.get(0).getName());
         assertEquals("Dominion", books.get(1).getName());
         assertEquals("People Like Us", books.get(2).getName());
-
-        assertEquals(2, movies.size());
-        assertEquals("Bla bla bla", movies.get(0).getName());
-        assertEquals("Clown Town", movies.get(1).getName());
     }
 
     @Test
@@ -149,6 +158,26 @@ public class ProductTest {
         assertTrue(products.contains(mid));
         assertTrue(products.contains(recent));
         assertFalse(products.contains(old));
+    }
+
+    @Test
+    void getModifiedProducts_returnsOnlyWhenDatesDiffer() {
+        Warehouse warehouse = new Warehouse();
+
+        LocalDateTime created = LocalDateTime.of(2023, 1, 1, 12, 0);
+        LocalDateTime modified = LocalDateTime.of(2023, 6, 1, 12, 0);
+
+        Product p1 = new Product(1, "Unchanged Book", Category.BOOK, 3, created, created);
+        Product p2 = new Product(2, "Changed Book", Category.BOOK, 4, created, modified);
+
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+
+        List<Product> modifiedProducts = warehouse.getModifiedProducts();
+
+        assertEquals(1, modifiedProducts.size());
+        assertTrue(modifiedProducts.contains(p2));
+        assertFalse(modifiedProducts.contains(p1));
     }
 
 

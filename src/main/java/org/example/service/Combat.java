@@ -27,7 +27,7 @@ public class Combat {
                     System.out.println("You attacked! " + enemy.getType() + "'s health is now " + enemy.getHealth());
                 }
             } else if (userChoice.contains("heal")) {
-                if (userInventory.hasItem(userChoice)) {
+                if (userInventory.hasItem("Health Potion")) {
                     player.setHealth(player.getHealth() + 10);
                     System.out.println("You used a health potion. You now have " + player.getHealth() + " health!");
                 }

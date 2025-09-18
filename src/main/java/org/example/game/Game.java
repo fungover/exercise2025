@@ -21,7 +21,7 @@ public class Game {
 
         if (itemChoice.equalsIgnoreCase("Y")) {
             Item sword = new Item("sword", "weapon");
-            Item healthPotion = new Item("healthPotion", "potion");
+            Item healthPotion = new Item("Health potion", "health_potion");
 
             userInventory.addItem(sword);
             userInventory.addItem(healthPotion);

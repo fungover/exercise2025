@@ -1,16 +1,20 @@
 package org.example.map;
 
 import org.example.entities.Enemy;
+import org.example.entities.Inventory;
+import org.example.entities.Item;
 import org.example.entities.Player;
 import org.example.service.Combat;
 
 public class Tile {
     private TileEnum type;
     private final Enemy enemy;
+    private Item chestItem;
 
-    public Tile(TileEnum type, Enemy enemy) {
+    public Tile(TileEnum type, Enemy enemy, Item chestItem) {
         this.type = type;
         this.enemy = enemy;
+        this.chestItem = chestItem;
     }
 
     public void onEnter(Player player, Tile tile) {
@@ -25,7 +29,15 @@ public class Tile {
 
                 break;
             case CHEST:
-                System.out.println("Found tile with chest");
+                if (chestItem != null) {
+                    System.out.println("You found a chest and opened it.");
+                    System.out.println("Inside the chest you found " + chestItem.getName() + " it has been added to your inventory!");
+
+                    Inventory userInventory = player.getInventory();
+                    userInventory.addItem(chestItem);
+
+                    this.type = TileEnum.EMPTY;
+                }
                 break;
             case DOOR:
                 System.out.println("Found tile with door");

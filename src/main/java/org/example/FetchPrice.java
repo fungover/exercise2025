@@ -21,7 +21,7 @@ public class FetchPrice {
 
     private String fetchPrice(String day, String month) {
         String payload;
-            String uri = createUri(day, month);
+        String uri = createUri(day, month);
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -31,6 +31,11 @@ public class FetchPrice {
                     .build();
             HttpResponse<String> response = client.send(request,
                     HttpResponse.BodyHandlers.ofString());
+            int status = response.statusCode();
+            if (status / 100 != 2) {
+                System.err.println("Non-2xx response " + status + " from " + uri);
+                return "[]";
+            }
             payload = response.body();
         } catch (IOException e) {
             System.err.println("Failed to fetch prices: " + e.getMessage());
@@ -44,12 +49,20 @@ public class FetchPrice {
     }
 
     private String createUri(String day, String month) {
-        return "https://www.elprisetjustnu.se/api/v1/prices/" + year +
+        String yearPart = year;
+        if ("12".equals(this.month) && "01".equals(month)) {
+            try {
+                yearPart = Integer.toString(Integer.parseInt(yearPart) + 1);
+            } catch (NumberFormatException ignore) {
+                // keep original year on parse failure
+            }
+        }
+        return "https://www.elprisetjustnu.se/api/v1/prices/" + yearPart +
                 "/" + month + "-" + day + "_SE" + zone + ".json";
     }
 
     public String fetchTodayPrices() {
-       return fetchPrice(today, month);
+        return fetchPrice(today, month);
     }
 
     public String fetchTomorrowPrices() {

@@ -32,8 +32,8 @@ class DiscountDecoratorTest {
     @ParameterizedTest
     @MethodSource("invalidInputs")
     @DisplayName("DiscountDecorator: throws IllegalArgumentException on invalid input")
-    void throwsExceptionIfInvalidInputs(Sellable testProduct, double price) {
-        assertThrows(IllegalArgumentException.class, () -> new DiscountDecorator(testProduct, price));
+    void throwsExceptionIfInvalidInputs(Sellable testProduct, double price, Class<? extends Throwable> expectedException) {
+        assertThrows(expectedException, () -> new DiscountDecorator(testProduct, price));
     }
 
     static Stream<Arguments> invalidInputs() {
@@ -46,9 +46,9 @@ class DiscountDecoratorTest {
                 .build();
 
         return Stream.of(
-                Arguments.of(null, 10),
-                Arguments.of(validProduct, -5),
-                Arguments.of(validProduct, 101)
+                Arguments.of(null, 10., NullPointerException.class),
+                Arguments.of(validProduct, -5, IllegalArgumentException.class),
+                Arguments.of(validProduct, 101, IllegalArgumentException.class)
         );
     }
 

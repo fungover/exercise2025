@@ -159,6 +159,7 @@ public class ProductServiceTest {
                 .name("Updated Product")
                 .category(Category.GENERAL)
                 .rating(2)
+                .price(5)
                 .build()
         ))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -204,7 +205,10 @@ public class ProductServiceTest {
 
                 //Rating
                 Arguments.of("1", "Test Product", Category.GENERAL, 11, 1),
-                Arguments.of("1", "Test Product", Category.GENERAL, 0, 1)
+                Arguments.of("1", "Test Product", Category.GENERAL, 0, 1),
+
+                //Price
+                Arguments.of("1", "Test Product", Category.GENERAL, 11, -5)
         );
     }
 

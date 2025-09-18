@@ -1,16 +1,16 @@
 package org.example.entities;
 
+import java.util.Objects;
+
 public class DiscountDecorator extends ProductDecorator {
     private final double discountPercentage;
 
     public DiscountDecorator(Sellable decoratedProduct, double discountPercentage) {
-        if (decoratedProduct == null) {
-            throw new IllegalArgumentException("Product cannot be null");
-        }
+        super(Objects.requireNonNull(decoratedProduct));
         if (discountPercentage < 0 || discountPercentage > 100) {
             throw new IllegalArgumentException("Discount percentage must be between 0 and 100");
         }
-        super(decoratedProduct);
+
         this.discountPercentage = discountPercentage;
     }
 

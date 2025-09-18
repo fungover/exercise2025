@@ -56,9 +56,9 @@ public class ProductTest {
 
         Product updated = warehouse.getProducts().getFirst();
 
-        assertEquals("New Name", updated.getName());
-        assertEquals(5, updated.getRating());
-        assertEquals(Category.BOOK, updated.getCategory());
+        assertEquals("New Name", updated.name());
+        assertEquals(5, updated.rating());
+        assertEquals(Category.BOOK, updated.category());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class ProductTest {
         warehouse.addProduct(p1);
         warehouse.addProduct(p2);
 
-        List<Product> products = warehouse.getAllProducts();
+        List<Product> products = warehouse.getProducts();
 
         assertEquals(2, products.size());
         assertTrue(products.contains(p1));
@@ -83,7 +83,7 @@ public class ProductTest {
     void getAllProducts_emptyWarehouse_returnsEmptyList() {
         Warehouse warehouse = new Warehouse();
 
-        List<Product> products = warehouse.getAllProducts();
+        List<Product> products = warehouse.getProducts();
 
         assertTrue(products.isEmpty());
     }
@@ -108,8 +108,8 @@ public class ProductTest {
         warehouse.addProduct(product1);
         warehouse.addProduct(product2);
 
-        assertEquals(56, product1.getId());
-        assertEquals(78, product2.getId());
+        assertEquals(56, product1.id());
+        assertEquals(78, product2.id());
 
     }
 
@@ -127,8 +127,8 @@ public class ProductTest {
         List<Product> movies = warehouse.getProductsByCategorySorted(Category.MOVIE);
 
         assertEquals(2, movies.size());
-        assertEquals("Bla bla bla", movies.get(0).getName());
-        assertEquals("Clown Town", movies.get(1).getName());
+        assertEquals("Bla bla bla", movies.get(0).name());
+        assertEquals("Clown Town", movies.get(1).name());
     }
 
     @Test
@@ -149,9 +149,9 @@ public class ProductTest {
         List<Product> books = warehouse.getProductsByCategorySorted(Category.BOOK);
 
         assertEquals(4, books.size());
-        assertEquals("Clown Town", books.get(0).getName());
-        assertEquals("Dominion", books.get(1).getName());
-        assertEquals("People Like Us", books.get(2).getName());
+        assertEquals("Clown Town", books.get(0).name());
+        assertEquals("Dominion", books.get(1).name());
+        assertEquals("People Like Us", books.get(2).name());
     }
 
     @Test

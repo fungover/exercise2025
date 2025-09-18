@@ -5,19 +5,15 @@ import entities.Category;
 import entities.Product;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collector;
-
-import static entities.Category.BOOK;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Warehouse {
     private final List<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
-        if(product.getName().isEmpty()){
+        if(product.name().isEmpty()){
             throw new IllegalArgumentException("Name can not be empty");
         }
         products.add(product);
@@ -25,43 +21,39 @@ public class Warehouse {
     }
 
     public List<Product> getProducts() {
-        return products;
+        return Collections.unmodifiableList(products);
     }
 
 
     public void updateProduct(int id, String name, Category category, int rating) {
-        Product product = products.stream()
-                .filter(p -> p.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException(
-                        "Product with id " + id + " not found"));
-        product.setName(name);
-        product.setCategory(category);
-        product.setRating(rating);
-
-    }
-
-    public List<Product> getAllProducts() {
-        return new ArrayList<>(products);
+        for (int i = 0; i < products.size(); i++) {
+            Product p = products.get(i);
+            if (p.id() == id) {
+                Product updated = new Product(id, name, category, rating, p.createdAt(), LocalDateTime.now());
+                products.set(i, updated);
+                return;
+            }
+        }
+        throw new NoSuchElementException("Product with id " + id + " not found");
     }
 
     public List<Product> getProductsByCategorySorted(Category category) {
         return products.stream()
-                .filter(p -> p.getCategory() == category)
-                .sorted(Comparator.comparing(Product::getName))
+                .filter(p -> p.category() == category)
+                .sorted(Comparator.comparing(Product::name))
                 .toList();
 
     }
 
     public List<Product> getProductsCreatedAfter(LocalDate date) {
         return products.stream()
-                .filter(p -> p.getCreatedAt().toLocalDate().isAfter(date))
+                .filter(p -> p.createdAt().toLocalDate().isAfter(date))
                 .toList();
     }
 
     public List<Product> getModifiedProducts() {
             return products.stream()
-                    .filter(p -> !p.getCreatedAt().equals(p.getModifiedAt()))
+                    .filter(p -> !p.createdAt().equals(p.modifiedAt()))
                     .toList();
         }
     }

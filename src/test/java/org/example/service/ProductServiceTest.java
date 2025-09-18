@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.entities.Product;
 import org.example.entities.Category;
+import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -12,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
      // --- addProduct ---
      @Test
      void addProductShouldAddSuccessfully() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          Product product = new Product.Builder()
                  .id("1")
                  .name("Kiwi")
@@ -28,6 +31,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
      @Test
      void addProductShouldThrowExceptionIfNameEmpty() {
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          assertThrows(IllegalArgumentException.class, () -> {
              new Product.Builder()
                      .id("2")
@@ -42,7 +47,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
      @Test
      void addProductShouldThrowExceptionIfRatingOutOfRange() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          Product product = new Product.Builder()
                  .id("3")
                  .name("Pear")
@@ -58,7 +64,8 @@ import static org.junit.jupiter.api.Assertions.*;
      // --- updateProduct ---
      @Test
      void updateProductShouldUpdateSuccessfully() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          Product product = new Product.Builder()
                  .id("4")
                  .name("Milk")
@@ -80,7 +87,8 @@ import static org.junit.jupiter.api.Assertions.*;
      // --- getProductById ---
      @Test
      void getProductByIdShouldReturnProductWhenIdExists() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          Product p = new Product.Builder()
                  .id("1")
                  .name("Kiwi")
@@ -97,14 +105,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
      @Test
      void getProductByIdShouldThrowExceptionWhenIdDoesNotExist() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          assertThrows(IllegalArgumentException.class, () -> productService.getProductById("85"));
      }
 
      // --- getProductsByCategorySorted ---
      @Test
      void getProductsByCategorySortedShouldReturnSortedProductsByCategory() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          productService.addProduct(
                  new Product.Builder()
                  .id("a")
@@ -151,14 +161,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
      @Test
      void getProductsByCategorySortedShouldThrowExceptionWhenCategoryIsNull() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          assertThrows(IllegalArgumentException.class, () -> productService.getProductsByCategorySorted(null));
      }
 
      // --- getProductsCreatedAfter ---
      @Test
      void getProductsCreatedAfterShouldFilter() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          LocalDate fiveDaysAgo = LocalDate.now().minusDays(5);
          LocalDate yesterday = LocalDate.now().minusDays(1);
          LocalDate today = LocalDate.now();
@@ -196,14 +208,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
      @Test
      void getProductsCreatedAfterShouldThrowExceptionWhenDateIsNull() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          assertThrows(IllegalArgumentException.class, () -> productService.getProductsCreatedAfter(null));
      }
 
      // --- getModifiedProducts ---
      @Test
      void getModifiedProductsShouldReturnModified() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          LocalDate now = LocalDate.now();
          LocalDate yesterday = now.minusDays(1);
 
@@ -235,7 +249,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
      @Test
      void getModifiedProductsShouldReturnEmptyListWhenNoModified() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          LocalDate today = LocalDate.now();
 
          productService.addProduct(new Product.Builder()
@@ -264,7 +279,8 @@ import static org.junit.jupiter.api.Assertions.*;
      // --- getAllProducts ---
      @Test
      void getAllProductsShouldReturnDefensiveCopy() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          Product product = new Product.Builder()
                  .id("10")
                  .name("A")
@@ -285,14 +301,16 @@ import static org.junit.jupiter.api.Assertions.*;
      // --- updateProduct failures ---
      @Test
      void updateProductShouldThrowExceptionWhenIdDoesNotExist() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          assertThrows(IllegalArgumentException.class, () ->
                  productService.updateProduct("missing", "Name", Category.Food, 5));
      }
 
      @Test
      void updateProductShouldValidateInput() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          // Valid product first
          Product product = new Product.Builder()
                  .id("u1")
@@ -324,7 +342,8 @@ import static org.junit.jupiter.api.Assertions.*;
      // --- getCategoriesWithProducts ---
      @Test
      void getCategoriesWithProductsShouldReturnSortedCategories() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          productService.addProduct(new Product.Builder()
                  .id("c1")
                  .name("Water")
@@ -352,7 +371,8 @@ import static org.junit.jupiter.api.Assertions.*;
      // --- countProductsInCategory ---
      @Test
      void countProductsInCategoryShouldCount() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          productService.addProduct(new Product.Builder()
                  .id("f1")
                  .name("Apple")
@@ -384,14 +404,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
      @Test
      void countProductsInCategoryShouldThrowOnNull() {
-         ProductService productService = new ProductService();
+        ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          assertThrows(IllegalArgumentException.class, () -> productService.countProductsInCategory(null));
      }
 
      // --- getProductInitialsMap ---
      @Test
      void getProductInitialsMapShouldCountInitialsCaseInsensitive() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          productService.addProduct(new Product.Builder()
                  .id("i1")
                  .name("apple")
@@ -426,7 +448,8 @@ import static org.junit.jupiter.api.Assertions.*;
      // --- getTopRatedProductsThisMonth ---
      @Test
      void getTopRatedProductsThisMonthShouldReturnTopRatedCreatedThisMonthSortedNewestFirst() {
-         ProductService productService = new ProductService();
+         ProductRepository repo = new InMemoryProductRepository();
+         ProductService productService = new ProductService(repo);
          LocalDate now = LocalDate.now();
          LocalDate earlierThisMonth = now.minusDays(5);
          LocalDate lastMonth = now.minusMonths(1);

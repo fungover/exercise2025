@@ -2,6 +2,7 @@ package exercise3.service;
 
 import exercise3.entities.Category;
 import exercise3.entities.Product;
+import exercise3.repository.InMemoryProductRepository;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -13,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ManagingProductTest {
 
     Product.ProductBuilder builder = new Product.ProductBuilder();
-    ManagingProduct managingProduct = new ManagingProduct();
+    InMemoryProductRepository managingProduct  = new InMemoryProductRepository();
+    ProductService productService  = new ProductService(managingProduct);
 
     @Test
     public void productIsAddedToListWhenCreated() {
@@ -41,7 +43,7 @@ class ManagingProductTest {
         managingProduct.updateProduct(builder.from(itemToUpdate).setRating(3).setModifiedDate(LocalDate.now()).createProduct());
 
         assertEquals(2,managingProduct.getAllProducts().size());
-        assertEquals(1, managingProduct.getModifiedProducts().size());
+        assertEquals(1, productService.getModifiedProducts().size());
 
     }
 
@@ -90,7 +92,7 @@ class ManagingProductTest {
         managingProduct.addProduct(builder.setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
         managingProduct.addProduct(builder.setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
-        List <Product> sortedProducts = managingProduct.getProductsByCategorySorted(Category.DRESS);
+        List <Product> sortedProducts = productService.getProductsByCategorySorted(Category.DRESS);
 
         assertEquals(4,sortedProducts.size());
         assertEquals("Cocktail dress", sortedProducts.getFirst().getName());
@@ -101,7 +103,7 @@ class ManagingProductTest {
 
     @Test
     public void throwsIllegalArgumentExceptionIfListToSortIsEmpty(){
-        assertThrows(IllegalArgumentException.class, ()-> managingProduct.getProductsByCategorySorted(Category.DRESS));
+        assertThrows(IllegalArgumentException.class, ()-> productService.getProductsByCategorySorted(Category.DRESS));
     }
 
     @Test
@@ -114,7 +116,7 @@ class ManagingProductTest {
         managingProduct.addProduct(builder.setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.of(2025, 9, 8)).setModifiedDate(LocalDate.of(2025, 9, 8)).createProduct());
         managingProduct.addProduct(builder.setId("Anna").setName("Cocktail dress").setCategory(Category.DRESS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
-        List<Product>  sortedProducts = managingProduct.getProductsCreatedAfter(LocalDate.of(2025,9,3));
+        List<Product>  sortedProducts = productService.getProductsCreatedAfter(LocalDate.of(2025,9,3));
 
         assertEquals(4,sortedProducts.size());
 
@@ -122,7 +124,7 @@ class ManagingProductTest {
 
     @Test
     public void throwsIllegalArgumentExpressionIfListToFilterForGivenDayIsEmpty(){
-        assertThrows(IllegalArgumentException.class, ()-> managingProduct.getProductsCreatedAfter(LocalDate.now()));
+        assertThrows(IllegalArgumentException.class, ()-> productService.getProductsCreatedAfter(LocalDate.now()));
     }
 
     @Test
@@ -134,14 +136,14 @@ class ManagingProductTest {
         managingProduct.addProduct(builder.setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.of(2025, 9, 8)).setModifiedDate(LocalDate.now()).createProduct());
         managingProduct.addProduct(builder.setId("Anna").setName("Cocktail dress").setCategory(Category.DRESS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
-        List<Product>  sortedProducts = managingProduct.getModifiedProducts();
+        List<Product>  sortedProducts = productService.getModifiedProducts();
 
         assertEquals(2,sortedProducts.size());
     }
 
     @Test
     public void throwsIllegalArgumentExceptionIfListToFilterForModifiedDateIsEmpty(){
-        assertThrows(IllegalArgumentException.class, ()-> managingProduct.getModifiedProducts());
+        assertThrows(IllegalArgumentException.class, ()-> productService.getModifiedProducts());
     }
 
     @Test
@@ -153,7 +155,7 @@ class ManagingProductTest {
         managingProduct.addProduct(builder.setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
         managingProduct.addProduct(builder.setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
-        List<Category> categories = managingProduct.getCategoriesWithProducts();
+        List<Category> categories = productService.getCategoriesWithProducts();
 
         assertEquals(3,categories.size());
         assertEquals(Category.JEANS,categories.getFirst());
@@ -163,7 +165,7 @@ class ManagingProductTest {
 
     @Test
     public void throwsIllegalArgumentExceptionIfListToFilterForProductsWithAtLeastOneProductIsEmpty(){
-        assertThrows(IllegalArgumentException.class, ()-> managingProduct.getCategoriesWithProducts());
+        assertThrows(IllegalArgumentException.class, ()-> productService.getCategoriesWithProducts());
     }
 
     @Test
@@ -175,12 +177,12 @@ class ManagingProductTest {
         managingProduct.addProduct(builder.setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
         managingProduct.addProduct(builder.setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
-        assertEquals(4, managingProduct.countProductsInCategory(Category.DRESS));
+        assertEquals(4, productService.countProductsInCategory(Category.DRESS));
     }
 
     @Test
     public void throwsIllegalArgumentExceptionIfListToFilterForProductsInCategoryIsEmpty(){
-        assertThrows(IllegalArgumentException.class, ()-> managingProduct.countProductsInCategory(Category.DRESS));
+        assertThrows(IllegalArgumentException.class, ()-> productService.countProductsInCategory(Category.DRESS));
     }
 
     @Test
@@ -192,7 +194,7 @@ class ManagingProductTest {
         managingProduct.addProduct(builder.setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
         managingProduct.addProduct(builder.setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
 
-        Map<Character, Integer> products = managingProduct.getProductsInitialsMap();
+        Map<Character, Integer> products = productService.getProductsInitialsMap();
 
         assertEquals(3, products.size());
         assertEquals(4, products.get('D'));
@@ -203,7 +205,7 @@ class ManagingProductTest {
 
     @Test
     public void throwsIllegalArgumentExceptionIfListToCollectCharacterAndCountIsEmpty(){
-        assertThrows(IllegalArgumentException.class, ()-> managingProduct.getProductsInitialsMap());
+        assertThrows(IllegalArgumentException.class, ()-> productService.getProductsInitialsMap());
     }
 
     @Test
@@ -220,9 +222,9 @@ class ManagingProductTest {
         managingProduct.addProduct(builder.setId("Milo").setName("Flared jeans").setCategory(Category.JEANS).setRating(10).setCreatedDate(firstDay).setModifiedDate(LocalDate.now()).createProduct());
         managingProduct.addProduct(builder.setId("Leon").setName("Dressed pants").setCategory(Category.PANTS).setRating(10).setCreatedDate(secondDay).setModifiedDate(LocalDate.now()).createProduct());
 
-        assertEquals(2, managingProduct.getTopProductsThisMonth().size());
-        assertEquals("Milo", managingProduct.getTopProductsThisMonth().getFirst().getId());
-        assertEquals("Leon", managingProduct.getTopProductsThisMonth().getLast().getId());
+        assertEquals(2, productService.getTopProductsThisMonth().size());
+        assertEquals("Milo", productService.getTopProductsThisMonth().getFirst().getId());
+        assertEquals("Leon", productService.getTopProductsThisMonth().getLast().getId());
 
     }
 }

@@ -516,6 +516,16 @@ class ProductServiceTest {
         assertEquals(0, toysCount); // Verify that the count is 0
     }
 
+    @Test
+    @DisplayName("Should throw exception when countProductsInCategory called with null category")
+    void countProductsInCategoryWithNullCategoryThrowsException() {
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
+                () -> productService.countProductsInCategory(null)
+        );
+        assertEquals("category cannot be null", exception.getMessage());
+    }
+
     // ========================================
     // TESTS FOR getProductsInitialsMap()
     // ========================================

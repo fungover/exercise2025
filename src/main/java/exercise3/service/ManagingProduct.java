@@ -1,7 +1,7 @@
-package Exercise3.Service;
+package exercise3.service;
 
-import Exercise3.Entities.Category;
-import Exercise3.Entities.Product;
+import exercise3.entities.Category;
+import exercise3.entities.Product;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -17,7 +17,7 @@ public class ManagingProduct implements Warehouse {
         Objects.requireNonNull(product, "Product cannot be null");
 
         boolean exists = listOfProducts.stream()
-                        .anyMatch(item -> item.id().equals(product.id()));
+                        .anyMatch(item -> item.getId().equals(product.getId()));
 
         if(exists) {
             throw new IllegalArgumentException("Product already exists");
@@ -46,8 +46,8 @@ public class ManagingProduct implements Warehouse {
         Objects.requireNonNull(id, "Product id cannot be null");
 
         Product productById = listOfProducts.stream()
-                .filter(item -> item.id().equals(id.trim()))
-                .max(Comparator.comparing(Product::modifiedDate))
+                .filter(item -> item.getId().equals(id.trim()))
+                .max(Comparator.comparing(Product::getModifiedDate))
                 .orElse(null);
 
         if(productById == null){
@@ -64,8 +64,8 @@ public class ManagingProduct implements Warehouse {
         Objects.requireNonNull(category, "Category cannot be null");
 
         return listOfProducts.stream()
-                .filter(item -> item.category().equals(category))
-                .sorted(Comparator.comparing(Product::name)).toList();
+                .filter(item -> item.getCategory().equals(category))
+                .sorted(Comparator.comparing(Product::getName)).toList();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ManagingProduct implements Warehouse {
         Objects.requireNonNull(after, "Date cannot be null");
 
         return listOfProducts.stream()
-                .filter(item -> item.createdDate().isAfter(after)).toList();
+                .filter(item -> item.getCreatedDate().isAfter(after)).toList();
 
     }
 
@@ -85,7 +85,7 @@ public class ManagingProduct implements Warehouse {
         checkIsListIsEmpty();
 
                return listOfProducts.stream()
-                .filter(item -> !item.createdDate().equals(item.modifiedDate())).toList();
+                .filter(item -> !item.getCreatedDate().equals(item.getModifiedDate())).toList();
 
     }
 
@@ -95,7 +95,7 @@ public class ManagingProduct implements Warehouse {
         checkIsListIsEmpty();
 
         var countedProducts = listOfProducts.stream()
-                .collect(Collectors.groupingBy(Product::category, Collectors.counting()));
+                .collect(Collectors.groupingBy(Product::getCategory, Collectors.counting()));
 
         return countedProducts.entrySet().stream()
                 .filter(entry -> entry.getValue() > 0)
@@ -111,7 +111,7 @@ public class ManagingProduct implements Warehouse {
         Objects.requireNonNull(category, "Category cannot be null");
 
         return listOfProducts.stream()
-                .filter(item -> item.category().equals(category)).count();
+                .filter(item -> item.getCategory().equals(category)).count();
     }
 
     @Override
@@ -120,19 +120,19 @@ public class ManagingProduct implements Warehouse {
         checkIsListIsEmpty();
 
         return listOfProducts.stream()
-                .collect(Collectors.groupingBy(item -> item.category().name().charAt(0),Collectors.collectingAndThen(Collectors.counting(), Long::intValue)));
+                .collect(Collectors.groupingBy(item -> item.getCategory().name().charAt(0),Collectors.collectingAndThen(Collectors.counting(), Long::intValue)));
     }
 
     @Override
     public List<Product> getTopProductsThisMonth() {
         LocalDate today = LocalDate.now();
         List<Product> listFilteredByMonth = listOfProducts.stream()
-                .filter(item -> item.createdDate().getYear() == today.getYear() &&
-                        item.createdDate().getMonth().equals(today.getMonth())).toList();
+                .filter(item -> item.getCreatedDate().getYear() == today.getYear() &&
+                        item.getCreatedDate().getMonth().equals(today.getMonth())).toList();
 
         return listFilteredByMonth.stream()
-                .filter(item -> item.rating() == 10)
-                .sorted(Comparator.comparing(Product::createdDate)).toList();
+                .filter(item -> item.getRating() == 10)
+                .sorted(Comparator.comparing(Product::getCreatedDate)).toList();
     }
 
     private void checkIsListIsEmpty() {

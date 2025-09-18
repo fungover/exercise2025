@@ -1,7 +1,7 @@
-package Exercise3.Service;
+package exercise3.service;
 
-import Exercise3.Entities.Category;
-import Exercise3.Entities.Product;
+import exercise3.entities.Category;
+import exercise3.entities.Product;
 
 import java.time.LocalDate;
 import java.util.List;

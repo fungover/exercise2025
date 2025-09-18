@@ -30,7 +30,7 @@ public abstract class ProductDecorator implements Sellable {
      * - Makes decorators composable - can stack multiple decorators.
      */
 
-    protected Sellable decoratedProduct; // The wrapped Sellable object.
+    protected final Sellable decoratedProduct; // The wrapped Sellable object.
 
     public ProductDecorator(Sellable decoratedProduct) { // Constructor takes the Sellable object to wrap with dependency injection.
         this.decoratedProduct = Objects.requireNonNull(decoratedProduct, "decoratedProduct cannot be null");

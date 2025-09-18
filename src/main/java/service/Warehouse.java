@@ -13,11 +13,14 @@ public class Warehouse {
     private final List<Product> products = new ArrayList<>();
 
     public void addProduct(Product product) {
-        if(product.name().isEmpty()){
+        Objects.requireNonNull(product, "Product must not be null");
+        if (product.name() == null || product.name().isBlank()) {
             throw new IllegalArgumentException("Name can not be empty");
         }
+        if (products.stream().anyMatch(p -> p.id() == product.id())) {
+            throw new IllegalArgumentException("Duplicate product id: " + product.id());
+        }
         products.add(product);
-
     }
 
     public List<Product> getProducts() {

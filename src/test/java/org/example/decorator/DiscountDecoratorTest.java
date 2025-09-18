@@ -85,4 +85,34 @@ class DiscountDecoratorTest {
         assertEquals("decoratedProduct cannot be null", exception.getMessage()); // Check exception message
     }
 
+    @Test
+    void discountDecoratorShouldHandleZeroPercentDiscount() {
+        Product product = new Product.Builder()
+                .id("test-1")
+                .name("Test Product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .price(100.0)
+                .build();
+
+        Sellable noDiscount = new DiscountDecorator(product, 0.0); // 0% discount
+
+        assertEquals(100.0, noDiscount.getPrice(), 0.01); // Price should be unchanged
+    }
+
+    @Test
+    void discountDecoratorShouldHandleOneHundredPercentDiscount() {
+        Product product = new Product.Builder()
+                .id("test-2")
+                .name("Free Product")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .price(100.0)
+                .build();
+
+        Sellable freeProduct = new DiscountDecorator(product, 100.0); // 100% discount
+
+        assertEquals(0.0, freeProduct.getPrice(), 0.01); // Price should be zero
+    }
+
 }

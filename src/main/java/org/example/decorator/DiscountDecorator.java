@@ -3,7 +3,7 @@ package org.example.decorator;
 public class DiscountDecorator extends ProductDecorator {
 
     /**
-     * DiscoundDecorator - Adds discount functionality to any Sellable.
+     * DiscountDecorator - Adds discount functionality to any Sellable.
      * <p>
      * HOW IT WORKS:
      * - Takes original Sellable + discount percentage.

@@ -14,7 +14,7 @@ public record Product(
         LocalDate modifiedDate
 ) implements Sellable {
     /**
-     * Private contructor which takes a Builder-instance as parameter.
+     * Private constructor which takes a Builder-instance as parameter.
      * <p>
      * WHY PRIVATE?
      * - This forces all products to be created through the Builder class.
@@ -34,7 +34,7 @@ public record Product(
                 builder.name,
                 builder.category,
                 builder.rating,
-                builder.price, // Price field added here aswell.
+                builder.price, // Price field added here as well.
                 builder.createdDate,
                 builder.modifiedDate
         );
@@ -44,7 +44,7 @@ public record Product(
      * Static nested Builder class which implements the Builder pattern for creating Product instances.
      * <p>
      * WHY STATIC NESTED CLASS?
-     * - static: Kan be used without creating an instance of the outer class (Product).
+     * - static: Can be used without creating an instance of the outer class (Product).
      * - nested: Logically connected to Product, same file and can access private members.
      * - Can be used as: new Product.Builder().id("1").name("Laptop").build();
      */

@@ -16,10 +16,10 @@ public class Warehouse {
             throw new IllegalArgumentException("product can not be null");
         }
 
-        if (productById.containsKey(product.id())) {
-            throw new IllegalArgumentException("Product already exists: " + product.id());
+        if (productById.containsKey(product.getId())) {
+            throw new IllegalArgumentException("Product already exists: " + product.getId());
         }
-        productById.put(product.id(), product);
+        productById.put(product.getId(), product);
         return product;
     }
 
@@ -54,14 +54,14 @@ public class Warehouse {
 
         LocalDate now = LocalDate.now();
 
-        Product updated = new Product(
-                existing.id(),
-                name.trim(),
-                category,
-                rating,
-                existing.createdDate(),
-                now
-        );
+        Product updated = new Product.Builder()
+                .id(existing.getId())
+                .name(name.trim())
+                .category(category)
+                .rating(rating)
+                .createdDate(existing.getCreatedDate())
+                .modifiedDate(now)
+                .build();
 
         productById.put(id, updated);
         return updated;
@@ -70,8 +70,8 @@ public class Warehouse {
     // Sorted A-Ö, filters products from the same category that I send in. Is returned in alphabetical order, immutable copy
     public List<Product> getProductsByCategorySorted(Category category) {
         Objects.requireNonNull(category, "category can not be null");
-        return productById.values().stream().filter(p -> p.category() == category)
-                .sorted(Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER))
+        return productById.values().stream().filter(p -> p.getCategory() == category)
+                .sorted(Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
@@ -79,13 +79,13 @@ public class Warehouse {
     public List<Product> getProductsCreatedAfter(LocalDate date) {
         Objects.requireNonNull(date, "date can not be null");
         return productById.values().stream()
-                .filter(p -> p.createdDate().isAfter(date))
+                .filter(p -> p.getCreatedDate().isAfter(date))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     // Gets all products, filters all products that are changed after creation
     public List<Product> getModifiedProducts() {
-        return productById.values().stream().filter(p -> !p.createdDate().equals(p.modifiedDate()))
+        return productById.values().stream().filter(p -> !p.getCreatedDate().equals(p.getModifiedDate()))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 

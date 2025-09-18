@@ -3,7 +3,9 @@ package entities;
 import java.time.LocalDate;
 import java.util.Objects;
 
-/** Changed from record to immutable class **/
+/**
+ * Changed from record to immutable class
+ **/
 public final class Product {
     private final String id;
     private final String name;
@@ -42,19 +44,19 @@ public final class Product {
     /**
      * Getters (Instead of record functions)
      */
-    public String id() {
+    public String getId() {
         return id;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
-    public Category category() {
+    public Category getCategory() {
         return category;
     }
 
-    public int rating() {
+    public int getRating() {
         return rating;
     }
 
@@ -66,7 +68,44 @@ public final class Product {
         return modifiedDate;
     }
 
-    //Builder class
+    /** With methods **/
+
+    public Product withName(String newName, LocalDate newModifiedDate) {
+        return new Product.Builder()
+                .id(this.getId())
+                .name(newName)
+                .category(this.getCategory())
+                .rating(this.getRating())
+                .createdDate(this.getCreatedDate())
+                .modifiedDate(newModifiedDate)
+                .build();
+    }
+
+    public Product withCategory(Category newCategory, LocalDate newModifiedDate) {
+        return new Product.Builder()
+                .id(this.getId())
+                .name(this.getName())
+                .category(newCategory)
+                .rating(this.getRating())
+                .createdDate(this.getCreatedDate())
+                .modifiedDate(newModifiedDate)
+                .build();
+    }
+
+    public Product withRating(int newRating, LocalDate newModifiedDate) {
+        return new Product.Builder()
+                .id(this.getId())
+                .name(this.getName())
+                .category(this.getCategory())
+                .rating(newRating)
+                .createdDate(this.getCreatedDate())
+                .modifiedDate(newModifiedDate)
+                .build();
+    }
+
+    /**
+     * Builder class
+     **/
     public static class Builder {
         private String id;
         private String name;

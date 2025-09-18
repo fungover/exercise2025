@@ -10,6 +10,8 @@ builder will only be able to go through my Product constructor. It can therefore
 The builder will be a so called 'nested public static class' in my current Product class. 
 
 
+
+
 ### About Assignment 4:
 🎯 Objective
 The goal of this assignment is to refactor the existing Product Management application by implementing 
@@ -22,29 +24,29 @@ This can become hard to read and inflexible if we add more attributes in the fut
 We will solve this using the Builder Pattern.
 
 ## Your Task
-[] Create a Builder Class: Inside your Product class/record, create a public static nested class named Builder.
+[x] Create a Builder Class: Inside your Product class/record, create a public static nested class named Builder.
 
-[] Add Fields to the Builder: 
+[x] Add Fields to the Builder: 
 The Builder class should have fields that correspond to the attributes of the Product 
 (e.g., id, name, category, rating).
 
-[] Implement "Setter" Methods: 
+[x] Implement "Setter" Methods: 
 For each field, create a public method that sets the value and returns the Builder instance (this). 
 This allows for method chaining.
 Example: public Builder name(String name) { ... }
 
-[] Implement the build() Method: Create a public build() method in the Builder. 
+[x] Implement the build() Method: Create a public build() method in the Builder. 
 This method will be responsible for:
 - Calling the Product's constructor with the values stored in the builder.
 - Returning the newly created, immutable Product instance.
 - This is the ideal place to handle validation (e.g., checking if name is empty) 
 or setting default values (like createdDate and modifiedDate).
 
-[] Make the Product Constructor Private: 
+[x] Make the Product Constructor Private: 
 To ensure that Product objects can only be created via the builder, 
 make the original Product constructor private.
 
-[] Update Your Code: 
+[x] Update Your Code: 
 Refactor your Warehouse class and your unit tests 
 to use the new builder for creating products.
 

@@ -7,19 +7,29 @@ import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
-        Product coffee = new Product(
-                "A-001", "coffee", Category.FOOD, 8, LocalDate.now(), LocalDate.now()
-        );
+        Product coffee = new Product.Builder()
+                .id("A-001")
+                .name("Coffee")
+                .category(Category.FOOD)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
 
-        Product lego = new Product(
-                "B-001", "LEGO Duplo", Category.TOYS, 9, LocalDate.now(), LocalDate.now()
-        );
+        Product lego = new Product.Builder()
+                .id("B-001")
+                .name("Lego")
+                .category(Category.TOYS)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
 
         System.out.println(coffee);
-        System.out.println("DisplayName:" + coffee.category().getDisplayName());
+        System.out.println("DisplayName:" + coffee.getCategory().getDisplayName());
 
         System.out.println(lego);
-        System.out.println("DisplayName:" + lego.category().getDisplayName());
+        System.out.println("DisplayName:" + lego.getCategory().getDisplayName());
     }
 }
 

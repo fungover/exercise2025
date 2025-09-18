@@ -31,8 +31,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
      @Test
      void addProductShouldThrowExceptionIfNameEmpty() {
-         ProductRepository repo = new InMemoryProductRepository();
-         ProductService productService = new ProductService(repo);
          assertThrows(IllegalArgumentException.class, () -> {
              new Product.Builder()
                      .id("2")

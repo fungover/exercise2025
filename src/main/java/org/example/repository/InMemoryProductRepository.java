@@ -8,11 +8,14 @@ public class InMemoryProductRepository implements ProductRepository {
     private final Map<UUID, Product> products = new LinkedHashMap<>();
 
     private UUID parseUuid(String id) {
-        try {
-            return UUID.fromString(id);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Product ID must be a valid UUID");
-        }
+             if (id == null || id.isBlank()) {
+                  throw new IllegalArgumentException("Product ID is required");
+            }
+          try {
+              return UUID.fromString(id);
+          } catch (IllegalArgumentException e) {
+              throw new IllegalArgumentException("Product ID must be a valid UUID: " + id, e);
+                  }
     }
     @Override
     public void addProduct(Product product) {
@@ -35,22 +38,26 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public Optional<Product> getProductById(String id) {
-        try {
-            UUID uuid = UUID.fromString(id);
-            return Optional.ofNullable(products.get(uuid));
-        } catch (IllegalArgumentException e) {
-            return Optional.empty();
+            if (id == null || id.isBlank()) {
+                return Optional.empty();
+            }
+          try {
+              UUID uuid = parseUuid(id);
+                return Optional.ofNullable(products.get(uuid));
+          } catch (IllegalArgumentException e) {
+              return Optional.empty();
         }
     }
 
     @Override
     public void updateProduct(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
         UUID productId = parseUuid(product.getId());
-
         if (!products.containsKey(productId)) {
             throw new IllegalArgumentException("Product with ID " + product.getId() + " does not exist");
         }
-
         products.put(productId, product);
     }
 }

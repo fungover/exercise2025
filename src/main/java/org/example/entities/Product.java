@@ -76,6 +76,7 @@ public final class Product implements Sellable {
     }
 
     // Generates unique hash code based on all fields
+    // Price is intentionally excluded from hashCode to maintain product identity
     @Override
     public int hashCode() {
         return Objects.hash(id, name, category, rating, createdDate, modifiedDate);

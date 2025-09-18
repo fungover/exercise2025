@@ -22,6 +22,9 @@ public class Warehouse {
         }
 
         // Check that the product does not already exist
+        if (product.id() == null || product.id().isBlank()) {
+            throw new IllegalArgumentException("Product id cannot be null or blank");
+        }
         if (products.containsKey(product.id())) {
             throw new IllegalArgumentException("Product with ID " + product.id() + " already exists");
         }
@@ -32,6 +35,12 @@ public class Warehouse {
 
      // Updating an existing product
     public void updateProduct(String id, String name, Category category, int rating) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("id cannot be null or blank");
+        }
+        if (category == null) {
+            throw new IllegalArgumentException("category cannot be null");
+        }
         // Find existing product
         Product existingProduct = products.get(id);
         if (existingProduct == null) {

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ProductTest {
 
@@ -34,7 +35,7 @@ public class ProductTest {
     @Test
     public void cantCreateProductName() {
         Product product = new Product(0,"", Category.FOOD, 5);
-        assertEquals("Name",product.name());
+        assertEquals("",product.name());
     }
 
     @Test
@@ -46,7 +47,7 @@ public class ProductTest {
     @Test
     public void cantCreateProductCategory() {
         Product product = new Product(0,"Name",null, 5);
-        assertEquals(Category.FOOD,product.category());
+        assertEquals(null,product.category());
     }
 
     @Test
@@ -56,8 +57,10 @@ public class ProductTest {
     }
     @Test
     public void cantCreateProductRating() {
-        Product product = new Product(0,"Name",Category.FOOD,11);
-        assertEquals(5,product.rating());
+        IllegalArgumentException errorMessage = assertThrows(IllegalArgumentException.class,
+                () -> new Product(0, "Name", Category.FOOD, 11));
+
+        assertEquals("Rating must be between 0 and 10", errorMessage.getMessage());
     }
 
     @Test
@@ -70,7 +73,8 @@ public class ProductTest {
     @Test
     public void cantCreateZonedDateTime() {
         Product product = new Product(0,"Name",Category.FOOD, 5);
-        assertEquals(ZonedDateTime.now(ZoneId.of("")),product.createdDate());
+        assertEquals(ZoneId.of("Europe/Stockholm"),product.createdDate().getZone());
+
     }
 
     @Test

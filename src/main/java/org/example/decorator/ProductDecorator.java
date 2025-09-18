@@ -19,7 +19,7 @@ import java.util.Objects;
  * COMPOSITION OVER INHERITANCE:
  * - Instead of inheriting from Product, we "wrap" it instead.
  * - Makes it possible to wrap any Sellable object, not just Product.
- * - More flexible then inheritence - can combine multiple decorators.
+ * - More flexible than inheritance - can combine multiple decorators.
  */
 
 public abstract class ProductDecorator implements Sellable {

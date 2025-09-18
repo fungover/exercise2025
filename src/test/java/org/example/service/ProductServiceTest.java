@@ -340,6 +340,16 @@ class ProductServiceTest {
         assertTrue(recentProducts.isEmpty()); // Verify that the result is an empty list
     }
 
+    @Test
+    @DisplayName("Should throw exception when getProductsCreatedAfter called with null date")
+    void getProductsCreatedAfterWithNullDateThrowsException() {
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
+                () -> productService.getProductsCreatedAfter(null)
+        );
+        assertEquals("date cannot be null", exception.getMessage());
+    }
+
     // ========================================
     // TESTS FOR getModifiedProducts()
     // ========================================

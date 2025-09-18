@@ -81,16 +81,15 @@ public class ProductService {
     }
 
     public Optional<Product> getProductById(String id) { //Using Optional to handle the case where the product might not be found.
+        Objects.requireNonNull(id, "id cannot be null");
         return productRepository.getProductById(id);
     }
 
-    /*
-    WORKING ON STREAMS HERE
-     */
 
     // Get products by category and sort them by name (A-Z).
 
     public List<Product> getProductsByCategorySorted(Category category) {
+        Objects.requireNonNull(category, "category cannot be null");
         return productRepository.getAllProducts().stream() // Convert the collection of products to a stream
                 .filter(product -> product.category() == category) // Filter products by the specified category
                 .sorted(Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER)) // Sort the filtered products by name in ascending order
@@ -100,6 +99,7 @@ public class ProductService {
     // Get products created after a given date.
 
     public List<Product> getProductsCreatedAfter(LocalDate date) {
+        Objects.requireNonNull(date, "date cannot be null");
         return productRepository.getAllProducts().stream()
                 .filter(product -> product.createdDate().isAfter(date)) // Filter products created after the specified date
                 .collect(Collectors.toList()); // Collect the filtered products into a list and return it
@@ -121,6 +121,7 @@ public class ProductService {
 
     // Return the number of products in a specific category.
     public long countProductsInCategory(Category category) {
+        Objects.requireNonNull(category, "category cannot be null");
         return productRepository.getAllProducts().stream()
                 .filter(product -> product.category() == category) // Filter products by the specified category
                 .count(); // Count the number of products in the filtered stream
@@ -139,21 +140,22 @@ public class ProductService {
                 ));
     }
 
-    // Return products with max rating, created this month, sorted by newst first.
+    // Return products with max rating, created this month, sorted by newest first.
     public List<Product> getTopRatedProductsThisMonth() {
 
         LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1); // Get the first day of the current month
 
-        OptionalInt maxRating = productRepository.getAllProducts().stream()
+        List<Product> all = productRepository.getAllProducts();
+        OptionalInt maxRating = all.stream()
                 .filter(product -> !product.createdDate().isBefore(startOfMonth)) // Filter products created this month
-                .mapToInt(Product::rating) // Map to their ratings
-                .max(); // Find the maximum rating among the filtered products
+                .mapToInt(Product::rating) // Extract ratings
+                .max(); // Find the maximum rating
 
         if (maxRating.isEmpty()) { // If no products were created this month, return an empty list
             return Collections.emptyList();
         }
-        // Return products with max rating, created this month, sorted by the newest first.
-        return productRepository.getAllProducts().stream()
+        // Return products with max rating, created this month, sorted by newest first.
+        return all.stream()
                 .filter(product -> !product.createdDate().isBefore(startOfMonth)) // Filter products created this month
                 .filter(product -> product.rating() == maxRating.getAsInt()) // Filter products with the maximum rating
                 .sorted(Comparator.comparing(Product::createdDate).reversed()) // Sort by created date in descending order (newest first)

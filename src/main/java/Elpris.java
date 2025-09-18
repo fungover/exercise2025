@@ -1,5 +1,5 @@
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;     //Denna plus ovan hjälper till att autmatiskt bygga rätt datum.
+import java.time.format.DateTimeFormatter;     //Denna plus ovan hjälper till att automatiskt bygga rätt datum.
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -23,7 +23,7 @@ class HourData {
 
 public class Elpris {
     public static void main(String[] args) {
-        String zone = "SE3";
+        String zone = "SE3";         //Kan ändras vid argument. (F:K högerklicka "modify run config och välj område)
 
         if (args.length > 0) {
             zone = args[0].toUpperCase();
@@ -63,16 +63,9 @@ public class Elpris {
             System.out.println("\nMorgondagen är ännu inte publicerad.");
         }
 
-
-
-
-
-
-
-
     }
 
-    public static String fetchJson(String urlString) {
+    public static String fetchJson(String urlString) {      // // Hämtas JSON från API via HTTP GET
         try {
             URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -107,7 +100,7 @@ public class Elpris {
     }
 
 
-    public static void printMeanPrice(List<HourData> hours) {
+    public static void printMeanPrice(List<HourData> hours) {     //skriver ut medelpriset
         double sum = 0;
 
         for (HourData h : hours) {
@@ -120,7 +113,7 @@ public class Elpris {
 
 
 
-    public static void printCheapestAndMostExpensive(List<HourData> hours) {
+    public static void printCheapestAndMostExpensive(List<HourData> hours) { //Dyraste och billigaste timmen
         if (hours.isEmpty()) {
             System.out.println("Ingen data tillgänglig.");
             return;
@@ -148,7 +141,7 @@ public class Elpris {
     }
 
 
-    public static String buildApiUrl (LocalDate date, String zone) {
+    public static String buildApiUrl (LocalDate date, String zone) { //Bygger API-url utifrån datum och zon.
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM-dd");
         String formattedDate = date.format(formatter);
         return "https://www.elprisetjustnu.se/api/v1/prices/" + formattedDate + "_" + zone + ".json";
@@ -156,7 +149,7 @@ public class Elpris {
 
 
 
-    public static void BestChargingTime(List<HourData> hours, int duration) {
+    public static void BestChargingTime(List<HourData> hours, int duration) { //Letar efter de bästa timmarna att ladda.
         if (hours.size() < duration) {
             System.out.println("Det finns förnärvarande inte tillräckligt många timmar i datan.");
             return;
@@ -166,7 +159,7 @@ public class Elpris {
         double bestAvg = Double.MAX_VALUE;
         int bestStartIndex = 0;
 
-        for (int i = 0; i <= hours.size() - duration; i++) {
+        for (int i = 0; i <= hours.size() - duration; i++) {   //Testar möjliga startpunkter.
             double sum = 0;
             for (int j = 0; j <duration; j++) {
                 sum += hours.get(i + j).SEK_per_kWh;
@@ -189,7 +182,7 @@ public class Elpris {
     }
 
 
-    public static String formatTime(String isoString) {
+    public static String formatTime(String isoString) {    //Formatering till förståelig tid och datum.
       LocalDateTime time = OffsetDateTime.parse(isoString, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                                          .toLocalDateTime();
       return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));

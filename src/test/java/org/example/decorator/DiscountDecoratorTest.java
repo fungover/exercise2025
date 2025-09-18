@@ -76,4 +76,13 @@ class DiscountDecoratorTest {
         assertEquals("Discount percentage must be between 0 and 100", exception.getMessage()); // Check exception message
     }
 
+    @Test
+    void discountDecoratorShouldThrowExceptionForNullProduct() {
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
+                () -> new DiscountDecorator(null, 20.0) // Null product
+        );
+        assertEquals("decoratedProduct cannot be null", exception.getMessage()); // Check exception message
+    }
+
 }

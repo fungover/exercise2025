@@ -1,5 +1,7 @@
 package org.example.decorator;
 
+import java.util.Objects;
+
 /**
  * ProductDecorator - Abstract base class for all product decorators.
  * - This is the "Base Decorator" which all concrete decorators will extend.
@@ -31,7 +33,7 @@ public abstract class ProductDecorator implements Sellable {
     protected Sellable decoratedProduct; // The wrapped Sellable object.
 
     public ProductDecorator(Sellable decoratedProduct) { // Constructor takes the Sellable object to wrap with dependency injection.
-        this.decoratedProduct = decoratedProduct;
+        this.decoratedProduct = Objects.requireNonNull(decoratedProduct, "decoratedProduct cannot be null");
     }
 
     @Override

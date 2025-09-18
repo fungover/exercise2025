@@ -17,11 +17,9 @@ public class PriceMapper {
     public Price[] getAllPrices() {
         this.todayPrices = getTodayPrices();
         this.tomorrowPrices = getTomorrowPrices();
-        if (tomorrowPrices != null) {
-            return ArrayUtils.addAll(todayPrices, tomorrowPrices);
-        } else {
-            return todayPrices;
-        }
+        if (todayPrices == null) todayPrices = new Price[0];
+        if (tomorrowPrices == null) tomorrowPrices = new Price[0];
+        return ArrayUtils.addAll(todayPrices, tomorrowPrices);
     }
 
     public Price[] getTodayPrices() {
@@ -30,7 +28,8 @@ public class PriceMapper {
             String firstPayload = fetch.fetchTodayPrices();
             todayPrices = mapper.readValue(firstPayload, Price[].class);
         } catch (JsonProcessingException e) {
-            System.out.println(e.getMessage());
+            System.err.println("Failed to parse today's prices: " + e.getMessage());
+            todayPrices = new Price[0];
         }
         return todayPrices;
     }
@@ -40,7 +39,9 @@ public class PriceMapper {
             FetchPrice fetch = new FetchPrice(zone);
             String secondPayload = fetch.fetchTomorrowPrices();
             tomorrowPrices = mapper.readValue(secondPayload, Price[].class);
-        } catch (JsonProcessingException _) {
+        } catch (JsonProcessingException e) {
+            System.err.println("Failed to parse tomorrow's prices: " + e.getMessage());
+            tomorrowPrices = new Price[0];
         }
         return tomorrowPrices;
     }

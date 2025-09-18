@@ -26,14 +26,19 @@ public class FetchPrice {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(uri))
+                    .timeout(java.time.Duration.ofSeconds(10))
                     .header("Content-Type", "application/json")
                     .build();
             HttpResponse<String> response = client.send(request,
                     HttpResponse.BodyHandlers.ofString());
             payload = response.body();
-        } catch (IOException | InterruptedException e) {
-            payload = e.getMessage();
-            System.out.println(payload);
+        } catch (IOException e) {
+            System.err.println("Failed to fetch prices: " + e.getMessage());
+            payload = "[]"; // Return empty array to allow graceful degradation
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Request was interrupted: " + e.getMessage());
+            throw new RuntimeException("Request was interrupted: " + e);
         }
         return payload;
     }

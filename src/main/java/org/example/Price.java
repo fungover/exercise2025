@@ -35,18 +35,30 @@ public class Price {
     }
 
     public String getStartHour() {
-            return timeStart.substring(11, 16);
+        if (timeStart == null || timeStart.length() < 16) {
+            return "";
+        }
+        return timeStart.substring(11, 16);
     }
 
     public String getStartDate() {
+        if (timeStart == null || timeStart.length() < 10) {
+            return "";
+        }
         return timeStart.substring(0, 10);
     }
 
     public String getEndHour() {
+        if (timeEnd == null || timeEnd.length() < 16) {
+            return "";
+        }
         return timeEnd.substring(11, 16);
     }
 
     public String getEndDate() {
+        if (timeEnd == null || timeEnd.length() < 10) {
+            return "";
+        }
         return timeEnd.substring(0, 10);
     }
 }

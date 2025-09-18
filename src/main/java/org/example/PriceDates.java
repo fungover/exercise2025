@@ -45,8 +45,8 @@ class FetchDates {
     }
 
     public String getTomorrowMonth() {
-        LocalDate tomorrowMonth = presentDate.plusMonths(1);
-        return String.format("%02d", tomorrowMonth.getMonthValue());
+        LocalDate tomorrow = presentDate.plusDays(1);
+        return String.format("%02d", tomorrow.getMonthValue());
 
     }
 }

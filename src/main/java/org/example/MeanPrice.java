@@ -5,22 +5,26 @@ import java.math.RoundingMode;
 
 class MeanPrice {
     private final PriceMapper prices;
-    private BigDecimal totalSek = BigDecimal.ZERO;
-    private BigDecimal totalEur = BigDecimal.ZERO;
 
     public MeanPrice(PriceMapper prices) {
         this.prices = prices;
     }
 
     private MeanPrices calculateMeanPrice() {
+        BigDecimal totalSek = BigDecimal.ZERO;
+        BigDecimal totalEur = BigDecimal.ZERO;
         Price[] todayPrices = prices.getTodayPrices();
         int count = todayPrices.length;
         if (count == 0)
             return new MeanPrices(BigDecimal.ZERO, BigDecimal.ZERO);
 
         for (var price : todayPrices) {
-            totalSek = totalSek.add(price.getSekPerKWh());
-            totalEur = totalEur.add(price.getEurPerKWh());
+            if (price.getSekPerKWh() != null) {
+                totalSek = totalSek.add(price.getSekPerKWh());
+            }
+            if (price.getEurPerKWh() != null) {
+                totalEur = totalEur.add(price.getEurPerKWh());
+            }
         }
 
         BigDecimal meanPriceSek = totalSek.divide(BigDecimal.valueOf(count),

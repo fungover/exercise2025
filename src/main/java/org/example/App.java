@@ -3,11 +3,11 @@ package org.example;
 import java.util.Scanner;
 
 public class App {
-    public static void main() {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         String zone;
         do {
             printAvailableZones();
-            Scanner scanner = new Scanner(System.in);
             System.out.print("Enter your zone: ");
             zone = scanner.nextLine();
         } while (!zone.equals("1") && !zone.equals("2") &&

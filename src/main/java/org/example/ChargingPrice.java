@@ -6,8 +6,6 @@ import java.util.Arrays;
 
 public class ChargingPrice {
     private final PriceMapper priceMapper;
-    private final int hours = LocalDateTime.now().getHour();
-    private final int minutes = LocalDateTime.now().getMinute();
 
     public ChargingPrice(PriceMapper priceMapper) {
         this.priceMapper = priceMapper;
@@ -15,6 +13,9 @@ public class ChargingPrice {
 
     private Price[] currentPrices() {
         Price[] allPrices = priceMapper.getAllPrices();
+        if (allPrices == null || allPrices.length == 0) {
+            return new Price[0];
+        }
         int newIndex = 0;
         String now = setHour();
         for (Price price : allPrices) {
@@ -27,14 +28,10 @@ public class ChargingPrice {
     }
 
     private String setHour() {
-        int dateTime;
-        if (minutes >= 30) {
-            dateTime = hours + 1;
-        } else {
-            dateTime = hours;
-        }
-        String formattedTime = String.format("%02d", dateTime);
-        return formattedTime + ":00";
+        var now = LocalDateTime.now();
+        int hour = now.getHour() + (now.getMinute() >= 30 ? 1 : 0);
+        hour = hour % 24; // wrap midnight -> 00:00
+        return String.format("%02d:00", hour);
     }
 
     private ChargingPriceDates chargingPrices(Price[] prices, int n, int k) {
@@ -98,5 +95,6 @@ public class ChargingPrice {
         printChargingPrice(8);
     }
 
-    record ChargingPriceDates(BigDecimal minSum, int startIndex, int endIndex) {}
+    record ChargingPriceDates(BigDecimal minSum, int startIndex, int endIndex) {
+    }
 }

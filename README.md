@@ -1,49 +1,48 @@
-# Warehouse Product Manager
+# Product Management System
 
-## Overview
-This project is a Java application for managing productService products.
+A Java application demonstrating the implementation of common design patterns: **Builder**, **Repository**, and **Decorator**.  
+The system manages a collection of pet products with features for creation, storage, retrieval, and dynamic pricing through decorators.
 
-At the moment it has a dog productService theme but can be easily extended to support other types of products.
+## Features
+- **Product Management**: Create, read, update, and manage pet products
+- **Category-based Organization**: Organize products by categories (`FOOD`, `TOYS`, `GROOMING`, `TRAINING`, `BEDDING`)
+- **Flexible Product Creation**: Build products easily with the **Builder Pattern**
+- **Data Access Abstraction**: **Repository Pattern** separates business logic from data storage
+- **Dynamic Pricing**: **Decorator Pattern** allows applying discounts without changing the original product
 
-The application targets Java 17+ (uses records and Stream.toList()) and JUnit 5 for unit testing.
+## Design Patterns Implemented
 
-## Structure
-- `entities/Product.java`: Defines the product model using an immutable record.
-- `entities/Category.java`: Enum representing product categories.
-- `service/Warehouse.java`: Main service class containing business logic.
-- `App.java`: Main application class.
-- `test/WarehouseTest.java`: Unit tests for all public methods using JUnit 5.
+### 1. Builder Pattern (Creational)
+`Product.Builder` enables flexible and readable product creation with validation.
 
-## Product Entity
-The `Product` class includes:
-- `id`: Unique identifier
-- `name`: Product name (must not be empty)
-- `category`: Enum value
-- `rating`: Integer between 0–10
-- `createdDate`: Date of creation
-- `modifiedDate`: Date of last modification
+```java
+Product product = new Product.Builder()
+    .id(UUID.randomUUID().toString())
+    .name("Chew Bone")
+    .category(Category.FOOD)
+    .price(BigDecimal.valueOf(45))
+    .rating(8)
+    .build();
+```
 
-## Implemented Functionality
-The following public methods are implemented in `Warehouse`:
+### 2. Repository Pattern (Structural)
 
-- `addProduct(Product product)`: Adds a new product.
-- `updateProduct(String id, String name, Category category, int rating)`: Updates an existing product.
-- `getAllProducts()`: Returns all products.
-- `getProductById(String id)`: Retrieves a product by its ID.
-- `getProductsByCategorySorted(Category category)`: Returns products in a category, sorted alphabetically.
-- `getProductsCreatedAfter(ZonedDateTime)`: Returns products created after the given date.
-- `getModifiedProducts()`: Returns products where `createdDate` and `modifiedDate` differ.
+Separates data storage logic from business logic via the `ProductRepository` interface.
 
-All methods use Java Streams where appropriate.
+**Components:**
+- `ProductRepository`: Defines data access contract
+- `InMemoryProductRepository`: In-memory implementation
+- `ProductService`: Business logic with dependency injection
 
-## Testing
-Each public method is tested with:
-- At least one test for successful execution
-- At least one test for expected failure (e.g., invalid input)
 
-Tests are written using JUnit 5 and cover both typical and edge cases.
+### 3. Decorator Pattern (Structural)
 
-## Notes
-- The application avoids exposing internal mutable structures.
-- Creation and modification dates are handled using `ZonedDateTime`.
-- The application uses UUIDs for product IDs.
+Adds functionality (like discounts) without modifying the original object.
+
+**Components:**
+
+- `Sellable`: Interface for sellable items
+
+- `ProductDecorator`: Abstract base class
+
+- `DiscountDecorator`: Concrete decorator for discounts

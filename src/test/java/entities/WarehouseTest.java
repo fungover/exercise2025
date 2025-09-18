@@ -2,7 +2,6 @@ package entities;
 
 /* Test Class where I declare Warehouses´ variable wh - this is private */
 
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.Warehouse;
@@ -39,23 +38,27 @@ public class WarehouseTest {
 
     @Test
     void addProduct_failsOnDuplicatedId() {
-        Product p1 = new Product(
-                "A-001",
-                "Coffee",
-                Category.FOOD,
-                8,
-                LocalDate.now(),
-                LocalDate.now());
+        Product p1 = new Product.Builder()
+                .id("A-001")
+                .name("Coffee")
+                .category(Category.FOOD)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
 
-        Product p2 = new Product(
-                "A-001",
-                "Cookies",
-                Category.FOOD, 4,
-                LocalDate.now(),
-                LocalDate.now());
+        Product p2 = new Product.Builder()
+                .id("A-001")
+                .name("Cookies")
+                .category(Category.FOOD)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
 
         wh.addProduct(p1);
-        assertThrows(IllegalArgumentException.class, () -> wh.addProduct(p2), "Should not allow duplicated ID´s");
+        assertThrows(IllegalArgumentException.class, () -> wh.addProduct(p2),
+                "Should not allow duplicated ID´s");
     }
 
 
@@ -68,13 +71,14 @@ public class WarehouseTest {
 
     @Test
     void getProductById_returnProduct() {
-        Product p = new Product(
-                "C-001",
-                "LEGO",
-                Category.TOYS,
-                9,
-                LocalDate.now(),
-                LocalDate.now());
+        Product p = new Product.Builder()
+                .id("C-001")
+                .name("Lego")
+                .category(Category.TOYS)
+                .rating(9)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
 
         wh.addProduct(p);
 
@@ -89,29 +93,32 @@ public class WarehouseTest {
 
     @Test
     void getAllProducts_returnsAllProducts() {
-        Product p1 = new Product(
-                "D-001",
-                "Book",
-                Category.BOOKS,
-                7,
-                LocalDate.now(),
-                LocalDate.now());
+        Product p1 = new Product.Builder()
+                .id("D-001")
+                .name("Book")
+                .category(Category.BOOKS)
+                .rating(7)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
 
-        Product p2 = new Product(
-                "E-002",
-                "Ball",
-                Category.TOYS,
-                6,
-                LocalDate.now(),
-                LocalDate.now());
+        Product p2 = new Product.Builder()
+                .id("E-001")
+                .name("Ball")
+                .category(Category.TOYS)
+                .rating(6)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
 
-        Product p3 = new Product(
-                "E-003",
-                "Spinner",
-                Category.TOYS,
-                7,
-                LocalDate.now(),
-                LocalDate.now());
+        Product p3 = new Product.Builder()
+                .id("E-003")
+                .name("Spinner")
+                .category(Category.TOYS)
+                .rating(7)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
 
         wh.addProduct(p1);
         wh.addProduct(p2);
@@ -133,13 +140,15 @@ public class WarehouseTest {
 
     @Test
     void updateProduct_success() {
-        Product p = new Product(
-                "U-001",
-                "coffee",
-                Category.FOOD,
-                7,
-                LocalDate.now().minusDays(3),
-                LocalDate.now().minusDays(3));
+        Product p = new Product.Builder()
+                .id("A-001")
+                .name("Coffee")
+                .category(Category.FOOD)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
+
         wh.addProduct(p);
 
         Product updated = wh.updateProduct("U-001", "Mascara", Category.BEAUTY, 10);
@@ -148,8 +157,8 @@ public class WarehouseTest {
         assertEquals(Category.BEAUTY, updated.category());
         assertEquals(10, updated.rating());
         assertEquals(p.id(), updated.id(), "Id should not change");
-        assertEquals(p.createdDate(), updated.createdDate(), "Should not change");
-        assertTrue(updated.modifiedDate().isAfter(p.modifiedDate()), "modifiedDate should be updated now");
+        assertEquals(p.getCreatedDate(), updated.getCreatedDate(), "Should not change");
+        assertTrue(updated.getModifiedDate().isAfter(p.getModifiedDate()), "modifiedDate should be updated now");
 
         assertEquals(updated, wh.getProductById("U-001"));
     }
@@ -167,13 +176,14 @@ public class WarehouseTest {
 
     @Test
     void updateProduct_failsOnEmptyName() {
-        Product p = new Product(
-                "U-010",
-                "Coffee",
-                Category.FOOD,
-                7,
-                LocalDate.now(),
-                LocalDate.now());
+        Product p = new Product.Builder()
+                .id("A-001")
+                .name("Coffee")
+                .category(Category.FOOD)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
 
         wh.addProduct(p);
 
@@ -188,13 +198,14 @@ public class WarehouseTest {
 
     @Test
     void updateProduct_failsOnBadRating() {
-        Product p = new Product(
-                "U-011",
-                "Coffee",
-                Category.FOOD,
-                7,
-                LocalDate.now(),
-                LocalDate.now());
+        Product p = new Product.Builder()
+                .id("A-001")
+                .name("Coffee")
+                .category(Category.FOOD)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
 
         wh.addProduct(p);
 
@@ -217,10 +228,10 @@ public class WarehouseTest {
 
     @Test
     void getProductsByCategorySorted_ReturnsAZByName_caseInsensitive() {
-        Product a = new Product("S1", "alpha", Category.TOYS, 7, LocalDate.now(), LocalDate.now());
-        Product b = new Product("S2", "Beta", Category.TOYS, 6, LocalDate.now(), LocalDate.now());
-        Product c = new Product("S3", "car", Category.TOYS, 5, LocalDate.now(), LocalDate.now());
-        Product x = new Product("X1", "zest", Category.TOYS, 4, LocalDate.now(), LocalDate.now());
+        Product a = new Product.Builder().id("S1").name("alpha").category(Category.TOYS).rating(7).createdDate(LocalDate.now()).modifiedDate(LocalDate.now()).build();
+        Product b = new Product.Builder().id("S2").name("beta").category(Category.TOYS).rating(6).createdDate(LocalDate.now()).modifiedDate(LocalDate.now()).build();
+        Product c = new Product.Builder().id("S3").name("cars").category(Category.TOYS).rating(5).createdDate(LocalDate.now()).modifiedDate(LocalDate.now()).build();
+        Product x = new Product.Builder().id("X1").name("zest").category(Category.TOYS).rating(4).createdDate(LocalDate.now()).modifiedDate(LocalDate.now()).build();
 
         wh.addProduct(b);
         wh.addProduct(c);
@@ -248,9 +259,12 @@ public class WarehouseTest {
         LocalDate d1 = LocalDate.now().minusDays(5);
         LocalDate d2 = LocalDate.now();
 
-        Product p0 = new Product("C1", "Old", Category.FOOD, 5, d0, d0);
-        Product p1 = new Product("C2", "Middle", Category.FOOD, 5, d1, d1);
-        Product p2 = new Product("C3", "New", Category.FOOD, 5, d2, d2);
+        Product p0 = new Product.Builder().id("C1").name("Old").category(Category.FOOD).rating(5)
+                .createdDate(d0).modifiedDate(d0).build();
+        Product p1 = new Product.Builder().id("C2").name("Middle").category(Category.FOOD).rating(5)
+                .createdDate(d1).modifiedDate(d1).build();
+        Product p2 = new Product.Builder().id("C3").name("New").category(Category.FOOD).rating(5)
+                .createdDate(d2).modifiedDate(d2).build();
 
         wh.addProduct(p0);
         wh.addProduct(p1);

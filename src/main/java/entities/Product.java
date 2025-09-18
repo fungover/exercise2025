@@ -39,7 +39,9 @@ public final class Product {
         this.rating = rating;
     }
 
-    //Getters
+    /**
+     * Getters (Instead of record functions)
+     */
     public String id() {
         return id;
     }
@@ -56,11 +58,11 @@ public final class Product {
         return rating;
     }
 
-    public LocalDate CreatedDate() {
+    public LocalDate getCreatedDate() {
         return createdDate;
     }
 
-    public LocalDate modifiedDate() {
+    public LocalDate getModifiedDate() {
         return modifiedDate;
     }
 

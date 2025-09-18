@@ -11,7 +11,7 @@ public class DiscountDecorator extends ProductDecorator {
      * - Overrides getPrice() to apply discount.
      */
 
-    private double discountPercentage;
+    private final double discountPercentage;
 
     public DiscountDecorator(Sellable decoratedProduct, double discountPercentage) {
         super(decoratedProduct);

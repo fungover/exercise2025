@@ -3,21 +3,24 @@ package entities;
 import java.time.LocalDate;
 import java.util.Objects;
 
-/**
- * All methods in my warehouse will be working with this Product object.
- * It is an immutable class that provides me with methods <p> fields, getters, equals,
- * hashCode & toString</p> These I typed myself when making a manual class
- * before converting Product to a record.
- **/
-public record Product(String id, String name, Category category, int rating, LocalDate createdDate,
-                      LocalDate modifiedDate) {
+/** Changed from record to immutable class **/
+public final class Product {
+    private final String id;
+    private final String name;
+    private final Category category;
+    private final int rating;
+    private final LocalDate createdDate;
+    private final LocalDate modifiedDate;
 
-    public Product {
-        id = Objects.requireNonNull(id, "id can not be null").trim();
-        name = Objects.requireNonNull(name, "name can not be null").trim();
-        category = Objects.requireNonNull(category, "category can not be null");
-        createdDate = Objects.requireNonNull(createdDate, "createdDate can not be null");
-        modifiedDate = Objects.requireNonNull(modifiedDate, "modifiedDate can not be null");
+    /**
+     * Private constructor available only for the builder
+     */
+    private Product(String id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate) {
+        this.id = Objects.requireNonNull(id, "id can not be null").trim();
+        this.name = Objects.requireNonNull(name, "name can not be null").trim();
+        this.category = Objects.requireNonNull(category, "category can not be null");
+        this.createdDate = Objects.requireNonNull(createdDate, "createdDate can not be null");
+        this.modifiedDate = Objects.requireNonNull(modifiedDate, "modifiedDate can not be null");
 
         if (id.isEmpty()) {
             throw new IllegalArgumentException("Id can not be empty");
@@ -32,28 +35,80 @@ public record Product(String id, String name, Category category, int rating, Loc
         if (modifiedDate.isBefore(createdDate)) {
             throw new IllegalArgumentException("modifiedDate can not be before createdDate");
         }
+
+        this.rating = rating;
     }
 
-    /**
-     * If I want to change the object in the future, without breaking immutability
-     **/
-    public Product withName(String newName, LocalDate newModifiedDate) {
-        return new Product(id, newName, category, rating, createdDate, newModifiedDate);
+    //Getters
+    public String id() {
+        return id;
     }
 
-    //
-    public Product withCategory(Category newCategory, LocalDate newModifiedDate) {
-        return new Product(id, name, newCategory, rating, createdDate, newModifiedDate);
+    public String name() {
+        return name;
     }
 
-    public Product withRating(int newRating, LocalDate newModifiedDate) {
-        return new Product(id, name, category, newRating, createdDate, newModifiedDate);
+    public Category category() {
+        return category;
     }
 
+    public int rating() {
+        return rating;
+    }
 
-    /**
-     * I will keep this even though it is not necessary when using a record
-     **/
+    public LocalDate CreatedDate() {
+        return createdDate;
+    }
+
+    public LocalDate modifiedDate() {
+        return modifiedDate;
+    }
+
+    //Builder class
+    public static class Builder {
+        private String id;
+        private String name;
+        private Category category;
+        private int rating;
+        private LocalDate createdDate = LocalDate.now();
+        private LocalDate modifiedDate = LocalDate.now();
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder category(Category category) {
+            this.category = category;
+            return this;
+        }
+
+        public Builder rating(int rating) {
+            this.rating = rating;
+            return this;
+        }
+
+        public Builder createdDate(LocalDate createdDate) {
+            this.createdDate = createdDate;
+            return this;
+        }
+
+        public Builder modifiedDate(LocalDate modifiedDate) {
+            this.modifiedDate = modifiedDate;
+            return this;
+        }
+
+        public Product build() {
+            return new Product(id, name, category, rating, createdDate, modifiedDate);
+        }
+
+    }
+
     @Override
     public String toString() {
         return "Product{" +

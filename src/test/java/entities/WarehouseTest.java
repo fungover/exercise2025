@@ -23,12 +23,14 @@ public class WarehouseTest {
 
     @Test
     void addProduct_Success() {
-        Product p = new Product(
-                "A-001",
-                "Coffee",
-                Category.FOOD,
-                8, LocalDate.now(),
-                LocalDate.now());
+        Product p = new Product.Builder()
+                .id("A-001")
+                .name("Coffee")
+                .category(Category.FOOD)
+                .rating(8)
+                .createdDate(LocalDate.now())
+                .modifiedDate(LocalDate.now())
+                .build();
 
         Product saved = wh.addProduct(p);
         assertEquals(p, saved, "Should return the same product instance");

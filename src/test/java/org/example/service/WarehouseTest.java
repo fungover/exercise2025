@@ -29,17 +29,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
      @Test
      void addProductShouldThrowExceptionIfNameEmpty() {
-         Warehouse warehouse = new Warehouse();
-         Product product = new Product.Builder()
-                 .id("2")
-                 .name("")
-                 .category(Category.Food)
-                .rating(5)
-                 .createdDate(LocalDate.now())
-                 .modifiedDate(LocalDate.now())
-                 .build();
-
-         assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
+         assertThrows(IllegalArgumentException.class, () -> {
+             new Product.Builder()
+                     .id("2")
+                     .name("")
+                     .category(Category.Food)
+                     .rating(5)
+                     .createdDate(LocalDate.now())
+                     .modifiedDate(LocalDate.now())
+                     .build();
+         });
      }
 
      @Test

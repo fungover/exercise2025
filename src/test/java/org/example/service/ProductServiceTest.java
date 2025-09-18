@@ -179,6 +179,7 @@ public class ProductServiceTest {
         );
 
         assertThatThrownBy(() -> productService.updateProduct(new Product.Builder()
+                .id(id)
                 .name(name)
                 .category(category)
                 .rating(rating)

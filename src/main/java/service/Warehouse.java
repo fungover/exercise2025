@@ -27,8 +27,11 @@ public class Warehouse {
         return Collections.unmodifiableList(products);
     }
 
-
     public void updateProduct(int id, String name, Category category, int rating) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name can not be empty");
+        }
+        Objects.requireNonNull(category, "Category must not be null");
         for (int i = 0; i < products.size(); i++) {
             Product p = products.get(i);
             if (p.id() == id) {

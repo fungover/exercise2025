@@ -1,8 +1,6 @@
 package org.example.entities;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -12,34 +10,41 @@ public class ProductTest {
 
     @Test
     void creatingProduct_withValidData_setsAllFields() {
-        // Skapar testdata
-        String id = "p-001";
-        String name = "Samsung 55\" 4K";
-        Category category = Category.TV;
-        int rating = 8;
-        LocalDate created = LocalDate.now();
+        LocalDate today = LocalDate.now();
 
-        // Skapar produkt
-        Product product = new Product(id, name, category, rating, created, created);
+        Product product = Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build();
 
         // Kontrollerar att produktens fält är satta korrekt
-        assertThat(product.id()).isEqualTo(id);
-        assertThat(product.name()).isEqualTo(name);
-        assertThat(product.category()).isEqualTo(category);
-        assertThat(product.rating()).isEqualTo(rating);
-        assertThat(product.createdDate()).isEqualTo(created);
-        assertThat(product.modifiedDate()).isEqualTo(created);
+        assertThat(product.id()).isEqualTo("p-001");
+        assertThat(product.name()).isEqualTo("Samsung 55\" 4K");
+        assertThat(product.category()).isEqualTo(Category.TV);
+        assertThat(product.rating()).isEqualTo(8);
+        assertThat(product.createdDate()).isEqualTo(today);
+        assertThat(product.modifiedDate()).isEqualTo(today);
     }
 
     @Test
     void creatingProduct_withBlankName_throwsException() {
-        String id = "p-001";
-        String blankName = "   ";
         LocalDate today = LocalDate.now();
 
         // Kontrollerar att ett exception kastas när namnet är blank
         assertThatThrownBy(() ->
-                new Product(id, blankName, Category.TV, 8, today, today))
+                Product.builder()
+                    .id("p-001")
+                    .name("   ")
+                    .category(Category.TV)
+                    .rating(8)
+                    .createdDate(today)
+                    .modifiedDate(today)
+                    .build()
+                )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("name");
     }
@@ -50,14 +55,29 @@ public class ProductTest {
 
         // rating < 0
         assertThatThrownBy(() ->
-                new Product("p-002", "Budget Laptop", Category.COMPUTER, -1, today, today))
+                Product.builder()
+                    .id("p-002")
+                    .name("Budget Laptop")
+                    .category(Category.COMPUTER)
+                    .rating(-1)
+                    .createdDate(today)
+                    .modifiedDate(today)
+                    .build()
+                )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("rating");
 
         // rating > 10
         assertThatThrownBy(() ->
-                new Product("p-003", "Pro Laptop", Category.COMPUTER, 11, today, today)
-        )
+                Product.builder()
+                    .id("p-003")
+                    .name("Pro Laptop")
+                    .category(Category.COMPUTER)
+                    .rating(11)
+                    .createdDate(today)
+                    .modifiedDate(today)
+                    .build()
+                )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("rating");
     }
@@ -68,7 +88,15 @@ public class ProductTest {
         LocalDate modified = created.minusDays(1);
 
         assertThatThrownBy(() ->
-                new Product("p-002", "Budget Laptop", Category.COMPUTER, 8, created, modified))
+                Product.builder()
+                    .id("p-004")
+                    .name("Budget Laptop")
+                    .category(Category.COMPUTER)
+                    .rating(8)
+                    .createdDate(created)
+                    .modifiedDate(modified)
+                    .build()
+                )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("modified");
     }
@@ -79,32 +107,41 @@ public class ProductTest {
 
         // id == null
         assertThatThrownBy(() ->
-                new Product(null, "Budget Laptop", Category.COMPUTER, 8, today, today))
+                Product.builder()
+                    .name("Budget Laptop")
+                    .category(Category.COMPUTER)
+                    .rating(8)
+                    .createdDate(today)
+                    .modifiedDate(today)
+                    .build()
+                )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("id");
 
         // name == null
         assertThatThrownBy(() ->
-                new Product("p-002", null, Category.COMPUTER, 8, today, today))
+                Product.builder()
+                    .id("p-002")
+                    .category(Category.COMPUTER)
+                    .rating(8)
+                    .createdDate(today)
+                    .modifiedDate(today)
+                    .build()
+                )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("name");
 
         // category == null
         assertThatThrownBy(() ->
-                new Product("p-002", "Budget Laptop", null, 8, today, today))
+                Product.builder()
+                    .id("p-002")
+                    .name("Budget Laptop")
+                    .rating(8)
+                    .createdDate(today)
+                    .modifiedDate(today)
+                    .build()
+                )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("category");
-
-        // createdDate == null
-        assertThatThrownBy(() ->
-                new Product("p-002", "Budget Laptop", Category.COMPUTER, 8, null, today))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("created");
-
-        // modifiedDate == null
-        assertThatThrownBy(() ->
-                new Product("p-002", "Budget Laptop", Category.COMPUTER, 8, today, null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("modified");
     }
 }

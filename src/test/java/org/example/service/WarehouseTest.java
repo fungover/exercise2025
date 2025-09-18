@@ -24,7 +24,14 @@ public class WarehouseTest {
 
     @Test
     void addProduct_storesProductInWarehouse() {
-        Product tv = new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today);
+        Product tv = Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build();
 
         warehouse.addProduct(tv);
 
@@ -43,8 +50,23 @@ public class WarehouseTest {
 
     @Test
     void addProduct_duplicatedId_throwsException() {
-        Product first = new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today);
-        Product duplicateId = new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today);
+        Product first = Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build();
+
+        Product duplicateId = Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build();
 
         warehouse.addProduct(first);
 
@@ -56,8 +78,23 @@ public class WarehouseTest {
 
     @Test
     void getProductById_returnsMatchingProduct() {
-        Product tv = new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today);
-        Product laptop = new Product("p-002", "Budget Laptop", Category.COMPUTER, 8, today, today);
+        Product tv = Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build();
+
+        Product laptop = Product.builder()
+                .id("p-002")
+                .name("Budget Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build();
 
         warehouse.addProduct(tv);
         warehouse.addProduct(laptop);
@@ -68,7 +105,14 @@ public class WarehouseTest {
 
     @Test
     void getProductById_unknownId_throwsException() {
-        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
+        warehouse.addProduct(Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
 
         assertThatThrownBy(() -> warehouse.getProductById("p-000"))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -77,10 +121,41 @@ public class WarehouseTest {
 
     @Test
     void getProductsByCategorySorted_returnsAtoZByName() {
-        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
-        warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
-        warehouse.addProduct(new Product("p-003", "Pro Laptop", Category.COMPUTER, 8, today, today));
-        warehouse.addProduct(new Product("p-004", "Another Laptop", Category.COMPUTER, 7, today, today));
+        warehouse.addProduct(Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-002")
+                .name("Budget Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-003")
+                .name("Pro Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-004")
+                .name("Another Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
 
         var computers = warehouse.getProductsByCategorySorted(Category.COMPUTER);
 
@@ -98,12 +173,59 @@ public class WarehouseTest {
         var d5 = LocalDate.of(2025, 1, 5);
         var d6 = LocalDate.of(2025, 1, 6);
 
-        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, d1, d1));
-        warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, d2, d2));
-        warehouse.addProduct(new Product("p-003", "Pro Laptop", Category.COMPUTER, 8, d3, d3));
-        warehouse.addProduct(new Product("p-004", "Another Laptop", Category.COMPUTER, 7, d4, d4));
-        warehouse.addProduct(new Product("p-005", "Iphone", Category.PHONE, 7, d5, d5));
-        warehouse.addProduct(new Product("p-006", "Refrigerator", Category.APPLIANCES, 7, d6, d6));
+        warehouse.addProduct(Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(d1)
+                .modifiedDate(d1)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-002")
+                .name("Budget Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(d2)
+                .modifiedDate(d2)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-003")
+                .name("Pro Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(d3)
+                .modifiedDate(d3)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-004")
+                .name("Another Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(d4)
+                .modifiedDate(d4)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-005")
+                .name("Iphone")
+                .category(Category.PHONE)
+                .rating(7)
+                .createdDate(d5)
+                .modifiedDate(d5)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-006")
+                .name("Refrigerator")
+                .category(Category.APPLIANCES)
+                .rating(7)
+                .createdDate(d6)
+                .modifiedDate(d6)
+                .build());
 
         var afterJan3 = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 1, 3));
         assertThat(afterJan3)
@@ -114,12 +236,25 @@ public class WarehouseTest {
     @Test
     void getModifiedProducts_returnsWhereCreatedNotEqualModified() {
         var createdDate = LocalDate.of(2025, 1, 1);
-
         // CreatedDate är samma som ModifiedDate
-        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, createdDate, createdDate));
+        warehouse.addProduct(Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(createdDate)
+                .modifiedDate(createdDate)
+                .build());
 
         // CreatedDate är inte samma som ModifiedDate
-        warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, createdDate, createdDate.plusDays(1)));
+        warehouse.addProduct(Product.builder()
+                .id("p-002")
+                .name("Budget Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(createdDate)
+                .modifiedDate(createdDate.plusDays(1))
+                .build());
 
         var modifiedDate = warehouse.getModifiedProducts();
 
@@ -130,22 +265,68 @@ public class WarehouseTest {
 
     @Test
     void getCategoriesWithProducts_returnsOnlyCategoriesWithProducts() {
-        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
-        warehouse.addProduct(new Product("p-006", "Refrigerator", Category.APPLIANCES, 7, today, today));
+        warehouse.addProduct(Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-002")
+                .name("Budget Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
 
         var categories = warehouse.getCategoriesWithProducts();
 
         assertThat(categories)
-                .containsExactly(Category.TV, Category.APPLIANCES)
-                .doesNotContain(Category.COMPUTER, Category.PHONE);
+                .containsExactly(Category.TV, Category.COMPUTER)
+                .doesNotContain(Category.APPLIANCES, Category.PHONE);
     }
 
     @Test
     void countProductsInCategory_returnsCorrectCount() {
-        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
-        warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
-        warehouse.addProduct(new Product("p-003", "Pro Laptop", Category.COMPUTER, 8, today, today));
-        warehouse.addProduct(new Product("p-006", "Refrigerator", Category.APPLIANCES, 7, today, today));
+        warehouse.addProduct(Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-002")
+                .name("Budget Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-003")
+                .name("Pro Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-006")
+                .name("Refrigerator")
+                .category(Category.APPLIANCES)
+                .rating(7)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
 
         int tvCount = warehouse.countProductsInCategory(Category.TV);
         int computerCount = warehouse.countProductsInCategory(Category.COMPUTER);
@@ -158,8 +339,23 @@ public class WarehouseTest {
 
     @Test
     void countProductsInCategory_whenNoneExists_returnsZero() {
-        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
-        warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
+        warehouse.addProduct(Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-002")
+                .name("Budget Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
 
         int phoneCount = warehouse.countProductsInCategory(Category.PHONE);
 
@@ -168,10 +364,41 @@ public class WarehouseTest {
 
     @Test
     void getProductInitialsMap_CountsByFirstLetter_caseInsensitive() {
-        warehouse.addProduct(new Product("p-001", "Samsung 55\" 4K", Category.TV, 8, today, today));
-        warehouse.addProduct(new Product("p-002", "Budget Laptop", Category.COMPUTER, 7, today, today));
-        warehouse.addProduct(new Product("p-003", "Pro Laptop", Category.COMPUTER, 8, today, today));
-        warehouse.addProduct(new Product("p-007", "Samsung 65\" 4K", Category.TV, 8, today, today));
+        warehouse.addProduct(Product.builder()
+                .id("p-001")
+                .name("Samsung 55\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-002")
+                .name("Budget Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-003")
+                .name("Pro Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-007")
+                .name("Samsung 65\" 4K")
+                .category(Category.TV)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
 
 
         var map = warehouse.getProductInitialsMap();
@@ -187,10 +414,41 @@ public class WarehouseTest {
     void getTopRatedProductsThisMonth_returnsTopRatedCreatedThisMonth_sortedNewestFirst() {
         LocalDate fixedNow = LocalDate.of(2025, 9, 15);
 
-        Product p1 = new Product("p-001", "Best TV", Category.TV, 10, fixedNow.minusDays(10), fixedNow.minusDays(10));
-        Product p2 = new Product("p-002", "Best Laptop", Category.COMPUTER, 10, fixedNow.minusDays(5), fixedNow.minusDays(5));
-        Product p3 = new Product("p-003", "Mid Phone", Category.PHONE, 7, fixedNow.minusDays(13), fixedNow.minusDays(13));
-        Product p4 = new Product("p-004", "Best Refrigerator", Category.APPLIANCES, 10, fixedNow.minusMonths(1), fixedNow.minusMonths(1));
+        Product p1 = Product.builder()
+                .id("p-001")
+                .name("Best TV")
+                .category(Category.TV)
+                .rating(10)
+                .createdDate(fixedNow.minusDays(10))
+                .modifiedDate(fixedNow.minusDays(10))
+                .build();
+
+        Product p2 = Product.builder()
+                .id("p-002")
+                .name("Best Laptop")
+                .category(Category.COMPUTER)
+                .rating(10)
+                .createdDate(fixedNow.minusDays(5))
+                .modifiedDate(fixedNow.minusDays(5))
+                .build();
+
+        Product p3 = Product.builder()
+                .id("p-003")
+                .name("Mid Phone")
+                .category(Category.PHONE)
+                .rating(7)
+                .createdDate(fixedNow.minusDays(13))
+                .modifiedDate(fixedNow.minusDays(13))
+                .build();
+
+        Product p4 = Product.builder()
+                .id("p-004")
+                .name("Best Refrigerator")
+                .category(Category.APPLIANCES)
+                .rating(10)
+                .createdDate(fixedNow.minusMonths(1))
+                .modifiedDate(fixedNow.minusMonths(1))
+                .build();
 
         warehouse.addProduct(p1);
         warehouse.addProduct(p2);
@@ -204,8 +462,23 @@ public class WarehouseTest {
 
     @Test
     void getTopRatedProductsThisMonth_whenNoMatchingProducts_returnsEmptyList() {
-        warehouse.addProduct(new Product("p-001", "Mid Phone", Category.TV, 7, today, today));
-        warehouse.addProduct(new Product("p-002", "Mid Laptop", Category.COMPUTER, 7, today, today));
+        warehouse.addProduct(Product.builder()
+                .id("p-003")
+                .name("Mid Phone")
+                .category(Category.PHONE)
+                .rating(7)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
+
+        warehouse.addProduct(Product.builder()
+                .id("p-002")
+                .name("Mid Laptop")
+                .category(Category.COMPUTER)
+                .rating(7)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build());
 
         var result = warehouse.getTopRatedProductsThisMonth(today);
 

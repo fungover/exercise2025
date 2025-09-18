@@ -3,6 +3,7 @@ package entities;
 import org.junit.jupiter.api.Test;
 import service.Warehouse;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -44,9 +45,10 @@ public class ProductTest {
     @Test
     void updateProduct_updatesWhenProductExists() {
         Warehouse warehouse = new Warehouse();
+        LocalDateTime now = LocalDateTime.now();
 
-        Product product = new Product(1, "Old Name", Category.BOOK, 3, LocalDateTime.now(),
-                LocalDateTime.now());
+        Product product = new Product(1, "Old Name", Category.BOOK, 3, now,
+                now);
 
         warehouse.addProduct(product);
 
@@ -120,13 +122,34 @@ public class ProductTest {
         assertEquals("Dominion", books.get(1).getName());
         assertEquals("People Like Us", books.get(2).getName());
 
-        assertEquals(2, movies.size()); // vi lade till 2 st i MOVIE
+        assertEquals(2, movies.size());
         assertEquals("Bla bla bla", movies.get(0).getName());
         assertEquals("Clown Town", movies.get(1).getName());
     }
 
+    @Test
+    public void getProductsCreatedAfter_returnsOnlyNewerProducts() {
+        Warehouse warehouse = new Warehouse();
 
+        LocalDateTime d1 = LocalDateTime.of(2023, 1, 1, 12, 0);
+        LocalDateTime d2 = LocalDateTime.of(2024, 1, 1, 12, 0);
+        LocalDateTime d3 = LocalDateTime.of(2025, 1, 1, 12, 0);
 
+        Product old = new Product(1, "Old Book", Category.BOOK, 3, d1, d1);
+        Product mid = new Product(2, "Mid Book", Category.BOOK, 4, d2, d2);
+        Product recent = new Product(3, "Recent Book", Category.BOOK, 5, d3, d3);
+
+        warehouse.addProduct(old);
+        warehouse.addProduct(mid);
+        warehouse.addProduct(recent);
+
+        List<Product> products = warehouse.getProductsCreatedAfter(LocalDate.of(2023, 6, 1));
+
+        assertEquals(2, products.size());
+        assertTrue(products.contains(mid));
+        assertTrue(products.contains(recent));
+        assertFalse(products.contains(old));
+    }
 
 
 }

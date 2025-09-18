@@ -4,6 +4,7 @@ package service;
 import entities.Category;
 import entities.Product;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -52,9 +53,9 @@ public class Warehouse {
 
     }
 
-    public void getProductSorted(){
-
+    public List<Product> getProductsCreatedAfter(LocalDate date) {
+        return products.stream()
+                .filter(p -> p.getCreatedAt().toLocalDate().isAfter(date))
+                .toList();
     }
-
-
 }

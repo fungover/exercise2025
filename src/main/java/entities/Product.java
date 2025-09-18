@@ -1,5 +1,6 @@
 package entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Product {
@@ -8,12 +9,17 @@ public class Product {
     private String name;
     private Category category;
     private int rating;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime lastModified;
 
-    public Product(int id, String name, Category category, int rating, LocalDateTime now, LocalDateTime localDateTime) {
+    public Product(int id, String name, Category category, int rating,
+                   LocalDateTime createdAt, LocalDateTime lastModified) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.rating = rating;
+        this.createdAt = createdAt;
+        this.lastModified = lastModified;
     }
 
     public String getName(){
@@ -42,6 +48,10 @@ public class Product {
 
     public Category setCategory(Category category){
        return this.category;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     @Override

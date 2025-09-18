@@ -10,12 +10,11 @@ public class Product {
     private final LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    private Product(String id, String name, Category category,
-                   int rating) {
-        this.id = id;
-        this.name = name;
-        this.category = category;
-        this.rating = rating;
+    private Product(Builder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.category = builder.category;
+        this.rating = builder.rating;
         this.createdDate = LocalDateTime.now();
         this.modifiedDate = null;
     }
@@ -37,7 +36,7 @@ public class Product {
     public LocalDateTime modifiedDate() {
         return modifiedDate;
     }
-    public void setModifiedDate() {
+    public void modifyDateToNow() {
         this.modifiedDate = LocalDateTime.now();
     }
 
@@ -46,25 +45,6 @@ public class Product {
         private String name;
         private Category category;
         private int rating;
-
-        public Product build() {
-            if (this.id.isEmpty()) {
-                throw new IllegalArgumentException("ID cannot be empty");
-            }
-            if (this.name.isEmpty()) {
-                throw new IllegalArgumentException("Name cannot be empty");
-            }
-            if (this.category == null) {
-                throw new IllegalArgumentException("Category cannot be empty");
-            }
-            if (this.rating < 0 || this.rating > 10) {
-                throw new IllegalArgumentException("Rating should be between 0 and 10");
-            }
-            final LocalDateTime createdDate = LocalDateTime.now();
-            LocalDateTime modifiedDate = null;
-
-            return new Product(this.id, this.name, this.category, this.rating);
-        }
 
         public Builder id(String id) {
             this.id = id;
@@ -81,6 +61,22 @@ public class Product {
         public Builder rating(int rating) {
             this.rating = rating;
             return this;
+        }
+
+        public Product build() {
+            if (this.id.isEmpty()) {
+                throw new IllegalArgumentException("ID cannot be empty");
+            }
+            if (this.name.isEmpty()) {
+                throw new IllegalArgumentException("Name cannot be empty");
+            }
+            if (this.category == null) {
+                throw new IllegalArgumentException("Category cannot be empty");
+            }
+            if (this.rating < 0 || this.rating > 10) {
+                throw new IllegalArgumentException("Rating should be between 0 and 10");
+            }
+            return new Product(this);
         }
     }
 }

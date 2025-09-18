@@ -31,7 +31,7 @@ public class Warehouse {
                 .build();
 
         products.add(newProduct);
-        newProduct.setModifiedDate();
+        newProduct.modifyDateToNow();
         products.remove(oldProduct);
 
         return products;

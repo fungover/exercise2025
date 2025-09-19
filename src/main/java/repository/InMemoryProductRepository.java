@@ -4,7 +4,8 @@ import entities.Product;
 import java.util.*;
 
 /**
- * Implementation of the contract/interface. Contains MAP and CRUD for storage and the storage logic.
+ * Implementation of the contract/interface.
+ * Contains MAP and CRUD (create, read, update, delete) for storage and the storage logic.
  **/
 public class InMemoryProductRepository implements ProductRepository {
 

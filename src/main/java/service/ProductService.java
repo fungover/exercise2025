@@ -81,5 +81,11 @@ public class ProductService {
                 .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
+    // Gets all products, filters all products that are changed after creation (not used yet)
+    public List<Product> getModifiedProducts() {
+        return repo.getAllProducts().stream().filter(p -> !p.getCreatedDate().equals(p.getModifiedDate()))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+    }
+
 }
 

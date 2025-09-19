@@ -18,7 +18,6 @@ public class WarehouseTest {
 
     // Every test gets its own new Warehouse, this makes every test fresh and clean for every new incoming test-product
     @BeforeEach
-
     void setup() {
         ProductRepository repo = new InMemoryProductRepository();
         svc = new ProductService(repo);

@@ -4,26 +4,30 @@ import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ProductTest {
 
     @Test
     void canCreateProduct() {
     Product product = new Product(0,"", Category.FOOD, 5);
+    assertNotNull(product);
+        System.out.println(product);
     }
 
     @Test
     public void canCreateProductID() {
-        Product product = new Product(0,"", Category.FOOD, 5);
-        assertEquals(0,product.ID());
+        Product product = new Product(5,"", Category.FOOD, 5);
+        assertEquals(5,product.ID());
+        System.out.println(product.ID());
     }
 
     @Test
     public void cantCreateProductID() {
-        Product product = new Product(0,"", Category.FOOD, 5);
+        Product product = new Product( 0,"", Category.FOOD, 5);
         assertEquals(0,product.ID());
+        System.out.println(product.ID());
     }
 
     @Test
@@ -47,7 +51,7 @@ public class ProductTest {
     @Test
     public void cantCreateProductCategory() {
         Product product = new Product(0,"Name",null, 5);
-        assertEquals(null,product.category());
+        assertNull(product.category());
     }
 
     @Test

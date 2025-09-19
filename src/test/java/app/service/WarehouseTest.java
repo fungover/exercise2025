@@ -12,6 +12,7 @@ import java.util.List;
 import static app.entities.Category.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class WarehouseTest {
 
@@ -40,10 +41,10 @@ public class WarehouseTest {
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(new Product(0,"Bread",FOOD,5));
         System.out.println("Added "+warehouse.products().size()+" Items to the warehouse");
-        System.out.println("ID: "+warehouse.products().get(0).ID());
-        System.out.println("Name: "+warehouse.products().get(0).name());
-        System.out.println("Category: "+warehouse.products().get(0).category());
-        System.out.println("Rating: "+warehouse.products().get(0).rating());
+        System.out.println("ID: "+warehouse.products().getFirst().ID());
+        System.out.println("Name: "+warehouse.products().getFirst().name());
+        System.out.println("Category: "+warehouse.products().getFirst().category());
+        System.out.println("Rating: "+warehouse.products().getFirst().rating());
 
         System.out.println();
         warehouse.updateProduct(0,"Milk",FOOD,7);
@@ -51,11 +52,11 @@ public class WarehouseTest {
 
 
         assertEquals(1,warehouse.products().size());
-        assertEquals("Milk",warehouse.products().get(0).name());
+        assertEquals("Milk",warehouse.products().getFirst().name());
         System.out.println("Updated "+warehouse.products().size()+" Items in the warehouse");
-        System.out.println("ID: "+warehouse.products().get(0).ID());
-        System.out.println("Name: "+warehouse.products().get(0).name());
-        System.out.println("Rating: "+warehouse.products().get(0).rating());
+        System.out.println("ID: "+warehouse.products().getFirst().ID());
+        System.out.println("Name: "+warehouse.products().getFirst().name());
+        System.out.println("Rating: "+warehouse.products().getFirst().rating());
     }
 
     @Test
@@ -98,7 +99,7 @@ public class WarehouseTest {
         warehouse.addProduct(new Product(1,"Milk",FOOD,7));
         warehouse.addProduct(new Product(2,"Coffee",FOOD,3));
         Product product = warehouse.getProductByID(10);
-        assertEquals(null,product);
+        assertNull(product);
     }
 
     @Test
@@ -139,7 +140,7 @@ public class WarehouseTest {
         LocalDate cutoff = LocalDate.of(2025, 1, 1);
         List<Product> updatedlist = warehouse.getProductsCreatedAfter(cutoff);
         assertEquals(1,updatedlist.size());
-        assertEquals("Bread",updatedlist.get(0).name());
+        assertEquals("Bread",updatedlist.getFirst().name());
 
         System.out.println("Found "+updatedlist.size()+" Products created after "+cutoff);
         updatedlist.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
@@ -157,7 +158,7 @@ public class WarehouseTest {
 
         List<Product> modified = warehouse.getModifiedProducts();
         assertEquals(1,modified.size());
-        assertEquals("Milk",modified.get(0).name());
+        assertEquals("Milk",modified.getFirst().name());
         System.out.println("Found "+modified.size()+" Modified Products");
         modified.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
 

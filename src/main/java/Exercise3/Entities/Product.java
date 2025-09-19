@@ -1,21 +1,25 @@
 package exercise3.entities;
 
+import exercise3.service.Sellable;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
-public final class Product {
+public final class Product implements Sellable {
 
     private final String id;
     private final String name;
+    private final double price;
     private final Category category;
     private final int rating;
     private final LocalDate createdDate;
     private final LocalDate modifiedDate;
 
-    private Product(String id, String name, Category category, int rating, LocalDate createdDate,
+    private Product(String id, String name, double price, Category category, int rating, LocalDate createdDate,
                    LocalDate modifiedDate) {
         this.id = id;
         this.name = name;
+        this.price = price;
         this.category = category;
         this.rating = rating;
         this.createdDate = createdDate;
@@ -28,6 +32,10 @@ public final class Product {
 
     public String getName() {
         return name;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public Category getCategory() {
@@ -50,18 +58,19 @@ public final class Product {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return rating == product.rating && Objects.equals(id, product.id) && Objects.equals(name, product.name) && category == product.category && Objects.equals(createdDate, product.createdDate) && Objects.equals(modifiedDate, product.modifiedDate);
+        return Double.compare(price, product.price) == 0 && rating == product.rating && Objects.equals(id, product.id) && Objects.equals(name, product.name) && category == product.category && Objects.equals(createdDate, product.createdDate) && Objects.equals(modifiedDate, product.modifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, category, rating, createdDate, modifiedDate);
+        return Objects.hash(id, name, price, category, rating, createdDate, modifiedDate);
     }
 
     @Override
     public String toString() {
         return "id: " + id +
                 ", name: " + name +
+                ", price: " + price +
                 ", category: " + category +
                 ", rating: " + rating +
                 ", createdDate: " + createdDate +
@@ -72,6 +81,7 @@ public final class Product {
     public static class ProductBuilder {
         private String id;
         private String name;
+        private double price;
         private Category category;
         private int rating;
         private LocalDate createdDate;
@@ -84,6 +94,11 @@ public final class Product {
 
         public ProductBuilder setName(String name) {
             this.name = name;
+            return this;
+        }
+
+        public ProductBuilder setPrice(double price) {
+            this.price = price;
             return this;
         }
 
@@ -110,6 +125,7 @@ public final class Product {
         public ProductBuilder from(Product product) {
             this.id = product.getId();
             this.name = product.getName();
+            this.price = product.getPrice();
             this.category = product.getCategory();
             this.rating = product.getRating();
             this.createdDate = product.getCreatedDate();
@@ -137,7 +153,7 @@ public final class Product {
                 throw new IllegalArgumentException("Modified date is before now");
             }
 
-            return new Product(id, name, category, rating, createdDate, modifiedDate);
+            return new Product(id, name, price, category, rating, createdDate, modifiedDate);
         }
     }
 

@@ -21,13 +21,18 @@ public class WarehouseTest {
     void setUp() {
         warehouse = new Warehouse();
 
+        LocalDateTime baseNow = LocalDateTime.now();
+        LocalDateTime sixDaysAgo = baseNow.minusDays(6);
+        LocalDateTime fourDaysAgo = baseNow.minusDays(4);
+        LocalDateTime oneDayAgo = baseNow.minusDays(1);
+
         product1 = new Product(
                 "1",
                 "Super Gaming Laptop",
                 Category.ELECTRONICS,
                 4,
-                LocalDateTime.now().minusDays(6),
-                LocalDateTime.now().minusDays(6)
+                sixDaysAgo,
+                null
         );
 
         product2 = new Product(
@@ -35,8 +40,8 @@ public class WarehouseTest {
                 "Dune Awakening",
                 Category.GAMES,
                 10,
-                LocalDateTime.now().minusDays(1),
-                LocalDateTime.now().minusDays(1)
+                oneDayAgo,
+                null
         );
 
         product3 = new Product(
@@ -44,8 +49,8 @@ public class WarehouseTest {
                 "Valheim",
                 Category.GAMES,
                 10,
-                LocalDateTime.now().minusDays(4),
-                LocalDateTime.now().minusDays(4)
+                fourDaysAgo,
+                null
         );
 
         product4 = new Product(
@@ -53,8 +58,8 @@ public class WarehouseTest {
                 "XGaming Chair",
                 Category.FURNITURE,
                 6,
-                LocalDateTime.now().minusDays(1),
-                LocalDateTime.now().minusDays(1)
+                oneDayAgo,
+                null
         );
 
         product5 = new Product(
@@ -62,8 +67,8 @@ public class WarehouseTest {
                 "Gaming Chair",
                 Category.FURNITURE,
                 8,
-                LocalDateTime.now().minusDays(1),
-                LocalDateTime.now().minusDays(1)
+                oneDayAgo,
+                null
         );
 
         warehouse.addProduct(product1);

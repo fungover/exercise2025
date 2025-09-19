@@ -3,7 +3,7 @@ package org.example.entities;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public final class Product {
+public class Product implements Sellable {
     private final String id;
     private final String name;
     private final Category category;
@@ -53,8 +53,6 @@ public final class Product {
     public static Builder builder() {
         return new Builder();
     }
-
-
 
     public static final class Builder {
         private String id;
@@ -177,6 +175,22 @@ public final class Product {
                 "createdDate=" + createdDate + ", " +
                 "modifiedDate=" + modifiedDate + ']' +
                 "price=" + price + ']';
+    }
+
+    // Implementering av Sellable interface
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public double getPrice() {
+        return price;
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
 }

@@ -2,11 +2,16 @@ package exercise4.service;
 
 public class DiscountDecorator extends ProductDecorator {
 
-    private final double discount;
+    private final double discountPercent;
 
-    public DiscountDecorator(Sellable sellable, double discount) {
+    public DiscountDecorator(Sellable sellable, double discountPercent) {
         super(sellable);
-        this.discount = discount;
+
+        if(discountPercent < 0 || discountPercent > 100) {
+            throw new IllegalArgumentException("Discount percent must be between 0 and 100");
+        }
+
+        this.discountPercent = discountPercent;
     }
 
     @Override
@@ -21,7 +26,7 @@ public class DiscountDecorator extends ProductDecorator {
 
     @Override
     public double getPrice() {
-        double procent = 1 - (discount/100);
+        double procent = 1 - (discountPercent /100);
         return sellable.getPrice()*procent;
     }
 

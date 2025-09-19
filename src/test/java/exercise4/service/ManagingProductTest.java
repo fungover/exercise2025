@@ -13,9 +13,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ManagingProductTest {
 
-    Product.ProductBuilder builder = new Product.ProductBuilder();
-    InMemoryProductRepository managingProduct  = new InMemoryProductRepository();
-    ProductService productService  = new ProductService(managingProduct);
+    Product.ProductBuilder builder;
+    InMemoryProductRepository managingProduct;
+    ProductService productService;
+
+    @org.junit.jupiter.api.BeforeEach
+            void setUp() {
+        builder = new Product.ProductBuilder();
+        managingProduct = new InMemoryProductRepository();
+        productService = new ProductService(managingProduct);
+    }
 
     @Test
     public void productIsAddedToListWhenCreated() {

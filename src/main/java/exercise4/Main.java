@@ -12,8 +12,7 @@ import java.util.List;
 
 public class Main {
 
-    static void main() {
-
+    static void main(String[] args) {
         Product.ProductBuilder builder = new Product.ProductBuilder();
         InMemoryProductRepository repository = new InMemoryProductRepository();
         ProductService productService = new ProductService(repository);
@@ -41,6 +40,6 @@ public class Main {
 
         System.out.println("The "+discount.getName() +" is discounted");
         System.out.printf("Discount price: %.2f SEK %n", discount.getPrice());
-
     }
+
 }

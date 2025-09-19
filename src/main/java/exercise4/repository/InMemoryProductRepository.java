@@ -27,6 +27,8 @@ public class InMemoryProductRepository implements ProductRepository {
     @Override
     public void updateProduct(Product product) {
 
+        Objects.requireNonNull(product, "Product cannot be null");
+
         if(listOfProducts.contains(product)){
             throw new IllegalArgumentException("Product already exists");
         }

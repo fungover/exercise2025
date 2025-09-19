@@ -17,7 +17,13 @@ class WarehouseUpdateProductTest {
     @BeforeEach
     void setUp() {
         warehouse = new Warehouse();
-        product = new Product("1", "Laptop", Category.ELECTRONICS, 8, LocalDate.of(2025, 9, 1), LocalDate.of(2025, 9, 1));
+        product = new Product.Builder()
+                .id("1")
+                .name("Laptop")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .createdDate(LocalDate.of(2025, 9, 1))
+                .build();
         warehouse.addProduct(product);
     }
 
@@ -47,8 +53,8 @@ class WarehouseUpdateProductTest {
     @Test
     void updateProduct_NullId_ThrowsIllegalArgumentException() {
         assertThatThrownBy(() -> warehouse.updateProduct(null, "Tablet", Category.ELECTRONICS, 7))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("ID must not be null");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("ID must not be null");
     }
 
     @Test
@@ -62,14 +68,14 @@ class WarehouseUpdateProductTest {
     void updateProduct_NullName_ThrowsIllegalArgumentException() {
         assertThatThrownBy(() -> warehouse.updateProduct("1", null, Category.ELECTRONICS, 7))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Name must not be null");
+                .hasMessage("Name must not be null or empty");
     }
 
     @Test
     void updateProduct_EmptyName_ThrowsIllegalArgumentException() {
         assertThatThrownBy(() -> warehouse.updateProduct("1", "", Category.ELECTRONICS, 7))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Name must not be empty");
+                .hasMessage("Name must not be null or empty");
     }
 
     @Test

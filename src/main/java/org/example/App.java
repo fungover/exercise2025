@@ -171,6 +171,7 @@ public class App {
         List<Product> products = productService.getModifiedProducts();
         printProducts(products);
         returnMessage();
+        
     }
 
     public static void main(String[] args) {

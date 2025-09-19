@@ -1,4 +1,4 @@
 package org.example.domain;
 
-public interface UserRepository {
+public interface DataStorage {
 }

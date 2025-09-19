@@ -1,4 +1,4 @@
-package exercise3.service;
+package exercise4.service;
 
 public interface Sellable {
 

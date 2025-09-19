@@ -1,4 +1,4 @@
-package exercise3.entities;
+package exercise4.entities;
 
 public enum Category {
 

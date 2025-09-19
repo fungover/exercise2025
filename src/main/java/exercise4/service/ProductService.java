@@ -1,8 +1,8 @@
-package exercise3.service;
+package exercise4.service;
 
-import exercise3.entities.Category;
-import exercise3.entities.Product;
-import exercise3.repository.ProductRepository;
+import exercise4.entities.Category;
+import exercise4.entities.Product;
+import exercise4.repository.ProductRepository;
 
 import java.time.LocalDate;
 import java.util.*;

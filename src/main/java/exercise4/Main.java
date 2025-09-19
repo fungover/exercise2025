@@ -1,11 +1,11 @@
-package exercise3;
+package exercise4;
 
-import exercise3.entities.Category;
-import exercise3.entities.Product;
-import exercise3.repository.InMemoryProductRepository;
-import exercise3.service.DiscountDecorator;
-import exercise3.service.ProductService;
-import exercise3.service.Sellable;
+import exercise4.entities.Category;
+import exercise4.entities.Product;
+import exercise4.repository.InMemoryProductRepository;
+import exercise4.service.DiscountDecorator;
+import exercise4.service.ProductService;
+import exercise4.service.Sellable;
 
 import java.time.LocalDate;
 import java.util.List;

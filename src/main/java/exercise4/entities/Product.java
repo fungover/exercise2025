@@ -1,6 +1,6 @@
-package exercise3.entities;
+package exercise4.entities;
 
-import exercise3.service.Sellable;
+import exercise4.service.Sellable;
 
 import java.time.LocalDate;
 import java.util.Objects;

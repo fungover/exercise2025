@@ -1,7 +1,7 @@
-package exercise3.service;
+package exercise4.service;
 
-import exercise3.entities.Category;
-import exercise3.entities.Product;
+import exercise4.entities.Category;
+import exercise4.entities.Product;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

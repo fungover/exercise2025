@@ -1,6 +1,6 @@
-package exercise3.repository;
+package exercise4.repository;
 
-import exercise3.entities.Product;
+import exercise4.entities.Product;
 
 import java.util.*;
 

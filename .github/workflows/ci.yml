@@ -20,7 +20,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          distribution: 'temurin'
+          distribution: 'oracle'
           java-version: ${{ env.Java_Version }}
           cache: maven
 

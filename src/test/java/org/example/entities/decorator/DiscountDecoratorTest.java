@@ -1,5 +1,7 @@
-package org.example.entities;
+package org.example.entities.decorator;
 
+import org.example.entities.Category;
+import org.example.entities.Product;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 

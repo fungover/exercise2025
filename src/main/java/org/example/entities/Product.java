@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import org.example.entities.decorator.Sellable;
+
 import java.time.LocalDate;
 import java.util.Objects;
 

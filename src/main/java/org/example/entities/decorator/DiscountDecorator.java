@@ -1,4 +1,4 @@
-package org.example.entities;
+package org.example.entities.decorator;
 
 // DiscountDecorator är en dekoratör som lägger till en ny funktion:
 // den kan ändra priset genom att applicera en rabatt.

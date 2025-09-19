@@ -1,4 +1,4 @@
-package org.example.entities;
+package org.example.entities.decorator;
 
 
 // Abstrakt bas för dekoratörer – skickar vidare alla anrop till produkten

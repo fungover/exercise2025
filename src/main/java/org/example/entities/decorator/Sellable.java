@@ -1,4 +1,4 @@
-package org.example.entities;
+package org.example.entities.decorator;
 
 public interface Sellable {
     String getId();

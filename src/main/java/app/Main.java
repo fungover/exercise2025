@@ -2,11 +2,24 @@ package app;
 
 import entities.Category;
 import entities.Product;
-
+import repository.InMemoryProductRepository;
+import repository.ProductRepository;
+import service.ProductService;
 import java.time.LocalDate;
 
+/**
+ * Main is like a demo program, that is implementing a repository pattern with a service layer
+ **/
 public class Main {
     public static void main(String[] args) {
+
+        //create repo, this is where everything gets stored
+        ProductRepository repo = new InMemoryProductRepository();
+
+        //inject repo in service
+        ProductService service = new ProductService(repo);
+
+        //create products with builder
         Product coffee = new Product.Builder()
                 .id("A-001")
                 .name("Coffee")
@@ -25,11 +38,19 @@ public class Main {
                 .modifiedDate(LocalDate.now())
                 .build();
 
-        System.out.println(coffee);
-        System.out.println("DisplayName:" + coffee.getCategory().getDisplayName());
+        //add products
+        service.addProduct(coffee);
+        service.addProduct(lego);
 
-        System.out.println(lego);
-        System.out.println("DisplayName:" + lego.getCategory().getDisplayName());
+        //use service
+        System.out.println("All products");
+        service.getAllProducts().forEach(System.out::println);
+
+        System.out.println("Get one product by ID:");
+        System.out.println(service.getProductById("A-001"));
+
+        System.out.println("Sorted toys:");
+        service.getProductsByCategorySorted(Category.TOYS).forEach(System.out::println);
     }
 }
 

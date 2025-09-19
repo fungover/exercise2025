@@ -1,10 +1,12 @@
 package entities;
 
-/* Test Class where I declare Warehouses´ variable wh - this is private */
+/* Test Class where I declare Warehouses´ variable svc - this is private */
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.Warehouse;
+import repository.InMemoryProductRepository;
+import repository.ProductRepository;
+import service.ProductService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,12 +14,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
-    private Warehouse wh;
+    private ProductService svc;
 
     // Every test gets its own new Warehouse, this makes every test fresh and clean for every new incoming test-product
     @BeforeEach
+
     void setup() {
-        wh = new Warehouse();
+        ProductRepository repo = new InMemoryProductRepository();
+        svc = new ProductService(repo);
     }
 
     @Test
@@ -31,9 +35,9 @@ public class WarehouseTest {
                 .modifiedDate(LocalDate.now())
                 .build();
 
-        Product saved = wh.addProduct(p);
+        Product saved = svc.addProduct(p);
         assertEquals(p, saved, "Should return the same product instance");
-        assertEquals(p, wh.getProductById("A-001"));
+        assertEquals(p, svc.getProductById("A-001"));
     }
 
     @Test
@@ -56,8 +60,8 @@ public class WarehouseTest {
                 .modifiedDate(LocalDate.now())
                 .build();
 
-        wh.addProduct(p1);
-        assertThrows(IllegalArgumentException.class, () -> wh.addProduct(p2),
+        svc.addProduct(p1);
+        assertThrows(IllegalArgumentException.class, () -> svc.addProduct(p2),
                 "Should not allow duplicated ID´s");
     }
 
@@ -65,7 +69,7 @@ public class WarehouseTest {
     @Test
     void addProduct_failsOnNullProduct() {
         assertThrows(IllegalArgumentException.class,
-                () -> wh.addProduct(null),
+                () -> svc.addProduct(null),
                 "Should reject null product");
     }
 
@@ -80,15 +84,15 @@ public class WarehouseTest {
                 .modifiedDate(LocalDate.now())
                 .build();
 
-        wh.addProduct(p);
+        svc.addProduct(p);
 
-        Product found = wh.getProductById("C-001");
+        Product found = svc.getProductById("C-001");
         assertEquals(p, found, "Should return the product with matching Id");
     }
 
     @Test
     void getProductById_failOnMissingId() {
-        assertThrows(IllegalArgumentException.class, () -> wh.getProductById("NO"), "Should throw if product does not exist");
+        assertThrows(IllegalArgumentException.class, () -> svc.getProductById("NO"), "Should throw if product does not exist");
     }
 
     @Test
@@ -120,11 +124,11 @@ public class WarehouseTest {
                 .modifiedDate(LocalDate.now())
                 .build();
 
-        wh.addProduct(p1);
-        wh.addProduct(p2);
-        wh.addProduct(p3);
+        svc.addProduct(p1);
+        svc.addProduct(p2);
+        svc.addProduct(p3);
 
-        List<Product> all = wh.getAllProducts();
+        List<Product> all = svc.getAllProducts();
 
         assertEquals(3, all.size(), "Should return a list of all products");
         assertTrue(all.contains(p1));
@@ -134,7 +138,7 @@ public class WarehouseTest {
 
     @Test
     void getAllProducts_ReturnsEmptyListWhenNoProducts() {
-        List<Product> all = wh.getAllProducts();
+        List<Product> all = svc.getAllProducts();
         assertTrue(all.isEmpty(), "Should return an empty List if no products present");
     }
 
@@ -149,9 +153,9 @@ public class WarehouseTest {
                 .modifiedDate(LocalDate.now())
                 .build();
 
-        wh.addProduct(p);
+        svc.addProduct(p);
 
-        Product updated = wh.updateProduct("A-001", "Mascara", Category.BEAUTY, 10);
+        Product updated = svc.updateProduct("A-001", "Mascara", Category.BEAUTY, 10);
 
         assertEquals("Mascara", updated.getName());
         assertEquals(Category.BEAUTY, updated.getCategory());
@@ -160,13 +164,13 @@ public class WarehouseTest {
         assertEquals(p.getCreatedDate(), updated.getCreatedDate(), "Should not change");
         assertTrue(!updated.getModifiedDate().isBefore(p.getModifiedDate()), "modifiedDate should be same day or the day after");
 
-        assertEquals(updated, wh.getProductById("A-001"));
+        assertEquals(updated, svc.getProductById("A-001"));
     }
 
     @Test
     void updateProduct_failsOnMissingId() {
         assertThrows(IllegalArgumentException.class,
-                () -> wh.updateProduct(
+                () -> svc.updateProduct(
                         "NOPE",
                         "X",
                         Category.FOOD,
@@ -185,10 +189,10 @@ public class WarehouseTest {
                 .modifiedDate(LocalDate.now())
                 .build();
 
-        wh.addProduct(p);
+        svc.addProduct(p);
 
         assertThrows(IllegalArgumentException.class,
-                () -> wh.updateProduct(
+                () -> svc.updateProduct(
                         "A-001",
                         " ",
                         Category.FOOD,
@@ -207,10 +211,10 @@ public class WarehouseTest {
                 .modifiedDate(LocalDate.now())
                 .build();
 
-        wh.addProduct(p);
+        svc.addProduct(p);
 
         assertThrows(IllegalArgumentException.class,
-                () -> wh.updateProduct(
+                () -> svc.updateProduct(
                         "A-011",
                         "Coffee",
                         Category.FOOD,
@@ -218,7 +222,7 @@ public class WarehouseTest {
                 "Rating must be between 0-10");
 
         assertThrows(IllegalArgumentException.class,
-                () -> wh.updateProduct(
+                () -> svc.updateProduct(
                         "A-011",
                         "Coffee",
                         Category.FOOD,
@@ -233,12 +237,12 @@ public class WarehouseTest {
         Product c = new Product.Builder().id("S3").name("Cars").category(Category.TOYS).rating(5).createdDate(LocalDate.now()).modifiedDate(LocalDate.now()).build();
         Product x = new Product.Builder().id("X1").name("Zest").category(Category.TOYS).rating(4).createdDate(LocalDate.now()).modifiedDate(LocalDate.now()).build();
 
-        wh.addProduct(b);
-        wh.addProduct(c);
-        wh.addProduct(a);
-        wh.addProduct(x);
+        svc.addProduct(b);
+        svc.addProduct(c);
+        svc.addProduct(a);
+        svc.addProduct(x);
 
-        java.util.List<Product> toys = wh.getProductsByCategorySorted(Category.TOYS);
+        java.util.List<Product> toys = svc.getProductsByCategorySorted(Category.TOYS);
 
         //Case-insensitive
         assertEquals(4, toys.size());
@@ -249,7 +253,7 @@ public class WarehouseTest {
 
     @Test
     void getProductsByCategorySorted_nullCategory_throws() {
-        assertThrows(NullPointerException.class, () -> wh.getProductsByCategorySorted(null),
+        assertThrows(NullPointerException.class, () -> svc.getProductsByCategorySorted(null),
                 "Category can not be null");
     }
 
@@ -266,11 +270,11 @@ public class WarehouseTest {
         Product p2 = new Product.Builder().id("C3").name("New").category(Category.FOOD).rating(5)
                 .createdDate(d2).modifiedDate(d2).build();
 
-        wh.addProduct(p0);
-        wh.addProduct(p1);
-        wh.addProduct(p2);
+        svc.addProduct(p0);
+        svc.addProduct(p1);
+        svc.addProduct(p2);
 
-        List<Product> out = wh.getProductsCreatedAfter(LocalDate.now().minusDays(7));
+        List<Product> out = svc.getProductsCreatedAfter(LocalDate.now().minusDays(7));
 
         assertEquals(2, out.size());
         assertTrue(out.stream().anyMatch(p -> p.getId().equals("C2")));
@@ -279,7 +283,7 @@ public class WarehouseTest {
 
     @Test
     void getProductsCreatedAfter_nullDate_throws() {
-        assertThrows(NullPointerException.class, () -> wh.getProductsCreatedAfter(null),
+        assertThrows(NullPointerException.class, () -> svc.getProductsCreatedAfter(null),
                 "date can not be null");
     }
 

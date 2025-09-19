@@ -17,12 +17,12 @@ from how we internally work with the data. https://medium.com/@hunterfreas/repos
 My first step is to separate the responsibilities (SRP) in my Warehouse. 
 
 I need: 
-[] an interface that defines a contract for storage. This will put a layer between my data and logic. Here
+[x] an interface that defines a contract for storage. This will put a layer between my data and logic. Here
 I will define abstract operations. 
-[] to implement the above interface - this is the storage (HashMap). All data is handled here. I separate
+[x] to implement the above interface - this is the storage (HashMap). All data is handled here. I separate
 "CRUD" (create, read, update, delete) from business logic. This makes it easy for me to try different 
 implementations (Local or database)
-[] A product service that handles only business logic. Here is where the validation, Building and Streams
+[x] A product service that handles only business logic. Here is where the validation, Building and Streams
 happens.
 
 ### About Assignment 4:
@@ -34,7 +34,7 @@ making it more flexible, maintainable, and testable.
 ### ✅ Part 1: The Builder Pattern (Creational)
 Currently, creating a Product object requires a constructor with many parameters. 
 This can become hard to read and inflexible if we add more attributes in the future. 
-We will solve this using the Builder Pattern.
+We will solve this using the Builder Pattern.R
 
 ## Your Task
 [x] Create a Builder Class: Inside your Product class/record, create a public static nested class named Builder.
@@ -81,21 +81,21 @@ it manages the product collection (data access) and implements business logic (f
 We will use the Repository Pattern to separate these concerns.
 
 ## Your Task
-[] Create a ProductRepository Interface:
-[] Create a new interface named ProductRepository in a repository package.
+[x] Create a ProductRepository Interface:
+Create a new interface named ProductRepository in a repository package.
 [] Define the contract for data access operations. It should include methods like:
 void addProduct(Product product)
 Optional<Product> getProductById(String id)
 List<Product> getAllProducts()
 void updateProduct(Product product)
-[] Create an InMemoryProductRepository:
-[] Create a new class InMemoryProductRepository that implements ProductRepository.
-[] Move the List or Map that stores your products from the Warehouse into this new class.
-[]Implement the interface methods. This class will now be solely responsible for managing the in-memory collection.
+[x] Create an InMemoryProductRepository:
+Create a new class InMemoryProductRepository that implements ProductRepository.
+[x] Move the List or Map that stores your products from the Warehouse into this new class.
+[x]Implement the interface methods. This class will now be solely responsible for managing the in-memory collection.
 
 Refactor Warehouse into a Service:
-[] Rename the Warehouse class to ProductService. This better reflects its new role.
-[] Remove the product collection from the ProductService.
+[x] Rename the Warehouse class to ProductService. This better reflects its new role.
+[??? continue here] Remove the product collection from the ProductService.
 [] Add a private final field for ProductRepository and initialize it via the constructor (this is called Dependency Injection).
 [] Update all methods in ProductService to use the repository for data access. For example, getAllProducts() will now simply call productRepository.getAllProducts().
 [] Update Application Startup: In your Main class (or wherever you start the application), you will now need to:

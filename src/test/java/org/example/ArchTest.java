@@ -6,10 +6,6 @@ import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.junit.jupiter.api.Test;
 
-import java.lang.classfile.ClassFile;
-
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-
 public class ArchTest {
 
     @Test

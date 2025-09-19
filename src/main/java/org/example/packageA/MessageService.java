@@ -1,9 +1,13 @@
 package org.example.packageA;
 
-import org.example.packageB.MessageSource;
+import org.example.packageC.Source;
 
 public class MessageService {
-    MessageSource source = new MessageSource();
+    Source source;
+
+    public MessageService(Source source) {
+        this.source = source;
+    }
 
     public void handleAllMessages(){
         var message = source.getNextMessage();

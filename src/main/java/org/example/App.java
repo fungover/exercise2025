@@ -2,7 +2,9 @@ package org.example;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
-import org.example.service.Warehouse;
+import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
+import org.example.service.ProductService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -10,17 +12,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
-    private final Warehouse warehouse;
+    private final ProductService productService;
     private final Scanner scanner;
 
     public App() {
-        this.warehouse = new Warehouse();
+        ProductRepository productRepository = new InMemoryProductRepository();
+        this.productService = new ProductService(productRepository);
         this.scanner = new Scanner(System.in);
     }
 
     private void returnMessage() {
         System.out.println(" ");
-        System.out.println("Press any key to return to main menu...");
+        System.out.println("Press Enter key to return to main menu...");
         scanner.nextLine();
     }
 
@@ -62,24 +65,30 @@ public class App {
         try {
             System.out.print("Enter ID: ");
             String id = scanner.nextLine().trim();
-            if (id.isEmpty()) { System.out.println("Error: ID must not be empty"); returnMessage(); return; }
             System.out.print("Enter Name: ");
             String name = scanner.nextLine().trim();
-            if (name.isEmpty()) { System.out.println("Error: Name must not be empty"); returnMessage(); return; }
             System.out.print("Enter Category (ELECTRONICS, BOOKS, CLOTHING, FOOD, TOYS): ");
             String categoryInput = scanner.nextLine().trim().toUpperCase();
             Category category = Category.valueOf(categoryInput);
             System.out.print("Enter Rating (0-10): ");
             int rating = Integer.parseInt(scanner.nextLine().trim());
-            if (rating < 0 || rating > 10) { System.out.println("Error: Rating must be between 0 and 10"); returnMessage(); return; }
             System.out.print("Enter Created Date (YYYY-MM-DD): ");
             LocalDate createdDate = LocalDate.parse(scanner.nextLine().trim());
-            Product product = new Product(id, name, category, rating, createdDate, createdDate);
-            warehouse.addProduct(product);
+            Product product = new Product.Builder()
+                    .id(id)
+                    .name(name)
+                    .category(category)
+                    .rating(rating)
+                    .createdDate(createdDate)
+                    .build();
+
+            productService.addProduct(product);
             System.out.println("Product added: " + product);
 
-        } catch (IllegalArgumentException | DateTimeParseException e) {
+        } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
+        } catch (DateTimeParseException e) {
+            System.out.println("Error: Invalid date format. Use YYYY-MM-DD");
         }
         returnMessage();
     }
@@ -95,7 +104,7 @@ public class App {
             Category category = Category.valueOf(categoryInput);
             System.out.print("Enter New Rating (0-10): ");
             int rating = Integer.parseInt(scanner.nextLine().trim());
-            boolean updated = warehouse.updateProduct(id, name, category, rating);
+            boolean updated = productService.updateProduct(id, name, category, rating);
             System.out.println(updated ? "Product updated" : "Product not found");
         } catch (IllegalArgumentException | DateTimeParseException e) {
             System.out.println("Error: " + e.getMessage());
@@ -112,7 +121,7 @@ public class App {
     }
 
     private void listAllProducts() {
-        List<Product> products = warehouse.getAllProducts();
+        List<Product> products = productService.getAllProducts();
         printProducts(products);
         returnMessage();
     }
@@ -121,7 +130,7 @@ public class App {
         try {
             System.out.print("Enter ID: ");
             String id = scanner.nextLine().trim();
-            Product product = warehouse.getProductById(id);
+            Product product = productService.getProductById(id);
             if (product != null) {
                 System.out.println("Product: " + product);
             } else {
@@ -138,7 +147,7 @@ public class App {
             System.out.print("Enter Category (ELECTRONICS, BOOKS, CLOTHING, FOOD, TOYS): ");
             String categoryInput = scanner.nextLine().trim().toUpperCase();
             Category category = Category.valueOf(categoryInput);
-            List<Product> products = warehouse.getProductsByCategorySorted(category);
+            List<Product> products = productService.getProductsByCategorySorted(category);
             printProducts(products);
         } catch (IllegalArgumentException e) {
             System.out.println("Error: Invalid category type");
@@ -150,7 +159,7 @@ public class App {
         try {
             System.out.print("Enter Date (YYYY-MM-DD): ");
             LocalDate date = LocalDate.parse(scanner.nextLine().trim());
-            List<Product> products = warehouse.getProductsCreatedAfter(date);
+            List<Product> products = productService.getProductsCreatedAfter(date);
             printProducts(products);
         } catch (DateTimeParseException e) {
             System.out.println("Error: Invalid date format");
@@ -159,7 +168,7 @@ public class App {
     }
 
     private void listModifiedProducts() {
-        List<Product> products = warehouse.getModifiedProducts();
+        List<Product> products = productService.getModifiedProducts();
         printProducts(products);
         returnMessage();
     }

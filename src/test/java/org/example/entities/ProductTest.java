@@ -144,4 +144,61 @@ public class ProductTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("category");
     }
+
+    @Test
+    void creatingProduct_withoutPrice_defaultsToZero() {
+        LocalDate today = LocalDate.now();
+
+        // Skapar en produkt utan price
+        Product product = Product.builder()
+                .id("p-005")
+                .name("Budget Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build();
+
+        // Default price är 0
+        assertThat(product.price()).isEqualTo(0.0);
+    }
+
+    @Test
+    void creatingProduct_withPrice_setsPrice() {
+        LocalDate today = LocalDate.now();
+
+        // Skapar en produkt med price
+        Product product = Product.builder()
+                .id("p-005")
+                .name("Budget Laptop")
+                .category(Category.COMPUTER)
+                .rating(8)
+                .price(999.99)
+                .createdDate(today)
+                .modifiedDate(today)
+                .build();
+
+        // Kontrollerar att price är satt korrekt
+        assertThat(product.price()).isEqualTo(999.99);
+    }
+
+    @Test
+    void creatingProduct_withNegativePrice_throwsException() {
+        LocalDate today = LocalDate.now();
+
+        // Kontrollerar att ett exception kastas när price är negativ
+        assertThatThrownBy(() ->
+                Product.builder()
+                        .id("p-005")
+                        .name("Budget Laptop")
+                        .category(Category.COMPUTER)
+                        .rating(8)
+                        .price(-15.50)
+                        .createdDate(today)
+                        .modifiedDate(today)
+                        .build()
+        )
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("price");
+    }
 }

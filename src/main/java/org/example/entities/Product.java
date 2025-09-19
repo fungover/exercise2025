@@ -10,6 +10,7 @@ public final class Product {
     private final int rating;
     private final LocalDate createdDate;
     private final LocalDate modifiedDate;
+    private final double price;
 
     private Product(Builder builder) {
         this.id = builder.id;
@@ -18,6 +19,7 @@ public final class Product {
         this.rating = builder.rating;
         this.createdDate = builder.createdDate;
         this.modifiedDate = builder.modifiedDate;
+        this.price = builder.price;
     }
 
     public String id() {
@@ -44,9 +46,15 @@ public final class Product {
         return modifiedDate;
     }
 
+    public double price() {
+        return price;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
+
+
 
     public static final class Builder {
         private String id;
@@ -55,6 +63,7 @@ public final class Product {
         private Integer rating;
         private LocalDate createdDate;
         private LocalDate modifiedDate;
+        private Double price;
 
         public Builder id(String id) {
             this.id = id;
@@ -86,14 +95,22 @@ public final class Product {
             return this;
         }
 
+        public Builder price(Double price) {
+            this.price = price;
+            return this;
+        }
+
 
         public Product build() {
-            // Default värden om man inte sätter createdDate och modifiedDate
+            // Default värden om man inte sätter createdDate, modifiedDate eller price
             if (createdDate == null) {
                 createdDate = LocalDate.now();
             }
             if (modifiedDate == null) {
                 modifiedDate = createdDate;
+            }
+            if (price == null) {
+                price = 0.0;
             }
 
             // Validering som ser till att alla krav följs
@@ -121,6 +138,9 @@ public final class Product {
             if (modifiedDate.isBefore(createdDate)) {
                 throw new IllegalArgumentException("modifiedDate cannot be before createdDate");
             }
+            if (price < 0) {
+                throw new IllegalArgumentException("price cannot be negative");
+            }
 
             // Skapa färdig produkt
             return new Product(this);
@@ -138,7 +158,8 @@ public final class Product {
                 Objects.equals(this.category, that.category) &&
                 this.rating == that.rating &&
                 Objects.equals(this.createdDate, that.createdDate) &&
-                Objects.equals(this.modifiedDate, that.modifiedDate);
+                Objects.equals(this.modifiedDate, that.modifiedDate) &&
+                Double.compare(this.price, that.price) == 0;
     }
 
     @Override
@@ -154,7 +175,8 @@ public final class Product {
                 "category=" + category + ", " +
                 "rating=" + rating + ", " +
                 "createdDate=" + createdDate + ", " +
-                "modifiedDate=" + modifiedDate + ']';
+                "modifiedDate=" + modifiedDate + ']' +
+                "price=" + price + ']';
     }
 
 }

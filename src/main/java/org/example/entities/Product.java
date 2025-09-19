@@ -5,22 +5,58 @@ import java.util.Objects;
 
 public record Product(String id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate) {
 
-    public Product {
-        Objects.requireNonNull(id, "ID must not be null");
-        id = id.trim();
-        if (id.isEmpty()) {
-            throw new IllegalArgumentException("ID must not be empty");
+    private Product(Builder builder) {
+        this(builder.id, builder.name, builder.category, builder.rating, builder.createdDate, builder.modifiedDate);
+    }
+
+    public static class Builder {
+        private String id;
+        private String name;
+        private Category category;
+        private int rating;
+        private LocalDate createdDate;
+        private LocalDate modifiedDate;
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
         }
-        Objects.requireNonNull(name, "Name must not be null");
-        name = name.trim();
-        if (name.isEmpty()) {
-            throw new IllegalArgumentException("Name must not be empty");
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
         }
-        Objects.requireNonNull(category, "Category must not be null");
-        if (rating < 0 || rating > 10) {
-            throw new IllegalArgumentException("Rating must be between 0 and 10");
+
+        public Builder category(Category category) {
+            this.category = category;
+            return this;
         }
-        Objects.requireNonNull(createdDate, "Created date must not be null");
-        Objects.requireNonNull(modifiedDate, "Modified date must not be null");
+
+        public Builder rating(int rating) {
+            this.rating = rating;
+            return this;
+        }
+
+        public Builder createdDate(LocalDate createdDate) {
+            this.createdDate = createdDate;
+            return this;
+        }
+
+        public Builder modifiedDate(LocalDate modifiedDate) {
+            this.modifiedDate = modifiedDate;
+            return this;
+        }
+
+        public Product build() {
+            StringBuilder error = new StringBuilder();
+            if (id == null || id.trim().isEmpty()) error.append("ID must not be null or empty");
+            if (name == null || name.trim().isEmpty()) error.append("Name must not be null or empty");
+            if (category == null) error.append("Category must not be null");
+            if (rating < 0 || rating > 10) error.append("Rating must be between 0 and 10");
+            if (createdDate == null) createdDate = LocalDate.now();
+            if (modifiedDate == null) modifiedDate = LocalDate.now();
+            if (!error.isEmpty()) throw new IllegalArgumentException(error.toString());
+            return new Product(this);
+        }
     }
 }

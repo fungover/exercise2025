@@ -25,15 +25,18 @@ public class Warehouse {
     public boolean updateProduct(String id, String name, Category category, int rating) {
         if (id == null) throw new IllegalArgumentException("ID must not be null");
         if (id.trim().isEmpty()) throw new IllegalArgumentException("ID must not be empty");
-        if (name == null) throw new IllegalArgumentException("Name must not be null");
-        if (name.trim().isEmpty()) throw new IllegalArgumentException("Name must not be empty");
-        if (category == null) throw new IllegalArgumentException("Category must not be null");
-        if (rating < 0 || rating > 10) throw new IllegalArgumentException("Rating must be between 0 and 10");
-
         for (int i = 0; i < products.size(); i++) {
             Product p = products.get(i);
             if (p.id().equals(id)) {
-                products.set(i, new Product(id, name, category, rating, p.createdDate(), LocalDate.now()));
+                Product updatedProduct = new Product.Builder()
+                        .id(id)
+                        .name(name)
+                        .category(category)
+                        .rating(rating)
+                        .createdDate(p.createdDate())
+                        .modifiedDate(LocalDate.now())
+                        .build();
+            products.set(i, updatedProduct);
                 return true;
             }
         }

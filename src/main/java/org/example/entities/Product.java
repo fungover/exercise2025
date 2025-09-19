@@ -1,7 +1,7 @@
 package org.example.entities;
 
 import java.time.LocalDate;
-import java.util.UUID;
+
 
 public record Product(Long id, String name, Category category, int rating,
                       LocalDate createdDate, LocalDate modifiedDate,
@@ -89,6 +89,13 @@ public record Product(Long id, String name, Category category, int rating,
             if (rating < 0 || rating > 10) {
                 throw new IllegalArgumentException(
                   "rating should be between 0 and 10");
+            }
+
+            if (category == null) {
+                throw new IllegalArgumentException("category cannot be null");
+            }
+            if (price < 0) {
+                throw new IllegalArgumentException("price cannot be negative");
             }
             // if id not set, we generate one
             long newId = (id != null) ? id : idCounter++;

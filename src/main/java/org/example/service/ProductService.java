@@ -5,7 +5,7 @@ import org.example.entities.Product;
 import org.example.repository.ProductRepository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +49,7 @@ public class ProductService {
                                                .category(category)
                                                .rating(rating)
                                                .createdDate(existing.createdDate())
+                                               .price(existing.price())
                                                .modifiedDate(LocalDate.now())
                                                .build();
 //          (existing.id(), name, category, rating,
@@ -58,7 +59,7 @@ public class ProductService {
     }
 
     public Product getProductById(String id) {
-        Long idToLong = Long.parseLong(id);
+
         return productRepository.getProductById(id)
                                 .orElseThrow(() -> new IllegalArgumentException(
                                   "Product not found"));

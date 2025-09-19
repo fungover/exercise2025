@@ -33,7 +33,7 @@ public class FetchPrice {
                     HttpResponse.BodyHandlers.ofString());
             int status = response.statusCode();
             if (status / 100 != 2) {
-                System.err.println("Non-2xx response " + status + " from " + uri);
+                // No error message if electricity prices doesn't exist
                 return "[]";
             }
             payload = response.body();

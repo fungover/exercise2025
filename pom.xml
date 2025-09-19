@@ -18,7 +18,9 @@
         <junit.jupiter.version>5.13.4</junit.jupiter.version>
         <assertj.core.version>3.27.4</assertj.core.version>
         <mockito.version>5.19.0</mockito.version>
+        <jackson.version>2.17.2</jackson.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -38,7 +40,13 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>

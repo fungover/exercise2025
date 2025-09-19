@@ -98,6 +98,11 @@ public final class Product implements Sellable {
         }
 
         public ProductBuilder setPrice(double price) {
+
+            if(price < 0){
+                throw new IllegalArgumentException("Price cannot be negative");
+            }
+
             this.price = price;
             return this;
         }

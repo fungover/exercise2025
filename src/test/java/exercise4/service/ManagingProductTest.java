@@ -39,8 +39,13 @@ class ManagingProductTest {
     @Test
     public void throwsIllegalArgumentExceptionIfProductWithUniqIdAlreadyExist() {
         managingProduct.addProduct(builder.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(1).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+        Product.ProductBuilder builder2 = new Product.ProductBuilder();
+        assertThrows(IllegalArgumentException.class, () -> managingProduct.addProduct(builder2.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(1).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct()));
+    }
 
-        assertThrows(IllegalArgumentException.class, () -> managingProduct.addProduct(builder.setId("Bella").setName("Knitted shirt").setCategory(Category.SHIRT).setRating(1).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct()));
+    @Test
+    public void throwsIllegalArgumentExceptionIfPriceIsNegative(){
+        assertThrows(IllegalArgumentException.class, () -> managingProduct.addProduct(builder.setId("Donna").setName("Flared jeans").setPrice(-10).setRating(8).setCategory(Category.JEANS).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct()));
     }
 
     @Test

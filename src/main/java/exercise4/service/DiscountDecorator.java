@@ -26,8 +26,8 @@ public class DiscountDecorator extends ProductDecorator {
 
     @Override
     public double getPrice() {
-        double procent = 1 - (discountPercent /100);
-        return sellable.getPrice()*procent;
+        double precent = 1 - (discountPercent /100);
+        return sellable.getPrice()*precent;
     }
 
     @Override

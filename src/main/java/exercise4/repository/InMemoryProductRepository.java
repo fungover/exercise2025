@@ -29,6 +29,7 @@ public class InMemoryProductRepository implements ProductRepository {
 
         Objects.requireNonNull(product, "Product cannot be null");
 
+        //Prevent adding identical products, but allow updated version with same ID
         if(listOfProducts.contains(product)){
             throw new IllegalArgumentException("Product already exists");
         }

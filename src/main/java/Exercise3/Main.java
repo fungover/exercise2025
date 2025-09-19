@@ -3,7 +3,9 @@ package exercise3;
 import exercise3.entities.Category;
 import exercise3.entities.Product;
 import exercise3.repository.InMemoryProductRepository;
+import exercise3.service.DiscountDecorator;
 import exercise3.service.ProductService;
+import exercise3.service.Sellable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +30,17 @@ public class Main {
         products.forEach(System.out::println);
 
         System.out.println(productService.countProductsInCategory(Category.JEANS));
+
+        repository.addProduct(builder.setId("Fiona").setName("Cocktail dress").setPrice(100)
+                .setRating(9).setCreatedDate(LocalDate.now()).setModifiedDate(LocalDate.now()).createProduct());
+
+        Product dress = repository.getProductById("Fiona");
+        System.out.printf("Original price: %.2f SEK %n", dress.getPrice());
+
+        Sellable discount = new DiscountDecorator(dress, 20);
+
+        System.out.println("The "+discount.getName() +" is discounted");
+        System.out.printf("Discount price: %.2f SEK %n", discount.getPrice());
 
     }
 }

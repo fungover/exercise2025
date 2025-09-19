@@ -69,8 +69,13 @@ public class ProductTest {
 
     @Test
     public void canCreateZonedDateTime() {
+
+        ZoneId stockholm = ZoneId.of("Europe/Stockholm");
+        ZonedDateTime time = ZonedDateTime.of(2025,1,1,1,1,1,1,stockholm);
+
         Product product = new Product(0,"Name",Category.FOOD, 5);
-        assertEquals(ZonedDateTime.now(ZoneId.of("Europe/Stockholm")),product.createdDate());
+
+        assertEquals(stockholm,product.createdDate().getZone());
         System.out.println(product.createdDate().getZone());
     }
 

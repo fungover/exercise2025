@@ -13,9 +13,26 @@ public class ContainerApp {
         System.out.println("=== Testing Simple container with Reflection ===");
 
         System.out.println("Test 1: EmailService + DatabaseRepository");
-        SimpleContainer container1 = new SimpleContainer();
+
+        
+        SimpleContainer container1 = new SimpleContainer(); // Creates a mew container class.
+
+        // Configures the container - tells which implementation to use.
+        // "When someone asks for DataRepository, give them DatabaseRepository".
         container1.bind(DataRepository.class, DatabaseRepository.class);
+        // "When someone asks for MessageService, give them EmailMessageService".
         container1.bind(MessageService.class, EmailMessageService.class);
+
+        /**
+         * Here, we only ask for MessageService - nothing else.
+         * The container will automatically:
+         * 1. See that MessageService -> EmailMessageService.
+         * 2. See that EmailMessageService needs DataRepository in the constructor.
+         * 3. See that DataRepository -> DatabaseRepository.
+         * 4. Create a DatabaseRepository first (no dependencies).
+         * 5. Use DatabaseRepository to create EmailMessageService.
+         * 6. Return the fully created EmailMessageService as MessageService.
+         */
 
         MessageService service1 = container1.getInstance(MessageService.class);
         service1.processMessage();

@@ -5,7 +5,6 @@ import org.warehouse.entities.Product;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public class ProductService {
   private final ProductRepository productRepository;

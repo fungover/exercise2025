@@ -7,6 +7,13 @@ import org.example.service.EmailMessageService;
 import org.example.domain.MessageService;
 import org.example.service.SmsMessageService;
 
+/**
+ * MANUAL DEPENDENCY INJECTION
+ * - Here all the "wiring" is done manually.
+ * - We choose which implementation that we want to use.
+ * - This is the only place where we create objects and wire dependencies.
+ */
+
 public class App {
     public static void main(String[] args) {
 

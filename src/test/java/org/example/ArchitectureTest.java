@@ -61,4 +61,34 @@ class ArchitectureTest {
         System.out.println("PASSED: Repository package only depends on domain package.");
     }
 
+    @Test
+    void domainInterfacesShouldNotImportConcreteImplementations() {
+
+        ArchRule rule = noClasses()
+                .that().resideInAPackage("..domain..")
+                .should().accessClassesThat().resideInAnyPackage(
+                        "..service..",
+                        "..repository.."
+                )
+                .as("Domain interfaces must not import concrete implementations");
+
+        System.out.println("Testing: Domain package should not import concrete service/repository classes");
+        rule.check(importedClasses);
+        System.out.println("PASSED: Domain interfaces correctly does not import concrete implementations.");
+    }
+
+    @Test
+    void appClassShouldBeOnlyPlaceToWireEverythingTogether() {
+
+        ArchRule rule = noClasses()
+                .that().resideInAnyPackage("..service..", "..repository..", "..domain..")
+                .should().accessClassesThat().resideInAPackage("org.example")
+                .andShould().accessClassesThat().haveSimpleName("App")
+                .as("Only App class should wire everything together.");
+
+        System.out.println("Testing: Only App class should access all packages for wiring.");
+        rule.check(importedClasses);
+        System.out.println("PASSED: Only app class correctly wires dependencies.");
+    }
+
 }

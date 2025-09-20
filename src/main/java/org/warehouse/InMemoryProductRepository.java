@@ -7,24 +7,18 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class Warehouse {
-  private final String name;
+public class InMemoryProductRepository implements ProductRepository {
+
   private final List<Product> products = new ArrayList<>();
 
-  public Warehouse(String name) {
-    this.name = name;
-  }
-
-  public String getName() {
-    return name;
-  }
-
+  @Override
   public void addProduct(Product product) {
-    if (product == null || product.id() == null) {
+    if (product == null) {
       throw new IllegalArgumentException("Product and product.id must not be null");
-      }
+    }
     boolean duplicate = products.stream().anyMatch(p -> p.id().equals(product.id()));
 
     if (duplicate) {
@@ -34,41 +28,7 @@ public class Warehouse {
     products.add(product);
   }
 
-  public List<Product> getAllProducts() {
-    if(products.isEmpty()) {
-      throw new IllegalArgumentException("No products found");
-    }
-    return new ArrayList<>(products);
-  }
-
-  public void updateProduct(String id, String name, Category category, int rating) {
-    if (name == null || name.isBlank()) {
-      throw new IllegalArgumentException("name must not be blank");
-      }
-    if (category == null) {
-      throw new IllegalArgumentException("category must not be null");
-      }
-    if (rating < 0 || rating > 10) {
-      throw new IllegalArgumentException("rating must be between 0 and 10");
-      }
-    for (int i = 0; i < products.size(); i++) {
-      Product current = products.get(i);
-      if (current.id().equals(id)) {
-        Product updated = new Product.Builder().
-                setId(current.id())
-                .setName(name)
-                .setCategory(category)
-                .setRating(rating)
-                .setCreatedDate(current.createdDate())
-                .setModifiedDate(LocalDate.now())
-                .build();
-        products.set(i, updated);
-        return;
-      }
-    }
-    throw new IllegalArgumentException("Product with id " + id + " not found");
-  }
-
+  @Override
   public Product getProductById(String id) {
     for (Product product : products) {
       if (product.id().equals(id)) {
@@ -77,6 +37,36 @@ public class Warehouse {
     }
     throw new IllegalArgumentException("Product with id " + id + " not found");
   }
+
+  @Override
+  public List<Product> getAllProducts() {
+    if(products.isEmpty()) {
+      throw new IllegalArgumentException("No products found");
+    }
+    return new ArrayList<>(products);
+  }
+
+  @Override
+  public void updateProduct(Product product) {
+    for (int i = 0; i < products.size(); i++) {
+      Product current = products.get(i);
+      if (current.id().equals(product.id())) {
+        Product updated = new Product.Builder()
+                .setId(current.id())
+                .setName(product.name())
+                .setCategory(product.category())
+                .setRating(product.rating())
+                .setCreatedDate(current.createdDate())
+                .setModifiedDate(LocalDate.now())
+                .build();
+
+        products.set(i, updated);
+        return;
+      }
+    }
+    throw new IllegalArgumentException("Product with id " + product.id() + " not found");
+  }
+
 
   public List<Product> getProductsByCategorySorted(Category category) {
     List<Product> result = products.stream()
@@ -102,7 +92,6 @@ public class Warehouse {
 
     return result;
   }
-
 
   public List<Product> getModifiedProducts() {
     var result = products.stream()

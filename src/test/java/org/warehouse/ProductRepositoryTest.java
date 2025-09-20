@@ -12,8 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class WarehouseTest {
-  Warehouse warehouse = new Warehouse("Test warehouse");
+public class ProductRepositoryTest {
+  ProductRepository repository = new InMemoryProductRepository();
+  ProductService productService = new ProductService(repository);
 
   Product product = new Product.Builder()
           .setId("1")
@@ -69,17 +70,29 @@ public class WarehouseTest {
           .setModifiedDate(LocalDate.now())
           .build();
 
-  @Test
-  public void canCreateWarehouseAndGetName() {
+  Product updatedProduct = new Product.Builder()
+          .setId("1")
+          .setName("Film2")
+          .setCategory(Category.DRAMA)
+          .setRating(9)
+          .setCreatedDate(LocalDate.now())
+          .setModifiedDate(LocalDate.now())
+          .build();
 
-    assertEquals(warehouse.getName(), "Test warehouse");
-  }
+  Product NotFoundProduct = new Product.Builder()
+          .setId("100")
+          .setName("Film")
+          .setCategory(Category.DRAMA)
+          .setRating(9)
+          .setCreatedDate(LocalDate.now())
+          .setModifiedDate(LocalDate.now())
+          .build();
 
   @Test
   public void canAddProductToWarehouse() {
 
-    warehouse.addProduct(product);
-    List<Product> products = warehouse.getAllProducts();
+    productService.addProduct(product);
+    List<Product> products = productService.getAllProducts();
 
     assertThat(products)
             .hasSize(1)
@@ -92,9 +105,9 @@ public class WarehouseTest {
 
   @Test
   public void canSeeIfProductIdIsUnique() {
-    warehouse.addProduct(product);
+    productService.addProduct(product);
 
-    assertThatThrownBy(() -> warehouse.addProduct(productSameId))
+    assertThatThrownBy(() -> productService.addProduct(productSameId))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("already exists");
 
@@ -103,10 +116,10 @@ public class WarehouseTest {
   @Test
   public void canUpdateProduct() {
 
-    warehouse.addProduct(product);
+    productService.addProduct(product);
 
-    warehouse.updateProduct("1", "Film2", Category.DRAMA, 9);
-    Product updated = warehouse.getAllProducts().getFirst();
+    productService.updateProduct(updatedProduct);
+    Product updated = productService.getAllProducts().getFirst();
 
     assertThat(updated.name()).isEqualTo("Film2");
     assertThat(updated.category()).isEqualTo(Category.DRAMA);
@@ -117,15 +130,15 @@ public class WarehouseTest {
 
   @Test
   public void cantUpdateProductIfIdNotFound() {
-    assertThatThrownBy(() -> warehouse.updateProduct("100", "Film", Category.DRAMA, 10))
+    assertThatThrownBy(() -> productService.updateProduct(NotFoundProduct))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("not found");
   }
 
   @Test
   public void canGetAllProducts() {
-    warehouse.addProduct(product);
-    List<Product> products = warehouse.getAllProducts();
+    productService.addProduct(product);
+    List<Product> products = productService.getAllProducts();
     assertThat(products)
             .hasSize(1)
             .contains(product);
@@ -133,15 +146,15 @@ public class WarehouseTest {
 
   @Test
   public void cantReturnProductIfIdNotFound() {
-    assertThatThrownBy(() -> warehouse.getAllProducts().getFirst())
+    assertThatThrownBy(() -> productService.getAllProducts().getFirst())
     .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("No products found");
   }
 
   @Test
   public void canGetProductById() {
-    warehouse.addProduct(product);
-    var found  = warehouse.getProductById("1");
+    productService.addProduct(product);
+    var found  = productService.getProductById("1");
 
     assertThat(found).isNotNull();
     assertThat(found.id()).isEqualTo("1");
@@ -152,7 +165,7 @@ public class WarehouseTest {
 
   @Test
   public void cantGetProductByIdIfIdNotFound() {
-    assertThatThrownBy(() -> warehouse.getProductById("100"))
+    assertThatThrownBy(() -> productService.getProductById("100"))
     .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("not found");
   }
@@ -160,11 +173,11 @@ public class WarehouseTest {
   @Test
   public void canGetProductsByCategorySorted() {
 
-    warehouse.addProduct(product);
-    warehouse.addProduct(product2);
-    warehouse.addProduct(product3);
+    productService.addProduct(product);
+    productService.addProduct(product2);
+    productService.addProduct(product3);
 
-    var sorted = warehouse.getProductsByCategorySorted(Category.THRILLER);
+    var sorted = productService.getProductsByCategorySorted(Category.THRILLER);
 
     assertThat(sorted).isSortedAccordingTo(Comparator.comparing(Product::name));
 
@@ -172,7 +185,7 @@ public class WarehouseTest {
 
   @Test
   public void cantGetProductsByCategorySortedWithEmptyList() {
-    assertThatThrownBy(() -> warehouse.getProductsByCategorySorted(Category.DRAMA))
+    assertThatThrownBy(() -> productService.getProductsByCategorySorted(Category.DRAMA))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("No products found in category");
 
@@ -180,10 +193,10 @@ public class WarehouseTest {
 
   @Test
   public void canGetProductCreatedAfterDate() {
-    warehouse.addProduct(oldProduct);
-    warehouse.addProduct(newProduct);
+    productService.addProduct(oldProduct);
+    productService.addProduct(newProduct);
 
-    var createdAfter = warehouse.getProductsCreatedAfter(LocalDate.of(2025, 8, 2));
+    var createdAfter = productService.getProductsCreatedAfter(LocalDate.of(2025, 8, 2));
 
     assertThat(createdAfter).hasSize(1);
     assertThat(createdAfter.getFirst().createdDate()).isEqualTo(LocalDate.of(2025, 9, 10));
@@ -191,28 +204,28 @@ public class WarehouseTest {
 
   @Test
   public void cantGetProductCreatedAfterDateIfProductNotExist() {
-    assertThatThrownBy(() -> warehouse.getProductsCreatedAfter(LocalDate.of(2025, 8, 2)))
+    assertThatThrownBy(() -> productService.getProductsCreatedAfter(LocalDate.of(2025, 8, 2)))
     .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("No products found");
   }
 
   @Test
   public void canGetProductsWithModifiedDates() {
-    warehouse.addProduct(newProduct);
-    warehouse.addProduct(oldProduct);
-    warehouse.addProduct(product2);
+    productService.addProduct(newProduct);
+    productService.addProduct(oldProduct);
+    productService.addProduct(product2);
 
-    var modifiedProduct = warehouse.getModifiedProducts();
+    var modifiedProduct = productService.getModifiedProducts();
 
     assertThat(modifiedProduct).hasSize(2);
   }
 
   @Test
   public void cantFindProductsWithModifiedDates() {
-    warehouse.addProduct(product);
-    warehouse.addProduct(product2);
+    productService.addProduct(product);
+    productService.addProduct(product2);
 
-    assertThatThrownBy(() -> warehouse.getModifiedProducts())
+    assertThatThrownBy(() -> productService.getModifiedProducts())
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("No modified products were found");
   }

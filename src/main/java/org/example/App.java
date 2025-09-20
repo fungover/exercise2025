@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
-	static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		final Scanner sc = new Scanner(System.in);
 		boolean menuOn = true;
 		System.out.print("Electricity zone: SE");
@@ -33,7 +33,13 @@ public class App {
 			switch (dayInput) {
 				case "1":
 					System.out.println("\nToday: ");
-					List<Hour> prices = service.getElectricityPrices(0);
+					List<Hour> prices;
+				try {
+					prices = service.getElectricityPrices(0);
+				} catch (IOException | InterruptedException e) {
+					System.out.println("Failed to fetch prices: " + e.getMessage());
+					break;
+				}
 					if (prices == null || prices.isEmpty()) {
 						System.out.println("No price data available. Try again later.");
 						break;
@@ -74,7 +80,13 @@ public class App {
 					}
 					break;
 				case "2":
-					List<Hour> tomorrow = service.getElectricityPrices(1);
+					List<Hour> tomorrow;
+					try {
+						tomorrow = service.getElectricityPrices(1);
+					} catch (IOException | InterruptedException e) {
+						System.out.println("Failed to fetch prices: " + e.getMessage());
+						break;
+					}
 					if (tomorrow == null || tomorrow.isEmpty()) {
 						System.out.println("No price data available. Try again later.");
 						break;
@@ -89,12 +101,15 @@ public class App {
 					switch (tmrInput) {
 						case "1":
 							service.printLowestPrice(tomorrow, 1);
+							System.out.println();
 							break;
 						case "2":
 							service.printHighestPrice(tomorrow, 1);
+							System.out.println();
 							break;
 						case "3":
 							service.printMeanPrice(tomorrow, 1);
+							System.out.println();
 							break;
 						case "4":
 							try {

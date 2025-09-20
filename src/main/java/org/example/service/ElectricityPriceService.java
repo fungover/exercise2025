@@ -69,7 +69,7 @@ public class ElectricityPriceService {
 	}
 
 	public void printLowestPrice(List<Hour> prices, int day) {
-		double lowest = prices.getFirst().SEK_per_kWh();
+		double lowest = prices.get(0).SEK_per_kWh();
 		int lowestHour = 0;
 		for (Hour h : prices) {
 			if (h.SEK_per_kWh() < lowest) {
@@ -82,7 +82,7 @@ public class ElectricityPriceService {
 	}
 
 	public void printHighestPrice(List<Hour> prices, int day) {
-		double highest = prices.getFirst().SEK_per_kWh();
+		double highest = prices.get(0).SEK_per_kWh();
 		int highestHour = 0;
 		for (Hour h : prices) {
 			if (h.SEK_per_kWh() > highest) {

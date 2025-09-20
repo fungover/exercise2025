@@ -1,10 +1,10 @@
 package org.example;
 
-import org.example.repository.DataRepository;
+import org.example.domain.DataRepository;
 import org.example.repository.DatabaseRepository;
 import org.example.repository.FileRepository;
 import org.example.service.EmailMessageService;
-import org.example.service.MessageService;
+import org.example.domain.MessageService;
 import org.example.service.SmsMessageService;
 
 public class App {
@@ -26,5 +26,8 @@ public class App {
         // Email service with file repository.
         MessageService emailWithFileService = new EmailMessageService(fileRepository);
         emailWithFileService.processMessage();
+
+        MessageService testService = new SmsMessageService(dbRepository);
+        testService.processMessage();
     }
 }

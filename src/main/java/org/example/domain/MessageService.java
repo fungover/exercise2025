@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.domain;
 
 public interface MessageService {
     void processMessage();

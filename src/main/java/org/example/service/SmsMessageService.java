@@ -1,6 +1,7 @@
 package org.example.service;
 
-import org.example.repository.DataRepository;
+import org.example.domain.DataRepository;
+import org.example.domain.MessageService;
 
 public class SmsMessageService implements MessageService {
     private final DataRepository repository;

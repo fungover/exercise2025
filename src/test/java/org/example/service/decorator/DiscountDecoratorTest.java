@@ -27,8 +27,8 @@ public class DiscountDecoratorTest {
                 .build();
         Sellable discounted = new DiscountDecorator(product, 1.5);
 
-        assertEquals(10, product.getPrice()); // Original price
-        assertEquals(9.85, discounted.getPrice()); // Discounted price
+        assertEquals(10, product.getPrice(), 1e-9); // Original price
+        assertEquals(9.85, discounted.getPrice(), 1e-9); // Discounted price
         assertEquals(product.getName(), discounted.getName()); // name unchanged
         assertEquals(product.getId(), discounted.getId()); // id unchanged
     }

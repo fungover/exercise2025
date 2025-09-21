@@ -1,11 +1,15 @@
 package org.example.repositories;
 
+import jakarta.enterprise.context.Dependent;
 import org.example.entities.Message;
 import org.example.interfaces.MessageRepository;
+import org.example.qualifiers.Database;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Dependent
+@Database
 public class DatabaseMessageRepository implements MessageRepository {
     private List<Message> messages = new ArrayList<>();
 

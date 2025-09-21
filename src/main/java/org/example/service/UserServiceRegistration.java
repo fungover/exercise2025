@@ -4,6 +4,6 @@ import org.example.users.User;
 
 import java.security.NoSuchAlgorithmException;
 
-public interface UserService {
+public interface UserServiceRegistration {
   void registerUser(User user) throws NoSuchAlgorithmException;
 }

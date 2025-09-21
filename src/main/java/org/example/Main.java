@@ -3,8 +3,8 @@ package org.example;
 import org.example.repository.FakeUserRepository;
 import org.example.repository.LocalUserRepository;
 import org.example.repository.UserRepository;
-import org.example.service.UserService;
-import org.example.service.UserServiceManager;
+import org.example.service.UserServiceRegistration;
+import org.example.service.UserServiceRegistrationEncrypted;
 import org.example.users.User;
 
 import java.security.NoSuchAlgorithmException;
@@ -15,15 +15,15 @@ public class Main {
     UserRepository localRepository = new LocalUserRepository();
     UserRepository fakeRepository = new FakeUserRepository();
 
-    UserService userService = new UserServiceManager(localRepository);
-    UserService userService2 = new UserServiceManager(fakeRepository);
+    UserServiceRegistration userServiceRegistration = new UserServiceRegistrationEncrypted(localRepository);
+    UserServiceRegistration userServiceRegistration2 = new UserServiceRegistrationEncrypted(fakeRepository);
 
-    userService.registerUser(new User("Test", "12345"));
+    userServiceRegistration.registerUser(new User("Test", "12345"));
 
     localRepository.login("Test", "12345");
     localRepository.login("Test", "12354");
 
-    userService2.registerUser(new User("Test2", "12345"));
+    userServiceRegistration2.registerUser(new User("Test2", "12345"));
     fakeRepository.login("Test", "12345");
   }
 }

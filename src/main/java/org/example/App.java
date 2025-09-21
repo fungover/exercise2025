@@ -24,7 +24,7 @@ public class App {
         System.out.println("--------------------------------");
 
         //Database message repository
-        System.out.println("=== Database mMssage Repository ===");
+        System.out.println("=== Database Message Repository ===");
         MessageRepository databaseRepository = new DatabaseMessageRepository();
         MessageService smsService = new SmsService(databaseRepository);
 
@@ -32,11 +32,21 @@ public class App {
 
         System.out.println("--------------------------------");
 
-        //DI container
+        //Custom DI Container
+        System.out.println("=== Custom DI Container ===");
+        DIContainer container = new SimpleDIContainer();
+        container.register(MessageService.class, EmailService.class);
+        container.register(MessageRepository.class, InMemoryMessageRepository.class);
+        MessageService emailServiceDi = container.resolve(MessageService.class);
+        emailServiceDi.send(new Message("Hello", "Alfred"));
+
+        System.out.println("--------------------------------");
+
+        //Weld container
         System.out.println("=== Weld SE Container ===");
         Weld weld = new Weld();
-        try (SeContainer container = weld.initialize()) {
-            EmailService emailService2 = container.select(EmailService.class).get();
+        try (SeContainer weldContainer = weld.initialize()) {
+            EmailService emailService2 = weldContainer.select(EmailService.class).get();
             emailService2.send(new Message("Hello", "Alfred"));
         }
 

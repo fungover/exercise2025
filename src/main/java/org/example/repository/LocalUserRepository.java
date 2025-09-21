@@ -23,7 +23,19 @@ public class LocalUserRepository implements UserRepository {
   }
 
   @Override
-  public void login(String username, String password) {
+  public void login(String username, String password) throws NoSuchAlgorithmException {
+    MessageDigest md = MessageDigest.getInstance("SHA-256");
+    byte[] hashCode = md.digest(password.getBytes());
+    StringBuilder stringBuilder = new StringBuilder();
+    for (byte b : hashCode) {
+      stringBuilder.append(String.format("%02X", b));
+    }
 
+    String newPassword = stringBuilder.toString();
+    for (User user : users) {
+      if (user.username().equals(username) && user.password().equals(newPassword)) {
+        System.out.println("Login successful");
+      }
+    }
   }
 }

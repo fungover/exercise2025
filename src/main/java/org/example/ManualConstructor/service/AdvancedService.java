@@ -1,9 +1,11 @@
-package org.example.ManualConstructor;
+package org.example.ManualConstructor.service;
 
-public class AndvancedService implements Service {
+import org.example.ManualConstructor.persistence.PersistenceLayer;
+
+public class AdvancedService implements Service {
     private final PersistenceLayer persistence;
 
-    public AndvancedService(PersistenceLayer persistence) {
+    public AdvancedService(PersistenceLayer persistence) {
         this.persistence = persistence;
     }
 

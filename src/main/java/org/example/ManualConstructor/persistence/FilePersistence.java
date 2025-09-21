@@ -1,4 +1,4 @@
-package org.example.ManualConstructor;
+package org.example.ManualConstructor.persistence;
 
 public class FilePersistence implements PersistenceLayer {
     @Override

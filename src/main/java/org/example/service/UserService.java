@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.User;
+import org.example.users.User;
 
 import java.security.NoSuchAlgorithmException;
 

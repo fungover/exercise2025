@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.User;
+import org.example.users.User;
 import org.example.repository.UserRepository;
 
 import java.security.MessageDigest;

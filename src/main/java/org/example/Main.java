@@ -5,6 +5,7 @@ import org.example.repository.LocalUserRepository;
 import org.example.repository.UserRepository;
 import org.example.service.UserService;
 import org.example.service.UserServiceManager;
+import org.example.users.User;
 
 import java.security.NoSuchAlgorithmException;
 

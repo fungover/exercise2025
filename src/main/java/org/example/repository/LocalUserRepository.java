@@ -1,6 +1,6 @@
 package org.example.repository;
 
-import org.example.User;
+import org.example.users.User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

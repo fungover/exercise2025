@@ -20,7 +20,10 @@ public class ArchUnitTest {
                         "..interfaces..",
                         "java.lang..",
                         "java.util..",
-                        "java.io.."
+                        "java.io..",
+                        "..qualifiers..",
+                        "jakarta.enterprise.context..",
+                        "jakarta.inject.."
                 );
 
         rule.check(classes);

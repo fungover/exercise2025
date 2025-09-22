@@ -72,6 +72,9 @@ public record Product (
               throw new IllegalArgumentException("rating must be between 0 and 10");
           }
 
+          if (createdDate == null) createdDate = LocalDateTime.now();
+          if (modifiedDate == null) modifiedDate = LocalDateTime.now();
+
           return new Product(id, name, category, rating, createdDate, modifiedDate);
       }
     }

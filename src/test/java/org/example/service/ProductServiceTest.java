@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,18 +13,18 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WarehouseTest {
+class ProductServiceTest {
 
-    ProductService warehouse;
+    ProductService productService;
 
     @BeforeEach
     void setUp() {
-        warehouse = new ProductService();
+        ProductRepository repository = new InMemoryProductRepository();
+        productService = new ProductService(repository);
     }
 
     @Test
     void addProduct() {
-
         Product product = new Product.ProductBuilder()
                 .id("1")
                 .name("Harry Potter and the Deathly Hallows")
@@ -30,10 +32,10 @@ class WarehouseTest {
                 .rating(9)
                 .build();
 
-        warehouse.addProduct(product);
+        productService.addProduct(product);
 
-        assertEquals(1, warehouse.getAllProducts().size());
-        assertTrue(warehouse.getAllProducts().contains(product));
+        assertEquals(1, productService.getAllProducts().size());
+        assertTrue(productService.getAllProducts().contains(product));
     }
 
     @Test
@@ -44,7 +46,7 @@ class WarehouseTest {
                     .name("")
                     .category(Category.BOOKS)
                     .rating(9)
-                    .build(); // the validation is here and testing that
+                    .build();
         });
     }
 
@@ -58,11 +60,11 @@ class WarehouseTest {
                 .rating(9)
                 .build();
 
-        warehouse.addProduct(product);
+        productService.addProduct(product);
 
-        warehouse.updateProduct("1", "HOKA One One", Category.SHOES, 10);
+        productService.updateProduct("1", "HOKA One One", Category.SHOES, 10);
 
-        Product updatedProduct = warehouse.getProductById("1");
+        Product updatedProduct = productService.getProductById("1");
 
         assertEquals("HOKA One One", updatedProduct.name());
         assertEquals(Category.SHOES, updatedProduct.category());
@@ -73,7 +75,7 @@ class WarehouseTest {
     void updateProductIdThatDontExistThrowsException() {
 
         assertThrows(IllegalArgumentException.class, () ->
-                warehouse.updateProduct("99", "eleventyelevenonetyone", Category.BOOKS, 5)
+                productService.updateProduct("99", "eleventyelevenonetyone", Category.BOOKS, 5)
         );
     }
 
@@ -95,10 +97,10 @@ class WarehouseTest {
                 .rating(9)
                 .build();
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
+        productService.addProduct(product1);
+        productService.addProduct(product2);
 
-        List<Product> allProducts = warehouse.getAllProducts();
+        List<Product> allProducts = productService.getAllProducts();
 
         assertEquals(2, allProducts.size());
         assertTrue(allProducts.contains(product1));
@@ -107,7 +109,7 @@ class WarehouseTest {
 
     @Test
     void getAllProductsEmptyWarehouseReturnsEmptyList() {
-        List<Product> allProducts = warehouse.getAllProducts();
+        List<Product> allProducts = productService.getAllProducts();
 
         assertTrue(allProducts.isEmpty(), "Expected empty list when no products are added");
     }
@@ -121,9 +123,9 @@ class WarehouseTest {
                 .category(Category.BOOKS)
                 .rating(7)
                 .build();
-        warehouse.addProduct(product);
+        productService.addProduct(product);
 
-        Product result = warehouse.getProductById("1");
+        Product result = productService.getProductById("1");
 
         assertEquals(product, result);
     }
@@ -131,7 +133,7 @@ class WarehouseTest {
     @Test
     void getProductByIdNonExistingIdThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            warehouse.getProductById("99");
+            productService.getProductById("99");
         });
     }
 
@@ -163,12 +165,12 @@ class WarehouseTest {
                 .rating(9)
                 .build();
 
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
-        warehouse.addProduct(p3);
-        warehouse.addProduct(p4);
+        productService.addProduct(p1);
+        productService.addProduct(p2);
+        productService.addProduct(p3);
+        productService.addProduct(p4);
 
-        List<Product> sortedFood = warehouse.getProductsByCategorySorted(Category.FOOD);
+        List<Product> sortedFood = productService.getProductsByCategorySorted(Category.FOOD);
 
         assertEquals(3, sortedFood.size());
         assertEquals("Apple", sortedFood.get(0).name());
@@ -193,10 +195,10 @@ class WarehouseTest {
                 .rating(8)
                 .build();
 
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
+        productService.addProduct(p1);
+        productService.addProduct(p2);
 
-        List<Product> result = warehouse.getProductsByCategorySorted(Category.CLOTHES);
+        List<Product> result = productService.getProductsByCategorySorted(Category.CLOTHES);
 
         assertTrue(result.isEmpty(), "Expected empty list for category with no products");
     }
@@ -222,10 +224,10 @@ class WarehouseTest {
                 .modifiedDate(now.minusDays(1))
                 .build();
 
-        warehouse.addProduct(oldProduct);
-        warehouse.addProduct(recentProduct);
+        productService.addProduct(oldProduct);
+        productService.addProduct(recentProduct);
 
-        List<Product> result = warehouse.getProductsCreatedAfter(LocalDate.now().minusDays(5));
+        List<Product> result = productService.getProductsCreatedAfter(LocalDate.now().minusDays(5));
 
         assertEquals(1, result.size());
         assertEquals("New Book", result.get(0).name());
@@ -235,7 +237,7 @@ class WarehouseTest {
     void getProductsCreatedAfterNoProductsAfterDateReturnsEmptyList() {
         LocalDateTime now = LocalDateTime.now();
 
-        warehouse.addProduct(new Product.ProductBuilder()
+        productService.addProduct(new Product.ProductBuilder()
                 .id("1")
                 .name("Old Book")
                 .category(Category.BOOKS)
@@ -243,7 +245,7 @@ class WarehouseTest {
                 .createdDate(now.minusDays(10))
                 .modifiedDate(now.minusDays(10))
                 .build());
-        warehouse.addProduct(new Product.ProductBuilder()
+        productService.addProduct(new Product.ProductBuilder()
                 .id("2")
                 .name("Older Food")
                 .category(Category.FOOD)
@@ -252,7 +254,7 @@ class WarehouseTest {
                 .modifiedDate(now.minusDays(5))
                 .build());
 
-        List<Product> result = warehouse.getProductsCreatedAfter(LocalDate.now());
+        List<Product> result = productService.getProductsCreatedAfter(LocalDate.now());
 
         assertTrue(result.isEmpty(), "Expected empty list when no products are created after the given date");
     }
@@ -270,9 +272,9 @@ class WarehouseTest {
                 .createdDate(createdTime)
                 .modifiedDate(createdTime)
                 .build();
-        warehouse.addProduct(product1);
+        productService.addProduct(product1);
 
-        warehouse.updateProduct("1", "Updated Book", Category.BOOKS, 8);
+        productService.updateProduct("1", "Updated Book", Category.BOOKS, 8);
 
         Product product2 = new Product.ProductBuilder()
                 .id("2")
@@ -282,9 +284,9 @@ class WarehouseTest {
                 .createdDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
                 .build();
-        warehouse.addProduct(product2);
+        productService.addProduct(product2);
 
-        List<Product> modified = warehouse.getModifiedProducts();
+        List<Product> modified = productService.getModifiedProducts();
 
         assertEquals(1, modified.size());
         assertEquals("Updated Book", modified.get(0).name());

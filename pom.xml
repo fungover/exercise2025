@@ -13,7 +13,7 @@
     <url>https://github.com/fungover/exercise2025</url>
 
     <properties>
-        <maven.compiler.release>24</maven.compiler.release>
+        <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.jupiter.version>5.13.4</junit.jupiter.version>
         <assertj.core.version>3.27.4</assertj.core.version>
@@ -55,27 +55,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.0</version>
-                <configuration>
-                    <compilerArgs>
-                        <arg>--enable-preview</arg>
-                    </compilerArgs>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.3</version>
-                <configuration>
-                    <argLine>@{argLine} --enable-preview</argLine>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.5.3</version>
-                <configuration>
-                    <argLine>@{argLine} --enable-preview</argLine>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -121,7 +110,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>[24,25)</version>
+                                    <version>[24,25]</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>

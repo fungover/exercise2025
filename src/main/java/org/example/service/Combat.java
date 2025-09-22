@@ -28,8 +28,15 @@ public class Combat {
                 }
             } else if (userChoice.contains("heal")) {
                 if (userInventory.hasItem("Health Potion")) {
+                    if (player.getHealth() >= player.getMaxHealth()) {
+                        System.out.println("You already have maximum health!");
+
+                        return;
+                    }
+
                     player.setHealth(player.getHealth() + 10);
                     System.out.println("You used a health potion. You now have " + player.getHealth() + " health!");
+                    userInventory.removeItem("Health Potion");
                 }
             }
 

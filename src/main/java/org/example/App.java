@@ -4,37 +4,21 @@ import org.example.ManualConstructor.persistence.DataBasePersistence;
 import org.example.ManualConstructor.persistence.FilePersistence;
 import org.example.ManualConstructor.persistence.PersistenceLayer;
 import org.example.ManualConstructor.service.AdvancedService;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
+
+import java.lang.reflect.Constructor;
 
 
 public class App {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello There!");
-//        Container container = new Container();
-//        container.bind(PersistenceLayer.class ,FilePersistence.class);
-//        container.bind(PersistenceLayer.class ,DataBasePersistence.class);
-
-
-
-        /*AdvancedService car = container.create(AdvancedService.class);*/
-
-        //System.out.println(container.getBindings());
-        /*service.test();*/
-        /*container.bind(PersistenceLayer.class ,DataBasePersistence.class);*/
-
-        /*container.create(AdvancedService.class);*/
-
-
-        /*System.out.println(AdvancedService.class.save("hej"));*/
-
-        /*AdvancedService service = container.create(AdvancedService.class);
-        service.processData("This is a test");*/
         Container container = new Container();
 
         // FilePersistence
         container.bind(PersistenceLayer.class, FilePersistence.class);
-        /*AdvancedService fileService = container.create(AdvancedService.class);
-        fileService.save("file-data.txt");*/
+        AdvancedService fileService = container.create(AdvancedService.class);
+        fileService.save("file-data.txt");
 
         System.out.println("\n--- Switching to database ---\n");
 
@@ -47,5 +31,15 @@ public class App {
         Transmission transmission = container.create(Transmission.class);
         System.out.println(car);
         System.out.println(transmission);
+
+        Weld weld = new Weld();
+        try (WeldContainer weldContainer = weld.initialize()) {
+            AdvancedService service = weldContainer.select(AdvancedService.class).get();
+
+            service.save("TestData1");
+            service.update("TestData2");
+            service.delete("OldData");
+            service.processData("Processing...");
+        }
     }
 }

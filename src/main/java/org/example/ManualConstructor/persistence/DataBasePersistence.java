@@ -1,5 +1,10 @@
 package org.example.ManualConstructor.persistence;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import org.example.qualifiers.DatabaseStore;
+
+@ApplicationScoped
+@DatabaseStore
 public class DataBasePersistence implements PersistenceLayer {
     @Override
     public void save(String data) {System.out.println("The data has been saved to a database: " + data);}

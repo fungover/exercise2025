@@ -1,5 +1,10 @@
 package org.example.ManualConstructor.persistence;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import org.example.qualifiers.FileStore;
+
+@ApplicationScoped
+@FileStore
 public class FilePersistence implements PersistenceLayer {
     @Override
     public void save(String file) {System.out.println("The data has been saved to a file: " + file);}

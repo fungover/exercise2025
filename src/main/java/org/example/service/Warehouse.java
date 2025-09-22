@@ -15,7 +15,7 @@ public class Warehouse {
     private final Map<String, Product> products = new HashMap<>();
 
     public void addProduct(Product product) {
-        products.put(product.id(), product);
+        products.put(product.id(), product); // remove validation from here because its now done in the build method
     }
 
     public List<Product> getAllProducts() {

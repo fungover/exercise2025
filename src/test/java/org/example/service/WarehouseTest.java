@@ -38,16 +38,14 @@ class WarehouseTest {
 
     @Test
     void addProductEmptyNameThrowsException() {
-        LocalDateTime now = LocalDateTime.now();
-        Product product = new Product(
-                "2",
-                "",
-                Category.BOOKS,
-                9,
-                now,
-                now
-        );
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Product.ProductBuilder()
+                    .id("1")
+                    .name("")
+                    .category(Category.BOOKS)
+                    .rating(9)
+                    .build(); // the validation is here and testing that
+        });
     }
 
     @Test

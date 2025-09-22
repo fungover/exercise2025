@@ -24,6 +24,8 @@ public class MapCreation {
 
             }
         }
+
+        grid[0][0] =  new Tile(TileEnum.EMPTY, null, null);
     }
 
     public Tile getTile(int x, int y) {

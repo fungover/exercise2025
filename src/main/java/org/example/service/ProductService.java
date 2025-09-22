@@ -3,6 +3,7 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.ProductRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,24 +11,25 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Warehouse {
+public class ProductService {
 
-    private final Map<String, Product> products = new HashMap<>();
+    private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     public void addProduct(Product product) {
-        products.put(product.id(), product); // remove validation from here because its now done in the build method
-    } //färdig
+        productRepository.addProduct(product);
+    }
 
     public List<Product> getAllProducts() {
-        return new ArrayList<>(products.values()); //färdig
+        return productRepository.getAllProducts();
     }
 
     public void updateProduct(String id, String name, Category category, int rating) {
-        Product existing = products.get(id);
-
-        if (existing == null) {
-            throw new IllegalArgumentException("Product not found");
-        }
+        Product existing = productRepository.getProductById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
         Product updated = new Product.ProductBuilder()
                 .id(existing.id())
@@ -38,32 +40,29 @@ public class Warehouse {
                 .modifiedDate(LocalDateTime.now())
                 .build();
 
-        products.put(id, updated);
-    } //färdig
+        productRepository.updateProduct(updated);
+    }
 
     public Product getProductById(String id) {
-        Product product = products.get(id);
-        if (product == null) {
-            throw new IllegalArgumentException("Product not found");
-        }
-        return product;
-    } //färdig
+        return productRepository.getProductById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    }
 
     public List<Product> getProductsByCategorySorted(Category category) {
-        return products.values().stream()
+        return productRepository.getAllProducts().stream()
                 .filter(p -> p.category() == category)
                 .sorted(Comparator.comparing(Product::name))
                 .collect(Collectors.toList());
-    }//färdig
+    }
 
     public List<Product> getProductsCreatedAfter(LocalDate date) {
-        return products.values().stream()
+        return productRepository.getAllProducts().stream()
                 .filter(p -> p.createdDate().toLocalDate().isAfter(date))
                 .collect(Collectors.toList());
     }
 
     public List<Product> getModifiedProducts() {
-        return products.values().stream()
+        return productRepository.getAllProducts().stream()
                 .filter(p -> !p.createdDate().truncatedTo(ChronoUnit.SECONDS)
                         .equals(p.modifiedDate().truncatedTo(ChronoUnit.SECONDS)))
                 .collect(Collectors.toList());

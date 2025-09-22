@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WarehouseTest {
 
-    Warehouse warehouse;
+    ProductService warehouse;
 
     @BeforeEach
     void setUp() {
-        warehouse = new Warehouse();
+        warehouse = new ProductService();
     }
 
     @Test

@@ -3,12 +3,13 @@ package org.example.decorator;
 import org.example.entities.Sellable;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public abstract class ProductDecorator implements Sellable {
-    protected Sellable decoratedProduct;
+    protected final Sellable decoratedProduct;
 
     public ProductDecorator(Sellable decoratedProduct) {
-        this.decoratedProduct = decoratedProduct;
+        this.decoratedProduct = Objects.requireNonNull(decoratedProduct, "decoratedProduct cannot be null");
     }
 
     @Override

@@ -1,8 +1,8 @@
-package org.example.ManualConstructor.service;
+package org.example.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.example.ManualConstructor.persistence.PersistenceLayer;
+import org.example.persistence.PersistenceLayer;
 import org.example.qualifiers.DatabaseStore;
 
 @ApplicationScoped

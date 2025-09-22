@@ -1,4 +1,4 @@
-package org.example.ManualConstructor.persistence;
+package org.example.persistence;
 
 public interface PersistenceLayer {
     void save(String data);

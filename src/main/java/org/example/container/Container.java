@@ -1,11 +1,6 @@
-package org.example;
-
-import org.example.ManualConstructor.persistence.FilePersistence;
-import org.example.ManualConstructor.persistence.PersistenceLayer;
+package org.example.container;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

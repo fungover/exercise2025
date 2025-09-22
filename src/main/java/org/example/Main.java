@@ -1,10 +1,8 @@
-package org.example.ManualConstructor;
+package org.example;
 
-import org.example.ManualConstructor.persistence.DataBasePersistence;
-import org.example.ManualConstructor.persistence.FilePersistence;
-import org.example.ManualConstructor.service.AdvancedService;
-
-import java.time.format.TextStyle;
+import org.example.persistence.DataBasePersistence;
+import org.example.persistence.FilePersistence;
+import org.example.service.AdvancedService;
 
 public class Main {
     void main() {

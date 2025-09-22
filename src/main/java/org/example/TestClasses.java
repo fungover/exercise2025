@@ -1,24 +1,28 @@
 package org.example;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+@ApplicationScoped
 class Engine {
+    @Inject
     public Engine() {
         System.out.println("Engine created");
     }
-    public void start() {
-        System.out.println("Engine started");
-    }
 }
 
+@ApplicationScoped
 class Transmission {
+    @Inject
     public Transmission() {
         System.out.println("Transmission created");
     }
 }
 
+@ApplicationScoped
 class Car {
     private final Engine engine;
     private final Transmission transmission;
-
+    @Inject
     public Car(Engine engine, Transmission transmission) {
         this.engine = engine;
         this.transmission = transmission;

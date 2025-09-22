@@ -1,4 +1,4 @@
-package org.example.ManualConstructor.persistence;
+package org.example.persistence;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.example.qualifiers.FileStore;

@@ -19,7 +19,7 @@ public class Warehouse {
     } //färdig
 
     public List<Product> getAllProducts() {
-        return new ArrayList<>(products.values());
+        return new ArrayList<>(products.values()); //färdig
     }
 
     public void updateProduct(String id, String name, Category category, int rating) {
@@ -47,14 +47,14 @@ public class Warehouse {
             throw new IllegalArgumentException("Product not found");
         }
         return product;
-    }
+    } //färdig
 
     public List<Product> getProductsByCategorySorted(Category category) {
         return products.values().stream()
                 .filter(p -> p.category() == category)
                 .sorted(Comparator.comparing(Product::name))
                 .collect(Collectors.toList());
-    }
+    }//färdig
 
     public List<Product> getProductsCreatedAfter(LocalDate date) {
         return products.values().stream()

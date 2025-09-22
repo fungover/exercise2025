@@ -114,9 +114,13 @@ class WarehouseTest {
 
     @Test
     void getProductByIdReturnsCorrectProduct() {
-        LocalDateTime now = LocalDateTime.now();
 
-        Product product = new Product("1", "Peppa Pigs adventure", Category.BOOKS, 7, now, now);
+        Product product = new Product.ProductBuilder()
+                .id("1")
+                .name("Peppa Pigs adventure")
+                .category(Category.BOOKS)
+                .rating(7)
+                .build();
         warehouse.addProduct(product);
 
         Product result = warehouse.getProductById("1");
@@ -133,12 +137,31 @@ class WarehouseTest {
 
     @Test
     void getProductsByCategorySortedReturnsSortedProducts() {
-        LocalDateTime now = LocalDateTime.now();
 
-        Product p1 = new Product("1", "Banana", Category.FOOD, 5, now, now);
-        Product p2 = new Product("2", "Apple", Category.FOOD, 7, now, now);
-        Product p3 = new Product("3", "Carrot", Category.FOOD, 6, now, now);
-        Product p4 = new Product("4", "Bridget Jones diary", Category.BOOKS, 9, now, now);
+        Product p1 = new Product.ProductBuilder()
+                .id("1")
+                .name("Banana")
+                .category(Category.FOOD)
+                .rating(8)
+                .build();
+        Product p2 = new Product.ProductBuilder()
+                .id("2")
+                .name("Apple")
+                .category(Category.FOOD)
+                .rating(8)
+                .build();
+        Product p3 = new Product.ProductBuilder()
+                .id("3")
+                .name("Carrot")
+                .category(Category.FOOD)
+                .rating(5)
+                .build();
+        Product p4 = new Product.ProductBuilder()
+                .id("4")
+                .name("Bridget Jones diary")
+                .category(Category.BOOKS)
+                .rating(9)
+                .build();
 
         warehouse.addProduct(p1);
         warehouse.addProduct(p2);
@@ -155,10 +178,23 @@ class WarehouseTest {
 
     @Test
     void getProductsByCategorySortedEmptyCategoryReturnsEmptyList() {
-        LocalDateTime now = LocalDateTime.now();
 
-        warehouse.addProduct(new Product("1", "Apple", Category.FOOD, 5, now, now));
-        warehouse.addProduct(new Product("2", "Book", Category.BOOKS, 8, now, now));
+        Product p1 = new Product.ProductBuilder()
+                .id("1")
+                .name("Apple")
+                .category(Category.FOOD)
+                .rating(5)
+                .build();
+
+        Product p2 = new Product.ProductBuilder()
+                .id("2")
+                .name("Book")
+                .category(Category.BOOKS)
+                .rating(8)
+                .build();
+
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
 
         List<Product> result = warehouse.getProductsByCategorySorted(Category.CLOTHES);
 
@@ -169,10 +205,22 @@ class WarehouseTest {
     void getProductsCreatedAfterReturnsCorrectProducts() {
         LocalDateTime now = LocalDateTime.now();
 
-        Product oldProduct = new Product("1", "Old Book", Category.BOOKS, 5,
-                now.minusDays(10), now.minusDays(10));
-        Product recentProduct = new Product("2", "New Book", Category.BOOKS, 9,
-                now.minusDays(1), now.minusDays(1));
+        Product oldProduct = new Product.ProductBuilder()
+                .id("1")
+                .name("Old Book")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(now.minusDays(10))
+                .modifiedDate(now.minusDays(10))
+                .build();
+        Product recentProduct = new Product.ProductBuilder()
+                .id("2")
+                .name("New Book")
+                .category(Category.BOOKS)
+                .rating(9)
+                .createdDate(now.minusDays(1))
+                .modifiedDate(now.minusDays(1))
+                .build();
 
         warehouse.addProduct(oldProduct);
         warehouse.addProduct(recentProduct);
@@ -187,8 +235,22 @@ class WarehouseTest {
     void getProductsCreatedAfterNoProductsAfterDateReturnsEmptyList() {
         LocalDateTime now = LocalDateTime.now();
 
-        warehouse.addProduct(new Product("1", "Old Book", Category.BOOKS, 5, now.minusDays(10), now.minusDays(10)));
-        warehouse.addProduct(new Product("2", "Older Food", Category.FOOD, 7, now.minusDays(5), now.minusDays(5)));
+        warehouse.addProduct(new Product.ProductBuilder()
+                .id("1")
+                .name("Old Book")
+                .category(Category.BOOKS)
+                .rating(5)
+                .createdDate(now.minusDays(10))
+                .modifiedDate(now.minusDays(10))
+                .build());
+        warehouse.addProduct(new Product.ProductBuilder()
+                .id("2")
+                .name("Older Food")
+                .category(Category.FOOD)
+                .rating(7)
+                .createdDate(now.minusDays(5))
+                .modifiedDate(now.minusDays(5))
+                .build());
 
         List<Product> result = warehouse.getProductsCreatedAfter(LocalDate.now());
 
@@ -200,12 +262,26 @@ class WarehouseTest {
     void getModifiedProductsReturnsOnlyModified() {
         LocalDateTime createdTime = LocalDateTime.now().minusMinutes(1);
 
-        Product product1 = new Product("1", "Original Book", Category.BOOKS, 7, createdTime, createdTime);
+        Product product1 = new Product.ProductBuilder()
+                .id("1")
+                .name("Original Book")
+                .category(Category.BOOKS)
+                .rating(7)
+                .createdDate(createdTime)
+                .modifiedDate(createdTime)
+                .build();
         warehouse.addProduct(product1);
 
         warehouse.updateProduct("1", "Updated Book", Category.BOOKS, 8);
 
-        Product product2 = new Product("2", "Fresh Food", Category.FOOD, 9, LocalDateTime.now(), LocalDateTime.now());
+        Product product2 = new Product.ProductBuilder()
+                .id("2")
+                .name("Fresh Food")
+                .category(Category.FOOD)
+                .rating(9)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .build();
         warehouse.addProduct(product2);
 
         List<Product> modified = warehouse.getModifiedProducts();

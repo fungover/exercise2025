@@ -2,6 +2,8 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,26 +22,45 @@ public class WarehouseTest {
 
     @BeforeEach
     void setUp() {
-        warehouse = new Warehouse();
-        product = Product.builder()
-                .id("1")
-                .name("Test product")
-                .category(Category.ELECTRONICS)
-                .rating(8)
-                .createdDate(LocalDate.now())
-                .build();
+        ProductRepository productRepository = new InMemoryProductRepository();
+        warehouse = new Warehouse(productRepository);
     }
 
     @Test
     void shouldCreateEmptyWarehouse() {
-        Warehouse warehouse = new Warehouse();
+        ProductRepository productRepository = new InMemoryProductRepository();
+        Warehouse warehouse = new Warehouse(productRepository);
         assertNotNull(warehouse);
     }
 
     @Test
     void shouldAddProduct() {
+        Product product = Product.builder()
+                .id("1")
+                .name("Test Product")
+                .category(Category.ELECTRONICS)
+                .rating(2)
+                .createdDate(LocalDate.now())
+                .build();
+
         warehouse.addProduct(product);
         assertDoesNotThrow(() -> warehouse.addProduct(product));
+    }
+
+    @Test
+    void shouldRemoveProduct() {
+        product = Product.builder()
+                .id("123")
+                .name("Test product")
+                .category(Category.ELECTRONICS)
+                .rating(2)
+                .createdDate(LocalDate.now())
+                .build();
+
+        warehouse.addProduct(product);
+        assertEquals(1, warehouse.getAllProducts().size());
+        warehouse.removeProduct(product);
+        assertEquals(0, warehouse.getAllProducts().size());
     }
 
     @Test
@@ -144,7 +165,7 @@ public class WarehouseTest {
                 .name("Old product")
                 .category(Category.ELECTRONICS)
                 .rating(3)
-                .createdDate(LocalDate.of(2025,9,1))
+                .createdDate(LocalDate.of(2025, 9, 1))
                 .build();
 
         Product newProduct1 = Product.builder()
@@ -152,7 +173,7 @@ public class WarehouseTest {
                 .name("New Product 1")
                 .category(Category.ELECTRONICS)
                 .rating(8)
-                .createdDate(LocalDate.of(2025,9,10))
+                .createdDate(LocalDate.of(2025, 9, 10))
                 .build();
 
         Product newProduct2 = Product.builder()
@@ -160,7 +181,7 @@ public class WarehouseTest {
                 .name("New Product 2")
                 .category(Category.SPORTS)
                 .rating(5)
-                .createdDate(LocalDate.of(2025,9,15))
+                .createdDate(LocalDate.of(2025, 9, 15))
                 .build();
 
         warehouse.addProduct(oldProduct);
@@ -182,7 +203,7 @@ public class WarehouseTest {
                 .name("Test product")
                 .category(Category.ELECTRONICS)
                 .rating(3)
-                .createdDate(LocalDate.of(2025,1,1))
+                .createdDate(LocalDate.of(2025, 1, 1))
                 .build());
 
         List<Product> result = warehouse.getProductsCreatedAfter(LocalDate.of(2099, 12, 10));
@@ -229,7 +250,7 @@ public class WarehouseTest {
                 .name("Test product")
                 .category(Category.ELECTRONICS)
                 .rating(3)
-                .createdDate(LocalDate.of(2025,1,1))
+                .createdDate(LocalDate.of(2025, 1, 1))
                 .build());
 
         List<Product> result = warehouse.getModifiedProducts();
@@ -244,7 +265,7 @@ public class WarehouseTest {
                 .name("Old Product")
                 .category(Category.ELECTRONICS)
                 .rating(8)
-                .createdDate(LocalDate.of(2025,9,1))
+                .createdDate(LocalDate.of(2025, 9, 1))
                 .build();
 
         warehouse.addProduct(originalProduct);

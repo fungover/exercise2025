@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.ProductRepository;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -11,56 +12,54 @@ import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 public class Warehouse {
+    private final ProductRepository productRepository;
 
-    private final List<Product> products = new ArrayList<>();
+    public Warehouse(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     public void addProduct(Product product) {
-        if (product == null) {
-            throw new IllegalArgumentException("Product cannot be null");
-        }
-        products.add(product);
+        productRepository.addProduct(product);
     }
 
     public List<Product> getAllProducts() {
-        return Collections.unmodifiableList(new ArrayList<>(products));
+        return productRepository.getAllProducts();
     }
 
     public Optional<Product> getProductById(String id) {
-        return products.stream()
-                .filter(product -> product.id().equals(id))
-                .findFirst();
+        return productRepository.getProductById(id);
+    }
+
+    public void removeProduct(Product product) {
+        productRepository.removeProduct(product);
     }
 
     public List<Product> getProductsByCategorySorted(Category category) {
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 .filter(product -> product.category().equals(category))
                 .sorted(Comparator.comparing(Product::name))
                 .collect(Collectors.toList());
     }
 
     public List<Product> getProductsCreatedAfter(LocalDate cutoffDate) {
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 .filter(product -> product.createdDate().isAfter(cutoffDate))
                 .collect(Collectors.toList());
     }
 
     public List<Product> getModifiedProducts() {
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 .filter(product -> !product.createdDate().equals(product.modifiedDate()))
                 .collect(Collectors.toList());
     }
 
     public void updateProduct(String id, String name, Category category, int rating) {
         // Find existing product
-        Optional<Product> existingProduct = products.stream()
-                .filter(product -> product.id().equals(id))
-                .findFirst();
+        Optional<Product> existingProduct = productRepository.getProductById(id);
 
         if (existingProduct.isEmpty()) {
             throw new IllegalArgumentException("Product with id " + id + " not found");
         }
-        // Remove old product
-        products.removeIf(product -> product.id().equals(id));
 
         // Create new product with updated values
         Product updatedProduct = Product.builder()
@@ -72,17 +71,17 @@ public class Warehouse {
                 .modifiedDate(LocalDate.now())
                 .build();
 
-        products.add(updatedProduct);
+        productRepository.updateProduct(updatedProduct);
     }
 
     public int countProductsInCategory(Category category) {
-        return (int) products.stream()
+        return (int) productRepository.getAllProducts().stream()
                 .filter(product -> product.category().equals(category))
                 .count();
     }
 
     public Set<Category> getCategoriesWithProducts() {
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 // Extract category from every product
                 .map(Product::category)
                 // Collect to Set to remove duplicates, no need to use distinct() on Set
@@ -90,7 +89,7 @@ public class Warehouse {
     }
 
     public Map<Character, Integer> getProductInitialsMap() {
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 // Group products by first letter in name
                 .collect(Collectors.groupingBy(
                         // Key: First letter
@@ -110,7 +109,7 @@ public class Warehouse {
         YearMonth thisMonth = YearMonth.from(now);
 
         // Find products from this month
-        List<Product> thisMonthProducts = products.stream()
+        List<Product> thisMonthProducts = productRepository.getAllProducts().stream()
                 .filter(product -> YearMonth.from(product.createdDate()).equals(thisMonth))
                 .collect(Collectors.toList());
 

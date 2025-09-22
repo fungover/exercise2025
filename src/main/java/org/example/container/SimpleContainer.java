@@ -61,7 +61,7 @@ public class SimpleContainer {
             // STEP 1: Determine which class to instantiate.
             // If a user requests an interface, then we must find the implementation.
             Class<?> implementationClass = requestedType;
-            // Check: Is it an interface and do we have a binding for it?
+            // Check: Is it an interface, and do we have a binding for it?
             if (requestedType.isInterface() && bindings.containsKey(requestedType)) {
                 // If yes, Change the interface to the concrete class from bindings.
                 // For example, MessageService.class -> EmailMessageService.class
@@ -115,4 +115,5 @@ public class SimpleContainer {
             throw new RuntimeException("Could not create instance of " + requestedType.getName(), e);
         }
     }
+
 }

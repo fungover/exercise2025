@@ -48,6 +48,9 @@ public class App {
         try (SeContainer weldContainer = weld.initialize()) {
             EmailService emailService2 = weldContainer.select(EmailService.class).get();
             emailService2.send(new Message("Hello", "Alfred"));
+
+            SmsService smsService2 = weldContainer.select(SmsService.class).get();
+            smsService2.send(new Message("Hello", "Alfred"));
         }
 
         System.out.println("--------------------------------");

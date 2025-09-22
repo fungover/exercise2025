@@ -16,16 +16,22 @@ public record Product(
     /**
      * Private constructor which takes a Builder-instance as parameter.
      * <p>
-     * WHY PRIVATE?
-     * - This forces all products to be created through the Builder class.
-     * - It ensures direct constructor calls are not possible, like new Product(...).
-     * - Ensures validation through the Builder's build() method.
+     * PURPOSE?
+     * - Provides a clean way to create Product from Builder data.
+     * - Keeps the builder pattern implementation organized.
+     * - All validation happens in Builder.build() before calling this constructor.
+     * <p>
+     * NOTE AND QUESTION TO TEACHER:
+     * - The canonical constructor is still public (java record)
+     * - But builder provides a more flexible and validated way to create products.
+     * - Should we add validation to the canonical constructor as well? if people use this?
      * <p>
      * WHERE GOES THE DATA?
      * - The Builder-object is sent to this constructor with its fields already set.
      * - We then take the values from the Builder and pass them to the record constructor.
      *
      */
+
 
     private Product(Builder builder) {
         this(

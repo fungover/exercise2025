@@ -62,6 +62,17 @@ public class App {
         // TEST 1: Basic Discount Decorator
         // =================================================================
         System.out.println("--- Test 1: Basic 20% Discount ---");
+
+        /**
+         * Here we decorate the laptop with DiscountDecorator to apply a 20% discount.
+         * We use the exisiting laptop object and wrap it with the decorator.
+         * this way we do not modify the original laptop object.
+         *
+         *  QUESTION FOR TEACHER:
+         *  - If we lets say would add a simple christmas edition decorator. Would it not be better to NOT add the "String christmasDecorator"
+         *  to the product interface? and just add it to the decorator class? So we don't modify the original interface?
+         */
+
         Sellable discountedLaptop = new DiscountDecorator(laptop, 20.0);
 
         System.out.println("Original Laptop:");
@@ -72,6 +83,7 @@ public class App {
         System.out.println("  Name: " + discountedLaptop.getName());
         System.out.println("  Price: $" + discountedLaptop.getPrice());
         System.out.println("  Savings: $" + (laptop.getPrice() - discountedLaptop.getPrice()));
+        
 
     }
 }

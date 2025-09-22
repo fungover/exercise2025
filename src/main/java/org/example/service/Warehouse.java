@@ -16,12 +16,6 @@ public class Warehouse {
 
     public void addProduct(Product product) {
         products.put(product.id(), product);
-
-        if (product.name() == null || product.name().isBlank()) {
-            throw new IllegalArgumentException("The name of the product is empty");
-        }
-
-        products.put(product.id(), product);
     }
 
     public List<Product> getAllProducts() {

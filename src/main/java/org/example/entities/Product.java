@@ -2,6 +2,10 @@ package org.example.entities;
 
 import java.time.LocalDateTime;
 
+// att göra:
+//valideringen i product constructor.
+// fortsätt med uppg 4
+
 public record Product (
         String id,
         String name,
@@ -9,9 +13,19 @@ public record Product (
         int rating,
         LocalDateTime createdDate,
         LocalDateTime modifiedDate
-) {
+)
+{  private Product(String id, String name, Category category, int rating) {
+    this(
+            id,
+            name,
+            category,
+            rating,
+            LocalDateTime.now(),
+            LocalDateTime.now()
+    );
+}
 
-    public static class Builder {
+    public static class ProductBuilder {
       private  String id;
       private String name;
       private Category category;
@@ -19,27 +33,27 @@ public record Product (
       private LocalDateTime createdDate;
       private LocalDateTime modifiedDate;
 
-      public Builder name(String name) {
+      public ProductBuilder name(String name) {
             this.name = name;
             return this;
         }
-      public Builder id(String id) {
+      public ProductBuilder id(String id) {
           this.id = id;
           return this;
       }
-      public Builder category(Category category) {
+      public ProductBuilder category(Category category) {
           this.category = category;
           return this;
       }
-      public Builder rating(int rating) {
+      public ProductBuilder rating(int rating) {
           this.rating = rating;
           return this;
       }
-      public Builder createdDate(LocalDateTime createdDate) {
+      public ProductBuilder createdDate(LocalDateTime createdDate) {
           this.createdDate = createdDate;
           return this;
       }
-      public Builder modifiedDate(LocalDateTime modifiedDate) {
+      public ProductBuilder modifiedDate(LocalDateTime modifiedDate) {
           this.modifiedDate = modifiedDate;
           return this;
       }
@@ -56,12 +70,6 @@ public record Product (
           }
           if (rating < 0 || rating > 10) {
               throw new IllegalArgumentException("rating must be between 0 and 10");
-          }
-          if (createdDate == null)  {
-              createdDate = LocalDateTime.now();
-          }
-          if (modifiedDate == null)  {
-              modifiedDate = LocalDateTime.now();
           }
 
           return new Product(id, name, category, rating, createdDate, modifiedDate);

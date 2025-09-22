@@ -22,14 +22,13 @@ class WarehouseTest {
 
     @Test
     void addProduct() {
-        LocalDateTime now = LocalDateTime.now();
-        Product product = new Product(
-                "1",
-                "Harry Potter and the deathly hollows",
-                Category.BOOKS,
-                9,
-                now,
-                now);
+
+        Product product = new Product.ProductBuilder()
+                .id("1")
+                .name("Harry Potter and the Deathly Hallows")
+                .category(Category.BOOKS)
+                .rating(9)
+                .build();
 
         warehouse.addProduct(product);
 

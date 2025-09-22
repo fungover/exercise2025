@@ -43,9 +43,7 @@ class DependencyInjectionTest {
         Investigation investigation = new Investigation(detective);
 
         // When & Then - Should not throw any exceptions and dependencies should work
-        assertThatNoException().isThrownBy(() -> {
-            investigation.startInvestigation("CASE-TEST");
-        });
+        assertThatNoException().isThrownBy(() -> investigation.startInvestigation("CASE-TEST"));
     }
 
     @Test
@@ -73,9 +71,7 @@ class DependencyInjectionTest {
 
         // When
         // This should work because we manually resolved the dependency chain
-        assertThatNoException().isThrownBy(() -> {
-            engine.startInvestigation("MANUAL-TEST");
-        });
+        assertThatNoException().isThrownBy(() -> engine.startInvestigation("MANUAL-TEST"));
 
         // Then - All dependencies should be properly injected
         assertThat(crimeRepo).isNotNull();

@@ -16,7 +16,7 @@ public class Warehouse {
 
     public void addProduct(Product product) {
         products.put(product.id(), product); // remove validation from here because its now done in the build method
-    }
+    } //färdig
 
     public List<Product> getAllProducts() {
         return new ArrayList<>(products.values());
@@ -24,19 +24,22 @@ public class Warehouse {
 
     public void updateProduct(String id, String name, Category category, int rating) {
         Product existing = products.get(id);
+
         if (existing == null) {
             throw new IllegalArgumentException("Product not found");
         }
-        Product updated = new Product(
-                existing.id(),
-                name,
-                category,
-                rating,
-                existing.createdDate(),
-                LocalDateTime.now()
-        );
+
+        Product updated = new Product.ProductBuilder()
+                .id(existing.id())
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .createdDate(existing.createdDate())
+                .modifiedDate(LocalDateTime.now())
+                .build();
+
         products.put(id, updated);
-    }
+    } //färdig
 
     public Product getProductById(String id) {
         Product product = products.get(id);

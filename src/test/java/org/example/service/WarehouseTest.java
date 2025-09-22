@@ -50,20 +50,20 @@ class WarehouseTest {
 
     @Test
     void updateProduct() {
-        LocalDateTime now = LocalDateTime.now();
-        Product product = new Product(
-                "1",
-                "Harry Potter and the deathly hollows",
-                Category.BOOKS,
-                9,
-                now,
-                now
-        );
+
+        Product product = new Product.ProductBuilder()
+                .id("1")
+                .name("Harry Potter and the deathly hollows")
+                .category(Category.BOOKS)
+                .rating(9)
+                .build();
+
         warehouse.addProduct(product);
 
         warehouse.updateProduct("1", "HOKA One One", Category.SHOES, 10);
 
         Product updatedProduct = warehouse.getProductById("1");
+
         assertEquals("HOKA One One", updatedProduct.name());
         assertEquals(Category.SHOES, updatedProduct.category());
         assertEquals(10, updatedProduct.rating());

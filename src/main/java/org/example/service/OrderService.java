@@ -1,4 +1,4 @@
-package org.example.manualConstructorInjection.service;
+package org.example.service;
 
 public interface OrderService {
     void processOrder(String orderId);

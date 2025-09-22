@@ -1,4 +1,4 @@
-package org.example.manualConstructorInjection.persistence;
+package org.example.persistence;
 
 public class DatabaseOrderRepository implements OrderRepository {
 

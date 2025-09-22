@@ -1,4 +1,4 @@
-package org.example.manualConstructorInjection.persistence;
+package org.example.persistence;
 
 public interface OrderRepository {
     void saveOrder(String orderId);

@@ -6,10 +6,10 @@ import org.example.repository.UserRepository;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class UserServiceRegistrationEncrypted implements UserServiceRegistration {
+public class UserRegistrationServiceEncrypted implements UserRegistrationService {
   private final UserRepository userRepository;
 
-  public UserServiceRegistrationEncrypted(UserRepository userRepository) {
+  public UserRegistrationServiceEncrypted(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 

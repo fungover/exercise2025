@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
-public class Warehouse {
+public class ProductService {
     private final ProductRepository productRepository;
 
-    public Warehouse(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 

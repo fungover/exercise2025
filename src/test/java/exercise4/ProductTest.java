@@ -1,7 +1,7 @@
 package exercise4;
 
-import exersice4.enteties.Category;
-import exersice4.enteties.Product;
+import exercise4.entities.Category;
+import exercise4.entities.Product;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
@@ -24,7 +24,7 @@ public class ProductTest {
     }
 
     @Test
-    void testGetCategorySuccess() {;
+    void testGetCategorySuccess() {
         Product product = new Product.Builder()
                 .setName("Strawberry conditioner")
                 .setCategory(Category.Conditioner)

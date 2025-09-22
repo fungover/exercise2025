@@ -1,8 +1,8 @@
-package exersice4;
+package exercise4;
 
-import exersice4.repository.InMemoryProductRepository;
-import exersice4.repository.ProductRepository;
-import exersice4.service.ProductServices;
+import exercise4.repository.InMemoryProductRepository;
+import exercise4.repository.ProductRepository;
+import exercise4.service.ProductServices;
 
 public class Main {
     public static void main(String[] args) {

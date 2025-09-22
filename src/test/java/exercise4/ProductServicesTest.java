@@ -1,19 +1,17 @@
 package exercise4;
 
 
-import exersice4.enteties.Category;
-import exersice4.enteties.Product;
-import exersice4.repository.InMemoryProductRepository;
-import exersice4.repository.ProductRepository;
-import exersice4.service.ProductServices;
+import exercise4.entities.Category;
+import exercise4.entities.Product;
+import exercise4.repository.InMemoryProductRepository;
+import exercise4.repository.ProductRepository;
+import exercise4.service.ProductServices;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ProductServicesTest {
     @Test
@@ -129,7 +127,7 @@ public class ProductServicesTest {
         ProductRepository pr = new InMemoryProductRepository();
         ProductServices productServices = new ProductServices(pr);
         Optional<Product> product = productServices.getProductById("tre");
-        assertThat(product.isEmpty());
+        assertTrue(product.isEmpty());
     }
     @Test
     void testGetProductsByCategorySortedSuccess(){

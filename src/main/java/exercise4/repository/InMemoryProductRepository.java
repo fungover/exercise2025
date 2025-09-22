@@ -1,6 +1,6 @@
-package exersice4.repository;
+package exercise4.repository;
 
-import exersice4.enteties.Product;
+import exercise4.entities.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public void addProduct(Product product) {
-        if(product.getName() == null){
+        if(product == null || product.getName() == null || product.getName().isBlank()){
             System.out.println("Product could not be added");
             return;
         }
@@ -24,6 +24,9 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public Optional<Product> getProductById(String id) {
+        if(id == null || id.isBlank()){
+            return Optional.empty();
+        }
         return products.stream()
                 .filter(product -> product.getId().equals(id)).
                 findFirst();

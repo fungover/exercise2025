@@ -1,6 +1,6 @@
-package exersice4.repository;
+package exercise4.repository;
 
-import exersice4.enteties.Product;
+import exercise4.entities.Product;
 
 import java.util.List;
 import java.util.Optional;

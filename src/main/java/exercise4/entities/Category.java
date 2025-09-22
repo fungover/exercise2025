@@ -1,4 +1,4 @@
-package exersice4.enteties;
+package exercise4.entities;
 
 public enum Category {
     Soap,

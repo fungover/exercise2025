@@ -1,4 +1,4 @@
-package exersice4.enteties;
+package exercise4.entities;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

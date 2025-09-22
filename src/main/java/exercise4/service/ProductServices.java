@@ -1,9 +1,8 @@
-package exersice4.service;
+package exercise4.service;
 
-import exersice4.enteties.Category;
-import exersice4.enteties.Product;
-import exersice4.repository.InMemoryProductRepository;
-import exersice4.repository.ProductRepository;
+import exercise4.entities.Category;
+import exercise4.entities.Product;
+import exercise4.repository.ProductRepository;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -46,8 +45,7 @@ public class ProductServices {
     public List<Product> getProductsCreatedAfter(LocalDateTime date){
         List<Product> products = productRepository.getAllProducts();
         if(date == null){
-            System.out.println("Date cannot be null");
-            return null;
+            throw new IllegalArgumentException("Date cannot be null");
         }
         List<Product> productsCreatedAfter = products.stream()
                 .filter(param -> param.getCreatedDate().isAfter(date))

@@ -7,6 +7,7 @@ import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(2)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(99.99))
                 .build();
 
         productService.addProduct(product);
@@ -55,6 +57,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(2)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(99.99))
                 .build();
 
         productService.addProduct(product);
@@ -71,6 +74,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(49.99))
                 .build();
 
         productService.addProduct(product);
@@ -88,6 +92,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(29.95))
                 .build();
 
         productService.addProduct(product);
@@ -113,6 +118,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(200.00))
                 .build();
 
         Product electronics2 = Product.builder()
@@ -121,6 +127,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(2)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(2400.99))
                 .build();
 
         Product sports = Product.builder()
@@ -129,6 +136,7 @@ public class ProductServiceTest {
                 .category(Category.SPORTS)
                 .rating(10)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(49.99))
                 .build();
 
         productService.addProduct(electronics1);
@@ -150,6 +158,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(99.99))
                 .build());
 
         List<Product> result = productService.getProductsByCategorySorted(Category.SPORTS);
@@ -166,6 +175,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(3)
                 .createdDate(LocalDate.of(2025, 9, 1))
+                .price(BigDecimal.valueOf(99.99))
                 .build();
 
         Product newProduct1 = Product.builder()
@@ -174,6 +184,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.of(2025, 9, 10))
+                .price(BigDecimal.valueOf(49.95))
                 .build();
 
         Product newProduct2 = Product.builder()
@@ -182,6 +193,7 @@ public class ProductServiceTest {
                 .category(Category.SPORTS)
                 .rating(5)
                 .createdDate(LocalDate.of(2025, 9, 15))
+                .price(BigDecimal.valueOf(100))
                 .build();
 
         productService.addProduct(oldProduct);
@@ -204,6 +216,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(3)
                 .createdDate(LocalDate.of(2025, 1, 1))
+                .price(BigDecimal.valueOf(99.99))
                 .build());
 
         List<Product> result = productService.getProductsCreatedAfter(LocalDate.of(2099, 12, 10));
@@ -222,6 +235,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(6)
                 .createdDate(createdDate)
+                .price(BigDecimal.valueOf(100.00))
                 .build();
 
         Product modifiedProduct = Product.builder()
@@ -231,6 +245,7 @@ public class ProductServiceTest {
                 .rating(7)
                 .createdDate(createdDate)
                 .modifiedDate(modifiedDate)
+                .price(BigDecimal.valueOf(99.99))
                 .build();
 
         productService.addProduct(unmodifiedProduct);
@@ -251,6 +266,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(3)
                 .createdDate(LocalDate.of(2025, 1, 1))
+                .price(BigDecimal.valueOf(99.99))
                 .build());
 
         List<Product> result = productService.getModifiedProducts();
@@ -266,6 +282,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.of(2025, 9, 1))
+                .price(BigDecimal.valueOf(100.00))
                 .build();
 
         productService.addProduct(originalProduct);
@@ -296,6 +313,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(999.99))
                 .build();
 
         productService.addProduct(product);
@@ -312,6 +330,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(999.99))
                 .build());
 
         productService.addProduct(Product.builder()
@@ -320,6 +339,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(99.99))
                 .build());
 
         productService.addProduct(Product.builder()
@@ -328,6 +348,7 @@ public class ProductServiceTest {
                 .category(Category.SPORTS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(999.99))
                 .build());
 
         int electronicsCount = productService.countProductsInCategory(Category.ELECTRONICS);
@@ -347,6 +368,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(999.99))
                 .build());
 
         productService.addProduct(Product.builder()
@@ -355,6 +377,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(49.99))
                 .build());
 
         productService.addProduct(Product.builder()
@@ -363,6 +386,7 @@ public class ProductServiceTest {
                 .category(Category.SPORTS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(9999.99))
                 .build());
 
         Set<Category> categories = productService.getCategoriesWithProducts();
@@ -381,6 +405,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(3)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(450.00))
                 .build());
 
         productService.addProduct(Product.builder()
@@ -389,6 +414,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(6)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(699.99))
                 .build());
 
         productService.addProduct(Product.builder()
@@ -397,6 +423,7 @@ public class ProductServiceTest {
                 .category(Category.SPORTS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(30))
                 .build());
 
         productService.addProduct(Product.builder()
@@ -405,6 +432,7 @@ public class ProductServiceTest {
                 .category(Category.CLOTHING)
                 .rating(2)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(95.99))
                 .build());
 
         Map<Character, Integer> initialsMap = productService.getProductInitialsMap();
@@ -427,6 +455,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(10)
                 .createdDate(thisMonth.minusDays(5))
+                .price(BigDecimal.valueOf(99.99))
                 .build();
 
         Product product2 = Product.builder()
@@ -435,6 +464,7 @@ public class ProductServiceTest {
                 .category(Category.CLOTHING)
                 .rating(5)
                 .createdDate(thisMonth.minusDays(2))
+                .price(BigDecimal.valueOf(49.99))
                 .build();
 
         Product product3 = Product.builder()
@@ -443,6 +473,7 @@ public class ProductServiceTest {
                 .category(Category.SPORTS)
                 .rating(10)
                 .createdDate(thisMonth.minusDays(1))
+                .price(BigDecimal.valueOf(29.99))
                 .build();
 
         Product oldProduct = Product.builder()
@@ -451,6 +482,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(9)
                 .createdDate(lastMonth)
+                .price(BigDecimal.valueOf(49.99))
                 .build();
 
         productService.addProduct(product1);
@@ -474,6 +506,7 @@ public class ProductServiceTest {
                 .category(Category.ELECTRONICS)
                 .rating(3)
                 .createdDate(lastMonth)
+                .price(BigDecimal.valueOf(29.99))
                 .build());
 
         List<Product> topRated = productService.getTopRatedProductsThisMonth();

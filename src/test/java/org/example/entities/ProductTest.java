@@ -3,6 +3,7 @@ package org.example.entities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,6 +17,7 @@ public class ProductTest {
     private LocalDate createdDate;
     private LocalDate modifiedDate;
     private Product product;
+    private BigDecimal price;
 
     @BeforeEach
     void setUp() {
@@ -25,6 +27,7 @@ public class ProductTest {
         rating = 8;
         createdDate = LocalDate.of(2025, 9, 8);
         modifiedDate = createdDate;
+        price = BigDecimal.valueOf(99.99);
 
         product = Product.builder()
                 .id(id)
@@ -32,6 +35,7 @@ public class ProductTest {
                 .category(category)
                 .rating(rating)
                 .createdDate(createdDate)
+                .price(price)
                 .build();
     }
 
@@ -73,6 +77,7 @@ public class ProductTest {
                 .category(category)
                 .rating(rating)
                 .createdDate(createdDate)
+                .price(BigDecimal.valueOf(999.99))
                 .build();
         // Then
         assertEquals(id, product.id());
@@ -127,6 +132,7 @@ public class ProductTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.of(2025, 9, 25))
+                .price(BigDecimal.valueOf(100.00))
                 .build();
 
         assertEquals("2", product.id());
@@ -187,6 +193,7 @@ public class ProductTest {
                 .name("Test")
                 .category(Category.SPORTS)
                 .rating(10)
+                .price(BigDecimal.valueOf(49.00))
                 .build();
 
         assertNotNull(product.createdDate());

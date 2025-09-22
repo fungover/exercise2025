@@ -69,6 +69,7 @@ public class ProductService {
                 .rating(rating)
                 .createdDate(existingProduct.get().createdDate())
                 .modifiedDate(LocalDate.now())
+                .price(existingProduct.get().price())
                 .build();
 
         productRepository.updateProduct(updatedProduct);

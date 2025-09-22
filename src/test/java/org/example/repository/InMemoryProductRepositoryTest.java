@@ -5,6 +5,7 @@ import org.example.entities.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ public class InMemoryProductRepositoryTest {
                 .category(Category.ELECTRONICS)
                 .rating(6)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(99.99))
                 .build();
 
         productRepository.addProduct(product);
@@ -48,6 +50,7 @@ public class InMemoryProductRepositoryTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(99.99))
                 .build();
 
         productRepository.addProduct(product);
@@ -77,6 +80,7 @@ public class InMemoryProductRepositoryTest {
                 .category(Category.ELECTRONICS)
                 .rating(5)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(99.99))
                 .build();
 
         productRepository.addProduct(original);
@@ -87,6 +91,7 @@ public class InMemoryProductRepositoryTest {
                 .category(Category.SPORTS)
                 .rating(9)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(79.99))
                 .build();
 
         productRepository.updateProduct(updated);
@@ -105,6 +110,7 @@ public class InMemoryProductRepositoryTest {
                 .category(Category.ELECTRONICS)
                 .rating(8)
                 .createdDate(LocalDate.now())
+                .price(BigDecimal.valueOf(99.99))
                 .build();
 
         productRepository.addProduct(product);

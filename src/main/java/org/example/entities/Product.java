@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Product {
@@ -9,6 +10,7 @@ public class Product {
     private final int rating;
     private final LocalDate createdDate;
     private final LocalDate modifiedDate;
+    private final BigDecimal price;
 
     public static class Builder {
         private String id;
@@ -17,6 +19,7 @@ public class Product {
         private int rating;
         private LocalDate createdDate;
         private LocalDate modifiedDate;
+        private BigDecimal price;
 
         public Builder id(String id) {
             this.id = id;
@@ -48,6 +51,11 @@ public class Product {
             return this;
         }
 
+        public Builder price(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
         public Product build() {
             if (id == null || id.trim().isEmpty()) {
                 throw new IllegalArgumentException("Product id cannot be empty");
@@ -68,8 +76,11 @@ public class Product {
             if (modifiedDate == null) {
                 modifiedDate = createdDate;
             }
+            if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalArgumentException("Product price must be greater than zero");
+            }
 
-            return new Product(id, name, category, rating, createdDate, modifiedDate);
+            return new Product(id, name, category, rating, createdDate, modifiedDate, price);
         }
     }
 
@@ -77,7 +88,8 @@ public class Product {
         return new Builder();
     }
 
-    private Product(String id, String name, Category category, int rating, LocalDate createdDate, LocalDate modifiedDate) {
+    private Product(String id, String name, Category category, int rating,
+                    LocalDate createdDate, LocalDate modifiedDate, BigDecimal price) {
         validateRating(rating);
         this.id = id;
         this.name = name;
@@ -85,6 +97,7 @@ public class Product {
         this.rating = rating;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+        this.price = price;
     }
 
     private void validateRating(int rating) {
@@ -116,5 +129,9 @@ public class Product {
 
     public LocalDate modifiedDate() {
         return modifiedDate;
+    }
+
+    public BigDecimal price() {
+        return price;
     }
 }

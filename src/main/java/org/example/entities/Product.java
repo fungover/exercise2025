@@ -3,7 +3,7 @@ package org.example.entities;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Product {
+public class Product implements Sellable {
     private final String id;
     private final String name;
     private final Category category;
@@ -11,6 +11,21 @@ public class Product {
     private final LocalDate createdDate;
     private final LocalDate modifiedDate;
     private final BigDecimal price;
+
+    @Override
+    public String getId() {
+        return id();
+    }
+
+    @Override
+    public String getName() {
+        return name();
+    }
+
+    @Override
+    public BigDecimal getPrice() {
+        return price();
+    }
 
     public static class Builder {
         private String id;

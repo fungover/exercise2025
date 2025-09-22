@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.container.Container;
 import org.example.detective.Detective;
 import org.example.detective.SherlockHolmes;
 import org.example.repository.Crime;
@@ -78,4 +79,17 @@ class DependencyInjectionTest {
         assertThat(detective).isNotNull();
         assertThat(engine).isNotNull();
     }
+    @Test
+    void shouldCreateInvestigationUsingContainer() {
+        // Given
+        Container container = new Container();
+
+        // When
+        Investigation investigation = container.getInstance(Investigation.class);
+
+        // Then
+        assertThat(investigation).isNotNull();
+        assertThatNoException().isThrownBy(() -> investigation.startInvestigation("CONTAINER-TEST"));
+    }
+
 }

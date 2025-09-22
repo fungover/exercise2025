@@ -49,12 +49,9 @@ public class InMemoryProductRepository implements ProductRepository {
         Optional<Product> productToUpdate = products.stream().
                 filter(p -> Objects.equals(p.getId(), product.getId())).
                 findFirst();
-
         if(productToUpdate.isPresent()){
             int index = products.indexOf(productToUpdate.get());
             products.set(index, product);
-
-
         }else{
             System.out.println("Product not found");
         }

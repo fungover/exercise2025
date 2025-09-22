@@ -73,7 +73,8 @@ public class ProductServicesTest {
                 .setName("Pink soap")
                 .setCategory(Category.Soap)
                 .setRating(8)
-                .setCreatedDate(LocalDateTime.now())
+                .setCreatedDate(product.getCreatedDate())
+                .setModifiedDate(LocalDateTime.now())
                 .setId("tre")
                 .build();
         productServices.updateProduct(updatedProduct);

@@ -11,20 +11,16 @@ import java.util.Optional;
 
 
 public class ProductServices {
-   // private final List<Product> products;
     private final ProductRepository productRepository;
 
     public ProductServices(ProductRepository productRepository) {
         this.productRepository = productRepository;
-       // products = new ArrayList<>();
     }
     public void addProduct(Product product) {
         productRepository.addProduct(product);
     }
     public void updateProduct(Product product) {
-
         productRepository.updateProduct(product);
-
     }
     public List<Product> getAllProducts() {
         return productRepository.getAllProducts();

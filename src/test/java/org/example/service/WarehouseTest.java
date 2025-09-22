@@ -81,8 +81,19 @@ class WarehouseTest {
     void getAllProductsReturnsAllProducts() {
         LocalDateTime now = LocalDateTime.now();
 
-        Product product1 = new Product("1", "Pizza", Category.FOOD, 100, now, now);
-        Product product2 = new Product("2", "Tacos", Category.FOOD, 99, now, now);
+        Product product1 = new Product.ProductBuilder()
+                .id("1")
+                .name("Pizza")
+                .category(Category.FOOD)
+                .rating(10)
+                .build();
+
+        Product product2 = new Product.ProductBuilder()
+                .id("2")
+                .name("Tacos")
+                .category(Category.FOOD)
+                .rating(9)
+                .build();
 
         warehouse.addProduct(product1);
         warehouse.addProduct(product2);

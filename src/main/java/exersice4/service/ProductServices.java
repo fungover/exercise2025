@@ -15,8 +15,8 @@ public class ProductServices {
    // private final List<Product> products;
     private final ProductRepository productRepository;
 
-    public ProductServices(){
-        productRepository = new InMemoryProductRepository();
+    public ProductServices(ProductRepository productRepository) {
+        this.productRepository = productRepository;
        // products = new ArrayList<>();
     }
     public void addProduct(Product product) {

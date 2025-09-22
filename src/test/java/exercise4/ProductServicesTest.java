@@ -3,6 +3,8 @@ package exercise4;
 
 import exersice4.enteties.Category;
 import exersice4.enteties.Product;
+import exersice4.repository.InMemoryProductRepository;
+import exersice4.repository.ProductRepository;
 import exersice4.service.ProductServices;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
@@ -19,7 +21,8 @@ public class ProductServicesTest {
         Product product = new Product.Builder().
                 setName("Rose soap")
                 .build();
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         productServices.addProduct(product);
         assertEquals(1, productServices.getAllProducts().size());
         assertEquals(product, productServices.getAllProducts().getFirst());
@@ -30,7 +33,8 @@ public class ProductServicesTest {
         Product product = new Product.Builder()
                 .setName(null)
                 .build();
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         productServices.addProduct(product);
         assertEquals(0, productServices.getAllProducts().size());
     }
@@ -40,7 +44,8 @@ public class ProductServicesTest {
         Product product = new Product.Builder()
                 .setName("Rose soap")
                 .build();
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         productServices.addProduct(product);
         Product updatedProduct = new Product.Builder()
                 .setName("Pink soap")
@@ -63,7 +68,8 @@ public class ProductServicesTest {
         Product product = new Product.Builder()
                 .setName("Rose soap")
                 .build();
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         productServices.addProduct(product);
         Product updatedProduct = new Product.Builder()
                 .setName("Pink soap")
@@ -85,7 +91,8 @@ public class ProductServicesTest {
         Product product2 = new Product.Builder()
                 .setName("Lavender soap")
                 .build();
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         productServices.addProduct(product);
         productServices.addProduct(product2);
         List<Product> allProducts = productServices.getAllProducts();
@@ -94,7 +101,8 @@ public class ProductServicesTest {
 
     @Test
     void testGetAllProductsFail() {
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         List<Product> allProducts = productServices.getAllProducts();
         assertEquals(0, allProducts.size());
     }
@@ -105,7 +113,8 @@ public class ProductServicesTest {
                 .setName("Rose soap")
                 .build();
         String id = product.getId();
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         productServices.addProduct(product);
         Optional<Product> product2 = productServices.getProductById(id);
         Product productById = null;
@@ -117,7 +126,8 @@ public class ProductServicesTest {
     }
     @Test
     void testGetProductByIdFail() {
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         Optional<Product> product = productServices.getProductById("tre");
         assertThat(product.isEmpty());
     }
@@ -138,7 +148,8 @@ public class ProductServicesTest {
                 .setCategory(Category.Shampoo)
                 .setRating(4)
                 .build();
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         productServices.addProduct(product);
         productServices.addProduct(product2);
         productServices.addProduct(product3);
@@ -148,7 +159,8 @@ public class ProductServicesTest {
     }
     @Test
     void testGetProductsByCategorySortFail(){
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         Product product = new Product.Builder()
                 .setName("Vanilla shampoo")
                 .setCategory(Category.Shampoo)
@@ -163,7 +175,8 @@ public class ProductServicesTest {
         Product product = new Product.Builder()
                 .setName("Rose soap")
                 .build();
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         productServices.addProduct(product);
         LocalDateTime date = LocalDateTime.of(2025,6,10, 12, 0, 0);
         List<Product> productsCreatedAfter = productServices.getProductsCreatedAfter(date);
@@ -171,7 +184,8 @@ public class ProductServicesTest {
     }
     @Test
     void testGetProductsCreatedAfterFail(){
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         LocalDateTime date = LocalDateTime.of(2025,6,10, 12, 0, 0);
         List<Product> productsCreatedAfter = productServices.getProductsCreatedAfter(date);
         assertEquals(0, productsCreatedAfter.size());
@@ -187,7 +201,8 @@ public class ProductServicesTest {
         Product product2 = new Product.Builder()
                 .setName("Lavender soap")
                 .build();
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         productServices.addProduct(product);
         productServices.addProduct(product2);
         Product updatedProduct = new Product.Builder()
@@ -203,7 +218,8 @@ public class ProductServicesTest {
     }
     @Test
     void testGetModifiedProductsFail(){
-        ProductServices productServices = new ProductServices();
+        ProductRepository pr = new InMemoryProductRepository();
+        ProductServices productServices = new ProductServices(pr);
         Product product = new Product.Builder()
                 .setName("Rose soap")
                 .build();

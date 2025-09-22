@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class LocalUserRepository implements UserRepository {
+public class EncryptedUserRepository implements UserRepository {
   Set<User> users = new HashSet<User>();
 
   @Override
@@ -22,7 +22,7 @@ public class LocalUserRepository implements UserRepository {
     String newPassword = stringBuilder.toString();
     for (User user : users) {
       if (user.username().equals(username) && user.password().equals(newPassword)) {
-        System.out.println("Login successful");
+        System.out.println("Login successful encrypted");
         return;
       }
     }

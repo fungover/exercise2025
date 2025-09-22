@@ -1,7 +1,6 @@
 package org.example.repository;
 
 import org.example.users.User;
-
 import java.security.NoSuchAlgorithmException;
 
 public interface UserRepository {

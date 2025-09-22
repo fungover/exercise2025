@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ProductServicesTest {
     @Test
@@ -26,7 +26,7 @@ public class ProductServicesTest {
         assertEquals(product, productServices.getAllProducts().getFirst());
     }
 
-    @Test
+    @Test()
     void testAddProductFail() {
         Product product = new Product.Builder()
                 .setName(null)

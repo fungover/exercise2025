@@ -5,6 +5,7 @@ import exercise4.entities.Product;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 public class InMemoryProductRepository implements ProductRepository {
     private final List<Product> products;
@@ -15,7 +16,9 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public void addProduct(Product product) {
-        if(product == null || product.getName() == null || product.getName().isBlank()){
+        if(product == null
+                || product.getId() == null || product.getId().isEmpty()
+                || product.getName() == null || product.getName().isBlank()){
             System.out.println("Product could not be added");
             return;
         }
@@ -28,7 +31,7 @@ public class InMemoryProductRepository implements ProductRepository {
             return Optional.empty();
         }
         return products.stream()
-                .filter(product -> product.getId().equals(id)).
+                .filter(product -> id.equals(product.getId())).
                 findFirst();
     }
 
@@ -39,8 +42,12 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public void updateProduct(Product product) {
+        if(product == null || product.getId() == null || product.getId().isBlank()){
+            System.out.println("Invalid product");
+            return;
+        }
         Optional<Product> productToUpdate = products.stream().
-                filter(p -> p.getId().equals(product.getId())).
+                filter(p -> Objects.equals(p.getId(), product.getId())).
                 findFirst();
 
         if(productToUpdate.isPresent()){

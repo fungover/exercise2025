@@ -1,14 +1,15 @@
 package exercise4.entities;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 
 public final class Product {
     private final String id;
     private final String name;
-    private Category category;
-    private Integer rating;
+    private final Category category;
+    private final Integer rating;
     private final LocalDateTime createdDate;
     private final LocalDateTime modifiedDate;
 
@@ -85,6 +86,12 @@ public final class Product {
             return this;
         }
         public Product build() {
+            Objects.requireNonNull(id, "id");
+            Objects.requireNonNull(createdDate, "createdDate");
+            Objects.requireNonNull(modifiedDate, "modifiedDate");
+            if(modifiedDate.isBefore(createdDate)){
+                throw new IllegalArgumentException("modifiedDate cannot be before createdDate");
+            }
             return new Product(this);
         }
 

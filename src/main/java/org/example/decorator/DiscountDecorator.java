@@ -23,8 +23,4 @@ public class DiscountDecorator extends ProductDecorator {
         return originalPrice.subtract(discountAmount).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public double getDiscountPercentage() {
-        return discountPercentage;
-    }
-
 }

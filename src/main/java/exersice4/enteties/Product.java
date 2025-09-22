@@ -6,13 +6,21 @@ import java.util.UUID;
 
 public final class Product {
     private final String id;
-    private String name;
+    private final String name;
     private Category category;
     private Integer rating;
     private final LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
+    private final LocalDateTime modifiedDate;
 
-    public Product(String name) {
+    private Product(Builder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.category = builder.category;
+        this.rating = builder.rating;
+        this.createdDate = builder.createdDate;
+        this.modifiedDate = builder.modifiedDate;
+    }
+    /*public Product(String name) {
         this.createdDate = LocalDateTime.now();
         this.modifiedDate = createdDate;
         this.name = name;
@@ -42,7 +50,7 @@ public final class Product {
         this.createdDate = createdDate;
         modifiedDate = LocalDateTime.now();
         this.id = id;
-    }
+    }*/
 
     public String getId() {
         return id;
@@ -51,41 +59,16 @@ public final class Product {
     public String getName() {
         return name;
     }
-  /*  public void setName(String name){
-        if(name == null){
-            System.out.println("Name cannot be null");
-        }else{
-            this.name = name;
-        }
-    }*/
 
     public Category getCategory() {
         return category;
     }
 
- /*   public void setCategory(Category category) {
-        if(category == null){
-            System.out.println("Category cannot be null");
-        }else{
-            this.category = category;
-        }
-    }*/
 
     public Integer getRating() {
         return rating;
     }
 
-  /*  public void setRating(Integer rating) {
-        if(rating == null){
-            System.out.println("Rating cannot be null");
-            return;
-        }
-        if(rating < 0 || rating > 10){
-            System.out.println("Rating must be between 0 and 10");
-            return;
-        }
-        this.rating = rating;
-    }*/
 
     public LocalDateTime getCreatedDate() {
         return createdDate;
@@ -95,12 +78,47 @@ public final class Product {
         return modifiedDate;
     }
 
-   /* public void setModifiedDate(LocalDateTime modifiedDate) {
-        if(modifiedDate == null){
-            System.out.println("ModifiedDate cannot be null");
-            return;
+    public static class Builder {
+        private String id;
+        private String name;
+        private Category category;
+        private Integer rating;
+        private LocalDateTime createdDate;
+        private LocalDateTime modifiedDate;
+
+        public Builder(){
+            this.id = UUID.randomUUID().toString();
+            createdDate = LocalDateTime.now();
+            modifiedDate = createdDate;
         }
-        this.modifiedDate = modifiedDate;
-    }*/
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+        public Builder setName(String name){
+            this.name = name;
+            return this;
+        }
+        public Builder setCategory(Category category){
+            this.category = category;
+            return this;
+        }
+        public Builder setRating(Integer rating){
+            this.rating = rating;
+            return this;
+        }
+        public Builder setCreatedDate(LocalDateTime createdDate){
+            this.createdDate = createdDate;
+            return this;
+        }
+        public Builder setModifiedDate(LocalDateTime modifiedDate){
+            this.modifiedDate = modifiedDate;
+            return this;
+        }
+        public Product build() {
+            return new Product(this);
+        }
+
+    }
 
 }

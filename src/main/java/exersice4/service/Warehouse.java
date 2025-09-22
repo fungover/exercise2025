@@ -33,7 +33,14 @@ public class Warehouse {
             productToUpdate.ifPresent(product -> product.setCategory(category));
             productToUpdate.ifPresent(product -> product.setRating(rating));
             productToUpdate.ifPresent(product -> product.setModifiedDate(LocalDateTime.now()));*/
-            Product updatedProduct = new Product(name, category, rating, createdDate, id);
+            //Product updatedProduct = new Product(name, category, rating, createdDate, id);
+            Product updatedProduct = new Product.Builder()
+                    .setName(name)
+                    .setCategory(category)
+                    .setRating(rating)
+                    .setCreatedDate(createdDate)
+                    .setId(id)
+                    .build();
             products.set(index, updatedProduct);
 
 

@@ -13,7 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class WarehouseTest {
     @Test
     void testAddProductSuccess() {
-        Product product = new Product("Rose soap");
+        Product product = new Product.Builder().
+                setName("Rose soap")
+                .build();
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(product);
         assertEquals(1, warehouse.getAllProducts().size());
@@ -22,7 +24,9 @@ public class WarehouseTest {
 
     @Test
     void testAddProductFail() {
-        Product product = new Product(null);
+        Product product = new Product.Builder()
+                .setName(null)
+                .build();
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(product);
         assertEquals(0, warehouse.getAllProducts().size());
@@ -30,7 +34,9 @@ public class WarehouseTest {
 
     @Test
     void testUpdateProductSuccess() {
-        Product product = new Product("Rose soap");
+        Product product = new Product.Builder()
+                .setName("Rose soap")
+                .build();
         String id = product.getId();
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(product);
@@ -45,7 +51,9 @@ public class WarehouseTest {
 
     @Test
     void testUpdateProductFail() {
-        Product product = new Product("Rose soap");
+        Product product = new Product.Builder()
+                .setName("Rose soap")
+                .build();
         String id = "tre";
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(product);
@@ -56,8 +64,12 @@ public class WarehouseTest {
 
     @Test
     void testGetAllProductsSuccess() {
-        Product product = new Product("Rose soap");
-        Product product2 = new Product("Lavender soap");
+        Product product = new Product.Builder()
+                .setName("Rose soap")
+                .build();
+        Product product2 = new Product.Builder()
+                .setName("Lavender soap")
+                .build();
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(product);
         warehouse.addProduct(product2);
@@ -74,7 +86,9 @@ public class WarehouseTest {
 
     @Test
     void testGetProductByIdSuccess() {
-        Product product = new Product("Rose soap");
+        Product product = new Product.Builder()
+                .setName("Rose soap")
+                .build();
         String id = product.getId();
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(product);
@@ -89,9 +103,21 @@ public class WarehouseTest {
     }
     @Test
     void testGetProductsByCategorySortedSuccess(){
-        Product product = new Product("Rose soap", Category.Soap, 8);
-        Product product2 = new Product("Lavender soap", Category.Soap, 5);
-        Product product3 = new Product("Vanilla shampoo", Category.Shampoo, 4);
+        Product product = new Product.Builder()
+                .setName("Rose soap")
+                .setCategory(Category.Soap)
+                .setRating(8)
+                .build();
+        Product product2 = new Product.Builder()
+                .setName("Lavender soap")
+                .setCategory(Category.Soap)
+                .setRating(5)
+                .build();
+        Product product3 = new Product.Builder()
+                .setName("Vanilla shampoo")
+                .setCategory(Category.Shampoo)
+                .setRating(4)
+                .build();
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(product);
         warehouse.addProduct(product2);
@@ -103,14 +129,20 @@ public class WarehouseTest {
     @Test
     void testGetProductsByCategorySortFail(){
         Warehouse warehouse = new Warehouse();
-        Product product = new Product("Vanilla shampoo", Category.Shampoo, 4);
+        Product product = new Product.Builder()
+                .setName("Vanilla shampoo")
+                .setCategory(Category.Shampoo)
+                .setRating(4)
+                .build();
         warehouse.addProduct(product);
         List<Product> productsInCategory = warehouse.getProductsByCategorySorted(Category.Soap);
         assertEquals(0, productsInCategory.size());
     }
     @Test
     void testGetProductsCreatedAfterSuccess(){
-        Product product = new Product("Rose soap");
+        Product product = new Product.Builder()
+                .setName("Rose soap")
+                .build();
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(product);
         LocalDateTime date = LocalDateTime.of(2025,6,10, 12, 0, 0);
@@ -126,21 +158,28 @@ public class WarehouseTest {
     }
     @Test
     void testGetModifiedProductsSuccess(){
-        Product product = new Product("Rose soap", Category.Shampoo, 7, LocalDateTime.of(2025,6,10, 12, 0, 0));
-        Product product2 = new Product("Lavender soap");
+        Product product = new Product.Builder()
+                .setName("Rose soap")
+                .setCategory(Category.Shampoo)
+                .setRating(7)
+                .setCreatedDate(LocalDateTime.of(2025,6,10, 12, 0, 0))
+                .build();
+        Product product2 = new Product.Builder()
+                .setName("Lavender soap")
+                .build();
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(product);
         warehouse.addProduct(product2);
         warehouse.updateProduct(product.getId(), "Pink soap", Category.Soap, 8, product.getCreatedDate());
-        /*LocalDateTime modifiedDate = LocalDateTime.of(2025,12,12, 12,0,0);
-        product.setModifiedDate(modifiedDate);*/
         List<Product> modifiedProducts = warehouse.getModifiedProducts();
         assertEquals(1, modifiedProducts.size());
     }
     @Test
     void testGetModifiedProductsFail(){
         Warehouse warehouse = new Warehouse();
-        Product product = new Product("Rose soap");
+        Product product = new Product.Builder()
+                .setName("Rose soap")
+                .build();
         warehouse.addProduct(product);
         List<Product> modifiedProducts = warehouse.getModifiedProducts();
         assertEquals(0, modifiedProducts.size());

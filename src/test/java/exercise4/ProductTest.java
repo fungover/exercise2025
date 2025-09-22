@@ -10,57 +10,46 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ProductTest {
     @Test
-    void testProductConstructorSetName() {
-        Product product = new Product("Rose soap");
-        LocalDateTime now = LocalDateTime.now();
-        assertEquals("Rose soap", product.getName());
-        assertEquals(LocalDateTime.now().getYear(), product.getCreatedDate().getYear());
-        assertEquals(LocalDateTime.now().getMonth(), product.getCreatedDate().getMonth());
-        assertEquals(LocalDateTime.now().getDayOfMonth(), product.getCreatedDate().getDayOfMonth());
-        assertNotNull(product.getId());
-    }
-
-    @Test
-    void testProductConstructorSetAll() {
-        Product product = new Product("Coconut Shampoo", Category.Shampoo, 7);
-        assertEquals("Coconut Shampoo", product.getName());
-        assertEquals(Category.Shampoo, product.getCategory());
-        assertEquals(7, product.getRating());
-        assertEquals(LocalDateTime.now().getYear(), product.getCreatedDate().getYear());
-        assertEquals(LocalDateTime.now().getMonth(), product.getCreatedDate().getMonth());
-        assertEquals(LocalDateTime.now().getDayOfMonth(), product.getCreatedDate().getDayOfMonth());
-        assertNotNull(product.getId());
-    }
-
-    @Test
     void testGetIdSuccess() {
-        Product product = new Product("Coconut Shampoo");
+        Product product = new Product.Builder().setName("Coconut shampoo").build();
         assertNotNull(product.getId());
     }
 
     @Test
     void testGetNameSuccess() {
-        Product product = new Product("Strawberry conditioner");
+        Product product = new Product.Builder()
+                .setName("Strawberry conditioner")
+                .build();
         assertEquals("Strawberry conditioner", product.getName());
     }
 
-
     @Test
-    void testGetCategorySuccess() {
-        Product product = new Product("Strawberry conditioner", Category.Conditioner, 5);
+    void testGetCategorySuccess() {;
+        Product product = new Product.Builder()
+                .setName("Strawberry conditioner")
+                .setCategory(Category.Conditioner)
+                .setRating(5)
+                .build();
         assertEquals(Category.Conditioner, product.getCategory());
     }
 
-
     @Test
     void testGetRatingSuccess() {
-        Product product = new Product("Strawberry conditioner", Category.Conditioner, 5);
+        Product product = new Product.Builder()
+                .setName("Strawberry conditioner")
+                .setCategory(Category.Conditioner)
+                .setRating(5)
+                .build();
         assertEquals(5, product.getRating());
     }
 
     @Test
     void testGetCreatedDateSuccess() {
-        Product product = new Product("Strawberry conditioner", Category.Conditioner, 5);
+        Product product = new Product.Builder()
+                .setName("Strawberry conditioner")
+                .setCategory(Category.Conditioner)
+                .setRating(5)
+                .build();
         assertEquals(LocalDateTime.now().getYear(), product.getCreatedDate().getYear());
         assertEquals(LocalDateTime.now().getMonth(), product.getCreatedDate().getMonth());
         assertEquals(LocalDateTime.now().getDayOfMonth(), product.getCreatedDate().getDayOfMonth());
@@ -68,7 +57,9 @@ public class ProductTest {
 
     @Test
     void testGetModifiedDateSuccess() {
-        Product product = new Product("Rose soap");
+        Product product = new Product.Builder()
+                .setName("Rose soap")
+                .build();
         assertEquals(LocalDateTime.now().getYear(), product.getModifiedDate().getYear());
         assertEquals(LocalDateTime.now().getMonth(), product.getModifiedDate().getMonth());
         assertEquals(LocalDateTime.now().getDayOfMonth(), product.getModifiedDate().getDayOfMonth());

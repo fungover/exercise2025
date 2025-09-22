@@ -35,10 +35,19 @@ public class App {
         //Custom DI Container
         System.out.println("=== Custom DI Container ===");
         DIContainer container = new SimpleDIContainer();
+
+        //EmailService with InMemoryMessageRepository
         container.register(MessageService.class, EmailService.class);
         container.register(MessageRepository.class, InMemoryMessageRepository.class);
         MessageService emailServiceDi = container.resolve(MessageService.class);
         emailServiceDi.send(new Message("Hello", "Alfred"));
+
+        //SmsService with DatabaseMessageRepository
+        System.out.println("Switching implementation");
+        container.register(MessageService.class, SmsService.class);
+        container.register(MessageRepository.class, DatabaseMessageRepository.class);
+        MessageService smsServiceDi = container.resolve(MessageService.class);
+        smsServiceDi.send(new Message("Hello", "Alfred"));
 
         System.out.println("--------------------------------");
 

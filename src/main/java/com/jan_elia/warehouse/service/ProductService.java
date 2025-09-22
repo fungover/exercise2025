@@ -12,7 +12,6 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-// Renamed from Warehouse to ProductService
 public class ProductService {
 
     private final Clock clock;

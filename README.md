@@ -1,69 +1,96 @@
 # Warehouse Product Manager
 
 ## Overview
-A simple Java application for managing products.  
-The project demonstrates:
-- Immutable entities (`Product`)
-- A service layer (`Warehouse`) with validation and defensive programming
-- Full unit test coverage with JUnit 5
+This project is a simple **Product Management application** written in Java.  
+It demonstrates modern practices such as immutability, validation, and the use of **design patterns** (Builder Pattern + Repository Pattern).
+
+The core service is `ProductService`, which manages `Product` entities through a `ProductRepository`.  
+For this implementation, an in-memory repository (`InMemoryProductRepository`) is provided.
+
+---
+
+## Features
+- Add products with validation (id, name, category, rating).
+- Update products (immutable replace, keep createdDate, set modifiedDate).
+- Retrieve all products (defensive copy).
+- Retrieve a product by id.
+- Filter products by category, sorted A–Z (case-insensitive).
+- Filter products created strictly after a given date.
+- Retrieve modified products (where modifiedDate != createdDate).
+- Full unit test coverage using JUnit 5.
+
+---
+
+## Design Patterns
+
+### Builder Pattern
+`Product` uses a nested `Builder` to simplify creation and centralize validation.
+
+Example:
+```java
+Product product = new Product.Builder()
+        .id("1")
+        .name("Laptop")
+        .category(Category.ELECTRONICS)
+        .rating(9)
+        .build();
+```
+
+### Repository Pattern
+Data access is separated from business logic.
+
+- `ProductRepository`: defines CRUD contract.
+- `InMemoryProductRepository`: manages products in memory using a `HashMap`.
+- `ProductService`: business logic layer that depends on a `ProductRepository`.
+
+Example setup:
+```java
+import java.time.Clock;
+import com.jan_elia.warehouse.repository.*;
+
+ProductRepository repo = new InMemoryProductRepository();
+ProductService service = new ProductService(Clock.systemDefaultZone(), repo);
+
+Product product = new Product.Builder()
+        .id("1")
+        .name("Phone")
+        .category(Category.ELECTRONICS)
+        .rating(8)
+        .build();
+
+service.addProduct(product);
+```
+
+---
+
+## Requirements
+- Java 24+
+- Maven 3.9+
+- IntelliJ IDEA
 
 ---
 
 ## How to Run
 
-### IntelliJ IDEA
-1. Open the project in IntelliJ
-2. Right-click on `WarehouseTest.java`
-3. Choose **Run 'WarehouseTest'**
-4. Or use the Maven tool window → Lifecycle → **test**
+### In IntelliJ
+1. Open the project.
+2. Run tests with the **JUnit 5** runner.
 
-### Command Line
-Open a terminal in the project root and run:
-
+### From CLI
 ```bash
-mvn test
+mvn clean test
 ```
 
 ---
 
-## Design Decisions
-- **Warehouse** is the public API (service layer)
-- **Product** is immutable (all fields are final, getters only)
-- **Category** is a simple enum used by Product
-- Internal storage: `Map<String, Product>`
-- No internal collections exposed – all lists are defensive and unmodifiable
+## Tests
+- Framework: JUnit 5
+- All public methods in `ProductService` are covered with **success and failure cases**.
+- Repository and builder validation tested.
 
----
-
-## Validation Rules
-- **id**: non-null, non-blank, must be unique
-- **name**: non-null, non-blank
-- **category**: non-null
-- **rating**: integer between 0–10
-- **dates**:
-    - `createdDate` set at creation
-    - `modifiedDate` updated on change
-- **time source**: `Warehouse` uses injected `Clock` for deterministic behavior
-- **errors**:
-    - `IllegalArgumentException` for invalid input
-    - `NoSuchElementException` for missing id
-
----
-
-## Public API
-- `addProduct(Product product)`
-- `updateProduct(String id, String name, Category category, int rating)`
-- `getAllProducts(): List<Product>`
-- `getProductById(String id): Product`
-- `getProductsByCategorySorted(Category category): List<Product>`
-- `getProductsCreatedAfter(LocalDate date): List<Product>`
-- `getModifiedProducts(): List<Product>`
-
----
-
-## Testing
-- JUnit 5
-- Each public method has tests for success and failure cases
-- Fixed `Clock` is used to control dates and make tests deterministic
+Run tests:
+```bash
+mvn test
+```
 
 ---

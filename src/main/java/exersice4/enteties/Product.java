@@ -20,37 +20,6 @@ public final class Product {
         this.createdDate = builder.createdDate;
         this.modifiedDate = builder.modifiedDate;
     }
-    /*public Product(String name) {
-        this.createdDate = LocalDateTime.now();
-        this.modifiedDate = createdDate;
-        this.name = name;
-        this.id = UUID.randomUUID().toString();
-    }
-
-    public Product(String name, Category category, Integer rating) {
-        this.name = name;
-        this.category = category;
-        this.rating = rating;
-        createdDate = LocalDateTime.now();
-        modifiedDate = createdDate;
-        this.id = UUID.randomUUID().toString();
-    }
-    public Product(String name, Category category, Integer rating, LocalDateTime createdDate) {
-        this.name = name;
-        this.category = category;
-        this.rating = rating;
-        this.createdDate = createdDate;
-        modifiedDate = LocalDateTime.now();
-        this.id = UUID.randomUUID().toString();
-    }
-    public Product(String name, Category category, Integer rating, LocalDateTime createdDate, String id) {
-        this.name = name;
-        this.category = category;
-        this.rating = rating;
-        this.createdDate = createdDate;
-        modifiedDate = LocalDateTime.now();
-        this.id = id;
-    }*/
 
     public String getId() {
         return id;

@@ -2,51 +2,21 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Warehouse {
-    private final List<Product> products = new ArrayList<>();
+public class ProductService {
+    private final ProductRepository productRepository;
+    private final List<Product> products;
 
-    public void addProduct(Product product) {
-        if (product.name().isEmpty()) {
-            System.out.println("Product name must not be empty");
-        } else {
-            products.add(product);
-        }
-    }
-
-    public List<Product> updateProduct(String id, String name,
-                                       Category category, int rating) {
-        Product oldProduct = getProductById(id);
-        Product newProduct =
-                new Product.Builder()
-                .id(id)
-                .name(name)
-                .category(category)
-                .rating(rating)
-                .build();
-
-        products.add(newProduct);
-        newProduct.modifyDateToNow();
-        products.remove(oldProduct);
-
-        return products;
-    }
-
-
-    public List<Product> getAllProducts() {
-        return products;
-    }
-
-    public Product getProductById(String idNumber) {
-        return products.stream()
-                .filter(product -> product.id().equals(idNumber))
-                .toList()
-                .getFirst();
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+        this.products = productRepository.getAllProducts();
     }
 
     public List<Product> getProductsByCategorySorted(Category category) {

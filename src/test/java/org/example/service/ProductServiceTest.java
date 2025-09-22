@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.InMemoryProductRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
@@ -11,16 +12,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
-public class WarehouseTest {
-    private final Warehouse warehouse = new Warehouse();
+public class ProductServiceTest {
+    private final InMemoryProductRepository productRepository = new InMemoryProductRepository();
+    private final ProductService productService = new ProductService(productRepository);
 
     @Test
     public void testAddingProducts() {
         addNewProductToWarehouse("23", "Pants", Category.CLOTHES, 5);
 
-        assertEquals(1, warehouse.getAllProducts().size());
+        assertEquals(1, productRepository.getAllProducts().size());
     }
+
     @Test
     public void testAddingProductsWithoutName() {
         // A product's name attribute must not be empty.
@@ -35,7 +39,7 @@ public class WarehouseTest {
         addNewProductToWarehouse("24", "Shirt", Category.CLOTHES, 8);
         addNewProductToWarehouse("25", "Hat", Category.CLOTHES, 3);
 
-        assertEquals(3, warehouse.getAllProducts().size());
+        assertEquals(3, productRepository.getAllProducts().size());
     }
 
     @Test
@@ -43,13 +47,15 @@ public class WarehouseTest {
         addNewProductToWarehouse("23", "Pants", Category.CLOTHES, 9);
         addNewProductToWarehouse("24", "Shirt", Category.CLOTHES, 8);
 
-        Product shirt = warehouse.getAllProducts().getLast();
+        Optional<Product> shirt = Optional
+                .ofNullable(productRepository.getAllProducts().getLast());
 
-        assertEquals(shirt, warehouse.getProductById("24"));
+        assertEquals(shirt, productRepository.getProductById("24"));
     }
+
     @Test
     public void testCannotFindProductById() {
-        assertThatThrownBy(() -> warehouse.getProductById("25"))
+        assertThatThrownBy(() -> productRepository.getProductById("25"))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -63,9 +69,9 @@ public class WarehouseTest {
         Product hat =
                 returnNewProduct("25", "Hat", Category.CLOTHES, 3);
 
-        warehouse.addProduct(pants); // index 0
-        warehouse.addProduct(shirt); // index 1
-        warehouse.addProduct(hat); // index 2
+        productRepository.addProduct(pants); // index 0
+        productRepository.addProduct(shirt); // index 1
+        productRepository.addProduct(hat); // index 2
 
         List<Product> sortedList = new ArrayList<>();
         sortedList.add(0, hat);
@@ -73,8 +79,9 @@ public class WarehouseTest {
         sortedList.add(2, shirt);
 
         assertEquals(sortedList,
-                warehouse.getProductsByCategorySorted(Category.CLOTHES));
+                productService.getProductsByCategorySorted(Category.CLOTHES));
     }
+
     @Test
     public void testCannotFindProductsByCategory() {
         Product raisins =
@@ -82,8 +89,8 @@ public class WarehouseTest {
         Product banana =
                 returnNewProduct("54", "Banana", Category.PROVISIONS, 8);
 
-        warehouse.addProduct(raisins); // index 0
-        warehouse.addProduct(banana); // index 1
+        productRepository.addProduct(raisins); // index 0
+        productRepository.addProduct(banana); // index 1
 
         List<Product> sortedList = new ArrayList<>();
         sortedList.add(0, banana);
@@ -91,7 +98,7 @@ public class WarehouseTest {
 
         // We are trying to sort clothes, but only have provisions in our products.
         assertNotEquals(sortedList,
-                warehouse.getProductsByCategorySorted(Category.CLOTHES));
+                productService.getProductsByCategorySorted(Category.CLOTHES));
     }
 
     @Test
@@ -101,9 +108,10 @@ public class WarehouseTest {
         LocalDateTime beforeProduct = LocalDateTime.of(2025,
                 9, 10, 11, 59);
 
-        assertThat(warehouse.getProductsCreatedAfter(beforeProduct))
-                .isEqualTo(warehouse.getAllProducts());
+        assertThat(productService.getProductsCreatedAfter(beforeProduct))
+                .isEqualTo(productRepository.getAllProducts());
     }
+
     @Test
     public void testNoProductsCreatedAfterSpecifiedDate() {
         addNewProductToWarehouse("53", "Raisins", Category.PROVISIONS, 7);
@@ -111,20 +119,28 @@ public class WarehouseTest {
         LocalDateTime afterProduct = LocalDateTime.of(2030,
                 9, 10, 12, 1);
 
-        assertThat(warehouse.getProductsCreatedAfter(afterProduct)).isEmpty();
+        assertThat(productService.getProductsCreatedAfter(afterProduct)).isEmpty();
     }
 
     @Test
     public void testUpdatingAProduct() {
-        addNewProductToWarehouse("53", "Raisins", Category.PROVISIONS, 7);
+        addNewProductToWarehouse("53", "Raisins",
+                Category.PROVISIONS, 5);
 
-        assertThat(warehouse.updateProduct("53", "Banana",
-                Category.PROVISIONS, 8)).isEqualTo(warehouse.getAllProducts());
+        Product updatedRaisins = returnNewProduct("53", "Raisins",
+                        Category.PROVISIONS, 8);
+
+        productRepository.updateProduct(updatedRaisins);
+        assertThat(updatedRaisins)
+                .isEqualTo(productRepository.getProductById("53").get());
     }
+
     @Test
     public void testCannotUpdateAProduct() {
-        assertThatThrownBy(() -> warehouse.updateProduct("54", "Banana",
-                Category.PROVISIONS, 8))
+        Product raisins = returnNewProduct("53", "Raisins",
+                Category.PROVISIONS, 5);
+
+        assertThatThrownBy(() -> productRepository.updateProduct(raisins))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -132,17 +148,20 @@ public class WarehouseTest {
     public void testGettingModifiedProducts() {
         addNewProductToWarehouse("53", "Raisins",
                 Category.PROVISIONS, 7);
-        warehouse.updateProduct("53", "Banana",
+        Product banana = returnNewProduct("53", "Banana",
                 Category.PROVISIONS, 8);
 
-        assertThat(warehouse.getModifiedProducts())
-                .isEqualTo(warehouse.getAllProducts());
+        productRepository.updateProduct(banana);
+
+        assertThat(productService.getModifiedProducts())
+                .isEqualTo(productRepository.getAllProducts());
     }
+
     @Test
     public void testCannotGetModifiedProducts() {
         addNewProductToWarehouse("27", "Sweater", Category.CLOTHES, 7);
 
-        assertThat(warehouse.getModifiedProducts()).isEmpty();
+        assertThat(productService.getModifiedProducts()).isEmpty();
     }
 
     @Test
@@ -154,11 +173,11 @@ public class WarehouseTest {
         Product sweater =
                 returnNewProduct("27", "Sweater", Category.CLOTHES, 7);
 
-        warehouse.addProduct(raisins);
-        warehouse.addProduct(pants);
-        warehouse.addProduct(sweater);
+        productRepository.addProduct(raisins);
+        productRepository.addProduct(pants);
+        productRepository.addProduct(sweater);
 
-        assertThat(warehouse.getCategoriesWithProducts())
+        assertThat(productService.getCategoriesWithProducts())
                 .hasSize(2)
                 .containsEntry(Category.CLOTHES, pants)
                 .containsEntry(Category.PROVISIONS, raisins);
@@ -166,13 +185,13 @@ public class WarehouseTest {
 
     private void addNewProductToWarehouse(String id, String name,
                                           Category category, int rating) {
-        warehouse.addProduct(
+        productRepository.addProduct(
                 new Product.Builder()
-                .id(id)
-                .name(name)
-                .category(category)
-                .rating(9)
-                .build()
+                        .id(id)
+                        .name(name)
+                        .category(category)
+                        .rating(9)
+                        .build()
         );
     }
 

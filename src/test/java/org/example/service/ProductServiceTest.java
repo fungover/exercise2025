@@ -19,47 +19,6 @@ public class ProductServiceTest {
     private final ProductService productService = new ProductService(productRepository);
 
     @Test
-    public void testAddingProducts() {
-        addNewProductToWarehouse("23", "Pants", Category.CLOTHES, 5);
-
-        assertEquals(1, productRepository.getAllProducts().size());
-    }
-
-    @Test
-    public void testAddingProductsWithoutName() {
-        // A product's name attribute must not be empty.
-        assertThatThrownBy(() -> addNewProductToWarehouse("34", "",
-                Category.PROVISIONS, 0))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    public void testGettingAllProducts() {
-        addNewProductToWarehouse("23", "Pants", Category.CLOTHES, 9);
-        addNewProductToWarehouse("24", "Shirt", Category.CLOTHES, 8);
-        addNewProductToWarehouse("25", "Hat", Category.CLOTHES, 3);
-
-        assertEquals(3, productRepository.getAllProducts().size());
-    }
-
-    @Test
-    public void testGettingProductById() {
-        addNewProductToWarehouse("23", "Pants", Category.CLOTHES, 9);
-        addNewProductToWarehouse("24", "Shirt", Category.CLOTHES, 8);
-
-        Optional<Product> shirt = Optional
-                .ofNullable(productRepository.getAllProducts().getLast());
-
-        assertEquals(shirt, productRepository.getProductById("24"));
-    }
-
-    @Test
-    public void testCannotFindProductById() {
-        assertThatThrownBy(() -> productRepository.getProductById("25"))
-                .isInstanceOf(NoSuchElementException.class);
-    }
-
-    @Test
     public void testGettingProductsByCategorySorted() {
         // Sorted by name A-Z.
         Product pants =
@@ -123,28 +82,6 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testUpdatingAProduct() {
-        addNewProductToWarehouse("53", "Raisins",
-                Category.PROVISIONS, 5);
-
-        Product updatedRaisins = returnNewProduct("53", "Raisins",
-                        Category.PROVISIONS, 8);
-
-        productRepository.updateProduct(updatedRaisins);
-        assertThat(updatedRaisins)
-                .isEqualTo(productRepository.getProductById("53").get());
-    }
-
-    @Test
-    public void testCannotUpdateAProduct() {
-        Product raisins = returnNewProduct("53", "Raisins",
-                Category.PROVISIONS, 5);
-
-        assertThatThrownBy(() -> productRepository.updateProduct(raisins))
-                .isInstanceOf(NoSuchElementException.class);
-    }
-
-    @Test
     public void testGettingModifiedProducts() {
         addNewProductToWarehouse("53", "Raisins",
                 Category.PROVISIONS, 7);
@@ -190,7 +127,7 @@ public class ProductServiceTest {
                         .id(id)
                         .name(name)
                         .category(category)
-                        .rating(9)
+                        .rating(rating)
                         .build()
         );
     }

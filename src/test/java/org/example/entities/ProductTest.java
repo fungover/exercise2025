@@ -199,4 +199,30 @@ public class ProductTest {
         assertNotNull(product.createdDate());
         assertEquals(product.createdDate(), product.modifiedDate());
     }
+
+    @Test
+    void shouldThrowExceptionForMissingPriceInBuilder() {
+        assertThrows(IllegalArgumentException.class, () ->
+                Product.builder()
+                        .id("1")
+                        .name("Test")
+                        .category(Category.ELECTRONICS)
+                        .rating(8)
+                        .createdDate(LocalDate.now())
+                        .build());
+    }
+
+    @Test
+    void shouldHaveTheCorrectPrice() {
+        Product product = Product.builder()
+                .id("1")
+                .name("Test")
+                .category(Category.SPORTS)
+                .rating(10)
+                .price(BigDecimal.valueOf(49.00))
+                .build();
+
+        assertEquals(BigDecimal.valueOf(49.00), product.price());
+        assertNotNull(product.price());
+    }
 }

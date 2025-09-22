@@ -164,7 +164,7 @@ public class Product implements Sellable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, category, rating, createdDate, modifiedDate);
+        return Objects.hash(id, name, category, rating, createdDate, modifiedDate, price);
     }
 
     @Override
@@ -175,7 +175,7 @@ public class Product implements Sellable {
                 "category=" + category + ", " +
                 "rating=" + rating + ", " +
                 "createdDate=" + createdDate + ", " +
-                "modifiedDate=" + modifiedDate + ']' +
+                "modifiedDate=" + modifiedDate + ", " +
                 "price=" + price + ']';
     }
 

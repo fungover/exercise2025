@@ -10,6 +10,12 @@ public class DiscountDecorator extends ProductDecorator {
     // och en rabattprocent som ska appliceras
     public DiscountDecorator(Sellable decoratedProduct, double discountPercentage) {
         super(decoratedProduct);
+        if (Double.isNaN(discountPercentage) || Double.isInfinite(discountPercentage)) {
+            throw new IllegalArgumentException("discountPercentage must be a finite number");
+            }
+        if (discountPercentage < 0.0 || discountPercentage > 100.0) {
+            throw new IllegalArgumentException("discountPercentage must be between 0 and 100");
+            }
         this.discountPercentage = discountPercentage;
     }
 

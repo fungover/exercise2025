@@ -1,6 +1,6 @@
-package exercise5.part1.service;
+package exercise5.part2.service;
 
-import exercise5.part1.repository.MessageRepository;
+import exercise5.part2.repository.MessageRepository;
 
 public class TextMessageService implements MessageService {
     private final MessageRepository messageRepository;

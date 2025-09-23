@@ -1,8 +1,8 @@
-package exercise5.part1.repository;
+package exercise5.part2.repository;
 
 import java.util.List;
 
-public class InMemoryMessageRepository implements MessageRepository{
+public class InMemoryMessageRepository implements MessageRepository {
     List<String> messages;
 
     public InMemoryMessageRepository(List<String> messages) {

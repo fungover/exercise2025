@@ -1,6 +1,5 @@
 package exercise5.part1;
 
-import exercise5.part1.enteties.Message;
 import exercise5.part1.repository.InMemoryMessageRepository;
 import exercise5.part1.repository.MessageRepository;
 import exercise5.part1.service.EmailMessageService;
@@ -21,6 +20,5 @@ public class Main {
         textMessageService.sendMessage("This is a text message");
         emailMessageService.sendMessage("This is an email message");
         voiceMessageService.sendMessage("This is a voice message");
-
     }
 }

@@ -1,10 +1,10 @@
-package exercise5.part1.service;
+package exercise5.part2.service;
 
-import exercise5.part1.repository.MessageRepository;
+import exercise5.part2.repository.MessageRepository;
 
-public class VoiceMessageService implements MessageService {
+public class EmailMessageService implements MessageService {
     MessageRepository messageRepository;
-    public VoiceMessageService(MessageRepository messageRepository) {
+    public EmailMessageService(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
     }
     @Override
@@ -14,6 +14,6 @@ public class VoiceMessageService implements MessageService {
 
     @Override
     public String getMessage() {
-        return "This is a voice message";
+        return "This message is an email";
     }
 }

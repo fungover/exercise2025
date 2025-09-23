@@ -9,12 +9,8 @@ public class AmdCPUService implements CPUService {
         this.repository = repository;
     }
 
-
     @Override
     public String selectCPU(String purpose) {
-        if ("Gaming".equals(purpose)) {
-            return "AMD Ryzen 7 Gaming CPU";
-        }
-        return "AMD Ryzen 5 Office CPU";
+        return repository.findCPU("AMD", purpose);
     }
 }

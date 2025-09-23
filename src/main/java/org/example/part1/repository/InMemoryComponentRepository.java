@@ -6,7 +6,7 @@ public class InMemoryComponentRepository implements ComponentRepository {
     public String findCPU(String brand, String purpose) {
         if ("Intel".equals(brand)) {
             return "Gaming".equals(purpose) ?
-                    "Intel i7-13700K Gaming CPU" : "Intel i5-13400 Office CPU";
+                    "Intel i7-13900K Gaming CPU" : "Intel i5-13400 Office CPU";
         } else if ("AMD".equals(brand)) {
             return "Gaming".equals(purpose) ?
                     "AMD Ryzen 7 7700X Gaming CPU" : "AMD Ryzen 5 7500 Office CPU";

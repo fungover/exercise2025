@@ -11,9 +11,6 @@ public class AmdGPUService implements GPUService {
 
     @Override
     public String selectGPU(String purpose) {
-        if ("Gaming".equals(purpose)) {
-            return "AMD Radeon Gaming GPU";
-        }
-        return "AMD Radeon Office GPU";
+        return repository.findGPU("AMD", purpose);
     }
 }

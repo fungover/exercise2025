@@ -1,6 +1,7 @@
 package org.example.entities;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 public class Product implements Sellable {
@@ -77,7 +78,7 @@ public class Product implements Sellable {
             return this;
         }
         public Builder price(BigDecimal price) {
-            this.price = price;
+            this.price = price.setScale(2, RoundingMode.HALF_UP);
             return this;
         }
 
@@ -93,6 +94,9 @@ public class Product implements Sellable {
             }
             if (this.rating < 0 || this.rating > 10) {
                 throw new IllegalArgumentException("Rating should be between 0 and 10");
+            }
+            if (this.price != null && this.price.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalArgumentException("Price cannot be negative");
             }
             return new Product(this);
         }

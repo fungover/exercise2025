@@ -1,6 +1,7 @@
 package org.example.entities;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class DiscountDecorator extends ProductDecorator {
     private double discountPercentage;
@@ -13,7 +14,12 @@ public class DiscountDecorator extends ProductDecorator {
     @Override
     public BigDecimal price() {
         BigDecimal oldPrice = super.price();
-        BigDecimal discount = oldPrice.multiply(BigDecimal.valueOf(discountPercentage));
-        return oldPrice.subtract(discount);
+        if (oldPrice != null) {
+            BigDecimal discount = oldPrice.multiply(BigDecimal
+                    .valueOf(discountPercentage / 100));
+            return oldPrice.subtract(discount).setScale(2,
+                    RoundingMode.HALF_UP);
+        }
+        return BigDecimal.ZERO;
     }
 }

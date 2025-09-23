@@ -1,5 +1,7 @@
 package org.example.part1.services;
 
+import org.example.part1.repository.ComponentRepository;
+import org.example.part1.repository.InMemoryComponentRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +10,8 @@ class AmdGPUServiceTest {
 
     @Test
     void shouldSelectGamingGPUForGamingPurpose() {
-        AmdGPUService service = new AmdGPUService();
+        ComponentRepository repository = new InMemoryComponentRepository();
+        AmdGPUService service = new AmdGPUService(repository);
 
         String gpu = service.selectGPU("Gaming");
 
@@ -17,7 +20,8 @@ class AmdGPUServiceTest {
 
     @Test
     void shouldSelectOfficeGPUForOfficePurpose() {
-        AmdGPUService service = new AmdGPUService();
+        ComponentRepository repository = new InMemoryComponentRepository();
+        AmdGPUService service = new AmdGPUService(repository);
 
         String gpu = service.selectGPU("Office");
 

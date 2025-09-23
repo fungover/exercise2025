@@ -1,5 +1,7 @@
 package org.example.part1;
 
+import org.example.part1.repository.ComponentRepository;
+import org.example.part1.repository.InMemoryComponentRepository;
 import org.example.part1.services.*;
 import org.junit.jupiter.api.Test;
 
@@ -9,8 +11,9 @@ class ComputerBuilderTest {
 
     @Test
     void shouldInjectCPUAndGPUServices() {
-        CPUService cpuService = new IntelCPUService();
-        GPUService gpuService = new NvidiaGPUService();
+        ComponentRepository repository = new InMemoryComponentRepository();
+        CPUService cpuService = new IntelCPUService(repository);
+        GPUService gpuService = new NvidiaGPUService(repository);
         ComputerBuilder builder = new ComputerBuilder(cpuService, gpuService);
 
         String result = builder.buildComputer("Gaming");
@@ -22,10 +25,11 @@ class ComputerBuilderTest {
 
     @Test
     void canSwitchCPUImplementationWithoutChangingTheBuilder() {
-        GPUService gpuService = new NvidiaGPUService();
+        ComponentRepository repository = new InMemoryComponentRepository();
+        GPUService gpuService = new NvidiaGPUService(repository);
 
-        ComputerBuilder intelBuilder = new ComputerBuilder(new IntelCPUService(), gpuService);
-        ComputerBuilder amdBuilder = new ComputerBuilder(new AmdCPUService(), gpuService);
+        ComputerBuilder intelBuilder = new ComputerBuilder(new IntelCPUService(repository), gpuService);
+        ComputerBuilder amdBuilder = new ComputerBuilder(new AmdCPUService(repository), gpuService);
 
         String intelResult = intelBuilder.buildComputer("Gaming");
         String amdResult = amdBuilder.buildComputer("Gaming");

@@ -1,5 +1,7 @@
 package org.example.part1.services;
 
+import org.example.part1.repository.ComponentRepository;
+import org.example.part1.repository.InMemoryComponentRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +10,8 @@ class NvidiaGPUServiceTest {
 
     @Test
     void shouldSelectGamingGPUForGamingPurpose() {
-        NvidiaGPUService service = new NvidiaGPUService();
+        ComponentRepository repository = new InMemoryComponentRepository();
+        NvidiaGPUService service = new NvidiaGPUService(repository);
 
         String gpu = service.selectGPU("Gaming");
 
@@ -17,7 +20,8 @@ class NvidiaGPUServiceTest {
 
     @Test
     void shouldSelectOfficeGPUForOfficePurpose() {
-        NvidiaGPUService service = new NvidiaGPUService();
+        ComponentRepository repository = new InMemoryComponentRepository();
+        NvidiaGPUService service = new NvidiaGPUService(repository);
 
         String gpu = service.selectGPU("Office");
 

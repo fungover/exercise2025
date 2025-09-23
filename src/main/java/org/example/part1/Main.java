@@ -27,6 +27,6 @@ public class Main {
         ComputerBuilder amdNvidiaBuilder = new ComputerBuilder(amdCPU, nvidiaGPU);
         ComputerBuilder intelAmdBuilder = new ComputerBuilder(intelCPU, amdGPU);
         System.out.println("\nAMD + Nvidia Gaming: " + amdNvidiaBuilder.buildComputer("Gaming"));
-        System.out.println("Intel + AMD Office: " + amdNvidiaBuilder.buildComputer("Office"));
+        System.out.println("Intel + AMD Office: " + intelAmdBuilder.buildComputer("Office"));
     }
 }

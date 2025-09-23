@@ -8,6 +8,8 @@ import org.example.service.EmailNotificationService;
 import org.example.service.NotificationService;
 import org.example.service.OrderService;
 import org.example.service.StandardOrderService;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
 
 public class App {
     public static void main(String[] args) {
@@ -15,9 +17,12 @@ public class App {
         runPart1();
         System.out.println("\n" + "=".repeat(30) + "\n");
         runPart2();
+        System.out.println("\n" + "=".repeat(30) + "\n");
+        runPart3();
 
 
     }
+
 
     private static void runPart1() {
         System.out.println("=== Part 1: Manual Dependency Injection ===");
@@ -80,5 +85,50 @@ public class App {
           StandardOrderService.class);
         System.out.println("Same instance? " + (orderService == orderService2));
     }
+
+    private static void runPart3() {
+
+        System.out.println("=== Part 3: Weld CDI container ===\n");
+        Weld weld = new Weld();
+        WeldContainer container = weld.initialize();
+
+        /**
+         * CDI will automatically:
+         * Find StandardOrderService
+         * notice it needs OrderRepository and NotificationService
+         * Use Producer to create DatabaseOrderRepository
+         * Create EmailNotificationService
+         * bring it all together
+         * return a fully configured service
+         */
+        try {
+            System.out.println("\n..Requesting OrderService from CDI..");
+            System.out.println("  CDI Automatically resolve all dependencies");
+
+            OrderService orderService = container.select(OrderService.class)
+                                                 .get();
+
+            //using the service
+            System.out.println("\n Using the CDI service:");
+            orderService.processOrder("CDI-001");
+            System.out.println(orderService.getOrderStatus("CDI-001"));
+
+            System.out.println("\n Testing singleton behavior...");
+            OrderService orderService2 = container.select(OrderService.class)
+                                                  .get();
+            System.out.println(
+              "   Same instance? " + (orderService == orderService2));
+            System.out.println(
+              "   (Should be 'true' because of @ApplicationScoped)");
+
+        } finally {
+            // Cleanup - shutdown the CDI container
+            System.out.println("\n Shutting down CDI container...");
+            container.shutdown();
+            System.out.println("   CDI container stopped cleanly.");
+        }
+
+    }
+
 }
 

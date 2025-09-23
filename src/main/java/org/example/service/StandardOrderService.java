@@ -1,13 +1,22 @@
 package org.example.service;
 
 import org.example.persistence.OrderRepository;
+import jakarta.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
 
+
+// @ApplicationScoped means: "Create ONE instance of this class for the entire 
+// application"
+@ApplicationScoped
 public class StandardOrderService implements OrderService {
     private final OrderRepository orderRepository;
     private final NotificationService notificationService;
 
-    public StandardOrderService(OrderRepository orderRepository,
-                                NotificationService notificationService) {
+    // @Inject tells CDI: "Please inject dependencies into this constructor"
+    // CDI will automatically find implementations of OrderRepository and
+    // NotificationService
+    @Inject public StandardOrderService(OrderRepository orderRepository,
+                                        NotificationService notificationService) {
         this.orderRepository = orderRepository;
         this.notificationService = notificationService;
         System.out.println("StandardOrderService created with repository: "

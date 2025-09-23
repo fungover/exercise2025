@@ -1,5 +1,8 @@
 package org.example.persistence;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class DatabaseOrderRepository implements OrderRepository {
 
     public DatabaseOrderRepository() {

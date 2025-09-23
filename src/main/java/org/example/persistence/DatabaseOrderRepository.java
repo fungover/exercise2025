@@ -2,6 +2,10 @@ package org.example.persistence;
 
 public class DatabaseOrderRepository implements OrderRepository {
 
+    public DatabaseOrderRepository() {
+        System.out.println("Database Order Repository created");
+    }
+
     @Override public void saveOrder(String orderId) {
         System.out.println("Saving order " + orderId + " to database");
     }

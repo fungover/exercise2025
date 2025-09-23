@@ -1,12 +1,14 @@
 package org.example.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class Product {
+public class Product implements Sellable {
     private final String id;
-    private String name;
-    private Category category;
-    private int rating;
+    private final String name;
+    private final Category category;
+    private final int rating;
+    private final BigDecimal price;
     private final LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
@@ -15,27 +17,38 @@ public class Product {
         this.name = builder.name;
         this.category = builder.category;
         this.rating = builder.rating;
+        this.price = builder.price;
         this.createdDate = LocalDateTime.now();
         this.modifiedDate = null;
     }
+
+    @Override
     public String id() {
         return id;
     }
+
+    @Override
     public String name() {
         return name;
     }
+
     public Category category() {
         return category;
     }
-    public int rating() {
-        return rating;
+
+    @Override
+    public BigDecimal price() {
+        return price;
     }
+
     public LocalDateTime createdDate() {
         return createdDate;
     }
+
     public LocalDateTime modifiedDate() {
         return modifiedDate;
     }
+
     public void modifyDateToNow() {
         this.modifiedDate = LocalDateTime.now();
     }
@@ -45,6 +58,7 @@ public class Product {
         private String name;
         private Category category;
         private int rating;
+        private BigDecimal price;
 
         public Builder id(String id) {
             this.id = id;
@@ -60,6 +74,10 @@ public class Product {
         }
         public Builder rating(int rating) {
             this.rating = rating;
+            return this;
+        }
+        public Builder price(BigDecimal price) {
+            this.price = price;
             return this;
         }
 

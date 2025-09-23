@@ -41,9 +41,6 @@ public class Tile {
                     this.type = TileEnum.EMPTY;
                 }
                 break;
-            case DOOR:
-                System.out.println("Found tile with door");
-                break;
             default:
                 System.out.println("Found empty tile");
 
@@ -57,4 +54,5 @@ public class Tile {
     public TileEnum getType() {
         return type;
     }
+
 }

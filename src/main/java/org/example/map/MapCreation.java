@@ -27,7 +27,7 @@ public class MapCreation {
         }
 
         grid[0][0] =  new Tile(TileEnum.EMPTY, null, null);
-        grid[0][1] =  new Tile(TileEnum.ENEMY, new Boss("Elder Dragon", 50, 20, 0, 1, "Flaming Breath"), null);
+        grid[5][0] =  new Tile(TileEnum.ENEMY, new Boss("Elder Dragon", 50, 20, 0, 1, "Flaming Breath"), null);
     }
 
     public Tile getTile(int x, int y) {

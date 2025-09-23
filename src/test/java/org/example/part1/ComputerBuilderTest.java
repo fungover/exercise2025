@@ -10,11 +10,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ComputerBuilderTest {
 
     @Test
-    void shouldInjectCPUAndGPUServices() {
+    void shouldInjectAllThreeDependencies() {
         ComponentRepository repository = new InMemoryComponentRepository();
         CPUService cpuService = new IntelCPUService(repository);
         GPUService gpuService = new NvidiaGPUService(repository);
-        ComputerBuilder builder = new ComputerBuilder(cpuService, gpuService);
+        AssemblyService assemblyService = new ProffesionalAssemblyService();
+        ComputerBuilder builder = new ComputerBuilder(cpuService, gpuService, assemblyService);
 
         String result = builder.buildComputer("Gaming");
 
@@ -27,9 +28,10 @@ class ComputerBuilderTest {
     void canSwitchCPUImplementationWithoutChangingTheBuilder() {
         ComponentRepository repository = new InMemoryComponentRepository();
         GPUService gpuService = new NvidiaGPUService(repository);
+        AssemblyService assemblyService = new ProffesionalAssemblyService();
 
-        ComputerBuilder intelBuilder = new ComputerBuilder(new IntelCPUService(repository), gpuService);
-        ComputerBuilder amdBuilder = new ComputerBuilder(new AmdCPUService(repository), gpuService);
+        ComputerBuilder intelBuilder = new ComputerBuilder(new IntelCPUService(repository), gpuService, assemblyService);
+        ComputerBuilder amdBuilder = new ComputerBuilder(new AmdCPUService(repository), gpuService,assemblyService);
 
         String intelResult = intelBuilder.buildComputer("Gaming");
         String amdResult = amdBuilder.buildComputer("Gaming");

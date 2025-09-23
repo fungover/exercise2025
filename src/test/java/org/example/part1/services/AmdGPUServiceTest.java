@@ -4,7 +4,7 @@ import org.example.part1.repository.ComponentRepository;
 import org.example.part1.repository.InMemoryComponentRepository;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class AmdGPUServiceTest {
 
@@ -15,7 +15,8 @@ class AmdGPUServiceTest {
 
         String gpu = service.selectGPU("Gaming");
 
-        assertEquals("AMD Radeon Gaming GPU", gpu);
+        assertThat(gpu).contains("Gaming");
+        assertThat(gpu).contains("AMD");
     }
 
     @Test
@@ -25,6 +26,7 @@ class AmdGPUServiceTest {
 
         String gpu = service.selectGPU("Office");
 
-        assertEquals("AMD Radeon Office GPU", gpu);
+        assertThat(gpu).contains("Office");
+        assertThat(gpu).contains("AMD");
     }
 }

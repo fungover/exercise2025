@@ -1,36 +1,48 @@
-## 🧪 How to Work on the Exercises
+# Product Management System
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+A Java application demonstrating the implementation of common design patterns: **Builder**, **Repository**, and **Decorator**.  
+The system manages a collection of pet products with features for creation, storage, retrieval, and dynamic pricing through decorators.
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
+## Features
+- **Product Management**: Create, read, update, and manage pet products
+- **Category-based Organization**: Organize products by categories (`FOOD`, `TOYS`, `GROOMING`, `TRAINING`, `BEDDING`)
+- **Flexible Product Creation**: Build products easily with the **Builder Pattern**
+- **Data Access Abstraction**: **Repository Pattern** separates business logic from data storage
+- **Dynamic Pricing**: **Decorator Pattern** allows applying discounts without changing the original product
+
+## Design Patterns Implemented
+
+### 1. Builder Pattern (Creational)
+`Product.Builder` enables flexible and readable product creation with validation.
+
+```java
+Product product = new Product.Builder()
+    .id(UUID.randomUUID().toString())
+    .name("Chew Bone")
+    .category(Category.FOOD)
+    .price(BigDecimal.valueOf(45))
+    .rating(8)
+    .build();
 ```
-Or fork the repository via GitHub and clone your fork.
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+### 2. Repository Pattern (Structural)
 
-Example for user githubuser working on Exercise 1:
+Separates data storage logic from business logic via the `ProductRepository` interface.
 
-```bash
-git checkout -b githubuser/exercise1
-```
+**Components:**
+- `ProductRepository`: Defines data access contract
+- `InMemoryProductRepository`: In-memory implementation
+- `ProductService`: Business logic with dependency injection
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
 
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
+### 3. Decorator Pattern (Structural)
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
+Adds functionality (like discounts) without modifying the original object.
 
-Link the PR to the issue you're solving.
+**Components:**
 
-Include a clear description of your solution.
+- `Sellable`: Interface for sellable items
 
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+- `ProductDecorator`: Abstract base class
+
+- `DiscountDecorator`: Concrete decorator for discounts

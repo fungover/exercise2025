@@ -1,15 +1,12 @@
 package org.example.map;
 
-import org.example.entities.Enemy;
-import org.example.entities.Inventory;
-import org.example.entities.Item;
-import org.example.entities.Player;
+import org.example.entities.*;
 import org.example.service.Combat;
 
 public class Tile {
     private TileEnum type;
     private final Enemy enemy;
-    private Item chestItem;
+    private final Item chestItem;
 
     public Tile(TileEnum type, Enemy enemy, Item chestItem) {
         this.type = type;
@@ -21,7 +18,12 @@ public class Tile {
         switch(type) {
             case ENEMY:
                 if (enemy != null) {
-                    System.out.println("You stepped up on a " + enemy.getType() + " prepare to fight!");
+                    if (enemy instanceof Boss boss) {
+                        System.out.println("You stepped up on a Boss! Prepare to fight the " + enemy.getType());
+                    } else {
+                        System.out.println("You stepped up on a " + enemy.getType() + " prepare to fight!");
+                    }
+
                     Combat.Fight(player, enemy, tile);
                 } else {
                     System.out.println("Found enemy without a type");

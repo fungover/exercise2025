@@ -30,5 +30,9 @@ public class Enemy {
     public int getDamage() {
         return this.damage;
     };
+
+    public void Attack(Player player) {
+        player.setHealth(player.getHealth() - this.damage);
+    }
 }
 

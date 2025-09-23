@@ -9,7 +9,7 @@ import static org.example.game.Game.GameStart;
 
 public class App {
     public static void main(String[] args) {
-        Player user = new Player("x", 10, 10, 10);
+        Player user = new Player("x", 10, 100, 100);
         Inventory userInventory = new Inventory();
 
         System.out.println("Welcome user! Please enter your name:");

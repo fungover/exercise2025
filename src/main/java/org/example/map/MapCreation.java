@@ -1,5 +1,6 @@
 package org.example.map;
 
+import org.example.entities.Boss;
 import org.example.entities.Enemy;
 import org.example.entities.Item;
 import java.util.Random;
@@ -15,9 +16,9 @@ public class MapCreation {
                 double roll = rand.nextDouble();
 
                 if (roll < 0.20) {
-                    grid[x][y] = new Tile(TileEnum.CHEST, null, new Item("Health potion", "health_potion"));
+                    grid[x][y] = new Tile(TileEnum.CHEST, null, new Item("Health Potion", "health_potion"));
                 } else if (roll < 0.40) {
-                    grid[x][y] = new Tile(TileEnum.ENEMY, new Enemy(getRandomEnemy(), 20, 5, x, y), null);
+                    grid[x][y] = new Tile(TileEnum.ENEMY, new Enemy(getRandomEnemy(), 20, 10, x, y), null);
                 } else {
                     grid[x][y] = new Tile(TileEnum.EMPTY, null, null);
                 }
@@ -26,6 +27,7 @@ public class MapCreation {
         }
 
         grid[0][0] =  new Tile(TileEnum.EMPTY, null, null);
+        grid[0][1] =  new Tile(TileEnum.ENEMY, new Boss("Elder Dragon", 50, 20, 0, 1, "Flaming Breath"), null);
     }
 
     public Tile getTile(int x, int y) {

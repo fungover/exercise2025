@@ -1,25 +1,32 @@
 package org.example.part1;
 
-import org.example.part1.services.AmdCPUService;
-import org.example.part1.services.CPUService;
-import org.example.part1.services.IntelCPUService;
+import org.example.part1.services.*;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("\nTesting manual dependency injection\n");
+        System.out.println("\nTesting manual dependency injection");
 
-        // Intel
         CPUService intelCPU = new IntelCPUService();
-        ComputerBuilder intelBuilder = new ComputerBuilder(intelCPU);
-
-        System.out.println("Intel Gaming: " + intelBuilder.buildComputer("Gaming"));
-        System.out.println("Intel Office: " + intelBuilder.buildComputer("Office"));
-
-        // AMD
         CPUService amdCPU = new AmdCPUService();
-        ComputerBuilder amdBuilder = new ComputerBuilder(amdCPU);
+        GPUService nvidiaGPU = new NvidiaGPUService();
+        GPUService amdGPU = new AmdGPUService();
 
-        System.out.println("AMD Gaming: " + amdBuilder.buildComputer("Gaming"));
-        System.out.println("AMD Office: " + amdBuilder.buildComputer("Office"));
+        // Intel + Nvidia
+        ComputerBuilder intelBuilder = new ComputerBuilder(intelCPU, nvidiaGPU);
+
+        System.out.println("\nIntel + Nvidia Gaming: " + intelBuilder.buildComputer("Gaming"));
+        System.out.println("Intel + Nvidia Office: " + intelBuilder.buildComputer("Office"));
+
+        // AMD + AMD
+        ComputerBuilder amdBuilder = new ComputerBuilder(amdCPU, amdGPU);
+
+        System.out.println("\nAMD + AMD Gaming: " + amdBuilder.buildComputer("Gaming"));
+        System.out.println("AMD + AMD Office: " + amdBuilder.buildComputer("Office"));
+
+        // AMD + Nvidia Gaming / Intel + AMD Office
+        ComputerBuilder amdNvidiaBuilder = new ComputerBuilder(amdCPU, nvidiaGPU);
+        ComputerBuilder intelAmdBuilder = new ComputerBuilder(intelCPU, amdGPU);
+        System.out.println("\nAMD + Nvidia Gaming: " + amdNvidiaBuilder.buildComputer("Gaming"));
+        System.out.println("Intel + AMD Office: " + amdNvidiaBuilder.buildComputer("Office"));
     }
 }

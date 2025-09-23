@@ -1,0 +1,58 @@
+package org.example.map;
+
+import org.example.entities.*;
+import org.example.service.Combat;
+
+public class Tile {
+    private TileEnum type;
+    private final Enemy enemy;
+    private final Item chestItem;
+
+    public Tile(TileEnum type, Enemy enemy, Item chestItem) {
+        this.type = type;
+        this.enemy = enemy;
+        this.chestItem = chestItem;
+    }
+
+    public void onEnter(Player player, Tile tile) {
+        switch(type) {
+            case ENEMY:
+                if (enemy != null) {
+                    if (enemy instanceof Boss boss) {
+                        System.out.println("You stepped up on a Boss! Prepare to fight the " + enemy.getType());
+                    } else {
+                        System.out.println("You stepped up on a " + enemy.getType() + " prepare to fight!");
+                    }
+
+                    Combat.Fight(player, enemy, tile);
+                } else {
+                    System.out.println("Found enemy without a type");
+                }
+
+                break;
+            case CHEST:
+                if (chestItem != null) {
+                    System.out.println("You found a chest and opened it.");
+                    System.out.println("Inside the chest you found " + chestItem.getName() + " it has been added to your inventory!");
+
+                    Inventory userInventory = player.getInventory();
+                    userInventory.addItem(chestItem);
+
+                    this.type = TileEnum.EMPTY;
+                }
+                break;
+            default:
+                System.out.println("Found empty tile");
+
+        }
+    }
+
+    public void setType(TileEnum type) {
+        this.type = type;
+    }
+
+    public TileEnum getType() {
+        return type;
+    }
+
+}

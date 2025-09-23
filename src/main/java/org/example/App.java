@@ -1,8 +1,8 @@
 package org.example;
 
 import org.example.container.Container;
-import org.example.detective.SherlockHolmes;
-import org.example.repository.CrimeArchive;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
 
 public class App {
     public static void main(String[] args) {
@@ -11,9 +11,12 @@ public class App {
 
         System.out.println("\nPart 2: Container DI");
         containerDI();
+
+        System.out.println("\nPart 3: Weld CDI");
+        weldDI();
     }
     private static void manualDependencyInjection() {
-        //Part 1 implementation
+        //Part 1 implementation with manual dependency injection
         var crimeRepo = new org.example.repository.CrimeArchive();
         var detective = new org.example.detective.SherlockHolmes(crimeRepo);
         var engine = new Investigation(detective);
@@ -33,5 +36,13 @@ public class App {
 
         System.out.println("Container successfully resolved entire dependency graph!");
     }
-}
 
+    //Part 3 implementation using Weld CDI
+    private static void weldDI() {
+        Weld weld = new Weld();
+        try (WeldContainer container = weld.initialize()) {
+            Investigation investigation = container.select(Investigation.class).get();
+            investigation.startInvestigation("CASE-WELD");
+        }
+    }
+}

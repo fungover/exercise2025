@@ -1,12 +1,13 @@
 package org.example;
 
-import org.example.container.Container;
+import jakarta.enterprise.inject.se.SeContainer;
+import jakarta.enterprise.inject.se.SeContainerInitializer;
 
 public class Main {
     public static void main(String[] args) {
-
-        App app = Container.getInstance(App.class);
-
-        app.processMessage("Part 2 test :)");
+        try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
+            App app = container.select(App.class).get();
+            app.processMessage("Hello from Weld CDI!");
+        }
     }
 }

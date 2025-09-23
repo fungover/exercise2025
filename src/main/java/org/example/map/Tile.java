@@ -53,4 +53,8 @@ public class Tile {
     public void setType(TileEnum type) {
         this.type = type;
     }
+
+    public TileEnum getType() {
+        return type;
+    }
 }

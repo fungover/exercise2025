@@ -18,7 +18,9 @@ public class ArchUnitTest {
                 .that().resideInAPackage("..container..")
                 .and().areNotAssignableTo(org.example.container.Container.class)
                 .should().dependOnClassesThat()
-                .resideInAnyPackage("..detective..", "..repository..")
+                .resideInAnyPackage(
+                        "..detective..",
+                        "..repository..")
                 .allowEmptyShould(true);
 
         rule.check(classes);
@@ -31,7 +33,13 @@ public class ArchUnitTest {
         ArchRule rule = classes()
                 .that().resideInAPackage("..detective..")
                 .should().onlyDependOnClassesThat()
-                .resideInAnyPackage("..detective..", "..repository..", "java..", "jakarta.inject..", "jakarta.enterprise.context..");
+                .resideInAnyPackage(
+                        "..detective..",
+                        "..repository..",
+                        "java..",
+                        "jakarta.inject..",
+                        "jakarta.enterprise.context.."
+                );
 
         rule.check(classes);
     }

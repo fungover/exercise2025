@@ -1,36 +1,59 @@
-## 🧪 How to Work on the Exercises
+# Exercise 5 – Dependency Injection
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+---
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
+## Part 1 – Manual Constructor Injection
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+Dependencies are manually wired using constructors:
 
-Example for user githubuser working on Exercise 1:
+- `CrimeArchive` implements `Crime`
+- `SherlockHolmes` implements `Detective` and receives a `Crime` instance
+- `Investigation` receives a `Detective` instance
 
-```bash
-git checkout -b githubuser/exercise1
-```
+This part demonstrates how dependencies can be resolved without any framework.
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
+---
 
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
+## Part 2 – Custom DI Container
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
+A `Container` class is built to:
 
-Link the PR to the issue you're solving.
+- Automatically instantiate classes using reflection
+- Resolve constructor dependencies recursively
+- Handle interface-to-implementation mapping
 
-Include a clear description of your solution.
+This part shows how a basic DI engine can be implemented manually.
 
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+---
+
+## Part 3 – CDI with Weld
+
+Weld is introduced as a CDI framework:
+
+- Classes are annotated with `@Inject` and `@ApplicationScoped`
+- A `beans.xml` file activates CDI
+- Weld resolves dependencies automatically
+
+This part compares manual DI with a real-world framework.
+
+---
+
+## Tests Overview
+
+### Functional Tests (`DependencyInjectionTest.java`)
+These tests verify that:
+
+- Manual wiring works correctly
+- The custom container can resolve dependencies
+- The investigation flow runs without exceptions
+
+### Architectural Tests (`ArchUnitTest.java`)
+These tests ensure that:
+
+- Packages follow clean dependency boundaries
+- `detective` does not depend on `container`
+- `container` is isolated from `detective` and `repository`
+
+Together, they validate both runtime behavior and structural integrity.
+
+---

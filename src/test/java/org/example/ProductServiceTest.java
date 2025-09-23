@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -15,6 +16,8 @@ class ProductServiceTest {
 	void testWarehouse() {
 		ProductRepository productRepository = new InMemoryProductRepository();
 		ProductService productService = new ProductService(productRepository);
+		assertThat(productService).isNotNull();
+		assertThat(productRepository.getAllProducts().isEmpty());
 	}
 
 	@Test
@@ -152,7 +155,7 @@ class ProductServiceTest {
 						.setRating(8)
 						.build());
 
-		var gameProduct = productRepository.getProductById("SUPER_GAME");
+		var gameProduct = productRepository.getProductById("SUPER_GAME").orElseThrow(() -> new NoSuchElementException("Not Found"));
 
 		assertThat(gameProduct.category()).isEqualTo(Category.GAMES);
 	}

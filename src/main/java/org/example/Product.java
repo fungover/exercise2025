@@ -31,10 +31,10 @@ public class Product {
 	}
 
 	public void updateProduct(String name, Category category, int rating) {
-		if (rating > 10 || rating < 0) {
+		if (rating < 0 || rating > 10) {
 			throw new IllegalArgumentException("rating should be between 0 and 10");
 		}
-		if (name.isEmpty()) {
+		if (name == null || name.isEmpty()) {
 			throw new IllegalArgumentException("name cannot be null or empty");
 		}
 		this.name = name;
@@ -67,7 +67,7 @@ public class Product {
 		return modifiedAt;
 	}
 
-	public void setModifiedAt() {
+	private void setModifiedAt() {
 		this.modifiedAt = LocalDateTime.now();
 	}
 

@@ -10,14 +10,19 @@ public class InMemoryProductRepository implements ProductRepository {
 	private final List<Product> products;
 
 	public InMemoryProductRepository() {
-		products = new ArrayList<Product>();
+		products = new ArrayList<>();
 	}
 
 	@Override
 	public void addProduct(Product product) {
 		if (product == null) {
-			throw new IllegalArgumentException("Product cannot be null or empty");
+			throw new IllegalArgumentException("product cannot be null");
 		} else {
+			for (Product p : products ) {
+				if (p.id().equals(product.id())) {
+					throw new IllegalArgumentException("product already exists");
+				}
+			}
 			products.add(product);
 		}
 	}
@@ -28,11 +33,10 @@ public class InMemoryProductRepository implements ProductRepository {
 	}
 
 	@Override
-	public Product getProductById(String id) {
+	public Optional<Product> getProductById(String id) {
 		return products.stream()
 						.filter(product -> product.id().equals(id))
-						.findFirst()
-						.orElseThrow(() -> new NoSuchElementException("Product not found"));
+						.findFirst();
 	}
 
 	@Override

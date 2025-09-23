@@ -2,6 +2,7 @@ package org.example;
 
 import org.junit.jupiter.api.Test;
 
+import java.awt.color.ProfileDataException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,8 +19,18 @@ class WarehouseTest {
 	@Test
 	void testAddingAProductToWarehouseAndWarehousListIncreases() {
 		Warehouse warehouse = new Warehouse();
-		Product product = new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8);
-		Product product2 = new Product("SUPER_DUPER_COMPUTER", "Computer", Category.COMPUTERS, 8);
+		Product product = new Product.ProductBuilder()
+						.setId("SUPER_GAME")
+						.setName("Little Leaf Lizards")
+						.setCategory(Category.GAMES)
+						.setRating(10)
+						.build();
+		Product product2 = new Product.ProductBuilder()
+						.setId("SUPER_DUPER_COMPUTER")
+						.setName("Super Computer")
+						.setCategory(Category.COMPUTERS)
+						.setRating(7)
+						.build();
 		warehouse.addProduct(product);
 		warehouse.addProduct(product2);
 		Product recievedProduct = warehouse.getAllProducts().get(1);
@@ -31,7 +42,12 @@ class WarehouseTest {
 	@Test
 	void testAddingAProductToWarehouseAndRetrievedValuesMatchTheAddedProduct() {
 		Warehouse warehouse = new Warehouse();
-		Product product = new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8);
+		Product product = new Product.ProductBuilder()
+						.setId("SUPER_COMPUTER")
+						.setName("Super Computer")
+						.setCategory(Category.COMPUTERS)
+						.setRating(8)
+						.build();
 		warehouse.addProduct(product);
 		Product recievedProduct = warehouse.getAllProducts().get(0);
 
@@ -43,7 +59,12 @@ class WarehouseTest {
 	@Test
 	void testUpdatingAProduct() {
 		Warehouse warehouse = new Warehouse();
-		Product product = new Product("SUPER_GAME", "Mage", Category.GAMES, 8);
+		Product product = new Product.ProductBuilder()
+						.setId("SUPER_GAME")
+						.setName("Mage")
+						.setCategory(Category.GAMES)
+						.setRating(8)
+						.build();
 		warehouse.addProduct(product);
 
 		assertThat(warehouse.getAllProducts().get(0).name()).isEqualTo("Mage");
@@ -56,7 +77,12 @@ class WarehouseTest {
 	@Test
 	void testUpdatingAProductWithAnIdThatDoesNotExist() {
 		Warehouse warehouse = new Warehouse();
-		Product product = new Product("SUPER_GAME", "Game", Category.GAMES, 8);
+		Product product = new Product.ProductBuilder()
+						.setId("SUPER_GAME")
+						.setName("Mage")
+						.setCategory(Category.GAMES)
+						.setRating(8)
+						.build();
 		warehouse.addProduct(product);
 
 		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -69,9 +95,24 @@ class WarehouseTest {
 	void testRetrieveAllProductsInWarehouse() {
 		Warehouse warehouse = new Warehouse();
 
-		Product product1 = new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8);
-		Product product2 = new Product("SUPER_GAME", "Game", Category.GAMES, 9);
-		Product product3 = new Product("SUPER_ACCESSORY", "Accessory", Category.ACCESSORIES, 6);
+		Product product1 = new Product.ProductBuilder()
+						.setId("SUPER_COMPUTER")
+						.setName("Computer")
+						.setCategory(Category.COMPUTERS)
+						.setRating(8)
+						.build();
+		Product product2 = new Product.ProductBuilder()
+						.setId("SUPER_GAME")
+						.setName("Game")
+						.setCategory(Category.GAMES)
+						.setRating(9)
+						.build();
+		Product product3 = new Product.ProductBuilder()
+						.setId("SUPER_ACCESSORY")
+						.setName("Accessory")
+						.setCategory(Category.ACCESSORIES)
+						.setRating(6)
+						.build();
 
 		warehouse.addProduct(product1);
 		warehouse.addProduct(product2);
@@ -85,9 +126,24 @@ class WarehouseTest {
 	@Test
 	void testRetrieveOneProductInWarehouseByID() {
 		Warehouse warehouse = new Warehouse();
-		warehouse.addProduct(new Product("SUPER_GAME", "Game", Category.GAMES, 9));
-		warehouse.addProduct(new Product("SUPER_ACCESSORY", "Accessory", Category.ACCESSORIES, 6));
-		warehouse.addProduct(new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8));
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("SUPER_GAME")
+						.setName("Game")
+						.setCategory(Category.GAMES)
+						.setRating(9)
+						.build());
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("SUPER_ACCESSORY")
+						.setName("Accessory")
+						.setCategory(Category.ACCESSORIES)
+						.setRating(6)
+						.build());
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("SUPER_COMPUTER")
+						.setName("Computer")
+						.setCategory(Category.COMPUTERS)
+						.setRating(8)
+						.build());
 
 		var gameProduct = warehouse.getProductById("SUPER_GAME");
 
@@ -97,10 +153,33 @@ class WarehouseTest {
 	@Test
 	void testRetrieveAllProductsInWarehouseByCategory() {
 		Warehouse warehouse = new Warehouse();
-		warehouse.addProduct(new Product("SUPER_GAME", "BGame", Category.GAMES, 9));
-		warehouse.addProduct(new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8));
-		warehouse.addProduct(new Product("A" + "SUPER_GAME", "AGame", Category.GAMES, 8));
-		warehouse.addProduct(new Product("SUPER_ACCESSORY", "Accessory", Category.ACCESSORIES, 6));
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("SUPER_GAME")
+						.setName("BGame")
+						.setCategory(Category.GAMES)
+						.setRating(9)
+						.build());
+
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("SUPER_COMPUTER")
+						.setName("Computer")
+						.setCategory(Category.COMPUTERS)
+						.setRating(8)
+						.build());
+
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("ASUPER_GAME")
+						.setName("AGame")
+						.setCategory(Category.GAMES)
+						.setRating(8)
+						.build());
+
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("ASUPER_ACCESSORY")
+						.setName("Accessory")
+						.setCategory(Category.ACCESSORIES)
+						.setRating(6)
+						.build());
 
 		List<Product> products = warehouse.getProductsByCategorySorted(Category.GAMES);
 
@@ -112,12 +191,32 @@ class WarehouseTest {
 	@Test
 	void testRetrieveAllProductsCreatedAfterACertainDate() throws InterruptedException {
 		Warehouse warehouse = new Warehouse();
-		warehouse.addProduct(new Product("SUPER_GAME", "BGame", Category.GAMES, 9));
-		warehouse.addProduct(new Product("SUPER_COMPUTER", "Computer", Category.COMPUTERS, 8));
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("SUPER_GAME")
+						.setName("BGame")
+						.setCategory(Category.GAMES)
+						.setRating(9)
+						.build());
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("SUPER_COMPUTER")
+						.setName("Computer")
+						.setCategory(Category.COMPUTERS)
+						.setRating(8)
+						.build());
 		LocalDateTime now = LocalDateTime.now();
 		Thread.sleep(1000);
-		warehouse.addProduct(new Product("ASUPER_GAME", "AGame", Category.GAMES, 8));
-		warehouse.addProduct(new Product("SUPER_ACCESSORY", "Accessory", Category.ACCESSORIES, 6));
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("ASUPER_GAME")
+						.setName("AGame")
+						.setCategory(Category.GAMES)
+						.setRating(8)
+						.build());
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("SUPER_ACCESSORY")
+						.setName("Accessory")
+						.setCategory(Category.ACCESSORIES)
+						.setRating(6)
+						.build());
 
 		List<Product> products = warehouse.getProductsCreatedAfter(now);
 
@@ -129,12 +228,24 @@ class WarehouseTest {
 	@Test
 	void testRetrieveAllProductsWhereModifiedIsNotEqualsToCreated() throws InterruptedException {
 		Warehouse warehouse = new Warehouse();
-		Product product = new Product("SUPER_GAMER", "Mage", Category.GAMES, 8);
-		Product product2 = new Product("ASUPER_GAME", "AGame", Category.GAMES, 7);
-		Product product3 = new Product("SUPER_GAME", "Game", Category.GAMES, 10);
-		warehouse.addProduct(product);
-		warehouse.addProduct(product2);
-		warehouse.addProduct(product3);
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("SUPER_GAME")
+						.setName("Mage")
+						.setCategory(Category.GAMES)
+						.setRating(8)
+						.build());
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("ASUPER_GAME")
+						.setName("AGame")
+						.setCategory(Category.GAMES)
+						.setRating(7)
+						.build());
+		warehouse.addProduct(new Product.ProductBuilder()
+						.setId("SUPER_GAME")
+						.setName("Game")
+						.setCategory(Category.GAMES)
+						.setRating(10)
+						.build());
 
 		Thread.sleep(100);
 		warehouse.updateProduct("SUPER_GAME", "Mage", Category.GAMES, 10);

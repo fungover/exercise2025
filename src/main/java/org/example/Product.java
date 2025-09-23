@@ -11,15 +11,15 @@ public class Product {
 	private final LocalDateTime createdAt;
 	private LocalDateTime modifiedAt;
 
-	public Product(String id, String name, Category category, int rating) {
-		if (rating > 10 || rating < 0) {
-			throw new IllegalArgumentException("Invalid rating");
+	private Product(String id, String name, Category category, int rating) {
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("id cannot be null or empty");
 		}
 		if (name == null || name.isEmpty()) {
-			throw new IllegalArgumentException("Name cannot be empty");
+			throw new IllegalArgumentException("name cannot be null or empty");
 		}
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("ID cannot be empty");
+		if (rating < 0 || rating > 10) {
+			throw new IllegalArgumentException("rating should be between 0 and 10");
 		}
 
 		this.id = id;
@@ -31,11 +31,11 @@ public class Product {
 	}
 
 	public void updateProduct(String name, Category category, int rating) {
-		if (rating > 10 || rating < 0 ) {
-			throw new IllegalArgumentException("Invalid rating");
+		if (rating > 10 || rating < 0) {
+			throw new IllegalArgumentException("rating should be between 0 and 10");
 		}
 		if (name.isEmpty()) {
-			throw new IllegalArgumentException("Product name cannot be empty");
+			throw new IllegalArgumentException("name cannot be null or empty");
 		}
 		this.name = name;
 		this.category = category;
@@ -71,5 +71,35 @@ public class Product {
 		this.modifiedAt = LocalDateTime.now();
 	}
 
+	public static class ProductBuilder {
+		private String id;
+		private String name;
+		private Category category;
+		private int rating;
+
+		public ProductBuilder setId(String id) {
+			this.id = id;
+			return this;
+		}
+
+		public ProductBuilder setName(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public ProductBuilder setCategory(Category category) {
+			this.category = category;
+			return this;
+		}
+
+		public ProductBuilder setRating(int rating) {
+			this.rating = rating;
+			return this;
+		}
+
+		public Product build() {
+			return new Product(id, name, category, rating);
+		}
+	}
 }
 

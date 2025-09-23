@@ -254,7 +254,7 @@ class ProductServiceTest {
 						.setRating(7)
 						.build());
 		productRepository.addProduct(new Product.ProductBuilder()
-						.setId("SUPER_GAME")
+						.setId("BSUPER_GAME")
 						.setName("Game")
 						.setCategory(Category.GAMES)
 						.setRating(10)

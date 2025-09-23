@@ -1,4 +1,4 @@
-package org.example.DI.manual.notify;
+package org.example.di.notify;
 
 public class EmailNotifier implements Notifier {
     private final String from;

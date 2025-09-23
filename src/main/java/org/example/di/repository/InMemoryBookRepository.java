@@ -1,4 +1,6 @@
-package org.example.DI.manual.repository;
+package org.example.di.repository;
+
+import org.example.di.model.Book;
 
 import java.util.*;
 

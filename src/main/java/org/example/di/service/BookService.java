@@ -1,8 +1,8 @@
-package org.example.DI.manual.service;
+package org.example.di.service;
 
-import org.example.DI.manual.notify.Notifier;
-import org.example.DI.manual.repository.Book;
-import org.example.DI.manual.repository.BookRepository;
+import org.example.di.notify.Notifier;
+import org.example.di.model.Book;
+import org.example.di.repository.BookRepository;
 
 import java.util.List;
 

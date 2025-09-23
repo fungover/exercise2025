@@ -1,16 +1,17 @@
-package org.example.DI.manual;
+package org.example.di;
 
-import org.example.DI.manual.notify.ConsoleNotifier;
-import org.example.DI.manual.notify.EmailNotifier;
-import org.example.DI.manual.repository.Book;
-import org.example.DI.manual.repository.BookRepository;
-import org.example.DI.manual.repository.InMemoryBookRepository;
-import org.example.DI.manual.service.BookService;
+import org.example.di.notify.ConsoleNotifier;
+import org.example.di.notify.EmailNotifier;
+import org.example.di.model.Book;
+import org.example.di.repository.BookRepository;
+import org.example.di.repository.InMemoryBookRepository;
+import org.example.di.service.BookService;
 
 public class BookMain
 {
     public static void main(String[] args)
     {
+        System.out.println("====== Manual DI ======");
         BookRepository bookRepository = new InMemoryBookRepository();
 
         ConsoleNotifier consoleNotifier = new ConsoleNotifier();

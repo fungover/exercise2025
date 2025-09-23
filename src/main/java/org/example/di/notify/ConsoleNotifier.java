@@ -1,4 +1,4 @@
-package org.example.DI.manual.notify;
+package org.example.di.notify;
 
 public class ConsoleNotifier implements Notifier {
     @Override public void info(String message) {

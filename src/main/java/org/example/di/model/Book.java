@@ -1,4 +1,4 @@
-package org.example.DI.manual.repository;
+package org.example.di.model;
 
 public record Book(String id, String title) {
 }

@@ -35,9 +35,9 @@ public class MapCreation {
     }
 
     public boolean insideMap(int x, int y) {
-        if (x < 0 || x > grid.length) {
+        if (x < 0 || x >= grid.length) {
             return false;
-        } else if (y < 0 || y > grid[0].length) {
+        } else if (y < 0 || y >= grid[0].length) {
             return false;
         }
 

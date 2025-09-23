@@ -1,0 +1,15 @@
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch JohnnyAstrom/exercise4
+# Changes to be committed:
+#	modified:   src/main/java/org/example/App.java
+#	modified:   src/main/java/org/example/entities/Product.java
+#	renamed:    src/main/java/org/example/entities/DiscountDecorator.java -> src/main/java/org/example/entities/decorator/DiscountDecorator.java
+#	renamed:    src/main/java/org/example/entities/ProductDecorator.java -> src/main/java/org/example/entities/decorator/ProductDecorator.java
+#	renamed:    src/main/java/org/example/entities/Sellable.java -> src/main/java/org/example/entities/decorator/Sellable.java
+#	renamed:    src/test/java/org/example/entities/DiscountDecoratorTest.java -> src/test/java/org/example/entities/decorator/DiscountDecoratorTest.java
+#	renamed:    src/test/java/org/example/entities/ProductDecoratorTest.java -> src/test/java/org/example/entities/decorator/ProductDecoratorTest.java
+#	renamed:    src/test/java/org/example/entities/SellableTest.java -> src/test/java/org/example/entities/decorator/SellableTest.java
+#

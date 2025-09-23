@@ -9,10 +9,11 @@ import org.example.domain.MessageService;
  * - Does NOT know about EmailMessageService or any other implementations.
  * - Final field to ensure immutability.
  */
-
+//@ApplicationScoped
 public class SmsMessageService implements MessageService { // Implements MessageService interface
     private final DataRepository repository; // Dependency on DataRepository interface
 
+    //  @Inject
     public SmsMessageService(DataRepository repository) { // Constructor injection
         this.repository = repository; // Assigning the injected repository to the final field
     }

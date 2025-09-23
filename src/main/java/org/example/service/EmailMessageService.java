@@ -1,5 +1,7 @@
 package org.example.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.example.domain.DataRepository;
 import org.example.domain.MessageService;
 
@@ -9,10 +11,11 @@ import org.example.domain.MessageService;
  * - Does NOT know which repository which is being used (Database or File).
  * - Final field to ensure immutability.
  */
-
+@ApplicationScoped
 public class EmailMessageService implements MessageService {
     private final DataRepository repository; // Dependency on DataRepository interface
 
+    @Inject //
     public EmailMessageService(DataRepository repository) { // Constructor injection
         this.repository = repository; // Assigning the injected repository to the final field
     }

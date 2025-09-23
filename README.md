@@ -1,36 +1,96 @@
-## 🧪 How to Work on the Exercises
+# Warehouse Product Manager
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+## Overview
+This project is a simple **Product Management application** written in Java.  
+It demonstrates modern practices such as immutability, validation, and the use of **design patterns** (Builder Pattern + Repository Pattern).
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
+The core service is `ProductService`, which manages `Product` entities through a `ProductRepository`.  
+For this implementation, an in-memory repository (`InMemoryProductRepository`) is provided.
+
+---
+
+## Features
+- Add products with validation (id, name, category, rating).
+- Update products (immutable replace, keep createdDate, set modifiedDate).
+- Retrieve all products (defensive copy).
+- Retrieve a product by id.
+- Filter products by category, sorted A–Z (case-insensitive).
+- Filter products created strictly after a given date.
+- Retrieve modified products (where modifiedDate != createdDate).
+- Full unit test coverage using JUnit 5.
+
+---
+
+## Design Patterns
+
+### Builder Pattern
+`Product` uses a nested `Builder` to simplify creation and centralize validation.
+
+Example:
+```java
+Product product = new Product.Builder()
+        .id("1")
+        .name("Laptop")
+        .category(Category.ELECTRONICS)
+        .rating(9)
+        .build();
 ```
-Or fork the repository via GitHub and clone your fork.
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+### Repository Pattern
+Data access is separated from business logic.
 
-Example for user githubuser working on Exercise 1:
+- `ProductRepository`: defines CRUD contract.
+- `InMemoryProductRepository`: manages products in memory using a `HashMap`.
+- `ProductService`: business logic layer that depends on a `ProductRepository`.
 
-```bash
-git checkout -b githubuser/exercise1
+Example setup:
+```java
+import java.time.Clock;
+import com.jan_elia.warehouse.repository.*;
+
+ProductRepository repo = new InMemoryProductRepository();
+ProductService service = new ProductService(Clock.systemDefaultZone(), repo);
+
+Product product = new Product.Builder()
+        .id("1")
+        .name("Phone")
+        .category(Category.ELECTRONICS)
+        .rating(8)
+        .build();
+
+service.addProduct(product);
 ```
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
+---
 
-### 🚀 4. Push Your Branch
+## Requirements
+- Java 24+
+- Maven 3.9+
+- IntelliJ IDEA
+
+---
+
+## How to Run
+
+### In IntelliJ
+1. Open the project.
+2. Run tests with the **JUnit 5** runner.
+
+### From CLI
 ```bash
-git push origin githubuser/exercise1
+mvn clean test
 ```
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
+---
 
-Link the PR to the issue you're solving.
+## Tests
+- Framework: JUnit 5
+- All public methods in `ProductService` are covered with **success and failure cases**.
+- Repository and builder validation tested.
 
-Include a clear description of your solution.
+Run tests:
+```bash
+mvn test
+```
 
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+---

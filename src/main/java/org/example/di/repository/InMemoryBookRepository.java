@@ -1,9 +1,11 @@
 package org.example.di.repository;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import org.example.di.model.Book;
 
 import java.util.*;
 
+@ApplicationScoped
 public class InMemoryBookRepository implements BookRepository {
     private final Map<String, Book> books = new HashMap<>();
 

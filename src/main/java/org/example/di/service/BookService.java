@@ -1,17 +1,21 @@
 package org.example.di.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.example.di.notify.Notifier;
 import org.example.di.model.Book;
+import org.example.di.qualifiers.Console;
 import org.example.di.repository.BookRepository;
 
 import java.util.List;
 
-
-public final class BookService {
+@ApplicationScoped
+public class BookService {
     private final BookRepository bookRepository;
-    private final Notifier notifier;
+    private final  Notifier notifier;
 
-    public BookService(BookRepository bookRepository, Notifier notifier) {
+    @Inject
+    public BookService(BookRepository bookRepository, @Console Notifier notifier) {
         this.bookRepository = bookRepository;
         this.notifier = notifier;
     }

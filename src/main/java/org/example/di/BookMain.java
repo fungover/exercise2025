@@ -1,5 +1,6 @@
 package org.example.di;
 
+import jakarta.enterprise.inject.se.SeContainer;
 import org.example.di.container.Container;
 import org.example.di.container.SimpleContainer;
 import org.example.di.notify.ConsoleNotifier;
@@ -9,6 +10,7 @@ import org.example.di.notify.Notifier;
 import org.example.di.repository.BookRepository;
 import org.example.di.repository.InMemoryBookRepository;
 import org.example.di.service.BookService;
+import org.jboss.weld.environment.se.Weld;
 
 public class BookMain
 {
@@ -51,7 +53,13 @@ public class BookMain
         serviceEmail.addBook(new Book("id4", "The Return of the King"));
         serviceEmail.listBooks().forEach(b -> System.out.println(" - " + b.title()));
 
-
+        System.out.println("====== Weld SE Container ======");
+        Weld weld = new Weld();
+        try (SeContainer weldContainer = weld.initialize()) {
+            BookService bookService = weldContainer.select(BookService.class).get();
+            bookService.addBook(new Book("id1", "Lord of the Rings"));
+            bookService.listBooks().forEach(b -> System.out.println(" - " + b.title()));
+        }
 
     }
 }

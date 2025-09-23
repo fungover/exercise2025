@@ -1,24 +1,26 @@
 package org.example;
 
+import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 
-import java.awt.color.ProfileDataException;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class WarehouseTest {
+class ProductServiceTest {
 	@Test
 	void testWarehouse() {
-		Warehouse warehouse = new Warehouse();
+		ProductRepository productRepository = new InMemoryProductRepository();
+		ProductService productService = new ProductService(productRepository);
 	}
 
 	@Test
 	void testAddingAProductToWarehouseAndWarehousListIncreases() {
-		Warehouse warehouse = new Warehouse();
+		ProductRepository productRepository = new InMemoryProductRepository();
+		ProductService productService = new ProductService(productRepository);
 		Product product = new Product.ProductBuilder()
 						.setId("SUPER_GAME")
 						.setName("Little Leaf Lizards")
@@ -31,25 +33,26 @@ class WarehouseTest {
 						.setCategory(Category.COMPUTERS)
 						.setRating(7)
 						.build();
-		warehouse.addProduct(product);
-		warehouse.addProduct(product2);
-		Product recievedProduct = warehouse.getAllProducts().get(1);
+		productRepository.addProduct(product);
+		productRepository.addProduct(product2);
+		Product recievedProduct = productRepository.getAllProducts().get(1);
 
-		assertThat(warehouse.getAllProducts().size()).isEqualTo(2);
+		assertThat(productRepository.getAllProducts().size()).isEqualTo(2);
 		assertThat(recievedProduct.id()).isEqualTo("SUPER_DUPER_COMPUTER");
 	}
 
 	@Test
 	void testAddingAProductToWarehouseAndRetrievedValuesMatchTheAddedProduct() {
-		Warehouse warehouse = new Warehouse();
+		ProductRepository productRepository = new InMemoryProductRepository();
+		ProductService productService = new ProductService(productRepository);
 		Product product = new Product.ProductBuilder()
 						.setId("SUPER_COMPUTER")
 						.setName("Super Computer")
 						.setCategory(Category.COMPUTERS)
 						.setRating(8)
 						.build();
-		warehouse.addProduct(product);
-		Product recievedProduct = warehouse.getAllProducts().get(0);
+		productRepository.addProduct(product);
+		Product recievedProduct = productRepository.getAllProducts().get(0);
 
 		assertThat(recievedProduct.id()).isEqualTo("SUPER_COMPUTER");
 		assertThat(recievedProduct.category()).isEqualTo(Category.COMPUTERS);
@@ -58,42 +61,45 @@ class WarehouseTest {
 
 	@Test
 	void testUpdatingAProduct() {
-		Warehouse warehouse = new Warehouse();
+		ProductRepository productRepository = new InMemoryProductRepository();
+		ProductService productService = new ProductService(productRepository);
 		Product product = new Product.ProductBuilder()
 						.setId("SUPER_GAME")
 						.setName("Mage")
 						.setCategory(Category.GAMES)
 						.setRating(8)
 						.build();
-		warehouse.addProduct(product);
+		productRepository.addProduct(product);
 
-		assertThat(warehouse.getAllProducts().get(0).name()).isEqualTo("Mage");
+		assertThat(productRepository.getAllProducts().get(0).name()).isEqualTo("Mage");
 
-		warehouse.updateProduct("SUPER_GAME", "Game", Category.GAMES, 10);
+		productRepository.updateProduct("SUPER_GAME", "Game", Category.GAMES, 10);
 
-		assertThat(warehouse.getAllProducts().get(0).name()).isEqualTo("Game");
+		assertThat(productRepository.getAllProducts().get(0).name()).isEqualTo("Game");
 	}
 
 	@Test
 	void testUpdatingAProductWithAnIdThatDoesNotExist() {
-		Warehouse warehouse = new Warehouse();
+		ProductRepository productRepository = new InMemoryProductRepository();
+		ProductService productService = new ProductService(productRepository);
 		Product product = new Product.ProductBuilder()
 						.setId("SUPER_GAME")
 						.setName("Mage")
 						.setCategory(Category.GAMES)
 						.setRating(8)
 						.build();
-		warehouse.addProduct(product);
+		productRepository.addProduct(product);
 
 		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-			warehouse.updateProduct("SUPER_GAMER", "Mage", Category.GAMES, 10);
+			productRepository.updateProduct("SUPER_GAMER", "Mage", Category.GAMES, 10);
 		});
 		assertThat(exception.getMessage()).isEqualTo("Product ID does not exist");
 	}
 
 	@Test
 	void testRetrieveAllProductsInWarehouse() {
-		Warehouse warehouse = new Warehouse();
+		ProductRepository productRepository = new InMemoryProductRepository();
+		ProductService productService = new ProductService(productRepository);
 
 		Product product1 = new Product.ProductBuilder()
 						.setId("SUPER_COMPUTER")
@@ -114,74 +120,76 @@ class WarehouseTest {
 						.setRating(6)
 						.build();
 
-		warehouse.addProduct(product1);
-		warehouse.addProduct(product2);
-		warehouse.addProduct(product3);
+		productRepository.addProduct(product1);
+		productRepository.addProduct(product2);
+		productRepository.addProduct(product3);
 
-		List<Product> products = warehouse.getAllProducts();
+		List<Product> products = productRepository.getAllProducts();
 		assertThat(products.size()).isEqualTo(3);
 		assertThat(products.get(1).rating()).isEqualTo(9);
 	}
 
 	@Test
 	void testRetrieveOneProductInWarehouseByID() {
-		Warehouse warehouse = new Warehouse();
-		warehouse.addProduct(new Product.ProductBuilder()
+		ProductRepository productRepository = new InMemoryProductRepository();
+		ProductService productService = new ProductService(productRepository);
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("SUPER_GAME")
 						.setName("Game")
 						.setCategory(Category.GAMES)
 						.setRating(9)
 						.build());
-		warehouse.addProduct(new Product.ProductBuilder()
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("SUPER_ACCESSORY")
 						.setName("Accessory")
 						.setCategory(Category.ACCESSORIES)
 						.setRating(6)
 						.build());
-		warehouse.addProduct(new Product.ProductBuilder()
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("SUPER_COMPUTER")
 						.setName("Computer")
 						.setCategory(Category.COMPUTERS)
 						.setRating(8)
 						.build());
 
-		var gameProduct = warehouse.getProductById("SUPER_GAME");
+		var gameProduct = productRepository.getProductById("SUPER_GAME");
 
 		assertThat(gameProduct.category()).isEqualTo(Category.GAMES);
 	}
 
 	@Test
 	void testRetrieveAllProductsInWarehouseByCategory() {
-		Warehouse warehouse = new Warehouse();
-		warehouse.addProduct(new Product.ProductBuilder()
+		ProductRepository productRepository = new InMemoryProductRepository();
+		ProductService productService = new ProductService(productRepository);
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("SUPER_GAME")
 						.setName("BGame")
 						.setCategory(Category.GAMES)
 						.setRating(9)
 						.build());
 
-		warehouse.addProduct(new Product.ProductBuilder()
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("SUPER_COMPUTER")
 						.setName("Computer")
 						.setCategory(Category.COMPUTERS)
 						.setRating(8)
 						.build());
 
-		warehouse.addProduct(new Product.ProductBuilder()
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("ASUPER_GAME")
 						.setName("AGame")
 						.setCategory(Category.GAMES)
 						.setRating(8)
 						.build());
 
-		warehouse.addProduct(new Product.ProductBuilder()
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("ASUPER_ACCESSORY")
 						.setName("Accessory")
 						.setCategory(Category.ACCESSORIES)
 						.setRating(6)
 						.build());
 
-		List<Product> products = warehouse.getProductsByCategorySorted(Category.GAMES);
+		List<Product> products = productService.getProductsByCategorySorted(Category.GAMES);
 
 		assertThat(products.size()).isEqualTo(2);
 		assertThat(products.get(0).rating()).isEqualTo(8);
@@ -190,14 +198,15 @@ class WarehouseTest {
 
 	@Test
 	void testRetrieveAllProductsCreatedAfterACertainDate() throws InterruptedException {
-		Warehouse warehouse = new Warehouse();
-		warehouse.addProduct(new Product.ProductBuilder()
+		ProductRepository productRepository = new InMemoryProductRepository();
+		ProductService productService = new ProductService(productRepository);
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("SUPER_GAME")
 						.setName("BGame")
 						.setCategory(Category.GAMES)
 						.setRating(9)
 						.build());
-		warehouse.addProduct(new Product.ProductBuilder()
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("SUPER_COMPUTER")
 						.setName("Computer")
 						.setCategory(Category.COMPUTERS)
@@ -205,20 +214,20 @@ class WarehouseTest {
 						.build());
 		LocalDateTime now = LocalDateTime.now();
 		Thread.sleep(1000);
-		warehouse.addProduct(new Product.ProductBuilder()
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("ASUPER_GAME")
 						.setName("AGame")
 						.setCategory(Category.GAMES)
 						.setRating(8)
 						.build());
-		warehouse.addProduct(new Product.ProductBuilder()
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("SUPER_ACCESSORY")
 						.setName("Accessory")
 						.setCategory(Category.ACCESSORIES)
 						.setRating(6)
 						.build());
 
-		List<Product> products = warehouse.getProductsCreatedAfter(now);
+		List<Product> products = productService.getProductsCreatedAfter(now);
 
 		assertThat(products.size()).isEqualTo(2);
 		assertThat(products.get(0).id()).isEqualTo("ASUPER_GAME");
@@ -227,20 +236,21 @@ class WarehouseTest {
 
 	@Test
 	void testRetrieveAllProductsWhereModifiedIsNotEqualsToCreated() throws InterruptedException {
-		Warehouse warehouse = new Warehouse();
-		warehouse.addProduct(new Product.ProductBuilder()
+		ProductRepository productRepository = new InMemoryProductRepository();
+		ProductService productService = new ProductService(productRepository);
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("SUPER_GAME")
 						.setName("Mage")
 						.setCategory(Category.GAMES)
 						.setRating(8)
 						.build());
-		warehouse.addProduct(new Product.ProductBuilder()
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("ASUPER_GAME")
 						.setName("AGame")
 						.setCategory(Category.GAMES)
 						.setRating(7)
 						.build());
-		warehouse.addProduct(new Product.ProductBuilder()
+		productRepository.addProduct(new Product.ProductBuilder()
 						.setId("SUPER_GAME")
 						.setName("Game")
 						.setCategory(Category.GAMES)
@@ -248,10 +258,10 @@ class WarehouseTest {
 						.build());
 
 		Thread.sleep(100);
-		warehouse.updateProduct("SUPER_GAME", "Mage", Category.GAMES, 10);
-		warehouse.updateProduct("ASUPER_GAME", "Assassin's Creed", Category.GAMES, 10);
+		productRepository.updateProduct("SUPER_GAME", "Mage", Category.GAMES, 10);
+		productRepository.updateProduct("ASUPER_GAME", "Assassin's Creed", Category.GAMES, 10);
 
-		List<Product> modifiedProducts = warehouse.getModifiedProducts();
+		List<Product> modifiedProducts = productService.getModifiedProducts();
 		assertThat(modifiedProducts.size()).isEqualTo(2);
 
 	}

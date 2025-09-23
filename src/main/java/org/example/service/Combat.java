@@ -30,17 +30,18 @@ public class Combat {
                     System.out.println("You attacked! " + enemy.getType() + "'s health is now " + enemy.getHealth());
                 }
             } else if (userChoice.contains("heal")) {
-                if (userInventory.hasItem("Health Potion")) {
+            } else if ("heal".equalsIgnoreCase(userChoice)) {
+                if (userInventory != null && userInventory.hasItem("Health Potion")) {
                     if (player.getHealth() >= player.getMaxHealth()) {
                         System.out.println("You already have maximum health!");
-
-                        return;
+                    } else {
+                        int totalHealing = player.getMaxHealth() - player.getHealth();
+                        player.setHealth(player.getHealth() + totalHealing);
+                        System.out.println("You used a health potion. You now have " + player.getHealth() + " health!");
+                        userInventory.removeItem("Health Potion");
                     }
-
-                    int totalHealing = player.getMaxHealth() - player.getHealth();
-                    player.setHealth(player.getHealth() + totalHealing);
-                    System.out.println("You used a health potion. You now have " + player.getHealth() + " health!");
-                    userInventory.removeItem("Health Potion");
+                } else {
+                    System.out.println("You don't have a health potion.");
                 }
             }
 

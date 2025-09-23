@@ -1,9 +1,9 @@
 package org.example.entities;
 
 public class Enemy {
-    private String type;
+    private final String type;
     private int health;
-    private int damage;
+    private final int damage;
     private int positionX;
     private int positionY;
 

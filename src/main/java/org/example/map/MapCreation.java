@@ -15,9 +15,9 @@ public class MapCreation {
             for(int y = 0; y < height; y++) {
                 double roll = rand.nextDouble();
 
-                if (roll < 0.20) {
+                if (roll < 0.25) {
                     grid[x][y] = new Tile(TileEnum.CHEST, null, new Item("Health Potion", "health_potion"));
-                } else if (roll < 0.40) {
+                } else if (roll < 0.6) {
                     grid[x][y] = new Tile(TileEnum.ENEMY, new Enemy(getRandomEnemy(), 20, 10, x, y), null);
                 } else {
                     grid[x][y] = new Tile(TileEnum.EMPTY, null, null);

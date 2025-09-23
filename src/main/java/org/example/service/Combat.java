@@ -21,7 +21,7 @@ public class Combat {
             Scanner scanner = new Scanner(System.in);
             String userChoice = scanner.nextLine().trim();
 
-            if (userChoice.contains("attack")) {
+            if ("attack".equalsIgnoreCase(userChoice)) {
                 enemy.setHealth(enemy.getHealth() - player.getDamage());
 
                 if (enemy.getHealth() <= 0) {
@@ -29,7 +29,6 @@ public class Combat {
                 } else {
                     System.out.println("You attacked! " + enemy.getType() + "'s health is now " + enemy.getHealth());
                 }
-            } else if (userChoice.contains("heal")) {
             } else if ("heal".equalsIgnoreCase(userChoice)) {
                 if (userInventory != null && userInventory.hasItem("Health Potion")) {
                     if (player.getHealth() >= player.getMaxHealth()) {

@@ -1,32 +1,27 @@
 package org.example.part1;
 
+import org.example.part1.repository.ComponentRepository;
+import org.example.part1.repository.InMemoryComponentRepository;
 import org.example.part1.services.*;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("\nTesting manual dependency injection");
+        System.out.println("\nManual dependency injection\n");
 
-        CPUService intelCPU = new IntelCPUService();
-        CPUService amdCPU = new AmdCPUService();
-        GPUService nvidiaGPU = new NvidiaGPUService();
-        GPUService amdGPU = new AmdGPUService();
+        ComponentRepository repository = new InMemoryComponentRepository();
 
-        // Intel + Nvidia
-        ComputerBuilder intelBuilder = new ComputerBuilder(intelCPU, nvidiaGPU);
+        CPUService intelCPU = new IntelCPUService(repository);
+        CPUService amdCPU = new AmdCPUService(repository);
+        GPUService nvidiaGPU = new NvidiaGPUService(repository);
+        GPUService amdGPU = new AmdGPUService(repository);
+        AssemblyService assemblyService = new ProffesionalAssemblyService();
 
-        System.out.println("\nIntel + Nvidia Gaming: " + intelBuilder.buildComputer("Gaming"));
-        System.out.println("Intel + Nvidia Office: " + intelBuilder.buildComputer("Office"));
+        ComputerBuilder intelNvidiaBuilder = new ComputerBuilder(intelCPU, nvidiaGPU, assemblyService);
+        ComputerBuilder amdAmdBuilder = new ComputerBuilder(amdCPU, amdGPU, assemblyService);
+        ComputerBuilder amdNvidiaBuilder = new ComputerBuilder(amdCPU, nvidiaGPU, assemblyService);
 
-        // AMD + AMD
-        ComputerBuilder amdBuilder = new ComputerBuilder(amdCPU, amdGPU);
-
-        System.out.println("\nAMD + AMD Gaming: " + amdBuilder.buildComputer("Gaming"));
-        System.out.println("AMD + AMD Office: " + amdBuilder.buildComputer("Office"));
-
-        // AMD + Nvidia Gaming / Intel + AMD Office
-        ComputerBuilder amdNvidiaBuilder = new ComputerBuilder(amdCPU, nvidiaGPU);
-        ComputerBuilder intelAmdBuilder = new ComputerBuilder(intelCPU, amdGPU);
-        System.out.println("\nAMD + Nvidia Gaming: " + amdNvidiaBuilder.buildComputer("Gaming"));
-        System.out.println("Intel + AMD Office: " + intelAmdBuilder.buildComputer("Office"));
+        System.out.println(intelNvidiaBuilder.buildComputer("Gaming"));
+        System.out.println(amdAmdBuilder.buildComputer("Office"));
+        System.out.println(amdNvidiaBuilder.buildComputer("Gaming"));
     }
 }

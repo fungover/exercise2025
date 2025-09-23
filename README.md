@@ -1,36 +1,69 @@
-## 🧪 How to Work on the Exercises
+# Warehouse Product Manager
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+## Overview
+A simple Java application for managing products.  
+The project demonstrates:
+- Immutable entities (`Product`)
+- A service layer (`Warehouse`) with validation and defensive programming
+- Full unit test coverage with JUnit 5
 
-### 📥 1. Clone or Fork the Repository
+---
+
+## How to Run
+
+### IntelliJ IDEA
+1. Open the project in IntelliJ
+2. Right-click on `WarehouseTest.java`
+3. Choose **Run 'WarehouseTest'**
+4. Or use the Maven tool window → Lifecycle → **test**
+
+### Command Line
+Open a terminal in the project root and run:
+
 ```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
-
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
-
-Example for user githubuser working on Exercise 1:
-
-```bash
-git checkout -b githubuser/exercise1
+mvn test
 ```
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
+---
 
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
+## Design Decisions
+- **Warehouse** is the public API (service layer)
+- **Product** is immutable (all fields are final, getters only)
+- **Category** is a simple enum used by Product
+- Internal storage: `Map<String, Product>`
+- No internal collections exposed – all lists are defensive and unmodifiable
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
+---
 
-Link the PR to the issue you're solving.
+## Validation Rules
+- **id**: non-null, non-blank, must be unique
+- **name**: non-null, non-blank
+- **category**: non-null
+- **rating**: integer between 0–10
+- **dates**:
+    - `createdDate` set at creation
+    - `modifiedDate` updated on change
+- **time source**: `Warehouse` uses injected `Clock` for deterministic behavior
+- **errors**:
+    - `IllegalArgumentException` for invalid input
+    - `NoSuchElementException` for missing id
 
-Include a clear description of your solution.
+---
 
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+## Public API
+- `addProduct(Product product)`
+- `updateProduct(String id, String name, Category category, int rating)`
+- `getAllProducts(): List<Product>`
+- `getProductById(String id): Product`
+- `getProductsByCategorySorted(Category category): List<Product>`
+- `getProductsCreatedAfter(LocalDate date): List<Product>`
+- `getModifiedProducts(): List<Product>`
+
+---
+
+## Testing
+- JUnit 5
+- Each public method has tests for success and failure cases
+- Fixed `Clock` is used to control dates and make tests deterministic
+
+---

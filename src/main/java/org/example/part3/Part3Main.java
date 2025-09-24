@@ -15,6 +15,9 @@ public class Part3Main {
         String gamingPC = builder.buildComputer("Gaming");
         System.out.println(gamingPC);
 
+        String officePC = builder.buildComputer("Office");
+        System.out.println(officePC);
+
         weld.shutdown();
         System.out.println("Weld CDI completed successfully!");
     }

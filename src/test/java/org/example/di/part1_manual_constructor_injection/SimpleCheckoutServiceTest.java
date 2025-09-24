@@ -3,6 +3,9 @@ package org.example.di.part1_manual_constructor_injection;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+// These are unit tests:
+// They verify the behavior of SimpleCheckoutService in isolation,
+// using different PaymentMethod implementations.
 public class SimpleCheckoutServiceTest {
 
     @Test

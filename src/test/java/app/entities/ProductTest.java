@@ -83,7 +83,6 @@ public class ProductTest {
     public void cantCreateZonedDateTime() {
         Product product = new Product(0,"Name",Category.FOOD, 5);
         assertEquals(ZoneId.of("Europe/Stockholm"),product.createdDate().getZone());
-
     }
 
     @Test

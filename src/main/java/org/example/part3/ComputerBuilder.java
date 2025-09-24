@@ -1,8 +1,8 @@
 package org.example.part3;
 
-import org.example.part1.services.AssemblyService;
-import org.example.part1.services.CPUService;
-import org.example.part1.services.GPUService;
+import org.example.part3.services.AssemblyService;
+import org.example.part3.services.CPUService;
+import org.example.part3.services.GPUService;
 
 public class ComputerBuilder {
     private final CPUService cpuService;

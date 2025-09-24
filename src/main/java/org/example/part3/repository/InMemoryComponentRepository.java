@@ -1,5 +1,8 @@
 package org.example.part3.repository;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class InMemoryComponentRepository implements ComponentRepository {
 
     @Override

@@ -7,12 +7,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SimpleContainerTest {
 
     @Test
-    void shouldCreateSimpleClassWithNoConstructor() {
+    void shouldCreateSimpleClassDefaultConstructor() {
         SimpleContainer container = new SimpleContainer();
 
-        String result = container.getInstance(String.class);
+        SimpleTestClass result = container.getInstance(SimpleTestClass.class);
 
-//        assertThat(result).isNotNull();
-        System.out.println("Test ran, Todo: actual logic here");
+        assertThat(result).isNotNull();
+        assertThat(result.getMessage()).isEqualTo("Created by container!");
     }
 }

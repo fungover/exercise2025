@@ -1,0 +1,51 @@
+package entities;
+
+import utils.Position;
+
+public abstract class Enemy {
+    private String type;
+    private int health;
+    private int damage;
+    private Position position;
+
+    public Enemy (String type, int health, int damage, Position position) {
+        this.type = type;
+        this.health = health;
+        this.damage = damage;
+        this.position = position;
+    }
+
+    public void setPosition(Position pos) {
+        this.position = pos;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public abstract void attack(Player player);
+
+    public void takeDamage(int damageAmount) {
+        health -= damageAmount;
+        if (health < 0) {
+            health = 0;
+        }
+    };
+
+    public boolean isAlive() {
+        return health > 0;
+    }
+
+}

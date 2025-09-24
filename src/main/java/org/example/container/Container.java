@@ -22,7 +22,6 @@ public class Container {
         // get parameters from constructor
         Class<?>[] paramTypes = constructor.getParameterTypes();
         Object[] dependencies = new Object[paramTypes.length];
-        System.out.println(paramTypes.length + " hej");
 
         for (int i = 0; i < paramTypes.length; i++) {
             dependencies[i] = create(paramTypes[i]);

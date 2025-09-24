@@ -21,10 +21,22 @@ public class TestDungeonGame {
 
 
     @Test
-    void testMonsterHit() {
-        Enemy enemy = new Enemy("Monster", 10, 2); //Testa skada, att HP sänks efter varje träff med monster.
+    void testMonsterHit() { //Testa skada, att HP sänks efter varje träff med monster.
+        Enemy enemy = new Enemy("Monster", 10, 2);
         enemy.takeDamage(5);
         assertEquals(5, enemy.getHealth());
+    }
+
+    @Test
+    void testPotion() { //Test av potion, se om HP-värdet höjs när spelare fångar potion.
+        Player player = new Player("TestPotion");
+        player.setHealth(10);
+        Item potion = new Item("Healing potion", "potion", 5);
+
+        player.addItem(potion);
+        player.setHealth(player.getHealth() + potion.getEffectValue());
+
+        assertEquals(15, player.getHealth());
     }
 
 

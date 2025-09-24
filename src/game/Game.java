@@ -1,6 +1,7 @@
 package game;
 
 import entities.Player;
+import entities.Item;
 import map.Room;
 import org.w3c.dom.ls.LSOutput;
 import javax.swing.event.CaretListener;
@@ -24,6 +25,7 @@ public class Game {
         //Rum
         Room start = new Room("Choose between two doors.");
         Room treasureRoom = new Room("You found your gold!");
+        treasureRoom.setItem(new Item("Healing potion", "potion", 5));
         Room monsterRoom = new Room("Attacked by a monster!");
         monsterRoom.setEnemy(new Enemy("Monster", 10, 2));
 
@@ -36,12 +38,25 @@ public class Game {
         while (true) {
             System.out.println(currentRoom.getDescription());
 
+            if (currentRoom.getItem() != null) {
+                Item item = currentRoom.getItem();
+                System.out.println("You found a healing potion: " + item.getName() + "!");
+                System.out.println("Do you want to want to take it? (Y/N: ");
+                String take = scanner.nextLine();
+
+                if (take.equalsIgnoreCase("Y")) {
+                    player.addItem (item);
+                    System.out.println(item.getName() + " added to your inventory.");
+                    currentRoom.setItem(null);
+                }
+            }
+
             if (currentRoom.getEnemy() != null && currentRoom.getEnemy().isAlive()) {
                 Enemy enemy = currentRoom.getEnemy();
                 System.out.println("Enemy encountered: " + enemy.getName() + " (HP: " + enemy.getHealth() + ")");
 
                 while (enemy.isAlive() && player.getHealth() > 0) {
-                    System.out.print("Attack (1) or run (2)? ");
+                    System.out.print("Attack (1), run (2), or use potion (3)? ");
                     String action = scanner.nextLine();
 
                     if (action.equals("1")){
@@ -65,6 +80,27 @@ public class Game {
                     if (player.getHealth() <= 0) {
                         System.out.println("You have lost - game over.");
                         return;
+                    }
+
+                    if (action.equals("3")) {
+                        boolean usedPotion = false;
+                        for (Item i : player.getInventory()) {
+                            if (i.getType().equals("potion")) {
+                                player.setHealth(player.getHealth() + i.getEffectValue());
+                                System.out.println("You used a " + i.getName() + " and restored " + i.getEffectValue() + " HP!");
+                                System.out.println("Your HP: " + player.getHealth());
+                                player.getInventory().remove(i);
+                                usedPotion = true;
+                                break;
+                            }
+
+                        }
+
+                        if (!usedPotion) {
+                            System.out.println("You have no potions");
+                        }
+
+                        continue;
                     }
                 }
 

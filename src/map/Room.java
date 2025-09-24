@@ -1,6 +1,8 @@
 package map;
 
 import entities.Enemy;
+import entities.Item;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ public class Room {
     private String description;
     private Map<Integer, Room> exits;
     private Enemy enemy;
+    private Item item;
 
     public Room(String description) {
         this.description = description;
@@ -36,5 +39,13 @@ public class Room {
 
     public Enemy getEnemy() {
         return enemy;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public Item getItem() {
+        return item;
     }
 }

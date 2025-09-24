@@ -1,36 +1,11 @@
-## 🧪 How to Work on the Exercises
+# Dungeon Crawler
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+Textbaserat spel skapat i Java, går ut på att spelaren går mellan rum. I rummen möts man av fiender, skatter eller "potions" som kan rädda ditt liv.   
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
+Strukten är följande:
+- `game` (spelstart och loop)
+- `entities` (Player, Enemy, Item)
+- `map` (Room och kopplingar mellan rum)
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+Spelet är beslutsbyggande, i varje rum du står inför behehöver du ta ställning till ja och nej frågor. Y/N, förkortning för yes or no. 
 
-Example for user githubuser working on Exercise 1:
-
-```bash
-git checkout -b githubuser/exercise1
-```
-
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
-
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
-
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
-
-Link the PR to the issue you're solving.
-
-Include a clear description of your solution.
-
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.

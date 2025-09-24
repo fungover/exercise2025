@@ -1,5 +1,8 @@
 package org.example.part3.services;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class ProffesionalAssemblyService implements AssemblyService {
 
     @Override

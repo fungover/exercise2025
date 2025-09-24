@@ -2,7 +2,7 @@ package org.example.part3.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.example.part1.repository.ComponentRepository;
+import org.example.part3.repository.ComponentRepository;
 
 @ApplicationScoped
 public class IntelCPUService implements CPUService {

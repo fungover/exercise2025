@@ -1,19 +1,43 @@
 package org.example.part2;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SimpleContainer {
 
+    // Map interfaces to concrete implementations
+    private final Map<Class<?>, Class<?>> interfaceBindings = new HashMap<>();
+
+    public SimpleContainer() {
+
+        // Config which implementation to use for interfaces
+        interfaceBindings.put(org.example.part1.services.CPUService.class,
+                org.example.part1.services.IntelCPUService.class);
+        interfaceBindings.put(org.example.part1.services.GPUService.class,
+                org.example.part1.services.NvidiaGPUService.class);
+        interfaceBindings.put(org.example.part1.services.AssemblyService.class,
+                org.example.part1.services.ProffesionalAssemblyService.class);
+        interfaceBindings.put(org.example.part1.repository.ComponentRepository.class,
+                org.example.part1.repository.InMemoryComponentRepository.class);
+    }
+
     public <T> T getInstance(Class<T> clazz) {
         try {
-            System.out.println("Creating instance of: " + clazz.getName());
+            // Check if this is an interface that need mapping
+            Class<?> implementationClass = clazz;
+            if (interfaceBindings.containsKey(clazz)) {
+                implementationClass = interfaceBindings.get(clazz);
+                System.out.println("Mapping interface " + clazz.getSimpleName() + " to " +
+                        implementationClass.getSimpleName());
+            }
+            System.out.println("Creating instance of: " + implementationClass.getName());
 
             // Get all constructors
-            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+            Constructor<?>[] constructors = implementationClass.getDeclaredConstructors();
 
             if (constructors.length == 0) {
-                throw new RuntimeException("No constructors found for " + clazz.getName());
+                throw new RuntimeException("No constructors found for " + implementationClass.getName());
             }
 
             // Take the first constructor assuming only one constructor per class

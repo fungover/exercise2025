@@ -32,11 +32,40 @@ public class Container {
                 type = (Class<T>) impl;
             }
 
-            Constructor<?> constructor = type.getConstructors()[0];
-            Class<?>[] paramTypes = constructor.getParameterTypes();
+            Constructor<?>[] publicCtors = type.getConstructors();
+            Constructor<?> constructorToUse = null;
 
+            // Prefer a public no-arg ctor if available
+            for (Constructor<?> c : publicCtors) {
+                if (c.getParameterCount() == 0) {
+                    constructorToUse = c;
+                    break;
+                }
+            }
+
+            // Otherwise choose the public ctor with the most params (deterministic)
+            if (constructorToUse == null) {
+                for (Constructor<?> c : publicCtors) {
+                    if (constructorToUse == null || c.getParameterCount() > constructorToUse.getParameterCount()) {
+                        constructorToUse = c;
+                    }
+                }
+            }
+
+            // If there are no public ctors, try a declared no-arg ctor
+            if (constructorToUse == null) {
+                try {
+                    Constructor<?> noArg = type.getDeclaredConstructor();
+                    noArg.setAccessible(true);
+                    return (T) noArg.newInstance();
+                } catch (NoSuchMethodException ex) {
+                    throw new RuntimeException("No accessible constructors found for " + type.getName(), ex);
+                }
+            }
+
+            Class<?>[] paramTypes = constructorToUse.getParameterTypes();
             if (paramTypes.length == 0) {
-                return type.getDeclaredConstructor().newInstance();
+                return (T) constructorToUse.newInstance();
             }
 
             Object[] dependencies = new Object[paramTypes.length];
@@ -44,7 +73,7 @@ public class Container {
                 dependencies[i] = getInstance(paramTypes[i]);
             }
 
-            return (T) constructor.newInstance(dependencies);
+            return (T) constructorToUse.newInstance(dependencies);
 
         } catch (Exception e) {
             throw new RuntimeException("Could not create an instance for: " + type, e);

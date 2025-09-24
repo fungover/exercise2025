@@ -45,12 +45,13 @@ class ArchitectureTest {
     }
 
     @Test
-    void repositoryPackageShouldOnlyDependOnDomainPackage() {
+    void repositoryPackageShouldOnlyDependOnDomainOrFrameworkPackage() {
 
         ArchRule rule = classes()
                 .that().resideInAPackage("..repository..")
                 .should().onlyDependOnClassesThat().resideInAnyPackage(
                         "java..",
+                        "jakarta..",
                         "..domain..",
                         "..repository.."
                 )

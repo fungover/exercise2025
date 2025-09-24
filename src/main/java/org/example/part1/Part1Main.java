@@ -4,7 +4,7 @@ import org.example.part1.repository.ComponentRepository;
 import org.example.part1.repository.InMemoryComponentRepository;
 import org.example.part1.services.*;
 
-public class Main {
+public class Part1Main {
     static void main() {
         System.out.println("\nManual dependency injection\n");
 

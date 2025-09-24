@@ -18,14 +18,21 @@ public class Movement {
 
     public void move(int dx, int dy) {
         Position playerPosition = player.getPosition();
+
+        if (playerPosition == null) {
+            System.out.println("You are out of bounds!");
+            return;
+        }
+
         int newX = playerPosition.getX() + dx;
         int newY = playerPosition.getY() + dy;
-        Tile destinationTile = dungeon.getTile(newX, newY);
 
         if (!dungeon.inBounds(newX, newY)) {
             System.out.println("You can't go out of the map");
             return;
         }
+
+        Tile destinationTile = dungeon.getTile(newX, newY);
 
         if (!destinationTile.isWalkable()) {
             System.out.println("A wall is blocking you from going there");

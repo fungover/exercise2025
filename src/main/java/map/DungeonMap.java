@@ -96,6 +96,11 @@ public class DungeonMap {
     }
 
     public Tile getTile(int x, int y) {
+        if (!inBounds(x, y)) {
+            throw new IndexOutOfBoundsException(
+                "Out of bounds: x= " + x + ", y= " + y
+            );
+        }
         return tiles[y][x];
     }
 

@@ -39,6 +39,9 @@ public abstract class Enemy {
 
     public void takeDamage(int damageAmount) {
         health -= damageAmount;
+        if (health < 0) {
+            health = 0;
+        }
     };
 
     public boolean isAlive() {

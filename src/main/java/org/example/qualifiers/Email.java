@@ -19,6 +19,7 @@ import static java.lang.annotation.ElementType.*;
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
 @Target({TYPE, METHOD, FIELD, PARAMETER})
+
 public @interface Email {
     class Literal extends AnnotationLiteral<Email> implements Email {
         @Serial

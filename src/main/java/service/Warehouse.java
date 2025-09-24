@@ -10,6 +10,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+//Jag ansvarar för att hantera min samling korrekt
+
 public class Warehouse {
 
     private final Map<String, Product> products = new HashMap<>();

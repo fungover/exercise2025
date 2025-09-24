@@ -3,6 +3,8 @@ package entities;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+//Jag ansvarar för att vara en giltig produkt"
+
 public record Product(
         String id,
         String name,
@@ -40,7 +42,7 @@ public record Product(
         name = name.trim();
     }
 
-    // Create a new product with current time (kept for backward compatibility)
+    // Create a new product with current time kept for backward compatibility
     public static Product createNew(String id, String name, Category category, int rating) {
         LocalDateTime now = LocalDateTime.now();
         return new Product(id, name, category, rating, now, now);
@@ -119,7 +121,7 @@ public record Product(
             return this;
         }
 
-        // Special method to create a new product (sets both timestamps to now)
+        // Special method to create a new product sets both timestamps to now
         public Builder asNewProduct() {
             return withCurrentTimestamps();
         }

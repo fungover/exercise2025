@@ -15,4 +15,14 @@ class SimpleContainerTest {
         assertThat(result).isNotNull();
         assertThat(result.getMessage()).isEqualTo("Created by container!");
     }
+
+    @Test
+    void shouldCreateClassWithSingleDependency() {
+        SimpleContainer container = new SimpleContainer();
+
+        TestClassWithDependency result = container.getInstance(TestClassWithDependency.class);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getMessage()).contains("Created by container!");
+    }
 }

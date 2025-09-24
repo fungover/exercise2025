@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.entities.Category;
 import org.example.entities.Product;
 import org.example.repository.InMemoryProductRepository;
+import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
@@ -15,7 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class ProductServiceTest {
-    private final InMemoryProductRepository productRepository = new InMemoryProductRepository();
+    private final ProductRepository productRepository = new InMemoryProductRepository();
     private final ProductService productService = new ProductService(productRepository);
 
     @Test

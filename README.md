@@ -9,3 +9,7 @@ Strukten är följande:
 
 Spelet är beslutsbyggande, i varje rum du står inför behehöver du ta ställning till ja och nej frågor. Y/N, förkortning för yes or no. 
 
+
+
+Testning: 
+- Korrekt förflyttning mellan rum.

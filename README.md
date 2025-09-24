@@ -13,3 +13,4 @@ Spelet är beslutsbyggande, i varje rum du står inför behehöver du ta ställn
 
 Testning: 
 - Korrekt förflyttning mellan rum.
+- Testar hur HP påverkas efter träff med monster. 

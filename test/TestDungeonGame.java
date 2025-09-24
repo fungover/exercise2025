@@ -19,5 +19,15 @@ public class TestDungeonGame {
 
 
 
-    //Testa skada, att HP sänks efter varje träff med monster. 
+
+    @Test
+    void testMonsterHit() {
+        Enemy enemy = new Enemy("Monster", 10, 2); //Testa skada, att HP sänks efter varje träff med monster.
+        enemy.takeDamage(5);
+        assertEquals(5, enemy.getHealth());
+    }
+
+
+
+
 }

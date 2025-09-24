@@ -1,7 +1,58 @@
 package org.example;
 
+import org.example.entities.Category;
+import org.example.entities.Product;
+import org.example.service.Warehouse;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello There!");
+        Warehouse warehouse = new Warehouse();
+        var products = getWarehouseProducts();
+        products.forEach(product -> {
+            warehouse.addProduct(product);
+        });
+
+
+//        iSeeBlackSheep(warehouse);
+
+//        warehouse.updateProduct("1", "blueLaptop", Category.FOOD, 3);
+
+        System.out.println();
+        iSeeBlackSheep(warehouse);
+
+        System.out.println("-".repeat(20));
+//        warehouse.getProductsByCategorySorted(Category.FOOD)
+//                 .forEach(System.out::println);
+
+//        System.out.println(products.get(0)
+        LocalDate now = LocalDate.now();
+        System.out.println(warehouse.getProductsCreatedAfter(now));
+    }
+
+    private static List<Product> getWarehouseProducts() {
+        List<Product> products = new ArrayList<>();
+        LocalDate yesterday = LocalDate.now()
+                                       .plusDays(4);
+        products.add(new Product("laptop", Category.ELECTRONICS, 4, yesterday));
+        products.add(new Product("SlaughterBoat", Category.GAMES, 7));
+        products.add(new Product("Cake", Category.FOOD, 10));
+        products.add(new Product("DuckDetective", Category.GAMES, 8, yesterday));
+        products.add(new Product("lamp", Category.ELECTRONICS, 10));
+        products.add(new Product("PC", Category.ELECTRONICS, 4));
+        products.add(new Product("DogFood", Category.FOOD, 2));
+        products.add(new Product("CatFood", Category.FOOD, 7));
+
+
+        return products;
+    }
+
+    private static void iSeeBlackSheep(Warehouse warehouse) {
+        warehouse.getAllProducts()
+                 .stream()
+                 .forEach(System.out::println);
     }
 }

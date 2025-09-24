@@ -9,6 +9,7 @@ import org.example.qualifiers.DatabaseStore;
 public class AdvancedService implements Service {
     private final PersistenceLayer persistence;
 
+    // change between @FileStore and @DatabaseStore to test different implementations
     @Inject
     public AdvancedService(@DatabaseStore PersistenceLayer persistence) {
         this.persistence = persistence;

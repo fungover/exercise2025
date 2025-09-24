@@ -11,8 +11,7 @@ import java.util.List;
 
 import static app.entities.Category.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
 
@@ -37,6 +36,30 @@ public class WarehouseTest {
     }
 
     @Test
+    public void addProductNoName() {
+        Warehouse warehouse = new Warehouse();
+
+        IllegalArgumentException fail = assertThrows(IllegalArgumentException.class,() ->
+                warehouse.addProduct(new Product(1,null,FOOD,5)));
+
+        List<Product> products = warehouse.products();
+        assertEquals("Product name cannot be null",fail.getMessage());
+        System.out.println(fail.getMessage());
+    }
+
+    @Test
+    public void addProductBlankName() {
+        Warehouse warehouse = new Warehouse();
+
+        IllegalArgumentException fail = assertThrows(IllegalArgumentException.class,() ->
+                warehouse.addProduct(new Product(1,"",FOOD,5)));
+
+        List<Product> products = warehouse.products();
+        assertEquals("Product name cannot be blank",fail.getMessage());
+        System.out.println(fail.getMessage());
+    }
+
+    @Test
     public void updateProduct() {
         Warehouse warehouse = new Warehouse();
         warehouse.addProduct(new Product(0,"Bread",FOOD,5));
@@ -49,14 +72,21 @@ public class WarehouseTest {
         System.out.println();
         warehouse.updateProduct(0,"Milk",FOOD,7);
 
-
-
         assertEquals(1,warehouse.products().size());
         assertEquals("Milk",warehouse.products().getFirst().name());
         System.out.println("Updated "+warehouse.products().size()+" Items in the warehouse");
         System.out.println("ID: "+warehouse.products().getFirst().ID());
         System.out.println("Name: "+warehouse.products().getFirst().name());
         System.out.println("Rating: "+warehouse.products().getFirst().rating());
+    }
+
+    @Test
+    public void updateProductFail() {
+        Warehouse warehouse = new Warehouse();
+        warehouse.addProduct(new Product(0,"Bread",FOOD,5));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> warehouse.updateProduct(1,"Milk",FOOD,7));
     }
 
     @Test
@@ -74,6 +104,14 @@ public class WarehouseTest {
         System.out.println("Contains "+products.size()+" Items");
         System.out.println("ID: "+products.get(0).ID() + " Name: "+products.get(0).name());
         System.out.println("ID: "+products.get(1).ID() + " Name: "+products.get(1).name());
+    }
+
+    @Test
+    public void getAllProductsEmpty() {
+        Warehouse warehouse = new Warehouse();
+        List<Product> products = warehouse.getAllProducts();
+        assertThat(products).isEmpty();
+        System.out.println("Contains "+products.size()+" Items");
     }
 
     @Test
@@ -132,10 +170,24 @@ public class WarehouseTest {
     }
 
     @Test
+    public void getProductsByCategoryEmpty() {
+        Warehouse warehouse = new Warehouse();
+        List<Product> updatedlist = warehouse.getProductsByCategory(Category.ELECTRONICS);
+        assertThat(updatedlist).isEmpty();
+        System.out.println("Found "+updatedlist.size()+" Electronics");
+        updatedlist.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
+    }
+
+    @Test
     void getProductsCreatedAfter() {
         Warehouse warehouse = new Warehouse();
-        warehouse.addProduct(new Product(0,"Bread",FOOD,5, ZonedDateTime.of(2025, 2, 1, 12, 0, 0, 0, ZoneId.of("Europe/Stockholm")), null));
-        warehouse.addProduct(new Product(1,"Milk",FOOD,7, ZonedDateTime.of(2024, 1, 1, 12, 0, 0, 0, ZoneId.of("Europe/Stockholm")), null));
+        warehouse.addProduct(new Product(0,"Bread",FOOD,5,
+                ZonedDateTime.of(2025, 2, 1, 12, 0, 0, 0,
+                        ZoneId.of("Europe/Stockholm")), null));
+
+        warehouse.addProduct(new Product(1,"Milk",FOOD,7,
+                ZonedDateTime.of(2024, 1, 1, 12, 0, 0, 0,
+                        ZoneId.of("Europe/Stockholm")), null));
 
         LocalDate cutoff = LocalDate.of(2025, 1, 1);
         List<Product> updatedlist = warehouse.getProductsCreatedAfter(cutoff);
@@ -144,6 +196,19 @@ public class WarehouseTest {
 
         System.out.println("Found "+updatedlist.size()+" Products created after "+cutoff);
         updatedlist.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
+    }
+
+    @Test
+    public void getProductsCreatedAfterEmpty() {
+        Warehouse warehouse = new Warehouse();
+        warehouse.addProduct(new Product(0,"Bread",FOOD,5,
+                ZonedDateTime.of(2023, 2, 1, 12, 0, 0, 0,
+                        ZoneId.of("Europe/Stockholm")), null));
+
+        LocalDate cutoff = LocalDate.of(2025, 1, 1);
+        List<Product> updatedlist = warehouse.getProductsCreatedAfter(cutoff);
+        assertThat(updatedlist).isEmpty();
+        System.out.println("Found "+updatedlist.size()+" Products created after "+cutoff);
     }
 
     @Test
@@ -161,7 +226,19 @@ public class WarehouseTest {
         assertEquals("Milk",modified.getFirst().name());
         System.out.println("Found "+modified.size()+" Modified Products");
         modified.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
+    }
 
+    @Test
+    public void getModifiedProductsEmpty() {
+        Warehouse warehouse = new Warehouse();
+        warehouse.addProduct(new Product(0,"Bread",FOOD,5,
+                ZonedDateTime.of(2023, 2, 1, 12, 0, 0, 0,
+                        ZoneId.of("Europe/Stockholm")), null));
+
+        List<Product> modified = warehouse.getModifiedProducts();
+        assertThat(modified).isEmpty();
+        System.out.println("Found "+modified.size()+" Modified Products");
+        modified.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
     }
 
 

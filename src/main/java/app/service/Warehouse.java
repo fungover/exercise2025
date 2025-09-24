@@ -15,8 +15,10 @@ private final List<Product> products = new ArrayList<>();
     public void addProduct(Product product) {
         if (product.name() == null) {
             throw new IllegalArgumentException("Product name cannot be null");
+        } else if (product.name().isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be blank");
         }
-    products.add(product);
+        products.add(product);
     }
 
     public List<Product> products() {
@@ -24,10 +26,11 @@ private final List<Product> products = new ArrayList<>();
     }
 
     public void updateProduct(int id, String name, Category category, int rating) {
-       Product productID = products.get(id);
-       if (productID == null) {
-           throw new IllegalArgumentException("Product with id " + id + " does not exist");
-       }
+       Product productID = products.stream()
+               .filter(product -> product.ID() == id)
+               .findFirst()
+               .orElseThrow( () -> new IllegalArgumentException("Product with id " + id + " does not exist"));
+
        Product updatedProduct = new Product(
                productID.ID(),
                name,category,

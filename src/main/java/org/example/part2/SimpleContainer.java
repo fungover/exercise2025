@@ -6,8 +6,9 @@ import java.util.Map;
 
 public class SimpleContainer {
 
-    // Map interfaces to concrete implementations
     private final Map<Class<?>, Class<?>> interfaceBindings = new HashMap<>();
+    private final Map<Class<?>, Object> singletonInstances = new HashMap<>();
+
 
     public SimpleContainer() {
 
@@ -24,9 +25,23 @@ public class SimpleContainer {
 
     public <T> T getInstance(Class<T> clazz) {
         try {
+            // Check for existing singleton
+            if (singletonInstances.containsKey(clazz)) {
+                System.out.println("Reusing singleton: " + clazz.getSimpleName());
+                return (T) singletonInstances.get(clazz);
+            }
+
             // Check if this is an interface that need mapping
             Class<?> implementationClass = clazz;
             if (interfaceBindings.containsKey(clazz)) {
+                // Also check if we have a singleton of the implementation
+                if (singletonInstances.containsKey(interfaceBindings.get(clazz))) {
+                    System.out.println("Reusing singleton implementation: " +
+                            interfaceBindings.get(clazz).getSimpleName());
+
+                    return (T) singletonInstances.get(interfaceBindings.get(clazz));
+                }
+
                 implementationClass = interfaceBindings.get(clazz);
                 System.out.println("Mapping interface " + clazz.getSimpleName() + " to " +
                         implementationClass.getSimpleName());
@@ -46,11 +61,10 @@ public class SimpleContainer {
 
             System.out.println("Constructor has " + parameterTypes.length + " parameters");
 
+            T instance;
             if (parameterTypes.length == 0) {
-                // Default constructor
-                return (T) constructor.newInstance();
+                instance = (T) constructor.newInstance();
             } else {
-                // Constructor with parameters - recursion
                 Object[] dependencies = new Object[parameterTypes.length];
 
                 for (int i = 0; i < parameterTypes.length; i++) {
@@ -60,8 +74,16 @@ public class SimpleContainer {
                     dependencies[i] = getInstance(parameterTypes[i]); // Recursive call
                 }
 
-                return (T) constructor.newInstance(dependencies);
+                instance = (T) constructor.newInstance(dependencies);
             }
+
+            // Store as singleton for future use
+            singletonInstances.put(implementationClass, instance);
+            if (clazz.isInterface()) {
+                singletonInstances.put(clazz, instance);
+            }
+
+            return instance;
 
         } catch (Exception e) {
             System.out.println("Failed to create " + clazz.getSimpleName() + ": " + e.getMessage());

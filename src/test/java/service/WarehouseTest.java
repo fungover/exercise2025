@@ -2,6 +2,8 @@ package service;
 
 import entities.Category;
 import entities.Product;
+import repository.InMemoryProductRepository;
+import repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -15,16 +17,27 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WarehouseTest {
+class ProductServiceTest {
 
-    private Warehouse warehouse;
+    private ProductService productService;
+    private ProductRepository productRepository;
     private Product sampleProduct;
 
     // Runs before each test to set up test data ensuring each test starts with a clean environment
     @BeforeEach
     void setUp() {
-        warehouse = new Warehouse();
-        sampleProduct = Product.createNew("1", "iPhone 15", Category.ELECTRONICS, 9);
+        // Skapa repository och service med dependency injection
+        productRepository = new InMemoryProductRepository();
+        productService = new ProductService(productRepository);
+
+        // Använd Builder Pattern för att skapa testprodukt
+        sampleProduct = new Product.Builder()
+                .id("1")
+                .name("iPhone 15")
+                .category(Category.ELECTRONICS)
+                .rating(9)
+                .asNewProduct()
+                .build();
     }
 
     // ========== TESTS FOR addProduct() ==========
@@ -32,9 +45,9 @@ class WarehouseTest {
     @Test
     @DisplayName("Should successfully add a valid product")
     void addProduct_ValidProduct_Success() {
-        warehouse.addProduct(sampleProduct);
+        productService.addProduct(sampleProduct);
 
-        Optional<Product> retrievedProduct = warehouse.getProductById("1");
+        Optional<Product> retrievedProduct = productService.getProductById("1");
         assertTrue(retrievedProduct.isPresent());
         assertEquals(sampleProduct, retrievedProduct.get());
     }
@@ -42,10 +55,9 @@ class WarehouseTest {
     @Test
     @DisplayName("Should throw exception when adding null product")
     void addProduct_NullProduct_ThrowsException() {
-
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> warehouse.addProduct(null)
+                () -> productService.addProduct(null)
         );
         assertEquals("Product cannot be null", exception.getMessage());
     }
@@ -53,14 +65,36 @@ class WarehouseTest {
     @Test
     @DisplayName("Should throw exception when adding duplicate product ID")
     void addProduct_DuplicateId_ThrowsException() {
-        warehouse.addProduct(sampleProduct);
-        Product duplicateProduct = Product.createNew("1", "Galaxy S24", Category.ELECTRONICS, 8);
+        productService.addProduct(sampleProduct);
+
+        Product duplicateProduct = new Product.Builder()
+                .id("1")  // Samma ID
+                .name("Galaxy S24")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .asNewProduct()
+                .build();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> warehouse.addProduct(duplicateProduct)
+                () -> productService.addProduct(duplicateProduct)
         );
         assertTrue(exception.getMessage().contains("already exists"));
+    }
+
+    // ========== TESTS FOR addNewProduct() convenience method ==========
+
+    @Test
+    @DisplayName("Should successfully add new product using convenience method")
+    void addNewProduct_ValidParameters_Success() {
+        productService.addNewProduct("CONV001", "Convenience Product", Category.BOOKS, 7);
+
+        Optional<Product> retrievedProduct = productService.getProductById("CONV001");
+        assertTrue(retrievedProduct.isPresent());
+        assertEquals("Convenience Product", retrievedProduct.get().name());
+        assertEquals(Category.BOOKS, retrievedProduct.get().category());
+        assertEquals(7, retrievedProduct.get().rating());
+        assertFalse(retrievedProduct.get().isModified()); // Ny produkt ska inte vara modifierad
     }
 
     // ========== TESTS FOR updateProduct() ==========
@@ -68,11 +102,11 @@ class WarehouseTest {
     @Test
     @DisplayName("Should successfully update existing product")
     void updateProduct_ExistingProduct_Success() {
-        warehouse.addProduct(sampleProduct);
+        productService.addProduct(sampleProduct);
 
-        warehouse.updateProduct("1", "iPhone 15 Pro", Category.ELECTRONICS, 10);
+        productService.updateProduct("1", "iPhone 15 Pro", Category.ELECTRONICS, 10);
 
-        Optional<Product> updated = warehouse.getProductById("1");
+        Optional<Product> updated = productService.getProductById("1");
         assertTrue(updated.isPresent());
         assertEquals("iPhone 15 Pro", updated.get().name());
         assertEquals(10, updated.get().rating());
@@ -84,17 +118,17 @@ class WarehouseTest {
     void updateProduct_NonExistingProduct_ThrowsException() {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> warehouse.updateProduct("999", "New Name", Category.BOOKS, 5)
+                () -> productService.updateProduct("999", "New Name", Category.BOOKS, 5)
         );
         assertTrue(exception.getMessage().contains("not found"));
     }
 
-    // ========== TESTER FÖR getAllProducts() ==========
+    // ========== TESTS FOR getAllProducts() ==========
 
     @Test
     @DisplayName("Should return empty list when no products exist")
     void getAllProducts_NoProducts_ReturnsEmptyList() {
-        List<Product> products = warehouse.getAllProducts();
+        List<Product> products = productService.getAllProducts();
 
         assertNotNull(products);
         assertTrue(products.isEmpty());
@@ -103,11 +137,18 @@ class WarehouseTest {
     @Test
     @DisplayName("Should return all products when products exist")
     void getAllProducts_ProductsExist_ReturnsAllProducts() {
-        Product product2 = Product.createNew("2", "MacBook", Category.ELECTRONICS, 8);
-        warehouse.addProduct(sampleProduct);
-        warehouse.addProduct(product2);
+        Product product2 = new Product.Builder()
+                .id("2")
+                .name("MacBook")
+                .category(Category.ELECTRONICS)
+                .rating(8)
+                .asNewProduct()
+                .build();
 
-        List<Product> products = warehouse.getAllProducts();
+        productService.addProduct(sampleProduct);
+        productService.addProduct(product2);
+
+        List<Product> products = productService.getAllProducts();
 
         assertEquals(2, products.size());
         assertTrue(products.contains(sampleProduct));
@@ -119,9 +160,9 @@ class WarehouseTest {
     @Test
     @DisplayName("Should return product when ID exists")
     void getProductById_ExistingId_ReturnsProduct() {
-        warehouse.addProduct(sampleProduct);
+        productService.addProduct(sampleProduct);
 
-        Optional<Product> result = warehouse.getProductById("1");
+        Optional<Product> result = productService.getProductById("1");
 
         assertTrue(result.isPresent());
         assertEquals(sampleProduct, result.get());
@@ -130,7 +171,7 @@ class WarehouseTest {
     @Test
     @DisplayName("Should return empty Optional when ID does not exist")
     void getProductById_NonExistingId_ReturnsEmpty() {
-        Optional<Product> result = warehouse.getProductById("999");
+        Optional<Product> result = productService.getProductById("999");
 
         assertFalse(result.isPresent());
     }
@@ -141,16 +182,36 @@ class WarehouseTest {
     @DisplayName("Should return products in category sorted by name")
     void getProductsByCategorySorted_MultipleProducts_ReturnsSortedByName() {
 
-        Product zebra = Product.createNew("3", "Zebra Pen", Category.TOYS, 6);
-        Product apple = Product.createNew("4", "Apple Toy", Category.TOYS, 7);
-        Product book = Product.createNew("5", "Java Book", Category.BOOKS, 9);
+        Product zebra = new Product.Builder()
+                .id("3")
+                .name("Zebra Pen")
+                .category(Category.TOYS)
+                .rating(6)
+                .asNewProduct()
+                .build();
 
-        warehouse.addProduct(zebra);
-        warehouse.addProduct(sampleProduct); // ELECTRONICS
-        warehouse.addProduct(apple);
-        warehouse.addProduct(book);
+        Product apple = new Product.Builder()
+                .id("4")
+                .name("Apple Toy")
+                .category(Category.TOYS)
+                .rating(7)
+                .asNewProduct()
+                .build();
 
-        List<Product> toysProducts = warehouse.getProductsByCategorySorted(Category.TOYS);
+        Product book = new Product.Builder()
+                .id("5")
+                .name("Java Book")
+                .category(Category.BOOKS)
+                .rating(9)
+                .asNewProduct()
+                .build();
+
+        productService.addProduct(zebra);
+        productService.addProduct(sampleProduct); // ELECTRONICS
+        productService.addProduct(apple);
+        productService.addProduct(book);
+
+        List<Product> toysProducts = productService.getProductsByCategorySorted(Category.TOYS);
 
         assertEquals(2, toysProducts.size());
         assertEquals("Apple Toy", toysProducts.get(0).name()); // Ska komma först (A före Z)
@@ -160,9 +221,9 @@ class WarehouseTest {
     @Test
     @DisplayName("Should return empty list when no products in category")
     void getProductsByCategorySorted_NoProductsInCategory_ReturnsEmptyList() {
-        warehouse.addProduct(sampleProduct); // ELECTRONICS
+        productService.addProduct(sampleProduct); // ELECTRONICS
 
-        List<Product> foodProducts = warehouse.getProductsByCategorySorted(Category.FOOD);
+        List<Product> foodProducts = productService.getProductsByCategorySorted(Category.FOOD);
 
         assertTrue(foodProducts.isEmpty());
     }
@@ -173,9 +234,9 @@ class WarehouseTest {
     @DisplayName("Should return products created after specified date")
     void getProductsCreatedAfter_ValidDate_ReturnsFilteredProducts() {
         LocalDate yesterday = LocalDate.now().minusDays(1);
-        warehouse.addProduct(sampleProduct); // Created "today"
+        productService.addProduct(sampleProduct); // Created "today"
 
-        List<Product> recentProducts = warehouse.getProductsCreatedAfter(yesterday);
+        List<Product> recentProducts = productService.getProductsCreatedAfter(yesterday);
 
         assertEquals(1, recentProducts.size());
         assertTrue(recentProducts.contains(sampleProduct));
@@ -185,9 +246,9 @@ class WarehouseTest {
     @DisplayName("Should return empty list when no products created after date")
     void getProductsCreatedAfter_NoProductsAfterDate_ReturnsEmptyList() {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
-        warehouse.addProduct(sampleProduct);
+        productService.addProduct(sampleProduct);
 
-        List<Product> futureProducts = warehouse.getProductsCreatedAfter(tomorrow);
+        List<Product> futureProducts = productService.getProductsCreatedAfter(tomorrow);
 
         assertTrue(futureProducts.isEmpty());
     }
@@ -197,14 +258,21 @@ class WarehouseTest {
     @Test
     @DisplayName("Should return only modified products")
     void getModifiedProducts_MixOfModifiedAndUnmodified_ReturnsOnlyModified() {
-        Product unmodified = Product.createNew("2", "Unmodified Product", Category.BOOKS, 7);
-        warehouse.addProduct(sampleProduct);
-        warehouse.addProduct(unmodified);
+        Product unmodified = new Product.Builder()
+                .id("2")
+                .name("Unmodified Product")
+                .category(Category.BOOKS)
+                .rating(7)
+                .asNewProduct()
+                .build();
+
+        productService.addProduct(sampleProduct);
+        productService.addProduct(unmodified);
 
         // Modify a product
-        warehouse.updateProduct("1", "Modified iPhone", Category.ELECTRONICS, 10);
+        productService.updateProduct("1", "Modified iPhone", Category.ELECTRONICS, 10);
 
-        List<Product> modifiedProducts = warehouse.getModifiedProducts();
+        List<Product> modifiedProducts = productService.getModifiedProducts();
 
         assertEquals(1, modifiedProducts.size());
         assertEquals("Modified iPhone", modifiedProducts.get(0).name());
@@ -214,9 +282,9 @@ class WarehouseTest {
     @Test
     @DisplayName("Should return empty list when no products are modified")
     void getModifiedProducts_NoModifiedProducts_ReturnsEmptyList() {
-        warehouse.addProduct(sampleProduct); // Inte modifierad
+        productService.addProduct(sampleProduct); // Inte modifierad
 
-        List<Product> modifiedProducts = warehouse.getModifiedProducts();
+        List<Product> modifiedProducts = productService.getModifiedProducts();
 
         assertTrue(modifiedProducts.isEmpty());
     }
@@ -226,17 +294,21 @@ class WarehouseTest {
     @Test
     @DisplayName("Should return all categories that have products")
     void getCategoriesWithProducts_MultipleCategories_ReturnsAllRepresentedCategories() {
-        Product electronics1 = Product.createNew("2", "iPhone", Category.ELECTRONICS, 9);
-        Product electronics2 = Product.createNew("3", "iPad", Category.ELECTRONICS, 8);
-        Product clothing = Product.createNew("4", "Jeans", Category.CLOTHING, 7);
-        Product books = Product.createNew("5", "Java Book", Category.BOOKS, 9);
+        Product electronics1 = new Product.Builder()
+                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9).asNewProduct().build();
+        Product electronics2 = new Product.Builder()
+                .id("3").name("iPad").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
+        Product clothing = new Product.Builder()
+                .id("4").name("Jeans").category(Category.CLOTHING).rating(7).asNewProduct().build();
+        Product books = new Product.Builder()
+                .id("5").name("Java Book").category(Category.BOOKS).rating(9).asNewProduct().build();
 
-        warehouse.addProduct(electronics1);
-        warehouse.addProduct(electronics2); // Same category as electronics1
-        warehouse.addProduct(clothing);
-        warehouse.addProduct(books);
+        productService.addProduct(electronics1);
+        productService.addProduct(electronics2); // Same category as electronics1
+        productService.addProduct(clothing);
+        productService.addProduct(books);
 
-        Set<Category> categories = warehouse.getCategoriesWithProducts();
+        Set<Category> categories = productService.getCategoriesWithProducts();
 
         assertEquals(3, categories.size()); // Bara 3 unika kategorier
         assertTrue(categories.contains(Category.ELECTRONICS));
@@ -248,7 +320,7 @@ class WarehouseTest {
     @Test
     @DisplayName("Should return empty set when no products exist")
     void getCategoriesWithProducts_NoProducts_ReturnsEmptySet() {
-        Set<Category> categories = warehouse.getCategoriesWithProducts();
+        Set<Category> categories = productService.getCategoriesWithProducts();
 
         assertTrue(categories.isEmpty());
     }
@@ -256,19 +328,23 @@ class WarehouseTest {
     @Test
     @DisplayName("Should count products in specific category correctly")
     void countProductsInCategory_MultipleProductsInCategory_ReturnsCorrectCount() {
-        Product electronics1 = Product.createNew("2", "iPhone", Category.ELECTRONICS, 9);
-        Product electronics2 = Product.createNew("3", "iPad", Category.ELECTRONICS, 8);
-        Product electronics3 = Product.createNew("4", "MacBook", Category.ELECTRONICS, 10);
-        Product clothing = Product.createNew("5", "Jeans", Category.CLOTHING, 7);
+        Product electronics1 = new Product.Builder()
+                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9).asNewProduct().build();
+        Product electronics2 = new Product.Builder()
+                .id("3").name("iPad").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
+        Product electronics3 = new Product.Builder()
+                .id("4").name("MacBook").category(Category.ELECTRONICS).rating(10).asNewProduct().build();
+        Product clothing = new Product.Builder()
+                .id("5").name("Jeans").category(Category.CLOTHING).rating(7).asNewProduct().build();
 
-        warehouse.addProduct(electronics1);
-        warehouse.addProduct(electronics2);
-        warehouse.addProduct(electronics3);
-        warehouse.addProduct(clothing);
+        productService.addProduct(electronics1);
+        productService.addProduct(electronics2);
+        productService.addProduct(electronics3);
+        productService.addProduct(clothing);
 
-        long electronicsCount = warehouse.countProductsInCategory(Category.ELECTRONICS);
-        long clothingCount = warehouse.countProductsInCategory(Category.CLOTHING);
-        long foodCount = warehouse.countProductsInCategory(Category.FOOD);
+        long electronicsCount = productService.countProductsInCategory(Category.ELECTRONICS);
+        long clothingCount = productService.countProductsInCategory(Category.CLOTHING);
+        long foodCount = productService.countProductsInCategory(Category.FOOD);
 
         assertEquals(3, electronicsCount);
         assertEquals(1, clothingCount);
@@ -280,7 +356,7 @@ class WarehouseTest {
     void countProductsInCategory_NullCategory_ThrowsException() {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> warehouse.countProductsInCategory(null)
+                () -> productService.countProductsInCategory(null)
         );
         assertEquals("Category cannot be null", exception.getMessage());
     }
@@ -288,19 +364,24 @@ class WarehouseTest {
     @Test
     @DisplayName("Should create map of product name initials and their counts")
     void getProductInitialsMap_MultipleProducts_ReturnsCorrectInitialsCount() {
-        Product iPhone = Product.createNew("2", "iPhone", Category.ELECTRONICS, 9);
-        Product iPad = Product.createNew("3", "iPad", Category.ELECTRONICS, 8);
-        Product android = Product.createNew("4", "Android Phone", Category.ELECTRONICS, 7);
-        Product book = Product.createNew("5", "Book", Category.BOOKS, 6);
-        Product apple = Product.createNew("6", "Apple Watch", Category.ELECTRONICS, 8);
+        Product iPhone = new Product.Builder()
+                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9).asNewProduct().build();
+        Product iPad = new Product.Builder()
+                .id("3").name("iPad").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
+        Product android = new Product.Builder()
+                .id("4").name("Android Phone").category(Category.ELECTRONICS).rating(7).asNewProduct().build();
+        Product book = new Product.Builder()
+                .id("5").name("Book").category(Category.BOOKS).rating(6).asNewProduct().build();
+        Product apple = new Product.Builder()
+                .id("6").name("Apple Watch").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
 
-        warehouse.addProduct(iPhone);     // I
-        warehouse.addProduct(iPad);       // I
-        warehouse.addProduct(android);    // A
-        warehouse.addProduct(book);       // B
-        warehouse.addProduct(apple);      // A
+        productService.addProduct(iPhone);     // I
+        productService.addProduct(iPad);       // I
+        productService.addProduct(android);    // A
+        productService.addProduct(book);       // B
+        productService.addProduct(apple);      // A
 
-        Map<Character, Integer> initialsMap = warehouse.getProductInitialsMap();
+        Map<Character, Integer> initialsMap = productService.getProductInitialsMap();
 
         assertEquals(3, initialsMap.size()); // 3 unika bokstäver: I, A, B
         assertEquals(Integer.valueOf(2), initialsMap.get('I')); // iPhone + iPad
@@ -310,23 +391,9 @@ class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Should handle empty product names gracefully")
-    void getProductInitialsMap_WithEmptyNames_IgnoresEmptyNames() {
-        // We cannot create products with empty names due to validation in Product
-        // But we can test that the method handles it if it happens.
-        Product validProduct = Product.createNew("2", "iPhone", Category.ELECTRONICS, 9);
-        warehouse.addProduct(validProduct);
-
-        Map<Character, Integer> initialsMap = warehouse.getProductInitialsMap();
-
-        assertEquals(1, initialsMap.size());
-        assertEquals(Integer.valueOf(1), initialsMap.get('I'));
-    }
-
-    @Test
     @DisplayName("Should return empty map when no products exist")
     void getProductInitialsMap_NoProducts_ReturnsEmptyMap() {
-        Map<Character, Integer> initialsMap = warehouse.getProductInitialsMap();
+        Map<Character, Integer> initialsMap = productService.getProductInitialsMap();
 
         assertTrue(initialsMap.isEmpty());
     }
@@ -334,13 +401,15 @@ class WarehouseTest {
     @Test
     @DisplayName("Should handle case insensitivity correctly")
     void getProductInitialsMap_MixedCase_GroupsCorrectly() {
-        Product apple1 = Product.createNew("2", "apple", Category.FOOD, 5);      // liten bokstav
-        Product apple2 = Product.createNew("3", "Apple Watch", Category.ELECTRONICS, 8); // stor bokstav
+        Product apple1 = new Product.Builder()
+                .id("2").name("apple").category(Category.FOOD).rating(5).asNewProduct().build();
+        Product apple2 = new Product.Builder()
+                .id("3").name("Apple Watch").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
 
-        warehouse.addProduct(apple1);
-        warehouse.addProduct(apple2);
+        productService.addProduct(apple1);
+        productService.addProduct(apple2);
 
-        Map<Character, Integer> initialsMap = warehouse.getProductInitialsMap();
+        Map<Character, Integer> initialsMap = productService.getProductInitialsMap();
 
         // Both should be grouped under 'A' (Case insensitive)
         assertEquals(1, initialsMap.size());
@@ -350,34 +419,44 @@ class WarehouseTest {
     @Test
     @DisplayName("Should return top rated products from this month sorted by newest first")
     void getTopRatedProductsThisMonth_WithVariousRatings_ReturnsTopRatedNewestFirst() {
-        // Create products with different dates and ratings this month
+        // Create products with different dates and ratings this month using Builder
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startOfMonth = now.withDayOfMonth(1);
         LocalDateTime midMonth = now.withDayOfMonth(15);
         LocalDateTime endOfMonth = now.withDayOfMonth(now.toLocalDate().lengthOfMonth());
 
         // Products this month with different ratings
-        Product product1 = new Product("2", "iPhone", Category.ELECTRONICS, 9, startOfMonth, startOfMonth);      // Betyg 9
-        Product product2 = new Product("3", "iPad", Category.ELECTRONICS, 10, midMonth, midMonth);               // Betyg 10 (MAX)
-        Product product3 = new Product("4", "MacBook", Category.ELECTRONICS, 8, midMonth.plusDays(1), midMonth.plusDays(1)); // Betyg 8
-        Product product4 = new Product("5", "AirPods", Category.ELECTRONICS, 10, endOfMonth, endOfMonth);        // Betyg 10 (MAX, nyaste)
+        Product product1 = new Product.Builder()
+                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9)
+                .createdDate(startOfMonth).modifiedDate(startOfMonth).build();
+        Product product2 = new Product.Builder()
+                .id("3").name("iPad").category(Category.ELECTRONICS).rating(10)
+                .createdDate(midMonth).modifiedDate(midMonth).build();
+        Product product3 = new Product.Builder()
+                .id("4").name("MacBook").category(Category.ELECTRONICS).rating(8)
+                .createdDate(midMonth.plusDays(1)).modifiedDate(midMonth.plusDays(1)).build();
+        Product product4 = new Product.Builder()
+                .id("5").name("AirPods").category(Category.ELECTRONICS).rating(10)
+                .createdDate(endOfMonth).modifiedDate(endOfMonth).build();
 
         // Product from last month not to be included
-        Product oldProduct = new Product("6", "Old Phone", Category.ELECTRONICS, 10, now.minusMonths(1), now.minusMonths(1));
+        Product oldProduct = new Product.Builder()
+                .id("6").name("Old Phone").category(Category.ELECTRONICS).rating(10)
+                .createdDate(now.minusMonths(1)).modifiedDate(now.minusMonths(1)).build();
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
-        warehouse.addProduct(product3);
-        warehouse.addProduct(product4);
-        warehouse.addProduct(oldProduct);
+        productService.addProduct(product1);
+        productService.addProduct(product2);
+        productService.addProduct(product3);
+        productService.addProduct(product4);
+        productService.addProduct(oldProduct);
 
-        List<Product> topProducts = warehouse.getTopRatedProductsThisMonth();
+        List<Product> topProducts = productService.getTopRatedProductsThisMonth();
 
         assertEquals(2, topProducts.size()); // Bara produkter med betyg 10 (max för denna månad)
         assertEquals("AirPods", topProducts.get(0).name());  // Nyaste först (slutet av månaden)
         assertEquals("iPad", topProducts.get(1).name());     // Äldre (mitten av månaden)
 
-        // Product from last month (not to be included)
+        // Verify all returned products have max rating
         assertTrue(topProducts.stream().allMatch(product -> product.rating() == 10));
 
         // Check sorting (newest first)
@@ -386,24 +465,60 @@ class WarehouseTest {
         }
     }
 
-  /*  @Test
-    @DisplayName("Should return empty list when no products exist this month")
-    void getTopRatedProductsThisMonth_NoProductsThisMonth_ReturnsEmptyList() {
-        // Only add products from last month
-        LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
-        Product oldProduct = new Product("2", "Old Product", Category.ELECTRONICS, 10, lastMonth, lastMonth);
-        warehouse.addProduct(oldProduct);
-
-        List<Product> topProducts = warehouse.getTopRatedProductsThisMonth();
-
-        assertTrue(topProducts.isEmpty());
-    }*/
-
     @Test
     @DisplayName("Should return empty list when no products exist at all")
     void getTopRatedProductsThisMonth_NoProducts_ReturnsEmptyList() {
-        List<Product> topProducts = warehouse.getTopRatedProductsThisMonth();
+        List<Product> topProducts = productService.getTopRatedProductsThisMonth();
 
         assertTrue(topProducts.isEmpty());
+    }
+
+    // ========== ADDITIONAL TESTS FOR NEW METHODS ==========
+
+    @Test
+    @DisplayName("Should return high quality products above threshold")
+    void getHighQualityProducts_WithThreshold_ReturnsFilteredProducts() {
+        Product highQuality1 = new Product.Builder()
+                .id("HQ1").name("Premium Product").category(Category.ELECTRONICS).rating(9).asNewProduct().build();
+        Product highQuality2 = new Product.Builder()
+                .id("HQ2").name("Excellent Product").category(Category.BOOKS).rating(10).asNewProduct().build();
+        Product lowQuality = new Product.Builder()
+                .id("LQ1").name("Basic Product").category(Category.TOYS).rating(6).asNewProduct().build();
+
+        productService.addProduct(highQuality1);
+        productService.addProduct(highQuality2);
+        productService.addProduct(lowQuality);
+
+        List<Product> highQualityProducts = productService.getHighQualityProducts(8);
+
+        assertEquals(2, highQualityProducts.size());
+        assertTrue(highQualityProducts.stream().allMatch(p -> p.rating() >= 8));
+        // Should be sorted by rating descending
+        assertEquals("Excellent Product", highQualityProducts.get(0).name()); // Rating 10 först
+        assertEquals("Premium Product", highQualityProducts.get(1).name());   // Rating 9 sedan
+    }
+
+    @Test
+    @DisplayName("Should check if products exist in category")
+    void hasProductsInCategory_WithAndWithoutProducts_ReturnsCorrectBoolean() {
+        Product electronics = new Product.Builder()
+                .id("E1").name("Laptop").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
+
+        productService.addProduct(electronics);
+
+        assertTrue(productService.hasProductsInCategory(Category.ELECTRONICS));
+        assertFalse(productService.hasProductsInCategory(Category.FOOD));
+    }
+
+    // ========== DEPENDENCY INJECTION TEST ==========
+
+    @Test
+    @DisplayName("Should throw exception when ProductRepository is null")
+    void constructor_NullRepository_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> new ProductService(null)
+        );
+        assertEquals("ProductRepository cannot be null", exception.getMessage());
     }
 }

@@ -1,10 +1,5 @@
 package org.example.entities;
-
 import java.time.LocalDateTime;
-
-// att göra:
-//valideringen i product constructor.
-// fortsätt med uppg 4
 
 public record Product (
         String id,
@@ -14,10 +9,7 @@ public record Product (
         LocalDateTime createdDate,
         LocalDateTime modifiedDate
 )
-{ // nu tog jag bort den onödiga extra konstruktor jag gjort då den inte används.
-    // Ändrade namn på Builder
-    //Väntar på hjälp av Martin
-
+{
     public static class Builder {
       private  String id;
       private String name;

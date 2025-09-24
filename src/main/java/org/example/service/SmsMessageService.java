@@ -1,7 +1,10 @@
 package org.example.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.example.domain.DataRepository;
 import org.example.domain.MessageService;
+import org.example.qualifiers.Sms;
 
 /**
  * Another implementation of MessageService that processes SMS messages.
@@ -9,11 +12,12 @@ import org.example.domain.MessageService;
  * - Does NOT know about EmailMessageService or any other implementations.
  * - Final field to ensure immutability.
  */
-//@ApplicationScoped
+@Sms // Same as in EmailMessageService but uses @Sms qualifier.
+@ApplicationScoped
 public class SmsMessageService implements MessageService { // Implements MessageService interface
     private final DataRepository repository; // Dependency on DataRepository interface
 
-    //  @Inject
+    @Inject
     public SmsMessageService(DataRepository repository) { // Constructor injection
         this.repository = repository; // Assigning the injected repository to the final field
     }

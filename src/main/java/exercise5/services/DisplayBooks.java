@@ -1,18 +1,21 @@
 package exercise5.services;
 
 import exercise5.repsitory.BookRepository;
+import exercise5.repsitory.InMemoryBookRepository;
+
+import java.awt.image.IndexColorModel;
 
 public class DisplayBooks implements Library{
 
-    private final BookRepository bookRepository;
+    private final InMemoryBookRepository inMemoryBookRepository;
 
-    public DisplayBooks(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
+    public DisplayBooks(InMemoryBookRepository inMemoryBookRepository) {
+        this.inMemoryBookRepository = inMemoryBookRepository;
     }
 
     @Override
     public void displayAllBooks() {
-        System.out.println("All Books: "+bookRepository.getAllBooks());
+        System.out.println("All Books: "+inMemoryBookRepository.getAllBooks());
     }
 
 }

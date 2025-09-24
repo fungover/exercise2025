@@ -1,34 +1,34 @@
 package exercise5.services;
 
 import exercise5.entities.Book;
-import exercise5.repsitory.BookRepository;
+import exercise5.repsitory.InMemoryBookRepository;
 
 import java.util.Comparator;
 
 public class SortBooks implements Sorting{
 
-    private final BookRepository bookRepository;
+    private final InMemoryBookRepository inMemoryBookRepository;
 
-    public SortBooks(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
+    public SortBooks(InMemoryBookRepository inMemoryBookRepository) {
+        this.inMemoryBookRepository = inMemoryBookRepository;
     }
 
     @Override
     public void sortBooksByRating() {
-        bookRepository.getAllBooks().stream()
+        inMemoryBookRepository.getAllBooks().stream()
                 .sorted(Comparator.comparing(Book::rating)).forEach(System.out::println);
     }
 
     @Override
     public void sortBooksByAuthor() {
-        bookRepository.getAllBooks().stream()
+        inMemoryBookRepository.getAllBooks().stream()
                 .sorted(Comparator.comparing(Book::author)).forEach(System.out::println);
 
     }
 
     @Override
     public void sortBooksByGenre() {
-        bookRepository.getAllBooks().stream()
+        inMemoryBookRepository.getAllBooks().stream()
                 .sorted(Comparator.comparing(Book::genre)).forEach(System.out::println);
     }
 

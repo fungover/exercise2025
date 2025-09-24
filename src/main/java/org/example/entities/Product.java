@@ -14,18 +14,11 @@ public record Product (
         LocalDateTime createdDate,
         LocalDateTime modifiedDate
 )
-{  private Product(String id, String name, Category category, int rating) {
-    this(
-            id,
-            name,
-            category,
-            rating,
-            LocalDateTime.now(),
-            LocalDateTime.now()
-    );
-}
+{ // nu tog jag bort den onödiga extra konstruktor jag gjort då den inte används.
+    // Ändrade namn på Builder
+    //Väntar på hjälp av Martin
 
-    public static class ProductBuilder {
+    public static class Builder {
       private  String id;
       private String name;
       private Category category;
@@ -33,27 +26,27 @@ public record Product (
       private LocalDateTime createdDate;
       private LocalDateTime modifiedDate;
 
-      public ProductBuilder name(String name) {
+      public Builder name(String name) {
             this.name = name;
             return this;
         }
-      public ProductBuilder id(String id) {
+      public Builder id(String id) {
           this.id = id;
           return this;
       }
-      public ProductBuilder category(Category category) {
+      public Builder category(Category category) {
           this.category = category;
           return this;
       }
-      public ProductBuilder rating(int rating) {
+      public Builder rating(int rating) {
           this.rating = rating;
           return this;
       }
-      public ProductBuilder createdDate(LocalDateTime createdDate) {
+      public Builder createdDate(LocalDateTime createdDate) {
           this.createdDate = createdDate;
           return this;
       }
-      public ProductBuilder modifiedDate(LocalDateTime modifiedDate) {
+      public Builder modifiedDate(LocalDateTime modifiedDate) {
           this.modifiedDate = modifiedDate;
           return this;
       }

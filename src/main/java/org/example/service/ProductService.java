@@ -31,7 +31,7 @@ public class ProductService {
         Product existing = productRepository.getProductById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
-        Product updated = new Product.ProductBuilder()
+        Product updated = new Product.Builder()
                 .id(existing.id())
                 .name(name)
                 .category(category)

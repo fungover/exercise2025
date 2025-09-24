@@ -25,7 +25,7 @@ class ProductServiceTest {
 
     @Test
     void addProduct() {
-        Product product = new Product.ProductBuilder()
+        Product product = new Product.Builder()
                 .id("1")
                 .name("Harry Potter and the Deathly Hallows")
                 .category(Category.BOOKS)
@@ -41,7 +41,7 @@ class ProductServiceTest {
     @Test
     void addProductEmptyNameThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Product.ProductBuilder()
+            new Product.Builder()
                     .id("1")
                     .name("")
                     .category(Category.BOOKS)
@@ -53,7 +53,7 @@ class ProductServiceTest {
     @Test
     void updateProduct() {
 
-        Product product = new Product.ProductBuilder()
+        Product product = new Product.Builder()
                 .id("1")
                 .name("Harry Potter and the deathly hollows")
                 .category(Category.BOOKS)
@@ -83,14 +83,14 @@ class ProductServiceTest {
     void getAllProductsReturnsAllProducts() {
         LocalDateTime now = LocalDateTime.now();
 
-        Product product1 = new Product.ProductBuilder()
+        Product product1 = new Product.Builder()
                 .id("1")
                 .name("Pizza")
                 .category(Category.FOOD)
                 .rating(10)
                 .build();
 
-        Product product2 = new Product.ProductBuilder()
+        Product product2 = new Product.Builder()
                 .id("2")
                 .name("Tacos")
                 .category(Category.FOOD)
@@ -117,7 +117,7 @@ class ProductServiceTest {
     @Test
     void getProductByIdReturnsCorrectProduct() {
 
-        Product product = new Product.ProductBuilder()
+        Product product = new Product.Builder()
                 .id("1")
                 .name("Peppa Pigs adventure")
                 .category(Category.BOOKS)
@@ -140,25 +140,25 @@ class ProductServiceTest {
     @Test
     void getProductsByCategorySortedReturnsSortedProducts() {
 
-        Product p1 = new Product.ProductBuilder()
+        Product p1 = new Product.Builder()
                 .id("1")
                 .name("Banana")
                 .category(Category.FOOD)
                 .rating(8)
                 .build();
-        Product p2 = new Product.ProductBuilder()
+        Product p2 = new Product.Builder()
                 .id("2")
                 .name("Apple")
                 .category(Category.FOOD)
                 .rating(8)
                 .build();
-        Product p3 = new Product.ProductBuilder()
+        Product p3 = new Product.Builder()
                 .id("3")
                 .name("Carrot")
                 .category(Category.FOOD)
                 .rating(5)
                 .build();
-        Product p4 = new Product.ProductBuilder()
+        Product p4 = new Product.Builder()
                 .id("4")
                 .name("Bridget Jones diary")
                 .category(Category.BOOKS)
@@ -181,14 +181,14 @@ class ProductServiceTest {
     @Test
     void getProductsByCategorySortedEmptyCategoryReturnsEmptyList() {
 
-        Product p1 = new Product.ProductBuilder()
+        Product p1 = new Product.Builder()
                 .id("1")
                 .name("Apple")
                 .category(Category.FOOD)
                 .rating(5)
                 .build();
 
-        Product p2 = new Product.ProductBuilder()
+        Product p2 = new Product.Builder()
                 .id("2")
                 .name("Book")
                 .category(Category.BOOKS)
@@ -207,7 +207,7 @@ class ProductServiceTest {
     void getProductsCreatedAfterReturnsCorrectProducts() {
         LocalDateTime now = LocalDateTime.now();
 
-        Product oldProduct = new Product.ProductBuilder()
+        Product oldProduct = new Product.Builder()
                 .id("1")
                 .name("Old Book")
                 .category(Category.BOOKS)
@@ -215,7 +215,7 @@ class ProductServiceTest {
                 .createdDate(now.minusDays(10))
                 .modifiedDate(now.minusDays(10))
                 .build();
-        Product recentProduct = new Product.ProductBuilder()
+        Product recentProduct = new Product.Builder()
                 .id("2")
                 .name("New Book")
                 .category(Category.BOOKS)
@@ -237,7 +237,7 @@ class ProductServiceTest {
     void getProductsCreatedAfterNoProductsAfterDateReturnsEmptyList() {
         LocalDateTime now = LocalDateTime.now();
 
-        productService.addProduct(new Product.ProductBuilder()
+        productService.addProduct(new Product.Builder()
                 .id("1")
                 .name("Old Book")
                 .category(Category.BOOKS)
@@ -245,7 +245,7 @@ class ProductServiceTest {
                 .createdDate(now.minusDays(10))
                 .modifiedDate(now.minusDays(10))
                 .build());
-        productService.addProduct(new Product.ProductBuilder()
+        productService.addProduct(new Product.Builder()
                 .id("2")
                 .name("Older Food")
                 .category(Category.FOOD)
@@ -264,7 +264,7 @@ class ProductServiceTest {
     void getModifiedProductsReturnsOnlyModified() {
         LocalDateTime createdTime = LocalDateTime.now().minusMinutes(1);
 
-        Product product1 = new Product.ProductBuilder()
+        Product product1 = new Product.Builder()
                 .id("1")
                 .name("Original Book")
                 .category(Category.BOOKS)
@@ -276,7 +276,7 @@ class ProductServiceTest {
 
         productService.updateProduct("1", "Updated Book", Category.BOOKS, 8);
 
-        Product product2 = new Product.ProductBuilder()
+        Product product2 = new Product.Builder()
                 .id("2")
                 .name("Fresh Food")
                 .category(Category.FOOD)

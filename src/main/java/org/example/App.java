@@ -16,21 +16,21 @@ public class App {
         ProductRepository repository = new InMemoryProductRepository();
         ProductService productService = new ProductService(repository);
 
-        Product p1 = new Product.ProductBuilder()
+        Product p1 = new Product.Builder()
                 .id("1")
                 .name("Harry Potter")
                 .category(Category.BOOKS)
                 .rating(9)
                 .build();
 
-        Product p2 = new Product.ProductBuilder()
+        Product p2 = new Product.Builder()
                 .id("2")
                 .name("HOKA One One")
                 .category(Category.SHOES)
                 .rating(10)
                 .build();
 
-        Product apple = new Product.ProductBuilder()
+        Product apple = new Product.Builder()
                 .id("10")
                 .name("Apple")
                 .category(Category.FOOD)
@@ -39,7 +39,7 @@ public class App {
                 .modifiedDate(LocalDateTime.now().minusDays(2))
                 .build();
 
-        Product pizza = new Product.ProductBuilder()
+        Product pizza = new Product.Builder()
                 .id("11")
                 .name("Pizza")
                 .category(Category.FOOD)
@@ -48,7 +48,7 @@ public class App {
                 .modifiedDate(LocalDateTime.now().minusDays(1))
                 .build();
 
-        Product tacos = new Product.ProductBuilder()
+        Product tacos = new Product.Builder()
                 .id("12")
                 .name("Tacos")
                 .category(Category.FOOD)
@@ -89,7 +89,7 @@ public class App {
         System.out.println();
 
         System.out.println("PRODUCTS CREATED AFTER YESTERDAY");
-        Product p3 = new Product.ProductBuilder()
+        Product p3 = new Product.Builder()
                 .id("3")
                 .name("New Book")
                 .category(Category.BOOKS)

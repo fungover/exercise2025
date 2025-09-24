@@ -11,17 +11,17 @@ import java.util.Map;
 
 public class Container {
 
-    // Save which implementations that can be used for interfaces
-    private static final Map<Class<?>, Class<?>> interfaceMappings = new HashMap<>();
+    // Bindings between interfaces and their implementations
+    private final Map<Class<?>, Class<?>> interfaceMappings = new HashMap<>();
 
-    static {
-        // The different implementations that can be used
+    public Container() {
+        // Default implementations
         interfaceMappings.put(MessageService.class, SMSService.class);
         interfaceMappings.put(MessageRepository.class, FileRepository.class);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T getInstance(Class<T> type) {
+    public <T> T getInstance(Class<T> type) {
         try {
             // If type is an interface, change to implementation from map
             if (type.isInterface()) {
@@ -43,7 +43,7 @@ public class Container {
                 }
             }
 
-            // Otherwise choose the public ctor with the most params (deterministic)
+            // Otherwise choose the public ctor with the most params
             if (constructorToUse == null) {
                 for (Constructor<?> c : publicCtors) {
                     if (constructorToUse == null || c.getParameterCount() > constructorToUse.getParameterCount()) {
@@ -78,5 +78,9 @@ public class Container {
         } catch (Exception e) {
             throw new RuntimeException("Could not create an instance for: " + type, e);
         }
+    }
+
+    public <T> void bind(Class<T> base, Class<? extends T> impl) {
+        interfaceMappings.put(base, impl);
     }
 }

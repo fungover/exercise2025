@@ -4,7 +4,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Default;
 
 @ApplicationScoped // Weld will manage this as a bean
-@Default // This is the default implementation
+@Swish // Qualifier so it can be chosen explicitly
+@Default // Marks this as the fallback (default) payment method
 public class SwishPayment implements PaymentMethod {
     @Override
     public String pay(int amount) {

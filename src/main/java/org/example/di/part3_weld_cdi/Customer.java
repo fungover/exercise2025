@@ -13,9 +13,13 @@ public class Customer {
         this.checkoutService = checkoutService;
     }
 
+    // Default payment method (Swish)
     public String makePurchase(int amount) {
-        String result = checkoutService.checkout(amount);
+        return "Customer completed purchase: " + checkoutService.checkout(amount);
+    }
 
-        return "Customer completed purchase: " + result;
+    // Choose payment method by name
+    public String makePurchase(int amount, String methodName) {
+        return "Customer completed purchase: " + checkoutService.checkout(amount, methodName);
     }
 }

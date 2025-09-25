@@ -19,7 +19,7 @@ public class WeldIntegrationTest {
             Customer customer = container.select(Customer.class).get();
 
             // Use the customer to make a purchase
-            String result = customer.makePurchase(200, "Swish");
+            String result = customer.makePurchase(200);
 
             // Check that the dependencies worked correctly
             assertEquals("Customer completed purchase: Paid 200 SEK with Swish", result);
@@ -37,7 +37,7 @@ public class WeldIntegrationTest {
             assertEquals("Customer completed purchase: Paid 200 SEK with Swish", swishResult);
 
             // Customer chooses Credit Card
-            String creditResult = customer.makePurchase(300, "creditcard");
+            String creditResult = customer.makePurchase(300, "creditCard");
             assertEquals("Customer completed purchase: Paid 300 SEK with Credit Card", creditResult);
 
             // Customer chooses Trustly

@@ -5,7 +5,7 @@ import org.example.part1.repository.InMemoryComponentRepository;
 import org.example.part1.services.*;
 
 public class Part1Main {
-    static void main() {
+    public static void main(String[] args) {
         System.out.println("\nManual dependency injection\n");
 
         ComponentRepository repository = new InMemoryComponentRepository();

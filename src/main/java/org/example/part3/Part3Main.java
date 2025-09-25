@@ -4,7 +4,7 @@ import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 
 public class Part3Main {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         System.out.println("\nWeld CDI\n");
 
         Weld weld = new Weld();

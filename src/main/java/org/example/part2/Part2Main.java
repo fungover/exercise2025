@@ -3,7 +3,7 @@ package org.example.part2;
 import org.example.part1.ComputerBuilder;
 
 public class Part2Main {
-    static void main() {
+    public static void main(String[] args) {
         System.out.println("\nCustom DI Container\n");
 
         // Create container

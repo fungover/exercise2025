@@ -17,6 +17,7 @@ public class ConsoleGreetingService implements GreetingService {
     @Override
     public void greet(String name) {
         String template = repository.getMessage();
-        System.out.println(String.format(template, name));
+        System.out.printf(template + "%n", name);
     }
 }
+

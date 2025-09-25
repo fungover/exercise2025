@@ -14,23 +14,22 @@ public class Container {
     @SuppressWarnings("unchecked")
     public <T> T get(Class<T> type) {
         try {
-            // Om typ är ett interface → hämta implementationen
+
             Class<?> impl = type;
             if (impl.isInterface()) {
                 impl = bindings.get(type);
+                if (impl == null) {
+                    throw new IllegalStateException("No binding registered for " + type.getName());
+                }
             }
-
-            // Vi antar att det finns exakt en konstruktor
             Constructor<?> ctor = impl.getDeclaredConstructors()[0];
             Class<?>[] paramTypes = ctor.getParameterTypes();
 
-            // Rekursivt hämta beroenden
             Object[] args = new Object[paramTypes.length];
             for (int i = 0; i < paramTypes.length; i++) {
                 args[i] = get(paramTypes[i]);
             }
 
-            // Skapa instans
             return (T) ctor.newInstance(args);
         } catch (Exception e) {
             throw new RuntimeException(e);

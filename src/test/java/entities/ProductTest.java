@@ -1,7 +1,8 @@
 package entities;
 
 import org.junit.jupiter.api.Test;
-import service.Warehouse;
+import service.ProductService;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,47 +15,66 @@ public class ProductTest {
 
     @Test
     public void addProduct_sizeIncreasesByOne() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
         LocalDateTime dateTime = LocalDateTime.now();
-        Product product = new Product(1, "Book", Category.BOOK, 8, dateTime, dateTime);
+        Product product = new Product.Builder()
+                .id(1)
+                .name("Book")
+                .category(Category.BOOK)
+                .rating(8)
+                .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
+                .build();
 
-        warehouse.addProduct(product);
+        productService.addProduct(product);
 
-        assertEquals(1, warehouse.getProducts().size());
-        assertEquals(product, warehouse.getProducts().getFirst());
+        assertEquals(1, productService.getProducts().size());
+        assertEquals(product, productService.getProducts().getFirst());
     }
 
     @Test
     public void addProduct_throwsExceptionWhenNameIsEmpty() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
         LocalDateTime now = LocalDateTime.of(2023, 1, 1, 12, 0);
-        Product product = new Product(2, "", Category.BOOK, 5, now, now);
+        Product product = new Product.Builder()
+                .id(2).name("")
+                .category(Category.BOOK)
+                .rating(5).createdAt(now)
+                .modifiedAt(now)
+                .build();
 
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
+        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(product));
     }
 
     @Test
     void updateProduct_failsWhenProductNotFound() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         assertThrows(NoSuchElementException.class, () ->
-                warehouse.updateProduct(99, "Name", Category.BOOK, 5)
+                productService.updateProduct(99, "Name", Category.BOOK, 5)
         );
     }
 
     @Test
     void updateProduct_updatesWhenProductExists() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
         LocalDateTime now = LocalDateTime.now();
 
-        Product product = new Product(1, "Old Name", Category.BOOK, 3, now,
-                now);
+        Product product = new Product.Builder()
+                .id(1)
+                .name("Old Name")
+                .category(Category.BOOK)
+                .rating(3)
+                .createdAt(now)
+                .modifiedAt(now)
+                .build();
 
-        warehouse.addProduct(product);
 
-        warehouse.updateProduct(1, "New Name", Category.BOOK, 5);
+        productService.addProduct(product);
 
-        Product updated = warehouse.getProducts().getFirst();
+        productService.updateProduct(1, "New Name", Category.BOOK, 5);
+
+        Product updated = productService.getProducts().getFirst();
 
         assertEquals("New Name", updated.name());
         assertEquals(5, updated.rating());
@@ -63,16 +83,31 @@ public class ProductTest {
 
     @Test
     void getAllProductsTest() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
         LocalDateTime now = LocalDateTime.now();
 
-        Product p1 = new Product(1, "Book", Category.BOOK, 5, now, now);
-        Product p2 = new Product(2, "Movie", Category.MOVIE, 4, now, now);
+        Product p1 = new Product.Builder()
+                .id(1)
+                .name("Book")
+                .category(Category.BOOK)
+                .rating(5)
+                .createdAt(now)
+                .modifiedAt(now)
+                .build();
 
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
+        Product p2 = new Product.Builder()
+                .id(2)
+                .name("Movie")
+                .category(Category.MOVIE)
+                .rating(4)
+                .createdAt(now)
+                .modifiedAt(now)
+                .build();
 
-        List<Product> products = warehouse.getProducts();
+        productService.addProduct(p1);
+        productService.addProduct(p2);
+
+        List<Product> products = productService.getProducts();
 
         assertEquals(2, products.size());
         assertTrue(products.contains(p1));
@@ -81,32 +116,47 @@ public class ProductTest {
 
     @Test
     void getAllProducts_emptyWarehouse_returnsEmptyList() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
-        List<Product> products = warehouse.getProducts();
+        List<Product> products = productService.getProducts();
 
         assertTrue(products.isEmpty());
     }
 
     @Test
     void getProductsByCategorySorted_noProductsInCategory_returnsEmptyList() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
-        List<Product> book1 = warehouse.getProductsByCategorySorted(Category.valueOf("BOOK"));
+        List<Product> book1 = productService.getProductsByCategorySorted(Category.valueOf("BOOK"));
 
         assertTrue(book1.isEmpty());
     }
 
     @Test
     public void getProductsByIdTest() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
         LocalDateTime now = LocalDateTime.now();
 
-        Product product1 = new Product(56, "Book", Category.BOOK, 5, now, now);
-        Product product2 = new Product(78, "Book", Category.BOOK, 5, now, now);
+        Product product1 = new Product.Builder()
+                .id(56)
+                .name("Book")
+                .category(Category.BOOK)
+                .rating(5)
+                .createdAt(now)
+                .modifiedAt(now)
+                .build();
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
+        Product product2 = new Product.Builder()
+                .id(78)
+                .name("Book")
+                .category(Category.BOOK)
+                .rating(5)
+                .createdAt(now)
+                .modifiedAt(now)
+                .build();
+
+        productService.addProduct(product1);
+        productService.addProduct(product2);
 
         assertEquals(56, product1.id());
         assertEquals(78, product2.id());
@@ -115,16 +165,31 @@ public class ProductTest {
 
     @Test
     public void SortProductCategory_alphabeticallyMovies() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
         LocalDateTime now = LocalDateTime.now();
 
-        Product p1 = new Product(5, "Clown Town", Category.MOVIE, 5, now, now);
-        Product p2 = new Product(6, "Bla bla bla", Category.MOVIE, 5, now, now);
+        Product p1 = new Product.Builder()
+                .id(5)
+                .name("Clown Town")
+                .category(Category.MOVIE)
+                .rating(5)
+                .createdAt(now)
+                .modifiedAt(now)
+                .build();
 
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
+        Product p2 = new Product.Builder()
+                .id(6)
+                .name("Bla bla bla")
+                .category(Category.MOVIE)
+                .rating(5)
+                .createdAt(now)
+                .modifiedAt(now)
+                .build();
 
-        List<Product> movies = warehouse.getProductsByCategorySorted(Category.MOVIE);
+        productService.addProduct(p1);
+        productService.addProduct(p2);
+
+        List<Product> movies = productService.getProductsByCategorySorted(Category.MOVIE);
 
         assertEquals(2, movies.size());
         assertEquals("Bla bla bla", movies.get(0).name());
@@ -133,20 +198,48 @@ public class ProductTest {
 
     @Test
     public void SortProductCategory_alphabeticallyBooks() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
         LocalDateTime now = LocalDateTime.now();
 
-        Product p1 = new Product(1, "The Book of Lost Hours", Category.BOOK, 4, now, now);
-        Product p2 = new Product(2, "Dominion", Category.BOOK, 1, now, now);
-        Product p3 = new Product(3, "People Like Us", Category.BOOK, 3, now, now);
-        Product p4 = new Product(4, "Clown Town", Category.BOOK, 5, now, now);
+        Product p1 = new Product.Builder()
+                .id(1)
+                .name("The Book of Lost Hours")
+                .category(Category.BOOK)
+                .rating(4)
+                .createdAt(now)
+                .modifiedAt(now)
+                .build();
 
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
-        warehouse.addProduct(p3);
-        warehouse.addProduct(p4);
+        Product p2 = new Product.Builder()
+                .id(2).name("Dominion")
+                .category(Category.BOOK)
+                .rating(1)
+                .createdAt(now)
+                .modifiedAt(now)
+                .build();
 
-        List<Product> books = warehouse.getProductsByCategorySorted(Category.BOOK);
+        Product p3 = new Product.Builder()
+                .id(3)
+                .name("People Like Us")
+                .category(Category.BOOK)
+                .rating(3).createdAt(now)
+                .modifiedAt(now)
+                .build();
+
+        Product p4 = new Product.Builder()
+                .id(4)
+                .name("Clown Town")
+                .category(Category.BOOK)
+                .rating(5).createdAt(now)
+                .modifiedAt(now)
+                .build();
+
+        productService.addProduct(p1);
+        productService.addProduct(p2);
+        productService.addProduct(p3);
+        productService.addProduct(p4);
+
+        List<Product> books = productService.getProductsByCategorySorted(Category.BOOK);
 
         assertEquals(4, books.size());
         assertEquals("Clown Town", books.get(0).name());
@@ -156,21 +249,43 @@ public class ProductTest {
 
     @Test
     public void getProductsCreatedAfter_returnsOnlyNewerProducts() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         LocalDateTime d1 = LocalDateTime.of(2023, 1, 1, 12, 0);
         LocalDateTime d2 = LocalDateTime.of(2024, 1, 1, 12, 0);
         LocalDateTime d3 = LocalDateTime.of(2025, 1, 1, 12, 0);
 
-        Product old = new Product(1, "Old Book", Category.BOOK, 3, d1, d1);
-        Product mid = new Product(2, "Mid Book", Category.BOOK, 4, d2, d2);
-        Product recent = new Product(3, "Recent Book", Category.BOOK, 5, d3, d3);
+        Product old = new Product.Builder()
+                .id(1)
+                .name("Old Book")
+                .category(Category.BOOK)
+                .rating(3).createdAt(d1)
+                .modifiedAt(d1)
+                .build();
 
-        warehouse.addProduct(old);
-        warehouse.addProduct(mid);
-        warehouse.addProduct(recent);
+        Product mid = new Product.Builder()
+                .id(2)
+                .name("Mid Book")
+                .category(Category.BOOK)
+                .rating(4)
+                .createdAt(d2)
+                .modifiedAt(d2)
+                .build();
 
-        List<Product> products = warehouse.getProductsCreatedAfter(LocalDate.of(2023, 6, 1));
+        Product recent = new Product.Builder()
+                .id(3)
+                .name("Recent Book")
+                .category(Category.BOOK)
+                .rating(5)
+                .createdAt(d3)
+                .modifiedAt(d3)
+                .build();
+
+        productService.addProduct(old);
+        productService.addProduct(mid);
+        productService.addProduct(recent);
+
+        List<Product> products = productService.getProductsCreatedAfter(LocalDate.of(2023, 6, 1));
 
         assertEquals(2, products.size());
         assertTrue(products.contains(mid));
@@ -180,18 +295,33 @@ public class ProductTest {
 
     @Test
     void getModifiedProducts_returnsOnlyWhenDatesDiffer() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         LocalDateTime created = LocalDateTime.of(2023, 1, 1, 12, 0);
         LocalDateTime modified = LocalDateTime.of(2023, 6, 1, 12, 0);
 
-        Product p1 = new Product(1, "Unchanged Book", Category.BOOK, 3, created, created);
-        Product p2 = new Product(2, "Changed Book", Category.BOOK, 4, created, modified);
+        Product p1 = new Product.Builder()
+                .id(1)
+                .name("Unchanged Book")
+                .category(Category.BOOK)
+                .rating(3)
+                .createdAt(created)
+                .modifiedAt(created)
+                .build();
 
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
+        Product p2 = new Product.Builder()
+                .id(2)
+                .name("Changed Book")
+                .category(Category.BOOK)
+                .rating(4)
+                .createdAt(created)
+                .modifiedAt(modified)
+                .build();
 
-        List<Product> modifiedProducts = warehouse.getModifiedProducts();
+        productService.addProduct(p1);
+        productService.addProduct(p2);
+
+        List<Product> modifiedProducts = productService.getModifiedProducts();
 
         assertEquals(1, modifiedProducts.size());
         assertTrue(modifiedProducts.contains(p2));
@@ -200,35 +330,55 @@ public class ProductTest {
 
     @Test
     void getProductsCreatedAfter_noProductsNewer_returnsEmptyList() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         LocalDateTime d1 = LocalDateTime.of(2023, 1, 1, 12, 0);
         LocalDateTime d2 = LocalDateTime.of(2023, 2, 1, 12, 0);
 
-        Product p1 = new Product(1, "Old Book 1", Category.BOOK, 3, d1, d1);
-        Product p2 = new Product(2, "Old Book 2", Category.BOOK, 4, d2, d2);
+        Product p1 = new Product.Builder().id(1)
+                .name("Old Book 1")
+                .category(Category.BOOK)
+                .rating(3).createdAt(d1)
+                .modifiedAt(d1)
+                .build();
+        Product p2 = new Product.Builder()
+                .id(2).name("Old Book 2")
+                .category(Category.BOOK)
+                .rating(4).createdAt(d2)
+                .modifiedAt(d2).build();
 
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
+        productService.addProduct(p1);
+        productService.addProduct(p2);
 
-        List<Product> products = warehouse.getProductsCreatedAfter(LocalDate.of(2023, 6, 1));
+        List<Product> products = productService.getProductsCreatedAfter(LocalDate.of(2023, 6, 1));
 
         assertTrue(products.isEmpty(), "List should be empty if no products are newer than given date");
     }
 
     @Test
     void getModifiedProducts_noModifiedProducts_returnsEmptyList() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         LocalDateTime created = LocalDateTime.of(2023, 1, 1, 12, 0);
 
-        Product p1 = new Product(1, "Book 1", Category.BOOK, 3, created, created);
-        Product p2 = new Product(2, "Book 2", Category.BOOK, 4, created, created);
+        Product p1 = new Product.Builder()
+                .id(1).name("Book 1")
+                .category(Category.BOOK)
+                .rating(3).createdAt(created)
+                .modifiedAt(created)
+                .build();
 
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
+        Product p2 = new Product.Builder()
+                .id(2).name("Book 2")
+                .category(Category.BOOK)
+                .rating(4).createdAt(created)
+                .modifiedAt(created)
+                .build();
 
-        List<Product> modifiedProducts = warehouse.getModifiedProducts();
+        productService.addProduct(p1);
+        productService.addProduct(p2);
+
+        List<Product> modifiedProducts = productService.getModifiedProducts();
 
         assertTrue(modifiedProducts.isEmpty(), "List should be empty if no products are modified");
     }

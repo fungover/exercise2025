@@ -4,6 +4,7 @@ import entities.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class InMemoryProductRepository implements ProductRepository{
@@ -17,16 +18,24 @@ public class InMemoryProductRepository implements ProductRepository{
 
     @Override
     public Optional<Product> getProductById(String id) {
-        return Optional.empty();
+        return products.stream()
+                .filter(p -> String.valueOf(p.id()).equals(id))
+                .findFirst();
     }
 
     @Override
     public List<Product> getAllProducts() {
-        return List.of();
+        return new ArrayList<>(products);
     }
 
     @Override
     public void updateProduct(Product product) {
-
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).id() == product.id()) {
+                products.set(i, product);
+                return;
+            }
+        }
+        throw new NoSuchElementException("Product not found");
     }
 }

@@ -54,7 +54,7 @@ public class ProductTest {
         ProductService productService = new ProductService(new InMemoryProductRepository());
 
         assertThrows(NoSuchElementException.class, () ->
-                productService.updateProduct(99, "Name", Category.BOOK, 5)
+                productService.updateProduct("99", "Name", Category.BOOK, 5)
         );
     }
 
@@ -75,9 +75,9 @@ public class ProductTest {
 
         productService.addProduct(product);
 
-        productService.updateProduct(1, "New Name", Category.BOOK, 5);
+        productService.updateProduct("1", "New Name", Category.BOOK, 5);
 
-        Product updated = productService.getProducts().getFirst();
+        Product updated = productService.getAllProducts().getFirst();
 
         assertEquals("New Name", updated.name());
         assertEquals(5, updated.rating());
@@ -110,7 +110,7 @@ public class ProductTest {
         productService.addProduct(p1);
         productService.addProduct(p2);
 
-        List<Product> products = productService.getProducts();
+        List<Product> products = productService.getAllProducts();
 
         assertEquals(2, products.size());
         assertTrue(products.contains(p1));
@@ -121,7 +121,7 @@ public class ProductTest {
     void getAllProducts_emptyWarehouse_returnsEmptyList() {
         ProductService productService = new ProductService(new InMemoryProductRepository());
 
-        List<Product> products = productService.getProducts();
+        List<Product> products = productService.getAllProducts();
 
         assertTrue(products.isEmpty());
     }

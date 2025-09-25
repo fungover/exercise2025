@@ -1,12 +1,12 @@
-package org.example;
+package org.game;
 
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AppTest {
+public class GameIT {
     @Test
-    void test() {
-        assertThat(true).isTrue();
+    void itTest() {
+        assertThat(false).isFalse();
     }
 }

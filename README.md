@@ -39,7 +39,6 @@ interfaceBindings.put(org.example.part1.services.CPUService.class,
 - I had to manually configure all mappings.
 #### Weld solved this:
 - Automatically finds classes with ```@ApplicationScoped``` annotation.
-- Could use ```@Primary``` to solve conflicts (I didn't use this to keep it simple).
 - Only annotations are needed, no hardcoded mappings.
 
 

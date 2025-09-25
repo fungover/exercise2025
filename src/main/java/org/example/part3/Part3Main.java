@@ -8,18 +8,19 @@ public class Part3Main {
         System.out.println("\nWeld CDI\n");
 
         Weld weld = new Weld();
-        WeldContainer container = weld.initialize();
 
-        ComputerBuilder builder = container.select(ComputerBuilder.class).get();
+        try (WeldContainer container = weld.initialize()) {
 
-        String gamingPC = builder.buildComputer("Gaming");
-        System.out.println(gamingPC);
+            ComputerBuilder builder = container.select(ComputerBuilder.class).get();
 
-        String officePC = builder.buildComputer("Office");
-        System.out.println(officePC);
+            String gamingPC = builder.buildComputer("Gaming");
+            System.out.println(gamingPC);
 
-        weld.shutdown();
-        System.out.println("Weld CDI completed successfully!");
+            String officePC = builder.buildComputer("Office");
+            System.out.println(officePC);
+
+            System.out.println("Weld CDI completed successfully!");
+        } // Container closed automatically here, even if an exception is thrown.
     }
 
 }

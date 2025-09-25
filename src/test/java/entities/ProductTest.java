@@ -1,6 +1,7 @@
 package entities;
 
 import org.junit.jupiter.api.Test;
+import service.InMemoryProductRepository;
 import service.ProductService;
 
 
@@ -15,7 +16,9 @@ public class ProductTest {
 
     @Test
     public void addProduct_sizeIncreasesByOne() {
-        ProductService productService = new ProductService();
+
+        ProductService productService = new ProductService(new InMemoryProductRepository());
+
         LocalDateTime dateTime = LocalDateTime.now();
         Product product = new Product.Builder()
                 .id(1)
@@ -28,13 +31,13 @@ public class ProductTest {
 
         productService.addProduct(product);
 
-        assertEquals(1, productService.getProducts().size());
-        assertEquals(product, productService.getProducts().getFirst());
+        assertEquals(1, productService.getAllProducts().size());
+        assertEquals(product, productService.getAllProducts().getFirst());
     }
 
     @Test
     public void addProduct_throwsExceptionWhenNameIsEmpty() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
         LocalDateTime now = LocalDateTime.of(2023, 1, 1, 12, 0);
         Product product = new Product.Builder()
                 .id(2).name("")
@@ -48,7 +51,7 @@ public class ProductTest {
 
     @Test
     void updateProduct_failsWhenProductNotFound() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
 
         assertThrows(NoSuchElementException.class, () ->
                 productService.updateProduct(99, "Name", Category.BOOK, 5)
@@ -57,7 +60,7 @@ public class ProductTest {
 
     @Test
     void updateProduct_updatesWhenProductExists() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
         LocalDateTime now = LocalDateTime.now();
 
         Product product = new Product.Builder()
@@ -83,7 +86,7 @@ public class ProductTest {
 
     @Test
     void getAllProductsTest() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
         LocalDateTime now = LocalDateTime.now();
 
         Product p1 = new Product.Builder()
@@ -116,7 +119,7 @@ public class ProductTest {
 
     @Test
     void getAllProducts_emptyWarehouse_returnsEmptyList() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
 
         List<Product> products = productService.getProducts();
 
@@ -125,7 +128,7 @@ public class ProductTest {
 
     @Test
     void getProductsByCategorySorted_noProductsInCategory_returnsEmptyList() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
 
         List<Product> book1 = productService.getProductsByCategorySorted(Category.valueOf("BOOK"));
 
@@ -134,7 +137,7 @@ public class ProductTest {
 
     @Test
     public void getProductsByIdTest() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
         LocalDateTime now = LocalDateTime.now();
 
         Product product1 = new Product.Builder()
@@ -165,7 +168,7 @@ public class ProductTest {
 
     @Test
     public void SortProductCategory_alphabeticallyMovies() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
         LocalDateTime now = LocalDateTime.now();
 
         Product p1 = new Product.Builder()
@@ -198,7 +201,7 @@ public class ProductTest {
 
     @Test
     public void SortProductCategory_alphabeticallyBooks() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
         LocalDateTime now = LocalDateTime.now();
 
         Product p1 = new Product.Builder()
@@ -249,7 +252,7 @@ public class ProductTest {
 
     @Test
     public void getProductsCreatedAfter_returnsOnlyNewerProducts() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
 
         LocalDateTime d1 = LocalDateTime.of(2023, 1, 1, 12, 0);
         LocalDateTime d2 = LocalDateTime.of(2024, 1, 1, 12, 0);
@@ -295,7 +298,7 @@ public class ProductTest {
 
     @Test
     void getModifiedProducts_returnsOnlyWhenDatesDiffer() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
 
         LocalDateTime created = LocalDateTime.of(2023, 1, 1, 12, 0);
         LocalDateTime modified = LocalDateTime.of(2023, 6, 1, 12, 0);
@@ -330,7 +333,7 @@ public class ProductTest {
 
     @Test
     void getProductsCreatedAfter_noProductsNewer_returnsEmptyList() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
 
         LocalDateTime d1 = LocalDateTime.of(2023, 1, 1, 12, 0);
         LocalDateTime d2 = LocalDateTime.of(2023, 2, 1, 12, 0);
@@ -357,7 +360,7 @@ public class ProductTest {
 
     @Test
     void getModifiedProducts_noModifiedProducts_returnsEmptyList() {
-        ProductService productService = new ProductService();
+        ProductService productService = new ProductService(new InMemoryProductRepository());
 
         LocalDateTime created = LocalDateTime.of(2023, 1, 1, 12, 0);
 

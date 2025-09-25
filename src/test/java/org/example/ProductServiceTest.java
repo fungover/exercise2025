@@ -1,16 +1,16 @@
 package org.example;
 import org.example.entities.Category;
 import org.example.entities.Product;
-import org.example.service.Warehouse;
+import org.example.service.ProductService;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class WarehouseTest {
+public class ProductServiceTest {
 
-    private Warehouse warehouse;
+    private ProductService productServiceTest;
     private Product product1;
     private Product product2;
     private Product product3;
@@ -19,7 +19,7 @@ public class WarehouseTest {
 
     @BeforeEach
     void setUp() {
-        warehouse = new Warehouse();
+        productServiceTest = new ProductService();
 
         LocalDateTime baseNow = LocalDateTime.now();
         LocalDateTime sixDaysAgo = baseNow.minusDays(6);
@@ -71,11 +71,11 @@ public class WarehouseTest {
                 null
         );
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
-        warehouse.addProduct(product3);
-        warehouse.addProduct(product4);
-        warehouse.addProduct(product5);
+        productServiceTest.addProduct(product1);
+        productServiceTest.addProduct(product2);
+        productServiceTest.addProduct(product3);
+        productServiceTest.addProduct(product4);
+        productServiceTest.addProduct(product5);
     }
 
     @Test
@@ -89,8 +89,8 @@ public class WarehouseTest {
                 LocalDateTime.now()
         );
 
-        warehouse.addProduct(addedProduct);
-        assertEquals(6, warehouse.getAllProducts().size());
+        productServiceTest.addProduct(addedProduct);
+        assertEquals(6, productServiceTest.getAllProducts().size());
      }
 
      @Test
@@ -103,13 +103,13 @@ public class WarehouseTest {
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().minusDays(1)
         );
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(duplicateProduct));
+        assertThrows(IllegalArgumentException.class, () -> productServiceTest.addProduct(duplicateProduct));
      }
 
      @Test
      void testingUpdateProduct() {
-         warehouse.updateProduct("1", "Newer Gaming Laptop", Category.ELECTRONICS, 8);
-         Product updatedProduct = warehouse.getProductById("1");
+         productServiceTest.updateProduct("1", "Newer Gaming Laptop", Category.ELECTRONICS, 8);
+         Product updatedProduct = productServiceTest.getProductById("1");
 
          assertEquals("1", updatedProduct.id());
          assertEquals("Newer Gaming Laptop", updatedProduct.name());
@@ -120,19 +120,19 @@ public class WarehouseTest {
      @Test
      void testingUpdateProductNotFoundTestFailure() {
         assertThrows(IllegalArgumentException.class, () -> {
-            warehouse.updateProduct("999", "Failing Product", Category.GAMES, 1);
+            productServiceTest.updateProduct("999", "Failing Product", Category.GAMES, 1);
         });
      }
 
      @Test
      void testingGetAllProducts() {
-        List<Product> allProducts = warehouse.getAllProducts();
+        List<Product> allProducts = productServiceTest.getAllProducts();
         assertEquals(5, allProducts.size());
      }
 
      @Test
     void testingAllProductsUnmodifiableTestFailure() {
-        List<Product> allProducts = warehouse.getAllProducts();
+        List<Product> allProducts = productServiceTest.getAllProducts();
         assertThrows(UnsupportedOperationException.class, () -> {
             allProducts.add(product1);
         });
@@ -140,7 +140,7 @@ public class WarehouseTest {
 
     @Test
     void getProductById() {
-        Product product = warehouse.getProductById("1");
+        Product product = productServiceTest.getProductById("1");
         assertEquals("1", product.id());
         assertEquals("Super Gaming Laptop", product.name());
         assertEquals(Category.ELECTRONICS, product.category());
@@ -149,38 +149,39 @@ public class WarehouseTest {
 
     @Test
     void getProductByIdNotFoundTestFailure() {
-        assertThrows(IllegalArgumentException.class, () -> {warehouse.getProductById("999");});
+        assertThrows(IllegalArgumentException.class, () -> {
+            productServiceTest.getProductById("999");});
     }
 
     @Test
     void getProductByCategorySorted() {
-        List<Product> sortedProducts = warehouse.getProductsByCategorySorted(Category.FURNITURE);
+        List<Product> sortedProducts = productServiceTest.getProductsByCategorySorted(Category.FURNITURE);
         assertEquals(2, sortedProducts.size());
         assertEquals("Gaming Chair",  sortedProducts.getFirst().name());
     }
 
     @Test
     void getProductByCategorySortedEmptyTestFailure() {
-        List<Product> emptyList = warehouse.getProductsByCategorySorted(Category.MOVIES);
+        List<Product> emptyList = productServiceTest.getProductsByCategorySorted(Category.MOVIES);
         assertTrue(emptyList.isEmpty(), "Should be empty");
     }
 
     @Test
     void getProductsCreatedAfter() {
-        List<Product> recentProducts = warehouse.getProductsCreatedAfter(LocalDateTime.now().minusDays(3));
+        List<Product> recentProducts = productServiceTest.getProductsCreatedAfter(LocalDateTime.now().minusDays(3));
         assertEquals(3, recentProducts.size());
     }
 
     @Test
     void getProductsCreatedAfterEmptyTestFailure() {
-        List<Product> emptyList = warehouse.getProductsCreatedAfter(LocalDateTime.now());
+        List<Product> emptyList = productServiceTest.getProductsCreatedAfter(LocalDateTime.now());
         assertTrue(emptyList.isEmpty(), "Should be empty");
     }
 
     @Test
     void getModifiedProducts() {
-        warehouse.updateProduct("1", "Newer Gaming Laptop", Category.ELECTRONICS, 8);
-        List<Product> modifiedProducts = warehouse.getModifiedProducts();
+        productServiceTest.updateProduct("1", "Newer Gaming Laptop", Category.ELECTRONICS, 8);
+        List<Product> modifiedProducts = productServiceTest.getModifiedProducts();
         assertEquals(1, modifiedProducts.size());
         assertEquals("Newer Gaming Laptop", modifiedProducts.getFirst().name());
 
@@ -188,7 +189,7 @@ public class WarehouseTest {
 
     @Test
     void getModifiedProductsEmptyTestFailure() {
-        List<Product> emptyList = warehouse.getModifiedProducts();
+        List<Product> emptyList = productServiceTest.getModifiedProducts();
         assertTrue(emptyList.isEmpty(), "Should be empty");
     }
 }

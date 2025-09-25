@@ -42,7 +42,7 @@ public class ProductService {
                 .orElseThrow(() -> new NoSuchElementException("Product with id " + id + " not found"));
 
         Product updated = new Product.Builder()
-                .id(Integer.parseInt(id))
+                .id(id)
                 .name(name)
                 .category(category)
                 .rating(rating)
@@ -68,7 +68,7 @@ public class ProductService {
     }
 
     public List<Product> getModifiedProducts() {
-        return getModifiedProducts().stream()
+        return getAllProducts().stream()
                 .filter(p -> !p.createdAt().equals(p.modifiedAt()))
                 .toList();
     }

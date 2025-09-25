@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Product {
-    private final int id;
+    private final String id;
     private final String name;
     private final Category category;
     private final int rating;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    private Product(int id, String name, Category category, int rating, LocalDateTime createdAt,
+    private Product(String id, String name, Category category, int rating, LocalDateTime createdAt,
             LocalDateTime modifiedAt) {
         this.id = id;
         this.name = name;
@@ -22,14 +22,14 @@ public class Product {
     }
 
     public static class Builder {
-        private int id;
+        private String id;
         private String name;
         private Category category;
         private int rating;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
 
-        public Builder id(int id) {
+        public Builder id(String id) {
             this.id = id;
             return this;
         }
@@ -73,7 +73,7 @@ public class Product {
 
     }
 
-    public int id() {
+    public String id() {
         return id;
     }
 

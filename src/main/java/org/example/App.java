@@ -1,14 +1,13 @@
 package org.example;
 
+import service.InMemoryProductRepository;
 
-import entities.Product;
+import service.ProductService;
 
-import java.time.LocalDateTime;
-
-import static entities.Category.BOOK;
 
 public class App {
     public static void main(String[] args) {
-
+        InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(inMemoryProductRepository);
     }
 }

@@ -21,7 +21,7 @@ public class ProductTest {
 
         LocalDateTime dateTime = LocalDateTime.now();
         Product product = new Product.Builder()
-                .id(1)
+                .id("1")
                 .name("Book")
                 .category(Category.BOOK)
                 .rating(8)
@@ -40,7 +40,7 @@ public class ProductTest {
         ProductService productService = new ProductService(new InMemoryProductRepository());
         LocalDateTime now = LocalDateTime.of(2023, 1, 1, 12, 0);
         Product product = new Product.Builder()
-                .id(2).name("")
+                .id("2").name("")
                 .category(Category.BOOK)
                 .rating(5).createdAt(now)
                 .modifiedAt(now)
@@ -64,7 +64,7 @@ public class ProductTest {
         LocalDateTime now = LocalDateTime.now();
 
         Product product = new Product.Builder()
-                .id(1)
+                .id("1")
                 .name("Old Name")
                 .category(Category.BOOK)
                 .rating(3)
@@ -90,7 +90,7 @@ public class ProductTest {
         LocalDateTime now = LocalDateTime.now();
 
         Product p1 = new Product.Builder()
-                .id(1)
+                .id("1")
                 .name("Book")
                 .category(Category.BOOK)
                 .rating(5)
@@ -99,7 +99,7 @@ public class ProductTest {
                 .build();
 
         Product p2 = new Product.Builder()
-                .id(2)
+                .id("2")
                 .name("Movie")
                 .category(Category.MOVIE)
                 .rating(4)
@@ -141,7 +141,7 @@ public class ProductTest {
         LocalDateTime now = LocalDateTime.now();
 
         Product product1 = new Product.Builder()
-                .id(56)
+                .id("56")
                 .name("Book")
                 .category(Category.BOOK)
                 .rating(5)
@@ -150,7 +150,7 @@ public class ProductTest {
                 .build();
 
         Product product2 = new Product.Builder()
-                .id(78)
+                .id("78")
                 .name("Book")
                 .category(Category.BOOK)
                 .rating(5)
@@ -161,8 +161,8 @@ public class ProductTest {
         productService.addProduct(product1);
         productService.addProduct(product2);
 
-        assertEquals(56, product1.id());
-        assertEquals(78, product2.id());
+        assertEquals("56", product1.id());
+        assertEquals("78", product2.id());
 
     }
 
@@ -172,7 +172,7 @@ public class ProductTest {
         LocalDateTime now = LocalDateTime.now();
 
         Product p1 = new Product.Builder()
-                .id(5)
+                .id("5")
                 .name("Clown Town")
                 .category(Category.MOVIE)
                 .rating(5)
@@ -181,7 +181,7 @@ public class ProductTest {
                 .build();
 
         Product p2 = new Product.Builder()
-                .id(6)
+                .id("6")
                 .name("Bla bla bla")
                 .category(Category.MOVIE)
                 .rating(5)
@@ -205,7 +205,7 @@ public class ProductTest {
         LocalDateTime now = LocalDateTime.now();
 
         Product p1 = new Product.Builder()
-                .id(1)
+                .id("1")
                 .name("The Book of Lost Hours")
                 .category(Category.BOOK)
                 .rating(4)
@@ -214,7 +214,7 @@ public class ProductTest {
                 .build();
 
         Product p2 = new Product.Builder()
-                .id(2).name("Dominion")
+                .id("2").name("Dominion")
                 .category(Category.BOOK)
                 .rating(1)
                 .createdAt(now)
@@ -222,7 +222,7 @@ public class ProductTest {
                 .build();
 
         Product p3 = new Product.Builder()
-                .id(3)
+                .id("3")
                 .name("People Like Us")
                 .category(Category.BOOK)
                 .rating(3).createdAt(now)
@@ -230,7 +230,7 @@ public class ProductTest {
                 .build();
 
         Product p4 = new Product.Builder()
-                .id(4)
+                .id("4")
                 .name("Clown Town")
                 .category(Category.BOOK)
                 .rating(5).createdAt(now)
@@ -259,7 +259,7 @@ public class ProductTest {
         LocalDateTime d3 = LocalDateTime.of(2025, 1, 1, 12, 0);
 
         Product old = new Product.Builder()
-                .id(1)
+                .id("1")
                 .name("Old Book")
                 .category(Category.BOOK)
                 .rating(3).createdAt(d1)
@@ -267,7 +267,7 @@ public class ProductTest {
                 .build();
 
         Product mid = new Product.Builder()
-                .id(2)
+                .id("2")
                 .name("Mid Book")
                 .category(Category.BOOK)
                 .rating(4)
@@ -276,7 +276,7 @@ public class ProductTest {
                 .build();
 
         Product recent = new Product.Builder()
-                .id(3)
+                .id("3")
                 .name("Recent Book")
                 .category(Category.BOOK)
                 .rating(5)
@@ -304,7 +304,7 @@ public class ProductTest {
         LocalDateTime modified = LocalDateTime.of(2023, 6, 1, 12, 0);
 
         Product p1 = new Product.Builder()
-                .id(1)
+                .id("1")
                 .name("Unchanged Book")
                 .category(Category.BOOK)
                 .rating(3)
@@ -313,7 +313,7 @@ public class ProductTest {
                 .build();
 
         Product p2 = new Product.Builder()
-                .id(2)
+                .id("2")
                 .name("Changed Book")
                 .category(Category.BOOK)
                 .rating(4)
@@ -338,14 +338,14 @@ public class ProductTest {
         LocalDateTime d1 = LocalDateTime.of(2023, 1, 1, 12, 0);
         LocalDateTime d2 = LocalDateTime.of(2023, 2, 1, 12, 0);
 
-        Product p1 = new Product.Builder().id(1)
+        Product p1 = new Product.Builder().id("1")
                 .name("Old Book 1")
                 .category(Category.BOOK)
                 .rating(3).createdAt(d1)
                 .modifiedAt(d1)
                 .build();
         Product p2 = new Product.Builder()
-                .id(2).name("Old Book 2")
+                .id("2").name("Old Book 2")
                 .category(Category.BOOK)
                 .rating(4).createdAt(d2)
                 .modifiedAt(d2).build();
@@ -365,14 +365,14 @@ public class ProductTest {
         LocalDateTime created = LocalDateTime.of(2023, 1, 1, 12, 0);
 
         Product p1 = new Product.Builder()
-                .id(1).name("Book 1")
+                .id("1").name("Book 1")
                 .category(Category.BOOK)
                 .rating(3).createdAt(created)
                 .modifiedAt(created)
                 .build();
 
         Product p2 = new Product.Builder()
-                .id(2).name("Book 2")
+                .id("2").name("Book 2")
                 .category(Category.BOOK)
                 .rating(4).createdAt(created)
                 .modifiedAt(created)

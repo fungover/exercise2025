@@ -3,6 +3,8 @@ package org.example.di.part3_weld_cdi;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
+
+import java.util.Locale;
 import java.util.Map;
 
 @ApplicationScoped // Weld creates this once and reuses it
@@ -19,7 +21,7 @@ public class SimpleCheckoutService implements CheckoutService {
         this.defaultPaymentMethod = defaultPaymentMethod;
         this.paymentMethods = Map.of(
                 "swish", swish,
-                "creditCard", creditCard,
+                "creditcard", creditCard,
                 "trustly", trustly
         );
     }
@@ -33,7 +35,10 @@ public class SimpleCheckoutService implements CheckoutService {
     // Choose payment method
     @Override
     public String checkout(int amount, String method) {
-        PaymentMethod chosenPaymentMethod = paymentMethods.get(method);
+        if (method == null) {
+            throw new IllegalArgumentException("Payment method name must not be null");
+            }
+        PaymentMethod chosenPaymentMethod = paymentMethods.get(method.toLowerCase(Locale.ROOT));
         if (chosenPaymentMethod == null) {
             throw new IllegalArgumentException("Invalid payment method: " + method);
         }

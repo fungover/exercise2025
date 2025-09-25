@@ -12,25 +12,41 @@ public class WeldApp {
 
         System.out.println("=== Testing Weld CDI ===");
 
-        try (SeContainer container = SeContainerInitializer.newInstance().initialize()) { // Creates and initializes the CDI-container (weld)
+
+        /**
+         * Creates and starts the Weld CDI-container.
+         * - It scans the classes in the project after CDI annotations. (@ApplicationScoped, @Inject, @Qualifier etc.)
+         * - Then it builds a "map" of which implementation to use for each interface/abstraction. (Which beans to use for which injection points)
+         */
+        try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
 
 
-            //Gets a bean that implements MessageService with the @Email qualifier.
-            //Since EmailMessageService is marked with @Email and @ApplicationScoped,
-            //the container knows to provide an instance of EmailMessageService.
-
+            /**
+             * Here we ask for MessageService with the @Email qualifier (annotation).
+             * - CDI finds EmailMessageService (It's applicationScoped and has @Email annotation).
+             * - Since EmailMessageService has a dependency on DataRepository, it also creates a DatabaseRepository.
+             * - NOTE: Selection of repository depends on which one is active in beans.xml (Database or File). @Default or @Alternative.
+             */
 
             MessageService emailService = container
                     .select(MessageService.class, new Email.Literal())
                     .get();
             emailService.processMessage();
 
-            // Same as above, but now we ask for the @Sms implementation.
+            /**
+             * Now we ask for MessageService with the @Sms qualifier (annotation) instead.
+             * - CDI finds SmsMessageService (It's applicationScoped and has @Sms annotation).
+             * - This one also needs a DataRepository, but now we reuse the same DatabaseRepository instance as before (because it's applicationScoped).
+             */
 
             MessageService smsService = container
                     .select(MessageService.class, new Sms.Literal())
                     .get();
             smsService.processMessage();
         }
+        /**
+         * And here at the end the container is shut down automatically (try-with-resources).
+         * - All beans with scope @ApplicationScoped or @Dependent are destroyed.
+         */
     }
 }

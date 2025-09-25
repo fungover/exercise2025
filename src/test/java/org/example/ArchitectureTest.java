@@ -79,17 +79,31 @@ class ArchitectureTest {
     }
 
     @Test
-    void appClassShouldBeOnlyPlaceToWireEverythingTogether() {
-
-        ArchRule rule = noClasses()
+    void onlyAppContainerAppAndWeldAppShouldWireDependencies() {
+        ArchRule appRule = noClasses()
                 .that().resideInAnyPackage("..service..", "..repository..", "..domain..")
-                .should().accessClassesThat().resideInAPackage("org.example")
-                .andShould().accessClassesThat().haveSimpleName("App")
-                .as("Only App class should wire everything together.");
+                .should().accessClassesThat().resideInAnyPackage("org.example..")
+                .andShould().accessClassesThat().haveSimpleName("App");
 
-        System.out.println("Testing: Only App class should access all packages for wiring.");
-        rule.check(importedClasses);
-        System.out.println("PASSED: Only app class correctly wires dependencies.");
+        ArchRule containerAppRule = noClasses()
+                .that().resideInAnyPackage("..service..", "..repository..", "..domain..")
+                .should().accessClassesThat().resideInAnyPackage("org.example..")
+                .andShould().accessClassesThat().haveSimpleName("ContainerApp");
+
+        ArchRule weldAppRule = noClasses()
+                .that().resideInAnyPackage("..service..", "..repository..", "..domain..")
+                .should().accessClassesThat().resideInAnyPackage("org.example..")
+                .andShould().accessClassesThat().haveSimpleName("WeldApp");
+
+        System.out.println("Testing: Only App, ContainerApp and WeldApp should wire dependencies.");
+
+        appRule.check(importedClasses);
+        containerAppRule.check(importedClasses);
+        weldAppRule.check(importedClasses);
+
+        System.out.println("PASSED: Only App, ContainerApp and WeldApp wire dependencies.");
+
     }
+
 
 }

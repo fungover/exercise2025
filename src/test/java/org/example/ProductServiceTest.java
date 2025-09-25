@@ -1,9 +1,13 @@
 package org.example;
 import org.example.entities.Category;
 import org.example.entities.Product;
+import org.example.repository.ProductRepository;
+import org.example.repository.InMemoryProductRepository;
 import org.example.service.ProductService;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,57 +23,53 @@ public class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        productServiceTest = new ProductService();
+        ProductRepository repository = new InMemoryProductRepository();
+        productServiceTest = new ProductService(repository);
 
         LocalDateTime baseNow = LocalDateTime.now();
         LocalDateTime sixDaysAgo = baseNow.minusDays(6);
         LocalDateTime fourDaysAgo = baseNow.minusDays(4);
         LocalDateTime oneDayAgo = baseNow.minusDays(1);
 
-        product1 = new Product(
-                "1",
-                "Super Gaming Laptop",
-                Category.ELECTRONICS,
-                4,
-                sixDaysAgo,
-                null
-        );
+        product1 = new Product.Builder()
+                .id("1")
+                .name("Super Gaming Laptop")
+                .category(Category.ELECTRONICS)
+                .rating(4)
+                .createdDate(sixDaysAgo)
+                .build();
 
-        product2 = new Product(
-                "2",
-                "Dune Awakening",
-                Category.GAMES,
-                10,
-                oneDayAgo,
-                null
-        );
+        product2 = new Product.Builder()
+                .id("2")
+                .name("Dune Awakening")
+                .category(Category.GAMES)
+                .rating(10)
+                .createdDate(oneDayAgo)
+                .build();
 
-        product3 = new Product(
-                "3",
-                "Valheim",
-                Category.GAMES,
-                10,
-                fourDaysAgo,
-                null
-        );
+        product3 = new Product.Builder()
+                .id("3")
+                .name("Valheim")
+                .category(Category.GAMES)
+                .rating(10)
+                .createdDate(fourDaysAgo)
+                .build();
 
-        product4 = new Product(
-                "4",
-                "XGaming Chair",
-                Category.FURNITURE,
-                6,
-                oneDayAgo,
-                null
-        );
+        product4 = new Product.Builder()
+                .id("4")
+                .name("XGaming Chair")
+                .category(Category.FURNITURE)
+                .rating(6)
+                .createdDate(oneDayAgo)
+                .build();
 
-        product5 = new Product(
-                "5",
-                "Gaming Chair",
-                Category.FURNITURE,
-                8,
-                oneDayAgo,
-                null
-        );
+        product5 = new Product.Builder()
+                .id("5")
+                .name("Gaming Chair")
+                .category(Category.FURNITURE)
+                .rating(8)
+                .createdDate(oneDayAgo)
+                .build();
 
         productServiceTest.addProduct(product1);
         productServiceTest.addProduct(product2);
@@ -80,31 +80,30 @@ public class ProductServiceTest {
 
     @Test
      void testingAddProduct() {
-        Product addedProduct = new Product(
-                "6",
-                "Table",
-                Category.FURNITURE,
-                3,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        Product addedProduct = new Product.Builder()
+                .id("6")
+                .name("Table")
+                .category(Category.FURNITURE)
+                .rating(3)
+                .createdDate(LocalDateTime.now())
+                .build();
 
         productServiceTest.addProduct(addedProduct);
         assertEquals(6, productServiceTest.getAllProducts().size());
      }
 
-     @Test
-     void testingAddProductAddingDuplicateProductTestFailure() {
-        Product duplicateProduct = new Product(
-                "1",
-                "Super Gaming Laptop",
-                Category.ELECTRONICS,
-                4,
-                LocalDateTime.now().minusDays(1),
-                LocalDateTime.now().minusDays(1)
-        );
+    @Test
+    void testingAddProductAddingDuplicateProductTestFailure() {
+        Product duplicateProduct = new Product.Builder()
+                .id("1")
+                .name("Super Gaming Laptop")
+                .category(Category.ELECTRONICS)
+                .rating(4)
+                .createdDate(LocalDateTime.now().minusDays(1))
+                .build();
+
         assertThrows(IllegalArgumentException.class, () -> productServiceTest.addProduct(duplicateProduct));
-     }
+    }
 
      @Test
      void testingUpdateProduct() {

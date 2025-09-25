@@ -1,0 +1,112 @@
+package org.example.entities;
+
+import org.example.entities.behaviors.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Player {
+    private final String name;
+    private int health;
+    private int baseDamage;
+    private final List<Item> inventory;
+    private int x;
+    private int y;
+    private final CombatBehavior combatBehavior;
+
+    public Player(String name, int health, int baseDamage, CombatBehavior combatBehavior) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Player name cannot be null or empty");
+        }
+        if (health <= 0) {
+            throw new IllegalArgumentException("Health cannot be negative or zero");
+        }
+        if (baseDamage < 0) {
+            throw new IllegalArgumentException("Base damage cannot be negative");
+        }
+        if (combatBehavior == null) {
+            throw new IllegalArgumentException("Combat behaviour cannot be null");
+        }
+        this.name = name;
+        this.health = health;
+        this.baseDamage = baseDamage;
+        this.combatBehavior = combatBehavior;
+        this.inventory = new ArrayList<>();
+        this.x = 0;
+        this.y = 0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getBaseDamage() {
+        return baseDamage;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public List<Item> getInventory() {
+        return new ArrayList<>(inventory);
+    }
+
+    public CombatBehavior getCombatBehaviour() {
+        return combatBehavior;
+    }
+
+    public boolean isAlive() {
+        return health > 0;
+    }
+
+    public void takeDamage(int damage) {
+        if (damage < 0) {
+            throw new IllegalArgumentException("Damage cannot be negative");
+        }
+        health = Math.max(0, health - damage);
+    }
+
+    public void attack(Enemy enemy) {
+        if (enemy == null) {
+            throw new IllegalArgumentException("Enemy cannot be null");
+        }
+        combatBehavior.attack(enemy);
+    }
+
+    public void addItem(Item item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Item cannot be null");
+        }
+        inventory.add(item);
+    }
+
+    public void useItem(Item item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Item cannot be null");
+        }
+        if (!inventory.contains(item)) {
+            throw new IllegalArgumentException("Item is not in inventory");
+        }
+        item.getEffect().apply(this);
+    }
+
+    public void moveTo(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + health + " health, " + baseDamage + " base damage, " + inventory.size() + " items)";
+    }
+}
+
+

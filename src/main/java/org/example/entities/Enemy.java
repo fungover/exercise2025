@@ -1,0 +1,56 @@
+package org.example.entities;
+
+import org.example.entities.behaviors.*;
+
+public abstract class Enemy {
+    private final String name;
+    private int health;
+    private final AttackBehavior attackBehavior;
+
+    protected Enemy(String name, int health, AttackBehavior attackBehavior) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Enemy name cannot be null or empty");
+        }
+        if (health <= 0) {
+            throw new IllegalArgumentException("Health cannot be negative or zero");
+        }
+        if (attackBehavior == null) {
+            throw new IllegalArgumentException("Attack behavior cannot be null");
+        }
+        this.name = name;
+        this.health = health;
+        this.attackBehavior = attackBehavior;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public AttackBehavior getAttackBehavior() {
+        return attackBehavior;
+    }
+
+    public boolean isAlive() {
+        return health > 0;
+    }
+
+    public void takeDamage(int damage) {
+        if (damage < 0) {
+            throw new IllegalArgumentException("Damage cannot be negative");
+        }
+        health = Math.max(0, health - damage);
+    }
+
+    public void attack(Player player) {
+        attackBehavior.attack(player);
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + health + " health, " + attackBehavior + ")";
+    }
+}

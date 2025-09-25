@@ -8,13 +8,13 @@ public class DIContainerTest {
 
     @Test
     void shouldCreateCustomerWithDependencies() {
-        // Create a DI container
-        DIContainer container = new DIContainer();
+        // We ask only for Customer, and the container resolves the full chain
+        // (Customer -> CheckoutService -> PaymentMethod) automatically.
+        Customer customer = new DIContainer()
+                .getInstance(Customer.class);
 
-        // Ask for a Customer instance
-        Customer customer = container.getInstance(Customer.class);
-
-        // Assert that the whole dependency graph was created
+        // NOTE: The container is currently hardcoded to use SwishPayment
+        // for the PaymentMethod interface. So this test will always expect Swish.
         String result = customer.makePurchase(200);
         assertEquals("Customer completed purchase: Paid 200 SEK with Swish", result);
     }

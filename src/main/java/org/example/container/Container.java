@@ -11,6 +11,12 @@ public class Container {
     private final Map<Class<?>, Class<?>> bindings = new HashMap<>();
 
     public <A, B extends A> void bind(Class<A> abstraction, Class<B> implementation) {
+        if (implementation == null) {
+            throw new IllegalArgumentException("Implementation must not be null for " + abstraction.getName());
+        }
+        if (!abstraction.isAssignableFrom(implementation)) {
+            throw new IllegalArgumentException(implementation.getName() + " does not implement " + abstraction.getName());
+        }
         bindings.put(abstraction, implementation);
     }
 

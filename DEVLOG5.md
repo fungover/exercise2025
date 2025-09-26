@@ -1,8 +1,13 @@
 ### Development notes
-Architecture: com.example.di = for my lab, dependency injection
+Architecture: 
 main = Start app
 service = business logic
 repository = Data access
+di = Recursive DI container
+
+MainManual = Step 1
+MainContainer = Step 2
+MainWeld = Step 3
 
 
 ## Exercise 5:
@@ -19,16 +24,16 @@ Goal: Learn the basics of Dependency Injection (DI) in Java:
 Hint: Focus on constructor injection — no setters, no static factories.
 
 # Part 2 – A Minimal DI Container
-[] Create a simple “container” class with a method to return an instance of a requested class.
-[] If the requested class has a constructor with parameters, the container should recursively request those dependencies as well.
-[] Demonstrate this by asking the container only for a top-level class and verifying that the entire dependency graph is created automatically.
+[x] Create a simple “container” class with a method to return an instance of a requested class.
+[x] If the requested class has a constructor with parameters, the container should recursively request those dependencies as well.
+[x] Demonstrate this by asking the container only for a top-level class and verifying that the entire dependency graph is created automatically.
 Hint: Reflection will be useful. You can assume each class has only one constructor.
 
 # Part 3 – Using Weld (CDI)
-[] Add Weld as a dependency to your project.
+[x] Add Weld as a dependency to your project.
 
-[] If you use Maven, include weld-se-core.
-[] Create a beans.xml file under META-INF (or WEB-INF if you later move to a web application).
+[x] If you use Maven, include weld-se-core.
+[x] Create a beans.xml file under META-INF (or WEB-INF if you later move to a web application).
 
 The file can be empty but must exist for CDI to be activated.
 [] Annotate your classes with CDI annotations.

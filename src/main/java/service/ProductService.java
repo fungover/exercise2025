@@ -41,9 +41,14 @@ public class ProductService {
 
 
     public void updateProduct(String id, String name, Category category, int rating) {
-        Product existing = getProductById(String.valueOf(id))
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("Id can not be empty");
+        }
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name can not be empty");
+        }
+        Product existing = getProductById(id)
                 .orElseThrow(() -> new NoSuchElementException("Product with id " + id + " not found"));
-
         Product updated = new Product.Builder()
                 .id(id)
                 .name(name)
@@ -52,7 +57,6 @@ public class ProductService {
                 .createdAt(existing.createdAt())
                 .modifiedAt(LocalDateTime.now())
                 .build();
-
         productRepository.updateProduct(updated);
     }
 

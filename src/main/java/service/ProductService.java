@@ -17,11 +17,14 @@ public class ProductService {
     }
 
     public void addProduct(Product product) {
-        if (product.name().isEmpty()) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product can not be null");
+        }
+        var name = product.name();
+        if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Name can not be empty");
         }
         productRepository.addProduct(product);
-
     }
 
     public Optional<Product> getProductById(String id) {

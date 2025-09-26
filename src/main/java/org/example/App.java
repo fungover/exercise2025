@@ -1,7 +1,13 @@
 package org.example;
 
+import service.InMemoryProductRepository;
+
+import service.ProductService;
+
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello There!");
+        InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(inMemoryProductRepository);
     }
 }

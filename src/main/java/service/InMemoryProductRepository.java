@@ -2,10 +2,7 @@ package service;
 
 import entities.Product;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 public class InMemoryProductRepository implements ProductRepository{
 
@@ -31,7 +28,7 @@ public class InMemoryProductRepository implements ProductRepository{
     @Override
     public void updateProduct(Product product) {
         for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).id() == product.id()) {
+            if (Objects.equals(products.get(i).id(), product.id())) {
                 products.set(i, product);
                 return;
             }

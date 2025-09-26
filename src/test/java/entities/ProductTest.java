@@ -32,7 +32,7 @@ public class ProductTest {
         productService.addProduct(product);
 
         assertEquals(1, productService.getAllProducts().size());
-        assertEquals(product, productService.getAllProducts().getFirst());
+        assertEquals(product, productService.getAllProducts().get(0));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class ProductTest {
 
         productService.updateProduct("1", "New Name", Category.BOOK, 5);
 
-        Product updated = productService.getAllProducts().getFirst();
+        Product updated = productService.getAllProducts().get(0);
 
         assertEquals("New Name", updated.name());
         assertEquals(5, updated.rating());

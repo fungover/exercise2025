@@ -65,14 +65,17 @@ public class ProductService {
     }
 
     public List<Product> getProductsCreatedAfter(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("date can not be null");
+        }
         return getAllProducts().stream()
-                .filter(p -> p.createdAt().toLocalDate().isAfter(date))
+                .filter(p -> p.createdAt() != null && p.createdAt().toLocalDate().isAfter(date))
                 .toList();
     }
 
     public List<Product> getModifiedProducts() {
         return getAllProducts().stream()
-                .filter(p -> !p.createdAt().equals(p.modifiedAt()))
+                .filter(p -> !Objects.equals(p.createdAt(), p.modifiedAt()))
                 .toList();
     }
 }

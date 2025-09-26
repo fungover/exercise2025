@@ -36,7 +36,7 @@ Hint: Reflection will be useful. You can assume each class has only one construc
 [x] Create a beans.xml file under META-INF (or WEB-INF if you later move to a web application).
 
 The file can be empty but must exist for CDI to be activated.
-[] Annotate your classes with CDI annotations.
+[x] Annotate your classes with CDI annotations.
 
 In Java SE, you can use the following:
 
@@ -47,9 +47,9 @@ In Java SE, you can use the following:
 @Singleton – alternative to @ApplicationScoped.
 Do not use @RequestScoped, @SessionScoped, or @ConversationScoped — they require a web container.
 
-[] Replace your custom container with Weld. Start Weld and ask it for your top-level class.
+[x] Replace your custom container with Weld. Start Weld and ask it for your top-level class.
 
-[] Run the application and compare the behavior with Part 1 and Part 2.
+[x] Run the application and compare the behavior with Part 1 and Part 2.
 
 What to Think About
 - Why is constructor injection often preferred over field or setter injection?

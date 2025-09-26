@@ -44,5 +44,3 @@ public class App {
         }
     }
 }
-
-// TODO: Fix so that AdvancedService can run both FilePersistence and DataBasePersistence

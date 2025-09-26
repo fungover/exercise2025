@@ -29,7 +29,12 @@ public class MiniContainer {
                 impl = registrations.get(type);
                 if (impl == null) throw new RuntimeException("No registration for " + type.getName());
             }
-            Constructor<?> ctor = impl.getConstructors()[0];
+            Constructor<?>[] ctors = impl.getConstructors();
+            if (ctors.length != 1) {
+                throw new RuntimeException("Expected exactly one public constructor for " + impl.getName() +
+                        ", but found " + ctors.length);
+            }
+            Constructor<?> ctor = ctors[0];
             Object[] args = Arrays.stream(ctor.getParameterTypes())
                     .map(this::get)
                     .toArray();

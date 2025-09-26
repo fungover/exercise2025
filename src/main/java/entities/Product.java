@@ -69,7 +69,7 @@ public class Product {
     @Override
     public String toString() {
         return "Product{id=" + id + ", name='" + name + "', category=" + category + ", rating=" + rating
-                + "created at=" + createdAt + "modified at=" + modifiedAt + "}";
+                + "created at=" + createdAt + ", modified at=" + modifiedAt + "}";
 
     }
 

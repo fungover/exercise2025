@@ -1,14 +1,21 @@
+### Development notes
+Architecture: com.example.di = for my lab, dependency injection
+main = Start app
+service = business logic
+repository = Data access
+
+
 ## Exercise 5:
 Dependency Injection with Java and Weld
 Goal: Learn the basics of Dependency Injection (DI) in Java:
 
-[] Understand constructor injection by hand.
+[x] Understand constructor injection by hand.
 [] Build a minimal DI container that resolves dependencies recursively.
 [] Use Weld (CDI) to handle injection automatically.
 # Part 1 – Manual Constructor Injection
-[] Create at least two interfaces and multiple implementations (e.g., a service and a persistence layer).
-[] In a Main class, manually instantiate the dependencies and pass them into constructors.
-[] Run the application and confirm that dependencies are correctly wired.
+[x] Create at least two interfaces and multiple implementations (e.g., a service and a persistence layer).
+[x] In a Main class, manually instantiate the dependencies and pass them into constructors.
+[x] Run the application and confirm that dependencies are correctly wired.
 Hint: Focus on constructor injection — no setters, no static factories.
 
 # Part 2 – A Minimal DI Container

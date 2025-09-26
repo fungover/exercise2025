@@ -1,10 +1,12 @@
-package com.example.di;
+package com.example.di.service;
+
+import com.example.di.repository.ProductRepository;
 
 /**
  * Service class that handles manual constructor injection
  **/
 
-public class ProductService {
+public class ProductService implements ProductServiceInterface {
     private final ProductRepository repo;
 
     public ProductService(ProductRepository repo) {

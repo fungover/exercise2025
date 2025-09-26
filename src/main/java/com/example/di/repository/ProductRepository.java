@@ -1,4 +1,4 @@
-package com.example.di;
+package com.example.di.repository;
 
 import java.util.List;
 

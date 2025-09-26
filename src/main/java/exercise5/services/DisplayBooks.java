@@ -1,22 +1,22 @@
 package exercise5.services;
 
-import exercise5.repsitory.InMemoryBookRepository;
+import exercise5.repository.BookRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class DisplayBooks implements Library{
 
-    private final InMemoryBookRepository inMemoryBookRepository;
+    private final BookRepository bookRepository;
 
     @Inject
-    public DisplayBooks(InMemoryBookRepository inMemoryBookRepository) {
-        this.inMemoryBookRepository = inMemoryBookRepository;
+    public DisplayBooks(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     @Override
     public void displayAllBooks() {
-        System.out.println("All Books: "+inMemoryBookRepository.getAllBooks());
+        System.out.println("All Books: "+bookRepository.getAllBooks());
     }
 
 }

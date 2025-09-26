@@ -1,4 +1,4 @@
-package exercise5.repsitory;
+package exercise5.repository;
 
 import exercise5.entities.Book;
 import exercise5.entities.Genre;

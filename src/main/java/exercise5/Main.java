@@ -1,6 +1,7 @@
 package exercise5;
 
-import exercise5.repsitory.InMemoryBookRepository;
+import exercise5.repository.BookRepository;
+import exercise5.repository.InMemoryBookRepository;
 import exercise5.services.Container;
 import exercise5.services.DescriptionOfBook;
 import exercise5.services.DisplayBooks;
@@ -29,6 +30,7 @@ public class Main {
         System.out.println("A Minimal DI Container");
 
         Container container = new Container();
+        container.register(BookRepository.class, InMemoryBookRepository.class);
 
         SortBooks sortBooks2 = container.getAccess(SortBooks.class);
         sortBooks2.sortBooksByRating();

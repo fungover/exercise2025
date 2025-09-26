@@ -2,6 +2,8 @@ package org.example.di;
 
 import javax.script.Bindings;
 import java.lang.reflect.Constructor;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +16,13 @@ public class Container {
         bindings.put(abstraction, implementation);
     }
 
+    private final ThreadLocal<Deque<Class<?>>> resolving = ThreadLocal.withInitial(ArrayDeque::new);
     public <T> T getInstance(Class<T> type) {
+        Deque<Class<?>> stack = resolving.get();
+        if (stack.contains(type)) {
+            throw new IllegalStateException("Circular dependency detected: " + stack + " -> " + type);
+        }
+        stack.push(type);
         try {
             // If type is interface use implementation from bindings
             if (type.isInterface()) {
@@ -41,6 +49,11 @@ public class Container {
             return type.cast(constructor.newInstance(dependencies));
         } catch (Exception e) {
             throw new RuntimeException("Could not create instance of " + type, e);
+        } finally {
+            stack.pop();
+            if (stack.isEmpty()) {
+                resolving.remove();
+            }
         }
 
     }

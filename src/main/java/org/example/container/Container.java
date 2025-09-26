@@ -1,6 +1,9 @@
 package org.example.container;
 
+import jakarta.inject.Inject;
+
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +25,27 @@ public class Container {
                     throw new IllegalStateException("No binding registered for " + type.getName());
                 }
             }
-            Constructor<?> ctor = impl.getDeclaredConstructors()[0];
+            if (Modifier.isAbstract(impl.getModifiers())) {
+                throw new IllegalStateException("Cannot instantiate abstract type: " + impl.getName());
+            }
+
+            Constructor<?>[] ctors = impl.getDeclaredConstructors();
+            Constructor<?> ctor = null;
+            for (Constructor<?> c : ctors) {
+                if (c.isAnnotationPresent(Inject.class)) {
+                    if (ctor != null) {
+                        throw new IllegalStateException("Multiple @Inject constructors on " + impl.getName());
+                    }
+                    ctor = c;
+                }
+            }
+            if (ctor == null) {
+                if (ctors.length == 1) {
+                    ctor = ctors[0];
+                } else {
+                    throw new IllegalStateException("Multiple constructors on " + impl.getName() + " — annotate one with @Inject");
+                }
+            }
             Class<?>[] paramTypes = ctor.getParameterTypes();
 
             Object[] args = new Object[paramTypes.length];

@@ -1,5 +1,5 @@
-<beans xmlns="https://jakarta.ee/xml/ns/jakartaee" bean-discovery-mode="annotated" version="4.0">
+<beans xmlns="https://jakarta.ee/xml/ns/jakartaee" bean-discovery-mode="annotated">
     <alternatives>
-        <class>org.example.persistence.implementation.EnglishMessageRepository</class>
+        <class>org.example.persistence.implementation.SwedishMessageRepository</class>
     </alternatives>
 </beans>

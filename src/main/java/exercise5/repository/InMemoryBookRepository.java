@@ -7,7 +7,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @ApplicationScoped
 public class InMemoryBookRepository implements BookRepository {
@@ -20,14 +19,6 @@ public class InMemoryBookRepository implements BookRepository {
         books.add(new Book("En man som heter Ove", "Fredrik Backman", Genre.FEELGOOD, 10));
         books.add(new Book("Döden i Olivlunden", "Sofia Rutbäck Eriksson", Genre.DECKARE, 8));
         books.add(new Book("Flickan i lådan", "Jan-Erik Ullström", Genre.DECKARE, 5));
-    }
-
-    @Override
-    public void addBook(Book book) {
-
-        Objects.requireNonNull(book);
-
-        books.add(book);
     }
 
     @Override

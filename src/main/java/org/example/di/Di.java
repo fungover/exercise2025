@@ -19,7 +19,9 @@ class C {
 }
 
 public class Di {
-  public static void main(String[] args) {
-    A a = new A(new B(new C()));
+  public static void main(String[] args) throws Exception {
+    DiContainer dc = new DiContainer();
+    A a = dc.getInstance(A.class);
+    System.out.println(a);
   }
 }

@@ -1,8 +1,10 @@
 package org.example.di;
 
+import static org.example.di.SimpleDi.resolve;
+
 class A {
-  public A(B b){
-  System.out.println("A created with B");
+  public A(B b) {
+    System.out.println("A created with B");
   }
 }
 
@@ -20,8 +22,7 @@ class C {
 
 public class Di {
   public static void main(String[] args) throws Exception {
-    DiContainer dc = new DiContainer();
-    A a = dc.getInstance(A.class);
-    System.out.println(a);
+    A a = SimpleDi.resolve(A.class);
+    System.out.println("Instance created at:" + a);
   }
 }

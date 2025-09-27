@@ -33,7 +33,14 @@ public class Container {
                 type = (Class<T>) implementation;
             }
             // Get constructor
-            Constructor<?> constructor = type.getConstructors()[0];
+            Constructor<?>[] constructors = type.getConstructors();
+            if (constructors.length != 1) {
+                throw new IllegalStateException(
+                        "Expected exactly one public constructor for " + type +
+                                " but found " + constructors.length
+                );
+            }
+            Constructor<?> constructor = constructors[0];
             // Get param types
             Class<?>[] paramTypes = constructor.getParameterTypes();
             // No params then create

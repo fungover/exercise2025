@@ -9,7 +9,7 @@ import org.example.service.SimpleDataService;
 
 
 public class Main {
-    public static void main(String[] args) {
+     static void main(String[] args) {
         DataRepository dbRepo = new DatabaseRepository();
         DataRepository memRepo = new InMemoryRepository();
 

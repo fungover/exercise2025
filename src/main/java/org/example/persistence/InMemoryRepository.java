@@ -2,8 +2,6 @@ package org.example.persistence;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Alternative;
-
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 

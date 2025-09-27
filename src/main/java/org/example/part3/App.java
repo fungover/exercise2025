@@ -1,19 +1,23 @@
 package org.example.part3;
 
+import org.example.qualifiers.Advanced;
+import org.example.qualifiers.Simple;
 import org.example.service.DataService;
-import org.example.service.SimpleDataService;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 
-import javax.xml.crypto.Data;
 
 public class App {
-    public static void main(String[] args) {
-        Weld weld = new Weld();
-        try (WeldContainer container = weld.initialize()) {
-            DataService service = container.select(DataService.class).get();
+     static void main(String[] args) {
+        try (WeldContainer container = new Weld().initialize()) {
+            DataService simple = container.select(DataService.class, new Simple.Literal()).get();
+            DataService advanced = container.select(DataService.class, new Advanced.Literal()).get();
 
-        service.process("Hello CDI Part 3 with alternatives!");
+            System.out.println("=== Running SimpleDataService ===");
+            simple.process("Hello from Simple!");
+
+            System.out.println("=== Running AdvancedDataService ===");
+            advanced.process("Hello from Advanced!");
         }
     }
 }

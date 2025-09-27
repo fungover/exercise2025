@@ -4,9 +4,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Alternative;
 import jakarta.inject.Inject;
 import org.example.persistence.DataRepository;
+import org.example.qualifiers.Advanced;
 
 @ApplicationScoped
-@Alternative
+@Advanced
 public class AdvancedDataService implements DataService {
     private final DataRepository dataRepository;
 

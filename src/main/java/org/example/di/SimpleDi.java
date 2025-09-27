@@ -8,10 +8,19 @@ import java.util.Set;
 public class SimpleDi {
   private static final ThreadLocal<Set<Class<?>>> constructing = ThreadLocal.withInitial(HashSet::new); {
   }
+  /// must have exactly one constructor
   public static <T> T resolve(Class<T> clazz) throws Exception {
     if(constructing.get().contains(clazz)) {
       throw new Exception("Class " + clazz.getName() + " already exists");
     }
+
+    Constructor<?>[] constructors = clazz.getConstructors();
+    if (constructors.length != 1) {
+      throw new IllegalArgumentException(
+              "Class " + clazz.getName() + " must have exactly one constructor"
+      );
+    }
+
     constructing.get().add(clazz);
 
     try {

@@ -40,5 +40,6 @@ public class Main {
 
     userService3.registerUser(new User("Test", "12345"));
     fakeRepo.login("Test", "12345");
+
   }
 }

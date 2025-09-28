@@ -1,4 +1,5 @@
 package org.example.di.common;
 
-public class GreetingsService {
+public interface GreetingsService {
+    String getGreeting(String name);
 }

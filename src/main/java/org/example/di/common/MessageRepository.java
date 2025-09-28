@@ -1,4 +1,5 @@
 package org.example.di.common;
 
-public class MessageRepository {
+public interface MessageRepository {
+    String getMessage();
 }

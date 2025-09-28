@@ -6,9 +6,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Container {
     private final Map<Class<?>, Class<?>> bindings = new HashMap<>();
+    private final ThreadLocal<Set<Class<?>>> resolving = ThreadLocal.withInitial(java.util.HashSet::new);
 
     public <A, B extends A> void bind(Class<A> abstraction, Class<B> implementation) {
         if (implementation == null) {
@@ -23,6 +25,12 @@ public class Container {
     @SuppressWarnings("unchecked")
     public <T> T get(Class<T> type) {
         try {
+
+            // Enkel cykeldetektering: A -> B -> A
+            Set<Class<?>> inProgress = resolving.get();
+            if (!inProgress.add(type)) {
+                throw new IllegalStateException("Circular dependency detected while resolving " + type.getName());
+            }
 
             Class<?> impl = type;
             if (impl.isInterface()) {
@@ -61,7 +69,12 @@ public class Container {
 
             return (T) ctor.newInstance(args);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to construct " + type.getName() + " (check bindings and constructors)", e);
+        } finally {
+
+            Set<Class<?>> inProgress = resolving.get();
+            inProgress.remove(type);
+            if (inProgress.isEmpty()) resolving.remove();
         }
     }
 }

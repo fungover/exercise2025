@@ -1,4 +1,10 @@
 package org.example.di.manual;
 
-public class InMemoryMessageRepository {
+import org.example.di.common.MessageRepository;
+
+public class InMemoryMessageRepository implements MessageRepository {
+    @Override
+    public String getMessage() {
+        return "Hello";
+    }
 }

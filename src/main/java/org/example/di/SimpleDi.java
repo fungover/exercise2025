@@ -18,8 +18,11 @@ public class SimpleDi {
 
   public static <T> T resolve(Class<T> clazz) {
 
-    Class<?> concreteClass = implementationMap.getOrDefault(clazz, clazz);
+    if (!constructing.isBound()) {
+      return runWithScope(clazz);
+      }
 
+    Class<?> concreteClass = implementationMap.getOrDefault(clazz, clazz);
     Set<Class<?>> stack = constructing.get();
     if(stack.contains(concreteClass)) {
       try {

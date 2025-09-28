@@ -29,7 +29,8 @@ public class ArchTest {
   public void onlyDependOnPackageC() {
     ArchRule only_depend_on_packageC = ArchRuleDefinition
             .classes().that().resideInAPackage("..repository..")
-            .should().dependOnClassesThat().resideInAnyPackage("..users..");
+            .should().onlyDependOnClassesThat()
+            .resideInAnyPackage("..repository..", "..users..", "java..", "jakarta..");
 
     JavaClasses importedClasses = new ClassFileImporter().importPackages("org.example");
     only_depend_on_packageC.check(importedClasses);

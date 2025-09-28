@@ -1,6 +1,7 @@
 package org.example.entities;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public record Product(
         int id,
@@ -10,5 +11,7 @@ public record Product(
         LocalDate createdDate,
         LocalDate modifiedDate
 ) {
-    public Product {}
+    public Product {
+        Objects.requireNonNull(name, "Name can't be null");
+    }
 }

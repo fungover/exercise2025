@@ -1,4 +1,12 @@
 package org.example.di.container;
 
-public class MessageRepoImp {
+import org.example.di.common.MessageRepository;
+
+public class MessageRepoImp implements MessageRepository {
+    public MessageRepoImp() {
+    }
+    @Override
+    public String getMessage() {
+        return "Hi";
+    }
 }

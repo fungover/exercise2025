@@ -31,14 +31,8 @@ public class SimpleDi {
     try {
       Constructor<?> constructor = clazz.getConstructors()[0];
       Class<?>[] paramTypes = constructor.getParameterTypes();
-      Object[] params = Arrays.stream(paramTypes)
-              .map(type -> {
-                try {
-                  return resolve(type);
-                } catch (Exception e) {
-                  throw new RuntimeException(e);
-                }
-              })
+      Object[] params = Arrays.stream(constructor.getParameterTypes())
+              .map(SimpleDi::resolve)
               .toArray();
       return clazz.cast(constructor.newInstance(params));
     } catch (Exception e) {

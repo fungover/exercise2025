@@ -16,8 +16,8 @@
         <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.jupiter.version>5.13.4</junit.jupiter.version>
-        <assertj.core.version>3.27.5</assertj.core.version>
-        <mockito.version>5.19.0</mockito.version>
+        <assertj.core.version>3.27.6</assertj.core.version>
+        <mockito.version>5.20.0</mockito.version>
     </properties>
     <dependencies>
         <dependency>
@@ -38,17 +38,6 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.tngtech.archunit</groupId>
-            <artifactId>archunit</artifactId>
-            <version>1.4.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.weld.se</groupId>
-            <artifactId>weld-se-core</artifactId>
-            <version>6.0.3.Final</version>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -65,28 +54,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.0</version>
-                <configuration>
-                    <compilerArgs>
-                        <arg>--enable-preview</arg>
-                    </compilerArgs>
-                </configuration>
+                <version>3.14.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.3</version>
-                <configuration>
-                    <argLine>@{argLine} --enable-preview</argLine>
-                </configuration>
+                <version>3.5.4</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.3</version>
-                <configuration>
-                    <argLine>@{argLine} --enable-preview</argLine>
-                </configuration>
+                <version>3.5.4</version>
                 <executions>
                     <execution>
                         <goals>
@@ -132,7 +110,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>[25)</version>
+                                    <version>[24,25]</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>

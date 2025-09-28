@@ -13,7 +13,7 @@ public class ProductTest {
 
     @Test
     void createProduct_success() {
-        Product p = new Product("Laptop", Category.ELECTRONICS, 8);
+        Product p = new Product.Builder().name("Laptop").category(Category.ELECTRONICS).rating(8).build();
 
         assertNotNull(p.identifier());
         assertEquals("Laptop", p.name());
@@ -25,20 +25,20 @@ public class ProductTest {
     }
 
     @Test
-    void createProduct_blankName_usesFallbackString() {
-        Product p = new Product("   ", Category.OTHER, 5);
-        assertEquals("Name cannot be empty", p.name());
+    void createProduct_blankName_throws() {
+        assertThrows(IllegalArgumentException.class, () -> new Product.Builder().name("   ").category(Category.OTHER).rating(5).build());
     }
 
     @Test
     void createProduct_invalidRating_throws() {
-        assertThrows(IllegalArgumentException.class, () -> new Product("Phone", Category.ELECTRONICS, -1));
-        assertThrows(IllegalArgumentException.class, () -> new Product("Phone", Category.ELECTRONICS, 11));
+        assertThrows(IllegalArgumentException.class, () -> new Product.Builder().name("Phone").category(Category.ELECTRONICS).rating(-1).build());
+        assertThrows(IllegalArgumentException.class, () -> new Product.Builder().name("Phone").category(Category.ELECTRONICS).rating(11).build());
     }
 
     @Test
     void updateFields_preservesIdAndCreated_updatesOthers() throws InterruptedException {
-        Product original = new Product("Chair", Category.FURNITURE, 6);
+        Product original = new Product.Builder().name("Chair").category(Category.FURNITURE).rating(6).build();
+
         String originalId = original.identifier();
         Instant originalCreated = original.createdDate();
 
@@ -50,6 +50,6 @@ public class ProductTest {
         assertEquals(originalCreated, updated.createdDate());
         assertEquals("Armchair", updated.name());
         assertEquals(9, updated.rating());
-        assertTrue(updated.lastModifiedDate().isAfter(original.lastModifiedDate()) || updated.lastModifiedDate().equals(original.lastModifiedDate()));
+        assertTrue(!updated.lastModifiedDate().isBefore(original.lastModifiedDate()));
     }
 }

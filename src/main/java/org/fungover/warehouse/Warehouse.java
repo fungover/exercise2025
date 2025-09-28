@@ -6,10 +6,7 @@ import org.fungover.entities.Product;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class Warehouse {
     private List<Product> products = new ArrayList<Product>();
@@ -19,13 +16,7 @@ public class Warehouse {
     }
 
     public void updateProduct(String id, String name, Category category, int rating) {
-        Product newProduct = new Product(name, category, rating);
-        products = products.stream().map(p -> {
-            if (p.identifier().equals(id)) {
-                return p.updateFields(id, name, category, rating);
-            }
-            return p;
-        }).toList();
+        products = products.stream().map(p -> p.identifier().equals(id) ? p.updateFields(id, name, category, rating) : p).toList();
     }
 
     public List<Product> getAllProducts() {
@@ -41,6 +32,7 @@ public class Warehouse {
     }
 
     public List<Product> getProductsCreatedAfter(LocalDate date) {
+        Objects.requireNonNull(date, "date must not be null");
         ZoneId zone = ZoneId.systemDefault();
         Instant threshold = date.atStartOfDay(zone).toInstant();
 

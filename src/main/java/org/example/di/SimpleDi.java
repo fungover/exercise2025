@@ -6,12 +6,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SimpleDi {
-  private static final ThreadLocal<Set<Class<?>>> constructing = ThreadLocal.withInitial(HashSet::new); {
+  private static final ScopedValue<Set<Class<?>>> constructing = ScopedValue.newInstance(); {
   }
   /// must have exactly one constructor
-  public static <T> T resolve(Class<T> clazz) throws Exception {
-    if(constructing.get().contains(clazz)) {
-      throw new Exception("Class " + clazz.getName() + " already exists");
+  public static <T> T resolve(Class<T> clazz) {
+    Set<Class<?>> stack = constructing.get();
+    if(stack.contains(clazz)) {
+      try {
+        throw new Exception("Class " + clazz.getName() + " already exists");
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
     }
 
     Constructor<?>[] constructors = clazz.getConstructors();
@@ -21,7 +26,7 @@ public class SimpleDi {
       );
     }
 
-    constructing.get().add(clazz);
+    stack.add(clazz);
 
     try {
       Constructor<?> constructor = clazz.getConstructors()[0];
@@ -39,7 +44,11 @@ public class SimpleDi {
     } catch (Exception e) {
       throw new RuntimeException("Can't initialize: " + clazz.getName(), e);
     } finally {
-      constructing.get().remove(clazz);
+      stack.remove(clazz);
     }
+  }
+
+  public static <T> T runWithScope(Class<T> rootClass){
+    return ScopedValue.where(constructing, new HashSet<>()).call(() -> resolve(rootClass));
   }
 }

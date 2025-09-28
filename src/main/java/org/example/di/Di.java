@@ -22,7 +22,7 @@ class C {
 
 public class Di {
   public static void main(String[] args) throws Exception {
-    A a = SimpleDi.resolve(A.class);
+    A a = SimpleDi.runWithScope(A.class);
     System.out.println("Instance created at:" + a);
   }
 }

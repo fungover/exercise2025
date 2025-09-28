@@ -1,5 +1,6 @@
 package org.example.repository;
 
+import jakarta.enterprise.context.Dependent;
 import org.example.users.User;
 
 import java.security.MessageDigest;
@@ -7,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Set;
 
+@Dependent
 public class EncryptedUserRepository implements UserRepository {
   Set<User> users = new HashSet<User>();
 

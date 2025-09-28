@@ -6,8 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SimpleDi {
-  private static final ScopedValue<Set<Class<?>>> constructing = ScopedValue.newInstance(); {
-  }
+  private static final ScopedValue<Set<Class<?>>> constructing = ScopedValue.newInstance();
   /// must have exactly one constructor
   public static <T> T resolve(Class<T> clazz) {
     Set<Class<?>> stack = constructing.get();
@@ -30,7 +29,6 @@ public class SimpleDi {
 
     try {
       Constructor<?> constructor = clazz.getConstructors()[0];
-      Class<?>[] paramTypes = constructor.getParameterTypes();
       Object[] params = Arrays.stream(constructor.getParameterTypes())
               .map(SimpleDi::resolve)
               .toArray();

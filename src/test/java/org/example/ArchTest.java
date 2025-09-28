@@ -1,4 +1,4 @@
-package org.depInjection;
+package org.example;
 
 
 import com.tngtech.archunit.core.domain.JavaClasses;

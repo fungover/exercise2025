@@ -1,18 +1,18 @@
 package org.example.computer.builders;
 
-import org.example.computer.Computer;
-import org.example.computer.ComputerType;
+import org.example.computer.PC;
+import org.example.computer.PCType;
 
-public class ComputerBuilder implements Builder {
-	private ComputerType computerType;
+public class PCBuilder implements Builder {
+	private PCType PCType;
 	private String cpu;
 	private String ram;
 	private String gpu;
 	private String disk;
 
 	@Override
-	public void setType(ComputerType computerType) {
-		this.computerType = computerType;
+	public void setType(PCType PCType) {
+		this.PCType = PCType;
 	}
 	@Override
 	public void setCpu(String cpu) {
@@ -30,7 +30,7 @@ public class ComputerBuilder implements Builder {
 	public void setDisk(String disk) {
 		this.disk = disk;
 	}
-	public Computer createComputer() {
-		return new Computer(computerType, cpu, gpu, ram, disk);
+	public PC createComputer() {
+		return new PC(PCType, cpu, gpu, ram, disk);
 	}
 }

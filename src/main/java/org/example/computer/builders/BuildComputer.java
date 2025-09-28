@@ -1,7 +1,7 @@
 package org.example.computer.builders;
 
-import org.example.computer.Computer;
+import org.example.computer.PC;
 
 public interface BuildComputer {
-	Computer build();
+	PC build();
 }

@@ -1,14 +1,14 @@
 package org.example.computer;
 
-public class Computer {
-	private final ComputerType TYPE;
+public class PC {
+	private final PCType TYPE;
 	private final String CPU;
 	private final String GPU;
 	private final String RAM;
 	private final String DISK;
 
 
-	public Computer(ComputerType TYPE, String CPU, String GPU, String RAM, String DISK) {
+	public PC(PCType TYPE, String CPU, String GPU, String RAM, String DISK) {
 		this.TYPE = TYPE;
 		this.CPU = CPU;
 		this.GPU = GPU;
@@ -16,7 +16,7 @@ public class Computer {
 		this.DISK = DISK;
 	}
 
-	public ComputerType TYPE() {
+	public PCType TYPE() {
 		return TYPE;
 	}
 

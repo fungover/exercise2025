@@ -10,7 +10,5 @@ public record Product(
         LocalDate createdDate,
         LocalDate modifiedDate
 ) {
-    public Product {
-
-    }
+    public Product {}
 }

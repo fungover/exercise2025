@@ -2,9 +2,10 @@ package org.example.entities;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 
 public record Product(
-        int id,
+        UUID id,
         String name,
         CategoryEnum category,
         int rating,

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Warehouse {
     private final List<Product> warehouseProducts = new ArrayList<>();
@@ -18,13 +19,13 @@ public class Warehouse {
     public void getProducts() {
         warehouseProducts.stream().forEach(System.out::println);
     }
-    public boolean updateProduct(int id, String name, CategoryEnum category, int rating) {
+    public boolean updateProduct(String id, String name, CategoryEnum category, int rating) {
         Objects.requireNonNull(name, "Name can't be null");
         Objects.requireNonNull(category, "Category can't be null");
 
         for (int i = 0; i < warehouseProducts.size(); i++) {
             Product product = warehouseProducts.get(i);
-            if (product.id() == id) {
+            if (Objects.equals(product.id().toString(), id)) {
                 Product updated = new Product(
                         product.id(),
                         name,
@@ -38,5 +39,11 @@ public class Warehouse {
             }
         }
         return false;
+    }
+
+    public Optional<Product> getProductById(String id) {
+        return warehouseProducts.stream()
+                .filter(product -> Objects.equals(product.id().toString(), id))
+                .findFirst();
     }
 }

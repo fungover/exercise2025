@@ -2,9 +2,9 @@ package org.example;
 
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
+import org.example.di.A;
 import org.example.di.SimpleDi;
 import org.example.repository.EncryptedUserRepository;
-import org.example.repository.FakeDBUserRepository;
 import org.example.repository.UserRepository;
 import org.example.service.UserRegistrationService;
 import org.example.service.UserRegistrationServiceEncrypted;
@@ -15,14 +15,7 @@ import java.security.NoSuchAlgorithmException;
 public class Main {
   public static void main(String[] args) throws NoSuchAlgorithmException {
 
-    // Manual run
-
-    // Fake db pool using user repository interface
-    UserRepository fakeRepo = new FakeDBUserRepository();
-    UserRegistrationService userService3 = new UserRegistrationServiceEncrypted(fakeRepo);
-
-    userService3.registerUser(new User("Test", "12345"));
-    fakeRepo.login("Test", "12345");
+    // Part 1 (Manual)
 
     // Encrypted user login and registration using user repository interface and service
 
@@ -31,15 +24,20 @@ public class Main {
 
     userService.registerUser(new User("Test", "12345"));
     encryptedRepo.login("Test", "12345");
-    
-    // Run with Weld
 
-    try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
-      UserRegistrationServiceEncrypted service =
-              container.select(UserRegistrationServiceEncrypted.class).get();
+    //Part 2 (Simple di)
+    UserRegistrationServiceEncrypted registrationService =
+            SimpleDi.runWithScope(UserRegistrationServiceEncrypted.class);
 
-      service.registerUser(new User("Alice", "12345"));
 
-    }
+    // PArt 3 (Run with Weld)
+
+//    try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
+//      UserRegistrationServiceEncrypted service =
+//              container.select(UserRegistrationServiceEncrypted.class).get();
+//
+//      service.registerUser(new User("Alice", "12345"));
+//
+//    }
   }
 }

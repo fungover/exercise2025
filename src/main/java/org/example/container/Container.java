@@ -67,6 +67,10 @@ public class Container {
                 args[i] = get(paramTypes[i]);
             }
 
+            if (!ctor.canAccess(null)) {
+                ctor.setAccessible(true);
+            }
+
             return (T) ctor.newInstance(args);
         } catch (Exception e) {
             throw new RuntimeException("Failed to construct " + type.getName() + " (check bindings and constructors)", e);

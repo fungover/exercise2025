@@ -1,5 +1,7 @@
 package org.example;
 
+import jakarta.enterprise.inject.se.SeContainer;
+import jakarta.enterprise.inject.se.SeContainerInitializer;
 import org.example.di.SimpleDi;
 import org.example.repository.EncryptedUserRepository;
 import org.example.repository.FakeDBUserRepository;
@@ -29,9 +31,15 @@ public class Main {
 
     userService.registerUser(new User("Test", "12345"));
     encryptedRepo.login("Test", "12345");
-
-    // Run with Weld
     
+    // Run with Weld
 
+    try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
+      UserRegistrationServiceEncrypted service =
+              container.select(UserRegistrationServiceEncrypted.class).get();
+
+      service.registerUser(new User("Alice", "12345"));
+
+    }
   }
 }

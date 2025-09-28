@@ -1,6 +1,7 @@
 package org.example.repository;
 
 import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.inject.Default;
 import org.example.users.User;
 
 import java.security.MessageDigest;
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Dependent
+@Default
 public class EncryptedUserRepository implements UserRepository {
   Set<User> users = new HashSet<User>();
 

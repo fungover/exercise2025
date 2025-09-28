@@ -1,0 +1,5 @@
+<beans xmlns="https://jakarta.ee/xml/ns/jakartaee" bean-discovery-mode="annotated">
+    <alternatives>
+        <class>org.example.persistence.implementation.SwedishMessageRepository</class>
+    </alternatives>
+</beans>

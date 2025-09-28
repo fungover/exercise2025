@@ -1,7 +1,19 @@
 package org.example;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.example.service.GreetingService;
+
+@ApplicationScoped
 public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello There!");
+    private final GreetingService greetingService;
+
+    @Inject
+    public App(GreetingService greetingService) {
+        this.greetingService = greetingService;
+    }
+
+    public void run() {
+        greetingService.greet("Johannes!");
     }
 }

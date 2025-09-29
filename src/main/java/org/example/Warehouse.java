@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Warehouse {
     private final List<Product> warehouseProducts = new ArrayList<>();
@@ -45,5 +46,11 @@ public class Warehouse {
         return warehouseProducts.stream()
                 .filter(product -> Objects.equals(product.id().toString(), id))
                 .findFirst();
+    }
+
+    public List<Product> getProductsByCategory(CategoryEnum category) {
+        return warehouseProducts.stream()
+                .filter(product -> product.category() == category)
+                .collect(Collectors.toList());
     }
 }

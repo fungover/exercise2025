@@ -31,7 +31,7 @@ public class Service{
     }
 
     // Get a pet
-    public PetDTO get(Long id) {
+    public PetDTO getPet(Long id) {
         PetDTO pet = pets.get(id);
         if (pet == null) throw new NotFoundException("Pet not found: " + id);
         return pet;

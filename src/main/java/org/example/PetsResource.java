@@ -16,16 +16,23 @@ public class PetsResource {
     @Inject
     Service service;
 
-    // GET /pets → List all pets
+    // GET /api/pets → List all pets
     @GET
     public List<PetDTO> listPets() {
         return service.list();
     }
 
-    // POST /pets → Adopt a new pet
+    // POST api/pets → Adopt a new pet
     @POST
     public Response adopt(@Valid PetDTO dto) {
         PetDTO saved = service.adopt(dto);
         return Response.status(Response.Status.CREATED).entity(saved).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response getPet(@PathParam("id") Long id) {
+        PetDTO pet = service.getPet(id);
+        return Response.ok(pet).build();
     }
 }

@@ -3,9 +3,10 @@ package org.example.dto;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import org.jetbrains.annotations.NotNull;
 
 public class PetDTO {
+    private long id;
+
     @NotBlank
     private String name;
 
@@ -32,6 +33,10 @@ public class PetDTO {
     }
 
     // Getters
+    public long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
@@ -49,6 +54,10 @@ public class PetDTO {
     }
 
     // Setters
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

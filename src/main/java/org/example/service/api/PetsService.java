@@ -4,7 +4,7 @@ import org.example.dto.PetDTO;
 
 import java.util.List;
 
-public interface PetService {
+public interface PetsService {
     PetDTO addPet(PetDTO petDTO);
     List<PetDTO> getAllPets();
     PetDTO getPetById(Long id);

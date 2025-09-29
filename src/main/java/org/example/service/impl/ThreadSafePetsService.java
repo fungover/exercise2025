@@ -1,5 +1,6 @@
 package org.example.service.impl;
 
+import jakarta.ws.rs.NotFoundException;
 import org.example.dto.PetDTO;
 import org.example.service.api.PetsService;
 
@@ -22,12 +23,15 @@ public class ThreadSafePetsService implements PetsService {
 
     @Override
     public List<PetDTO> getAllPets() {
-        return List.of();
+        return List.copyOf(pets.values());
     }
 
     @Override
     public PetDTO getPetById(Long id) {
-        return null;
+        if (!pets.containsKey(id)) {
+            throw new NotFoundException("Pet with id " + id + " not found");
+        }
+        return pets.get(id);
     }
 
     @Override

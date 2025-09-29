@@ -58,7 +58,7 @@ public class Warehouse {
                 .collect(Collectors.toList());
     }
 
-    public List<Product> getModifiedProducts(LocalDate date) {
+    public List<Product> getModifiedProducts() {
         return warehouseProducts.stream()
                 .filter(product -> product.createdDate() != product.modifiedDate())
                 .collect(Collectors.toList());

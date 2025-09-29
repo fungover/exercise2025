@@ -169,6 +169,44 @@ public class WarehouseTest {
         assertEquals(2, products.size());
         assertEquals("Hammer", products.get(0).name());
         assertEquals("Saw", products.get(1).name());
+    }
 
+    @Test
+    @DisplayName("Checks that getModifedProducts works. Should return products that doesnt have the same createdDate as modifiedDate")
+    public void getModifedProductsTrueTest() {
+        Warehouse warehouse = new Warehouse();
+
+        LocalDate nowDate = LocalDate.now();
+        LocalDate tomorrowDate = nowDate.plusDays(1);
+
+        Product saw = new Product(UUID.randomUUID(), "Saw",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
+        Product nailgun = new Product(UUID.randomUUID(), "Nailgun",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
+        Product hammer = new Product(UUID.randomUUID(), "Hammer",  CategoryEnum.UTILITY, 4, nowDate, tomorrowDate);
+
+        warehouse.addProduct(saw);
+        warehouse.addProduct(nailgun);
+        warehouse.addProduct(hammer);
+
+        List <Product> products = warehouse.getModifiedProducts();
+        assertEquals(1, products.size());
+        assertEquals("Hammer", products.getFirst().name());
+    }
+
+    @Test
+    @DisplayName("Checks that getModifedProducts works. Should return 0 products, because none is modified")
+    public void getModifedProductsFalseTest() {
+        Warehouse warehouse = new Warehouse();
+
+        LocalDate nowDate = LocalDate.now();
+        LocalDate tomorrowDate = nowDate.plusDays(1);
+
+        Product saw = new Product(UUID.randomUUID(), "Saw",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
+        Product nailgun = new Product(UUID.randomUUID(), "Nailgun",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
+
+        warehouse.addProduct(saw);
+        warehouse.addProduct(nailgun);
+
+        List <Product> products = warehouse.getModifiedProducts();
+        assertEquals(0, products.size());
     }
 }

@@ -4,9 +4,6 @@ import org.example.entities.CategoryEnum;
 import org.example.entities.Product;
 import org.example.service.Warehouse;
 import org.junit.jupiter.api.*;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +12,6 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
-    public Warehouse setupWarehouse() {
-
     public Warehouse setupWarehouse() {
         Warehouse warehouse = new Warehouse();
 
@@ -175,7 +170,7 @@ public class WarehouseTest {
 
     @Test
     @DisplayName("getModifiedProducts returns products where modifiedDate is not createdDate")
-    public void getModifedProductsTrueTest() {
+    public void getModifiedProductsTrueTest() {
         Warehouse warehouse = new Warehouse();
 
         LocalDate nowDate = LocalDate.now();
@@ -196,11 +191,10 @@ public class WarehouseTest {
 
     @Test
     @DisplayName("getModifiedProducts returns empty list when none is modified")
-    public void getModifedProductsFalseTest() {
+    public void getModifiedProductsFalseTest() {
         Warehouse warehouse = new Warehouse();
 
         LocalDate nowDate = LocalDate.now();
-        LocalDate tomorrowDate = nowDate.plusDays(1);
 
         Product saw = new Product(UUID.randomUUID(), "Saw",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
         Product nailgun = new Product(UUID.randomUUID(), "Nailgun",  CategoryEnum.UTILITY, 4, nowDate, nowDate);

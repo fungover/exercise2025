@@ -67,18 +67,17 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that getProduct returns all products in our warehouse storage. Should print a list of all products.")
+    @DisplayName("Checks that getProduct returns all products in our warehouse storage. Should equals 4 and products should be found by stringName.")
     public void getProductsTest() {
         Warehouse warehouse = setupWarehouse();
 
-        System.setOut(new PrintStream(outContent));
+        List<Product> products = warehouse.getProducts();
 
-        warehouse.getProducts();
-
-        String printed = outContent.toString();
-        assertTrue(printed.contains("Hammer"));
-        assertTrue(printed.contains("Screwdriver"));
-        assertTrue(printed.contains("Television"));
+        assertEquals(4, products.size());
+        assertTrue(products.stream().anyMatch(product -> product.name().equals("Hammer")));
+        assertTrue(products.stream().anyMatch(product -> product.name().equals("Screwdriver")));
+        assertTrue(products.stream().anyMatch(product -> product.name().equals("Television")));
+        assertTrue(products.stream().anyMatch(product -> product.name().equals("Drill")));
     }
 
     @Test

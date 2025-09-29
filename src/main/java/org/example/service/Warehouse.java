@@ -14,9 +14,10 @@ public class Warehouse {
         return warehouseProducts.add(product);
     }
 
-    public void getProducts() {
-        warehouseProducts.stream().forEach(System.out::println);
+    public List<Product> getProducts() {
+        return new ArrayList<>(warehouseProducts);
     }
+
     public boolean updateProduct(String id, String name, CategoryEnum category, int rating) {
         Objects.requireNonNull(name, "Name can't be null");
         Objects.requireNonNull(category, "Category can't be null");
@@ -60,7 +61,7 @@ public class Warehouse {
 
     public List<Product> getModifiedProducts() {
         return warehouseProducts.stream()
-                .filter(product -> product.createdDate() != product.modifiedDate())
+                .filter(product -> !Objects.equals(product.createdDate(), product.modifiedDate()))
                 .collect(Collectors.toList());
     }
 }

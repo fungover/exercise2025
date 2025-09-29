@@ -23,19 +23,17 @@ class ProductServiceTest {
     private ProductRepository productRepository;
     private Product sampleProduct;
 
-    // Runs before each test to set up test data ensuring each test starts with a clean environment
     @BeforeEach
     void setUp() {
-        // Skapa repository och service med dependency injection
         productRepository = new InMemoryProductRepository();
         productService = new ProductService(productRepository);
 
-        // Använd Builder Pattern för att skapa testprodukt
         sampleProduct = new Product.Builder()
                 .id("1")
                 .name("iPhone 15")
                 .category(Category.ELECTRONICS)
                 .rating(9)
+                .price(12000.0)
                 .asNewProduct()
                 .build();
     }
@@ -68,10 +66,11 @@ class ProductServiceTest {
         productService.addProduct(sampleProduct);
 
         Product duplicateProduct = new Product.Builder()
-                .id("1")  // Samma ID
+                .id("1")
                 .name("Galaxy S24")
                 .category(Category.ELECTRONICS)
                 .rating(8)
+                .price(11000.0)
                 .asNewProduct()
                 .build();
 
@@ -82,19 +81,20 @@ class ProductServiceTest {
         assertTrue(exception.getMessage().contains("already exists"));
     }
 
-    // ========== TESTS FOR addNewProduct() convenience method ==========
+    // ========== TESTS FOR addNewProduct() ==========
 
     @Test
     @DisplayName("Should successfully add new product using convenience method")
     void addNewProduct_ValidParameters_Success() {
-        productService.addNewProduct("CONV001", "Convenience Product", Category.BOOKS, 7);
+        productService.addNewProduct("CONV001", "Convenience Product", Category.BOOKS, 7, 400.0);
 
         Optional<Product> retrievedProduct = productService.getProductById("CONV001");
         assertTrue(retrievedProduct.isPresent());
         assertEquals("Convenience Product", retrievedProduct.get().name());
         assertEquals(Category.BOOKS, retrievedProduct.get().category());
         assertEquals(7, retrievedProduct.get().rating());
-        assertFalse(retrievedProduct.get().isModified()); // Ny produkt ska inte vara modifierad
+        assertEquals(400.0, retrievedProduct.get().price());
+        assertFalse(retrievedProduct.get().isModified());
     }
 
     // ========== TESTS FOR updateProduct() ==========
@@ -104,13 +104,14 @@ class ProductServiceTest {
     void updateProduct_ExistingProduct_Success() {
         productService.addProduct(sampleProduct);
 
-        productService.updateProduct("1", "iPhone 15 Pro", Category.ELECTRONICS, 10);
+        productService.updateProduct("1", "iPhone 15 Pro", Category.ELECTRONICS, 10, 13000.0);
 
         Optional<Product> updated = productService.getProductById("1");
         assertTrue(updated.isPresent());
         assertEquals("iPhone 15 Pro", updated.get().name());
         assertEquals(10, updated.get().rating());
-        assertTrue(updated.get().isModified()); // Ska vara modifierad nu
+        assertEquals(13000.0, updated.get().price());
+        assertTrue(updated.get().isModified());
     }
 
     @Test
@@ -118,7 +119,7 @@ class ProductServiceTest {
     void updateProduct_NonExistingProduct_ThrowsException() {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> productService.updateProduct("999", "New Name", Category.BOOKS, 5)
+                () -> productService.updateProduct("999", "New Name", Category.BOOKS, 5, 500.0)
         );
         assertTrue(exception.getMessage().contains("not found"));
     }
@@ -142,6 +143,7 @@ class ProductServiceTest {
                 .name("MacBook")
                 .category(Category.ELECTRONICS)
                 .rating(8)
+                .price(15000.0)
                 .asNewProduct()
                 .build();
 
@@ -187,6 +189,7 @@ class ProductServiceTest {
                 .name("Zebra Pen")
                 .category(Category.TOYS)
                 .rating(6)
+                .price(50.0)
                 .asNewProduct()
                 .build();
 
@@ -195,6 +198,7 @@ class ProductServiceTest {
                 .name("Apple Toy")
                 .category(Category.TOYS)
                 .rating(7)
+                .price(75.0)
                 .asNewProduct()
                 .build();
 
@@ -203,25 +207,26 @@ class ProductServiceTest {
                 .name("Java Book")
                 .category(Category.BOOKS)
                 .rating(9)
+                .price(500.0)
                 .asNewProduct()
                 .build();
 
         productService.addProduct(zebra);
-        productService.addProduct(sampleProduct); // ELECTRONICS
+        productService.addProduct(sampleProduct);
         productService.addProduct(apple);
         productService.addProduct(book);
 
         List<Product> toysProducts = productService.getProductsByCategorySorted(Category.TOYS);
 
         assertEquals(2, toysProducts.size());
-        assertEquals("Apple Toy", toysProducts.get(0).name()); // Ska komma först (A före Z)
+        assertEquals("Apple Toy", toysProducts.get(0).name());
         assertEquals("Zebra Pen", toysProducts.get(1).name());
     }
 
     @Test
     @DisplayName("Should return empty list when no products in category")
     void getProductsByCategorySorted_NoProductsInCategory_ReturnsEmptyList() {
-        productService.addProduct(sampleProduct); // ELECTRONICS
+        productService.addProduct(sampleProduct);
 
         List<Product> foodProducts = productService.getProductsByCategorySorted(Category.FOOD);
 
@@ -234,7 +239,7 @@ class ProductServiceTest {
     @DisplayName("Should return products created after specified date")
     void getProductsCreatedAfter_ValidDate_ReturnsFilteredProducts() {
         LocalDate yesterday = LocalDate.now().minusDays(1);
-        productService.addProduct(sampleProduct); // Created "today"
+        productService.addProduct(sampleProduct);
 
         List<Product> recentProducts = productService.getProductsCreatedAfter(yesterday);
 
@@ -263,14 +268,14 @@ class ProductServiceTest {
                 .name("Unmodified Product")
                 .category(Category.BOOKS)
                 .rating(7)
+                .price(300.0)
                 .asNewProduct()
                 .build();
 
         productService.addProduct(sampleProduct);
         productService.addProduct(unmodified);
 
-        // Modify a product
-        productService.updateProduct("1", "Modified iPhone", Category.ELECTRONICS, 10);
+        productService.updateProduct("1", "Modified iPhone", Category.ELECTRONICS, 10, 13000.0);
 
         List<Product> modifiedProducts = productService.getModifiedProducts();
 
@@ -282,7 +287,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("Should return empty list when no products are modified")
     void getModifiedProducts_NoModifiedProducts_ReturnsEmptyList() {
-        productService.addProduct(sampleProduct); // Inte modifierad
+        productService.addProduct(sampleProduct);
 
         List<Product> modifiedProducts = productService.getModifiedProducts();
 
@@ -295,26 +300,26 @@ class ProductServiceTest {
     @DisplayName("Should return all categories that have products")
     void getCategoriesWithProducts_MultipleCategories_ReturnsAllRepresentedCategories() {
         Product electronics1 = new Product.Builder()
-                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9).asNewProduct().build();
+                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9).price(12000.0).asNewProduct().build();
         Product electronics2 = new Product.Builder()
-                .id("3").name("iPad").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
+                .id("3").name("iPad").category(Category.ELECTRONICS).rating(8).price(8000.0).asNewProduct().build();
         Product clothing = new Product.Builder()
-                .id("4").name("Jeans").category(Category.CLOTHING).rating(7).asNewProduct().build();
+                .id("4").name("Jeans").category(Category.CLOTHING).rating(7).price(800.0).asNewProduct().build();
         Product books = new Product.Builder()
-                .id("5").name("Java Book").category(Category.BOOKS).rating(9).asNewProduct().build();
+                .id("5").name("Java Book").category(Category.BOOKS).rating(9).price(500.0).asNewProduct().build();
 
         productService.addProduct(electronics1);
-        productService.addProduct(electronics2); // Same category as electronics1
+        productService.addProduct(electronics2);
         productService.addProduct(clothing);
         productService.addProduct(books);
 
         Set<Category> categories = productService.getCategoriesWithProducts();
 
-        assertEquals(3, categories.size()); // Bara 3 unika kategorier
+        assertEquals(3, categories.size());
         assertTrue(categories.contains(Category.ELECTRONICS));
         assertTrue(categories.contains(Category.CLOTHING));
         assertTrue(categories.contains(Category.BOOKS));
-        assertFalse(categories.contains(Category.FOOD)); // Ingen produkt i denna kategori
+        assertFalse(categories.contains(Category.FOOD));
     }
 
     @Test
@@ -329,13 +334,13 @@ class ProductServiceTest {
     @DisplayName("Should count products in specific category correctly")
     void countProductsInCategory_MultipleProductsInCategory_ReturnsCorrectCount() {
         Product electronics1 = new Product.Builder()
-                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9).asNewProduct().build();
+                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9).price(12000.0).asNewProduct().build();
         Product electronics2 = new Product.Builder()
-                .id("3").name("iPad").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
+                .id("3").name("iPad").category(Category.ELECTRONICS).rating(8).price(8000.0).asNewProduct().build();
         Product electronics3 = new Product.Builder()
-                .id("4").name("MacBook").category(Category.ELECTRONICS).rating(10).asNewProduct().build();
+                .id("4").name("MacBook").category(Category.ELECTRONICS).rating(10).price(15000.0).asNewProduct().build();
         Product clothing = new Product.Builder()
-                .id("5").name("Jeans").category(Category.CLOTHING).rating(7).asNewProduct().build();
+                .id("5").name("Jeans").category(Category.CLOTHING).rating(7).price(800.0).asNewProduct().build();
 
         productService.addProduct(electronics1);
         productService.addProduct(electronics2);
@@ -348,7 +353,7 @@ class ProductServiceTest {
 
         assertEquals(3, electronicsCount);
         assertEquals(1, clothingCount);
-        assertEquals(0, foodCount); // Inga produkter i FOOD-kategorin
+        assertEquals(0, foodCount);
     }
 
     @Test
@@ -365,29 +370,29 @@ class ProductServiceTest {
     @DisplayName("Should create map of product name initials and their counts")
     void getProductInitialsMap_MultipleProducts_ReturnsCorrectInitialsCount() {
         Product iPhone = new Product.Builder()
-                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9).asNewProduct().build();
+                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9).price(12000.0).asNewProduct().build();
         Product iPad = new Product.Builder()
-                .id("3").name("iPad").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
+                .id("3").name("iPad").category(Category.ELECTRONICS).rating(8).price(8000.0).asNewProduct().build();
         Product android = new Product.Builder()
-                .id("4").name("Android Phone").category(Category.ELECTRONICS).rating(7).asNewProduct().build();
+                .id("4").name("Android Phone").category(Category.ELECTRONICS).rating(7).price(7000.0).asNewProduct().build();
         Product book = new Product.Builder()
-                .id("5").name("Book").category(Category.BOOKS).rating(6).asNewProduct().build();
+                .id("5").name("Book").category(Category.BOOKS).rating(6).price(300.0).asNewProduct().build();
         Product apple = new Product.Builder()
-                .id("6").name("Apple Watch").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
+                .id("6").name("Apple Watch").category(Category.ELECTRONICS).rating(8).price(5000.0).asNewProduct().build();
 
-        productService.addProduct(iPhone);     // I
-        productService.addProduct(iPad);       // I
-        productService.addProduct(android);    // A
-        productService.addProduct(book);       // B
-        productService.addProduct(apple);      // A
+        productService.addProduct(iPhone);
+        productService.addProduct(iPad);
+        productService.addProduct(android);
+        productService.addProduct(book);
+        productService.addProduct(apple);
 
         Map<Character, Integer> initialsMap = productService.getProductInitialsMap();
 
-        assertEquals(3, initialsMap.size()); // 3 unika bokstäver: I, A, B
-        assertEquals(Integer.valueOf(2), initialsMap.get('I')); // iPhone + iPad
-        assertEquals(Integer.valueOf(2), initialsMap.get('A')); // Android + Apple Watch
-        assertEquals(Integer.valueOf(1), initialsMap.get('B')); // Book
-        assertNull(initialsMap.get('C')); // No product starts with C
+        assertEquals(3, initialsMap.size());
+        assertEquals(Integer.valueOf(2), initialsMap.get('I'));
+        assertEquals(Integer.valueOf(2), initialsMap.get('A'));
+        assertEquals(Integer.valueOf(1), initialsMap.get('B'));
+        assertNull(initialsMap.get('C'));
     }
 
     @Test
@@ -402,46 +407,41 @@ class ProductServiceTest {
     @DisplayName("Should handle case insensitivity correctly")
     void getProductInitialsMap_MixedCase_GroupsCorrectly() {
         Product apple1 = new Product.Builder()
-                .id("2").name("apple").category(Category.FOOD).rating(5).asNewProduct().build();
+                .id("2").name("apple").category(Category.FOOD).rating(5).price(10.0).asNewProduct().build();
         Product apple2 = new Product.Builder()
-                .id("3").name("Apple Watch").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
+                .id("3").name("Apple Watch").category(Category.ELECTRONICS).rating(8).price(5000.0).asNewProduct().build();
 
         productService.addProduct(apple1);
         productService.addProduct(apple2);
 
         Map<Character, Integer> initialsMap = productService.getProductInitialsMap();
 
-        // Both should be grouped under 'A' (Case insensitive)
         assertEquals(1, initialsMap.size());
-        assertEquals(Integer.valueOf(2), initialsMap.get('A')); // Båda produkter under 'A'
+        assertEquals(Integer.valueOf(2), initialsMap.get('A'));
     }
 
     @Test
     @DisplayName("Should return top rated products from this month sorted by newest first")
     void getTopRatedProductsThisMonth_WithVariousRatings_ReturnsTopRatedNewestFirst() {
-        // Create products with different dates and ratings this month using Builder
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startOfMonth = now.withDayOfMonth(1);
         LocalDateTime midMonth = now.withDayOfMonth(15);
         LocalDateTime endOfMonth = now.withDayOfMonth(now.toLocalDate().lengthOfMonth());
 
-        // Products this month with different ratings
         Product product1 = new Product.Builder()
-                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9)
+                .id("2").name("iPhone").category(Category.ELECTRONICS).rating(9).price(12000.0)
                 .createdDate(startOfMonth).modifiedDate(startOfMonth).build();
         Product product2 = new Product.Builder()
-                .id("3").name("iPad").category(Category.ELECTRONICS).rating(10)
+                .id("3").name("iPad").category(Category.ELECTRONICS).rating(10).price(8000.0)
                 .createdDate(midMonth).modifiedDate(midMonth).build();
         Product product3 = new Product.Builder()
-                .id("4").name("MacBook").category(Category.ELECTRONICS).rating(8)
+                .id("4").name("MacBook").category(Category.ELECTRONICS).rating(8).price(15000.0)
                 .createdDate(midMonth.plusDays(1)).modifiedDate(midMonth.plusDays(1)).build();
         Product product4 = new Product.Builder()
-                .id("5").name("AirPods").category(Category.ELECTRONICS).rating(10)
+                .id("5").name("AirPods").category(Category.ELECTRONICS).rating(10).price(3000.0)
                 .createdDate(endOfMonth).modifiedDate(endOfMonth).build();
-
-        // Product from last month not to be included
         Product oldProduct = new Product.Builder()
-                .id("6").name("Old Phone").category(Category.ELECTRONICS).rating(10)
+                .id("6").name("Old Phone").category(Category.ELECTRONICS).rating(10).price(10000.0)
                 .createdDate(now.minusMonths(1)).modifiedDate(now.minusMonths(1)).build();
 
         productService.addProduct(product1);
@@ -452,14 +452,11 @@ class ProductServiceTest {
 
         List<Product> topProducts = productService.getTopRatedProductsThisMonth();
 
-        assertEquals(2, topProducts.size()); // Bara produkter med betyg 10 (max för denna månad)
-        assertEquals("AirPods", topProducts.get(0).name());  // Nyaste först (slutet av månaden)
-        assertEquals("iPad", topProducts.get(1).name());     // Äldre (mitten av månaden)
-
-        // Verify all returned products have max rating
+        assertEquals(2, topProducts.size());
+        assertEquals("AirPods", topProducts.get(0).name());
+        assertEquals("iPad", topProducts.get(1).name());
         assertTrue(topProducts.stream().allMatch(product -> product.rating() == 10));
 
-        // Check sorting (newest first)
         for (int i = 0; i < topProducts.size() - 1; i++) {
             assertTrue(topProducts.get(i).createdDate().isAfter(topProducts.get(i + 1).createdDate()));
         }
@@ -473,17 +470,17 @@ class ProductServiceTest {
         assertTrue(topProducts.isEmpty());
     }
 
-    // ========== ADDITIONAL TESTS FOR NEW METHODS ==========
+    // ========== ADDITIONAL TESTS ==========
 
     @Test
     @DisplayName("Should return high quality products above threshold")
     void getHighQualityProducts_WithThreshold_ReturnsFilteredProducts() {
         Product highQuality1 = new Product.Builder()
-                .id("HQ1").name("Premium Product").category(Category.ELECTRONICS).rating(9).asNewProduct().build();
+                .id("HQ1").name("Premium Product").category(Category.ELECTRONICS).rating(9).price(10000.0).asNewProduct().build();
         Product highQuality2 = new Product.Builder()
-                .id("HQ2").name("Excellent Product").category(Category.BOOKS).rating(10).asNewProduct().build();
+                .id("HQ2").name("Excellent Product").category(Category.BOOKS).rating(10).price(500.0).asNewProduct().build();
         Product lowQuality = new Product.Builder()
-                .id("LQ1").name("Basic Product").category(Category.TOYS).rating(6).asNewProduct().build();
+                .id("LQ1").name("Basic Product").category(Category.TOYS).rating(6).price(100.0).asNewProduct().build();
 
         productService.addProduct(highQuality1);
         productService.addProduct(highQuality2);
@@ -493,24 +490,21 @@ class ProductServiceTest {
 
         assertEquals(2, highQualityProducts.size());
         assertTrue(highQualityProducts.stream().allMatch(p -> p.rating() >= 8));
-        // Should be sorted by rating descending
-        assertEquals("Excellent Product", highQualityProducts.get(0).name()); // Rating 10 först
-        assertEquals("Premium Product", highQualityProducts.get(1).name());   // Rating 9 sedan
+        assertEquals("Excellent Product", highQualityProducts.get(0).name());
+        assertEquals("Premium Product", highQualityProducts.get(1).name());
     }
 
     @Test
     @DisplayName("Should check if products exist in category")
     void hasProductsInCategory_WithAndWithoutProducts_ReturnsCorrectBoolean() {
         Product electronics = new Product.Builder()
-                .id("E1").name("Laptop").category(Category.ELECTRONICS).rating(8).asNewProduct().build();
+                .id("E1").name("Laptop").category(Category.ELECTRONICS).rating(8).price(10000.0).asNewProduct().build();
 
         productService.addProduct(electronics);
 
         assertTrue(productService.hasProductsInCategory(Category.ELECTRONICS));
         assertFalse(productService.hasProductsInCategory(Category.FOOD));
     }
-
-    // ========== DEPENDENCY INJECTION TEST ==========
 
     @Test
     @DisplayName("Should throw exception when ProductRepository is null")

@@ -3,18 +3,19 @@ package entities;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-//Jag ansvarar för att vara en giltig produkt"
+// Product record that implements Sellable interface
 
 public record Product(
         String id,
         String name,
         Category category,
         int rating,
+        double price,  // ← NYTT: pris-attribut
         LocalDateTime createdDate,
         LocalDateTime modifiedDate
-) {
+) implements Sellable {  // ← NYTT: implementerar Sellable
 
-    // Public constructor for validation (required for records)
+    // Public constructor for validation
     public Product {
         // Input validation
         Objects.requireNonNull(id, "Product ID cannot be null");
@@ -33,6 +34,11 @@ public record Product(
             throw new IllegalArgumentException("Rating must be between 0 and 10, was: " + rating);
         }
 
+        // Validate price
+        if (price < 0) {
+            throw new IllegalArgumentException("Price cannot be negative, was: " + price);
+        }
+
         // Ensure modifiedDate is not before createdDate
         if (modifiedDate.isBefore(createdDate)) {
             throw new IllegalArgumentException("Modified date cannot be before created date");
@@ -42,22 +48,27 @@ public record Product(
         name = name.trim();
     }
 
-    // Create a new product with current time kept for backward compatibility
-    public static Product createNew(String id, String name, Category category, int rating) {
-        LocalDateTime now = LocalDateTime.now();
-        return new Product(id, name, category, rating, now, now);
+    // === SELLABLE INTERFACE METHODS ===
+
+    @Override
+    public String getName() {
+        return name;
     }
 
-    // Creates a copy of this product with updated values
-    public Product withUpdatedValues(String newName, Category newCategory, int newRating) {
-        return new Product(
-                this.id,
-                newName,
-                newCategory,
-                newRating,
-                this.createdDate,
-                LocalDateTime.now()
-        );
+    @Override
+    public double getPrice() {
+        return price;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String getDescription() {
+        return String.format("%s (%s) - Rating: %d/10 - Price: %.2f kr",
+                name, category, rating, price);
     }
 
     // Checks if the product has been modified since it was created
@@ -65,12 +76,14 @@ public record Product(
         return !createdDate.equals(modifiedDate);
     }
 
-    // Builder class - public static nested class
+    // === BUILDER CLASS ===
+
     public static class Builder {
         private String id;
         private String name;
         private Category category;
         private int rating;
+        private double price;  // ← NYTT: pris i Builder
         private LocalDateTime createdDate;
         private LocalDateTime modifiedDate;
 
@@ -80,6 +93,7 @@ public record Product(
             LocalDateTime now = LocalDateTime.now();
             this.createdDate = now;
             this.modifiedDate = now;
+            this.price = 0.0;  // Default pris
         }
 
         // Setter methods that return Builder instance for method chaining
@@ -100,6 +114,11 @@ public record Product(
 
         public Builder rating(int rating) {
             this.rating = rating;
+            return this;
+        }
+
+        public Builder price(double price) {
+            this.price = price;
             return this;
         }
 
@@ -140,7 +159,7 @@ public record Product(
             }
 
             // Create and return the product using the record constructor
-            return new Product(id, name, category, rating, createdDate, modifiedDate);
+            return new Product(id, name, category, rating, price, createdDate, modifiedDate);
         }
     }
 }

@@ -4,56 +4,29 @@ import entities.Product;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repository interface for Product data access operations.
- * Definierar kontraktet för hur vi lagrar och hämtar produkter.
- */
+ //Repository interface for Product data access operations.
+//Defines the contract for how we store and retrieve products.
+
 public interface ProductRepository {
 
-    /**
-     * Lägger till en ny produkt i repository
-     * @param product Produkten som ska läggas till
-     * @throws IllegalArgumentException om produkt med samma ID redan finns
-     */
+     // Adding a new product to the repository
     void addProduct(Product product);
 
-    /**
-     * Hämtar en produkt baserat på dess ID
-     * @param id Produkt-ID som ska sökas efter
-     * @return Optional som innehåller produkten om den hittas, tom annars
-     */
+    // Retrieves a product based on its ID
     Optional<Product> getProductById(String id);
 
-    /**
-     * Hämtar alla produkter i repository
-     * @return Lista med alla produkter
-     */
+    // Retrieves all products in repository
     List<Product> getAllProducts();
 
-    /**
-     * Uppdaterar en befintlig produkt
-     * @param product Den uppdaterade produkten (måste ha befintligt ID)
-     * @throws IllegalArgumentException om produkten inte finns
-     */
+    //Updating an existing product
     void updateProduct(Product product);
 
-    /**
-     * Tar bort en produkt baserat på ID
-     * @param id ID på produkten som ska tas bort
-     * @return true om produkten togs bort, false om den inte hittades
-     */
+    // Deletes a product based on ID
     boolean removeProduct(String id);
 
-    /**
-     * Kontrollerar om en produkt med givet ID finns
-     * @param id ID som ska kontrolleras
-     * @return true om produkten finns, false annars
-     */
+    // Checks if a product with a given ID exists
     boolean existsById(String id);
 
-    /**
-     * Hämtar totalt antal produkter
-     * @return Antal produkter i repository
-     */
+    //Retrieves total number of products
     long count();
 }

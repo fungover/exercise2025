@@ -11,27 +11,21 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * ProductService - Business logic layer that uses repository for data access
- * Ansvarar för affärslogik och validering, medan repository hanterar datalagring
- */
+
+// ProductService - Business logic layer that uses repository for data access
 public class ProductService {
 
     private final ProductRepository productRepository;
 
-    /**
-     * Constructor injection av repository
-     */
+
+    //Constructor injection av repository
     public ProductService(ProductRepository productRepository) {
         this.productRepository = Objects.requireNonNull(productRepository,
                 "ProductRepository cannot be null");
     }
 
-    /**
-     * Lägger till en ny produkt
-     */
+    // Adding a new product
     public void addProduct(Product product) {
-        // Validering (business logic)
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
@@ -40,35 +34,31 @@ public class ProductService {
             throw new IllegalArgumentException("Product id cannot be null or blank");
         }
 
-        // Kontrollera om produkten redan finns genom repository
+        // Check if the product already exists through the repository
         if (productRepository.getProductById(product.id()).isPresent()) {
             throw new IllegalArgumentException("Product with ID " + product.id() + " already exists");
         }
 
-        // Delegera till repository för datalagring
+        // Delegate to repository for data storage
         productRepository.addProduct(product);
     }
 
-    /**
-     * Bekvämlighetsmetod för att lägga till ny produkt med Builder pattern
-     */
-    public void addNewProduct(String id, String name, Category category, int rating) {
+    //Convenience method for adding new product using Builder pattern
+    public void addNewProduct(String id, String name, Category category, int rating, double price) {
         Product product = new Product.Builder()
                 .id(id)
                 .name(name)
                 .category(category)
                 .rating(rating)
+                .price(price)
                 .asNewProduct()  // Sätter current timestamps
                 .build();
 
         addProduct(product);
     }
 
-    /**
-     * Uppdaterar en befintlig produkt
-     */
-    public void updateProduct(String id, String name, Category category, int rating) {
-        // Validering
+    //Updating an existing product
+    public void updateProduct(String id, String name, Category category, int rating, double price) {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("id cannot be null or blank");
         }
@@ -76,41 +66,36 @@ public class ProductService {
             throw new IllegalArgumentException("category cannot be null");
         }
 
-        // Hitta befintlig produkt genom repository
+        // Find existing product through repository
         Product existingProduct = productRepository.getProductById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Product with ID " + id + " not found"));
 
-        // Skapa uppdaterad produkt med Builder
+        // Create updated product with Builder
         Product updatedProduct = new Product.Builder()
                 .id(existingProduct.id())
                 .name(name)
                 .category(category)
                 .rating(rating)
+                .price(price)
                 .createdDate(existingProduct.createdDate())  // Behåll ursprungligt datum
                 .modifiedDate(LocalDateTime.now())           // Uppdatera modified datum
                 .build();
 
-        // Uppdatera genom repository
+        // Update through repository
         productRepository.updateProduct(updatedProduct);
     }
 
-    /**
-     * Hämtar alla produkter - delegerar direkt till repository
-     */
+    // Downloads all products - delegates directly to repository
     public List<Product> getAllProducts() {
         return productRepository.getAllProducts();
     }
 
-    /**
-     * Hämtar en specifik produkt med ID - delegerar direkt till repository
-     */
+    // Retrieves a specific product by ID - delegates directly to repository
     public Optional<Product> getProductById(String id) {
         return productRepository.getProductById(id);
     }
 
-    /**
-     * Hämtar produkter i en specifik kategori, sorterade A-Z efter namn
-     */
+    // Retrieves products in a specific category, sorted A-Z by name
     public List<Product> getProductsByCategorySorted(Category category) {
         return productRepository.getAllProducts()
                 .stream()
@@ -119,9 +104,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Hämtar produkter skapade efter ett specifikt datum
-     */
+    // Retrieves products created after a specific date
     public List<Product> getProductsCreatedAfter(LocalDate date) {
         return productRepository.getAllProducts()
                 .stream()
@@ -129,9 +112,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Hämtar produkter som har blivit modifierade
-     */
+    // Retrieving products that have been modified
     public List<Product> getModifiedProducts() {
         return productRepository.getAllProducts()
                 .stream()
@@ -141,9 +122,7 @@ public class ProductService {
 
     // ========== VG-METODER ==========
 
-    /**
-     * Hämtar alla kategorier som har minst en produkt
-     */
+    //Retrieves all categories that have at least one product
     public Set<Category> getCategoriesWithProducts() {
         return productRepository.getAllProducts()
                 .stream()
@@ -151,9 +130,7 @@ public class ProductService {
                 .collect(Collectors.toSet());
     }
 
-    /**
-     * Räknar antal produkter i en specifik kategori
-     */
+    // Counts the number of products in a specific category
     public long countProductsInCategory(Category category) {
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null");
@@ -165,9 +142,7 @@ public class ProductService {
                 .count();
     }
 
-    /**
-     * Returnerar en Map med första bokstäver i produktnamn och deras antal
-     */
+    // Returns a Map with first letters of product names and their quantity
     public Map<Character, Integer> getProductInitialsMap() {
         return productRepository.getAllProducts()
                 .stream()
@@ -185,9 +160,7 @@ public class ProductService {
                 ));
     }
 
-    /**
-     * Produkter med högsta betyg skapade denna månad, sorterade nyaste först
-     */
+    // Top rated products created this month, sorted newest first
     public List<Product> getTopRatedProductsThisMonth() {
         YearMonth currentMonth = YearMonth.now();
 
@@ -211,9 +184,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Hämtar produkter med betyg över angiven tröskel
-     */
+     // Retrieves products with ratings above the specified threshold
     public List<Product> getHighQualityProducts(int minRating) {
         if (minRating < 0 || minRating > 10) {
             throw new IllegalArgumentException("Rating must be between 0 and 10");
@@ -226,9 +197,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Kontrollera om warehouse har produkter i given kategori
-     */
+    // Check if warehouse has products in given category
     public boolean hasProductsInCategory(Category category) {
         return productRepository.getAllProducts()
                 .stream()

@@ -47,7 +47,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that AddProduct works as supposed to. Should return true because input in product is valid")
+    @DisplayName("addProduct with valid product returns true")
     public void testAddProductTrue() {
         Warehouse warehouse = new Warehouse();
         Product tv = new Product(UUID.randomUUID(), "Television", CategoryEnum.ELECTRIC, 3, LocalDate.now(), LocalDate.now());
@@ -57,7 +57,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that AddProduct works as supposed to. Should call NullPointerException because name is null/invalid.")
+    @DisplayName("constructing Product with null name throws NullPointerException")
     public void testAddProductFalse() {
         Warehouse warehouse = new Warehouse();
 
@@ -67,7 +67,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that getProduct returns all products in our warehouse storage. Should equals 4 and products should be found by stringName.")
+    @DisplayName("getProducts returns all stored products and includes expected names")
     public void getProductsTest() {
         Warehouse warehouse = setupWarehouse();
 
@@ -81,7 +81,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that updateProduct works as intended. Should return true if product is updated")
+    @DisplayName("updateProduct with existing id updates product and returns true")
     public void updateProductTrueTest() {
         Warehouse warehouse = new Warehouse();
 
@@ -94,7 +94,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that updateProduct works as intended. Should return false because product uuid is wrong")
+    @DisplayName("updateProduct with invalid id returns false")
     public void updateProductFalseTest() {
         Warehouse warehouse = new Warehouse();
 
@@ -107,7 +107,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that getProductById works as intended, should return product")
+    @DisplayName("getProductById with existing id returns product")
     public void getProductByIdTrueTest() {
         Warehouse warehouse = new Warehouse();
 
@@ -120,7 +120,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that getProductById works as intended, should return product")
+    @DisplayName("getProductById with non-existing id returns empty")
     public void getProductByIdFalseTest() {
         Warehouse warehouse = new Warehouse();
 
@@ -133,7 +133,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that getProductsByCategorySorted works as intended. Should return all products in the same category sorted A to Z")
+    @DisplayName("getProductsByCategorySorted filters by category and sorts names A to Z")
     public void getProductsByCategorySorted() {
         Warehouse warehouse = setupWarehouse();
 
@@ -146,7 +146,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that getProductsCreatedAfter works as intended. Should return products with later createdDate then inserted date")
+    @DisplayName("getProductsCreatedAfter returns all products created after that date")
     public void getProductsCreatedAfterTrueTest() {
         Warehouse warehouse = new Warehouse();
 
@@ -169,31 +169,26 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that getProductsCreatedAfter works as intended. Should return all products because all products are created after input date")
+    @DisplayName("getProductsCreatedAfter returns no products because all products are created before date ")
     public void getProductsCreatedAfterFalseTest() {
         Warehouse warehouse = new Warehouse();
 
         LocalDate nowDate = LocalDate.now();
         LocalDate tomorrowDate = nowDate.plusDays(1);
-        LocalDate yesterdayDate = nowDate.minusDays(1);
-        LocalDate yesterday2Date = nowDate.minusDays(2);
 
         Product hammer = new Product(UUID.randomUUID(), "Hammer",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
-        Product saw = new Product(UUID.randomUUID(), "Saw", CategoryEnum.UTILITY, 2, tomorrowDate, tomorrowDate);
-        Product nailgun = new Product(UUID.randomUUID(), "Nailgun", CategoryEnum.UTILITY, 3, yesterdayDate, yesterdayDate);
+        Product saw = new Product(UUID.randomUUID(), "Saw", CategoryEnum.UTILITY, 2, nowDate, nowDate);
+        Product nailgun = new Product(UUID.randomUUID(), "Nailgun", CategoryEnum.UTILITY, 3, nowDate, nowDate);
 
         warehouse.addProduct(hammer);
         warehouse.addProduct(saw);
         warehouse.addProduct(nailgun);
-        List<Product> products = warehouse.getProductsCreatedAfter(yesterday2Date);
-        assertEquals(3, products.size());
-        assertEquals("Hammer", products.get(0).name());
-        assertEquals("Saw", products.get(1).name());
-        assertEquals("Nailgun", products.get(2).name());
+        List<Product> products = warehouse.getProductsCreatedAfter(tomorrowDate);
+        assertEquals(0, products.size());
     }
 
     @Test
-    @DisplayName("Checks that getModifedProducts works. Should return products that doesnt have the same createdDate as modifiedDate")
+    @DisplayName("getModifiedProducts returns products where modifiedDate is not createdDate")
     public void getModifedProductsTrueTest() {
         Warehouse warehouse = new Warehouse();
 
@@ -214,7 +209,7 @@ public class WarehouseTest {
     }
 
     @Test
-    @DisplayName("Checks that getModifedProducts works. Should return 0 products, because none is modified")
+    @DisplayName("getModifiedProducts returns empty list when none is modified")
     public void getModifedProductsFalseTest() {
         Warehouse warehouse = new Warehouse();
 

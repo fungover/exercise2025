@@ -1,5 +1,0 @@
-package exercise5.part1.repository;
-
-public interface MessageRepository {
-    void saveMessage(String message);
-}

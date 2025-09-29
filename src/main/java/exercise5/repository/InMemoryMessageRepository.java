@@ -1,10 +1,15 @@
-package exercise5.part2.repository;
+package exercise5.repository;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import java.util.List;
 
+@ApplicationScoped
 public class InMemoryMessageRepository implements MessageRepository {
     List<String> messages;
 
+    @Inject
     public InMemoryMessageRepository(List<String> messages) {
         this.messages = messages;
     }

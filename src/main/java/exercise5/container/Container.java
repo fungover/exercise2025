@@ -1,9 +1,8 @@
-package exercise5.part2.container;
-
-
+package exercise5.container;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Container{
     private final Map<Class<?>, Class<?>> registry = new HashMap<>();
@@ -23,21 +22,21 @@ public class Container{
             instanceType = type;
         }
         try {
-        Constructor<?>[] constructors = instanceType.getDeclaredConstructors();
-        Constructor<?> constructor = constructors[0];
-        constructor.setAccessible(true);
-        Class<?>[] parameterTypes = constructor.getParameterTypes();
-        if(parameterTypes.length == 0){
-            System.out.println("No parameters in constructor for "+ instanceType.getSimpleName());
-            T result = (T) constructor.newInstance();
-            instances.put(type, result);
-            return result;
-        }
-        Object[] dependencies = new Object[parameterTypes.length];
-        for (int i = 0; i < parameterTypes.length; i++) {
-            System.out.println("Creating the dependency "+parameterTypes[i].getSimpleName());
-            dependencies[i] = resolve(parameterTypes[i]);
-        }
+            Constructor<?>[] constructors = instanceType.getDeclaredConstructors();
+            Constructor<?> constructor = constructors[0];
+            constructor.setAccessible(true);
+            Class<?>[] parameterTypes = constructor.getParameterTypes();
+            if(parameterTypes.length == 0){
+                System.out.println("No parameters in constructor for "+ instanceType.getSimpleName());
+                T result = (T) constructor.newInstance();
+                instances.put(type, result);
+                return result;
+            }
+            Object[] dependencies = new Object[parameterTypes.length];
+            for (int i = 0; i < parameterTypes.length; i++) {
+                System.out.println("Creating the dependency "+parameterTypes[i].getSimpleName());
+                dependencies[i] = resolve(parameterTypes[i]);
+            }
             T classInstance = (T) constructor.newInstance(dependencies);
             System.out.println("Created instance of "+classInstance.getClass().getSimpleName());
             instances.put(type, instanceType);

@@ -9,6 +9,7 @@ import java.util.Map;
 public class Container {
 
     private final Map<Class<?>, Class<?>> bindings = new HashMap<>();
+    private final Map<Class<?>, Object> cache = new HashMap<>();
     //Create register for which classes to use for specific interface
     public <T> void register(Class<T> abstraction, Class<? extends T> implementation) {
         bindings.put(abstraction, implementation);
@@ -21,6 +22,12 @@ public class Container {
     private <T> T getClass(Class<T> type){
 
         try{
+
+            if(cache.containsKey(type)){
+
+                return type.cast(cache.get(type));
+            }
+
             Class<?> target = resolve(type);
             Constructor<?>[] constructor= target.getDeclaredConstructors();
 
@@ -38,7 +45,10 @@ public class Container {
                 arguments[i] = getClass(parameters[i]);
             }
             //Returns new instance of constructor is created with needed dependencies
-            return type.cast(constructor[0].newInstance(arguments));
+            Object createdInstance = constructor[0].newInstance(arguments);
+            cache.put(type, createdInstance);
+
+            return type.cast(createdInstance);
 
         }catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);

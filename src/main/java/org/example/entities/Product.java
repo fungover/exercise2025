@@ -18,18 +18,18 @@ public final class Product {
      */
 
     private Product(Builder builder){
-        this.id = Objects.requireNonNull(builder.id, "ID required, cannot be null");
-        this.name = Objects.requireNonNull(builder.name, "Name required, cannot be null");
+        this.id = Objects.requireNonNull(builder.id, "ID required, cannot be null").trim();
+        this.name = Objects.requireNonNull(builder.name, "Name required, cannot be null").trim();
         this.category = Objects.requireNonNull(builder.category, "Category required, cannot be null");
         this.createdDate = Objects.requireNonNullElse(builder.createdDate, LocalDateTime.now());
         this.modifiedDate = builder.modifiedDate != null ? builder.modifiedDate : this.createdDate;
 
 
-        if (builder.id.trim().isEmpty()){
+        if (this.id.isEmpty()){
             throw new IllegalArgumentException("ID cannot be empty");
         }
 
-        if (builder.name.trim().isEmpty()){
+        if (this.name.trim().isEmpty()){
             throw new IllegalArgumentException("Name cannot be empty");
         }
 

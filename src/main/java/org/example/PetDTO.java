@@ -19,7 +19,10 @@ public class PetDTO {
     @Min(value = 0, message = "Happiness must be at least 0")
     @Max(value = 100, message = "Happiness must be at most 100")
     private Integer happiness;
-    
+
+    public PetDTO() {
+    }
+
     public PetDTO(Long id, String name, String species, Integer hungerLevel, Integer happiness) {
         this.id = id;
         this.name = name;

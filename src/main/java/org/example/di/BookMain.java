@@ -56,6 +56,7 @@ public class BookMain
         System.out.println("====== Weld SE Container ======");
         Weld weld = new Weld();
         try (SeContainer weldContainer = weld.initialize()) {
+            System.out.println("-- Using ConsoleNotifier as Notifier --");
             BookService bookService = weldContainer.select(BookService.class).get();
             bookService.addBook(new Book("id1", "Lord of the Rings"));
             bookService.listBooks().forEach(b -> System.out.println(" - " + b.title()));

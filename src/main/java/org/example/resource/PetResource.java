@@ -31,5 +31,13 @@ public class PetResource {
         return Response.ok(petService.getAllPets()).build();
     }
 
+    @GET
+    @Path("/{id}")
+    public Response getById(@PathParam("id") Long id) {
+        return petService.getPetById(id)
+                .map(p -> Response.ok(p).build())
+                .orElse(Response.status(Response.Status.NOT_FOUND).build());
+    }
+
 
 }

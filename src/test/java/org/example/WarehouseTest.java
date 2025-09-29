@@ -2,7 +2,7 @@ package org.example;
 
 import org.fungover.entities.Category;
 import org.fungover.entities.Product;
-import org.fungover.warehouse.Warehouse;
+import org.fungover.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
 
-    private Warehouse warehouse;
+    private ProductService warehouse;
 
     @BeforeEach
     void setUp() {
-        warehouse = new Warehouse();
+        warehouse = new ProductService();
     }
 
     @Test

@@ -23,7 +23,7 @@ public record Product(String identifier, String name, int rating, Category categ
             Instant now = Instant.now();
             String id = identifier == null ? UUID.randomUUID().toString() : identifier;
             String n = validateName(name);
-            int r = validateRating(Objects.requireNonNullElse(rating, 0));
+            int r = validateRating(rating);
             Category c = Objects.requireNonNull(category, "Category is required");
             Instant created = createdDate == null ? now : createdDate;
             Instant lastModified = lastModifiedDate == null ? now : lastModifiedDate;

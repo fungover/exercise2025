@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 public class Warehouse {
     private final List<Product> warehouseProducts = new ArrayList<>();
 
-    public void addProduct(Product product) {
-        warehouseProducts.add(product);
+    public Boolean addProduct(Product product) {
+        return warehouseProducts.add(product);
     }
 
     public void getProducts() {

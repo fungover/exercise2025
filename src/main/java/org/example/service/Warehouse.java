@@ -4,10 +4,7 @@ import org.example.entities.CategoryEnum;
 import org.example.entities.Product;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Warehouse {
@@ -48,9 +45,10 @@ public class Warehouse {
                 .findFirst();
     }
 
-    public List<Product> getProductsByCategory(CategoryEnum category) {
+    public List<Product> getProductsByCategorySorted(CategoryEnum category) {
         return warehouseProducts.stream()
                 .filter(product -> product.category() == category)
+                .sorted(Comparator.comparing(product -> product.name() == null ? "" : product.name().trim(), String.CASE_INSENSITIVE_ORDER))
                 .collect(Collectors.toList());
     }
 

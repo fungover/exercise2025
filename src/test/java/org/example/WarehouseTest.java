@@ -30,7 +30,7 @@ public class WarehouseTest {
         System.setOut(originalOut);
     }
 
-    public void setupWarehouse() {
+    public Warehouse setupWarehouse() {
         Warehouse warehouse = new Warehouse();
 
         Product hammer = new Product(UUID.randomUUID(), "Hammer", CategoryEnum.UTILITY, 4, LocalDate.now(), LocalDate.now());
@@ -39,6 +39,8 @@ public class WarehouseTest {
         warehouse.addProduct(screwdriver);
         Product tv = new Product(UUID.randomUUID(), "Television", CategoryEnum.ELECTRIC, 3, LocalDate.now(), LocalDate.now());
         warehouse.addProduct(tv);
+
+        return warehouse;
     }
 
     @Test
@@ -59,5 +61,46 @@ public class WarehouseTest {
         assertThrows(NullPointerException.class, () -> {
             Product tv = new Product(UUID.randomUUID(), null, CategoryEnum.ELECTRIC, 3, LocalDate.now(), LocalDate.now());
         });
+    }
+
+    @Test
+    @DisplayName("Checks that getProduct returns all products in our warehouse storage. Should print a list of all products.")
+    public void getProductsTest() {
+        Warehouse warehouse = setupWarehouse();
+
+        System.setOut(new PrintStream(outContent));
+
+        warehouse.getProducts();
+
+        String printed = outContent.toString();
+        assertTrue(printed.contains("Hammer"));
+        assertTrue(printed.contains("Screwdriver"));
+        assertTrue(printed.contains("Television"));
+    }
+
+    @Test
+    @DisplayName("Checks that updateProduct works as intended. Should return true if product is updated")
+    public void updateProductTrueTest() {
+        Warehouse warehouse = new Warehouse();
+
+        Product hammer = new Product(UUID.randomUUID(), "Hammer", CategoryEnum.UTILITY, 4, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(hammer);
+
+        boolean updated = warehouse.updateProduct(hammer.id().toString(), "Updated hammer", CategoryEnum.UTILITY, 5);
+
+        assertTrue(updated);
+    }
+
+    @Test
+    @DisplayName("Checks that updateProduct works as intended. Should return false because product uuid is wrong")
+    public void updateProductFalseTest() {
+        Warehouse warehouse = new Warehouse();
+
+        Product hammer = new Product(UUID.randomUUID(), "Hammer", CategoryEnum.UTILITY, 4, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(hammer);
+
+        boolean updated = warehouse.updateProduct("h342dass", "Updated hammer", CategoryEnum.UTILITY, 5);
+
+        assertFalse(updated);
     }
 }

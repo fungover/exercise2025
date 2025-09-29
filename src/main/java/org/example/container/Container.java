@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 
 public class Container {
 
-    public final <T> T createInstance(Class<T> rootClass, Object... args) {
+    public static <T> T createInstance(Class<T> rootClass, Object... args) {
         try {
             for (Constructor<?> ctor : rootClass.getDeclaredConstructors()) {
                 Class<?>[] paramTypes = ctor.getParameterTypes();
@@ -31,14 +31,14 @@ public class Container {
         throw new RuntimeException("Failed to instantiate " + rootClass.getName());
     }
 
-    private boolean isCompatible(Class<?> paramType, Class<?> argType) {
+    private static boolean isCompatible(Class<?> paramType, Class<?> argType) {
         if (paramType.isPrimitive()) {
             return getWrapperType(paramType).equals(argType);
         }
         return paramType.isAssignableFrom(argType);
     }
 
-    private Class<?> getWrapperType(Class<?> primitiveType) {
+    private static Class<?> getWrapperType(Class<?> primitiveType) {
         if (primitiveType == boolean.class) return Boolean.class;
         if (primitiveType == byte.class) return Byte.class;
         if (primitiveType == char.class) return Character.class;

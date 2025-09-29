@@ -22,8 +22,7 @@ public class App {
                 "Black", 2024));
 
         // Part 2
-        Container container = new Container();
-        Car bmw = container.createInstance(Car.class, "BMW",
+        Car bmw = Container.createInstance(Car.class, "BMW",
                 "M3", "Blue", 2013);
         System.out.println(bmw);
     }

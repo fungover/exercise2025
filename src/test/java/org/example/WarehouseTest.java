@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -134,16 +135,40 @@ public class WarehouseTest {
         assertFalse(sameProductFromId.isPresent());
     }
 
-        @Test
-        @DisplayName("Checks that getProductsByCategorySorted works as intended. Should return all products in the same category sorted A to Z")
-        public void getProductsByCategorySorted() {
-            Warehouse warehouse = setupWarehouse();
+    @Test
+    @DisplayName("Checks that getProductsByCategorySorted works as intended. Should return all products in the same category sorted A to Z")
+    public void getProductsByCategorySorted() {
+        Warehouse warehouse = setupWarehouse();
 
-            List<Product> products = warehouse.getProductsByCategorySorted(CategoryEnum.UTILITY);
+        List<Product> products = warehouse.getProductsByCategorySorted(CategoryEnum.UTILITY);
 
-            assertEquals(3, products.size());
-            assertEquals("Drill", products.getFirst().name());
-            assertEquals("Hammer", products.get(1).name());
-            assertEquals("Screwdriver", products.get(2).name());
-        }
+        assertEquals(3, products.size());
+        assertEquals("Drill", products.getFirst().name());
+        assertEquals("Hammer", products.get(1).name());
+        assertEquals("Screwdriver", products.get(2).name());
+    }
+
+    @Test
+    @DisplayName("Checks that getProductsCreatedAfter works as intended. Should return products with later createdDate then inserted date")
+    public void getProductsCreatedAfterTest() {
+        Warehouse warehouse = new Warehouse();
+
+        LocalDate nowDate = LocalDate.now();
+        LocalDate tomorrowDate = nowDate.plusDays(1);
+        LocalDate yesterdayDate = nowDate.minusDays(1);
+        LocalDate yesterday2Date = nowDate.minusDays(2);
+
+        Product hammer = new Product(UUID.randomUUID(), "Hammer",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
+        Product saw = new Product(UUID.randomUUID(), "Saw", CategoryEnum.UTILITY, 2, tomorrowDate, tomorrowDate);
+        Product nailgun = new Product(UUID.randomUUID(), "Nailgun", CategoryEnum.UTILITY, 3, yesterday2Date, yesterday2Date);
+
+        warehouse.addProduct(hammer);
+        warehouse.addProduct(saw);
+        warehouse.addProduct(nailgun);
+        List<Product> products = warehouse.getProductsCreatedAfter(yesterdayDate);
+        assertEquals(2, products.size());
+        assertEquals("Hammer", products.get(0).name());
+        assertEquals("Saw", products.get(1).name());
+
+    }
 }

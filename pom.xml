@@ -28,11 +28,12 @@
     <dependencies>
         <dependency>
             <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-core-api</artifactId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
             <version>${jakartaee-api.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
 
     <build>
         <finalName>jakartaee-hello-world</finalName>

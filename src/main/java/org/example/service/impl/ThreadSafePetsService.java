@@ -31,19 +31,20 @@ public class ThreadSafePetsService implements PetsService {
 
     @Override
     public PetDTO getPetById(Long id) {
-        if (!pets.containsKey(id)) {
+        PetDTO petDTO = pets.get(id);
+        if (petDTO == null) {
             throw new NotFoundException("Pet with id " + id + " not found");
         }
-        return pets.get(id);
+
+        return petDTO;
     }
 
     @Override
     public PetDTO feedPet(Long id) {
-        if (!pets.containsKey(id)) {
+        PetDTO petDTO = pets.get(id);
+        if (petDTO == null) {
             throw new NotFoundException("Pet with id " + id + " not found");
         }
-
-        PetDTO petDTO = pets.get(id);
 
         lock.lock();
         try {
@@ -60,12 +61,38 @@ public class ThreadSafePetsService implements PetsService {
 
     @Override
     public PetDTO playWithPet(Long id) {
-        return null;
+        PetDTO petDTO = pets.get(id);
+        if (petDTO == null) {
+            throw new NotFoundException("Pet with id " + id + " not found");
+        }
+
+        lock.lock();
+        try {
+            if (petDTO.getHappiness() >= 100) {
+                throw new BadRequestException("Pet is already happy");
+            }
+            petDTO.setHappiness(Math.min(100, petDTO.getHappiness() + 10));
+        } finally {
+            lock.unlock();
+        }
+
+        return petDTO;
     }
 
     @Override
     public PetDTO deletePet(Long id) {
-        pets.remove(id);
-        return null;
+        PetDTO petDTO = pets.get(id);
+        if (petDTO == null) {
+            throw new NotFoundException("Pet with id " + id + " not found");
+        }
+
+        lock.lock();
+        try {
+            pets.remove(id);
+        } finally {
+            lock.unlock();
+        }
+
+        return petDTO;
     }
 }

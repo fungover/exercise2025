@@ -55,4 +55,21 @@ public class Service{
             lock.unlock();
         }
     }
+
+    public PetDTO playWithPet(Long id) {
+        PetDTO pet = pets.get(id);
+        if (pet == null) throw new NotFoundException("Pet not found: " + id);
+
+        lock.lock();
+        try {
+            int newHappiness = Math.max(0, Math.min(100, pet.getHappiness() + 10));
+            pet.setHappiness(newHappiness);
+            return pet;
+        } catch (Exception e) {
+            System.err.println("Error playing with pet " + id + ": " + e.getMessage());
+            throw e;
+        } finally {
+            lock.unlock();
+        }
+    }
 }

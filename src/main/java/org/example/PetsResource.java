@@ -43,4 +43,10 @@ public class PetsResource {
         return Response.ok(pet).build();
     }
 
+    @PUT
+    @Path("/{id}/play")
+    public Response playPet(@PathParam("id") Long id) {
+        PetDTO pet = service.playWithPet(id);
+        return Response.ok(pet).build();
+    }
 }

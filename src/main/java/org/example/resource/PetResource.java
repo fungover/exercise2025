@@ -2,10 +2,7 @@ package org.example.resource;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.dto.PetDTO;
@@ -28,4 +25,11 @@ public class PetResource {
                 .entity(created)
                 .build();
     }
+
+    @GET
+    public Response getAll() {
+        return Response.ok(petService.getAllPets()).build();
+    }
+
+
 }

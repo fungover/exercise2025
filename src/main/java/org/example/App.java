@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.container.Container;
 import org.example.entities.Car;
 import org.example.entities.Motorcycle;
 import org.example.repository.Garage;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
 public class App {
     public static void main(String[] args) {
-        // Dependency injection with vehicles
+        // Part 1
         VehicleRepository repository = new Garage(new ArrayList<>());
         VehicleProcessor processor = new VehicleService(repository);
 
@@ -19,5 +20,11 @@ public class App {
                 "Red", 2005));
         processor.process(new Motorcycle("Harley Davidson", "Nightster",
                 "Black", 2024));
+
+        // Part 2
+        Container container = new Container();
+        Car bmw = container.createInstance(Car.class, "BMW",
+                "M3", "Blue", 2013);
+        System.out.println(bmw);
     }
 }

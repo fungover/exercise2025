@@ -150,7 +150,7 @@ public class WarehouseTest {
 
     @Test
     @DisplayName("Checks that getProductsCreatedAfter works as intended. Should return products with later createdDate then inserted date")
-    public void getProductsCreatedAfterTest() {
+    public void getProductsCreatedAfterTrueTest() {
         Warehouse warehouse = new Warehouse();
 
         LocalDate nowDate = LocalDate.now();
@@ -169,6 +169,30 @@ public class WarehouseTest {
         assertEquals(2, products.size());
         assertEquals("Hammer", products.get(0).name());
         assertEquals("Saw", products.get(1).name());
+    }
+
+    @Test
+    @DisplayName("Checks that getProductsCreatedAfter works as intended. Should return all products because all products are created after input date")
+    public void getProductsCreatedAfterFalseTest() {
+        Warehouse warehouse = new Warehouse();
+
+        LocalDate nowDate = LocalDate.now();
+        LocalDate tomorrowDate = nowDate.plusDays(1);
+        LocalDate yesterdayDate = nowDate.minusDays(1);
+        LocalDate yesterday2Date = nowDate.minusDays(2);
+
+        Product hammer = new Product(UUID.randomUUID(), "Hammer",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
+        Product saw = new Product(UUID.randomUUID(), "Saw", CategoryEnum.UTILITY, 2, tomorrowDate, tomorrowDate);
+        Product nailgun = new Product(UUID.randomUUID(), "Nailgun", CategoryEnum.UTILITY, 3, yesterdayDate, yesterdayDate);
+
+        warehouse.addProduct(hammer);
+        warehouse.addProduct(saw);
+        warehouse.addProduct(nailgun);
+        List<Product> products = warehouse.getProductsCreatedAfter(yesterday2Date);
+        assertEquals(3, products.size());
+        assertEquals("Hammer", products.get(0).name());
+        assertEquals("Saw", products.get(1).name());
+        assertEquals("Nailgun", products.get(2).name());
     }
 
     @Test

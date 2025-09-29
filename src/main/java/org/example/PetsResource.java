@@ -35,4 +35,12 @@ public class PetsResource {
         PetDTO pet = service.getPet(id);
         return Response.ok(pet).build();
     }
+
+    @PUT
+    @Path("/{id}/feed")
+    public Response feedPet(@PathParam("id") Long id) {
+        PetDTO pet = service.feedPet(id);
+        return Response.ok(pet).build();
+    }
+
 }

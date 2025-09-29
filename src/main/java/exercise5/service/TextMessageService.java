@@ -1,8 +1,6 @@
 package exercise5.service;
 
-import exercise5.enteties.Message;
 import exercise5.repository.MessageRepository;
-import exercise5.service.MessageService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -15,12 +13,12 @@ public class TextMessageService implements MessageService {
     }
 
     @Override
-    public void sendMessage(Message message) {
+    public void sendMessage(String message) {
         System.out.println(message);
     }
 
     @Override
     public String getMessage() {
-        return "This message is an SMS";
+        return "You got a text message";
     }
 }

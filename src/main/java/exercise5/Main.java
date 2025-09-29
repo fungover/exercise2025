@@ -1,6 +1,5 @@
 package exercise5;
 
-import exercise5.enteties.Message;
 import exercise5.repository.InMemoryMessageRepository;
 import exercise5.repository.MessageRepository;
 import exercise5.service.EmailMessageService;
@@ -17,14 +16,16 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         System.out.println("-----Part 1-----");
-        List<String> messages = new ArrayList<>();
-        MessageRepository messageRepository1 = new InMemoryMessageRepository(messages);
+        MessageRepository messageRepository1 = new InMemoryMessageRepository(/*new ArrayList<>()*/);
         MessageService textMessageService1 = new TextMessageService(messageRepository1);
         MessageService emailMessageService1 = new EmailMessageService(messageRepository1);
         MessageService voiceMessageService1 = new VoiceMessageService(messageRepository1);
-        textMessageService1.sendMessage(new Message("This is a text message"));
-        emailMessageService1.sendMessage(new Message("This is an email message"));
-        voiceMessageService1.sendMessage(new Message("This is a voice message"));
+        textMessageService1.sendMessage("This is a sent text");
+        System.out.println(textMessageService1.getMessage());
+        emailMessageService1.sendMessage("This is a sent email");
+        System.out.println(emailMessageService1.getMessage());
+        voiceMessageService1.sendMessage("This is a sent voice message");
+        System.out.println(voiceMessageService1.getMessage());
 
         System.out.println("-----Part 2-----");
         Container container = new Container();
@@ -32,24 +33,14 @@ public class Main {
         container.register(MessageRepository.class, InMemoryMessageRepository.class);
         container.register(List.class, ArrayList.class);
         MessageService voiceMessageService2 = container.resolve(VoiceMessageService.class);
-        voiceMessageService2.sendMessage(new Message("This is a voice message"));
-
+        voiceMessageService2.sendMessage("This is a sent voice message");
+        System.out.println(voiceMessageService2.getMessage());
         System.out.println("-----Part 3-----");
-        System.out.println("Hello World!");
-        /*Weld weld = new Weld();
-        try(WeldContainer container = weld.initialize()){
-            MessageService messageService  = container.select(MessageService.class).get();
-        }*/
         Weld weld = new Weld();
 
         try (WeldContainer weldContainer = weld.initialize()) {
-            MessageService messageService = weldContainer.select(MessageService.class).get();
-            messageService.sendMessage(new Message("This is a message"));
-
+            MessageService messageService = weldContainer.select(EmailMessageService.class).get();
+            System.out.println(messageService.getMessage());
         }
-        /*try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
-            MessageService messageService = container.select(MessageService.class).get();
-            messageService.sendMessage("Hello World");
-        }*/
     }
 }

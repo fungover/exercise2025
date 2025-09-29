@@ -1,8 +1,6 @@
 package exercise5.service;
 
-import exercise5.enteties.Message;
 import exercise5.repository.MessageRepository;
-import exercise5.service.MessageService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -14,12 +12,12 @@ public class VoiceMessageService implements MessageService {
         this.messageRepository = messageRepository;
     }
     @Override
-    public void sendMessage(Message message) {
+    public void sendMessage(String message) {
         System.out.println(message);
     }
 
     @Override
     public String getMessage() {
-        return "This is a voice message";
+        return "You got a voice message";
     }
 }

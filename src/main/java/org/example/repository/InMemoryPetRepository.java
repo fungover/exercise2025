@@ -1,5 +1,6 @@
 package org.example.repository;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import org.example.dto.PetDTO;
 
 import java.util.Collection;
@@ -8,6 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+@ApplicationScoped
 public class InMemoryPetRepository implements PetRepository {
 
     private final Map<Long, PetDTO> pets = new ConcurrentHashMap<>();

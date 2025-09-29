@@ -15,21 +15,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
-    private final PrintStream originalOut = System.out;
-    private final java.io.InputStream originalIn = System.in;
-    private ByteArrayOutputStream outContent;
-
-    @BeforeEach
-    public void setUpStreams() {
-        outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-    }
-
-    @AfterEach
-    public void restoreStreams() {
-        System.setIn(originalIn);
-        System.setOut(originalOut);
-    }
+    public Warehouse setupWarehouse() {
 
     public Warehouse setupWarehouse() {
         Warehouse warehouse = new Warehouse();

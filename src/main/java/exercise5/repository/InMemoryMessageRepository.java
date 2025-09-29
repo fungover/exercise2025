@@ -17,6 +17,9 @@ public class InMemoryMessageRepository implements MessageRepository {
     }
     @Override
     public void saveMessage(String message) {
+        if(message == null || message.isBlank()) {
+            throw new IllegalArgumentException("Message cannot be null or blank");
+        }
         messages.add(message);
     }
 }

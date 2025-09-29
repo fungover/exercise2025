@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,6 +41,8 @@ public class WarehouseTest {
         warehouse.addProduct(screwdriver);
         Product tv = new Product(UUID.randomUUID(), "Television", CategoryEnum.ELECTRIC, 3, LocalDate.now(), LocalDate.now());
         warehouse.addProduct(tv);
+        Product drill = new Product(UUID.randomUUID(), "Drill", CategoryEnum.UTILITY, 5, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(drill);
 
         return warehouse;
     }
@@ -130,4 +133,17 @@ public class WarehouseTest {
 
         assertFalse(sameProductFromId.isPresent());
     }
+
+        @Test
+        @DisplayName("Checks that getProductsByCategorySorted works as intended. Should return all products in the same category sorted A to Z")
+        public void getProductsByCategorySorted() {
+            Warehouse warehouse = setupWarehouse();
+
+            List<Product> products = warehouse.getProductsByCategorySorted(CategoryEnum.UTILITY);
+
+            assertEquals(3, products.size());
+            assertEquals("Drill", products.getFirst().name());
+            assertEquals("Hammer", products.get(1).name());
+            assertEquals("Screwdriver", products.get(2).name());
+        }
 }

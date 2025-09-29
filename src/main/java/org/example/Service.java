@@ -1,5 +1,6 @@
 package org.example;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+@ApplicationScoped
 public class Service{
     private final ConcurrentHashMap<Long, PetDTO> pets = new ConcurrentHashMap<>();
     private final AtomicLong idGen = new AtomicLong(1);

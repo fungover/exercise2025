@@ -13,14 +13,20 @@ public class Container{
 
     public <T> T resolve(Class<T> type) {
         System.out.println("Resolving "+type.getSimpleName());
-        if(registry.containsKey(type)) {
+        /*if(registry.containsKey(type)) {
             System.out.println(type.getSimpleName()+" already exists");
             return (T) instances.get(type);
         }
         Class<?> instanceType = registry.get(type);
         if(instanceType == null) {
             instanceType = type;
+        }*/
+        Object cached = instances.get(type);
+        if(cached != null) {
+            System.out.println(type.getSimpleName());
+            return type.cast(cached);
         }
+        Class<?> instanceType = registry.getOrDefault(type, type);
         try {
             Constructor<?>[] constructors = instanceType.getDeclaredConstructors();
             Constructor<?> constructor = constructors[0];
@@ -28,7 +34,7 @@ public class Container{
             Class<?>[] parameterTypes = constructor.getParameterTypes();
             if(parameterTypes.length == 0){
                 System.out.println("No parameters in constructor for "+ instanceType.getSimpleName());
-                T result = (T) constructor.newInstance();
+                T result = type.cast(constructor.newInstance());
                 instances.put(type, result);
                 return result;
             }
@@ -37,9 +43,9 @@ public class Container{
                 System.out.println("Creating the dependency "+parameterTypes[i].getSimpleName());
                 dependencies[i] = resolve(parameterTypes[i]);
             }
-            T classInstance = (T) constructor.newInstance(dependencies);
+            T classInstance = (T) type.cast(constructor.newInstance(dependencies));
             System.out.println("Created instance of "+classInstance.getClass().getSimpleName());
-            instances.put(type, instanceType);
+            instances.put(type, classInstance);
             return classInstance;
         } catch (Exception e) {
             throw new RuntimeException(e);

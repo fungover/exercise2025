@@ -14,6 +14,7 @@ public class TextMessageService implements MessageService {
 
     @Override
     public void sendMessage(String message) {
+        messageRepository.saveMessage(message);
         System.out.println(message);
     }
 

@@ -120,7 +120,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>[24,25]</version>
+                                    <version>[25,26]</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>

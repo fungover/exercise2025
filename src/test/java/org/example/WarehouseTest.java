@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -102,5 +103,31 @@ public class WarehouseTest {
         boolean updated = warehouse.updateProduct("h342dass", "Updated hammer", CategoryEnum.UTILITY, 5);
 
         assertFalse(updated);
+    }
+
+    @Test
+    @DisplayName("Checks that getProductById works as intended, should return product")
+    public void getProductByIdTrueTest() {
+        Warehouse warehouse = new Warehouse();
+
+        Product hammer = new Product(UUID.randomUUID(), "Hammer", CategoryEnum.UTILITY, 4, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(hammer);
+
+        Optional<Product> sameProductFromId = warehouse.getProductById(hammer.id().toString());
+
+        assertTrue(sameProductFromId.isPresent());
+    }
+
+    @Test
+    @DisplayName("Checks that getProductById works as intended, should return product")
+    public void getProductByIdFalseTest() {
+        Warehouse warehouse = new Warehouse();
+
+        Product hammer = new Product(UUID.randomUUID(), "Hammer", CategoryEnum.UTILITY, 4, LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(hammer);
+
+        Optional<Product> sameProductFromId = warehouse.getProductById("head21zsd");
+
+        assertFalse(sameProductFromId.isPresent());
     }
 }

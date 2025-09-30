@@ -4,7 +4,9 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.example.dto.PetDTO;
+import org.example.dto.PetResponseDTO;
 import org.example.service.api.PetsService;
 
 import java.util.List;
@@ -18,8 +20,12 @@ public class PetResource {
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public PetDTO addPet(@Valid PetDTO petDTO) {
-        return petsService.addPet(petDTO);
+    public Response addPet(@Valid PetDTO petDTO) {
+        PetDTO createdPet = petsService.addPet(petDTO);
+
+        return Response.status(Response.Status.CREATED)
+                .entity(new PetResponseDTO("Successfully added pet", createdPet))
+                .build();
     }
 
     @GET
@@ -38,21 +44,27 @@ public class PetResource {
     @PUT
     @Path("{id}/feed")
     @Produces({ MediaType.APPLICATION_JSON })
-    public PetDTO feedPet(@PathParam("id") Long id) {
-        return petsService.feedPet(id);
+    public Response feedPet(@PathParam("id") Long id) {
+        PetDTO fedPet = petsService.feedPet(id);
+        return Response.ok(new PetResponseDTO("Pet has been fed!", fedPet))
+                .build();
     }
 
     @PUT
     @Path("{id}/play")
     @Produces({ MediaType.APPLICATION_JSON })
-    public PetDTO playWithPet(@PathParam("id") Long id) {
-        return petsService.playWithPet(id);
+    public Response playWithPet(@PathParam("id") Long id) {
+        PetDTO playedWithPet = petsService.playWithPet(id);
+        return Response.ok(new PetResponseDTO("Pet has been played with", playedWithPet))
+                .build();
     }
 
     @DELETE
     @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public PetDTO deletePet(@PathParam("id") Long id) {
-        return petsService.deletePet(id);
+    public Response deletePet(@PathParam("id") Long id) {
+        petsService.deletePet(id);
+        return Response.ok(new PetResponseDTO("Pet has successfully been removed"))
+                .build();
     }
 }

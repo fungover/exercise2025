@@ -50,10 +50,10 @@ public class ThreadSafePetsService implements PetsService {
 
         lock.lock();
         try {
-            if (petDTO.getHungerLevel() >= 100) {
+            if (petDTO.getHungerLevel() <= 0) {
                 throw new BadRequestException("Pet is already full");
             }
-            petDTO.setHungerLevel(Math.min(100, petDTO.getHungerLevel() + 10));
+            petDTO.setHungerLevel(Math.max(0, petDTO.getHungerLevel() - 10));
         } finally {
             lock.unlock();
         }

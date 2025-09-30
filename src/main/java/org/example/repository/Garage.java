@@ -1,13 +1,18 @@
 package org.example.repository;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import org.example.entities.Vehicle;
 
 import java.util.List;
 
+@ApplicationScoped
 public class Garage implements VehicleRepository {
     private final List<Vehicle> vehicles;
 
     public Garage(List<Vehicle> listType) {
+        if (listType == null) {
+            throw new IllegalArgumentException("Vehicle list cannot be null");
+        }
         this.vehicles = listType;
     }
 

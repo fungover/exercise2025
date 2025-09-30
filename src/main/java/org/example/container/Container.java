@@ -11,7 +11,8 @@ public class Container {
                 if (paramTypes.length == args.length) {
                     boolean match = true;
                     for (int i = 0; i < paramTypes.length; i++) {
-                        if (!isCompatible(paramTypes[i], args[i].getClass())) {
+                        Class<?> argType = args[i] != null ? args[i].getClass() : null;
+                        if (!isCompatible(paramTypes[i], argType)) {
                             match = false;
                             System.err.println("Argument " + i +
                                     " is not compatible with " +
@@ -32,6 +33,9 @@ public class Container {
     }
 
     private static boolean isCompatible(Class<?> paramType, Class<?> argType) {
+        if (argType == null) {
+            return !paramType.isPrimitive();
+        }
         if (paramType.isPrimitive()) {
             return getWrapperType(paramType).equals(argType);
         }

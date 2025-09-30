@@ -1,7 +1,5 @@
 package org.example;
 
-// This is the main class where the program starts
-
 import org.example.repository.InMemoryMessageRepository;
 import org.example.repository.MessageRepository;
 import org.example.repository.MessageRepositoryHandler;
@@ -10,7 +8,8 @@ import org.example.service.MessageServiceHandler;
 
 public class Main {
     public static void main(String[] args) {
-        // Create a repository to handle messages
+
+        // Create repositories to handle messages
         MessageRepository repository = new MessageRepositoryHandler();
         MessageRepository repository2 = new InMemoryMessageRepository();
 
@@ -18,7 +17,7 @@ public class Main {
         MessageService service = new MessageServiceHandler(repository);
         MessageService service2 = new MessageServiceHandler(repository2);
 
-        // Use the service to send a message
+        // Use the service to send message
         service.sendMessage("Hej hur mår du?");
         service2.sendMessage("Hej, detta meddelande går till listan");
     }

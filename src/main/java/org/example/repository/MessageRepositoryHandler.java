@@ -10,7 +10,7 @@ A little reminder for myself:
 
 public class MessageRepositoryHandler implements MessageRepository {
 
-        @Override
+    @Override
         public void saveMessage(String message) {
             System.out.println("Mottaget meddelande: " + message);
         }

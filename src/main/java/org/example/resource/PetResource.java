@@ -44,7 +44,7 @@ public class PetResource {
     public Response feed(@PathParam("id") Long id) {
         return petService.feedPet(id)
                 .map(p -> Response.ok(p).build())
-                .orElse(Response.status(Response.Status.NOT_FOUND).build());
+                .orElseThrow(() -> new NotFoundException("Pet with ID " + id + " does not exist."));
     }
 
     @PUT
@@ -52,16 +52,17 @@ public class PetResource {
     public Response play(@PathParam("id") Long id) {
         return petService.playWithPet(id)
                 .map(p -> Response.ok(p).build())
-                .orElse(Response.status(Response.Status.NOT_FOUND).build());
+                .orElseThrow(() -> new NotFoundException("Pet with ID " + id + " does not exist."));
     }
 
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
-        if (petService.deletePet(id)) {
-            return Response.noContent().build();
+        boolean deleted = petService.deletePet(id);
+        if (!deleted) {
+            throw new NotFoundException("Pet with ID " + id + " does not exist.");
         }
-        return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.noContent().build();
     }
 
 

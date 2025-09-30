@@ -36,7 +36,7 @@ public class PetResource {
     public Response getById(@PathParam("id") Long id) {
         return petService.getPetById(id)
                 .map(p -> Response.ok(p).build())
-                .orElse(Response.status(Response.Status.NOT_FOUND).build());
+                .orElseThrow(() -> new NotFoundException("Pet with ID " + id + " does not exist."));
     }
 
     @PUT

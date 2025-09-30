@@ -49,4 +49,11 @@ public class PetsResource {
         PetDTO pet = service.playWithPet(id);
         return Response.ok(pet).build();
     }
+
+    @DELETE
+    @Path("/{id}")
+    public List<PetDTO> deletePet(@PathParam("id") Long id) {
+        service.deletePet(id);
+        return service.list();
+    }
 }

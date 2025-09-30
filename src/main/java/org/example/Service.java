@@ -14,9 +14,6 @@ public class Service{
     private final ConcurrentHashMap<Long, PetDTO> pets = new ConcurrentHashMap<>();
     private final AtomicLong idGen = new AtomicLong(1);
     private final ReentrantLock lock = new ReentrantLock();
-    //TODO: manage hunger level
-    //TODO: manage happiness level
-
 
     // Adopts a new pet
     public PetDTO adopt(PetDTO dto) {
@@ -71,5 +68,9 @@ public class Service{
         } finally {
             lock.unlock();
         }
+    }
+
+    public void deletePet(Long id) {
+        pets.remove(id);
     }
 }

@@ -6,8 +6,12 @@ import org.example.dto.PetDTO;
 import org.example.repository.PetRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 public class PetService {
@@ -57,5 +61,44 @@ public class PetService {
         } finally {
             lock.unlock();
         }
+    }
+
+    // Start working on filtering, sorting and pagination features here
+
+    public List<PetDTO> searchPets(int offset, int limit, String species, String sortBy, String order) {
+        Stream<PetDTO> stream = petRepository.findAll().stream();
+
+        stream = applyFilter(stream, species);
+        stream = applySorting(stream, sortBy, order);
+        return applyPagination(stream, offset, limit);
+    }
+
+    private Stream<PetDTO> applyFilter(Stream<PetDTO> stream, String species) {
+        if (species != null && !species.isBlank()) {
+            return stream.filter(p -> p.getSpecies().equalsIgnoreCase(species));
+        }
+        return stream;
+    }
+
+    private Stream<PetDTO> applySorting(Stream<PetDTO> stream, String sortBy, String order) {
+        Comparator<PetDTO> comparator = switch (sortBy.toLowerCase()) {
+            case "name" -> Comparator.comparing(PetDTO::getName, String.CASE_INSENSITIVE_ORDER);
+            case "species" -> Comparator.comparing(PetDTO::getSpecies, String.CASE_INSENSITIVE_ORDER);
+            case "happiness" -> Comparator.comparingInt(PetDTO::getHappiness);
+            case "hungerlevel" -> Comparator.comparingInt(PetDTO::getHungerLevel);
+            default -> Comparator.comparing(PetDTO::getId);
+        };
+
+        if ("desc".equalsIgnoreCase(order)) {
+            comparator = comparator.reversed();
+        }
+        return stream.sorted(comparator);
+    }
+
+    private List<PetDTO> applyPagination(Stream<PetDTO> stream, int offset, int limit) {
+        return stream
+                .skip(offset)
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 }

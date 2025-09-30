@@ -65,5 +65,20 @@ public class PetResource {
         return Response.noContent().build();
     }
 
+    @GET
+    @Path("/search")
+    public Response searchPets(
+            @QueryParam("offset") @DefaultValue("0") int offset,
+            @QueryParam("limit") @DefaultValue("10") int limit,
+            @QueryParam("species") String species,
+            @QueryParam("sortBy") @DefaultValue("id") String sortBy,
+            @QueryParam("order") @DefaultValue("asc") String order
+    ) {
+        return Response.ok(
+                petService.searchPets(offset, limit, species, sortBy, order)
+        ).build();
+
+    }
+
 
 }

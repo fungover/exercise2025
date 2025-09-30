@@ -6,6 +6,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Collections;
 import java.util.List;
 
 @Path("/pets")
@@ -18,8 +19,15 @@ public class PetsResource {
 
     // GET /api/pets → List all pets
     @GET
-    public List<PetDTO> listPets() {
-        return service.list();
+    public Response listPets() {
+        List<PetDTO> pets = service.list();
+        if (pets.isEmpty()) {
+            return Response.status(Response.Status.OK)
+                    .entity("Empty list")
+                    .build();
+        }
+        return Response.ok(pets).build();
+
     }
 
     // POST api/pets → Adopt a new pet
@@ -52,8 +60,8 @@ public class PetsResource {
 
     @DELETE
     @Path("/{id}")
-    public List<PetDTO> deletePet(@PathParam("id") Long id) {
-        service.deletePet(id);
-        return service.list();
+    public Response deletePet(@PathParam("id") Long id) {
+        PetDTO removed = service.deletePet(id);
+        return Response.ok(removed).build();
     }
 }

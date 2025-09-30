@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 @ApplicationScoped
-public class Service{
+public class Service {
     private final ConcurrentHashMap<Long, PetDTO> pets = new ConcurrentHashMap<>();
     private final AtomicLong idGen = new AtomicLong(1);
     private final ReentrantLock lock = new ReentrantLock();
@@ -44,11 +44,7 @@ public class Service{
             int newHunger = Math.max(0, pet.getHungerLevel() - 10);
             pet.setHungerLevel(newHunger);
             return pet;
-        } catch (Exception e) {
-            System.err.println("Error feeding pet " + id + ": " + e.getMessage());
-            throw e;
-        }
-        finally {
+        } finally {
             lock.unlock();
         }
     }
@@ -62,15 +58,16 @@ public class Service{
             int newHappiness = Math.max(0, Math.min(100, pet.getHappiness() + 10));
             pet.setHappiness(newHappiness);
             return pet;
-        } catch (Exception e) {
-            System.err.println("Error playing with pet " + id + ": " + e.getMessage());
-            throw e;
         } finally {
             lock.unlock();
         }
     }
 
-    public void deletePet(Long id) {
-        pets.remove(id);
+    public PetDTO deletePet(Long id) {
+        PetDTO removed = pets.remove(id);
+        if (removed == null) {
+            throw new NotFoundException("Pet not found: " + id);
+        }
+        return removed;
     }
 }

@@ -2,6 +2,7 @@ package org.example;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.validation.ValidationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,9 @@ public class Service {
     public PetDTO feedPet(Long id) {
         PetDTO pet = pets.get(id);
         if (pet == null) throw new NotFoundException("Pet not found: " + id);
+        if (pet.getHungerLevel() <= 0) {
+            throw new ValidationException("Pet is not hungry!");
+        }
 
         lock.lock();
         try {
@@ -52,6 +56,9 @@ public class Service {
     public PetDTO playWithPet(Long id) {
         PetDTO pet = pets.get(id);
         if (pet == null) throw new NotFoundException("Pet not found: " + id);
+        if (pet.getHappiness() >= 100) {
+            throw new ValidationException("Pet is too exhausted to play!");
+        }
 
         lock.lock();
         try {
@@ -62,6 +69,7 @@ public class Service {
             lock.unlock();
         }
     }
+
 
     public PetDTO deletePet(Long id) {
         PetDTO removed = pets.remove(id);

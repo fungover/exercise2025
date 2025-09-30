@@ -37,20 +37,34 @@ public class Container {
             return !paramType.isPrimitive();
         }
         if (paramType.isPrimitive()) {
-            return getWrapperType(paramType).equals(argType);
+            return isPrimitiveAssignable(paramType, argType);
         }
         return paramType.isAssignableFrom(argType);
     }
 
-    private static Class<?> getWrapperType(Class<?> primitiveType) {
-        if (primitiveType == boolean.class) return Boolean.class;
-        if (primitiveType == byte.class) return Byte.class;
-        if (primitiveType == char.class) return Character.class;
-        if (primitiveType == short.class) return Short.class;
-        if (primitiveType == int.class) return Integer.class;
-        if (primitiveType == long.class) return Long.class;
-        if (primitiveType == float.class) return Float.class;
-        if (primitiveType == double.class) return Double.class;
-        return primitiveType; // Default, non-primitive value
+    private static boolean isPrimitiveAssignable(Class<?> primitiveType, Class<?> argType) {
+        if  (argType == null) return false;
+        if (primitiveType == boolean.class) return argType == Boolean.class;
+        if (primitiveType == byte.class) return argType == Byte.class;
+        if (primitiveType == char.class) return argType == Character.class;
+        if (argType == Character.class) return primitiveType == int.class ||
+                primitiveType == long.class || primitiveType == float.class ||
+                primitiveType == double.class;
+        if (!Number.class.isAssignableFrom(argType)) return false;
+        if (primitiveType == short.class) return argType == Short.class ||
+                argType == Byte.class;
+        if (primitiveType == int.class) return argType == Integer.class ||
+                argType == Short.class || argType == Byte.class;
+        if (primitiveType == long.class) return argType == Long.class ||
+                argType == Integer.class || argType == Short.class ||
+                argType == Byte.class;
+        if (primitiveType == float.class) return argType == Float.class ||
+                argType == Long.class || argType == Integer.class ||
+                argType == Short.class || argType == Byte.class;
+        if (primitiveType == double.class) return argType == Double.class ||
+                argType == Float.class || argType == Long.class ||
+                argType == Integer.class || argType == Short.class ||
+                argType == Byte.class;
+        return false;
     }
 }

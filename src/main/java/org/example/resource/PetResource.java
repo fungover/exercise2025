@@ -1,6 +1,7 @@
 package org.example.resource;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.example.dto.PetDTO;
@@ -17,7 +18,7 @@ public class PetResource {
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    public PetDTO addPet(PetDTO petDTO) {
+    public PetDTO addPet(@Valid PetDTO petDTO) {
         return petsService.addPet(petDTO);
     }
 
@@ -36,7 +37,6 @@ public class PetResource {
 
     @PUT
     @Path("{id}/feed")
-    @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     public PetDTO feedPet(@PathParam("id") Long id) {
         return petsService.feedPet(id);
@@ -44,9 +44,15 @@ public class PetResource {
 
     @PUT
     @Path("{id}/play")
-    @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     public PetDTO playWithPet(@PathParam("id") Long id) {
         return petsService.playWithPet(id);
+    }
+
+    @DELETE
+    @Path("{id}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public PetDTO deletePet(@PathParam("id") Long id) {
+        return petsService.deletePet(id);
     }
 }

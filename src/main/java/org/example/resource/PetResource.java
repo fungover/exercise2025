@@ -33,4 +33,20 @@ public class PetResource {
     public PetDTO getPetById(@PathParam("id") Long id) {
         return petsService.getPetById(id);
     }
+
+    @PUT
+    @Path("{id}/feed")
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    public PetDTO feedPet(@PathParam("id") Long id) {
+        return petsService.feedPet(id);
+    }
+
+    @PUT
+    @Path("{id}/play")
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    public PetDTO playWithPet(@PathParam("id") Long id) {
+        return petsService.playWithPet(id);
+    }
 }

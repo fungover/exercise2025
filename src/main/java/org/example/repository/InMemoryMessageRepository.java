@@ -3,6 +3,9 @@ package org.example.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class InMemoryMessageRepository implements  MessageRepository {
     private final List<String> messages = new ArrayList<>();
 

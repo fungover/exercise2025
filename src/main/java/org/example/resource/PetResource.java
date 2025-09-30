@@ -39,5 +39,13 @@ public class PetResource {
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
 
+    @PUT
+    @Path("/{id}/feed")
+    public Response feed(@PathParam("id") Long id) {
+        return petService.feedPet(id)
+                .map(p -> Response.ok(p).build())
+                .orElse(Response.status(Response.Status.NOT_FOUND).build());
+    }
+
 
 }

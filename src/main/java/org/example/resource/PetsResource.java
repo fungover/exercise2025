@@ -12,10 +12,13 @@ import org.example.service.api.PetsService;
 import java.util.List;
 
 @Path("pets")
-public class PetResource {
+public class PetsResource {
+    private final PetsService petsService;
 
     @Inject
-    private PetsService petsService;
+    public PetsResource(PetsService petsService) {
+        this.petsService = petsService;
+    }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })

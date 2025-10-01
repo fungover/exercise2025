@@ -5,6 +5,9 @@ import java.lang.reflect.Constructor;
 public class Container {
 
     public static <T> T createInstance(Class<T> rootClass, Object... args) {
+        if (rootClass == null) {
+            throw new IllegalArgumentException("rootClass cannot be null");
+        }
         try {
             for (Constructor<?> ctor : rootClass.getDeclaredConstructors()) {
                 Class<?>[] paramTypes = ctor.getParameterTypes();
@@ -27,9 +30,10 @@ public class Container {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Failed to instantiate: " + e);
+            throw new RuntimeException("Failed to instantiate " + rootClass.getName(), e);
         }
-        throw new RuntimeException("Failed to instantiate " + rootClass.getName());
+        throw new RuntimeException("No compatible constructor found for " +
+                rootClass.getName() + " with " + args.length + " arguments");
     }
 
     private static boolean isCompatible(Class<?> paramType, Class<?> argType) {

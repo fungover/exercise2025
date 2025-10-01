@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class App {
     public static void main(String[] args) {
         // Part 1
-        VehicleRepository repository = new Garage(new ArrayList<>());
+        VehicleRepository repository = new Garage();
         VehicleProcessor processor = new VehicleService(repository);
 
         Car volvo = new Car("Volvo", "V50",
@@ -34,9 +34,11 @@ public class App {
 
         // Part 3
         Weld weld = new Weld();
+        System.out.println(); // Line break
         try (WeldContainer container = weld.initialize()) {
             CdiVehicleService service = container
                     .select(CdiVehicleService.class).get();
+            System.out.println();
             service.process(volvo);
         }
     }

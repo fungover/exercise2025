@@ -1,6 +1,7 @@
 package org.example.service.impl;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import org.example.dto.PetDTO;
@@ -9,14 +10,14 @@ import org.example.service.api.PetsService;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 @ApplicationScoped
 public class ThreadSafePetsService implements PetsService {
     private final PetsRepository repository;
-    private final ReentrantLock lock = new ReentrantLock();
+    private final ConcurrentHashMap<Long, ReentrantLock> locks = new ConcurrentHashMap<>();
 
+    @Inject
     public ThreadSafePetsService(PetsRepository repository) {
         this.repository = repository;
     }
@@ -39,36 +40,55 @@ public class ThreadSafePetsService implements PetsService {
 
     @Override
     public PetDTO feedPet(Long id) {
-        PetDTO petDTO = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Pet with id " + id + " not found"));
+        ReentrantLock lock = locks.computeIfAbsent(id, k -> new ReentrantLock());
+        lock.lock();
+        try {
+            PetDTO petDTO = repository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Pet with id " + id + " not found"));
 
-        if (petDTO.getHungerLevel() <= 0) {
-            throw new BadRequestException("Pet is already full");
+            if (petDTO.getHungerLevel() <= 0) {
+                throw new BadRequestException("Pet is already full");
+            }
+
+            petDTO.setHungerLevel(Math.max(0, petDTO.getHungerLevel() - 10));
+            return repository.save(petDTO);
+        } finally {
+            lock.unlock();
         }
-
-        petDTO.setHungerLevel(Math.max(0, petDTO.getHungerLevel() - 10));
-        return repository.save(petDTO);
     }
 
     @Override
     public PetDTO playWithPet(Long id) {
-        PetDTO petDTO = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Pet with id " + id + " not found"));
+        ReentrantLock lock = locks.computeIfAbsent(id, k -> new ReentrantLock());
+        lock.lock();
+        try {
+            PetDTO petDTO = repository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Pet with id " + id + " not found"));
 
-        if (petDTO.getHappiness() >= 100) {
-            throw new BadRequestException("Pet is already happy");
+            if (petDTO.getHappiness() >= 100) {
+                throw new BadRequestException("Pet is already happy");
+            }
+
+            petDTO.setHappiness(Math.min(100, petDTO.getHappiness() + 10));
+            return repository.save(petDTO);
+        } finally {
+            lock.unlock();
         }
-
-        petDTO.setHappiness(Math.min(100, petDTO.getHappiness() + 10));
-        return repository.save(petDTO);
     }
 
     @Override
     public PetDTO deletePet(Long id) {
-        PetDTO petDTO = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Pet with id " + id + " not found"));
+        ReentrantLock lock = locks.computeIfAbsent(id, k -> new ReentrantLock());
+        lock.lock();
+        try {
+            PetDTO petDTO = repository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Pet with id " + id + " not found"));
 
-        repository.deleteById(id);
-        return petDTO;
+            repository.deleteById(id);
+            locks.remove(id);
+            return petDTO;
+        } finally {
+            lock.unlock();
+        }
     }
 }

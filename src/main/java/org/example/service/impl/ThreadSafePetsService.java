@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import org.example.dto.PetDTO;
+import org.example.exception.PetStateException;
 import org.example.repository.api.PetsRepository;
 import org.example.service.api.PetsService;
 
@@ -47,7 +48,7 @@ public class ThreadSafePetsService implements PetsService {
                     .orElseThrow(() -> new NotFoundException("Pet with id " + id + " not found"));
 
             if (petDTO.getHungerLevel() <= 0) {
-                throw new BadRequestException("Pet is already full");
+                throw new PetStateException("Pet is already full");
             }
 
             petDTO.setHungerLevel(Math.max(0, petDTO.getHungerLevel() - 10));
@@ -66,7 +67,7 @@ public class ThreadSafePetsService implements PetsService {
                     .orElseThrow(() -> new NotFoundException("Pet with id " + id + " not found"));
 
             if (petDTO.getHappiness() >= 100) {
-                throw new BadRequestException("Pet is already happy");
+                throw new PetStateException("Pet is already happy");
             }
 
             petDTO.setHappiness(Math.min(100, petDTO.getHappiness() + 10));

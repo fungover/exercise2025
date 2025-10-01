@@ -3,6 +3,6 @@ package org.example;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
 
-@ApplicationPath("api")
-public class PetApplication extends Application {
+@ApplicationPath("api") // All REST endpoints will be under /api.
+public class PetApplication extends Application { // Inherits from Jakarta EE application. Needed for JAX-RS (RESTEasy) to know where API starts
 }

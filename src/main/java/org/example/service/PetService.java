@@ -13,11 +13,11 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@ApplicationScoped
+@ApplicationScoped // CDI: one instance of this service will be created and reused
 public class PetService {
 
     @Inject
-    private PetRepository petRepository;
+    private PetRepository petRepository; // CDI: inject the repository implementation here
 
     private final ReentrantLock lock = new ReentrantLock();
 

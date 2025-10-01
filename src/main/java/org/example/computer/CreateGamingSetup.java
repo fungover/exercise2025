@@ -16,10 +16,15 @@ public class CreateGamingSetup implements GamingSetup {
 	@Override
 	public void buildAndStorePC() {
 		this.computer = pcBuilder.build();
-	}
 
+		System.out.println("Type: " + computer.TYPE()
+						+ "\nProcessor: " + computer.CPU()
+						+ "\nGraphics Card: " + computer.GPU()
+						+ "\nRandom Access Memory: " + computer.RAM()
+						+ "\nDisk Space: " + computer.DISK());
+	}
 	@Override
 	public PC getPC() {
-		return computer;
-	};
+		return this.computer;
+	}
 }

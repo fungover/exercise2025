@@ -74,4 +74,11 @@ public class PetResource {
         }
         return Response.noContent().build();
     }
+
+    @GET
+    @Path("/crash")
+    public Response crash() {
+        throw new RuntimeException("Boom! Något gick fel");
+    }
+
 }

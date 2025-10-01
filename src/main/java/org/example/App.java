@@ -12,9 +12,13 @@ public class App {
 	public static void main(String[] args) {
 		System.out.println("Part 1: ");
 		manualDependency();
+		System.out.println();
 
 		System.out.println("Part 2: ");
 		containerDI();
+		System.out.println();
+
+		System.out.println("Part 3: ");
 	}
 
 

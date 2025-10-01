@@ -1,5 +1,6 @@
 package org.example.container;
 
+import org.example.InjectionPoint;
 import org.example.computer.CreateGamingSetup;
 import org.example.computer.GamingSetup;
 import org.example.computer.builders.BuildGamingPC;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 public final class Container {
 
-	private static Map<Class<?>, Class<?>> interfaceMap = new HashMap<Class<?>, Class<?>>();
+	private static final Map<Class<?>, Class<?>> interfaceMap = new HashMap<>();
 
 	static {
 		interfaceMap.put(GamingSetup.class, CreateGamingSetup.class);
@@ -27,17 +28,16 @@ public final class Container {
 			throw new IllegalArgumentException("Class can not be null");
 		}
 
-		try {
-			if (clazz.isInterface()) {
-				clazz = (Class<T>) interfaceMap.get(clazz);
+		if (clazz.isInterface()) {
+			Class<?> impl = interfaceMap.get(clazz);
+			if (impl == null) {
+				throw new IllegalArgumentException("No implementation for " + clazz);
 			}
-
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			clazz = (Class<T>) impl;
 		}
+
 		try {
-			Constructor<?> constructor = clazz.getConstructors()[0];
+			Constructor<?> constructor = getConstructor(clazz);
 
 			Class<?>[] paramTypes = constructor.getParameterTypes();
 			Object[] params = Arrays.stream(paramTypes)
@@ -49,5 +49,23 @@ public final class Container {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private static Constructor<?> getConstructor(Class<?> clazz) {
+		Constructor<?>[] constructors = clazz.getConstructors();
+		Constructor<?> constructor = null;
+		if (constructors.length == 0) {
+			throw new IllegalArgumentException("No constructor for " + clazz);
+		}
+		if (constructors.length > 1) {
+			for (Constructor<?> ctor : constructors) {
+				if (ctor.isAnnotationPresent(InjectionPoint.class)) {
+					constructor = ctor;
+				}
+			}
+		} else {
+			constructor = constructors[0];
+		}
+		return constructor;
 	}
 }

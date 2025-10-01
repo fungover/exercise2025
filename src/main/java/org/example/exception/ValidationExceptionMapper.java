@@ -24,8 +24,11 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
             error.put("message", violation.getMessage());
             errors.add(error);
         }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("errors", errors);
         return Response.status(Response.Status.BAD_REQUEST)
-                .entity(errors)
+                .entity(response)
                 .build();
     }
 }

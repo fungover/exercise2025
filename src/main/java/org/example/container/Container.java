@@ -9,7 +9,11 @@ public class Container {
             throw new IllegalArgumentException("rootClass cannot be null");
         }
         try {
-            for (Constructor<?> ctor : rootClass.getDeclaredConstructors()) {
+            Constructor<?>[] constructors = rootClass.getDeclaredConstructors();
+            // Sort for deterministic selection when multiple constructors match
+            java.util.Arrays.sort(constructors,
+                    java.util.Comparator.comparing(Constructor::toString));
+            for (Constructor<?> ctor : constructors) {
                 Class<?>[] paramTypes = ctor.getParameterTypes();
                 if (paramTypes.length == args.length) {
                     boolean match = true;

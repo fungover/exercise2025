@@ -1,5 +1,6 @@
 package org.example.resource;
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -18,6 +19,10 @@ public class PetsResource {
     @Inject
     public PetsResource(PetsService petsService) {
         this.petsService = petsService;
+    }
+
+    public PetsResource() {
+        this.petsService = null;
     }
 
     @POST

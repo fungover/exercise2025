@@ -14,10 +14,10 @@ public record Book(String titel, String author, Genre genre, int rating){
         if(rating < 0 || rating > 10) {
             throw new IllegalArgumentException("Invalid rating");
         }
-        if(titel == null || titel.isEmpty()) {
+        if(titel == null || titel.isBlank()) {
             throw new IllegalArgumentException("Invalid titel");
         }
-        if(author == null || author.isEmpty()) {
+        if(author == null || author.isBlank()) {
             throw new IllegalArgumentException("Invalid author");
         }
         if(genre == null) {

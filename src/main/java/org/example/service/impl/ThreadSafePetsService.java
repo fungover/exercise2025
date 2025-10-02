@@ -9,9 +9,11 @@ import org.example.exception.PetStateException;
 import org.example.repository.api.PetsRepository;
 import org.example.service.api.PetsService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 public class ThreadSafePetsService implements PetsService {
@@ -29,12 +31,30 @@ public class ThreadSafePetsService implements PetsService {
     }
 
     @Override
-    public List<PetDTO> getAllPets(int offset, int limit, String species) {
+    public List<PetDTO> getAllPets(int offset, int limit, String species, String sortBy, String order) {
         if (offset < 0 || limit <= 0) {
             throw new IllegalArgumentException("Offset must be >= 0 and limit must be > 0");
         }
-        return repository.findAll().stream()
-                .filter(pet -> species == null || species.isBlank() || pet.getSpecies().equalsIgnoreCase(species))
+
+        Stream<PetDTO> petStream = repository.findAll().stream();
+
+        if (species != null && !species.isBlank()) {
+            petStream = petStream.filter(pet -> pet.getSpecies().equalsIgnoreCase(species));
+        }
+
+        Comparator<PetDTO> comparator;
+        if ("happiness".equalsIgnoreCase(sortBy)) {
+            comparator = Comparator.comparing(PetDTO::getHappiness);
+        } else {
+            comparator = Comparator.comparing(PetDTO::getId);
+        }
+
+        if ("desc".equalsIgnoreCase(order)) {
+            comparator = comparator.reversed();
+        }
+
+        return petStream
+                .sorted(comparator)
                 .skip(offset)
                 .limit(limit)
                 .toList();

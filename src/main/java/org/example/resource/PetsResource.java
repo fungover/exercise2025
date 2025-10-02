@@ -40,8 +40,10 @@ public class PetsResource {
     public List<PetDTO> getPets(
             @QueryParam("offset") @DefaultValue("0") int offset,
             @QueryParam("limit") @DefaultValue("10") int limit,
-            @QueryParam("species") String species) {
-        return petsService.getAllPets(offset, limit, species);
+            @QueryParam("species") String species,
+            @QueryParam("sortBy") String sortBy,
+            @QueryParam("order") String order) {
+        return petsService.getAllPets(offset, limit, species, sortBy, order);
     }
 
     @GET

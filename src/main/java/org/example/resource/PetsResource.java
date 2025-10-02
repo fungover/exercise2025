@@ -1,6 +1,5 @@
 package org.example.resource;
 
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -38,8 +37,10 @@ public class PetsResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<PetDTO> getPets() {
-        return petsService.getAllPets();
+    public List<PetDTO> getPets(
+            @QueryParam("offset") @DefaultValue("0") int offset,
+            @QueryParam("limit") @DefaultValue("10") int limit) {
+        return petsService.getAllPets(offset, limit);
     }
 
     @GET

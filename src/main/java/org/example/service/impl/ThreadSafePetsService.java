@@ -34,6 +34,18 @@ public class ThreadSafePetsService implements PetsService {
     }
 
     @Override
+    public List<PetDTO> getAllPets(int offset, int limit) {
+        if (offset < 0 || limit <= 0) {
+            throw new IllegalArgumentException("Offset must be >= 0 and limit must be > 0");
+        }
+
+        return repository.findAll().stream()
+                .skip(offset)
+                .limit(limit)
+                .toList();
+    }
+
+    @Override
     public PetDTO getPetById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Pet with id " + id + " not found"));

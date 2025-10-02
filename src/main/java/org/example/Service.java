@@ -26,15 +26,23 @@ public class Service {
     }
 
     // List with all pets
-    public List<PetDTO> list(int offset, int limit) {
+    public List<PetDTO> list(int offset, int limit, String species, String sortBy, String order) {
         lock.lock();
         try {
             List<PetDTO> allPets = new ArrayList<>(pets.values());
 
-            // protect mot out of bounds
+
+            //pagination species
+            if (species != null && !species.isEmpty()) {
+                allPets.removeIf(pet -> !species.equalsIgnoreCase(pet.getSpecies()));
+            }
+
+            // Pagination limit
             if (offset < 0) offset = 0;
             if (limit < 0) limit = 10;
             int end = Math.min(offset + limit, allPets.size());
+
+            //pagination sortBy and order
 
             if (offset > end) {
                 return Collections.emptyList();

@@ -6,8 +6,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.List;
-
 @Path("/pets")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -22,15 +20,21 @@ public class PetsResource {
         this.service = service;
     }
 
-    // GET /api/pets → List all pets
+     //GET /api/pets → List all pets
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<PetDTO> listPets(
+    public Response filterList (
             @QueryParam("offset") @DefaultValue("0") int offset,
-            @QueryParam("limit") @DefaultValue("3") int limit) {
-        return service.list(offset, limit);
-    }
+            @QueryParam("limit") @DefaultValue("10") int limit,
+            @QueryParam("species") String species,
+            @QueryParam("sortBy") String sortBy,
+            @QueryParam("order")  String order)  {
+        // Validate sortBy and order parameter
 
+        return Response
+                .status(Response.Status.OK)
+                .entity(service.list(offset, limit, species, sortBy, order))
+                .build();
+    }
 
     // POST api/pets → Adopt a new pet
     @POST

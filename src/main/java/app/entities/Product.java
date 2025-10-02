@@ -2,6 +2,7 @@ package app.entities;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 public record Product(
         int ID,
@@ -17,8 +18,13 @@ public record Product(
                 builder.name,
                 builder.category,
                 builder.rating,
-                builder.createdDate !=null ? builder.createdDate:ZonedDateTime.now(ZoneId.of("Europe/Stockholm")),
-                builder.modifiedDate !=null ? builder.modifiedDate:builder.createdDate
+                builder.createdDate !=null
+                        ?builder.createdDate.truncatedTo(ChronoUnit.MINUTES)
+                        :ZonedDateTime.now(ZoneId.of("Europe/Stockholm")).truncatedTo(ChronoUnit.MINUTES),
+
+                builder.modifiedDate !=null
+                        ?builder.modifiedDate
+                        :null
         );
 
         if (rating < 0 || rating > 10) {
@@ -58,12 +64,21 @@ public record Product(
         }
 
         public Builder createdDate(ZonedDateTime createdDate) {
-            this.createdDate = createdDate;
+            if (createdDate != null) {
+                this.createdDate = createdDate.truncatedTo(ChronoUnit.MINUTES);
+            } else {
+                this.createdDate = null;
+            }
             return this;
         }
 
         public Builder modifiedDate(ZonedDateTime modifiedDate) {
-            this.modifiedDate = modifiedDate;
+            if (modifiedDate != null) {
+                this.modifiedDate = modifiedDate.truncatedTo(ChronoUnit.MINUTES);
+
+            } else {
+                this.modifiedDate = null;
+            }
             return this;
         }
 

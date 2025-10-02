@@ -69,7 +69,7 @@ public class ProductTest {
     public void canCreateZonedDateTime() {
 
         ZoneId stockholm = ZoneId.of("Europe/Stockholm");
-        ZonedDateTime time = ZonedDateTime.of(2025,1,1,1,1,1,1,stockholm);
+        ZonedDateTime time = ZonedDateTime.of(2025,1,1,1,0,0,0,stockholm);
 
         Product product = new Product.Builder().createdDate(time).build();
 
@@ -97,7 +97,9 @@ public class ProductTest {
         ZonedDateTime createdDate = ZonedDateTime.of(
                 2025, 9, 1, 12, 0, 0, 0,
                 ZoneId.of("Europe/Stockholm"));
-        Product product = new Product.Builder().createdDate(createdDate).build();
+
+        Product product = new Product.Builder().modifiedDate(createdDate).build();
+        System.out.println(product.modifiedDate());
         assertEquals(createdDate,product.modifiedDate());
     }
 

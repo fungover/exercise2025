@@ -79,7 +79,9 @@ public class ProductService {
 
     public List<Product> getModifiedProducts() {
         return storage.getAllProducts().stream()
-                .filter(product -> !product.createdDate().equals(product.modifiedDate()))
+                .filter(product -> product.modifiedDate() !=null &&
+                        !product.createdDate().equals(product.modifiedDate()))
+                .sorted(Comparator.comparing(Product::modifiedDate))
                 .collect(Collectors.toList());
     }
 }

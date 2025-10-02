@@ -1,14 +1,18 @@
 package org.example.computer;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.example.computer.builders.BuildComputer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ApplicationScoped
 public class CreateGamingSetup implements GamingSetup {
 	private final BuildComputer pcBuilder;
 	private PC computer;
 
+	@Inject
 	public CreateGamingSetup(BuildComputer pcBuilder) {
 		this.pcBuilder = pcBuilder;
 	}

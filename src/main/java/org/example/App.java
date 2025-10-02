@@ -7,6 +7,8 @@ import org.example.computer.builders.BuildGamingPC;
 import org.example.computer.builders.Builder;
 import org.example.computer.builders.PCBuilder;
 import org.example.container.Container;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
 
 public class App {
 	public static void main(String[] args) {
@@ -19,6 +21,8 @@ public class App {
 		System.out.println();
 
 		System.out.println("Part 3: ");
+		weldDI();
+		System.out.println();
 	}
 
 
@@ -33,5 +37,13 @@ public class App {
 	private static void containerDI() {
 		GamingSetup gamingSetup = Container.resolve(GamingSetup.class);
 		gamingSetup.buildAndStorePC();
+	}
+
+	private static void weldDI() {
+		Weld weld = new Weld();
+		try (WeldContainer container = weld.initialize()) {
+			GamingSetup gamingSetup = container.select(GamingSetup.class).get();
+			gamingSetup.buildAndStorePC();
+		}
 	}
 }

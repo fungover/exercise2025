@@ -1,6 +1,7 @@
-Mitt Warehouse består av kläder, det kommer att vara min produkt men skall kategoriseras i typ, färg osv. 
+Mitt Warehouse består av kläder,t.ex. klänningar, skjortor, kostymer.
+Objektorienterade principer är implementerade och testad med JUnit 5.
 
-Strukturen ska vara följande: 
+Projektstrukturen är följande: 
 - Entities 
 - Produkt
 - Kategori
@@ -27,4 +28,7 @@ getModifiedProducts()
 
 
 Krav på testerna:
-Use JUnit 5 for all unit tests. Each public method must have: At least one test for successful execution At least one test for failure (e.g. invalid input)
+14 godkända tester gjorda.
+
+("Use JUnit 5 for all unit tests. Each public method must have: At least one test 
+for successful execution At le ast one test for failure (e.g. invalid input)") 

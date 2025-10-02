@@ -1,10 +1,11 @@
 package org.example;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.validation.ValidationException;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -25,9 +26,26 @@ public class Service {
     }
 
     // List with all pets
-    public List<PetDTO> list() {
-        return new ArrayList<>(pets.values());
+    public List<PetDTO> list(int offset, int limit) {
+        lock.lock();
+        try {
+            List<PetDTO> allPets = new ArrayList<>(pets.values());
+
+            // protect mot out of bounds
+            if (offset < 0) offset = 0;
+            if (limit < 0) limit = 10;
+            int end = Math.min(offset + limit, allPets.size());
+
+            if (offset > end) {
+                return Collections.emptyList();
+            }
+
+            return new ArrayList<>(allPets.subList(offset, end));
+        } finally {
+            lock.unlock();
+        }
     }
+
 
     // Get a pet
     public PetDTO getPet(Long id) {

@@ -1,0 +1,205 @@
+package service;
+
+import entities.Category;
+import entities.Product;
+import org.junit.jupiter.api.Test;
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class WarehouseTest {
+
+    @Test
+    void testAddProductSuccess() {  //Testar att produkt läggs till och sparas korrekt.
+        Warehouse warehouse = new Warehouse();
+        Product product = new Product("1", "Red Dress", Category.DRESS, 5,
+                LocalDate.now(), LocalDate.now());
+
+        warehouse.addProduct(product);
+
+        assertEquals(1, warehouse.getAllProducts().size());
+        assertEquals("Red Dress", warehouse.getAllProducts().get(0).name());
+    }
+
+    @Test
+    void testAddProductFailsIfNameEmpty() { //Ser till att det inte går att lägga till produkt utan namn.
+        Warehouse warehouse = new Warehouse();
+        Product product = new Product("2", "", Category.SUIT, 4,
+                LocalDate.now(), LocalDate.now());
+
+        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
+    }
+
+    @Test
+    void testUpdateProductSuccess() { //Testar att det går att uppdatera produkten med datum t.ex.
+        Warehouse warehouse = new Warehouse();
+        Product product = new Product("1", "Red Dress", Category.DRESS, 5,
+                LocalDate.now().minusDays(1), LocalDate.now().minusDays(1));
+        warehouse.addProduct(product);
+
+        warehouse.updateProduct("1", "Blue Dress", Category.DRESS, 8);
+
+        Product updated = warehouse.getAllProducts().get(0);
+        assertEquals("Blue Dress", updated.name());
+        assertEquals(8, updated.rating());
+        assertEquals(product.createdDate(), updated.createdDate());
+        assertTrue(updated.modifiedDate().isAfter(product.modifiedDate()));
+    }
+
+    @Test
+    void testUpdateProductFailsIfNotFound() {
+        Warehouse warehouse = new Warehouse();
+
+        assertThrows(IllegalArgumentException.class, () ->
+                warehouse.updateProduct("999", "Nonexistent", Category.SUIT, 5)
+        );
+    }
+
+    @Test
+    void testGetAllProductsReturnsProducts() {
+        Warehouse warehouse = new Warehouse();
+        Product product1 = new Product("1", "Red Dress", Category.DRESS, 5,
+                LocalDate.now(), LocalDate.now());
+        Product product2 = new Product("2", "Suit Jacket", Category.SUIT, 3,
+                LocalDate.now(), LocalDate.now());
+
+        warehouse.addProduct(product1);
+        warehouse.addProduct(product2);
+
+        List<Product> all = warehouse.getAllProducts();
+
+        assertEquals(2, all.size());
+        assertTrue(all.contains(product1));
+        assertTrue(all.contains(product2));
+    }
+
+    @Test
+    void testGetProductByIdSuccess() { //Hittar produkt med hjälp av ID.
+        Warehouse warehouse = new Warehouse();
+        Product product = new Product("1", "Red dress", Category.DRESS, 5,
+                LocalDate.now(), LocalDate.now());
+        warehouse.addProduct(product);
+
+        Product found = warehouse.getProductById("1");
+
+        assertEquals("Red dress", found.name());
+        assertEquals(Category.DRESS, found.category());
+    }
+
+    @Test
+    void testGetProductByIdFailsIfNotFound() {  //Detta ger fel om ID inte finns.
+        Warehouse warehouse = new Warehouse();
+
+        assertThrows(IllegalArgumentException.class, () ->
+                warehouse.getProductById("999")
+        );
+    }
+
+    @Test
+    void testGetProductsByCategorySortedSuccess() {
+        Warehouse warehouse = new Warehouse();
+        Product p1 = new Product("1", "Blue Shirt", Category.SHIRT, 2,
+                LocalDate.now(), LocalDate.now());
+        Product p2 = new Product("2", "Red Shirt", Category.SHIRT, 4,
+                LocalDate.now(), LocalDate.now());
+        Product p3 = new Product("3", "Black dress", Category.DRESS, 3,
+                LocalDate.now(), LocalDate.now());
+
+        warehouse.addProduct(p1);
+        warehouse.addProduct(p2);
+        warehouse.addProduct(p3);
+
+        List<Product> shirts = warehouse.getProductsByCategorySorted(Category.SHIRT);
+
+        assertEquals(2, shirts.size());
+        assertEquals("Blue Shirt", shirts.get(0).name());
+        assertEquals("Red Shirt", shirts.get(1).name());
+    }
+
+    @Test
+    void testGetProductsByCategorySortedEmpty() {
+        Warehouse warehouse = new Warehouse();
+
+        List<Product> dresses = warehouse.getProductsByCategorySorted(Category.DRESS);
+
+        assertTrue(dresses.isEmpty());
+    }
+
+    @Test
+    void testGetProductsCreatedAfterSuccess() {
+        Warehouse warehouse = new Warehouse();
+        Product old = new Product("1", "Old Suit", Category.SUIT, 5,
+                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 1));
+        Product recent = new Product("2", "New Dress", Category.DRESS, 1,
+                LocalDate.of(2023, 1, 1), LocalDate.of(2023, 1, 1));
+
+        warehouse.addProduct(old);
+        warehouse.addProduct(recent);
+
+        List<Product> results = warehouse.getProductsCreatedAfter(LocalDate.of(2021, 1, 1));
+
+
+        assertEquals(1, results.size());
+        assertEquals("New Dress", results.get(0).name());
+    }
+
+    @Test
+    void testGetProductsCreatedAfterNoResults() {
+        Warehouse warehouse = new Warehouse();
+        Product old = new Product("1", "Vintage Coat", Category.SUIT, 4,
+                LocalDate.of(2019, 5, 10), LocalDate.of(2019, 5, 10));
+
+        warehouse.addProduct(old);
+
+        List<Product> results = warehouse.getProductsCreatedAfter(LocalDate.of(2022, 1, 1));
+
+        assertTrue(results.isEmpty());
+    }
+
+    @Test
+    void testGetModifiedProductsSuccess() {
+        Warehouse warehouse = new Warehouse();
+        Product original = new Product("1", "Green Dress", Category.DRESS, 2,
+                LocalDate.of(2023, 1, 1), LocalDate.of(2023, 1, 1));
+        Product modified = new Product("2", "Blue Suit", Category.SUIT, 5,
+                LocalDate.of(2023, 1, 1), LocalDate.of(2023, 2, 1));
+
+        warehouse.addProduct(original);
+        warehouse.addProduct(modified);
+
+        List<Product> results = warehouse.getModifiedProducts();
+
+        assertEquals(1, results.size());
+        assertEquals("Blue Suit", results.get(0).name());
+    }
+
+    @Test
+    void testGetModifiedProductsEmpty() {
+        Warehouse warehouse = new Warehouse();
+        Product product = new Product("1", "Yellow Shirt", Category.SHIRT, 5,
+                LocalDate.now(), LocalDate.now());
+
+        warehouse.addProduct(product);
+
+        List<Product> results = warehouse.getModifiedProducts();
+
+        assertTrue(results.isEmpty());
+    }
+
+
+
+    //Test som ska faila
+    @Test
+    void testGetAllProductsEmpty() {
+        Warehouse warehouse = new Warehouse();
+
+        List<Product> all = warehouse.getAllProducts();
+
+        assertTrue(all.isEmpty());
+    }
+
+
+}
+
+

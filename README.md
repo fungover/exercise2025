@@ -1,36 +1,34 @@
-## 🧪 How to Work on the Exercises
+Mitt Warehouse består av kläder,t.ex. klänningar, skjortor, kostymer.
+Objektorienterade principer är implementerade och testad med JUnit 5.
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+Projektstrukturen är följande: 
+- Entities 
+- Produkt
+- Kategori
+- Service, med klasser för att hantera produkterna, samla eller utesluta osv. 
+- Tester för alla metoderna. 
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+Efterfrågad funktionalitet:
+"Implement the following public methods in Warehouse with corresponding 
+unit tests (success + failure cases where applicable):"
+addProduct(Product product)
 
-Example for user githubuser working on Exercise 1:
+updateProduct(String id, String name, Category category, int rating)
 
-```bash
-git checkout -b githubuser/exercise1
-```
+getAllProducts()
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
+getProductById(String id)
 
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
+getProductsByCategorySorted(Category category)
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
+getProductsCreatedAfter(LocalDate date)
 
-Link the PR to the issue you're solving.
+getModifiedProducts()
 
-Include a clear description of your solution.
 
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+Krav på testerna:
+14 godkända tester gjorda.
+
+("Use JUnit 5 for all unit tests. Each public method must have: At least one test 
+for successful execution At le ast one test for failure (e.g. invalid input)") 

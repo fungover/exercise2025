@@ -6,8 +6,7 @@ import java.util.List;
 
 public interface PetsService {
     PetDTO addPet(PetDTO petDTO);
-    List<PetDTO> getAllPets();
-    List<PetDTO> getAllPets(int offset, int limit);
+    List<PetDTO> getAllPets(int offset, int limit, String species);
     PetDTO getPetById(Long id);
     PetDTO feedPet(Long id);
     PetDTO playWithPet(Long id);

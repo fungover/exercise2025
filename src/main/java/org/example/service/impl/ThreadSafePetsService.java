@@ -29,17 +29,12 @@ public class ThreadSafePetsService implements PetsService {
     }
 
     @Override
-    public List<PetDTO> getAllPets() {
-        return repository.findAll();
-    }
-
-    @Override
-    public List<PetDTO> getAllPets(int offset, int limit) {
+    public List<PetDTO> getAllPets(int offset, int limit, String species) {
         if (offset < 0 || limit <= 0) {
             throw new IllegalArgumentException("Offset must be >= 0 and limit must be > 0");
         }
-
         return repository.findAll().stream()
+                .filter(pet -> species == null || species.isBlank() || pet.getSpecies().equalsIgnoreCase(species))
                 .skip(offset)
                 .limit(limit)
                 .toList();

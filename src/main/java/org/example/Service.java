@@ -6,6 +6,7 @@ import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -42,7 +43,14 @@ public class Service {
             if (limit < 0) limit = 10;
             int end = Math.min(offset + limit, allPets.size());
 
-            //pagination sortBy and order
+            //pagination sortBy happines and order
+            if (sortBy != null && !sortBy.isEmpty()) {
+                if (order.equals("asc")) {
+                    allPets.sort(Comparator.comparing(PetDTO::getHappiness));
+                } else if (order.equals("desc")) {
+                    allPets.sort(Comparator.comparing(PetDTO::getHappiness).reversed());
+                }
+            }
 
             if (offset > end) {
                 return Collections.emptyList();

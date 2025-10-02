@@ -31,13 +31,6 @@ public class ProductServiceTest {
                 .hasSize(1)
                 .contains(new Product.Builder().name("Bread").category(FOOD).rating(5).build());
 
-        System.out.println("Added "+products.size()+" Items to the warehouse");
-        System.out.println("ID: "+products.getFirst().ID());
-        System.out.println("Name: "+products.getFirst().name());
-        System.out.println("Category: "+products.getFirst().category());
-        System.out.println("Rating: "+products.getFirst().rating());
-        System.out.println("Created date: "+products.getFirst().createdDate());
-        System.out.println("Modified date: "+products.getFirst().modifiedDate());
     }
 
     @Test
@@ -49,7 +42,6 @@ public class ProductServiceTest {
 
         List<Product> products = productService.products();
         assertEquals("Product name cannot be null",fail.getMessage());
-        System.out.println(fail.getMessage());
     }
 
     @Test
@@ -61,28 +53,17 @@ public class ProductServiceTest {
 
         List<Product> products = productService.products();
         assertEquals("Product name cannot be blank",fail.getMessage());
-        System.out.println(fail.getMessage());
     }
 
     @Test
     public void updateProduct() {
         ProductService productService = createService();
         productService.addProduct(new Product.Builder().name("Bread").category(FOOD).rating(5).build());
-        System.out.println("Added "+ productService.products().size()+" Items to the warehouse");
-        System.out.println("ID: "+ productService.products().getFirst().ID());
-        System.out.println("Name: "+ productService.products().getFirst().name());
-        System.out.println("Category: "+ productService.products().getFirst().category());
-        System.out.println("Rating: "+ productService.products().getFirst().rating());
 
-        System.out.println();
         productService.updateProduct(0,"Milk",FOOD,7);
 
         assertEquals(1, productService.products().size());
         assertEquals("Milk", productService.products().getFirst().name());
-        System.out.println("Updated "+ productService.products().size()+" Items in the warehouse");
-        System.out.println("ID: "+ productService.products().getFirst().ID());
-        System.out.println("Name: "+ productService.products().getFirst().name());
-        System.out.println("Rating: "+ productService.products().getFirst().rating());
     }
 
     @Test
@@ -105,9 +86,6 @@ public class ProductServiceTest {
         assertEquals("Bread",products.get(0).name());
         assertEquals("Milk",products.get(1).name());
 
-        System.out.println("Contains "+products.size()+" Items");
-        System.out.println("ID: "+products.get(0).ID() + " Name: "+products.get(0).name());
-        System.out.println("ID: "+products.get(1).ID() + " Name: "+products.get(1).name());
     }
 
     @Test
@@ -115,7 +93,6 @@ public class ProductServiceTest {
         ProductService productService = createService();
         List<Product> products = productService.getAllProducts();
         assertThat(products).isEmpty();
-        System.out.println("Contains "+products.size()+" Items");
     }
 
     @Test
@@ -131,7 +108,6 @@ public class ProductServiceTest {
         assertEquals(FOOD,product.category());
         assertEquals(3,product.rating());
 
-        System.out.println("Found product info: "+ productService.getProductByID(2));
     }
 
     @Test
@@ -141,7 +117,6 @@ public class ProductServiceTest {
         productService.addProduct(new Product.Builder().id(1).name("Milk").category(FOOD).rating(7).build());
         productService.addProduct(new Product.Builder().id(2).name("Coffee").category(FOOD).rating(3).build());
         Product product  = productService.getProductByID(10);
-        System.out.println(product);
         assertNull(product);
 
     }
@@ -172,8 +147,6 @@ public class ProductServiceTest {
         List<Product> updatedlist = productService.getProductsByCategory(Category.ELECTRONICS);
         assertThat(updatedlist).hasSize(18)
                 .allMatch(product -> product.category() == ELECTRONICS);
-        System.out.println("Found "+updatedlist.size()+" Electronics");
-        updatedlist.forEach(product -> System.out.println("Name: "+product.name() + " ID: "+product.ID()));
     }
 
     @Test
@@ -181,8 +154,6 @@ public class ProductServiceTest {
         ProductService productService = createService();
         List<Product> updatedlist = productService.getProductsByCategory(Category.ELECTRONICS);
         assertThat(updatedlist).isEmpty();
-        System.out.println("Found "+updatedlist.size()+" Electronics");
-        updatedlist.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
     }
 
     @Test
@@ -201,8 +172,6 @@ public class ProductServiceTest {
         assertEquals(1,updatedlist.size());
         assertEquals("Bread",updatedlist.getFirst().name());
 
-        System.out.println("Found "+updatedlist.size()+" Products created after "+cutoff);
-        updatedlist.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
     }
 
     @Test
@@ -215,7 +184,6 @@ public class ProductServiceTest {
         LocalDate cutoff = LocalDate.of(2025, 1, 1);
         List<Product> updatedlist = productService.getProductsCreatedAfter(cutoff);
         assertThat(updatedlist).isEmpty();
-        System.out.println("Found "+updatedlist.size()+" Products created after "+cutoff);
     }
 
     @Test
@@ -234,9 +202,6 @@ public class ProductServiceTest {
         List<Product> modified = productService.getModifiedProducts();
         assertEquals(1,modified.size());
         assertEquals("Milk",modified.getFirst().name());
-        System.out.println("Found "+modified.size()+" Modified Products");
-        modified.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
-        System.out.println("Modified Date: "+modified.getFirst().modifiedDate());
     }
 
     @Test
@@ -249,8 +214,6 @@ public class ProductServiceTest {
 
         List<Product> modified = productService.getModifiedProducts();
         assertThat(modified).isEmpty();
-        System.out.println("Found "+modified.size()+" Modified Products");
-        modified.forEach(product -> System.out.println("ID: "+product.ID() + " Name: "+product.name()));
     }
 
 

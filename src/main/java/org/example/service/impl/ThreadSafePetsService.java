@@ -32,8 +32,12 @@ public class ThreadSafePetsService implements PetsService {
 
     @Override
     public List<PetDTO> getAllPets(int offset, int limit, String species, String sortBy, String order) {
-        if (offset < 0 || limit <= 0) {
-            throw new IllegalArgumentException("Offset must be >= 0 and limit must be > 0");
+        if (offset < 0) {
+            throw new IllegalArgumentException("Offset must be greater than or equal to 0");
+        }
+
+        if (limit <= 0) {
+            throw new IllegalArgumentException("Limit must be greater than 0");
         }
 
         Stream<PetDTO> petStream = repository.findAll().stream();

@@ -1,12 +1,14 @@
 package exercise6.repository;
 
+import exercise6.pets.AnimalType;
 import exercise6.pets.Pet;
 
 import java.util.List;
 
 public interface PetRepository {
 
-    void addPet(Pet pet);
+    String addPet(String name, AnimalType animalType);
     List<Pet> getPets();
     Object getUniqPet(String id);
+    String removePet(String id);
 }

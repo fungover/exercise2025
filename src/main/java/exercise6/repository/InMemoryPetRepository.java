@@ -18,11 +18,13 @@ public class InMemoryPetRepository implements PetRepository {
         petList.add(new Pet( "Karo", AnimalType.DOG));
         petList.add(new Pet( "Misse", AnimalType.CAT));
         petList.add(new Pet( "Roy", AnimalType.CAT));
+        petList.add(new Pet( "Miro", AnimalType.CAT));
     }
 
     @Override
-    public void addPet(Pet pet) {
-        petList.add(pet);
+    public String addPet(String name, AnimalType animalType) {
+        petList.add(new Pet(name,  animalType));
+        return "Pet added successfully";
     }
 
     @Override
@@ -36,6 +38,12 @@ public class InMemoryPetRepository implements PetRepository {
 
         return petList.stream()
                 .filter(item -> item.getId() == uniqId).collect(Collectors.toSet());
+    }
+
+    @Override
+    public String removePet(String id) {
+        petList.remove(Integer.parseInt(id));
+        return "Pet removed";
     }
 
 }

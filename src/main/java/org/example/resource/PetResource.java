@@ -8,9 +8,6 @@ import jakarta.ws.rs.core.Response;
 import org.example.dto.PetDTO;
 import org.example.service.PetService;
 
-import java.util.Collection;
-import java.util.Comparator;
-
 /**
  * PetResource is the REST API layer for pets.
  * IT exposes PetService functioanlity through HTTP
@@ -42,50 +39,13 @@ public class PetResource {
     @GET
     public Response getAllPets(
             @QueryParam("offset") @DefaultValue("0") int offset,
-            @QueryParam("limit") @DefaultValue("10") int limit,
+            @QueryParam("limit") @DefaultValue("-1") int limit,
             @QueryParam("species") String species,
             @QueryParam("sortBy") String sortBy,
             @QueryParam("order") @DefaultValue("asc") String order) {
-        // Convert pets from map to list for easier slicing
-        var allPets = petService.getAllPets().stream();
 
-        // If species filter is set, only keep pets of that species
-        if (species != null && !species.isBlank()) {
-            allPets = allPets.filter(p -> p.getSpecies().equalsIgnoreCase(species));
-        }
-
-        // Convert to list before sorting/pagination
-        var petList = allPets.toList();
-
-        // Sorting (if sortBy is provided)
-        if (sortBy != null && !sortBy.isBlank()) {
-            Comparator<PetDTO> comparator = switch (sortBy.toLowerCase()) {
-                case "name" -> Comparator.comparing(PetDTO::getName, String.CASE_INSENSITIVE_ORDER);
-                case "species" -> Comparator.comparing(PetDTO::getSpecies, String.CASE_INSENSITIVE_ORDER);
-                case "hungerlevel" -> Comparator.comparing(PetDTO::getHungerLevel);
-                case "happiness" -> Comparator.comparing(PetDTO::getHappiness);
-                default -> null;
-            };
-
-            if (comparator != null) {
-                if ("desc".equalsIgnoreCase(order)) {
-                    comparator = comparator.reversed();
-                }
-                petList = petList.stream().sorted(comparator).toList();
-            }
-        }
-
-        // Pagination logic, calculate sublist boundaries
-        int fromIndex = Math.max(0, offset);
-        int toIndex = (limit < 0) ? petList.size() : Math.min(petList.size(), offset + limit);
-
-        // Handle case: offset > size
-        if (fromIndex > petList.size()) {
-            return Response.ok(java.util.Collections.emptyList()).build();
-        }
-
-        var paginated = petList.subList(fromIndex, toIndex);
-        return Response.ok(paginated).build();
+        var pets = petService.getPets(species, sortBy, order, offset, limit);
+        return Response.ok(pets).build();
     }
 
     // GET /pets/{id}. Get a specific pet by ID.

@@ -3,9 +3,10 @@ package org.example.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.example.dto.PetDTO;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.Comparator;
 
 
 /**
@@ -26,6 +27,49 @@ public class PetService {
 
     // Counter to generate unique Pet IDs
     private final AtomicLong idCounter = new AtomicLong(1);
+
+    // Advanced pet retrieval with filtering, sorting and pagination
+    public List<PetDTO> getPets(String species, String sortBy, String order, int offset, int limit) {
+
+        // Convert pets from map to list for easier slicing
+        var allPets = getAllPets().stream();
+
+        // If species filter is set, only keep pets of that species
+        if (species != null && !species.isBlank()) {
+            allPets = allPets.filter(p -> p.getSpecies().equalsIgnoreCase(species));
+        }
+
+        // Convert to list before sorting/pagination
+        var petList = allPets.toList();
+
+        // Sorting (if sortBy is provided)
+        if (sortBy != null && !sortBy.isBlank()) {
+            Comparator<PetDTO> comparator = switch (sortBy.toLowerCase()) {
+                case "name" -> Comparator.comparing(PetDTO::getName, String.CASE_INSENSITIVE_ORDER);
+                case "species" -> Comparator.comparing(PetDTO::getSpecies, String.CASE_INSENSITIVE_ORDER);
+                case "hungerlevel" -> Comparator.comparing(PetDTO::getHungerLevel);
+                case "happiness" -> Comparator.comparing(PetDTO::getHappiness);
+                default -> null;
+            };
+
+            if (comparator != null) {
+                if ("desc".equalsIgnoreCase(order)) {
+                    comparator = comparator.reversed();
+                }
+                petList = petList.stream().sorted(comparator).toList();
+            }
+        }
+
+        // Pagination logic, calculate sublist boundaries
+        int fromIndex = Math.max(0, offset);
+        int toIndex = (limit < 0) ? petList.size() : Math.min(petList.size(), offset + limit);
+
+        if (fromIndex > petList.size()) {
+            return Collections.emptyList();
+        }
+
+        return petList.subList(fromIndex, toIndex);
+    }
 
     // Add (adopt) a new pet. A new ID will be assigned automatically.
     public Long addPet(PetDTO pet) {

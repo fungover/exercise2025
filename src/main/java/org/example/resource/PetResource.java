@@ -50,9 +50,7 @@ public class PetResource {
     public Response getPetById(@PathParam("id") Long id) {
         PetDTO pet = petService.getPetById(id);
         if (pet == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\": \"Pet not found\"}")
-                    .build();
+            throw new NotFoundException();
         }
         return Response.ok(pet).build();
     }
@@ -64,9 +62,7 @@ public class PetResource {
     public Response feedPet(@PathParam("id") Long id) {
         PetDTO pet = petService.getPetById(id);
         if (pet == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\": \"Pet not found\"}")
-                    .build();
+            throw new NotFoundException();
         }
 
         petService.feedPet(id);
@@ -80,9 +76,7 @@ public class PetResource {
     public Response playWithPet(@PathParam("id") Long id) {
         PetDTO pet = petService.getPetById(id);
         if (pet == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\": \"Pet not found\"}")
-                    .build();
+            throw new NotFoundException();
         }
 
         petService.playWithPet(id);
@@ -96,9 +90,7 @@ public class PetResource {
     public Response deletePet(@PathParam("id") Long id) {
         boolean removed = petService.deletePet(id);
         if (!removed) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\": \"Pet not found\"}")
-                    .build();
+            throw new NotFoundException();
         }
         return Response.noContent().build();
     }

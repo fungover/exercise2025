@@ -3,6 +3,7 @@ package org.example.dto;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * PetDTO is our Data Transfer Object (DTO) to represent a Pet
@@ -14,18 +15,20 @@ import jakarta.validation.constraints.NotBlank;
  */
 public class PetDTO {
 
-    @NotBlank(message = "Name cannot be empty")
+    @NotBlank(message = "Name cannot be blank")
     private String name;
 
-    @NotBlank(message = "Species cannot be empty")
+    @NotBlank(message = "Species cannot be blank")
     private String species;
 
+    @NotNull(message = "Hunger level must be provided")
     @Min(value = 0, message = "Hunger level must be at least 0")
-    @Max(value = 100, message = "Hunger level must be at most 100")
+    @Max(value = 100, message = "Hunger level cannot exceed 100")
     private int hungerLevel;
 
+    @NotNull(message = "Happiness level must be provided")
     @Min(value = 0, message = "Happiness level must be at least 0")
-    @Max(value = 100, message = "Happiness level must be at most 100")
+    @Max(value = 100, message = "Happiness level cannot exceed 100")
     private int happiness;
 
     // Empty constructor needed by Jakarta Bean Validation

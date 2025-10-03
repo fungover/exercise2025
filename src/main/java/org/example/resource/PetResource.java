@@ -36,25 +36,32 @@ public class PetResource {
                 .build();
     }
 
-    // GET /pets. List all pets with optional pagination (offset and limit)
-    // Example: /pets?offset=0&limit=10
+    // GET /pets. List all pets with optional pagination (offset and limit) and filtering by species.
+    // Example: /pets?offset=0&limit=10&species=dog
     @GET
     public Response getAllPets(
             @QueryParam("offset") @DefaultValue("0") int offset,
-            @QueryParam("limit") @DefaultValue("10") int limit) {
+            @QueryParam("limit") @DefaultValue("10") int limit,
+            @QueryParam("species") String species) {
         // Convert pets from map to list for easier slicing
-        var allPets = petService.getAllPets().stream().toList();
+        var allPets = petService.getAllPets().stream();
 
-        // Calculate sublist boundaries
+        // If species filter is set, only keep pets of that species
+        if (species != null && !species.isBlank()) {
+            allPets = allPets.filter(p -> p.getSpecies().equalsIgnoreCase(species));
+        }
+        var petList = allPets.toList();
+
+        // Pagination logic, calculate sublist boundaries
         int fromIndex = Math.max(0, offset);
-        int toIndex = (limit < 0) ? allPets.size() : Math.min(allPets.size(), offset + limit);
+        int toIndex = (limit < 0) ? petList.size() : Math.min(petList.size(), offset + limit);
 
         // Handle case: offset > size
-        if (fromIndex > allPets.size()) {
+        if (fromIndex > petList.size()) {
             return Response.ok(java.util.Collections.emptyList()).build();
         }
 
-        var paginated = allPets.subList(fromIndex, toIndex);
+        var paginated = petList.subList(fromIndex, toIndex);
         return Response.ok(paginated).build();
     }
 

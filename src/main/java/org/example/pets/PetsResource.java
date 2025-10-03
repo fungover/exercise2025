@@ -39,6 +39,10 @@ public class PetsResource {
     return petsService.getById(Long.valueOf(id));
   }
 
-
+  @DELETE
+  @Path("/{id}")
+  public void removePet(@PathParam("id") String id) {
+    petsService.removePet(Long.valueOf(id));
+  }
 }
 

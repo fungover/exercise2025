@@ -32,4 +32,21 @@ public class PetsRepository implements Repository {
     }
     return null;
   }
+
+  @Override
+  public Pets remove(Long id) {
+    for(Pets pet : pets){
+      if(pet.id().equals(id)){
+        pets.remove(pet);
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public Pets update(Long id) {
+    return null;
+  }
+
+
 }

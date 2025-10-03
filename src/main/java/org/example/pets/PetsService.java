@@ -27,4 +27,8 @@ public class PetsService {
   public Pets getById(Long id){
     return petsRepository.getById(id);
   }
+
+  public Pets removePet(Long id) {
+    return petsRepository.remove(id);
+  }
 }

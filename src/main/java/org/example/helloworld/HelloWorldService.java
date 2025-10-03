@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @ApplicationScoped
-
 public class HelloWorldService {
 
     private Greeting greeting;

@@ -10,6 +10,7 @@ public class PetDTO {
 
     @NotBlank(message = "Name is mandatory")
     private String name;
+    @NotBlank(message = "Species is mandatory")
     private String species;
     @NotNull(message = "Hunger level is required")
     @Min(value = 0, message = "Hunger level must be at least 0")

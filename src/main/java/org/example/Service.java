@@ -32,26 +32,33 @@ public class Service {
         try {
             List<PetDTO> allPets = new ArrayList<>(pets.values());
 
-
-            //pagination species
+            // Filter by species
             if (species != null && !species.isEmpty()) {
                 allPets.removeIf(pet -> !species.equalsIgnoreCase(pet.getSpecies()));
             }
 
-            // Pagination limit
+            // Validate pagination values
             if (offset < 0) offset = 0;
             if (limit < 0) limit = 10;
             int end = Math.min(offset + limit, allPets.size());
 
-            //pagination sortBy happines and order
+            // Sorting
             if (sortBy != null && !sortBy.isEmpty()) {
-                if (order.equals("asc")) {
-                    allPets.sort(Comparator.comparing(PetDTO::getHappiness));
-                } else if (order.equals("desc")) {
-                    allPets.sort(Comparator.comparing(PetDTO::getHappiness).reversed());
+                Comparator<PetDTO> comparator = switch (sortBy.toLowerCase()) {
+                    case "hunger" -> Comparator.comparing(PetDTO::getHungerLevel);
+                    case "happiness" -> Comparator.comparing(PetDTO::getHappiness);
+                    case "id" -> Comparator.comparing(PetDTO::getId);
+                    default -> Comparator.comparing(PetDTO::getId);
+                };
+
+                if ("desc".equalsIgnoreCase(order)) {
+                    comparator = comparator.reversed();
                 }
+
+                allPets.sort(comparator);
             }
 
+            // Handle invalid offset
             if (offset > end) {
                 return Collections.emptyList();
             }

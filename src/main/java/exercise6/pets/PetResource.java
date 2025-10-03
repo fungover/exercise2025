@@ -45,8 +45,8 @@ public class PetResource {
 
     @DELETE
     @Path("/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String removePet(@PathParam("id") String id) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Pet> removePet(@PathParam("id") String id) {
         return petRepository.removePet(id);
     }
 }

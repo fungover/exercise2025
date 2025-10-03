@@ -10,5 +10,5 @@ public interface PetRepository {
     String addPet(String name, AnimalType animalType);
     List<Pet> getPets();
     Object getUniqPet(String id);
-    String removePet(String id);
+    List<Pet> removePet(String id);
 }

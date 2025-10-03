@@ -41,9 +41,9 @@ public class InMemoryPetRepository implements PetRepository {
     }
 
     @Override
-    public String removePet(String id) {
-        petList.remove(Integer.parseInt(id));
-        return "Pet removed";
+    public List<Pet> removePet(String id) {
+     petList.removeIf(item -> item.getId() == Integer.parseInt(id));
+        return petList;
     }
 
 }

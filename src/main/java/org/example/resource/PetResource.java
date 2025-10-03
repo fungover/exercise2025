@@ -9,6 +9,7 @@ import org.example.dto.PetDTO;
 import org.example.service.PetService;
 
 import java.util.Collection;
+import java.util.Comparator;
 
 /**
  * PetResource is the REST API layer for pets.
@@ -42,7 +43,9 @@ public class PetResource {
     public Response getAllPets(
             @QueryParam("offset") @DefaultValue("0") int offset,
             @QueryParam("limit") @DefaultValue("10") int limit,
-            @QueryParam("species") String species) {
+            @QueryParam("species") String species,
+            @QueryParam("sortBy") String sortBy,
+            @QueryParam("order") @DefaultValue("asc") String order) {
         // Convert pets from map to list for easier slicing
         var allPets = petService.getAllPets().stream();
 
@@ -50,7 +53,27 @@ public class PetResource {
         if (species != null && !species.isBlank()) {
             allPets = allPets.filter(p -> p.getSpecies().equalsIgnoreCase(species));
         }
+
+        // Convert to list before sorting/pagination
         var petList = allPets.toList();
+
+        // Sorting (if sortBy is provided)
+        if (sortBy != null && !sortBy.isBlank()) {
+            Comparator<PetDTO> comparator = switch (sortBy.toLowerCase()) {
+                case "name" -> Comparator.comparing(PetDTO::getName, String.CASE_INSENSITIVE_ORDER);
+                case "species" -> Comparator.comparing(PetDTO::getSpecies, String.CASE_INSENSITIVE_ORDER);
+                case "hungerlevel" -> Comparator.comparing(PetDTO::getHungerLevel);
+                case "happiness" -> Comparator.comparing(PetDTO::getHappiness);
+                default -> null;
+            };
+
+            if (comparator != null) {
+                if ("desc".equalsIgnoreCase(order)) {
+                    comparator = comparator.reversed();
+                }
+                petList = petList.stream().sorted(comparator).toList();
+            }
+        }
 
         // Pagination logic, calculate sublist boundaries
         int fromIndex = Math.max(0, offset);

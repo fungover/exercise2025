@@ -16,20 +16,25 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
 
     @Override
     public Response toResponse(ConstraintViolationException e) {
-        List<Map<String, String>> errors = new ArrayList<>();
+        List<Map<String, String>> details = new ArrayList<>();
 
-        // Collect all validation errors
+
         for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-            Map<String, String> error = new HashMap<>(); // Create a map for each error
-            error.put("field", violation.getPropertyPath().toString()); // Field that caused the violation
-            error.put("message", violation.getMessage()); // Violation message
-            errors.add(error); // Add the error map to the list
+            Map<String, String> errorDetail = new HashMap<>();
+            errorDetail.put("field", violation.getPropertyPath().toString());
+            errorDetail.put("message", violation.getMessage());
+            details.add(errorDetail);
         }
 
-        Map<String, Object> response = new HashMap<>(); // Create a response map
-        response.put("errors", errors); // Add the list of errors to the response
-        return Response.status(Response.Status.BAD_REQUEST) // 400 Bad Request
-                .entity(response) // Set the response body to the error details
+        Map<String, Object> error = new HashMap<>();
+        error.put("type", "ValidationError");
+        error.put("details", details);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("error", error);
+
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(response)
                 .build();
     }
 }

@@ -2,9 +2,13 @@ package org.example.resource;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import org.example.dto.PetDTO;
 import org.example.service.PetService;
 
@@ -19,17 +23,22 @@ public class PetResource {
     private PetService petService; // CDI: Injecting the service to handle business logic.
 
     @POST
-    public Response create(@Valid PetDTO pet) { // @Valid triggers validation based on annotations in PetDTO
+    public Response create(@Valid PetDTO pet, @Context UriInfo uriInfo) { // @Valid triggers validation based on annotations in PetDTO
         PetDTO created = petService.createPet(pet);
-        return Response.created(URI.create("/api/pets/" + created.getId())) // 201 Created with Location header based on new pet ID
-                .entity(created) // Response body contains the created pet
+
+        URI location = uriInfo.getAbsolutePathBuilder()
+                .path(String.valueOf(created.getId())) // adds the new pet ID on the end of the current path.
+                .build();
+
+        return Response.created(location)
+                .entity(created) // 201 Created with the created pet in the response body
                 .build();
     }
 
     @GET
     public Response getAll(
-            @QueryParam("offset") @DefaultValue("0") int offset, // offset for pagination, default is 0
-            @QueryParam("limit") @DefaultValue("10") int limit, // limit for pagination, default is 10
+            @QueryParam("offset") @DefaultValue("0") @Min(0) int offset, // offset for pagination, default is 0
+            @QueryParam("limit") @DefaultValue("10") @Min(1) @Max(100) int limit, // limit for pagination, default is 10
             @QueryParam("species") String species, // optional species filter
             @QueryParam("sortBy") @DefaultValue("id") String sortBy, // field to sort by, default is "id"
             @QueryParam("order") @DefaultValue("asc") String order // sort order, default is ascending

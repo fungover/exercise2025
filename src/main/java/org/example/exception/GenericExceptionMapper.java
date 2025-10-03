@@ -4,7 +4,9 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Provider // Registers this class as a provider for JAX-RS, making it discoverable by the framework.
@@ -12,12 +14,21 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> { // I
 
     @Override
     public Response toResponse(Throwable e) {
-        Map<String, String> error = new HashMap<>(); // Create a map for the error message
-        error.put("error", "Internal server error"); // Generic error message
-        error.put("details", e.getMessage()); // Add the exception message to the map
+        Map<String, Object> error = new HashMap<>();
+        error.put("type", "InternalServerError");
 
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR) // 500 Internal Server Error
-                .entity(error) // Set the response body to the error message
+        List<Map<String, String>> details = new ArrayList<>();
+        Map<String, String> detail = new HashMap<>();
+        detail.put("message", e.getMessage() != null ? e.getMessage() : "Unexpected error");
+        details.add(detail);
+
+        error.put("details", details);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("error", error);
+
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(response)
                 .build();
     }
 }

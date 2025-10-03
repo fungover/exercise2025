@@ -27,7 +27,9 @@ public class PetDTO {
     @Max(value = 100, message = "Happiness must be between 0 and 100") // Validation: happiness between 0 and 100
     private int happiness;
 
-    public PetDTO() { // Default constructor needed for JSON deserialization
+    public PetDTO() {
+        this.hungerLevel = 50;
+        this.happiness = 50;
     }
 
     public PetDTO(String name, String species, int hungerLevel, int happiness) {

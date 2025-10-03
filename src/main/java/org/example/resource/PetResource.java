@@ -83,4 +83,11 @@ public class PetResource {
         }
         return Response.noContent().build(); // 204 No Content on successful deletion
     }
+
+    @GET
+    @Path("/crash")
+    public Response crash() {
+        throw new RuntimeException("Simulated server crash");
+    }
+
 }

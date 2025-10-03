@@ -18,7 +18,6 @@ import java.util.Collection;
  */
 @Path("pets")
 @Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class PetResource {
 
     @Inject
@@ -27,6 +26,7 @@ public class PetResource {
     // POST /pets. Adopt a new pet.
     // Input: PetDTO (validtated with @Valid)
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response adoptPet(@Valid PetDTO pet) {
         Long id = petService.addPet(pet);
 
@@ -55,5 +55,51 @@ public class PetResource {
                     .build();
         }
         return Response.ok(pet).build();
+    }
+
+    // PUT /pets/{id}/feed. Feed a pet to decrease hunger level.
+    // Returns 200 OK if the pet was updated. 404 if not found.
+    @PUT
+    @Path("/{id}/feed")
+    public Response feedPet(@PathParam("id") Long id) {
+        PetDTO pet = petService.getPetById(id);
+        if (pet == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\": \"Pet not found\"}")
+                    .build();
+        }
+
+        petService.feedPet(id);
+        return Response.ok(petService.getPetById(id)).build(); // return updated pet
+    }
+
+    // PUT /pets/{id}/play. Play with a pet to increase happiness.
+    // Returns 200 OK if the pet was updated. 404 if not found.
+    @PUT
+    @Path("/{id}/play")
+    public Response playWithPet(@PathParam("id") Long id) {
+        PetDTO pet = petService.getPetById(id);
+        if (pet == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\": \"Pet not found\"}")
+                    .build();
+        }
+
+        petService.playWithPet(id);
+        return Response.ok(petService.getPetById(id)).build(); // return updated pet
+    }
+
+    // DELETE /pets/{id}. Release a pet (remove from memory)
+    // Returns 204 No Content if successful. 404 if not found.
+    @DELETE
+    @Path("/{id}")
+    public Response deletePet(@PathParam("id") Long id) {
+        boolean removed = petService.deletePet(id);
+        if (!removed) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\": \"Pet not found\"}")
+                    .build();
+        }
+        return Response.noContent().build();
     }
 }

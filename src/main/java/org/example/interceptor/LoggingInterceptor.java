@@ -20,7 +20,7 @@ public class LoggingInterceptor {
         logger.info("Entering method: " + ctx.getMethod().getName() + ", " +
                 Arrays.toString(ctx.getParameters()));
         var result = ctx.proceed();
-        logger.info("Result from running: " +  result);
+        //logger.info("Result from running: " +  result);
         return result;
     }
 }

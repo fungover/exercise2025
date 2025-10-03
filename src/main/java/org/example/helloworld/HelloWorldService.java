@@ -2,8 +2,6 @@ package org.example.helloworld;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.inject.Qualifier;
-import org.example.annotations.English;
 import org.example.annotations.Log;
 import org.example.annotations.Swedish;
 import org.jboss.logging.Logger;
@@ -12,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @ApplicationScoped
-@Log
+
 public class HelloWorldService {
 
     private Greeting greeting;
@@ -29,7 +27,7 @@ public class HelloWorldService {
         logger.info("HelloWorldService instance created");
     }
 
-
+    @Log
     public Hello createHelloMessage(String name) {
         if ((name == null) || name.trim().isEmpty()) {
             name = "world";

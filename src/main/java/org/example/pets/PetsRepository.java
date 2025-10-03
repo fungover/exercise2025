@@ -4,14 +4,18 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 
 @ApplicationScoped
 public class PetsRepository implements Repository {
   List<Pets> pets = new CopyOnWriteArrayList<Pets>();
+  private final AtomicLong idGenerator = new AtomicLong(1);
 
   @Override
   public void add(Pets pet) {
-    pets.add(pet);
+    Long id = idGenerator.getAndIncrement();
+    Pets newPet = new Pets(id, pet.name(), pet.hungerLevel(), pet.happiness());
+    pets.add(newPet);
   }
 
   @Override
@@ -20,7 +24,7 @@ public class PetsRepository implements Repository {
   }
 
   @Override
-  public Pets getById(String id) {
+  public Pets getById(Long id) {
     for(Pets pet : pets){
       if(pet.id().equals(id)){
         return pet;

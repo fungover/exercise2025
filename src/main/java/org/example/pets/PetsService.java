@@ -24,7 +24,7 @@ public class PetsService {
     return petsRepository.getAll();
   }
 
-  public Pets getById(String id){
+  public Pets getById(Long id){
     return petsRepository.getById(id);
   }
 }

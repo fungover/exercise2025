@@ -1,8 +1,10 @@
 package org.example.pets;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.example.validation.ValidName;
 
-public record Pets (String id,
+public record Pets (Long id,
                     @ValidName String name,
-                    String hungerLevel,
-                    String happiness) {}
+                    @NotNull @Size(min=1, max=10)String hungerLevel,
+                    @NotNull @Size(max=5)String happiness) {}

@@ -36,7 +36,7 @@ public class PetsResource {
   @Path("/{id}")
   @Produces({ MediaType.APPLICATION_JSON })
   public Pets getById(@PathParam("id") String id) {
-    return petsService.getById(id);
+    return petsService.getById(Long.valueOf(id));
   }
 
 

@@ -2,14 +2,13 @@ package org.example.resource;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.example.dto.PetDTO;
+import org.example.dto.PetQueryParams;
 import org.example.service.PetService;
 
 import java.net.URI;
@@ -27,7 +26,7 @@ public class PetResource {
         PetDTO created = petService.createPet(pet);
 
         URI location = uriInfo.getAbsolutePathBuilder()
-                .path(String.valueOf(created.getId())) // adds the new pet ID on the end of the current path.
+                .path(String.valueOf(created.getId())) // adds the new pet ID on the end of the current path. (builds the URL of the newly created pet)
                 .build();
 
         return Response.created(location)
@@ -36,19 +35,17 @@ public class PetResource {
     }
 
     @GET
-    public Response getAll(
-            @QueryParam("offset") @DefaultValue("0") @Min(0) int offset, // offset for pagination, default is 0
-            @QueryParam("limit") @DefaultValue("10") @Min(1) @Max(100) int limit, // limit for pagination, default is 10
-            @QueryParam("species") String species, // optional species filter
-            @QueryParam("sortBy") @DefaultValue("id") String sortBy, // field to sort by, default is "id"
-            @QueryParam("order") @DefaultValue("asc") String order // sort order, default is ascending
-    ) {
+    public Response getAll(@BeanParam @Valid PetQueryParams params) { // @BeanParam to map query parameters to the PetQueryParams DTO
         return Response.ok(
-                petService.searchPets(offset, limit, species, sortBy, order) // Call service to get filtered, sorted, paginated pets
-        ).build(); // 200 OK with the list of pets in the response body
-
+                petService.searchPets(
+                        params.getOffset(),
+                        params.getLimit(),
+                        params.getSpecies(),
+                        params.getSortBy(),
+                        params.getOrder()
+                )
+        ).build();
     }
-
 
     @GET
     @Path("/{id}") // Path parameter for pet ID, e.g., /api/pets/1
@@ -83,11 +80,4 @@ public class PetResource {
         }
         return Response.noContent().build(); // 204 No Content on successful deletion
     }
-
-    @GET
-    @Path("/crash")
-    public Response crash() {
-        throw new RuntimeException("Simulated server crash");
-    }
-
 }

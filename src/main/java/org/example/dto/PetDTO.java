@@ -21,18 +21,17 @@ public class PetDTO {
 
     @Min(value = 0, message = "Hunger level must be between 0 and 100") // Validation: hunger level between 0 and 100
     @Max(value = 100, message = "Hunger level must be between 0 and 100") // Validation: hunger level between 0 and 100
-    private int hungerLevel;
+    private Integer hungerLevel;
 
     @Min(value = 0, message = "Happiness must be between 0 and 100") // Validation: happiness between 0 and 100
     @Max(value = 100, message = "Happiness must be between 0 and 100") // Validation: happiness between 0 and 100
-    private int happiness;
+    private Integer happiness;
 
     public PetDTO() {
-        this.hungerLevel = 50;
-        this.happiness = 50;
+
     }
 
-    public PetDTO(String name, String species, int hungerLevel, int happiness) {
+    public PetDTO(String name, String species, Integer hungerLevel, Integer happiness) {
         this.name = name;
         this.species = species;
         this.hungerLevel = hungerLevel;
@@ -63,19 +62,19 @@ public class PetDTO {
         this.species = species;
     }
 
-    public int getHungerLevel() {
+    public Integer getHungerLevel() {
         return hungerLevel;
     }
 
-    public void setHungerLevel(int hungerLevel) {
+    public void setHungerLevel(Integer hungerLevel) {
         this.hungerLevel = hungerLevel;
     }
 
-    public int getHappiness() {
+    public Integer getHappiness() {
         return happiness;
     }
 
-    public void setHappiness(int happiness) {
+    public void setHappiness(Integer happiness) {
         this.happiness = happiness;
     }
 }

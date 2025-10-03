@@ -22,8 +22,15 @@ public class PetService {
     private final ReentrantLock lock = new ReentrantLock();
 
     public PetDTO createPet(PetDTO pet) {
-        return petRepository.save(pet); // Save the pet using the repository
+        if (pet.getHungerLevel() == null) {
+            pet.setHungerLevel(50);
+        }
+        if (pet.getHappiness() == null) {
+            pet.setHappiness(50);
+        }
+        return petRepository.save(pet);
     }
+
 
     public Collection<PetDTO> getAllPets() {
         return petRepository.findAll(); // Retrieve all pets from the repository (This was used before filtering, sorting and pagination)

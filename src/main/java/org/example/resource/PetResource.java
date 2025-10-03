@@ -36,11 +36,26 @@ public class PetResource {
                 .build();
     }
 
-    // GET /pets. List all pets.
-    // Output: JSON array of all PetDTOs
+    // GET /pets. List all pets with optional pagination (offset and limit)
+    // Example: /pets?offset=0&limit=10
     @GET
-    public Collection<PetDTO> getAllPets() {
-        return petService.getAllPets();
+    public Response getAllPets(
+            @QueryParam("offset") @DefaultValue("0") int offset,
+            @QueryParam("limit") @DefaultValue("10") int limit) {
+        // Convert pets from map to list for easier slicing
+        var allPets = petService.getAllPets().stream().toList();
+
+        // Calculate sublist boundaries
+        int fromIndex = Math.max(0, offset);
+        int toIndex = (limit < 0) ? allPets.size() : Math.min(allPets.size(), offset + limit);
+
+        // Handle case: offset > size
+        if (fromIndex > allPets.size()) {
+            return Response.ok(java.util.Collections.emptyList()).build();
+        }
+
+        var paginated = allPets.subList(fromIndex, toIndex);
+        return Response.ok(paginated).build();
     }
 
     // GET /pets/{id}. Get a specific pet by ID.

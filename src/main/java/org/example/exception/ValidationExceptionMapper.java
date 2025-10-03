@@ -8,6 +8,7 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,24 +16,25 @@ import java.util.stream.Collectors;
 @Provider
 public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
     @Override
-    public Response toResponse(ConstraintViolationException exception) {
-        Map<String, String> errors = exception.getConstraintViolations()
+    public Response toResponse(ConstraintViolationException e) {
+        List<Object> violations = e.getConstraintViolations()
                 .stream()
-                .collect(Collectors.toMap(
-                        cv -> {
-                            String path = cv.getPropertyPath().toString();
-                            if (path.contains(".")) {
-                                path = path.substring(path.lastIndexOf(".") + 1);
-                            }
-                            return path;
-                        },
-                        cv -> cv.getMessage(),
-                        (msg1, msg2) -> msg1,
-                        LinkedHashMap::new
-                ));
+                .map(cv -> new Object() {
+                    public final String field = cv.getPropertyPath().toString()
+                            .replaceAll("^.*\\.", "");
+                    public final String message = cv.getMessage();
+                })
+                .collect(Collectors.toList());
+
+        Jsonb jsonb = JsonbBuilder.create();
+        String json = jsonb.toJson(new Object() {
+            public final List<Object> violationsList = violations;
+        });
 
         return Response.status(Response.Status.BAD_REQUEST)
-                .entity(errors)
+                .entity(json)
+                .type("application/json")
                 .build();
     }
+
 }

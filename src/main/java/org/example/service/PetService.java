@@ -43,8 +43,8 @@ public class PetService {
     }
 
     // Delete (release) a pet by its ID
-    public void deletePet(Long id) {
-        pets.remove(id) != null;
+    public boolean deletePet(Long id) {
+        return pets.remove(id) != null;
     }
 
     // Feed a pet: reduce hunger by 10 (not below 0)

@@ -1,5 +1,6 @@
 package org.example.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import org.example.dto.PetDTO;
 
 import java.util.Collection;
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * - Service is responsible for storing and modifying pets.
  * - Keeps our REST resource classes clean and focused.
  */
+@ApplicationScoped
 public class PetService {
 
     // Thread-safe map to store pets (id -> PetDTO)

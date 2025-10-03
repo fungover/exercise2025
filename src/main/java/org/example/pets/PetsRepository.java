@@ -21,6 +21,11 @@ public class PetsRepository implements Repository {
 
   @Override
   public Pets getById(String id) {
-    return pets.stream().findAny().orElse(null);
+    for(Pets pet : pets){
+      if(pet.id().equals(id)){
+        return pet;
+      }
+    }
+    return null;
   }
 }

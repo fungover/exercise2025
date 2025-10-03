@@ -15,12 +15,16 @@ public class PetsService {
     this.petsRepository = petsRepository;
   }
 
-  public Response addPet(Pets pet) {
+  public void addPet(Pets pet) {
     petsRepository.add(pet);
-    return Response.status(Response.Status.CREATED).entity(pet).build();
+    Response.status(Response.Status.CREATED).entity(pet).build();
   }
 
   public List<Pets> getPets() {
     return petsRepository.getAll();
+  }
+
+  public Pets getById(String id){
+    return petsRepository.getById(id);
   }
 }

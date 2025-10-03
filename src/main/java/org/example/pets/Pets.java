@@ -1,3 +1,8 @@
 package org.example.pets;
 
-public record Pets (String name) {}
+import org.example.validation.ValidName;
+
+public record Pets (String id,
+                    @ValidName String name,
+                    String hungerLevel,
+                    String happiness) {}

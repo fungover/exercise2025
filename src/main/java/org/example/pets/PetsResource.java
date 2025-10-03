@@ -1,6 +1,8 @@
 package org.example.pets;
 
+import jakarta.enterprise.inject.build.compatible.spi.Validation;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.example.annotations.Log;
@@ -26,8 +28,15 @@ public class PetsResource {
 
   @POST
   @Consumes({ MediaType.APPLICATION_JSON })
-  public void adopt(Pets pet) {
+  public void adopt(@Valid Pets pet) {
     petsService.addPet(pet);
+  }
+
+  @GET()
+  @Path("/{id}")
+  @Produces({ MediaType.APPLICATION_JSON })
+  public Pets getById(@PathParam("id") String id) {
+    return petsService.getById(id);
   }
 
 

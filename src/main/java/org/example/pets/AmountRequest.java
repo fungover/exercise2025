@@ -1,3 +1,6 @@
 package org.example.pets;
 
-public record AmountRequest(String amount) {}
+import jakarta.validation.constraints.NotBlank;
+import org.example.validation.ValidAmount;
+
+public record AmountRequest(@NotBlank @ValidAmount String amount) {}

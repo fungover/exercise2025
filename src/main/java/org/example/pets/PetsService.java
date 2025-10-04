@@ -2,7 +2,6 @@ package org.example.pets;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 

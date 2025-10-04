@@ -1,14 +1,11 @@
 package org.example.pets;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import org.example.validation.ValidHappiness;
 import org.example.validation.ValidHunger;
 import org.example.validation.ValidName;
 
 public record Pets (Long id,
-                    @ValidName String name,
-                    @ValidHunger String hungerLevel,
-                    @ValidHappiness String happiness) {}
+                    @NotBlank @ValidName String name,
+                    @NotBlank @ValidHunger String hungerLevel,
+                    @NotBlank @ValidHappiness String happiness) {}

@@ -1,6 +1,5 @@
 package org.example.pets;
 
-import jakarta.enterprise.inject.build.compatible.spi.Validation;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -37,7 +36,7 @@ public class PetsResource {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response adopt(@Valid Pets pet) {
+  public Response adopt(Pets pet) {
     Pets createdPet = petsService.addPet(pet);
     return Response.status(Response.Status.CREATED)
             .entity(createdPet)
@@ -79,7 +78,7 @@ public class PetsResource {
   @Path("/{id}/feed")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response feedPet(@PathParam("id") String id, AmountRequest request) {
+  public Response feedPet(@PathParam("id") String id, @Valid AmountRequest request) {
     Pets updatedPet = petsService.feedPet(id, request.amount());
 
     if (updatedPet == null) {

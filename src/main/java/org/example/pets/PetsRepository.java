@@ -60,6 +60,7 @@ public class PetsRepository implements Repository {
                 String.valueOf(Long.parseLong(pet.hungerLevel()) - hungerLevel),
                 pet.happiness());
         pets.set(i, updated);
+        return updated;
       }
     }
     return null;
@@ -78,6 +79,7 @@ public class PetsRepository implements Repository {
                 String.valueOf(Long.parseLong(pet.happiness()) + happinessLevel)
         );
         pets.set(i, updated);
+        return updated;
       }
     }
     return null;

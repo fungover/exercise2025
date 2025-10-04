@@ -17,6 +17,9 @@ public class CdiGreetingService  implements GreetingsService {
     }
     @Override
     public String getGreeting(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name must not be null or blank");
+        }
         return repository.getMessage() + ", " + name + "!";
     }
 }

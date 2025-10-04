@@ -53,4 +53,13 @@ class PetServiceTest {
         assertThat(updated).isPresent();
         assertThat(updated.get().getHungerLevel()).isZero();
     }
+
+    @Test
+    void playWithPetIncreasesHappinessButNotAbove100() {
+        PetDTO pet = petService.createPet(new PetDTO("Doris", "Dog", 50, 95));
+        Optional<PetDTO> updated = petService.playWithPet(pet.getId());
+
+        assertThat(updated).isPresent();
+        assertThat(updated.get().getHappiness()).isEqualTo(100);
+    }
 }

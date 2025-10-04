@@ -9,10 +9,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Constraint(validatedBy = {})
-@NotNull @Size(min=2, max=12)
+@NotNull @Size(min=1, max=5)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidName {
-  String message() default "Uncorrected name";
-    Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default {};
+public @interface ValidHappiness {
+  String message() default "Uncorrected happiness";
+  Class<?>[] groups() default {};
+  Class<? extends Payload>[] payload() default {};
 }

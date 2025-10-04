@@ -36,7 +36,7 @@ public class PetsResource {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response adopt(Pets pet) {
+  public Response adopt(@Valid Pets pet) {
     Pets createdPet = petsService.addPet(pet);
     return Response.status(Response.Status.CREATED)
             .entity(createdPet)
@@ -98,7 +98,7 @@ public class PetsResource {
   @Path("/{id}/play")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response playPet(@PathParam("id") String id, AmountRequest request) {
+  public Response playPet(@PathParam("id") String id, @Valid AmountRequest request) {
     Pets updatedPet = petsService.playPet(id, request.amount());
 
     if (updatedPet == null) {

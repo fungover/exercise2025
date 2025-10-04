@@ -42,26 +42,34 @@ public class PetsRepository implements Repository {
     Long longId = Long.parseLong(id);
     long longAmount = Long.parseLong(amount);
 
-    return petsMap.computeIfPresent(longId, (key, pet) -> new Pets(
+    return petsMap.computeIfPresent(longId, (key, pet) -> {
+      long newHunger = Long.parseLong(pet.hungerLevel()) - longAmount;
+      if(newHunger < 0){
+        throw new IllegalArgumentException("Hunger level cannot be less than 0");
+      }
+      return new Pets(
             pet.id(),
             pet.name(),
-            String.valueOf(Long.parseLong(pet.hungerLevel()) - longAmount),
-            pet.happiness()
-            )
-    );
+            String.valueOf(newHunger),
+            pet.happiness());
+    });
   }
 
   @Override
   public Pets play(String id, String amount) {
-    Long longId = Long.parseLong(id);
-    long longAmount = Long.parseLong(amount);
+    Long longId = Long.valueOf(id);
+    long happinessDelta = Long.parseLong(amount);
 
-    return petsMap.computeIfPresent(longId, (key, pet) -> new Pets(
-            pet.id(),
-            pet.name(),
-            pet.hungerLevel(),
-            String.valueOf(Long.parseLong(pet.happiness()) + longAmount)
-            )
-    );
+    return petsMap.computeIfPresent(longId, (k, pet) -> {
+      long newHappiness = Long.parseLong(pet.happiness()) + happinessDelta;
+      if (newHappiness > 20) {
+        throw new IllegalArgumentException("Happiness level cannot be greater than 20");
+      }
+      return new Pets(
+              pet.id(),
+              pet.name(),
+              pet.hungerLevel(),
+              String.valueOf(newHappiness));
+    });
   }
 }

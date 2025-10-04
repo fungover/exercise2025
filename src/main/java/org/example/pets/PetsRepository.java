@@ -12,10 +12,11 @@ public class PetsRepository implements Repository {
   private final AtomicLong idGenerator = new AtomicLong(1);
 
   @Override
-  public void add(Pets pet) {
+  public Pets add(Pets pet) {
     Long id = idGenerator.getAndIncrement();
     Pets newPet = new Pets(id, pet.name(), pet.hungerLevel(), pet.happiness());
     pets.add(newPet);
+    return newPet;
   }
 
   @Override
@@ -48,7 +49,7 @@ public class PetsRepository implements Repository {
   }
 
   @Override
-  public void feed(String id, String amount) {
+  public Pets feed(String id, String amount) {
     var longId = Long.valueOf(id);
     var hungerLevel = Long.parseLong(amount);
     for(int i = 0; i < pets.size(); i++){
@@ -61,10 +62,11 @@ public class PetsRepository implements Repository {
         pets.set(i, updated);
       }
     }
+    return null;
   }
 
   @Override
-  public void play(String id, String amount) {
+  public Pets play(String id, String amount) {
     var longId = Long.valueOf(id);
     var happinessLevel = Long.parseLong(amount);
     for(int i = 0; i < pets.size(); i++){
@@ -78,5 +80,6 @@ public class PetsRepository implements Repository {
         pets.set(i, updated);
       }
     }
+    return null;
   }
 }

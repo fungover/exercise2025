@@ -15,9 +15,8 @@ public class PetsService {
     this.petsRepository = petsRepository;
   }
 
-  public void addPet(Pets pet) {
-    petsRepository.add(pet);
-    Response.status(Response.Status.CREATED).entity(pet).build();
+  public Pets addPet(Pets pet) {
+    return petsRepository.add(pet);
   }
 
   public List<Pets> getPets() {
@@ -32,11 +31,11 @@ public class PetsService {
     return petsRepository.remove(id);
   }
 
-  public void feedPet(String id, String amount) {
-    petsRepository.feed(id, amount);
+  public Pets feedPet(String id, String amount) {
+    return petsRepository.feed(id, amount);
   }
 
-  public void playPet(String id, String amount) {
-    petsRepository.play(id, amount);
+  public Pets playPet(String id, String amount) {
+    return petsRepository.play(id, amount);
   }
 }

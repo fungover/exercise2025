@@ -23,15 +23,25 @@ public class PetsResource {
   }
 
   @GET
-  @Produces({ MediaType.APPLICATION_JSON })
-  public List<Pets> pets() {
-    return petsService.getPets();
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response pets() {
+    List<Pets> allPets = petsService.getPets();
+
+    if (allPets.isEmpty()) {
+      return Response.ok(List.of("Empty")).build();
+    }
+
+    return Response.ok(allPets).build();
   }
 
   @POST
-  @Consumes({ MediaType.APPLICATION_JSON })
-  public void adopt(@Valid Pets pet) {
-    petsService.addPet(pet);
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response adopt(@Valid Pets pet) {
+    Pets createdPet = petsService.addPet(pet);
+    return Response.status(Response.Status.CREATED)
+            .entity(createdPet)
+            .build();
   }
 
   @GET()
@@ -67,20 +77,42 @@ public class PetsResource {
 
   @PUT
   @Path("/{id}/feed")
-  @Consumes({ MediaType.APPLICATION_JSON })
-  @Produces({MediaType.APPLICATION_JSON})
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
   public Response feedPet(@PathParam("id") String id, AmountRequest request) {
-    petsService.feedPet((id), request.amount());
-    return Response.status(200).build();
+    Pets updatedPet = petsService.feedPet(id, request.amount());
+
+    if (updatedPet == null) {
+      ErrorResponse errorResponse = new ErrorResponse(
+              "Cannot feed pet. Pet with ID " + id + " not found",
+              404
+      );
+      return Response.status(Response.Status.NOT_FOUND)
+              .entity(errorResponse)
+              .build();
+    }
+
+    return Response.ok(updatedPet).build();
   }
 
   @PUT
   @Path("/{id}/play")
-  @Consumes({ MediaType.APPLICATION_JSON})
-  @Produces({MediaType.APPLICATION_JSON})
-  public Response playPet(@PathParam("id") String id, AmountRequest request){
-    petsService.playPet((id), request.amount());
-    return Response.status(200).build();
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response playPet(@PathParam("id") String id, AmountRequest request) {
+    Pets updatedPet = petsService.playPet(id, request.amount());
+
+    if (updatedPet == null) {
+      ErrorResponse errorResponse = new ErrorResponse(
+              "Cannot play with pet. Pet with ID " + id + " not found",
+              404
+      );
+      return Response.status(Response.Status.NOT_FOUND)
+              .entity(errorResponse)
+              .build();
+    }
+
+    return Response.ok(updatedPet).build();
   }
 }
 

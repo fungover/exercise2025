@@ -3,10 +3,10 @@ package org.example.pets;
 import java.util.List;
 
 public interface Repository {
-  void add(Pets pet);
+  Pets add(Pets pet);
   List<Pets> getAll();
   Pets getById(String id);
   Pets remove(String id);
-  void feed(String id, String amount);
-  void play(String id, String amount);
+  Pets feed(String id, String amount);
+  Pets play(String id, String amount);
 }

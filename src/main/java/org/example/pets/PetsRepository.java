@@ -72,4 +72,14 @@ public class PetsRepository implements Repository {
               String.valueOf(newHappiness));
     });
   }
+
+  @Override
+  public Pets find(String name) {
+    for (Pets pet : petsMap.values()) {
+      if (pet.name().equalsIgnoreCase(name)) {
+        return pet;
+      }
+    }
+    return null;
+  }
 }

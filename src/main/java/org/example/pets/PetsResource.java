@@ -113,5 +113,20 @@ public class PetsResource {
 
     return Response.ok(updatedPet).build();
   }
+
+  @GET
+  @Produces({ MediaType.APPLICATION_JSON})
+  public Response findPet(@QueryParam("species") String name) {
+    Pets pet = petsService.find(name);
+    if (pet == null) {
+      ErrorResponse errorResponse = new ErrorResponse("Cannot find pet. Pet with name "
+              + name + " not found", 404);
+      return Response.status(Response.Status.NOT_FOUND)
+              .entity(errorResponse)
+              .build();
+
+    }
+    return Response.ok(pet).build();
+  }
 }
 

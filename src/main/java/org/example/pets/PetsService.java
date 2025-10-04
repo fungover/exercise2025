@@ -37,4 +37,8 @@ public class PetsService {
   public Pets playPet(String id, String amount) {
     return petsRepository.play(id, amount);
   }
+
+  public Pets find(String name) {
+    return petsRepository.find(name);
+  }
 }

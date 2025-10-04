@@ -35,4 +35,11 @@ class PetDTOTest {
         Set<ConstraintViolation<PetDTO>> violations = validator.validate(pet); // Validate the pet
         assertEquals(1, violations.size()); // Expect 1 violation
     }
+
+    @Test
+    void invalidTooLongName() {
+        PetDTO pet = new PetDTO("a".repeat(60), "Dog", 50, 50); // Invalid: name too long
+        Set<ConstraintViolation<PetDTO>> violations = validator.validate(pet); // Validate the pet
+        assertEquals(1, violations.size()); // Expect 1 violation
+    }
 }

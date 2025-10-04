@@ -56,4 +56,11 @@ class PetDTOTest {
         Set<ConstraintViolation<PetDTO>> violations = validator.validate(pet); // Validate the pet
         assertEquals(1, violations.size()); // Expect 1 violation
     }
+
+    @Test
+    void invalidHungerBelow0() {
+        PetDTO pet = new PetDTO("Doris", "Dog", -10, 50); // Invalid: hunger level below 0
+        Set<ConstraintViolation<PetDTO>> violations = validator.validate(pet); // Validate the pet
+        assertEquals(1, violations.size()); // Expect 1 violation
+    }
 }

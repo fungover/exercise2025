@@ -33,4 +33,13 @@ class PetServiceTest {
         assertThat(created.getHungerLevel()).isEqualTo(50);
         assertThat(created.getHappiness()).isEqualTo(50);
     }
+
+    @Test
+    void createPetRespectsExplicitValues() {
+        PetDTO pet = new PetDTO("Doris", "Dog", 0, 0);
+        PetDTO created = petService.createPet(pet);
+
+        assertThat(created.getHungerLevel()).isZero();
+        assertThat(created.getHappiness()).isZero();
+    }
 }

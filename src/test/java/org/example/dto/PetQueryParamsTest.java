@@ -32,4 +32,24 @@ class PetQueryParamsTest {
         assertThat(violations).isEmpty();
     }
 
+    @Test
+    void invalidOffsetBelow0() {
+        PetQueryParams params = new PetQueryParams();
+        params.setOffset(-1); // Invalid offset
+        params.setLimit(10);
+
+        var violations = validator.validate(params);
+        assertThat(violations).hasSize(1); // Expecting one violation for offset
+    }
+
+    @Test
+    void invalidLimitBelow1() {
+        PetQueryParams params = new PetQueryParams();
+        params.setOffset(0);
+        params.setLimit(0); // Invalid limit
+
+        var violations = validator.validate(params);
+        assertThat(violations).hasSize(1); // Expecting one violation for limit
+    }
+
 }

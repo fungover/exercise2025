@@ -5,6 +5,8 @@ import org.example.repository.InMemoryPetRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class PetServiceTest {
@@ -41,5 +43,14 @@ class PetServiceTest {
 
         assertThat(created.getHungerLevel()).isZero();
         assertThat(created.getHappiness()).isZero();
+    }
+
+    @Test
+    void feedPet_reducesHungerButNotBelow0() {
+        PetDTO pet = petService.createPet(new PetDTO("Doris", "Dog", 5, 50));
+        Optional<PetDTO> updated = petService.feedPet(pet.getId());
+
+        assertThat(updated).isPresent();
+        assertThat(updated.get().getHungerLevel()).isZero();
     }
 }

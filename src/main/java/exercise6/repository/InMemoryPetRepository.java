@@ -33,11 +33,11 @@ public class InMemoryPetRepository implements PetRepository {
     }
 
     @Override
-    public Object getUniqPet(String id) {
-        int uniqId = Integer.parseInt(id);
-
-        return petList.stream()
-                .filter(item -> item.getId() == uniqId).collect(Collectors.toSet());
+    public Pet getUniqPet(String id) {
+       return petList.stream()
+               .filter(item -> item.getId() == Integer.parseInt(id))
+               .findFirst()
+               .orElse(null);
     }
 
     @Override

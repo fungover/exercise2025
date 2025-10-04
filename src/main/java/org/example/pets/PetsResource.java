@@ -7,6 +7,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.annotations.Log;
+import org.example.validation.ErrorResponse;
 
 import java.util.List;
 
@@ -36,14 +37,32 @@ public class PetsResource {
   @GET()
   @Path("/{id}")
   @Produces({ MediaType.APPLICATION_JSON })
-  public Pets getById(@PathParam("id") String id) {
-    return petsService.getById(id);
+  public Response getById(@PathParam("id") String id) {
+    Pets pet = petsService.getById(id);
+    if(pet == null){
+      ErrorResponse errorResponse = new ErrorResponse("Cannot find pet. Pet with ID " + id + " not found", 404);
+      return Response.status(Response.Status.NOT_FOUND).entity(errorResponse).build();
+    }
+    return Response.ok(pet).build();
   }
 
   @DELETE
   @Path("/{id}")
-  public void removePet(@PathParam("id") String id) {
-    petsService.removePet(id);
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response removePet(@PathParam("id") String id) {
+    Pets removedPet = petsService.removePet(id);
+
+    if (removedPet == null) {
+      ErrorResponse errorResponse = new ErrorResponse(
+              "Cannot remove pet. Pet with ID " + id + " not found",
+              404
+      );
+      return Response.status(Response.Status.NOT_FOUND)
+              .entity(errorResponse)
+              .build();
+    }
+
+    return Response.ok(removedPet).build();
   }
 
   @PUT

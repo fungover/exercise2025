@@ -35,9 +35,16 @@ public class PetsRepository implements Repository {
   }
 
   @Override
-  public void remove(String id) {
-    var longId = Long.valueOf(id);
-    pets.removeIf(pet -> pet.id().equals(longId));
+  public Pets remove(String id) {
+    Long longId = Long.valueOf(id);
+    for (int i = 0; i < pets.size(); i++) {
+      Pets pet = pets.get(i);
+      if (pet.id().equals(longId)) {
+        pets.remove(i);
+        return pet;
+      }
+    }
+    return null;
   }
 
   @Override

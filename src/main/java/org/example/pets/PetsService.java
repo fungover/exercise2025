@@ -28,8 +28,8 @@ public class PetsService {
     return petsRepository.getById(id);
   }
 
-  public void removePet(String id) {
-    petsRepository.remove(id);
+  public Pets removePet(String id) {
+    return petsRepository.remove(id);
   }
 
   public void feedPet(String id, String amount) {

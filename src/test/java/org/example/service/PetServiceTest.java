@@ -62,4 +62,14 @@ class PetServiceTest {
         assertThat(updated).isPresent();
         assertThat(updated.get().getHappiness()).isEqualTo(100);
     }
+
+    @Test
+    void deletePetRemovesPet() {
+        PetDTO pet = petService.createPet(new PetDTO("Doris", "Dog", 50, 50));
+        boolean deleted = petService.deletePet(pet.getId());
+
+
+        assertThat(deleted).isTrue();
+        assertThat(petService.getPetById(pet.getId())).isEmpty();
+    }
 }

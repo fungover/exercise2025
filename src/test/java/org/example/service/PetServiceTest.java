@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 class PetServiceTest {
 
@@ -71,5 +72,13 @@ class PetServiceTest {
 
         assertThat(deleted).isTrue();
         assertThat(petService.getPetById(pet.getId())).isEmpty();
+    }
+
+    @Test
+    void getAllPetsReturnsAllPets() {
+        petService.createPet(new PetDTO("Doris", "Dog", 50, 50));
+        petService.createPet(new PetDTO("Maja", "Cat", 50, 50));
+
+        assertThat(petService.getAllPets()).hasSize(2);
     }
 }

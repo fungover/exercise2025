@@ -1,0 +1,25 @@
+### Add a pet
+POST http://localhost:8080/api/pets
+Content-Type: application/json
+
+{
+  "name": "Bamse",
+  "species": "Cat",
+  "hungerLevel": 6,
+  "happiness": 10
+}
+
+### List all pets
+GET http://localhost:8080/api/pets
+
+### Get a pet by id
+GET http://localhost:8080/api/pets/1
+
+### Feed a pet
+PUT http://localhost:8080/api/pets/1/feed
+
+### Play with a pet
+PUT http://localhost:8080/api/pets/1/play
+
+### Delete a pet
+DELETE http://localhost:8080/api/pets/1

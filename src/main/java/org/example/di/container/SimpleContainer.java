@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class SimpleContainer {
     private final Map<Class<?>, Class<?>> interfacesToImpl = new HashMap<>();
+    private final Map<Class<?>, Object> singletons = new HashMap<>();
     public SimpleContainer() {
         interfacesToImpl.put(MessageRepository.class, MessageRepoImp.class);
         interfacesToImpl.put(GreetingsService.class, GreetingServiceImp.class);
@@ -18,6 +19,9 @@ public class SimpleContainer {
     @SuppressWarnings("unchecked")
     public <T> T getInstance(Class<T> clazz) {
         try {
+            if (singletons.containsKey(clazz)) {
+                return (T) singletons.get(clazz);
+            }
             Class<?> targetClass = clazz.isInterface() ? interfacesToImpl.getOrDefault(clazz, clazz) : clazz;
             if (targetClass.isInterface()) {
                 throw new RuntimeException("No implementation found for " + clazz.getName());
@@ -38,6 +42,7 @@ public class SimpleContainer {
             if (!clazz.isInstance(instance)) {
                 throw new RuntimeException("Instance is not of type " + clazz.getName());
             }
+            singletons.put(clazz, instance);
             return (T) instance;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("Failed to instantiate " + clazz.getName(), e);

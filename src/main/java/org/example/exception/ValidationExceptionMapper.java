@@ -1,6 +1,7 @@
 package org.example.exception;
 
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -13,11 +14,11 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
 
     @Override
     public Response toResponse(ConstraintViolationException e) {
-        List<ViolationMessage> violations = e.getConstraintViolations().stream()
+        List<ErrorDetail> violations = e.getConstraintViolations().stream()
                 .map(v -> new ViolationMessage(
-                        v.getPropertyPath().toString()
-                                .substring(v.getPropertyPath().toString().lastIndexOf(".") + 1),
+                        extractFieldName(v.getPropertyPath()),
                         v.getMessage()))
+                .map(v -> (ErrorDetail) v)
                 .toList();
 
         ErrorResponse errorResponse = new ErrorResponse("ValidationError", violations);
@@ -26,5 +27,13 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
                 .entity(errorResponse)
                 .type(MediaType.APPLICATION_JSON)
                 .build();
+    }
+
+    private String extractFieldName(Path propertyPath) {
+        String fieldName = "";
+        for (Path.Node node : propertyPath) {
+            fieldName = node.getName();
+        }
+        return fieldName;
     }
 }

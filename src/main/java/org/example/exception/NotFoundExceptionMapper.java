@@ -15,7 +15,9 @@ public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundExceptio
     public Response toResponse(NotFoundException e) {
         ErrorResponse errorResponse = new ErrorResponse(
                 "NotFoundError",
-                List.of(new MessageDetail(e.getMessage()))
+                List.of(new MessageDetail(
+                        e.getMessage() != null ? e.getMessage() : "Resource not found"
+                ))
         );
 
         return Response.status(Response.Status.NOT_FOUND)

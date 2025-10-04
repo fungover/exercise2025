@@ -89,6 +89,7 @@ public class PetService {
 
     private Stream<PetDTO> applySorting(Stream<PetDTO> stream, String sortBy, String order) {
 
+
         Comparator<PetDTO> comparator = switch (sortBy.toLowerCase()) { // Determine comparator based on sortBy parameter
             case "name" ->
                     Comparator.comparing(PetDTO::getName, String.CASE_INSENSITIVE_ORDER); // Case-insensitive sorting for names

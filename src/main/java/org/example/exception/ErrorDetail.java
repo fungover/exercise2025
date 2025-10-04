@@ -1,4 +1,4 @@
 package org.example.exception;
 
-public interface ErrorDetail {
+public sealed interface ErrorDetail permits MessageDetail, ViolationMessage {
 }

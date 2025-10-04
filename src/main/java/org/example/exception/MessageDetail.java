@@ -1,6 +1,4 @@
 package org.example.exception;
 
-public record MessageDetail(
-        String message
-) {
+public record MessageDetail(String message) implements ErrorDetail {
 }

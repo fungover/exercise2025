@@ -21,6 +21,14 @@ public class PetService {
 
     private final ReentrantLock lock = new ReentrantLock();
 
+    PetService(PetRepository petRepository) {
+        this.petRepository = petRepository;
+    }
+
+    public PetService() {
+
+    }
+
     public PetDTO createPet(PetDTO pet) {
         if (pet.getHungerLevel() == null) {
             pet.setHungerLevel(50);

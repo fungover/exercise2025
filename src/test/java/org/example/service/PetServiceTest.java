@@ -16,15 +16,7 @@ class PetServiceTest {
 
     @BeforeEach
     void setUp() {
-        petService = new PetService();
-        var repo = new InMemoryPetRepository();
-        try {
-            var field = PetService.class.getDeclaredField("petRepository");
-            field.setAccessible(true);
-            field.set(petService, repo);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        petService = new PetService(new InMemoryPetRepository());
     }
 
     @Test

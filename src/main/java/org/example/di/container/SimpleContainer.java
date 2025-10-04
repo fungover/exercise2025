@@ -6,11 +6,14 @@ import org.example.di.common.MessageRepository;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class SimpleContainer {
     private final Map<Class<?>, Class<?>> interfacesToImpl = new HashMap<>();
     private final Map<Class<?>, Object> singletons = new HashMap<>();
+    private final ThreadLocal<Set<Class<?>>> instantiating = ThreadLocal.withInitial(HashSet::new);
     public SimpleContainer() {
         interfacesToImpl.put(MessageRepository.class, MessageRepoImp.class);
         interfacesToImpl.put(GreetingsService.class, GreetingServiceImp.class);
@@ -19,6 +22,9 @@ public class SimpleContainer {
     @SuppressWarnings("unchecked")
     public <T> T getInstance(Class<T> clazz) {
         try {
+            if (!instantiating.get().add(clazz)) {
+                throw new RuntimeException("Recursive dependency detected for " + clazz.getName());
+            }
             if (singletons.containsKey(clazz)) {
                 return (T) singletons.get(clazz);
             }
@@ -28,10 +34,6 @@ public class SimpleContainer {
             }
 
             Constructor<?>[] constructors = targetClass.getDeclaredConstructors();
-            if (constructors.length == 0) {
-                throw new RuntimeException("No default constructor found for " + clazz.getName());
-            }
-
             Constructor<?> constructor = constructors[0];
             Class<?>[] paramTypes = constructor.getParameterTypes();
             Object[] params = new Object[paramTypes.length];
@@ -46,6 +48,8 @@ public class SimpleContainer {
             return (T) instance;
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("Failed to instantiate " + clazz.getName(), e);
+        } finally {
+            instantiating.get().remove(clazz);
         }
     }
 }

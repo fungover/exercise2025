@@ -14,7 +14,7 @@ import java.lang.annotation.RetentionPolicy;
 @NotNull @Min(1) @Max(3) @NotBlank
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidAmount {
-  String message() default "Uncorrected amount";
+  String message() default "Incorrected amount";
   Class<?>[] groups() default {};
   Class<? extends Payload>[] payload() default {};
 }

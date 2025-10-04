@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
 @NotNull @Min(1) @Max(5) @NotBlank
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidHunger {
-  String message() default "Uncorrected hunger";
+  String message() default "Incorrected hunger";
   Class<?>[] groups() default {};
   Class<? extends Payload>[] payload() default {};
 }

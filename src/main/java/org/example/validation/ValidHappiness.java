@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
 @NotNull @Min(0) @Max(10) @NotBlank
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidHappiness {
-  String message() default "Uncorrected happiness";
+  String message() default "Incorrected happiness";
   Class<?>[] groups() default {};
   Class<? extends Payload>[] payload() default {};
 }

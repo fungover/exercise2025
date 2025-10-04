@@ -13,7 +13,7 @@ import java.lang.annotation.RetentionPolicy;
 @NotNull @Size(min=2, max=12) @NotBlank
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidName {
-  String message() default "Uncorrected name";
+  String message() default "Incorrected name";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

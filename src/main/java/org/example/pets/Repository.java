@@ -9,5 +9,5 @@ public interface Repository {
   Pets remove(String id);
   Pets feed(String id, String amount);
   Pets play(String id, String amount);
-  Pets find(String name);
+  List<Pets> findByName(String name);
 }

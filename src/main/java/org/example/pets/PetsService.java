@@ -38,7 +38,7 @@ public class PetsService {
     return petsRepository.play(id, amount);
   }
 
-  public Pets find(String name) {
-    return petsRepository.find(name);
+  public List<Pets> findByName(String name) {
+    return petsRepository.findByName(name);
   }
 }

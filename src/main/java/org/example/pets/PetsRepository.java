@@ -2,6 +2,7 @@ package org.example.pets;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -58,10 +59,10 @@ public class PetsRepository implements Repository {
   @Override
   public Pets play(String id, String amount) {
     Long longId = Long.valueOf(id);
-    long happinessDelta = Long.parseLong(amount);
+    long longAmount = Long.parseLong(amount);
 
     return petsMap.computeIfPresent(longId, (k, pet) -> {
-      long newHappiness = Long.parseLong(pet.happiness()) + happinessDelta;
+      long newHappiness = Long.parseLong(pet.happiness()) + longAmount;
       if (newHappiness > 20) {
         throw new IllegalArgumentException("Happiness level cannot be greater than 20");
       }
@@ -74,12 +75,12 @@ public class PetsRepository implements Repository {
   }
 
   @Override
-  public Pets find(String name) {
-    for (Pets pet : petsMap.values()) {
-      if (pet.name().equalsIgnoreCase(name)) {
-        return pet;
-      }
+  public List<Pets> findByName(String name) {
+    if (name == null || name.isBlank()) {
+      return new ArrayList<>(petsMap.values());
     }
-    return null;
+    return petsMap.values().stream()
+            .filter(p -> p.name().equalsIgnoreCase(name))
+            .toList();
   }
 }

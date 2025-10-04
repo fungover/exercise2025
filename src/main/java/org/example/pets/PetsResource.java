@@ -23,13 +23,15 @@ public class PetsResource {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response pets() {
+  public Response pets(@QueryParam("species") String name) {
     List<Pets> allPets = petsService.getPets();
+    List<Pets> pets = petsService.findByName(name);
 
-    if (allPets.isEmpty()) {
+    if (allPets.isEmpty() ) {
       return Response.ok(List.of()).build();
-    }
-
+    } else if (name != null) {
+      return Response.ok(pets).build();
+    } else
     return Response.ok(allPets).build();
   }
 
@@ -112,21 +114,6 @@ public class PetsResource {
     }
 
     return Response.ok(updatedPet).build();
-  }
-
-  @GET
-  @Produces({ MediaType.APPLICATION_JSON})
-  public Response findPet(@QueryParam("species") String name) {
-    Pets pet = petsService.find(name);
-    if (pet == null) {
-      ErrorResponse errorResponse = new ErrorResponse("Cannot find pet. Pet with name "
-              + name + " not found", 404);
-      return Response.status(Response.Status.NOT_FOUND)
-              .entity(errorResponse)
-              .build();
-
-    }
-    return Response.ok(pet).build();
   }
 }
 

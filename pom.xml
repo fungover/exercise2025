@@ -23,6 +23,7 @@
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
         <war-plugin.version>3.4.0</war-plugin.version>
         <wildfly-plugin.version>5.0.1.Final</wildfly-plugin.version>
+        <surefire-plugin.version>3.2.5</surefire-plugin.version>
     </properties>
 
     <dependencies>
@@ -72,12 +73,18 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${war-plugin.version}</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
+
 
             <!-- Execute 'mvn clean package wildfly:run' to run the application. -->
             <plugin>

@@ -24,9 +24,10 @@ public class PetsRepository implements Repository {
   }
 
   @Override
-  public Pets getById(Long id) {
+  public Pets getById(String id) {
+    var longId = Long.valueOf(id);
     for(Pets pet : pets){
-      if(pet.id().equals(id)){
+      if(pet.id().equals(longId)){
         return pet;
       }
     }
@@ -34,18 +35,25 @@ public class PetsRepository implements Repository {
   }
 
   @Override
-  public Pets remove(Long id) {
-    for(Pets pet : pets){
-      if(pet.id().equals(id)){
-        pets.remove(pet);
-      }
-    }
-    return null;
+  public void remove(String id) {
+    var longId = Long.valueOf(id);
+    pets.removeIf(pet -> pet.id().equals(longId));
   }
 
   @Override
-  public Pets update(Long id) {
-    return null;
+  public void feed(String id, String amount) {
+    var longId = Long.valueOf(id);
+    var hungerLevel = Long.parseLong(amount);
+    for(int i = 0; i < pets.size(); i++){
+      Pets pet = pets.get(i);
+      if(pet.id().equals(longId)){
+        Pets updated = new Pets(pet.id(),
+                pet.name(),
+                String.valueOf(Long.parseLong(pet.hungerLevel()) - hungerLevel),
+                pet.happiness());
+        pets.set(i, updated);
+      }
+    }
   }
 
 

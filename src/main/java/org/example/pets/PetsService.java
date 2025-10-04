@@ -24,11 +24,15 @@ public class PetsService {
     return petsRepository.getAll();
   }
 
-  public Pets getById(Long id){
+  public Pets getById(String id){
     return petsRepository.getById(id);
   }
 
-  public Pets removePet(Long id) {
-    return petsRepository.remove(id);
+  public void removePet(String id) {
+    petsRepository.remove(id);
+  }
+
+  public void feedPet(String id, String amount) {
+    petsRepository.feed(id, amount);
   }
 }

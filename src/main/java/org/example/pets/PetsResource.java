@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.example.annotations.Log;
 
 import java.util.List;
@@ -36,13 +37,23 @@ public class PetsResource {
   @Path("/{id}")
   @Produces({ MediaType.APPLICATION_JSON })
   public Pets getById(@PathParam("id") String id) {
-    return petsService.getById(Long.valueOf(id));
+    return petsService.getById(id);
   }
 
   @DELETE
   @Path("/{id}")
   public void removePet(@PathParam("id") String id) {
-    petsService.removePet(Long.valueOf(id));
+    petsService.removePet(id);
+  }
+
+  @PUT
+  @Path("/{id}/feed")
+  @Consumes({ MediaType.APPLICATION_JSON })
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response feedPet(@PathParam("id") String id, FeedRequest request) {
+    petsService.feedPet((id), request.amount());
+    return Response.status(200).build();
   }
 }
+
 

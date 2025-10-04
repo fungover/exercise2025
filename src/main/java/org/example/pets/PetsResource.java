@@ -27,7 +27,7 @@ public class PetsResource {
     List<Pets> allPets = petsService.getPets();
 
     if (allPets.isEmpty()) {
-      return Response.ok(List.of("Empty")).build();
+      return Response.ok(List.of()).build();
     }
 
     return Response.ok(allPets).build();

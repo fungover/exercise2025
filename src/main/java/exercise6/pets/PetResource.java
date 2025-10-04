@@ -2,6 +2,7 @@ package exercise6.pets;
 
 import exercise6.repository.PetRepository;
 import exercise6.service.Feed;
+import exercise6.service.PetRequest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -32,15 +33,17 @@ public class PetResource {
     @GET()
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Object getUniqPet(@PathParam("id") String id) {
+    public Pet getUniqPet(@PathParam("id") String id) {
         return petRepository.getUniqPet(id);
     }
 
     @PUT()
     @Path("/{id}/feed")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String feedPet(@PathParam("id") String id) {
-        return feed.feedPet(id);
+    public String feedPet(@PathParam("id") String id, PetRequest request) {
+        int feedThePet = request.feedPet;
+        return feed.feedPet(id, feedThePet);
     }
 
     @DELETE

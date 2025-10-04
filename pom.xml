@@ -29,8 +29,14 @@
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-core-api</artifactId>
-            <version>${jakartaee-api.version}</version>
+            <version>10.0.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.2</version>
         </dependency>
     </dependencies>
 
@@ -59,7 +65,12 @@
                 <configuration>
                     <version>${wildfly.version}</version>
                     <server-config>standalone.xml</server-config>
-                    <java-opts>-Djava.security.manager=disallow</java-opts>
+                    <java-opts>
+                        -Xms64m
+                        -Xmx512m
+                        -Djava.net.preferIPv4Stack=true
+                        -Djava.awt.headless=true
+                    </java-opts>
                 </configuration>
             </plugin>
         </plugins>

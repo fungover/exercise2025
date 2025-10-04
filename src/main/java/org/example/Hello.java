@@ -8,7 +8,11 @@ public class Hello {
         this.name = name;
     }
 
-    public String getHello(){
+    public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

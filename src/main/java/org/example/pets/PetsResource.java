@@ -49,11 +49,19 @@ public class PetsResource {
   @PUT
   @Path("/{id}/feed")
   @Consumes({ MediaType.APPLICATION_JSON })
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response feedPet(@PathParam("id") String id, FeedRequest request) {
+  @Produces({MediaType.APPLICATION_JSON})
+  public Response feedPet(@PathParam("id") String id, AmountRequest request) {
     petsService.feedPet((id), request.amount());
     return Response.status(200).build();
   }
-}
 
+  @PUT
+  @Path("/{id}/play")
+  @Consumes({ MediaType.APPLICATION_JSON})
+  @Produces({MediaType.APPLICATION_JSON})
+  public Response playPet(@PathParam("id") String id, AmountRequest request){
+    petsService.playPet((id), request.amount());
+    return Response.status(200).build();
+  }
+}
 

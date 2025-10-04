@@ -56,5 +56,20 @@ public class PetsRepository implements Repository {
     }
   }
 
-
+  @Override
+  public void play(String id, String amount) {
+    var longId = Long.valueOf(id);
+    var happinessLevel = Long.parseLong(amount);
+    for(int i = 0; i < pets.size(); i++){
+      Pets pet = pets.get(i);
+      if(pet.id().equals(longId)){
+        Pets updated = new Pets(pet.id(),
+                pet.name(),
+                pet.hungerLevel(),
+                String.valueOf(Long.parseLong(pet.happiness()) + happinessLevel)
+        );
+        pets.set(i, updated);
+      }
+    }
+  }
 }

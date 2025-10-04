@@ -35,4 +35,8 @@ public class PetsService {
   public void feedPet(String id, String amount) {
     petsRepository.feed(id, amount);
   }
+
+  public void playPet(String id, String amount) {
+    petsRepository.play(id, amount);
+  }
 }

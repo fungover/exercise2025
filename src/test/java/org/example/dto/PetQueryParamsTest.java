@@ -52,4 +52,13 @@ class PetQueryParamsTest {
         assertThat(violations).hasSize(1); // Expecting one violation for limit
     }
 
+    @Test
+    void invalidLimitAbove100() {
+        PetQueryParams params = new PetQueryParams();
+        params.setOffset(0);
+        params.setLimit(101); // Invalid limit
+
+        var violations = validator.validate(params);
+        assertThat(violations).hasSize(1); // Expecting one violation for limit
+    }
 }

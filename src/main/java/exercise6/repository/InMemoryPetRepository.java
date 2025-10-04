@@ -6,7 +6,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class InMemoryPetRepository implements PetRepository {
@@ -38,6 +37,12 @@ public class InMemoryPetRepository implements PetRepository {
                .filter(item -> item.getId() == Integer.parseInt(id))
                .findFirst()
                .orElse(null);
+    }
+
+    @Override
+    public List<Pet> sortPetByType(AnimalType animalType) {;
+       return petList.stream()
+                .filter(item -> item.getAnimalType() == animalType).toList();
     }
 
     @Override

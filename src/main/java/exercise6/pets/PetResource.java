@@ -26,7 +26,11 @@ public class PetResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Pet> getPets() {
+    public List<Pet> getPets(@QueryParam("species") String animalType) {
+        if(animalType != null) {
+            AnimalType petSpecies = AnimalType.valueOf(animalType.toUpperCase());
+            return petRepository.sortPetByType(petSpecies);
+        }
         return  petRepository.getPets();
     }
 

@@ -2,7 +2,7 @@ package entities;
 
 public class BossEnemy extends Enemy {
     public BossEnemy() {
-        super("Boss", 15, 5);
+        super("Boss", 15, 3);
     }
 
     @Override

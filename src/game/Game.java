@@ -54,10 +54,12 @@ public class Game {
                     player.addItem (item);
                     System.out.println(item.getName() + " added to your inventory.");
                     currentRoom.setItem(null);
+                    currentRoom = start;
+                    continue;
                 }
             }
 
-            if (currentRoom.getEnemy() == null && currentRoom == monsterRoom) {
+            if (currentRoom.getEnemy() != null && currentRoom.getEnemy().isAlive()) {
                 Enemy enemy;
                 if (Math.random() < 0.5) {
                     enemy = new BossEnemy();

@@ -11,6 +11,8 @@ public class Enemy {
         this.damage = damage;
     }
 
+
+
     public String getName(){
         return name;
     }

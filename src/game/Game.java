@@ -1,5 +1,6 @@
 package game;
 
+import entities.BossEnemy;
 import entities.Player;
 import entities.Item;
 import map.Room;
@@ -7,6 +8,8 @@ import org.w3c.dom.ls.LSOutput;
 import javax.swing.event.CaretListener;
 import java.util.Scanner;
 import entities.Enemy;
+import java.util.Random;
+
 
 public class Game {
     public static void main(String[] args) {
@@ -34,6 +37,9 @@ public class Game {
 
         Room currentRoom = start;
 
+
+
+
         //CLI loop
         while (true) {
             System.out.println(currentRoom.getDescription());
@@ -49,6 +55,16 @@ public class Game {
                     System.out.println(item.getName() + " added to your inventory.");
                     currentRoom.setItem(null);
                 }
+            }
+
+            if (currentRoom.getEnemy() == null && currentRoom == monsterRoom) {
+                Enemy enemy;
+                if (Math.random() < 0.5) {
+                    enemy = new BossEnemy();
+                } else {
+                    enemy = new Enemy("Extra strong enemy", 10, 2);
+                }
+                currentRoom.setEnemy(enemy);
             }
 
             if (currentRoom.getEnemy() != null && currentRoom.getEnemy().isAlive()) {
@@ -106,6 +122,9 @@ public class Game {
 
                 if (!enemy.isAlive()) {
                     System.out.println("You defeated the " + enemy.getName() + "!");
+                    currentRoom.setEnemy(null); //för att ta bort fienden när den är defeated.
+                    currentRoom = start;
+                    continue; //Börja om u loopen, visa rum.
                 }
             }
 

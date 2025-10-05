@@ -8,7 +8,7 @@ Det gör man genom att ta beslut i ja och nej frågor. Y/N, är förkortning fö
 
 Strukten är följande:
 - `game` (spelstart och loop)
-- `entities` (Player, Enemy, Item)
+- `entities` (Player, Enemy, Item, BossEnemy)
 - `map` (Room och kopplingar mellan rum)
 
 
@@ -16,3 +16,9 @@ Testning:
 - Korrekt förflyttning mellan rum.
 - Testar hur HP påverkas efter träff med monster. 
 - //Test av potion, se om HP-värdet höjs när spelare fångar potion.
+
+
+Uppdatering 5/10: Lagt till slumpmässig spawn av fiender, så 50% risk att få en BossEnemy, 
+den ärver de flesta egenskaperna från Enemy men har några unika egensakpr. 
+
+Har även uppdaterat koden så att man börjar om inför rumval efter att man besegrat fienden. 

@@ -20,8 +20,14 @@ public class PetResource {
     private PetService petService;
 
     @GET
-    public Collection<PetDTO> getAllPets() {
-        return petService.getAllPets();
+    public Collection<PetDTO> getAllPets(
+            @QueryParam("offset") @DefaultValue("0") int offset,
+            @QueryParam("limit") @DefaultValue("10") int limit,
+            @QueryParam("species") String species,
+            @QueryParam("sortBy") @DefaultValue("id") String sortBy,
+            @QueryParam("order") @DefaultValue("asc") String order
+    ) {
+        return petService.getAllPetsFiltered(offset, limit, species, sortBy, order);
     }
 
     @GET
@@ -33,7 +39,7 @@ public class PetResource {
     }
 
     @POST
-    public Response adoptPet(PetDTO pet) {
+    public Response adoptPet(@Valid PetDTO pet) {
         PetDTO newPet = petService.addPet(pet);
         return Response.status(Response.Status.CREATED).entity(newPet).build();
     }

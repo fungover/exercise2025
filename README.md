@@ -1,36 +1,24 @@
-## 🧪 How to Work on the Exercises
+# Dungeon Crawler
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+Textbaserat spel skapat i Java, går ut på att spelaren går mellan rum. 
+I rummen möts man av fiender, skatter eller "potions" som kan rädda ditt liv.  
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
+Spelet är beslutsbyggande, i varje rum du står inför scenarion som du ska ta ställning till.
+Det gör man genom att ta beslut i ja och nej frågor. Y/N, är förkortning för yes or no.
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+Strukten är följande:
+- `game` (spelstart och loop)
+- `entities` (Player, Enemy, Item, BossEnemy)
+- `map` (Room och kopplingar mellan rum)
 
-Example for user githubuser working on Exercise 1:
 
-```bash
-git checkout -b githubuser/exercise1
-```
+Testning: 
+- Korrekt förflyttning mellan rum.
+- Testar hur HP påverkas efter träff med monster. 
+- //Test av potion, se om HP-värdet höjs när spelare fångar potion.
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
 
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
+Uppdatering 5/10: Lagt till slumpmässig spawn av fiender, så 50% risk att få en BossEnemy, 
+den ärver de flesta egenskaperna från Enemy men har några unika egensakpr. 
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
-
-Link the PR to the issue you're solving.
-
-Include a clear description of your solution.
-
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+Har även uppdaterat koden så att man börjar om inför rumval efter att man besegrat fienden. 

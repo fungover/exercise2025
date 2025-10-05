@@ -64,18 +64,26 @@ public class PetService {
     }
 
     public Collection<PetDTO> getAllPetsFiltered(int offset, int limit, String species, String sortBy, String order) {
+        if (sortBy == null) sortBy = "id";
+        if (order == null) order = "asc";
+        if (offset < 0) throw new IllegalArgumentException("Offset must be non-negative");
+        if (limit < 0) throw new IllegalArgumentException("Limit must be non-negative");
+
+        final String sortByFinal = sortBy.toLowerCase();
+        final String orderFinal = order.toLowerCase();
+
         return pets.values().stream()
                 .filter(pet -> species == null || pet.getSpecies().equalsIgnoreCase(species))
                 .sorted((p1, p2) -> {
                     int comparison;
-                    switch (sortBy.toLowerCase()) {
+                    switch (sortByFinal) {
                         case "name" -> comparison = p1.getName().compareToIgnoreCase(p2.getName());
                         case "species" -> comparison = p1.getSpecies().compareToIgnoreCase(p2.getSpecies());
                         case "happiness" -> comparison = Integer.compare(p1.getHappiness(), p2.getHappiness());
                         case "hungerlevel" -> comparison = Integer.compare(p1.getHungerLevel(), p2.getHungerLevel());
                         default -> comparison = Long.compare(p1.getId(), p2.getId());
                     }
-                    return order.equalsIgnoreCase("desc") ? -comparison : comparison;
+                    return orderFinal.equals("desc") ? -comparison : comparison;
                 })
                 .skip(offset)
                 .limit(limit)

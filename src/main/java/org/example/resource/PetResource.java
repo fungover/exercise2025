@@ -25,6 +25,12 @@ public class PetResource {
             @QueryParam("sortBy") @DefaultValue("id") String sortBy,
             @QueryParam("order") @DefaultValue("asc") String order
     ) {
+        if (offset < 0) {
+            throw new BadRequestException("Offset must be non-negative");
+        }
+        if (limit < 0) {
+            throw new BadRequestException("Limit must be non-negative");
+        }
         return petService.getAllPetsFiltered(offset, limit, species, sortBy, order);
     }
 

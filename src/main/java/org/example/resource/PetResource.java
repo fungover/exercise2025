@@ -32,39 +32,30 @@ public class PetResource {
 
     @GET
     @Path("{id}")
-    public Response getPet(@PathParam("id") long id) {
-        PetDTO pet = petService.getPet(id);
-        if (pet == null) return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.ok(pet).build();
+    public PetDTO getPet(@PathParam("id") long id) {
+        return petService.getPet(id);
     }
 
     @POST
-    public Response adoptPet(@Valid PetDTO pet) {
-        PetDTO newPet = petService.addPet(pet);
-        return Response.status(Response.Status.CREATED).entity(newPet).build();
+    public PetDTO adoptPet(@Valid PetDTO pet) {
+        return petService.addPet(pet);
     }
 
     @PUT
     @Path("{id}/feed")
-    public Response feedPet(@PathParam("id") long id) {
-        PetDTO pet = petService.feedPet(id);
-        if (pet == null) return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.ok(pet).build();
+    public PetDTO feedPet(@PathParam("id") long id) {
+        return petService.feedPet(id);
     }
 
     @PUT
     @Path("{id}/play")
-    public Response playWithPet(@PathParam("id") long id) {
-        PetDTO pet = petService.playWithPet(id);
-        if (pet == null) return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.ok(pet).build();
+    public PetDTO playWithPet(@PathParam("id") long id) {
+        return petService.playWithPet(id);
     }
 
     @DELETE
     @Path("{id}")
-    public Response releasePet(@PathParam("id") long id) {
-        PetDTO removed = petService.removePet(id);
-        if (removed == null) return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.noContent().build();
+    public void releasePet(@PathParam("id") long id) {
+        petService.removePet(id);
     }
 }

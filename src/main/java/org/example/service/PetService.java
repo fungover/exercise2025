@@ -1,6 +1,7 @@
 package org.example.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.NotFoundException;
 import org.example.dto.PetDTO;
 
 import java.util.Collection;
@@ -18,7 +19,11 @@ public class PetService {
     }
 
     public PetDTO getPet(long id) {
-        return pets.get(id);
+        PetDTO pet = pets.get(id);
+        if (pet == null) {
+            throw new NotFoundException("Pet with ID " + id + " not found");
+        }
+        return pet;
     }
 
     public PetDTO addPet(PetDTO pet) {
@@ -30,34 +35,39 @@ public class PetService {
 
     public PetDTO feedPet(long id) {
         PetDTO updatedPet = pets.computeIfPresent(id, (k, pet) -> {
-            int oldHunger = pet.getHungerLevel();
-            pet.setHungerLevel(Math.max(0, oldHunger - 1));
-            System.out.println("Feeding pet " + pet.getId() + ": " + oldHunger + " -> " + pet.getHungerLevel());
+            pet.setHungerLevel(Math.max(0, pet.getHungerLevel() - 1));
             return pet;
         });
+        if (updatedPet == null) {
+            throw new NotFoundException("Pet with ID " + id + " not found");
+        }
         return updatedPet;
     }
 
     public PetDTO playWithPet(long id) {
         PetDTO updatedPet = pets.computeIfPresent(id, (k, pet) -> {
-            int oldHappiness = pet.getHappiness();
-            pet.setHappiness(Math.min(100, oldHappiness + 1));
-            System.out.println("Playing with pet " + pet.getId() + ": " + oldHappiness + " -> " + pet.getHappiness());
+            pet.setHappiness(Math.min(100, pet.getHappiness() + 1));
             return pet;
         });
+        if (updatedPet == null) {
+            throw new NotFoundException("Pet with ID " + id + " not found");
+        }
         return updatedPet;
     }
 
     public PetDTO removePet(long id) {
-        return pets.remove(id);
+        PetDTO removed = pets.remove(id);
+        if (removed == null) {
+            throw new NotFoundException("Pet with ID " + id + " not found");
+        }
+        return removed;
     }
 
     public Collection<PetDTO> getAllPetsFiltered(int offset, int limit, String species, String sortBy, String order) {
         return pets.values().stream()
                 .filter(pet -> species == null || pet.getSpecies().equalsIgnoreCase(species))
-
                 .sorted((p1, p2) -> {
-                    int comparison = 0;
+                    int comparison;
                     switch (sortBy.toLowerCase()) {
                         case "name" -> comparison = p1.getName().compareToIgnoreCase(p2.getName());
                         case "species" -> comparison = p1.getSpecies().compareToIgnoreCase(p2.getSpecies());

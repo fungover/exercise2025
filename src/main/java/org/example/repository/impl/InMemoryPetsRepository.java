@@ -17,11 +17,15 @@ public class InMemoryPetsRepository implements PetsRepository {
 
     @Override
     public PetDTO save(PetDTO pet) {
+        PetDTO copy = new PetDTO(pet.getName(), pet.getSpecies(), pet.getHungerLevel(), pet.getHappiness());
+        copy.setId(pet.getId());
+
         if (pet.getId() == 0) {
-            pet.setId(generateId());
+            copy.setId(generateId());
         }
-        pets.put(pet.getId(), pet);
-        return pet;
+
+        pets.put(copy.getId(), copy);
+        return copy;
     }
 
     @Override
@@ -31,7 +35,13 @@ public class InMemoryPetsRepository implements PetsRepository {
 
     @Override
     public Optional<PetDTO> findById(Long id) {
-        return Optional.ofNullable(pets.get(id));
+        return Optional.ofNullable(pets.get(id)).map(this::copyPet);
+    }
+
+    private PetDTO copyPet(PetDTO pet) {
+        PetDTO copy = new PetDTO(pet.getName(), pet.getSpecies(), pet.getHungerLevel(), pet.getHappiness());
+        copy.setId(pet.getId());
+        return copy;
     }
 
     @Override
@@ -39,8 +49,7 @@ public class InMemoryPetsRepository implements PetsRepository {
         pets.remove(id);
     }
 
-    @Override
-    public Long generateId() {
+    private Long generateId() {
         return idGenerator.incrementAndGet();
     }
 }

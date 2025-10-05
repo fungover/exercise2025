@@ -72,7 +72,7 @@ public class ThreadSafePetsService implements PetsService {
 
     @Override
     public PetDTO feedPet(Long id) {
-        ReentrantLock lock = locks.computeIfAbsent(id, k -> new ReentrantLock());
+        ReentrantLock lock = getLock(id);
         lock.lock();
         try {
             PetDTO petDTO = repository.findById(id)
@@ -91,7 +91,7 @@ public class ThreadSafePetsService implements PetsService {
 
     @Override
     public PetDTO playWithPet(Long id) {
-        ReentrantLock lock = locks.computeIfAbsent(id, k -> new ReentrantLock());
+        ReentrantLock lock = getLock(id);
         lock.lock();
         try {
             PetDTO petDTO = repository.findById(id)
@@ -110,7 +110,7 @@ public class ThreadSafePetsService implements PetsService {
 
     @Override
     public PetDTO deletePet(Long id) {
-        ReentrantLock lock = locks.computeIfAbsent(id, k -> new ReentrantLock());
+        ReentrantLock lock = getLock(id);
         lock.lock();
         try {
             PetDTO petDTO = repository.findById(id)
@@ -123,4 +123,13 @@ public class ThreadSafePetsService implements PetsService {
             lock.unlock();
         }
     }
+
+    private ReentrantLock getLock(Long id) {
+        ReentrantLock lock = locks.computeIfAbsent(id, k -> new ReentrantLock());
+        if (locks.size() > 1000) {
+            locks.entrySet().removeIf(e -> !e.getValue().isLocked() && !e.getValue().hasQueuedThreads());
+        }
+        return lock;
+    }
+
 }

@@ -10,5 +10,4 @@ public interface PetsRepository {
     List<PetDTO> findAll();
     Optional<PetDTO> findById(Long id);
     void deleteById(Long id);
-    Long generateId();
 }

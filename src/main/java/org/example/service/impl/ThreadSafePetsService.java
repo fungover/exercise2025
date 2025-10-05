@@ -12,6 +12,7 @@ import org.example.service.api.PetsService;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Stream;
 
@@ -115,9 +116,7 @@ public class ThreadSafePetsService implements PetsService {
         try {
             PetDTO petDTO = repository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Pet with id " + id + " not found"));
-
             repository.deleteById(id);
-            locks.remove(id);
             return petDTO;
         } finally {
             lock.unlock();
@@ -126,9 +125,6 @@ public class ThreadSafePetsService implements PetsService {
 
     private ReentrantLock getLock(Long id) {
         ReentrantLock lock = locks.computeIfAbsent(id, k -> new ReentrantLock());
-        if (locks.size() > 1000) {
-            locks.entrySet().removeIf(e -> !e.getValue().isLocked() && !e.getValue().hasQueuedThreads());
-        }
         return lock;
     }
 

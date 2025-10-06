@@ -1,5 +1,5 @@
 package org.example;
 
 public interface GreetingService {
-    String  greet(String name);
+    String greet(String name);
 }

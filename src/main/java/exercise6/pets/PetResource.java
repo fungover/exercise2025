@@ -4,6 +4,7 @@ import exercise6.annotations.Feed;
 import exercise6.annotations.Play;
 import exercise6.repository.PetRepository;
 import exercise6.service.HandlePetValue;
+import exercise6.service.PetService;
 import exercise6.validation.ValueValidate;
 import exercise6.validation.PetValidate;
 import jakarta.inject.Inject;
@@ -17,6 +18,8 @@ public class PetResource {
 
     @Inject
     PetRepository petRepository;
+    @Inject
+    PetService petService;
     @Inject @Feed
     HandlePetValue handlePetFeed;
     @Inject @Play
@@ -31,11 +34,25 @@ public class PetResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Pet> getPets(@QueryParam("species") String animalType) {
+    public List<Pet> getPets(@QueryParam("species") String animalType,
+                             @QueryParam("sortBy") String happy,
+                             @QueryParam("order") String value
+                             ){
         if(animalType != null) {
             AnimalType petSpecies = AnimalType.valueOf(animalType.toUpperCase());
-            return petRepository.sortPetByType(petSpecies);
+            return petService.sortPetByType(petSpecies);
         }
+
+        if("happiness".equals(happy) ) {
+            if("desc".equals(value)) {
+                return petService.sortPetByHappinessDesc();
+            }
+            if("asc".equals(value)) {
+                return petService.sortPetByHappinessAsc();
+            }
+
+        }
+
         return  petRepository.getPets();
     }
 

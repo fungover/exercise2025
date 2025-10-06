@@ -10,6 +10,5 @@ public interface PetRepository {
     String addPet(String name, AnimalType animalType);
     List<Pet> getPets();
     Pet getUniqPet(int id);
-    List<Pet> sortPetByType(AnimalType animalType);
     List<Pet> removePet(int id);
 }

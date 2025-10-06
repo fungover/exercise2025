@@ -48,12 +48,6 @@ public class InMemoryPetRepository implements PetRepository {
     }
 
     @Override
-    public List<Pet> sortPetByType(AnimalType animalType) {
-       return petList.stream()
-                .filter(item -> item.getAnimalType() == animalType).toList();
-    }
-
-    @Override
     public List<Pet> removePet(int id) {
      petList.removeIf(item -> item.getId() == id);
         return petList;

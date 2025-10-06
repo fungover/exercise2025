@@ -4,8 +4,9 @@ import exercise6.repository.PetRepository;
 import exercise6.service.Feed;
 import exercise6.service.PetRequest;
 import exercise6.service.Play;
-import exercise6.validation.ValidName;
+import exercise6.validation.PetDTO;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
@@ -24,8 +25,8 @@ public class PetResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String addPet(@ValidName String name, AnimalType animalType) {
-        return petRepository.addPet(name, animalType);
+    public String addPet(@Valid PetDTO petDTO) {
+        return  petRepository.addPet(petDTO.getName(), petDTO.getAnimalType());
     }
 
     @GET

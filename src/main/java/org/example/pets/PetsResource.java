@@ -39,14 +39,9 @@ public class PetsResource {
         logger.info("Listing pets");
         List<PetDTO> pets = petService.list(offset, limit, species, sortBy, order);
         if (pets.isEmpty()) {
-            return Response.status(Response.Status.OK).entity(List.of("List is empty")).build();
-        } else {
-            // Validate sortBy and order parameter
-            return Response
-                    .status(Response.Status.OK)
-                    .entity(petService.list(offset, limit, species, sortBy, order))
-                    .build();
+            return Response.ok(List.of()).build();
         }
+        return Response.ok(pets).build();
 
     }
 

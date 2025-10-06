@@ -32,4 +32,4 @@ You can then run the Docker image by executing:
 docker run -it --rm -p 8080:8080 jakartaee-hello-world:v1
 ```
 
-Once the runtime starts, you can access the REST end-point at [http://localhost:8080/jakartaee-hello-world/rest/hello](http://localhost:8080/jakartaee-hello-world/rest/hello).
+Once the runtime starts, you can access the REST end-point at [http://localhost:8080/jakartaee-hello-world/api/pets](http://localhost:8080/jakartaee-hello-world/rest/hello).

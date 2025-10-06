@@ -77,14 +77,13 @@ public class PetService {
     }
 
     public PetDTO feedPet(Long id) {
-        PetDTO pet = pets.get(id);
-        if (pet == null) throw new NotFoundException("Pet not found: " + id);
-        if (pet.getHungerLevel() <= 0) {
-            throw new ValidationException("Pet is not hungry!");
-        }
-
         lock.lock();
         try {
+            PetDTO pet = pets.get(id);
+            if (pet == null) throw new NotFoundException("Pet not found: " + id);
+            if (pet.getHungerLevel() <= 0) {
+                throw new ValidationException("Pet is not hungry!");
+            }
             int newHunger = Math.max(0, pet.getHungerLevel() - 10);
             pet.setHungerLevel(newHunger);
             return pet;
@@ -94,14 +93,13 @@ public class PetService {
     }
 
     public PetDTO playWithPet(Long id) {
-        PetDTO pet = pets.get(id);
-        if (pet == null) throw new NotFoundException("Pet not found: " + id);
-        if (pet.getHappiness() >= 100) {
-            throw new ValidationException("Pet is too exhausted to play!");
-        }
-
         lock.lock();
         try {
+            PetDTO pet = pets.get(id);
+            if (pet == null) throw new NotFoundException("Pet not found: " + id);
+            if (pet.getHappiness() >= 100) {
+                throw new ValidationException("Pet is too exhausted to play!");
+            }
             int newHappiness = Math.max(0, Math.min(100, pet.getHappiness() + 10));
             pet.setHappiness(newHappiness);
             return pet;

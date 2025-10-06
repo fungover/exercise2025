@@ -37,7 +37,6 @@
         </dependency>
     </dependencies>
 
-
     <build>
         <finalName>jakartaee-hello-world</finalName>
         <plugins>

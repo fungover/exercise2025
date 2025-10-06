@@ -22,25 +22,25 @@ public class Pet {
         this.happiness = 0;
     }
 
-    public String setHunger(int hunger) {
+    public void setHunger(int hunger) {
 
         int checkHunger = this.hunger + hunger;
 
-        if(checkHunger < 0){
-            this.hunger = 0;
-            return " is starving";
-
-        }else if(checkHunger == 100 || checkHunger > 100){
+        if(checkHunger == 100 || checkHunger > 100){
             this.hunger = 100;
-            return " is fully fed";
         }else{
             this.hunger = checkHunger;
-            return " is partly fed";
         }
     }
 
     public void setHappiness(int happiness) {
-        this.happiness = happiness;
+        int checkHappiness = this.happiness + happiness;
+
+        if(checkHappiness == 100 || checkHappiness > 100){
+            this.happiness = 100;
+        }else{
+            this.happiness = checkHappiness;
+        }
     }
 
     public int getId() {

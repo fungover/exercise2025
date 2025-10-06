@@ -1,20 +1,29 @@
 package exercise6.pets;
 
+import exercise6.annotations.Feed;
 import exercise6.repository.PetRepository;
-import exercise6.service.Feed;
-import jakarta.enterprise.context.ApplicationScoped;
+import exercise6.service.HandlePetValue;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
-@ApplicationScoped
-public class FeedPet implements Feed {
+@RequestScoped
+@Feed
+public class FeedPet implements HandlePetValue {
 
     @Inject
     private PetRepository petRepository;
 
-    @Override
-    public String feedPet(String id, int feedPet) {
-        String name = petRepository.getUniqPet(id).getName();
 
-        return name + petRepository.getUniqPet(id).setHunger(feedPet);
+    @Override
+    public String increaseValue(String id, int value) {
+        Pet petToHandle = petRepository.getUniqPet(id);
+        petToHandle.setHunger(value);
+        String petName = petToHandle.getName();
+
+        if (petToHandle.getHunger() == 100) {
+            return petName +" is fully fed, find a friend to feed";
+        }else{
+            return petName +" is partly fed and is eger for more food";
+        }
     }
 }

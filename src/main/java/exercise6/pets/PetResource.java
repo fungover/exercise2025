@@ -1,9 +1,10 @@
 package exercise6.pets;
 
+import exercise6.annotations.Feed;
+import exercise6.annotations.Play;
 import exercise6.repository.PetRepository;
-import exercise6.service.Feed;
+import exercise6.service.HandlePetValue;
 import exercise6.validation.SetValueDTO;
-import exercise6.service.Play;
 import exercise6.validation.PetDTO;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -17,10 +18,11 @@ public class PetResource {
 
     @Inject
     PetRepository petRepository;
-    @Inject
-    Feed feed;
-    @Inject
-    Play play;
+    @Inject @Feed
+    HandlePetValue handlePetFeed;
+    @Inject @Play
+    HandlePetValue handlePetPlay;
+
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -46,20 +48,20 @@ public class PetResource {
         return petRepository.getUniqPet(id);
     }
 
-    @PUT()
     @Path("/{id}/feed")
+    @PUT()
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String feedPet(@PathParam("id") String id, @Valid SetValueDTO request) {
-        return feed.feedPet(id, request.getRequestValue());
-    }
+            return handlePetFeed.increaseValue(id, request.getRequestValue());
+        }
 
     @PUT
     @Path("/{id}/play")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String playPet(@PathParam("id") String id, @Valid SetValueDTO request) {
-        return play.playWithPet(id, request.getRequestValue());
+        return handlePetPlay.increaseValue(id, request.getRequestValue());
     }
 
     @DELETE

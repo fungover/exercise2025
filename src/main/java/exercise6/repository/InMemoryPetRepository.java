@@ -3,6 +3,7 @@ package exercise6.repository;
 import exercise6.pets.AnimalType;
 import exercise6.pets.Pet;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -32,22 +33,29 @@ public class InMemoryPetRepository implements PetRepository {
     }
 
     @Override
-    public Pet getUniqPet(String id) {
-       return petList.stream()
-               .filter(item -> item.getId() == Integer.parseInt(id))
-               .findFirst()
-               .orElse(null);
+    public Pet getUniqPet(int id) {
+
+        Pet uniqPet = petList.stream()
+                .filter(item -> item.getId() == id)
+                .findFirst()
+                .orElse(null);
+
+        if(uniqPet == null) {
+            throw new NotFoundException("Pet with id " + id + " not found");
+        }
+
+       return uniqPet;
     }
 
     @Override
-    public List<Pet> sortPetByType(AnimalType animalType) {;
+    public List<Pet> sortPetByType(AnimalType animalType) {
        return petList.stream()
                 .filter(item -> item.getAnimalType() == animalType).toList();
     }
 
     @Override
-    public List<Pet> removePet(String id) {
-     petList.removeIf(item -> item.getId() == Integer.parseInt(id));
+    public List<Pet> removePet(int id) {
+     petList.removeIf(item -> item.getId() == id);
         return petList;
     }
 

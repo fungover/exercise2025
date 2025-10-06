@@ -14,7 +14,7 @@ public class PlayWithPet implements HandlePetValue {
     PetRepository petRepository;
 
     @Override
-    public String increaseValue(String id, int value) {
+    public String increaseValue(int id, int value) {
         Pet petToHandle = petRepository.getUniqPet(id);
         petToHandle.setHappiness(value);
         String petName = petToHandle.getName();

@@ -15,7 +15,7 @@ public class FeedPet implements HandlePetValue {
 
 
     @Override
-    public String increaseValue(String id, int value) {
+    public String increaseValue(int id, int value) {
         Pet petToHandle = petRepository.getUniqPet(id);
         petToHandle.setHunger(value);
         String petName = petToHandle.getName();

@@ -4,7 +4,7 @@ import exercise6.pets.AnimalType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class PetDTO {
+public class PetValidate {
     @NotBlank(message = "Name is mandatory")
     @NotNull(message = "Name is mandatory")
     private String name;

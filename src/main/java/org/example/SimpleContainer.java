@@ -19,6 +19,12 @@ public class SimpleContainer {
         Class<?> type = bindings.getOrDefault(requested, requested);
         try {
             Constructor<?> ctor = type.getDeclaredConstructors()[0];
+            Constructor<?>[] ctors = type.getDeclaredConstructors();
+            if (ctors.length == 0) {
+            throw new IllegalArgumentException("No constructors available for: " + type.getName());
+            }
+            Constructor<?> ctor = ctors[0];
+            ctor.setAccessible(true);
             Class<?>[] paramTypes = ctor.getParameterTypes();
             Object[] deps = new Object[paramTypes.length];
             for (int i = 0; i < paramTypes.length; i++) {

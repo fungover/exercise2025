@@ -2,6 +2,10 @@ package org.example;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello There!");
+        // Manuell "wiring" via konstruktorer
+        MessageRepository repo = new InMemoryMessageRepository();
+        GreetingService service = new SimpleGreetingService(repo);
+
+        System.out.println(service.greet("World"));
     }
 }

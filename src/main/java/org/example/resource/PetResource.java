@@ -5,12 +5,14 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.json.Json;
+
 import org.example.dto.PetDTO;
 import org.example.service.PetService;
 
 /**
  * PetResource is the REST API layer for pets.
- * IT exposes PetService functioanlity through HTTP
+ * It exposes PetService functionality through HTTP
  *
  * Base path: /api/pets
  */
@@ -22,16 +24,21 @@ public class PetResource {
     private PetService petService;
 
     // POST /pets. Adopt a new pet.
-    // Input: PetDTO (validtated with @Valid)
+    // Input: PetDTO (validated with @Valid)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response adoptPet(@Valid PetDTO pet) {
         Long id = petService.addPet(pet);
 
         // return 201 Created with the new ID in the response body
-        return Response.status(Response.Status.CREATED)
-                .entity("{\"id\": " + id + "}")
-                .build();
+        String json = Json.createObjectBuilder()
+                .add("id", id)
+                .build()
+                .toString();
+
+                return Response.status(Response.Status.CREATED)
+                        .entity(json)
+                        .build();
     }
 
     // GET /pets. List all pets with optional pagination (offset and limit) and filtering by species.

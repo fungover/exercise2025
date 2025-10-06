@@ -2,7 +2,7 @@ package exercise6.pets;
 
 import exercise6.repository.PetRepository;
 import exercise6.service.Feed;
-import exercise6.service.PetRequest;
+import exercise6.validation.SetValueDTO;
 import exercise6.service.Play;
 import exercise6.validation.PetDTO;
 import jakarta.inject.Inject;
@@ -50,18 +50,16 @@ public class PetResource {
     @Path("/{id}/feed")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String feedPet(@PathParam("id") String id, PetRequest request) {
-        int feedThePet = request.feedPet;
-        return feed.feedPet(id, feedThePet);
+    public String feedPet(@PathParam("id") String id, @Valid SetValueDTO request) {
+        return feed.feedPet(id, request.getRequestValue());
     }
 
     @PUT
     @Path("/{id}/play")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String playPet(@PathParam("id") String id, PetRequest request) {
-        int playWithPet = request.playPet;
-        return play.playWithPet(id, playWithPet);
+    public String playPet(@PathParam("id") String id, @Valid SetValueDTO request) {
+        return play.playWithPet(id, request.getRequestValue());
     }
 
     @DELETE

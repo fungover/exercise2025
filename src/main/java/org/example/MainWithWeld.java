@@ -6,16 +6,13 @@ import jakarta.enterprise.inject.se.SeContainerInitializer;
 import jakarta.inject.Inject;
 
 import org.example.service.ChatService;
-import org.example.service.LoggingChatServiceQualifier;
 import org.example.service.MainChatServiceQualifier;
 
 @ApplicationScoped
 public class MainWithWeld {
 
-    //Choose what dependency you want by either commenting out MainChatServiceQualifier or LoggingChatServiceQualifier
     @Inject
     @MainChatServiceQualifier
-    //@LoggingChatServiceQualifier
 
     private ChatService chatService;
 

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.pets;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

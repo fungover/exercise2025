@@ -1,4 +1,4 @@
-package org.example;
+package org.example.pets;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 @Consumes(MediaType.APPLICATION_JSON)
 public class PetsResource {
 
-    Service service;
+    PetService petService;
     Logger logger = Logger.getLogger(PetsResource.class.getName());
 
     public PetsResource() {
@@ -22,9 +22,9 @@ public class PetsResource {
     }
 
     @Inject
-    public PetsResource(Service service) {
+    public PetsResource(PetService petService) {
         logger.info("Creating PetsResource");
-        this.service = service;
+        this.petService = petService;
     }
 
     //GET /api/pets → List all pets
@@ -37,14 +37,14 @@ public class PetsResource {
             @QueryParam("order") String order) {
 
         logger.info("Listing pets");
-        List<PetDTO> pets = service.list(offset, limit, species, sortBy, order);
+        List<PetDTO> pets = petService.list(offset, limit, species, sortBy, order);
         if (pets.isEmpty()) {
             return Response.status(Response.Status.OK).entity(List.of("List is empty")).build();
         } else {
             // Validate sortBy and order parameter
             return Response
                     .status(Response.Status.OK)
-                    .entity(service.list(offset, limit, species, sortBy, order))
+                    .entity(petService.list(offset, limit, species, sortBy, order))
                     .build();
         }
 
@@ -54,7 +54,7 @@ public class PetsResource {
     @POST
     public Response adopt(@Valid PetDTO dto) {
         logger.info("Adopting pet: " + dto.getName());
-        PetDTO saved = service.adopt(dto);
+        PetDTO saved = petService.adopt(dto);
         return Response.status(Response.Status.CREATED).entity(saved).build();
     }
 
@@ -62,7 +62,7 @@ public class PetsResource {
     @Path("/{id}")
     public Response getPet(@PathParam("id") Long id) {
         logger.info("Getting pet: " + id);
-        PetDTO pet = service.getPet(id);
+        PetDTO pet = petService.getPet(id);
         return Response.ok(pet).build();
     }
 
@@ -70,7 +70,7 @@ public class PetsResource {
     @Path("/{id}/feed")
     public Response feedPet(@PathParam("id") Long id) {
         logger.info("Feeding pet: " + id);
-        PetDTO pet = service.feedPet(id);
+        PetDTO pet = petService.feedPet(id);
         return Response.ok(pet).build();
     }
 
@@ -78,7 +78,7 @@ public class PetsResource {
     @Path("/{id}/play")
     public Response playPet(@PathParam("id") Long id) {
         logger.info("Playing with pet: " + id);
-        PetDTO pet = service.playWithPet(id);
+        PetDTO pet = petService.playWithPet(id);
         return Response.ok(pet).build();
     }
 
@@ -86,7 +86,7 @@ public class PetsResource {
     @Path("/{id}")
     public Response deletePet(@PathParam("id") Long id) {
         logger.info("Deleting pet: " + id);
-        PetDTO removed = service.deletePet(id);
+        PetDTO removed = petService.deletePet(id);
         return Response.ok(removed).build();
     }
 }

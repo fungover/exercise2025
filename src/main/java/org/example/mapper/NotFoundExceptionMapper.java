@@ -1,4 +1,4 @@
-package org.example;
+package org.example.mapper;
 
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;

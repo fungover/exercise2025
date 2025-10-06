@@ -1,4 +1,4 @@
-package org.example;
+package org.example.pets;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.ValidationException;
@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 @ApplicationScoped
-public class Service {
+public class PetService {
     private final ConcurrentHashMap<Long, PetDTO> pets = new ConcurrentHashMap<>();
     private final AtomicLong idGen = new AtomicLong(1);
     private final ReentrantLock lock = new ReentrantLock();
@@ -47,7 +47,6 @@ public class Service {
                 Comparator<PetDTO> comparator = switch (sortBy.toLowerCase()) {
                     case "hunger" -> Comparator.comparing(PetDTO::getHungerLevel);
                     case "happiness" -> Comparator.comparing(PetDTO::getHappiness);
-                    case "id" -> Comparator.comparing(PetDTO::getId);
                     default -> Comparator.comparing(PetDTO::getId);
                 };
 

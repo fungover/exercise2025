@@ -27,22 +27,23 @@ public class ProductService {
         Objects.requireNonNull(name, "Name can't be null");
         Objects.requireNonNull(category, "Category can't be null");
 
-        for (int i = 0; i < warehouseProducts.size(); i++) {
-            Product product = warehouseProducts.get(i);
-            if (Objects.equals(product.id().toString(), id)) {
-                Product updated = new Product.Builder()
-                        .id(product.id())
-                        .name(name)
-                        .category(category)
-                        .rating(rating)
-                        .createdDate(product.createdDate())
-                        .modifiedDate(LocalDate.now())
-                        .build();
+        Optional<Product> searchingProduct = productRepository.getProduct(id);
 
-                warehouseProducts.set(i, updated);
-                return true;
-            }
+        if (searchingProduct.isPresent()) {
+            Product old = searchingProduct.get();
+            Product updated = new Product.Builder()
+                .id(old.id())
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .createdDate(old.createdDate())
+                .modifiedDate(LocalDate.now())
+                .build();
+
+            productRepository.updateProduct(updated);
+            return true;
         }
+
         return false;
     }
 

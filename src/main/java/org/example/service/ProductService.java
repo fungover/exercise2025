@@ -2,13 +2,18 @@ package org.example.service;
 
 import org.example.entities.CategoryEnum;
 import org.example.entities.Product;
+import org.example.repository.ProductRepository;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProductService {
-    private final List<Product> warehouseProducts = new ArrayList<>();
+    private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     public Boolean addProduct(Product product) {
         return warehouseProducts.add(product);

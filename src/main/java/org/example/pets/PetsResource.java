@@ -2,10 +2,7 @@ package org.example.pets;
 
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
 import java.util.List;
@@ -28,6 +25,13 @@ public class PetsResource {
     @Produces({MediaType.APPLICATION_JSON})
     public List<PetDTO> getAllPets() {
         return petService.getAllPets();
+    }
+
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public PetDTO addPet(PetDTO petDTO) {
+        return petService.addPet(petDTO);
     }
 
 }

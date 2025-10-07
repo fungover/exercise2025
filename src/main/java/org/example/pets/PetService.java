@@ -27,7 +27,11 @@ public class PetService {
     }
 
     public PetDTO getPetById(Long id) {
-        return pets.get(id);
+        PetDTO pet = pets.get(id);
+        if (pet == null) {
+            throw new IllegalArgumentException("Pet with id " + id + " does not exist");
+        }
+        return pet;
     }
 
     public PetDTO addPet(PetDTO petDTO) {

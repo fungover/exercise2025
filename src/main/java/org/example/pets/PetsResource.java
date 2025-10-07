@@ -27,6 +27,13 @@ public class PetsResource {
         return petService.getAllPets();
     }
 
+    @GET
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public PetDTO getPetById(@PathParam("id") Long id) {
+        return petService.getPetById(id);
+    }
+
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})

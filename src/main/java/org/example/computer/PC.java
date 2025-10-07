@@ -1,44 +1,44 @@
 package org.example.computer;
 
 public class PC {
-	private final PCType TYPE;
-	private final String CPU;
-	private final String GPU;
-	private final String RAM;
-	private final String DISK;
+	private final PCType type;
+	private final String cpu;
+	private final String gpu;
+	private final String ram;
+	private final String disk;
 
 
-	public PC(PCType TYPE, String CPU, String GPU, String RAM, String DISK) {
-		this.TYPE = TYPE;
-		this.CPU = CPU;
-		this.GPU = GPU;
-		this.RAM = RAM;
-		this.DISK = DISK;
+	public PC(PCType type, String cpu, String gpu, String ram, String disk) {
+		this.type = type;
+		this.cpu = cpu;
+		this.gpu = gpu;
+		this.ram = ram;
+		this.disk = disk;
 	}
 
 	public PCType TYPE() {
-		return TYPE;
+		return type;
 	}
 
 	public String CPU() {
-		return CPU;
+		return cpu;
 	}
 
 	public String GPU() {
-		return GPU;
+		return gpu;
 	}
 
 	public String RAM() {
-		return RAM;
+		return ram;
 	}
 
 	public String DISK() {
-		return DISK;
+		return disk;
 	}
 
 	@Override
 	public String toString() {
-		return "Computer [TYPE=" + TYPE + ", CPU=" + CPU + ", GPU=" + GPU + ", RAM=" + RAM + ", DISK=" + DISK + "]";
+		return "Computer [TYPE=" + type + ", CPU=" + cpu + ", GPU=" + gpu + ", RAM=" + ram + ", DISK=" + disk + "]";
 	}
 
 }

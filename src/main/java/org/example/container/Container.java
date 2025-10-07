@@ -1,7 +1,6 @@
 package org.example.container;
 
 import jakarta.inject.Inject;
-import org.example.InjectionPoint;
 import org.example.computer.CreateGamingSetup;
 import org.example.computer.GamingSetup;
 import org.example.computer.builders.BuildGamingPC;
@@ -30,7 +29,7 @@ public final class Container {
 		}
 
 		if (clazz.isInterface()) {
-			Class<?> impl = interfaceMap.get(clazz);
+			Class<? extends T> impl = (Class<? extends T>) interfaceMap.get(clazz);
 			if (impl == null) {
 				throw new IllegalArgumentException("No implementation for " + clazz);
 			}

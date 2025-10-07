@@ -10,6 +10,8 @@ import org.example.container.Container;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 
+import java.util.Objects;
+
 public class App {
 	public static void main(String[] args) {
 		System.out.println("Part 1: ");
@@ -27,21 +29,20 @@ public class App {
 
 
 	private static void manualDependency() {
-		Builder PCBuilder = new PCBuilder();
-		BuildComputer gamingPCBuilder = new BuildGamingPC(PCBuilder);
+		Builder pcBuilder = new PCBuilder();
+		BuildComputer gamingPCBuilder = new BuildGamingPC(pcBuilder);
 		GamingSetup gamingSetup = new CreateGamingSetup(gamingPCBuilder);
 
 		gamingSetup.buildAndStorePC();
 	}
 
 	private static void containerDI() {
-		GamingSetup gamingSetup = Container.resolve(GamingSetup.class);
+		GamingSetup gamingSetup = Objects.requireNonNull(Container.resolve(GamingSetup.class), "DI resolution failed");
 		gamingSetup.buildAndStorePC();
 	}
 
 	private static void weldDI() {
-		Weld weld = new Weld();
-		try (WeldContainer container = weld.initialize()) {
+		try (WeldContainer container = new Weld().initialize()) {
 			GamingSetup gamingSetup = container.select(GamingSetup.class).get();
 			gamingSetup.buildAndStorePC();
 		}

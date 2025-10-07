@@ -15,7 +15,9 @@ public class ConvertParam implements ParamConverterProvider {
     public <T> ParamConverter<T> getConverter(Class<T> aClass, Type type, Annotation[] annotations) {
         for (Annotation annotation : annotations) {
             if (annotation.annotationType().equals(IdCheck.class)) {
-                return (ParamConverter<T>) new IdValidate();
+                @SuppressWarnings("unchecked")
+                ParamConverter<T> converter = (ParamConverter<T>) new IdValidate();
+                return converter;
             }
         }
 

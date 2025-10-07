@@ -12,7 +12,7 @@ public record Product(
         LocalDate createdDate,
         LocalDate modifiedDate
 ) {
-    public Product {
+    private Product {
         Objects.requireNonNull(name, "Name can't be null");
     }
 
@@ -52,6 +52,14 @@ public record Product(
         public Builder modifiedDate(LocalDate modifiedDate) {
             this.modifiedDate = modifiedDate;
             return this;
+        }
+
+        public Product build() {
+            Objects.requireNonNull(name, "Name can't be null");
+            createdDate = LocalDate.now();
+            modifiedDate = LocalDate.now();
+
+            return new Product(id, name, category, rating, createdDate, modifiedDate);
         }
     }
 }

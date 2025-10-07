@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository {
-    void addProduct(Product product);
+    boolean addProduct(Product product);
 
     Optional<Product> getProduct(String id);
 

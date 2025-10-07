@@ -16,7 +16,7 @@ public class ProductService {
     }
 
     public Boolean addProduct(Product product) {
-        return warehouseProducts.add(product);
+        return productRepository.addProduct(product);
     }
 
     public List<Product> getProducts() {

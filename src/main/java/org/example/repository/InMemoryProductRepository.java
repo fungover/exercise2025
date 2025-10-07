@@ -10,8 +10,8 @@ public class InMemoryProductRepository implements ProductRepository {
     private final List<Product> warehouseProducts = new ArrayList<>();
 
     @Override
-    public void addProduct(Product product) {
-        warehouseProducts.add(product);
+    public boolean addProduct(Product product) {
+        return warehouseProducts.add(product);
     }
 
     @Override

@@ -30,6 +30,8 @@ public class Warehouse {
                         .name(name)
                         .category(category)
                         .rating(rating)
+                        .createdDate(product.createdDate())
+                        .modifiedDate(LocalDate.now())
                         .build();
 
                 warehouseProducts.set(i, updated);

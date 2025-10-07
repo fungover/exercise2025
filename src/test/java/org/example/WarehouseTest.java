@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.entities.CategoryEnum;
 import org.example.entities.Product;
+import org.example.repository.InMemoryProductRepository;
 import org.example.service.ProductService;
 import org.junit.jupiter.api.*;
 import java.time.LocalDate;
@@ -13,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
     public ProductService setupWarehouse() {
-        ProductService productService = new ProductService();
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(productRepository);
 
         Product hammer = new Product.Builder()
             .id(UUID.randomUUID())
@@ -50,7 +52,8 @@ public class WarehouseTest {
     @Test
     @DisplayName("addProduct with valid product returns true")
     public void testAddProductTrue() {
-        ProductService productService = new ProductService();
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(productRepository);
         Product tv = new Product.Builder()
             .id(UUID.randomUUID())
             .name("Television")
@@ -65,7 +68,8 @@ public class WarehouseTest {
     @Test
     @DisplayName("constructing Product with null name throws NullPointerException")
     public void testAddProductFalse() {
-        ProductService productService = new ProductService();
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(productRepository);
 
         assertThrows(NullPointerException.class, () -> {
             Product tv = new Product.Builder()
@@ -94,7 +98,8 @@ public class WarehouseTest {
     @Test
     @DisplayName("updateProduct with existing id updates product and returns true")
     public void updateProductTrueTest() {
-        ProductService productService = new ProductService();
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(productRepository);
 
         Product hammer = new Product.Builder()
             .id(UUID.randomUUID())
@@ -112,7 +117,8 @@ public class WarehouseTest {
     @Test
     @DisplayName("updateProduct with invalid id returns false")
     public void updateProductFalseTest() {
-        ProductService productService = new ProductService();
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(productRepository);
 
         Product hammer = new Product.Builder()
             .id(UUID.randomUUID())
@@ -131,7 +137,8 @@ public class WarehouseTest {
     @Test
     @DisplayName("getProductById with existing id returns product")
     public void getProductByIdTrueTest() {
-        ProductService productService = new ProductService();
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(productRepository);
 
         Product hammer = new Product.Builder()
             .id(UUID.randomUUID())
@@ -149,7 +156,8 @@ public class WarehouseTest {
     @Test
     @DisplayName("getProductById with non-existing id returns empty")
     public void getProductByIdFalseTest() {
-        ProductService productService = new ProductService();
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(productRepository);
 
         Product hammer = new Product.Builder()
             .id(UUID.randomUUID())
@@ -180,7 +188,8 @@ public class WarehouseTest {
     @Test
     @DisplayName("getProductsCreatedAfter returns all products created after that date")
     public void getProductsCreatedAfterTrueTest() {
-        ProductService productService = new ProductService();
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(productRepository);
 
         LocalDate nowDate = LocalDate.now();
         LocalDate tomorrowDate = nowDate.plusDays(1);
@@ -224,7 +233,8 @@ public class WarehouseTest {
     @Test
     @DisplayName("getProductsCreatedAfter returns no products because all products are created before date ")
     public void getProductsCreatedAfterFalseTest() {
-        ProductService productService = new ProductService();
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(productRepository);
 
         LocalDate nowDate = LocalDate.now();
         LocalDate tomorrowDate = nowDate.plusDays(1);
@@ -264,7 +274,8 @@ public class WarehouseTest {
     @Test
     @DisplayName("getModifiedProducts returns products where modifiedDate is not createdDate")
     public void getModifiedProductsTrueTest() {
-        ProductService productService = new ProductService();
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(productRepository);
 
         LocalDate nowDate = LocalDate.now();
         LocalDate tomorrowDate = nowDate.plusDays(1);
@@ -306,7 +317,8 @@ public class WarehouseTest {
     @Test
     @DisplayName("getModifiedProducts returns empty list when none is modified")
     public void getModifiedProductsFalseTest() {
-        ProductService productService = new ProductService();
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductService productService = new ProductService(productRepository);
 
         LocalDate nowDate = LocalDate.now();
 

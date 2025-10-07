@@ -20,7 +20,7 @@ public class ProductService {
     }
 
     public List<Product> getProducts() {
-        return new ArrayList<>(warehouseProducts);
+        return productRepository.getAllProducts();
     }
 
     public boolean updateProduct(String id, String name, CategoryEnum category, int rating) {

@@ -48,9 +48,7 @@ public class ProductService {
     }
 
     public Optional<Product> getProductById(String id) {
-        return warehouseProducts.stream()
-                .filter(product -> Objects.equals(product.id().toString(), id))
-                .findFirst();
+        return productRepository.getProduct(id);
     }
 
     public List<Product> getProductsByCategorySorted(CategoryEnum category) {

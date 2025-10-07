@@ -5,7 +5,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 @ApplicationScoped
@@ -30,4 +29,26 @@ public class PetService {
     public PetDTO getPetById(Long id) {
         return pets.get(id);
     }
+
+    public PetDTO addPet(PetDTO petDTO) {
+        Long newId = idGenerator.getAndIncrement();
+        petDTO.setId(newId);
+
+        if (petDTO.getName() == null || petDTO.getName().isEmpty()) {
+            throw new IllegalArgumentException("Pet name cannot be empty");
+        }
+        if (petDTO.getType() == null || petDTO.getType().isEmpty()) {
+            throw new IllegalArgumentException("Pet type cannot be empty");
+        }
+        if (petDTO.getHungerLevel() < 0 || petDTO.getHungerLevel() > 10) {
+            throw new IllegalArgumentException("Hunger level must be between 0 and 10");
+        }
+        if (petDTO.getHappinessLevel() < 0 || petDTO.getHappinessLevel() > 10) {
+            throw new IllegalArgumentException("Happiness level must be between 0 and 10");
+        }
+
+        pets.put(newId, petDTO);
+        return petDTO;
+    }
+
 }

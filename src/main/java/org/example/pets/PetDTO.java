@@ -7,6 +7,9 @@ public class PetDTO {
     private int hungerLevel;
     private int happinessLevel;
 
+    // Default constuctor
+    public PetDTO() {
+    }
 
     public PetDTO(Long id, String name, String type, int hungerLevel, int happinessLevel) {
         this.id = id;
@@ -16,7 +19,7 @@ public class PetDTO {
         this.happinessLevel = happinessLevel;
     }
 
-
+    // Getters
     public Long getId() {
         return id;
     }
@@ -32,4 +35,23 @@ public class PetDTO {
     public int getHappinessLevel() {
         return happinessLevel;
     }
+
+    // Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
+    public void setHungerLevel(int hungerLevel) {
+        this.hungerLevel = hungerLevel;
+    }
+    public void setHappinessLevel(int happinessLevel) {
+        this.happinessLevel = happinessLevel;
+    }
+
+
 }

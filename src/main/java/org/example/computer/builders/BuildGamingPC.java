@@ -1,12 +1,11 @@
 package org.example.computer.builders;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
-import org.example.InjectionPoint;
 import org.example.computer.PC;
 import org.example.computer.PCType;
 
-@ApplicationScoped
+@Dependent
 public class BuildGamingPC implements BuildComputer {
 	private final Builder builder;
 

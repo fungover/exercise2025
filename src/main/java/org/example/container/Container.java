@@ -1,5 +1,6 @@
 package org.example.container;
 
+import jakarta.inject.Inject;
 import org.example.InjectionPoint;
 import org.example.computer.CreateGamingSetup;
 import org.example.computer.GamingSetup;
@@ -45,10 +46,10 @@ public final class Container {
 							.toArray();
 
 			return clazz.cast(constructor.newInstance(params));
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch  (Exception e) {
+			throw new RuntimeException("Failed to resolve " + clazz, e);
 		}
-		return null;
+
 	}
 
 	private static Constructor<?> getConstructor(Class<?> clazz) {
@@ -57,15 +58,19 @@ public final class Container {
 		if (constructors.length == 0) {
 			throw new IllegalArgumentException("No constructor for " + clazz);
 		}
-		if (constructors.length > 1) {
-			for (Constructor<?> ctor : constructors) {
-				if (ctor.isAnnotationPresent(InjectionPoint.class)) {
-					constructor = ctor;
-				}
-			}
-		} else {
-			constructor = constructors[0];
+		if  (constructors.length == 1) {
+			return constructors[0];
 		}
-		return constructor;
+		for (Constructor<?> ctor : constructors) {
+			if (ctor.isAnnotationPresent(Inject.class)) {
+				return ctor;
+			}
+		}
+		for (Constructor<?> ctor : constructors) {
+			if (ctor.getParameterCount() == 0) {
+				return ctor;
+			}
+		}
+		return constructors[0];
 	}
 }

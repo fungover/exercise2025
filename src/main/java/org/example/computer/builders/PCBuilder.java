@@ -1,10 +1,10 @@
 package org.example.computer.builders;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import org.example.computer.PC;
 import org.example.computer.PCType;
 
-@ApplicationScoped
+ @Dependent
 public class PCBuilder implements Builder {
 	private PCType PCType;
 	private String cpu;

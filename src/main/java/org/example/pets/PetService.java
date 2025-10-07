@@ -8,19 +8,17 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @ApplicationScoped
 public class PetService {
 
-    List<String> petsList = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<PetDTO> petsList = new CopyOnWriteArrayList<>();
 
-    public Pets getPets(String pets) {
-        if ((pets == null) || pets.trim().isEmpty()) {
-            pets = "Generic pet";
-        }
-        else
-            petsList.add(pets);
-
-        return new Pets(pets);
+    public PetService() {
+        // Mocked data
+        petsList.add(new PetDTO(1L, "Rex", "Dog", 10, 10));
+        petsList.add(new PetDTO(2L, "Garfield", "Cat", 4, 1));
+        petsList.add(new PetDTO(3L, "Flax", "Bird", 1, 5));
     }
 
-    public List<String> petsList() {
-        return List.copyOf(petsList);
+
+    public List<PetDTO> getAllPets() {
+        return petsList;
     }
 }

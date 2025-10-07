@@ -8,10 +8,15 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
+import java.util.List;
+
 @Path("pets")
 public class PetsResource {
 
     PetService petService;
+
+    public PetsResource() {
+    }
 
     @Inject
     public PetsResource(PetService petService) {
@@ -22,6 +27,13 @@ public class PetsResource {
     @Produces({ MediaType.APPLICATION_JSON })
     public Pets pets(@QueryParam("pets") String pets) {
         return petService.getPets(pets);
+    }
+
+    @GET
+    @Path("all")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<String> getAllPets() {
+        return petService.petsList();
     }
 
 }

@@ -52,20 +52,20 @@ public class ProductService {
     }
 
     public List<Product> getProductsByCategorySorted(CategoryEnum category) {
-        return warehouseProducts.stream()
+        return productRepository.getAllProducts().stream()
                 .filter(product -> product.category() == category)
                 .sorted(Comparator.comparing(product -> product.name() == null ? "" : product.name().trim(), String.CASE_INSENSITIVE_ORDER))
                 .collect(Collectors.toList());
     }
 
     public List<Product> getProductsCreatedAfter(LocalDate date) {
-        return warehouseProducts.stream()
+        return productRepository.getAllProducts().stream()
                 .filter(product -> product.createdDate().isAfter(date))
                 .collect(Collectors.toList());
     }
 
     public List<Product> getModifiedProducts() {
-        return warehouseProducts.stream()
+        return productRepository.getAllProducts().stream()
                 .filter(product -> !Objects.equals(product.createdDate(), product.modifiedDate()))
                 .collect(Collectors.toList());
     }

@@ -14,9 +14,10 @@ public class PetDTO {
     @Min(value = 0, message = "Hunger level can't be lower than 0")
     int hungerLevel;
     @NotNull(message = "Happiness level is required.")
-    @Max(value = 100, message = "Happiness level can't be higher than 100")
-    @Min(value = 0, message = "Happiness level can't be lower than 0")
+    @Max(value = 100, message = "Happiness can't be higher than 100")
+    @Min(value = 0, message = "Happiness can't be lower than 0")
     int happiness;
+    long id;
 
 
     public PetDTO(String name, String species, int hungerLevel, int happiness) {
@@ -28,6 +29,13 @@ public class PetDTO {
     public PetDTO() {}
     public String getName() {
         return name;
+    }
+
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setName(String name) {

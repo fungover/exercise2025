@@ -1,7 +1,6 @@
 package org.example.pets;
 
 import jakarta.enterprise.context.ApplicationScoped;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,7 +14,9 @@ public class PetService {
     public PetService() {
     }
     public PetDTO adoptPet(PetDTO pet) {
-        pets.put(idGenerator.incrementAndGet(), pet);
+        long id = idGenerator.incrementAndGet();
+        pet.setId(id);
+        pets.put(id, pet);
         return pet;
     }
     public List<PetDTO> getAllPets(){
@@ -25,21 +26,17 @@ public class PetService {
     public PetDTO getPet(long id) {
         return pets.get(id);
     }
-    public PetDTO feedPet(long id){
+    public void feedPet(long id){
         PetDTO pet = pets.get(id);
-        int hunger = pet.getHungerLevel();
-        pet.setHungerLevel(hunger - 10);
-        return pet;
+        int hunger = pet.getHungerLevel()-10;
+        pet.setHungerLevel(hunger);
     }
-    public PetDTO playWithPet(long id){
+    public void playWithPet(long id){
         PetDTO pet = pets.get(id);
         int happiness = pet.getHappiness();
         pet.setHappiness(happiness + 10);
-        return pet;
     }
-    public PetDTO deletePet(long id){
-        PetDTO pet = pets.get(id);
+    public void deletePet(long id){
         pets.remove(id);
-        return pet;
     }
 }

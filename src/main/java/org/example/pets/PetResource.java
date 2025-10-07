@@ -5,12 +5,15 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.util.Collection;
+import java.util.List;
 
 
 @Path("/pets")
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 public class PetResource {
 
@@ -23,38 +26,67 @@ public class PetResource {
         this.petService = petService;
     }
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public PetDTO adoptPet(@Valid PetDTO pet) {
-        return petService.adoptPet(pet);
+    public Response adoptPet(@Valid PetDTO pet) {
+        System.out.println("Adopting pet: " + pet.getName());
+        PetDTO saved = petService.adoptPet(pet);
+        return Response.status(Response.Status.CREATED).entity(saved).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Collection<PetDTO> getPets(){
-        return petService.getAllPets();
+    public Response getAllPets(){
+        System.out.println("In get all pets");
+        List<PetDTO> pets = petService.getAllPets();
+        if(pets.isEmpty()){
+            throw new NotFoundException();
+        }
+        return Response.ok(pets).build();
     }
 
     @GET
-    @Path("{id}")
-    public PetDTO getPet(@PathParam("id") long id){
-        return petService.getPet(id);
+    @Path("/{id}")
+    public Response getPet(@PathParam("id") long id){
+        System.out.println("In getPet: "+id);
+        PetDTO pet = petService.getPet(id);
+        System.out.println(pet);
+        if(pet == null){
+            throw new NotFoundException();
+        }
+        return Response.ok(pet).build();
     }
 
     @PUT
-    @Path("{id}/feed")
-    public PetDTO feedPet(@PathParam("id") long id){
-        return petService.feedPet(id);
+    @Path("/{id}/feed")
+    public Response feedPet(@PathParam("id") long id){
+        System.out.println("In feed pet");
+        var pet = petService.getPet(id);
+        if(pet == null){
+            throw new NotFoundException();
+        }
+        petService.feedPet(id);
+        System.out.println("Feeding pet: " + pet.getName() + " " + pet.getHungerLevel());
+        return Response.ok(pet).build();
     }
     @PUT
     @Path("{id}/play")
-    public PetDTO playWithPet(@PathParam("id") long id){
-        return petService.playWithPet(id);
+    public Response playWithPet(@PathParam("id") long id){
+        var pet = petService.getPet(id);
+         if(pet == null){
+            throw new NotFoundException();
+        }
+        petService.playWithPet(id);
+        return Response.ok(pet).build();
     }
 
     @DELETE
     @Path("{id}")
-    public PetDTO deletePet(@PathParam("id") long id){
-        return petService.deletePet(id);
+    public Response deletePet(@PathParam("id") long id){
+        var pet = petService.getPet(id);
+        if(pet == null){
+            throw new NotFoundException();
+        }
+        petService.deletePet(id);
+        return Response.ok(pet).build();
     }
 
 }

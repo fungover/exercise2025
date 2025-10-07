@@ -2,6 +2,7 @@ package org.example.pets;
 
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
@@ -37,7 +38,7 @@ public class PetsResource {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public PetDTO addPet(PetDTO petDTO) {
+    public PetDTO addPet(@Valid PetDTO petDTO) {
         return petService.addPet(petDTO);
     }
 

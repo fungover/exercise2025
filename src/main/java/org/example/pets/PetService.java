@@ -38,19 +38,6 @@ public class PetService {
         Long newId = idGenerator.getAndIncrement();
         petDTO.setId(newId);
 
-        if (petDTO.getName() == null || petDTO.getName().isEmpty()) {
-            throw new IllegalArgumentException("Pet name cannot be empty");
-        }
-        if (petDTO.getType() == null || petDTO.getType().isEmpty()) {
-            throw new IllegalArgumentException("Pet type cannot be empty");
-        }
-        if (petDTO.getHungerLevel() < 0 || petDTO.getHungerLevel() > 10) {
-            throw new IllegalArgumentException("Hunger level must be between 0 and 10");
-        }
-        if (petDTO.getHappinessLevel() < 0 || petDTO.getHappinessLevel() > 10) {
-            throw new IllegalArgumentException("Happiness level must be between 0 and 10");
-        }
-
         pets.put(newId, petDTO);
         return petDTO;
     }

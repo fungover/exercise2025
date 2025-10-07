@@ -7,7 +7,7 @@ public class PetDTO {
     private int hungerLevel;
     private int happinessLevel;
 
-    // Default constuctor
+    // Default constructor
     public PetDTO() {
     }
 

@@ -64,14 +64,14 @@ public class Warehouse {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
-        Product updated = new Product(
-                existing.id(),
-                name,
-                category,
-                rating,
-                existing.createdDate(),
-                java.time.LocalDate.now()
-        );
+        Product updated = new Product.Builder()
+                .id(existing.id())
+                .name(name)
+                .category(category)
+                .rating(rating)
+                .createdDate(existing.createdDate())
+                .modifiedDate(LocalDate.now())
+                .build();
 
         products.remove(existing);
         products.add(updated);

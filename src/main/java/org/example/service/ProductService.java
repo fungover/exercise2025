@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Warehouse {
+public class ProductService {
     private final List<Product> warehouseProducts = new ArrayList<>();
 
     public Boolean addProduct(Product product) {

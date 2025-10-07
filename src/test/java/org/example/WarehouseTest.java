@@ -2,7 +2,7 @@ package org.example;
 
 import org.example.entities.CategoryEnum;
 import org.example.entities.Product;
-import org.example.service.Warehouse;
+import org.example.service.ProductService;
 import org.junit.jupiter.api.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -12,8 +12,8 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
-    public Warehouse setupWarehouse() {
-        Warehouse warehouse = new Warehouse();
+    public ProductService setupWarehouse() {
+        ProductService productService = new ProductService();
 
         Product hammer = new Product.Builder()
             .id(UUID.randomUUID())
@@ -21,43 +21,43 @@ public class WarehouseTest {
             .category(CategoryEnum.UTILITY)
             .rating(4)
             .build();
-        warehouse.addProduct(hammer);
+        productService.addProduct(hammer);
         Product screwdriver = new Product.Builder()
             .id(UUID.randomUUID())
             .name("Screwdriver")
             .category(CategoryEnum.UTILITY)
             .rating(2)
             .build();
-        warehouse.addProduct(screwdriver);
+        productService.addProduct(screwdriver);
         Product tv = new Product.Builder()
             .id(UUID.randomUUID())
             .name("Television")
             .category(CategoryEnum.ELECTRIC)
             .rating(3)
             .build();
-        warehouse.addProduct(tv);
+        productService.addProduct(tv);
         Product drill = new Product.Builder()
             .id(UUID.randomUUID())
             .name("Drill")
             .category(CategoryEnum.UTILITY)
             .rating(5)
             .build();
-        warehouse.addProduct(drill);
+        productService.addProduct(drill);
 
-        return warehouse;
+        return productService;
     }
 
     @Test
     @DisplayName("addProduct with valid product returns true")
     public void testAddProductTrue() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
         Product tv = new Product.Builder()
             .id(UUID.randomUUID())
             .name("Television")
             .category(CategoryEnum.ELECTRIC)
             .rating(3)
             .build();
-        boolean added = warehouse.addProduct(tv);
+        boolean added = productService.addProduct(tv);
 
         assertTrue(added);
     }
@@ -65,7 +65,7 @@ public class WarehouseTest {
     @Test
     @DisplayName("constructing Product with null name throws NullPointerException")
     public void testAddProductFalse() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         assertThrows(NullPointerException.class, () -> {
             Product tv = new Product.Builder()
@@ -80,9 +80,9 @@ public class WarehouseTest {
     @Test
     @DisplayName("getProducts returns all stored products and includes expected names")
     public void getProductsTest() {
-        Warehouse warehouse = setupWarehouse();
+        ProductService productService = setupWarehouse();
 
-        List<Product> products = warehouse.getProducts();
+        List<Product> products = productService.getProducts();
 
         assertEquals(4, products.size());
         assertTrue(products.stream().anyMatch(product -> product.name().equals("Hammer")));
@@ -94,7 +94,7 @@ public class WarehouseTest {
     @Test
     @DisplayName("updateProduct with existing id updates product and returns true")
     public void updateProductTrueTest() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         Product hammer = new Product.Builder()
             .id(UUID.randomUUID())
@@ -102,9 +102,9 @@ public class WarehouseTest {
             .category(CategoryEnum.UTILITY)
             .rating(4)
             .build();
-        warehouse.addProduct(hammer);
+        productService.addProduct(hammer);
 
-        boolean updated = warehouse.updateProduct(hammer.id().toString(), "Updated hammer", CategoryEnum.UTILITY, 5);
+        boolean updated = productService.updateProduct(hammer.id().toString(), "Updated hammer", CategoryEnum.UTILITY, 5);
 
         assertTrue(updated);
     }
@@ -112,7 +112,7 @@ public class WarehouseTest {
     @Test
     @DisplayName("updateProduct with invalid id returns false")
     public void updateProductFalseTest() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         Product hammer = new Product.Builder()
             .id(UUID.randomUUID())
@@ -121,9 +121,9 @@ public class WarehouseTest {
             .rating(4)
             .build();
 
-        warehouse.addProduct(hammer);
+        productService.addProduct(hammer);
 
-        boolean updated = warehouse.updateProduct("h342dass", "Updated hammer", CategoryEnum.UTILITY, 5);
+        boolean updated = productService.updateProduct("h342dass", "Updated hammer", CategoryEnum.UTILITY, 5);
 
         assertFalse(updated);
     }
@@ -131,7 +131,7 @@ public class WarehouseTest {
     @Test
     @DisplayName("getProductById with existing id returns product")
     public void getProductByIdTrueTest() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         Product hammer = new Product.Builder()
             .id(UUID.randomUUID())
@@ -139,9 +139,9 @@ public class WarehouseTest {
             .category(CategoryEnum.UTILITY)
             .rating(4)
             .build();
-        warehouse.addProduct(hammer);
+        productService.addProduct(hammer);
 
-        Optional<Product> sameProductFromId = warehouse.getProductById(hammer.id().toString());
+        Optional<Product> sameProductFromId = productService.getProductById(hammer.id().toString());
 
         assertTrue(sameProductFromId.isPresent());
     }
@@ -149,7 +149,7 @@ public class WarehouseTest {
     @Test
     @DisplayName("getProductById with non-existing id returns empty")
     public void getProductByIdFalseTest() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         Product hammer = new Product.Builder()
             .id(UUID.randomUUID())
@@ -157,9 +157,9 @@ public class WarehouseTest {
             .category(CategoryEnum.UTILITY)
             .rating(4)
             .build();
-        warehouse.addProduct(hammer);
+        productService.addProduct(hammer);
 
-        Optional<Product> sameProductFromId = warehouse.getProductById("head21zsd");
+        Optional<Product> sameProductFromId = productService.getProductById("head21zsd");
 
         assertFalse(sameProductFromId.isPresent());
     }
@@ -167,9 +167,9 @@ public class WarehouseTest {
     @Test
     @DisplayName("getProductsByCategorySorted filters by category and sorts names A to Z")
     public void getProductsByCategorySorted() {
-        Warehouse warehouse = setupWarehouse();
+        ProductService productService = setupWarehouse();
 
-        List<Product> products = warehouse.getProductsByCategorySorted(CategoryEnum.UTILITY);
+        List<Product> products = productService.getProductsByCategorySorted(CategoryEnum.UTILITY);
 
         assertEquals(3, products.size());
         assertEquals("Drill", products.getFirst().name());
@@ -180,7 +180,7 @@ public class WarehouseTest {
     @Test
     @DisplayName("getProductsCreatedAfter returns all products created after that date")
     public void getProductsCreatedAfterTrueTest() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         LocalDate nowDate = LocalDate.now();
         LocalDate tomorrowDate = nowDate.plusDays(1);
@@ -212,10 +212,10 @@ public class WarehouseTest {
             .modifiedDate(yesterday2Date)
             .build();
 
-        warehouse.addProduct(hammer);
-        warehouse.addProduct(saw);
-        warehouse.addProduct(nailgun);
-        List<Product> products = warehouse.getProductsCreatedAfter(yesterdayDate);
+        productService.addProduct(hammer);
+        productService.addProduct(saw);
+        productService.addProduct(nailgun);
+        List<Product> products = productService.getProductsCreatedAfter(yesterdayDate);
         assertEquals(2, products.size());
         assertEquals("Hammer", products.get(0).name());
         assertEquals("Saw", products.get(1).name());
@@ -224,7 +224,7 @@ public class WarehouseTest {
     @Test
     @DisplayName("getProductsCreatedAfter returns no products because all products are created before date ")
     public void getProductsCreatedAfterFalseTest() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         LocalDate nowDate = LocalDate.now();
         LocalDate tomorrowDate = nowDate.plusDays(1);
@@ -254,17 +254,17 @@ public class WarehouseTest {
                 .modifiedDate(nowDate)
                 .build();
 
-        warehouse.addProduct(hammer);
-        warehouse.addProduct(saw);
-        warehouse.addProduct(nailgun);
-        List<Product> products = warehouse.getProductsCreatedAfter(tomorrowDate);
+        productService.addProduct(hammer);
+        productService.addProduct(saw);
+        productService.addProduct(nailgun);
+        List<Product> products = productService.getProductsCreatedAfter(tomorrowDate);
         assertEquals(0, products.size());
     }
 
     @Test
     @DisplayName("getModifiedProducts returns products where modifiedDate is not createdDate")
     public void getModifiedProductsTrueTest() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         LocalDate nowDate = LocalDate.now();
         LocalDate tomorrowDate = nowDate.plusDays(1);
@@ -294,11 +294,11 @@ public class WarehouseTest {
                 .modifiedDate(nowDate)
                 .build();
 
-        warehouse.addProduct(saw);
-        warehouse.addProduct(nailgun);
-        warehouse.addProduct(hammer);
+        productService.addProduct(saw);
+        productService.addProduct(nailgun);
+        productService.addProduct(hammer);
 
-        List <Product> products = warehouse.getModifiedProducts();
+        List <Product> products = productService.getModifiedProducts();
         assertEquals(1, products.size());
         assertEquals("Hammer", products.getFirst().name());
     }
@@ -306,7 +306,7 @@ public class WarehouseTest {
     @Test
     @DisplayName("getModifiedProducts returns empty list when none is modified")
     public void getModifiedProductsFalseTest() {
-        Warehouse warehouse = new Warehouse();
+        ProductService productService = new ProductService();
 
         LocalDate nowDate = LocalDate.now();
 
@@ -327,10 +327,10 @@ public class WarehouseTest {
             .modifiedDate(nowDate)
             .build();
 
-        warehouse.addProduct(saw);
-        warehouse.addProduct(nailgun);
+        productService.addProduct(saw);
+        productService.addProduct(nailgun);
 
-        List <Product> products = warehouse.getModifiedProducts();
+        List <Product> products = productService.getModifiedProducts();
         assertEquals(0, products.size());
     }
 }

@@ -15,4 +15,13 @@ public record Product(
     public Product {
         Objects.requireNonNull(name, "Name can't be null");
     }
+
+    public static class Builder {
+        private UUID id;
+        private String name;
+        private CategoryEnum category;
+        private int rating;
+        private LocalDate createdDate;
+        private LocalDate modifiedDate;
+    }
 }

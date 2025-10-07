@@ -15,13 +15,33 @@ public class WarehouseTest {
     public Warehouse setupWarehouse() {
         Warehouse warehouse = new Warehouse();
 
-        Product hammer = new Product(UUID.randomUUID(), "Hammer", CategoryEnum.UTILITY, 4, LocalDate.now(), LocalDate.now());
+        Product hammer = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Hammer")
+            .category(CategoryEnum.UTILITY)
+            .rating(4)
+            .build();
         warehouse.addProduct(hammer);
-        Product screwdriver = new Product(UUID.randomUUID(), "Screwdriver", CategoryEnum.UTILITY, 2, LocalDate.now(), LocalDate.now());
+        Product screwdriver = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Screwdriver")
+            .category(CategoryEnum.UTILITY)
+            .rating(2)
+            .build();
         warehouse.addProduct(screwdriver);
-        Product tv = new Product(UUID.randomUUID(), "Television", CategoryEnum.ELECTRIC, 3, LocalDate.now(), LocalDate.now());
+        Product tv = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Television")
+            .category(CategoryEnum.ELECTRIC)
+            .rating(3)
+            .build();
         warehouse.addProduct(tv);
-        Product drill = new Product(UUID.randomUUID(), "Drill", CategoryEnum.UTILITY, 5, LocalDate.now(), LocalDate.now());
+        Product drill = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Drill")
+            .category(CategoryEnum.UTILITY)
+            .rating(5)
+            .build();
         warehouse.addProduct(drill);
 
         return warehouse;
@@ -31,7 +51,12 @@ public class WarehouseTest {
     @DisplayName("addProduct with valid product returns true")
     public void testAddProductTrue() {
         Warehouse warehouse = new Warehouse();
-        Product tv = new Product(UUID.randomUUID(), "Television", CategoryEnum.ELECTRIC, 3, LocalDate.now(), LocalDate.now());
+        Product tv = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Television")
+            .category(CategoryEnum.ELECTRIC)
+            .rating(3)
+            .build();
         boolean added = warehouse.addProduct(tv);
 
         assertTrue(added);
@@ -43,7 +68,12 @@ public class WarehouseTest {
         Warehouse warehouse = new Warehouse();
 
         assertThrows(NullPointerException.class, () -> {
-            Product tv = new Product(UUID.randomUUID(), null, CategoryEnum.ELECTRIC, 3, LocalDate.now(), LocalDate.now());
+            Product tv = new Product.Builder()
+                .id(UUID.randomUUID())
+                .name(null)
+                .category(CategoryEnum.ELECTRIC)
+                .rating(3)
+                .build();
         });
     }
 
@@ -66,7 +96,12 @@ public class WarehouseTest {
     public void updateProductTrueTest() {
         Warehouse warehouse = new Warehouse();
 
-        Product hammer = new Product(UUID.randomUUID(), "Hammer", CategoryEnum.UTILITY, 4, LocalDate.now(), LocalDate.now());
+        Product hammer = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Hammer")
+            .category(CategoryEnum.UTILITY)
+            .rating(4)
+            .build();
         warehouse.addProduct(hammer);
 
         boolean updated = warehouse.updateProduct(hammer.id().toString(), "Updated hammer", CategoryEnum.UTILITY, 5);
@@ -79,7 +114,13 @@ public class WarehouseTest {
     public void updateProductFalseTest() {
         Warehouse warehouse = new Warehouse();
 
-        Product hammer = new Product(UUID.randomUUID(), "Hammer", CategoryEnum.UTILITY, 4, LocalDate.now(), LocalDate.now());
+        Product hammer = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Hammer")
+            .category(CategoryEnum.UTILITY)
+            .rating(4)
+            .build();
+
         warehouse.addProduct(hammer);
 
         boolean updated = warehouse.updateProduct("h342dass", "Updated hammer", CategoryEnum.UTILITY, 5);
@@ -92,7 +133,12 @@ public class WarehouseTest {
     public void getProductByIdTrueTest() {
         Warehouse warehouse = new Warehouse();
 
-        Product hammer = new Product(UUID.randomUUID(), "Hammer", CategoryEnum.UTILITY, 4, LocalDate.now(), LocalDate.now());
+        Product hammer = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Hammer")
+            .category(CategoryEnum.UTILITY)
+            .rating(4)
+            .build();
         warehouse.addProduct(hammer);
 
         Optional<Product> sameProductFromId = warehouse.getProductById(hammer.id().toString());
@@ -105,7 +151,12 @@ public class WarehouseTest {
     public void getProductByIdFalseTest() {
         Warehouse warehouse = new Warehouse();
 
-        Product hammer = new Product(UUID.randomUUID(), "Hammer", CategoryEnum.UTILITY, 4, LocalDate.now(), LocalDate.now());
+        Product hammer = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Hammer")
+            .category(CategoryEnum.UTILITY)
+            .rating(4)
+            .build();
         warehouse.addProduct(hammer);
 
         Optional<Product> sameProductFromId = warehouse.getProductById("head21zsd");
@@ -136,9 +187,30 @@ public class WarehouseTest {
         LocalDate yesterdayDate = nowDate.minusDays(1);
         LocalDate yesterday2Date = nowDate.minusDays(2);
 
-        Product hammer = new Product(UUID.randomUUID(), "Hammer",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
-        Product saw = new Product(UUID.randomUUID(), "Saw", CategoryEnum.UTILITY, 2, tomorrowDate, tomorrowDate);
-        Product nailgun = new Product(UUID.randomUUID(), "Nailgun", CategoryEnum.UTILITY, 3, yesterday2Date, yesterday2Date);
+        Product hammer = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Hammer")
+            .category(CategoryEnum.UTILITY)
+            .rating(4)
+            .createdDate(nowDate)
+            .modifiedDate(nowDate)
+            .build();
+        Product saw = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Saw")
+            .category(CategoryEnum.UTILITY)
+            .rating(2)
+            .createdDate(tomorrowDate)
+            .modifiedDate(tomorrowDate)
+            .build();
+        Product nailgun = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Nailgun")
+            .category(CategoryEnum.UTILITY)
+            .rating(3)
+            .createdDate(yesterday2Date)
+            .modifiedDate(yesterday2Date)
+            .build();
 
         warehouse.addProduct(hammer);
         warehouse.addProduct(saw);
@@ -157,9 +229,30 @@ public class WarehouseTest {
         LocalDate nowDate = LocalDate.now();
         LocalDate tomorrowDate = nowDate.plusDays(1);
 
-        Product hammer = new Product(UUID.randomUUID(), "Hammer",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
-        Product saw = new Product(UUID.randomUUID(), "Saw", CategoryEnum.UTILITY, 2, nowDate, nowDate);
-        Product nailgun = new Product(UUID.randomUUID(), "Nailgun", CategoryEnum.UTILITY, 3, nowDate, nowDate);
+        Product hammer = new Product.Builder()
+                .id(UUID.randomUUID())
+                .name("Hammer")
+                .category(CategoryEnum.UTILITY)
+                .rating(4)
+                .createdDate(nowDate)
+                .modifiedDate(nowDate)
+                .build();
+        Product saw = new Product.Builder()
+                .id(UUID.randomUUID())
+                .name("Saw")
+                .category(CategoryEnum.UTILITY)
+                .rating(2)
+                .createdDate(nowDate)
+                .modifiedDate(nowDate)
+                .build();
+        Product nailgun = new Product.Builder()
+                .id(UUID.randomUUID())
+                .name("Nailgun")
+                .category(CategoryEnum.UTILITY)
+                .rating(3)
+                .createdDate(nowDate)
+                .modifiedDate(nowDate)
+                .build();
 
         warehouse.addProduct(hammer);
         warehouse.addProduct(saw);
@@ -176,9 +269,30 @@ public class WarehouseTest {
         LocalDate nowDate = LocalDate.now();
         LocalDate tomorrowDate = nowDate.plusDays(1);
 
-        Product saw = new Product(UUID.randomUUID(), "Saw",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
-        Product nailgun = new Product(UUID.randomUUID(), "Nailgun",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
-        Product hammer = new Product(UUID.randomUUID(), "Hammer",  CategoryEnum.UTILITY, 4, nowDate, tomorrowDate);
+        Product hammer = new Product.Builder()
+                .id(UUID.randomUUID())
+                .name("Hammer")
+                .category(CategoryEnum.UTILITY)
+                .rating(4)
+                .createdDate(nowDate)
+                .modifiedDate(tomorrowDate)
+                .build();
+        Product saw = new Product.Builder()
+                .id(UUID.randomUUID())
+                .name("Saw")
+                .category(CategoryEnum.UTILITY)
+                .rating(2)
+                .createdDate(nowDate)
+                .modifiedDate(nowDate)
+                .build();
+        Product nailgun = new Product.Builder()
+                .id(UUID.randomUUID())
+                .name("Nailgun")
+                .category(CategoryEnum.UTILITY)
+                .rating(3)
+                .createdDate(nowDate)
+                .modifiedDate(nowDate)
+                .build();
 
         warehouse.addProduct(saw);
         warehouse.addProduct(nailgun);
@@ -196,8 +310,22 @@ public class WarehouseTest {
 
         LocalDate nowDate = LocalDate.now();
 
-        Product saw = new Product(UUID.randomUUID(), "Saw",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
-        Product nailgun = new Product(UUID.randomUUID(), "Nailgun",  CategoryEnum.UTILITY, 4, nowDate, nowDate);
+        Product saw = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Saw")
+            .category(CategoryEnum.UTILITY)
+            .rating(3)
+            .createdDate(nowDate)
+            .modifiedDate(nowDate)
+            .build();
+        Product nailgun = new Product.Builder()
+            .id(UUID.randomUUID())
+            .name("Nailgun")
+            .category(CategoryEnum.UTILITY)
+            .rating(3)
+            .createdDate(nowDate)
+            .modifiedDate(nowDate)
+            .build();
 
         warehouse.addProduct(saw);
         warehouse.addProduct(nailgun);

@@ -1,9 +1,5 @@
 package org.example.pets;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import org.example.validation.ValidHappinessLevel;
 import org.example.validation.ValidHungerLevel;
 import org.example.validation.ValidName;

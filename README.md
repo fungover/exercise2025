@@ -11,7 +11,7 @@ is not actually needed. You may first need to execute `chmod +x mvnw`.
 ./mvnw clean package wildfly:run
 ```
 
-Once the runtime starts, you can access the REST end-point at [http://localhost:8080/jakartaee-hello-world/rest/hello](http://localhost:8080/jakartaee-hello-world/rest/hello).
+Once the runtime starts, you can access the REST end-point at [http://localhost:8080/pets](http://localhost:8080/pets).
 
 You can also run the project via Docker. To build the Docker image, execute the following commands from the
 directory where this file resides. Please ensure you have installed

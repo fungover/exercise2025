@@ -1,6 +1,7 @@
 package exercise6.pets;
 
 import exercise6.annotations.Feed;
+import exercise6.annotations.IdCheck;
 import exercise6.annotations.Play;
 import exercise6.repository.PetRepository;
 import exercise6.service.HandlePetValue;
@@ -9,6 +10,7 @@ import exercise6.validation.ValueValidate;
 import exercise6.validation.PetValidate;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import java.util.List;
@@ -36,7 +38,9 @@ public class PetResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Pet> getPets(@QueryParam("species") String animalType,
                              @QueryParam("sortBy") String happy,
-                             @QueryParam("order") String value
+                             @QueryParam("order") String value,
+                             @QueryParam("offset") @Min(0) Integer page,
+                             @QueryParam("limit") Integer pageSize
                              ){
         if(animalType != null) {
             AnimalType petSpecies = AnimalType.valueOf(animalType.toUpperCase());
@@ -50,7 +54,10 @@ public class PetResource {
             if("asc".equals(value)) {
                 return petService.sortPetByHappinessAsc();
             }
+        }
 
+        if(page != null) {
+            return petService.petPagination(page, pageSize);
         }
 
         return  petRepository.getPets();
@@ -59,7 +66,7 @@ public class PetResource {
     @GET()
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Pet getUniqPet(@PathParam("id")  int id) {
+    public Pet getUniqPet(@PathParam("id") @IdCheck int id) {
         return petRepository.getUniqPet(id);
     }
 
@@ -67,7 +74,7 @@ public class PetResource {
     @PUT()
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String feedPet(@PathParam("id") int id, @Valid ValueValidate request) {
+    public String feedPet(@PathParam("id") @IdCheck int id, @Valid ValueValidate request) {
         return handlePetFeed.increaseValue(id, request.getRequestValue());
         }
 
@@ -75,14 +82,14 @@ public class PetResource {
     @Path("/{id}/play")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String playPet(@PathParam("id") int id, @Valid ValueValidate request) {
+    public String playPet(@PathParam("id")@IdCheck int id, @Valid ValueValidate request) {
         return handlePetPlay.increaseValue(id, request.getRequestValue());
     }
 
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Pet> removePet(@PathParam("id") int id) {
+    public List<Pet> removePet(@PathParam("id") @IdCheck int id) {
         return petRepository.removePet(id);
     }
 }

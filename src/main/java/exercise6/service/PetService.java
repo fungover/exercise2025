@@ -31,4 +31,18 @@ public class PetService {
                 .sorted(Comparator.comparingInt(Pet::getHappiness))
                 .toList();
     }
+
+    public List<Pet> petPagination(int page, int pageSize) {
+
+        int petToDisplay = petRepository.getPets().size();
+        int maxPage = petToDisplay / pageSize;
+        if (page > maxPage) {
+            page = maxPage;
+        }
+
+        return petRepository.getPets().stream()
+                .skip((long) (page-1) * pageSize)
+                .limit(pageSize)
+                .toList();
+    }
 }

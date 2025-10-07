@@ -1,5 +1,6 @@
 package exercise6.validation;
 
+import exercise6.annotations.IdCheck;
 import jakarta.ws.rs.ext.ParamConverter;
 import jakarta.ws.rs.ext.ParamConverterProvider;
 import jakarta.ws.rs.ext.Provider;
@@ -12,9 +13,12 @@ public class ConvertParam implements ParamConverterProvider {
 
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> aClass, Type type, Annotation[] annotations) {
-        if (aClass.equals(int.class) || aClass.equals(Integer.class)) {
-            return (ParamConverter<T>) new IdValidate();
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType().equals(IdCheck.class)) {
+                return (ParamConverter<T>) new IdValidate();
+            }
         }
+
         return null;
     }
 }

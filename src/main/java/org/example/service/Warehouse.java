@@ -25,14 +25,13 @@ public class Warehouse {
         for (int i = 0; i < warehouseProducts.size(); i++) {
             Product product = warehouseProducts.get(i);
             if (Objects.equals(product.id().toString(), id)) {
-                Product updated = new Product(
-                        product.id(),
-                        name,
-                        category,
-                        rating,
-                        product.createdDate(),
-                        LocalDate.now()
-                );
+                Product updated = new Product.Builder()
+                        .id(product.id())
+                        .name(name)
+                        .category(category)
+                        .rating(rating)
+                        .build();
+
                 warehouseProducts.set(i, updated);
                 return true;
             }

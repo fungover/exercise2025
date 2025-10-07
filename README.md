@@ -1,36 +1,36 @@
-## 🧪 How to Work on the Exercises
+# Pet API - Jakarta EE + Docker
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+Exercise 6 with RESTful API for managing virtual pets. Built with Jakarta EE, deployed on Wildfly and containerized with Docker.
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
+___ 
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+## Getting started
 
-Example for user githubuser working on Exercise 1:
+### Requirements 
+- Java 21 
+- Maven 
+- Docker desktop
 
-```bash
-git checkout -b githubuser/exercise1
-```
+### Build and run with WAR + wildfly 
+mvn clean package
+mvn wildfly:run / or run by configuration in IDE 
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
+### Build and run with Docker
+docker build -t exercise6-api .
+docker run -p 8080:8080 exercise6-api
 
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
+### Testing with curl or Bruno 
+# Create a pet
+curl -X POST http://localhost:8080/api/pets \
+-H "Content-Type: application/json" \
+-d '{"name":"Milo","species":"Dog","hungerLevel":20,"happinessLevel":80}'
+# List all pets
+curl http://localhost:8080/api/pets
+# Feed or play with pet 
+curl -X PUT http://localhost:8080/api/pets/1/feed - (or play)
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
-
-Link the PR to the issue you're solving.
-
-Include a clear description of your solution.
-
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+### Technologies used 
+- Jakarta EE(REST, validation)
+- Wildfly
+- Docker 
+- Maven

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet API</title>
+</head>
+<body>
+<h1>🐾 Pet API is running 🚀</h1>
+<p>This RESTful API lets you manage virtual pets using Jakarta EE.</p>
+
+<h2>Core Endpoints</h2>
+<ul>
+    <li><strong>POST</strong> /api/pets – Create a new pet</li>
+    <li><strong>GET</strong> /api/pets – List all pets</li>
+    <li><strong>PUT</strong> /api/pets/{id}/feed – Feed a pet</li>
+    <li><strong>PUT</strong> /api/pets/{id}/play – Play with a pet</li>
+    <li><strong>DELETE</strong> /api/pets/{id} – Delete a pet</li>
+</ul>
+
+<h2>Bonus Features</h2>
+<ul>
+    <li><strong>Pagination:</strong> GET /api/pets?offset=0&amp;limit=10</li>
+    <li><strong>Filtering:</strong> GET /api/pets?species=cat</li>
+    <li><strong>Sorting (asc):</strong> GET /api/pets?sortBy=happiness&amp;order=asc</li>
+    <li><strong>Sorting (desc):</strong> GET /api/pets?sortBy=happiness&amp;order=desc</li>
+</ul>
+
+<h2>How to Test</h2>
+<p>You can test the API using:</p>
+<ul>
+    <li><strong>curl</strong> in the terminal</li>
+    <li><strong>Bruno</strong>, <strong>Postman</strong>, or any REST client</li>
+    <li>Browser (for simple GET requests)</li>
+</ul>
+
+<h3>Example curl command:</h3>
+<pre>
+curl -X POST http://localhost:8080/api/pets \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Milo","species":"Dog","hungerLevel":20,"happinessLevel":80}'
+  </pre>
+</body>
+</html>

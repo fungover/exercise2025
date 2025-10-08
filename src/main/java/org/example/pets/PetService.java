@@ -22,6 +22,9 @@ public class PetService {
         pets.put(1L, new PetDTO(1L, "Rex", "Dog", 6, 10));
         pets.put(2L, new PetDTO(2L, "Garfield", "Cat", 10, 1));
         pets.put(3L, new PetDTO(3L, "Flax", "Bird", 1, 5));
+        pets.put(4L, new PetDTO(4L, "Jax", "Dog", 7, 3));
+        pets.put(5L, new PetDTO(5L, "Alex", "Dog", 4, 7));
+        pets.put(6L, new PetDTO(6L, "Spot", "Dog", 2, 9));
     }
 
 

@@ -10,6 +10,15 @@ public class PetValidationExceptionMapper implements ExceptionMapper <Constraint
 
     @Override
     public Response toResponse(ConstraintViolationException e) {
-        return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).type("application/json").build();
+        var violations  = e.getConstraintViolations().stream()
+                //KOLLA UPP getPropertyPath
+                .map(a -> "{\"message\":\"" + a.getMessage()
+                        .replace("\"", "\\\"") + "\"}")
+                .collect(java.util.stream.Collectors.joining(",", "[", "]"));
+
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(violations)
+                .type("application/json")
+                .build();
     }
 }

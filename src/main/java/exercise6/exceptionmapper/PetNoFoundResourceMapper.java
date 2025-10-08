@@ -10,6 +10,9 @@ public class PetNoFoundResourceMapper implements ExceptionMapper<NotFoundExcepti
 
     @Override
     public Response toResponse(NotFoundException e) {
-        return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).type("application/json").build();
+        return Response.status(Response.Status.NOT_FOUND)
+                .entity("{\"error\":\"" + e.getMessage().replace("\"", "\\\"")+"\"}")
+                .type("application/json")
+                .build();
     }
 }

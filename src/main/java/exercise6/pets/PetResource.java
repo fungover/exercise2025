@@ -13,6 +13,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+
+import java.util.Arrays;
 import java.util.List;
 
 @Path("pets")
@@ -39,12 +41,17 @@ public class PetResource {
     public List<Pet> getPets(@QueryParam("species") String animalType,
                              @QueryParam("sortBy") String happy,
                              @QueryParam("order") String value,
-                             @QueryParam("offset") @Min(0) Integer page,
-                             @QueryParam("limit") Integer pageSize
+                             @QueryParam("offset") @Min(value = 0, message = "Offset can not be less than 0") Integer page,
+                             @QueryParam("limit") @Min(value = 1, message = "Limit can not be less than 1") Integer pageSize
                              ){
         if(animalType != null) {
-            AnimalType petSpecies = AnimalType.valueOf(animalType.toUpperCase());
-            return petService.sortPetByType(petSpecies);
+            try{
+                AnimalType petSpecies = AnimalType.valueOf(animalType.toUpperCase());
+                return petService.sortPetByType(petSpecies);
+            }catch(IllegalArgumentException e){
+                throw new BadRequestException("Invalid animal type" + animalType +
+                        ". Valid animal types are " + Arrays.toString(AnimalType.values()));
+            }
         }
 
         if("happiness".equals(happy) ) {
@@ -67,7 +74,7 @@ public class PetResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Pet getUniqPet(@PathParam("id") @IdCheck int id) {
-        return petRepository.getUniqPet(id);
+        return petRepository.getPetById(id);
     }
 
     @Path("/{id}/feed")

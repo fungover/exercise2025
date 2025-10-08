@@ -49,4 +49,11 @@ public class PetsResource {
         return petService.feedPet(id);
     }
 
+    @PUT
+    @Path("{id}/play")
+    @Produces({MediaType.APPLICATION_JSON})
+    public PetDTO playWithPet(@PathParam("id") Long id) {
+        return petService.playWithPet(id);
+    }
+
 }

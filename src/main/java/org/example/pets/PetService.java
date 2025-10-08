@@ -54,4 +54,16 @@ public class PetService {
         return pet;
     }
 
+    public PetDTO playWithPet(Long id) {
+        PetDTO pet = getPetById(id);
+        if (pet == null) {
+            throw new IllegalArgumentException("Pet with id " + id + " does not exist");
+        }
+
+        int newHappinessLevel = Math.min(10, pet.getHappinessLevel() + 1);
+        pet.setHappinessLevel(newHappinessLevel);
+
+        return pet;
+    }
+
 }

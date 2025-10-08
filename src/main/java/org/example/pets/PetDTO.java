@@ -9,18 +9,16 @@ public class PetDTO {
     String name;
     @NotBlank(message = "Species can't be blank.")
     String species;
-    @NotNull(message = "Hunger level is required.")
-    @Max(value = 100, message = "Hunger level can't be higher than 100")
-    @Min(value = 0, message = "Hunger level can't be lower than 0")
+    @Max(value = 100, message = "Hunger level can't be higher than 100.")
+    @Min(value = 0, message = "Hunger level can't be lower than 0.")
     int hungerLevel;
-    @NotNull(message = "Happiness level is required.")
-    @Max(value = 100, message = "Happiness can't be higher than 100")
-    @Min(value = 0, message = "Happiness can't be lower than 0")
+    @Max(value = 100, message = "Happiness can't be higher than 100.")
+    @Min(value = 0, message = "Happiness can't be lower than 0.")
     int happiness;
     long id;
 
 
-    public PetDTO(String name, String species, int hungerLevel, int happiness) {
+    public PetDTO(String name, String species, Integer hungerLevel, Integer happiness) {
         this.name = name;
         this.species = species;
         this.hungerLevel = hungerLevel;
@@ -50,7 +48,7 @@ public class PetDTO {
         this.species = species;
     }
 
-    public int getHungerLevel() {
+    public Integer getHungerLevel() {
         return hungerLevel;
     }
 
@@ -58,7 +56,7 @@ public class PetDTO {
         this.hungerLevel = hungerLevel;
     }
 
-    public int getHappiness() {
+    public Integer getHappiness() {
         return happiness;
     }
 

@@ -60,9 +60,9 @@ public class PetResource {
     public Response feedPet(@PathParam("id") long id){
         System.out.println("In feed pet");
         var pet = petService.getPet(id);
-        if(pet == null){
+       /* if(pet == null){
             throw new NotFoundException();
-        }
+        }*/
         petService.feedPet(id);
         System.out.println("Feeding pet: " + pet.getName() + " " + pet.getHungerLevel());
         return Response.ok(pet).build();

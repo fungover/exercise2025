@@ -1,6 +1,8 @@
 package org.example.pets;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.NotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,12 +30,18 @@ public class PetService {
     }
     public void feedPet(long id){
         PetDTO pet = pets.get(id);
-        int hunger = pet.getHungerLevel()-10;
+        if(pet == null){
+            throw new NotFoundException();
+        }
+        var hunger = Math.max(0, pet.getHungerLevel()-10);
         pet.setHungerLevel(hunger);
     }
     public void playWithPet(long id){
         PetDTO pet = pets.get(id);
-        int happiness = pet.getHappiness();
+        if(pet == null){
+            throw new NotFoundException();
+        }
+        var happiness = Math.min(100, pet.getHappiness());
         pet.setHappiness(happiness + 10);
     }
     public void deletePet(long id){

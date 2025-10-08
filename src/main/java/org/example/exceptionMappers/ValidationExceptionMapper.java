@@ -18,18 +18,30 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
     public Response toResponse(ConstraintViolationException e) {
         List<ViolationMessage> violations = e.getConstraintViolations()
                 .stream()
-                .map(cv -> new ViolationMessage(cv.getPropertyPath()
+                .map(cv -> {
+                    String path = cv.getPropertyPath().toString();
+                    String fieldName = path.substring(path.lastIndexOf('.') + 1);
+                    return new ViolationMessage(fieldName, cv.getMessage());
+                })
+                /*.map(cv -> new ViolationMessage(cv.getPropertyPath()
                         .toString()
                         .substring(cv.getPropertyPath()
                                 .toString()
                                 .lastIndexOf(".")+1),
-                        cv.getMessage()))
+                        cv.getMessage()))*/
                         .toList();
-
-        Jsonb jsonb = JsonbBuilder.create();
+        try(Jsonb jsonb = JsonbBuilder.create()){
+            String json = jsonb.toJson(violations);
+            logger.info(json);
+            return Response.status(Response.Status.BAD_REQUEST).entity(json).build();
+        } catch(Exception ex){
+            logger.error("Failed to serialize violations", ex);
+            throw new RuntimeException("Failed to serialize violations", ex);
+        }
+        /*Jsonb jsonb = JsonbBuilder.create();
         String json = jsonb.toJson(violations);
         logger.info(json);
-        return Response.status(Response.Status.BAD_REQUEST).entity(json).build();
+        return Response.status(Response.Status.BAD_REQUEST).entity(json).build();*/
     }
     public static class ViolationMessage {
         public String field;

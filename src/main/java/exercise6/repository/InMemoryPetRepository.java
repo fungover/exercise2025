@@ -33,7 +33,7 @@ public class InMemoryPetRepository implements PetRepository {
     }
 
     @Override
-    public Pet getUniqPet(int id) {
+    public Pet getPetById(int id) {
 
         Pet uniqPet = petList.stream()
                 .filter(item -> item.getId() == id)

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class PetService {
@@ -23,9 +24,16 @@ public class PetService {
     }
 
 
-    public List<PetDTO> getAllPets() {
-        // Convert Map to List
-        return new ArrayList<>(pets.values());
+    public List<PetDTO> getAllPets(String species) {
+        List<PetDTO> petList = new ArrayList<>(pets.values());
+
+        if (species != null && !species.isBlank()) {
+            petList = petList.stream()
+                    .filter(pet -> pet.getSpecies().equalsIgnoreCase(species))
+                    .toList();
+        }
+
+        return petList;
     }
 
     public PetDTO getPetById(Long id) {

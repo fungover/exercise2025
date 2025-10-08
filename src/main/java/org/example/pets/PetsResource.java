@@ -25,8 +25,8 @@ public class PetsResource {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public List<PetDTO> getAllPets() {
-        return petService.getAllPets();
+    public List<PetDTO> getAllPets(@QueryParam("species") String species) {
+        return petService.getAllPets(species);
     }
 
     @GET

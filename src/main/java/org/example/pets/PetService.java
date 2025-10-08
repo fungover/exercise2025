@@ -5,6 +5,7 @@ import org.example.exception.BadRequestException;
 import org.example.exception.NotFoundException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -24,16 +25,36 @@ public class PetService {
     }
 
 
-    public List<PetDTO> getAllPets(String species) {
+    public List<PetDTO> getAllPets(String species, String sortBy, String order) {
         List<PetDTO> petList = new ArrayList<>(pets.values());
 
+        // Filter by species if provided
         if (species != null && !species.isBlank()) {
             petList = petList.stream()
                     .filter(pet -> pet.getSpecies().equalsIgnoreCase(species))
-                    .toList();
+                    .collect(Collectors.toList());
+        }
+
+        // Sort if sortBy is provided
+        if (sortBy != null && !sortBy.isBlank()) {
+            Comparator<PetDTO> comparator = getComparator(sortBy);
+            if ("desc".equalsIgnoreCase(order)) {
+                comparator = comparator.reversed();
+            }
+            petList.sort(comparator);
         }
 
         return petList;
+    }
+
+    private Comparator<PetDTO> getComparator(String sortBy) {
+        return switch (sortBy.toLowerCase()) {
+            case "name" -> Comparator.comparing(PetDTO::getName, String.CASE_INSENSITIVE_ORDER);
+            case "species" -> Comparator.comparing(PetDTO::getSpecies, String.CASE_INSENSITIVE_ORDER);
+            case "hungerlevel" -> Comparator.comparing(PetDTO::getHungerLevel);
+            case "happinesslevel" -> Comparator.comparing(PetDTO::getHappinessLevel);
+            default -> Comparator.comparing(PetDTO::getId);
+        };
     }
 
     public PetDTO getPetById(Long id) {

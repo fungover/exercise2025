@@ -25,8 +25,11 @@ public class PetsResource {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public List<PetDTO> getAllPets(@QueryParam("species") String species) {
-        return petService.getAllPets(species);
+    public List<PetDTO> getAllPets(
+            @QueryParam("species") String species,
+            @QueryParam("sortBy") String sortBy,
+            @QueryParam("order") String order) {
+        return petService.getAllPets(species, sortBy, order);
     }
 
     @GET

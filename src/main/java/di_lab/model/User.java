@@ -1,4 +1,4 @@
-package org.example.model;
+package di_lab.model;
 
 public class User {
     private String name;

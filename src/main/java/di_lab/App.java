@@ -4,19 +4,16 @@ import di_lab.Repository.InMemoryUserRepository;
 import di_lab.Repository.UserRepository;
 import di_lab.Service.UserService;
 import di_lab.Service.UserServiceImpl;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
 
 public class App {
     public static void main(String[] args) {
+        Weld weld = new Weld();
 
-        // Create repository
-        UserRepository userRepository = new InMemoryUserRepository();
-
-        // Create service and inject dependency via the constructor. Here you can just change the argument
-        // in the constructor if you want to change repository or a mocked repository.
-        UserService userService = new UserServiceImpl(userRepository);
-
-        // Use service
-        userService.register("Batman");
-        userService.register("Robin");
+        try (WeldContainer container = weld.initialize()) {
+            UserService service = container.select(UserService.class).get();
+            service.register("Batman");
+        }
     }
 }

@@ -35,13 +35,18 @@ public class PetService {
     public List<Pet> petPagination(int page, int pageSize) {
 
         int petToDisplay = petRepository.getPets().size();
-        int maxPage = petToDisplay / pageSize;
+
+        if(petToDisplay == 0){
+            return List.of();
+        }
+
+        int maxPage = (int) Math.ceil((double) petToDisplay / pageSize);
         if (page > maxPage) {
             page = maxPage;
         }
-
+        long start = (long)(page - 1) * pageSize;
         return petRepository.getPets().stream()
-                .skip((long) (page-1) * pageSize)
+                .skip(start)
                 .limit(pageSize)
                 .toList();
     }

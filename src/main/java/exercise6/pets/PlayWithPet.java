@@ -15,14 +15,14 @@ public class PlayWithPet implements HandlePetValue {
 
     @Override
     public String increaseValue(int id, int value) {
-        Pet petToHandle = petRepository.getUniqPet(id);
+        Pet petToHandle = petRepository.getPetById(id);
         petToHandle.setHappiness(value);
         String petName = petToHandle.getName();
 
         if (petToHandle.getHappiness() == 100) {
             return petName +" is already happy, find a friend to play with";
         }else{
-            return petName +" is partly happy and is eger for more fun";
+            return petName +" is partly happy and is eager for more fun";
         }
 
     }

@@ -16,14 +16,14 @@ public class FeedPet implements HandlePetValue {
 
     @Override
     public String increaseValue(int id, int value) {
-        Pet petToHandle = petRepository.getUniqPet(id);
+        Pet petToHandle = petRepository.getPetById(id);
         petToHandle.setHunger(value);
         String petName = petToHandle.getName();
 
         if (petToHandle.getHunger() == 100) {
             return petName +" is fully fed, find a friend to feed";
         }else{
-            return petName +" is partly fed and is eger for more food";
+            return petName +" is partly fed and is eager for more food";
         }
     }
 }

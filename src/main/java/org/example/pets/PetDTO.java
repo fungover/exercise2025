@@ -18,7 +18,7 @@ public class PetDTO {
     long id;
 
 
-    public PetDTO(String name, String species, Integer hungerLevel, Integer happiness) {
+    public PetDTO(String name, String species, int hungerLevel, int happiness) {
         this.name = name;
         this.species = species;
         this.hungerLevel = hungerLevel;

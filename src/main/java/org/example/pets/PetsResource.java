@@ -56,4 +56,11 @@ public class PetsResource {
         return petService.playWithPet(id);
     }
 
+    @DELETE
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public PetDTO deletePet(@PathParam("id") Long id) {
+        return petService.deletePet(id);
+    }
+
 }

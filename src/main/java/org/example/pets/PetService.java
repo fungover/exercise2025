@@ -44,9 +44,6 @@ public class PetService {
 
     public PetDTO feedPet(Long id) {
         PetDTO pet = getPetById(id);
-        if (pet == null) {
-            throw new IllegalArgumentException("Pet with id " + id + " does not exist");
-        }
 
         int newHungerLevel = Math.max(0, pet.getHungerLevel() - 1);
         pet.setHungerLevel(newHungerLevel);
@@ -56,13 +53,17 @@ public class PetService {
 
     public PetDTO playWithPet(Long id) {
         PetDTO pet = getPetById(id);
-        if (pet == null) {
-            throw new IllegalArgumentException("Pet with id " + id + " does not exist");
-        }
 
         int newHappinessLevel = Math.min(10, pet.getHappinessLevel() + 1);
         pet.setHappinessLevel(newHappinessLevel);
 
+        return pet;
+    }
+
+    public PetDTO deletePet(Long id) {
+        PetDTO pet = getPetById(id);
+
+        pets.remove(id);
         return pet;
     }
 

@@ -11,7 +11,7 @@ public class App {
         // Create repository
         UserRepository userRepository = new InMemoryUserRepository();
 
-        // Create service and inject dependency via the contructor. Here you can just change the argument
+        // Create service and inject dependency via the constructor. Here you can just change the argument
         // in the constructor if you want to change repository or a mocked repository.
         UserService userService = new UserServiceImpl(userRepository);
 

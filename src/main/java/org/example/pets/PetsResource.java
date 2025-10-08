@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
@@ -38,8 +39,12 @@ public class PetsResource {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public PetDTO addPet(@Valid PetDTO petDTO) {
-        return petService.addPet(petDTO);
+    public Response addPet(@Valid PetDTO petDTO) {
+        PetDTO createdPet = petService.addPet(petDTO);
+        return Response
+                .status(Response.Status.CREATED)
+                .entity(createdPet)
+                .build();
     }
 
     @PUT
@@ -59,8 +64,12 @@ public class PetsResource {
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public PetDTO deletePet(@PathParam("id") Long id) {
-        return petService.deletePet(id);
+    public Response deletePet(@PathParam("id") Long id) {
+        PetDTO deletePet = petService.deletePet(id);
+        return Response
+                .status(Response.Status.NO_CONTENT)
+                .entity(deletePet)
+                .build();
     }
 
 }

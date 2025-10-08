@@ -1,6 +1,7 @@
 package org.example.pets;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import org.example.exception.BadRequestException;
 import org.example.exception.NotFoundException;
 
 import java.util.ArrayList;
@@ -46,6 +47,10 @@ public class PetService {
     public PetDTO feedPet(Long id) {
         PetDTO pet = getPetById(id);
 
+        if (pet.getHungerLevel() == 0) {
+            throw new BadRequestException(pet.getName() + " is full and cannot eat more right now!");
+        }
+
         int newHungerLevel = Math.max(0, pet.getHungerLevel() - 1);
         pet.setHungerLevel(newHungerLevel);
 
@@ -54,6 +59,10 @@ public class PetService {
 
     public PetDTO playWithPet(Long id) {
         PetDTO pet = getPetById(id);
+
+        if (pet.getHappinessLevel() == 10) {
+            throw new BadRequestException(pet.getName() + " is exhausted and must take a break!");
+        }
 
         int newHappinessLevel = Math.min(10, pet.getHappinessLevel() + 1);
         pet.setHappinessLevel(newHappinessLevel);

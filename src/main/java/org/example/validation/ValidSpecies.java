@@ -9,11 +9,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Constraint(validatedBy = {})
-@NotBlank(message = "Type cannot be blank")
+@NotBlank(message = "Species cannot be blank")
 @Size(min = 1, max = 20)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidType {
-    String message() default "Type must be between 1 and 20 characters";
+public @interface ValidSpecies {
+    String message() default "Species must be between 1 and 20 characters";
     Class<?>[] groups() default {};
     Class<? extends jakarta.validation.Payload>[] payload() default {};
 }

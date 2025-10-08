@@ -3,7 +3,7 @@ package org.example.pets;
 import org.example.validation.ValidHappinessLevel;
 import org.example.validation.ValidHungerLevel;
 import org.example.validation.ValidName;
-import org.example.validation.ValidType;
+import org.example.validation.ValidSpecies;
 
 public class PetDTO {
     private Long id;
@@ -11,8 +11,8 @@ public class PetDTO {
     @ValidName
     private String name;
 
-    @ValidType
-    private String type;
+    @ValidSpecies
+    private String species;
 
     @ValidHungerLevel
     private int hungerLevel;
@@ -24,10 +24,10 @@ public class PetDTO {
     public PetDTO() {
     }
 
-    public PetDTO(Long id, String name, String type, int hungerLevel, int happinessLevel) {
+    public PetDTO(Long id, String name, String species, int hungerLevel, int happinessLevel) {
         this.id = id;
         this.name = name;
-        this.type = type;
+        this.species = species;
         this.hungerLevel = hungerLevel;
         this.happinessLevel = happinessLevel;
     }
@@ -39,8 +39,8 @@ public class PetDTO {
     public String getName() {
         return name;
     }
-    public String getType() {
-        return type;
+    public String getSpecies() {
+        return species;
     }
     public int getHungerLevel() {
         return hungerLevel;
@@ -56,8 +56,8 @@ public class PetDTO {
     public void setName(String name) {
         this.name = name;
     }
-    public void setType(String type) {
-        this.type = type;
+    public void setSpecies(String species) {
+        this.species = species;
     }
     public void setHungerLevel(int hungerLevel) {
         this.hungerLevel = hungerLevel;

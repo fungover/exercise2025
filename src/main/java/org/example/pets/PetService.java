@@ -42,4 +42,16 @@ public class PetService {
         return petDTO;
     }
 
+    public PetDTO feedPet(Long id) {
+        PetDTO pet = getPetById(id);
+        if (pet == null) {
+            throw new IllegalArgumentException("Pet with id " + id + " does not exist");
+        }
+
+        int newHungerLevel = Math.max(0, pet.getHungerLevel() - 1);
+        pet.setHungerLevel(newHungerLevel);
+
+        return pet;
+    }
+
 }

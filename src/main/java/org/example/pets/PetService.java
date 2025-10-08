@@ -1,6 +1,7 @@
 package org.example.pets;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import org.example.exception.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class PetService {
     public PetDTO getPetById(Long id) {
         PetDTO pet = pets.get(id);
         if (pet == null) {
-            throw new IllegalArgumentException("Pet with id " + id + " does not exist");
+            throw new NotFoundException("Pet with id " + id + " does not exist");
         }
         return pet;
     }

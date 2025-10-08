@@ -8,6 +8,10 @@ public class IdValidate implements ParamConverter<Integer> {
     @Override
     public Integer fromString(String paramValue) {
 
+        if(paramValue==null || paramValue.isBlank()) {
+            throw new BadRequestException("Parameter is null or empty");
+        }
+
         int petId;
 
         try{

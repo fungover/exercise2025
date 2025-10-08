@@ -48,7 +48,7 @@ public class PetDTO {
         this.species = species;
     }
 
-    public Integer getHungerLevel() {
+    public int getHungerLevel() {
         return hungerLevel;
     }
 
@@ -56,7 +56,7 @@ public class PetDTO {
         this.hungerLevel = hungerLevel;
     }
 
-    public Integer getHappiness() {
+    public int getHappiness() {
         return happiness;
     }
 

@@ -1,5 +1,6 @@
 package org.example;
 
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -24,10 +25,9 @@ public class PetsResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createPet(PetDTO petDTO) {
-        logger.infov("Adopted pet: {0}", petDTO.name());
+    public Response createPet(@Nonnull PetDTO petDTO) {
+        petsService.adoptPet(petDTO);
         return Response.ok()
-                .entity(new PetsResource(petsService))
                 .build();
     }
 

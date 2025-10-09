@@ -12,7 +12,7 @@ class WarehouseTest {
 
     @Test
     void testAddProductSuccess() {  //Testar att produkt läggs till och sparas korrekt.
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
         Product product = new Product("1", "Red Dress", Category.DRESS, 5,
                 LocalDate.now(), LocalDate.now());
 
@@ -24,7 +24,7 @@ class WarehouseTest {
 
     @Test
     void testAddProductFailsIfNameEmpty() { //Ser till att det inte går att lägga till produkt utan namn.
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
         Product product = new Product("2", "", Category.SUIT, 4,
                 LocalDate.now(), LocalDate.now());
 
@@ -33,7 +33,7 @@ class WarehouseTest {
 
     @Test
     void testUpdateProductSuccess() { //Testar att det går att uppdatera produkten med datum t.ex.
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
         Product product = new Product("1", "Red Dress", Category.DRESS, 5,
                 LocalDate.now().minusDays(1), LocalDate.now().minusDays(1));
         warehouse.addProduct(product);
@@ -49,7 +49,7 @@ class WarehouseTest {
 
     @Test
     void testUpdateProductFailsIfNotFound() {
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
 
         assertThrows(IllegalArgumentException.class, () ->
                 warehouse.updateProduct("999", "Nonexistent", Category.SUIT, 5)
@@ -58,7 +58,7 @@ class WarehouseTest {
 
     @Test
     void testGetAllProductsReturnsProducts() {
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
         Product product1 = new Product("1", "Red Dress", Category.DRESS, 5,
                 LocalDate.now(), LocalDate.now());
         Product product2 = new Product("2", "Suit Jacket", Category.SUIT, 3,
@@ -76,7 +76,7 @@ class WarehouseTest {
 
     @Test
     void testGetProductByIdSuccess() { //Hittar produkt med hjälp av ID.
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
         Product product = new Product("1", "Red dress", Category.DRESS, 5,
                 LocalDate.now(), LocalDate.now());
         warehouse.addProduct(product);
@@ -89,7 +89,7 @@ class WarehouseTest {
 
     @Test
     void testGetProductByIdFailsIfNotFound() {  //Detta ger fel om ID inte finns.
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
 
         assertThrows(IllegalArgumentException.class, () ->
                 warehouse.getProductById("999")
@@ -98,7 +98,7 @@ class WarehouseTest {
 
     @Test
     void testGetProductsByCategorySortedSuccess() {
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
         Product p1 = new Product("1", "Blue Shirt", Category.SHIRT, 2,
                 LocalDate.now(), LocalDate.now());
         Product p2 = new Product("2", "Red Shirt", Category.SHIRT, 4,
@@ -119,7 +119,7 @@ class WarehouseTest {
 
     @Test
     void testGetProductsByCategorySortedEmpty() {
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
 
         List<Product> dresses = warehouse.getProductsByCategorySorted(Category.DRESS);
 
@@ -128,7 +128,7 @@ class WarehouseTest {
 
     @Test
     void testGetProductsCreatedAfterSuccess() {
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
         Product old = new Product("1", "Old Suit", Category.SUIT, 5,
                 LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 1));
         Product recent = new Product("2", "New Dress", Category.DRESS, 1,
@@ -146,7 +146,7 @@ class WarehouseTest {
 
     @Test
     void testGetProductsCreatedAfterNoResults() {
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
         Product old = new Product("1", "Vintage Coat", Category.SUIT, 4,
                 LocalDate.of(2019, 5, 10), LocalDate.of(2019, 5, 10));
 
@@ -159,7 +159,7 @@ class WarehouseTest {
 
     @Test
     void testGetModifiedProductsSuccess() {
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
         Product original = new Product("1", "Green Dress", Category.DRESS, 2,
                 LocalDate.of(2023, 1, 1), LocalDate.of(2023, 1, 1));
         Product modified = new Product("2", "Blue Suit", Category.SUIT, 5,
@@ -176,7 +176,7 @@ class WarehouseTest {
 
     @Test
     void testGetModifiedProductsEmpty() {
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
         Product product = new Product("1", "Yellow Shirt", Category.SHIRT, 5,
                 LocalDate.now(), LocalDate.now());
 
@@ -192,7 +192,7 @@ class WarehouseTest {
     //Test som ska faila
     @Test
     void testGetAllProductsEmpty() {
-        Warehouse warehouse = new Warehouse();
+        ProductService warehouse = new ProductService();
 
         List<Product> all = warehouse.getAllProducts();
 

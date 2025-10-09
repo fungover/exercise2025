@@ -3,15 +3,16 @@ package service;
 import entities.Category;
 import entities.Product;
 import java.time.LocalDate;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
+import repository.ProductRepository;
 
-public class Warehouse {
+public class ProductService {
 
-    private final List<Product> products;  //final för att inte kunna byta ut listan, men möjligt att ändra och lägga till.
+    private final ProductRepository productRepository;
 
-    public Warehouse() {
-        this.products = new ArrayList<>();  //Tom lista, kan fyllas med produkter.
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     public void addProduct(Product product) { //För att lägga till produkter i listan, några steg för att validera, så som att det inte är null.
@@ -23,46 +24,41 @@ public class Warehouse {
             throw new IllegalArgumentException("Product name cannot be empty");
         }
 
-        products.add(product);
+        productRepository.addProduct(product);
     }
 
     public List<Product> getAllProducts() {  //Kopia på orginallistan där värden inte kan ändras.
-        return new ArrayList<>(products);
+        return productRepository.getAllProducts();
     }
 
-    public List<Product> getProductsByCategorySorted(Category category) {
-        return products.stream()
-                .filter(p -> p.category() == category)
-                .sorted((p1, p2) -> p1.name().compareToIgnoreCase(p2.name()))  //Sorterar i alfabetiskt ordning.
-                .toList();
-
-    }
-
-    public Product getProductById(String id) {
-        return products.stream()
-                .filter(p -> p.id().equals(id))
-                .findFirst()
+    public Product getProductId(String id) {
+        return productRepository.getProductById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
     }
 
+    public List<Product> getProductsByCategorySorted(Category category) {
+        return productRepository.getAllProducts().stream()
+                .filter(p -> p.category() == category)
+                .sorted((p1, p2) -> p1.name().compareToIgnoreCase(p2.name()))
+                .toList();
+    }
+
+
+
     public List<Product> getProductsCreatedAfter(LocalDate date) { //Sorterar ut produkter efter datum.
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 .filter(p -> p.createdDate().isAfter(date))
                 .toList();
     }
 
     public List<Product> getModifiedProducts() {  //Inte samma datum som skapat utan kan vara ändrat.
-        return products.stream()
+        return productRepository.getAllProducts().stream()
                 .filter(p -> !p.createdDate().equals(p.modifiedDate()))
                 .toList();
     }
 
     public void updateProduct(String id, String name, Category category, int rating) {
-
-        Product existing = products.stream()
-                .filter(p -> p.id().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+        Product existing = getProductId(id);
 
         Product updated = new Product.Builder()
                 .id(existing.id())
@@ -73,8 +69,6 @@ public class Warehouse {
                 .modifiedDate(LocalDate.now())
                 .build();
 
-        products.remove(existing);
-        products.add(updated);
-
+        productRepository.updateProduct(updated);
     }
 }

@@ -11,13 +11,10 @@ public class DIContainer {
     // Register which implementation to use for each interface
     public <T> void register(Class<T> interfaceClass, Class<? extends T> implementationClass) {
         bindings.put(interfaceClass, implementationClass);
-        System.out.println("  Registrerad: " + interfaceClass.getSimpleName() +
-                " → " + implementationClass.getSimpleName());
     }
 
     // Get instance of requested class - creates entire dependency graph
     public <T> T getInstance(Class<T> clazz) throws Exception {
-        System.out.println("  Löser upp: " + clazz.getSimpleName());
 
         // If it's an interface, get the registered implementation
         Class<?> classToInstantiate = bindings.getOrDefault(clazz, clazz);
@@ -41,7 +38,6 @@ public class DIContainer {
         // Recursively resolve dependencies
         Object[] dependencies = new Object[parameterTypes.length];
         for (int i = 0; i < parameterTypes.length; i++) {
-            System.out.println("    Behöver: " + parameterTypes[i].getSimpleName());
             dependencies[i] = getInstance(parameterTypes[i]);
         }
 

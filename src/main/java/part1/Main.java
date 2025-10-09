@@ -3,17 +3,18 @@ package part1;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("      PART 1: MANUELL INJECTION      ");
+        System.out.println("      PART 1: MANUAL INJECTION      ");
         System.out.println("====================================\n");
 
-        // Scenario 1: Kranvatten + Handkvarn
+        // Scenario 1: Standard CoffeeMaker
+        System.out.println("--- SCENARIO 1: Standard (Kranvatten + Handkvarn) ---");
         WaterSource tap = new TapWater();
         BeanGrinder manual = new ManualGrinder();
         CoffeeMaker maker1 = new CoffeeMaker(tap, manual);
         maker1.makeCoffee("arabica beans");
 
-        // Scenario 2: Flaskvatten + Elektrisk kvarn
-        System.out.println("--- SCENARIO 2: Flaskvatten + Elektrisk kvarn ---");
+        // Scenario 2: Deluxe CoffeeMaker
+        System.out.println("\n--- SCENARIO 2: Deluxe Flaskvatten + Elektrisk kvarn ---");
         WaterSource bottled = new BottledWater();
         BeanGrinder electric = new ElectricGrinder();
         CoffeeMaker maker2 = new CoffeeMaker(bottled, electric);

@@ -26,7 +26,7 @@ public class Main {
 
 
             // Scenario 2: Deluxe CoffeeMaker
-            System.out.println("\n--- SCENARIO 2: Deluxe (Flaskvatten + Elektrisk kvarn) ---");
+            System.out.println("\n--- SCENARIO 2: Deluxe Flaskvatten + Elektrisk kvarn ---");
 
             // Get beans from Weld
             BottledWater bottled = container.select(BottledWater.class).get();

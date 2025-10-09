@@ -21,6 +21,5 @@ public class CoffeeMaker {
         System.out.println("3. Brygger kaffet...");
         System.out.println("☕ Kaffet är klart!");
         System.out.println("Goooott!!!...");
-        System.out.println("––– Klart –––\n");
     }
 }

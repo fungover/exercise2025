@@ -115,9 +115,10 @@ public class PetService {
     }
 
     public PetDTO deletePet(Long id) {
-        PetDTO pet = getPetById(id);
-
-        pets.remove(id);
+        PetDTO pet = pets.remove(id);
+        if (pet == null) {
+            throw new NotFoundException("Pet with id " + id + " does not exist");
+        }
         return pet;
     }
 

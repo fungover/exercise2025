@@ -47,4 +47,9 @@ public class InMemoryPetRepository implements PetRepository {
             return updated;
         });
     }
+
+    @Override
+    public boolean delete(long id) {
+        return store.remove(id) != null;
+    }
 }

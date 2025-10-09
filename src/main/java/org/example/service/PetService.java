@@ -47,4 +47,8 @@ public class PetService {
         Pet updated = repo.update(id, p -> p.play(amount));
         return PetMapper.toDTO(updated);
     }
+
+    public void release(long id) {
+        if (!repo.delete(id)) throw new NotFoundException("Pet " + id + " not found");
+    }
 }

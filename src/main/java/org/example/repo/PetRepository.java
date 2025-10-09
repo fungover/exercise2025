@@ -13,5 +13,7 @@ public interface PetRepository {
 
     Optional<Pet> findById(long id);
 
-    Pet update(long id, UnaryOperator<Pet> change); // atomic transform
+    Pet update(long id, UnaryOperator<Pet> change);
+
+    boolean delete(long id);
 }

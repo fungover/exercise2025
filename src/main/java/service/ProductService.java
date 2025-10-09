@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 import repository.ProductRepository;
 
-public class ProductService {
+public class ProductService { //Hanterar logik inte datahantering.
 
-    private final ProductRepository productRepository;
+    private final ProductRepository productRepository; //Dependency Injection.
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;

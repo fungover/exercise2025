@@ -1,12 +1,13 @@
 package repository;
 
 import entities.Product;
-
-import javax.swing.text.html.Option;
+//import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+//Lagrar produkter i lista istället för databas.
 public class SaveProductRepository implements ProductRepository {
 
     private final List<Product> products = new ArrayList<>();
@@ -25,12 +26,12 @@ public class SaveProductRepository implements ProductRepository {
 
     @Override
     public List<Product> getAllProducts() {
-        return new ArrayList<>(products);
+        return new ArrayList<>(products); //Returnerar en kopia så det inte kan ändras utifrån.
     }
 
     @Override
     public void updateProduct(Product updatedProduct) {
-        products.removeIf(p -> p.id().equals(updatedProduct.id()));
-        products.add(updatedProduct);
+        products.removeIf(p -> p.id().equals(updatedProduct.id())); //Raderar gammal version.
+        products.add(updatedProduct); //Lägger till om updaterad.
     }
 }

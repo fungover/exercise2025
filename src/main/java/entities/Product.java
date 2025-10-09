@@ -12,7 +12,7 @@ public record Product (    //Record för att köra immutable (objekt som inte ka
     LocalDate modifiedDate
 ) {
 
-    public static class Builder {
+    public static class Builder { //Builder pattern för struktur.
         private String id;
         public String name;
         private entities.Category category;
@@ -20,6 +20,8 @@ public record Product (    //Record för att köra immutable (objekt som inte ka
         private LocalDate createdDate;
         private LocalDate modifiedDate;
 
+
+        //Metoder och returnerar builder.
         public Builder id(String id) {
             this.id = id;
             return this;

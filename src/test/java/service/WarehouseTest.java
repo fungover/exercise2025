@@ -11,8 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WarehouseTest {
-
+class ProductServiceTest {
 
 
     @Test
@@ -38,14 +37,17 @@ class WarehouseTest {
         ProductRepository repo = new SaveProductRepository();
         ProductService service = new ProductService(repo);
 
-        Product product = new Product.Builder()
-                .id("2")
-                .name("")
-                .category(Category.SUIT)
-                .rating(4)
-                .build();
+        assertThrows(IllegalArgumentException.class, () -> {
+            Product product = new Product.Builder()
+                    .id("2")
+                    .name("")
+                    .category(Category.SUIT)
+                    .rating(4)
+                    .build();
 
-        assertThrows(IllegalArgumentException.class, () -> service.addProduct(product));
+            service.addProduct(product);
+
+        });
     }
 
     @Test
@@ -75,25 +77,39 @@ class WarehouseTest {
 
     @Test
     void testUpdateProductFailsIfNotFound() {
-        ProductService warehouse = new ProductService();
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
         assertThrows(IllegalArgumentException.class, () ->
-                warehouse.updateProduct("999", "Nonexistent", Category.SUIT, 5)
+                service.updateProduct("999", "Nonexistent", Category.SUIT, 5)
         );
     }
 
     @Test
     void testGetAllProductsReturnsProducts() {
-        ProductService warehouse = new ProductService();
-        Product product1 = new Product("1", "Red Dress", Category.DRESS, 5,
-                LocalDate.now(), LocalDate.now());
-        Product product2 = new Product("2", "Suit Jacket", Category.SUIT, 3,
-                LocalDate.now(), LocalDate.now());
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        warehouse.addProduct(product1);
-        warehouse.addProduct(product2);
+        Product product1 = new Product.Builder()
+                .id("1")
+                .name("Red Dress")
+                .category(Category.DRESS)
+                .rating(5)
+                .build();
 
-        List<Product> all = warehouse.getAllProducts();
+
+        Product product2 = new Product.Builder()
+                .id("2")
+                .name("Suit Jacket")
+                .category(Category.SUIT)
+                .rating(3)
+                .build();
+
+
+        service.addProduct(product1);
+        service.addProduct(product2);
+
+        List<Product> all = service.getAllProducts();
 
         assertEquals(2, all.size());
         assertTrue(all.contains(product1));
@@ -102,12 +118,19 @@ class WarehouseTest {
 
     @Test
     void testGetProductByIdSuccess() { //Hittar produkt med hjälp av ID.
-        ProductService warehouse = new ProductService();
-        Product product = new Product("1", "Red dress", Category.DRESS, 5,
-                LocalDate.now(), LocalDate.now());
-        warehouse.addProduct(product);
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        Product found = warehouse.getProductById("1");
+        Product product = new Product.Builder()
+                .id("1")
+                .name("Red dress")
+                .category(Category.DRESS)
+                .rating(5)
+                .build();
+
+        service.addProduct(product);
+
+        Product found = service.getProductId("1");
 
         assertEquals("Red dress", found.name());
         assertEquals(Category.DRESS, found.category());
@@ -115,28 +138,45 @@ class WarehouseTest {
 
     @Test
     void testGetProductByIdFailsIfNotFound() {  //Detta ger fel om ID inte finns.
-        ProductService warehouse = new ProductService();
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
         assertThrows(IllegalArgumentException.class, () ->
-                warehouse.getProductById("999")
+                service.getProductId("999")
         );
     }
 
     @Test
     void testGetProductsByCategorySortedSuccess() {
-        ProductService warehouse = new ProductService();
-        Product p1 = new Product("1", "Blue Shirt", Category.SHIRT, 2,
-                LocalDate.now(), LocalDate.now());
-        Product p2 = new Product("2", "Red Shirt", Category.SHIRT, 4,
-                LocalDate.now(), LocalDate.now());
-        Product p3 = new Product("3", "Black dress", Category.DRESS, 3,
-                LocalDate.now(), LocalDate.now());
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        warehouse.addProduct(p1);
-        warehouse.addProduct(p2);
-        warehouse.addProduct(p3);
+        Product p1 = new Product.Builder()
+                .id("1")
+                .name("Blue Shirt")
+                .category(Category.SHIRT)
+                .rating(2)
+                .build();
 
-        List<Product> shirts = warehouse.getProductsByCategorySorted(Category.SHIRT);
+        Product p2 = new Product.Builder()
+                .id("2")
+                .name("Red Shirt")
+                .category(Category.SHIRT)
+                .rating(4)
+                .build();
+
+        Product p3 = new Product.Builder()
+                .id("3")
+                .name("Black dress")
+                .category(Category.DRESS)
+                .rating(3)
+                .build();
+
+        service.addProduct(p1);
+        service.addProduct(p2);
+        service.addProduct(p3);
+
+        List<Product> shirts = service.getProductsByCategorySorted(Category.SHIRT);
 
         assertEquals(2, shirts.size());
         assertEquals("Blue Shirt", shirts.get(0).name());
@@ -145,25 +185,40 @@ class WarehouseTest {
 
     @Test
     void testGetProductsByCategorySortedEmpty() {
-        ProductService warehouse = new ProductService();
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        List<Product> dresses = warehouse.getProductsByCategorySorted(Category.DRESS);
-
+        List<Product> dresses = service.getProductsByCategorySorted(Category.DRESS);
         assertTrue(dresses.isEmpty());
     }
 
     @Test
     void testGetProductsCreatedAfterSuccess() {
-        ProductService warehouse = new ProductService();
-        Product old = new Product("1", "Old Suit", Category.SUIT, 5,
-                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 1));
-        Product recent = new Product("2", "New Dress", Category.DRESS, 1,
-                LocalDate.of(2023, 1, 1), LocalDate.of(2023, 1, 1));
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        warehouse.addProduct(old);
-        warehouse.addProduct(recent);
+        Product old = new Product.Builder()
+                .id("1") .name("Old Suit")
+                .category(Category.SUIT)
+                .rating(5)
+                .createdDate(LocalDate.of(2020, 1, 1))
+                .modifiedDate(LocalDate.of(2020, 1, 1))
+                .build();
 
-        List<Product> results = warehouse.getProductsCreatedAfter(LocalDate.of(2021, 1, 1));
+
+        Product recent = new Product.Builder()
+                .id("2")
+                .name("New Dress")
+                .category(Category.DRESS)
+                .rating(1)
+                .createdDate(LocalDate.of(2023, 1, 1))
+                .modifiedDate(LocalDate.of(2023, 1, 1))
+                .build();
+
+        service.addProduct(old);
+        service.addProduct(recent);
+
+        List<Product> results = service.getProductsCreatedAfter(LocalDate.of(2021, 1, 1));
 
 
         assertEquals(1, results.size());
@@ -172,29 +227,52 @@ class WarehouseTest {
 
     @Test
     void testGetProductsCreatedAfterNoResults() {
-        ProductService warehouse = new ProductService();
-        Product old = new Product("1", "Vintage Coat", Category.SUIT, 4,
-                LocalDate.of(2019, 5, 10), LocalDate.of(2019, 5, 10));
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        warehouse.addProduct(old);
+        Product old = new Product.Builder()
+                .id("1")
+                .name("Vintage Coat")
+                .category(Category.SUIT)
+                .rating(4)
+                .createdDate(LocalDate.of(2019, 5, 10))
+                .modifiedDate(LocalDate.of(2019, 5, 10))
+                .build();
 
-        List<Product> results = warehouse.getProductsCreatedAfter(LocalDate.of(2022, 1, 1));
+        service.addProduct(old);
 
+        List<Product> results = service.getProductsCreatedAfter(LocalDate.of(2022, 1, 1));
         assertTrue(results.isEmpty());
     }
 
     @Test
     void testGetModifiedProductsSuccess() {
-        ProductService warehouse = new ProductService();
-        Product original = new Product("1", "Green Dress", Category.DRESS, 2,
-                LocalDate.of(2023, 1, 1), LocalDate.of(2023, 1, 1));
-        Product modified = new Product("2", "Blue Suit", Category.SUIT, 5,
-                LocalDate.of(2023, 1, 1), LocalDate.of(2023, 2, 1));
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        warehouse.addProduct(original);
-        warehouse.addProduct(modified);
+        Product original = new Product.Builder()
+                .id("1")
+                .name("Green Dress")
+                .category(Category.DRESS)
+                .rating(2)
+                .createdDate(LocalDate.of(2023, 1, 1))
+                .modifiedDate(LocalDate.of(2023, 1, 1))
+                .build();
 
-        List<Product> results = warehouse.getModifiedProducts();
+
+        Product modified = new Product.Builder()
+                .id("2")
+                .name("Blue Suit")
+                .category(Category.SUIT)
+                .rating(5)
+                .createdDate(LocalDate.of(2023, 1, 1))
+                .modifiedDate(LocalDate.of(2023, 2, 1))
+                .build();
+
+        service.addProduct(original);
+        service.addProduct(modified);
+
+        List<Product> results = service.getModifiedProducts();
 
         assertEquals(1, results.size());
         assertEquals("Blue Suit", results.get(0).name());
@@ -202,14 +280,18 @@ class WarehouseTest {
 
     @Test
     void testGetModifiedProductsEmpty() {
-        ProductService warehouse = new ProductService();
-        Product product = new Product("1", "Yellow Shirt", Category.SHIRT, 5,
-                LocalDate.now(), LocalDate.now());
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        warehouse.addProduct(product);
+        Product product = new Product.Builder()
+                .id("1") .name("Yellow Shirt")
+                .category(Category.SHIRT)
+                .rating(5)
+                .build();
 
-        List<Product> results = warehouse.getModifiedProducts();
+        service.addProduct(product);
 
+        List<Product> results = service.getModifiedProducts();
         assertTrue(results.isEmpty());
     }
 
@@ -218,10 +300,10 @@ class WarehouseTest {
     //Test som ska faila
     @Test
     void testGetAllProductsEmpty() {
-        ProductService warehouse = new ProductService();
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        List<Product> all = warehouse.getAllProducts();
-
+        List<Product> all = service.getAllProducts();
         assertTrue(all.isEmpty());
     }
 

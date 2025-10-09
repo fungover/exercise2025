@@ -1,5 +1,28 @@
+
+Uppdatering: 9/10
 Mitt Warehouse består av kläder,t.ex. klänningar, skjortor, kostymer.
-Objektorienterade principer är implementerade och testad med JUnit 5.
+Builder Pattern och Repository pattern är implementerat. 
+Logiken är testad med JUnit 5.
+
+Build Pattern ligger i Product.
+
+Product p = new Product.Builder()
+.id("1")
+.name("Red Dress")
+.category(Category.DRESS)
+.rating(5)
+.build();
+
+
+Tillkommet för Repository Pattern: 
+ProductRepository - Kontrakt för dataåtkomsten.
+SaveProductRepository - Listan för lagring.
+ProductService - sammankopplad med ProductRepository, förser logiken.
+
+
+
+
+//
 
 Projektstrukturen är följande: 
 - Entities 

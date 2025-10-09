@@ -48,7 +48,11 @@ public class PetService {
             petList.sort(comparator);
         }
 
-        // Pagination if offset and limit are provided
+        // Validate pagination parameters
+        if ((offset != null && offset < 0) || (limit != null && limit < 0)) {
+            throw new BadRequestException("Offset and limit must be positive numbers");
+        }
+        // Pagination if both are provided
         if (offset != null && limit != null) {
             int start = Math.min(offset, petList.size());
             int end = Math.min(start + limit, petList.size());

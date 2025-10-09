@@ -41,7 +41,7 @@ public class PetResource {
     public List<Pet> getPets(@QueryParam("species") String animalType,
                              @QueryParam("sortBy") String happy,
                              @QueryParam("order") String value,
-                             @QueryParam("offset") @Min(value = 0, message = "Offset can not be less than 0") Integer page,
+                             @QueryParam("offset") @Min(value = 1, message = "Offset can not be less than 0") Integer page,
                              @QueryParam("limit") @Min(value = 1, message = "Limit can not be less than 1") Integer pageSize
                              ){
         if(animalType != null) {

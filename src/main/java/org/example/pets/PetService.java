@@ -28,7 +28,7 @@ public class PetService {
     }
 
 
-    public List<PetDTO> getAllPets(String species, String sortBy, String order) {
+    public List<PetDTO> getAllPets(String species, String sortBy, String order, Integer offset, Integer limit) {
         List<PetDTO> petList = new ArrayList<>(pets.values());
 
         // Filter by species if provided
@@ -45,6 +45,13 @@ public class PetService {
                 comparator = comparator.reversed();
             }
             petList.sort(comparator);
+        }
+
+        // Pagination if offset and limit are provided
+        if (offset != null && limit != null) {
+            int start = Math.min(offset, petList.size());
+            int end = Math.min(start + limit, petList.size());
+            petList = petList.subList(start, end);
         }
 
         return petList;

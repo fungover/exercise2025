@@ -70,10 +70,9 @@ public class PetsResource {
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response deletePet(@PathParam("id") Long id) {
-        PetDTO deletePet = petService.deletePet(id);
+        petService.deletePet(id);
         return Response
-                .status(Response.Status.NO_CONTENT)
-                .entity(deletePet)
+                .noContent()
                 .build();
     }
 

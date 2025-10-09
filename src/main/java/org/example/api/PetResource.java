@@ -37,4 +37,9 @@ public class PetResource {
     public List<PetDTO> list() {
         return service.list();
     }
+
+    @GET @Path("/{id}")
+    public PetDTO get(@PathParam("id") long id) {
+        return service.get(id);
+    }
 }

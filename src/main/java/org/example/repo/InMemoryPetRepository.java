@@ -5,6 +5,7 @@ import org.example.domain.Pet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -27,4 +28,10 @@ public class InMemoryPetRepository implements PetRepository {
     public List<Pet> findAll() {
         return new ArrayList<>(store.values());
     }
+
+    @Override
+    public Optional<Pet> findById(long id) {
+        return Optional.ofNullable(store.get(id));
+    }
+
     }

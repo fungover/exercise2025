@@ -2,6 +2,7 @@ package org.example.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import org.example.api.PetMapper;
 import org.example.domain.Pet;
 import org.example.dto.PetDTO;
@@ -30,6 +31,11 @@ public class PetService {
 
     public List<PetDTO> list() {
         return repo.findAll().stream().map(PetMapper::toDTO).collect(Collectors.toList());
+    }
+
+    public PetDTO get(long id) {
+        Pet p = repo.findById(id).orElseThrow(() -> new NotFoundException("Pet " + id + " not found"));
+        return PetMapper.toDTO(p);
     }
 
 }

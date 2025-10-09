@@ -1,19 +1,40 @@
 package org.example.api;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import org.example.dto.PetDTO;
+import org.example.service.PetService;
 
+import java.net.URI;
 import java.util.List;
-import java.util.Collections;
 
 @Path("/pets")
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class PetResource {
+
+    PetService service;
+
+    public PetResource() {}
+
+    @Inject
+    public PetResource(PetService service) {
+        this.service = service;
+    }
+
+    @POST
+    public Response adopt(PetDTO dto, @Context UriInfo uriInfo) {
+        PetDTO created = service.adopt(dto);
+        URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(created.getId())).build();
+        return Response.created(location).entity(created).build();
+    }
+
     @GET
     public List<PetDTO> list() {
-        return Collections.emptyList();
+        return service.list();
     }
 }

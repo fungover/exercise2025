@@ -85,7 +85,7 @@
                 <configuration>
                     <version>${wildfly.version}</version>
                     <server-config>standalone.xml</server-config>
-                    <java-opts>-Djava.security.manager=disallow</java-opts>
+                    <javaOpts>-Djava.security.manager=disallow</javaOpts>
                 </configuration>
             </plugin>
         </plugins>

@@ -8,6 +8,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
+import java.util.Map;
 
 // REST resource handling Tamagotchi HTTP requests
 // Base path: /tamagotchis
@@ -56,9 +57,21 @@ public class TamagotchiResource {
         }
 
         // Apply pagination
-        if (offset > 0 || limit < tamagotchis.size()) {
-            int end = Math.min(offset + limit, tamagotchis.size());
-            tamagotchis = tamagotchis.subList(offset, end);
+        if (offset < 0 || limit < 0) {
+           return Response.status(Response.Status.BAD_REQUEST)
+             .entity(Map.of("error", "offset och limit måste vara noll eller större"))
+          .build();
+        }
+
+        if (offset >= tamagotchis.size()) {
+            return Response.ok(List.of()).build();
+        }
+
+        if (limit < tamagotchis.size() - offset) {
+           int end = Math.min(offset + limit, tamagotchis.size());
+           tamagotchis = tamagotchis.subList(offset, end);
+            } else if (offset > 0) {
+            tamagotchis = tamagotchis.subList(offset, tamagotchis.size());
         }
 
         return Response.ok(tamagotchis).build();

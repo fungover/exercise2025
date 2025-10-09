@@ -59,26 +59,28 @@ public class TamagotchiService {
         TamagotchiDTO tama = tamagotchis.get(id);
         if (tama == null) return null;
 
-        // Cannot feed a sleeping Tamagotchi
-        if (tama.isSleeping()) {
-            throw new IllegalStateException("Kan inte mata en sovande Tamagotchi!");
+        synchronized (tama) {
+            // Cannot feed a sleeping Tamagotchi
+            if (tama.isSleeping()) {
+                throw new IllegalStateException("Kan inte mata en sovande Tamagotchi!");
+            }
+
+            // Reduce hunger by 25 (minimum 0)
+            tama.setHunger(Math.max(0, tama.getHunger() - 25));
+
+            // Increase health by 5 (maximum 100)
+            tama.setHealth(Math.min(100, tama.getHealth() + 5));
+
+            // Decrease energy slightly by 5
+            tama.setEnergy(Math.max(0, tama.getEnergy() - 5));
+
+            // 30% chance that feeding creates a mess
+            if (Math.random() > 0.7) {
+                tama.setNeedsCleaning(true);
+            }
+
+            updateStatus(tama);
         }
-
-        // Reduce hunger by 25 (minimum 0)
-        tama.setHunger(Math.max(0, tama.getHunger() - 25));
-
-        // Increase health by 5 (maximum 100)
-        tama.setHealth(Math.min(100, tama.getHealth() + 5));
-
-        // Decrease energy slightly by 5
-        tama.setEnergy(Math.max(0, tama.getEnergy() - 5));
-
-        // 30% chance that feeding creates a mess
-        if (Math.random() > 0.7) {
-            tama.setNeedsCleaning(true);
-        }
-
-        updateStatus(tama);
         return tama;
     }
 
@@ -212,15 +214,21 @@ public class TamagotchiService {
         }
     }
 
-    // BONUS: Filter Tamagotchis by character type
+    // Filter Tamagotchis by character type
     public List<TamagotchiDTO> getTamagotchisByCharacter(String character) {
+        if (character == null || character.isEmpty()) {
+            return new ArrayList<>();
+        }
         return tamagotchis.values().stream()
                 .filter(tama -> tama.getCharacter().equalsIgnoreCase(character))
                 .collect(Collectors.toList());
     }
 
-    // BONUS: Sort Tamagotchis by specified attribute
+    // Sort Tamagotchis by specified attribute
     public List<TamagotchiDTO> getSortedTamagotchis(String sortBy, String order) {
+        if (sortBy == null || sortBy.isEmpty()) {
+            sortBy = "id";
+        }
         List<TamagotchiDTO> tamaList = new ArrayList<>(tamagotchis.values());
 
         // Determine comparator based on sortBy parameter
@@ -253,7 +261,14 @@ public class TamagotchiService {
 
     // BONUS: Paginate results for large collections
     public List<TamagotchiDTO> getPaginatedTamagotchis(int offset, int limit) {
+        if (offset < 0 ) {
+            throw new IllegalArgumentException("Offset cannot be negative!");
+        }
+        if (limit < 0) {
+            throw new IllegalArgumentException("Limit cannot be negative!");
+        }
         return tamagotchis.values().stream()
+                .sorted(Comparator.comparing(TamagotchiDTO::getId))
                 .skip(offset)
                 .limit(limit)
                 .collect(Collectors.toList());

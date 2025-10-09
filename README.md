@@ -12,7 +12,7 @@ Sleep 					PUT http://localhost:8080/api/tamagotchis/id/sleep
 Wake 					PUT http://localhost:8080/api/tamagotchis/id/wake
 Clean 					PUT http://localhost:8080/api/tamagotchis/id/clean
 Medicine 				PUT http://localhost:8080/api/tamagotchis/id/medicine
-Release					ERASE http://localhost:8080/api/tamagotchis/id
+Release					DELETE http://localhost:8080/api/tamagotchis/id
 
 Pagination(default limit=10 offset=0) GET http://localhost:8080/api/tamagotchis?offset=0&limit=10
 Filtering: GET http://localhost:8080/api/tamagotchis?character=Mametchi

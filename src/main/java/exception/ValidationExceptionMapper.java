@@ -5,7 +5,9 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 // Exception mapper to handle Bean Validation errors
@@ -16,17 +18,17 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
     @Override
     public Response toResponse(ConstraintViolationException exception) {
         // Collect all validation errors
-        Map<String, String> errors = new HashMap<>();
+        Map<String, List<String>> errors = new LinkedHashMap<>();
 
         // Iterate through each violation and extract field name and message
         for (ConstraintViolation<?> violation : exception.getConstraintViolations()) {
             String field = violation.getPropertyPath().toString();
             String message = violation.getMessage();
-            errors.put(field, message);
+            errors.computeIfAbsent(field, key -> new ArrayList<>()).add(message);
         }
 
         // Build response body
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> response = new LinkedHashMap<>();
         response.put("status", 400);
         response.put("message", "Valideringsfel");
         response.put("errors", errors);

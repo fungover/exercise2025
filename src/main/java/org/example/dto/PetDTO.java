@@ -1,10 +1,27 @@
 package org.example.dto;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class PetDTO {
-    private Long id;
+    private Long id; // assigned by server
+
+    @NotBlank(message = "name must not be blank")
+    @Size(max = 40, message = "name must be at most 40 characters")
     private String name;
+
+    @NotBlank(message = "species must not be blank")
+    @Size(max = 40, message = "species must be at most 40 characters")
     private String species;
+
+    @Min(value = 0, message = "hungerLevel must be between 0 and 100")
+    @Max(value = 100, message = "hungerLevel must be between 0 and 100")
     private int hungerLevel;
+
+    @Min(value = 0, message = "happiness must be between 0 and 100")
+    @Max(value = 100, message = "happiness must be between 0 and 100")
     private int happiness;
 
     public PetDTO() {}

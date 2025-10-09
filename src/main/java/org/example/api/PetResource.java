@@ -1,6 +1,8 @@
 package org.example.api;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -27,7 +29,7 @@ public class PetResource {
     }
 
     @POST
-    public Response adopt(PetDTO dto, @Context UriInfo uriInfo) {
+    public Response adopt(@Valid PetDTO dto, @Context UriInfo uriInfo) {
         PetDTO created = service.adopt(dto);
         URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(created.getId())).build();
         return Response.created(location).entity(created).build();
@@ -45,13 +47,13 @@ public class PetResource {
 
     @PUT @Path("/{id}/feed")
     public PetDTO feed(@PathParam("id") long id,
-                       @QueryParam("amount") int amount) {
+                       @QueryParam("amount") @DefaultValue("10") @Min(1) int amount) {
         return service.feed(id, amount);
     }
 
     @PUT @Path("/{id}/play")
     public PetDTO play(@PathParam("id") long id,
-                       @QueryParam("amount") int amount) {
+                       @QueryParam("amount") @DefaultValue("10") @Min(1) int amount) {
         return service.play(id, amount);
     }
 

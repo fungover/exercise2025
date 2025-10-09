@@ -38,4 +38,13 @@ public class PetService {
         return PetMapper.toDTO(p);
     }
 
+    public PetDTO feed(long id, int amount) {
+        Pet updated = repo.update(id, p -> p.feed(amount));
+        return PetMapper.toDTO(updated);
+    }
+
+    public PetDTO play(long id, int amount) {
+        Pet updated = repo.update(id, p -> p.play(amount));
+        return PetMapper.toDTO(updated);
+    }
 }

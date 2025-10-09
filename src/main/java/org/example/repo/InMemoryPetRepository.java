@@ -1,6 +1,7 @@
 package org.example.repo;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.NotFoundException;
 import org.example.domain.Pet;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.UnaryOperator;
 
 @ApplicationScoped
 public class InMemoryPetRepository implements PetRepository {
@@ -34,4 +36,15 @@ public class InMemoryPetRepository implements PetRepository {
         return Optional.ofNullable(store.get(id));
     }
 
+    @Override
+    public Pet update(long id, UnaryOperator<Pet> change) {
+        return store.compute(id, (k, existing) -> {
+            if (existing == null) throw new NotFoundException("Pet " + id + " not found");
+            Pet updated = change.apply(existing);
+            if (updated.id() == null || !updated.id().equals(id)) {
+                updated = updated.withId(id);
+            }
+            return updated;
+        });
     }
+}

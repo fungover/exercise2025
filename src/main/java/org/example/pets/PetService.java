@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class PetService {
 
     private final ConcurrentHashMap<Long, PetDTO> pets = new ConcurrentHashMap<>();
-    private final AtomicLong idGenerator = new AtomicLong(4);
+    private final AtomicLong idGenerator = new AtomicLong(7); // Change initialValue after how many sample pets you have
 
     public PetService() {
         // Sample data for demonstration/testing purposes

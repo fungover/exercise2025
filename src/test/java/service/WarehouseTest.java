@@ -3,6 +3,9 @@ package service;
 import entities.Category;
 import entities.Product;
 import org.junit.jupiter.api.Test;
+import repository.ProductRepository;
+import repository.SaveProductRepository;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -10,37 +13,60 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WarehouseTest {
 
+
+
     @Test
-    void testAddProductSuccess() {  //Testar att produkt läggs till och sparas korrekt.
-        ProductService warehouse = new ProductService();
-        Product product = new Product("1", "Red Dress", Category.DRESS, 5,
-                LocalDate.now(), LocalDate.now());
+    void testAddProductSuccess() {
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        warehouse.addProduct(product);
+        Product product = new Product.Builder()
+                .id("1")
+                .name("Red Dress")
+                .category(Category.DRESS)
+                .rating(5)
+                .build();
 
-        assertEquals(1, warehouse.getAllProducts().size());
-        assertEquals("Red Dress", warehouse.getAllProducts().get(0).name());
+        service.addProduct(product);
+
+        assertEquals(1, service.getAllProducts().size());
+        assertEquals("Red Dress", service.getAllProducts().get(0).name());
     }
 
     @Test
     void testAddProductFailsIfNameEmpty() { //Ser till att det inte går att lägga till produkt utan namn.
-        ProductService warehouse = new ProductService();
-        Product product = new Product("2", "", Category.SUIT, 4,
-                LocalDate.now(), LocalDate.now());
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        assertThrows(IllegalArgumentException.class, () -> warehouse.addProduct(product));
+        Product product = new Product.Builder()
+                .id("2")
+                .name("")
+                .category(Category.SUIT)
+                .rating(4)
+                .build();
+
+        assertThrows(IllegalArgumentException.class, () -> service.addProduct(product));
     }
 
     @Test
     void testUpdateProductSuccess() { //Testar att det går att uppdatera produkten med datum t.ex.
-        ProductService warehouse = new ProductService();
-        Product product = new Product("1", "Red Dress", Category.DRESS, 5,
-                LocalDate.now().minusDays(1), LocalDate.now().minusDays(1));
-        warehouse.addProduct(product);
+        ProductRepository repo = new SaveProductRepository();
+        ProductService service = new ProductService(repo);
 
-        warehouse.updateProduct("1", "Blue Dress", Category.DRESS, 8);
+        Product product = new Product.Builder()
+                .id("1")
+                .name("Red Dress")
+                .category(Category.DRESS)
+                .rating(5)
+                .createdDate(LocalDate.now().minusDays(1))
+                .modifiedDate(LocalDate.now().minusDays(1))
+                .build();
 
-        Product updated = warehouse.getAllProducts().get(0);
+
+        service.addProduct(product);
+        service.updateProduct("1", "Blue Dress", Category.DRESS, 8);
+
+        Product updated = service.getAllProducts().get(0);
         assertEquals("Blue Dress", updated.name());
         assertEquals(8, updated.rating());
         assertEquals(product.createdDate(), updated.createdDate());

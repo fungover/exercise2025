@@ -4,6 +4,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.example.Hello;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
 🐼Implement a JAX-RS resource class:
 POST /pets → Adopt a new pet
@@ -14,17 +17,24 @@ PUT /pets/{id}/play → Play with the pet (increase happiness)
 DELETE /pets/{id} → Release the pet
 */
 
-@Path("hello")
+@Path("pets")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class PetResource {
 
 
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON })
-    public Hello hello(@QueryParam("name") String name) {
-        if ((name == null) || name.trim().isEmpty()) {
-            name = "pets";
-        }
+    private static List<PetDTO> pets = new ArrayList<>();
 
-        return new Hello(name);
+    // GET /api/pets → lista alla djur
+    @GET
+    public List<PetDTO> listAll() {
+        return pets;
+    }
+
+    // POST /api/pets → lägg till nytt djur
+    @POST
+    public PetDTO addPet(PetDTO pet) {
+        pets.add(pet);
+        return pet;
     }
 }

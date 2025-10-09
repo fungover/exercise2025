@@ -18,7 +18,8 @@ public class PetService {
     private final AtomicLong idGenerator = new AtomicLong(4);
 
     public PetService() {
-        // Mocked data
+        // Sample data for demonstration/testing purposes
+        // In production, this data would be loaded from a database or other source
         pets.put(1L, new PetDTO(1L, "Rex", "Dog", 6, 10));
         pets.put(2L, new PetDTO(2L, "Garfield", "Cat", 10, 1));
         pets.put(3L, new PetDTO(3L, "Flax", "Bird", 1, 5));

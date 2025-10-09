@@ -8,6 +8,7 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Provider
@@ -15,15 +16,14 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
 
     @Override
     public Response toResponse(ConstraintViolationException exception) {
-        Map<String, String> errors = new HashMap<>();
-
-        for (ConstraintViolation<?> violation : exception.getConstraintViolations()) {
-            errors.put("message", violation.getMessage());
-        }
+        List<String> messages = exception.getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .toList();
 
         return Response
                 .status(Response.Status.BAD_REQUEST)
-                .entity(errors)
+                .entity(Map.of("messages", messages))
                 .build();
     }
 }

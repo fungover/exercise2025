@@ -3,5 +3,5 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.jboss.com/xml/ns/javaee http://www.jboss.org/j2ee/schema/jboss-web_7_5.xsd"
            version="7.5">
-    <context-root>jakartaee-hello-world</context-root>
+    <context-root>/api</context-root>
 </jboss-web>

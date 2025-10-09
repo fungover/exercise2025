@@ -1,4 +1,4 @@
-package org.example;
+package org.example.pets;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.jboss.logging.Logger;

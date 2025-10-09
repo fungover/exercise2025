@@ -20,8 +20,10 @@ public class PetDTO {
     @ValidHappinessLevel
     private int happinessLevel;
 
-    // Default constructor
+    // Default constructor with default values for hunger and happiness if not provided
     public PetDTO() {
+        this.hungerLevel = 5;
+        this.happinessLevel = 5;
     }
 
     public PetDTO(Long id, String name, String species, int hungerLevel, int happinessLevel) {

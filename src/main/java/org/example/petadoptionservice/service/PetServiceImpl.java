@@ -2,6 +2,7 @@ package org.example.petadoptionservice.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
 import org.example.petadoptionservice.dto.PetDTO;
@@ -22,7 +23,10 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public PetDTO adopt(PetDTO pet) {
-        validator.validate(pet);
+        var violations = validator.validate(pet);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         Long id = idGenerator.getAndIncrement();
         PetDTO newPet = new PetDTO(id, pet.name(), pet.species(), pet.hungerLevel(), pet.happiness());
         pets.put(id, newPet);

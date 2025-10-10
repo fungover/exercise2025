@@ -52,6 +52,9 @@ public class PetServiceImpl implements PetService {
         lock.lock();
         try {
             PetDTO pet = getById(id);
+            if (pet == null) {
+                throw new NotFoundException("Pet with id " + id + " does not exist");
+            }
             int newHungerLevel = Math.max(0, pet.hungerLevel() - 10);
             PetDTO updated = new PetDTO(id, pet.name(), pet.species(), newHungerLevel, pet.happiness());
             pets.put(id, updated);
@@ -66,6 +69,9 @@ public class PetServiceImpl implements PetService {
         lock.lock();
         try {
             PetDTO pet = getById(id);
+            if (pet == null) {
+                throw new NotFoundException("Pet with id " + id + " does not exist");
+            }
             int newHappinessLevel = Math.min(100, pet.happiness() + 10);
             int newHunger = Math.min(100, pet.hungerLevel() + 10 );
             PetDTO updated = new PetDTO(id, pet.name(), pet.species(), newHunger, newHappinessLevel);

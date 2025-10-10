@@ -188,9 +188,16 @@
             if (body) options.body = JSON.stringify(body);
             const response = await fetch(`${baseUrl}${path}`, options);
             const text = await response.text();
-            const display = response.ok
-                ? JSON.stringify(JSON.parse(text), null, 2)
-                : `❌ Error ${response.status}: ${text}`;
+            let display;
+            if (response.ok) {
+                try {
+                    display = JSON.stringify(JSON.parse(text), null, 2);
+                } catch {
+                    display = text;
+                }
+            } else {
+                display = `❌ Error ${response.status}: ${text}`;
+            }
             document.getElementById('response').textContent = display;
         } catch (error) {
             document.getElementById('response').textContent = `⚠️ Network Error: ${error.message}`;

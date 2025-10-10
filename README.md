@@ -1,36 +1,20 @@
-## 🧪 How to Work on the Exercises
+###Instructions
+Start server type: wf enter
+Stop server: ctrl c
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+Hatch Tamagotchis 		POST http://localhost:8080/api/tamagotchis
+Get All Tamagotchis 		GET http://localhost:8080/api/tamagotchis
+Get Tamagotchi by id 		GET http://localhost:8080/api/tamagotchis/id
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
+Feed 					PUT http://localhost:8080/api/tamagotchis/id/feed
+Play 					PUT http://localhost:8080/api/tamagotchis/id/play
+Sleep 					PUT http://localhost:8080/api/tamagotchis/id/sleep
+Wake 					PUT http://localhost:8080/api/tamagotchis/id/wake
+Clean 					PUT http://localhost:8080/api/tamagotchis/id/clean
+Medicine 				PUT http://localhost:8080/api/tamagotchis/id/medicine
+Release					DELETE http://localhost:8080/api/tamagotchis/id
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
-
-Example for user githubuser working on Exercise 1:
-
-```bash
-git checkout -b githubuser/exercise1
-```
-
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
-
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
-
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
-
-Link the PR to the issue you're solving.
-
-Include a clear description of your solution.
-
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+Pagination(default limit=10 offset=0) GET http://localhost:8080/api/tamagotchis?offset=0&limit=10
+Filtering: GET http://localhost:8080/api/tamagotchis?character=Mametchi
+Sort:(sortBy, default order = asc): energy, happiness, health, hunger, name, needsCleaning, status
+GET http://localhost:8080/api/tamagotchis?sortBy=happiness&order=desc

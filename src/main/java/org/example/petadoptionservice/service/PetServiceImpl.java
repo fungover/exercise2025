@@ -3,6 +3,7 @@ package org.example.petadoptionservice.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Validator;
+import jakarta.ws.rs.NotFoundException;
 import org.example.petadoptionservice.dto.PetDTO;
 
 import java.util.List;
@@ -35,7 +36,11 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public PetDTO getById(Long id) {
-        return pets.get(id);
+        PetDTO pet = pets.get(id);
+        if (pet == null) {
+            throw new NotFoundException("Pet with id " + id + " does not exist");
+        }
+        return pet;
     }
 
     @Override
@@ -70,7 +75,7 @@ public class PetServiceImpl implements PetService {
     @Override
     public void release(Long id) {
         if (pets.remove(id) == null) {
-            throw new IllegalArgumentException("Pet with id " + id + " does not exist");
+            throw new NotFoundException("Pet with id " + id + " does not exist");
         }
     }
 

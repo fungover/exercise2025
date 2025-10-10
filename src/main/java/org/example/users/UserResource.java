@@ -1,5 +1,6 @@
 package org.example.users;
 
+import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -13,13 +14,20 @@ import java.net.URI;
 @Path("users")
 public class UserResource {
 
-    Logger logger = Logger.getLogger(UserResource.class);
+    UserService userService;
+
+    public UserResource() {
+    }
+
+    @Inject
+    public UserResource(UserService userService) {
+        this.userService = userService;
+    }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     public Response uploadUserInfo( @Valid User user ){
-        logger.infov("Created user {0} with employment status {1}", user.name(), user.employed());
+        userService.addUser(user);
         return Response.created(URI.create("")).build();
     }
-
 }

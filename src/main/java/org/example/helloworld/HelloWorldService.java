@@ -1,6 +1,7 @@
 package org.example.helloworld;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import org.example.annotations.Log;
 import org.example.annotations.Swedish;
@@ -38,4 +39,9 @@ public class HelloWorldService {
     public List<String> guestBook() {
         return List.copyOf(guestBook);
     }
+
+//    // Listener
+//    public void onUserCreated(@Observes UserCreatedEvent event) {
+//        System.out.println("User created: " + event.getUsername());
+//    }
 }

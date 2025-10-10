@@ -49,6 +49,14 @@ public class TamagotchiResource {
         }
         // Apply sorting if specified
         else if (sortBy != null && !sortBy.isEmpty()) {
+            // Validate sortBy field
+            List<String> validSortFields = List.of("energy", "happiness", "health", "hunger", "name", "age");
+            if (!validSortFields.contains(sortBy)) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity(Map.of("error", "Ogiltigt sortBy-värde. Tillåtna värden: " + String.join(", ", validSortFields)))
+                        .build();
+            }
+            // ✅ FIX: Actually sort the tamagotchis!
             tamagotchis = tamagotchiService.getSortedTamagotchis(sortBy, order);
         }
         // Otherwise return all
@@ -56,21 +64,23 @@ public class TamagotchiResource {
             tamagotchis = tamagotchiService.getAllTamagotchis();
         }
 
-        // Apply pagination
+        // Validate pagination parameters
         if (offset < 0 || limit < 0) {
-           return Response.status(Response.Status.BAD_REQUEST)
-             .entity(Map.of("error", "offset och limit måste vara noll eller större"))
-          .build();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(Map.of("error", "offset och limit måste vara noll eller större"))
+                    .build();
         }
 
+        // Return empty list if offset is beyond the size
         if (offset >= tamagotchis.size()) {
             return Response.ok(List.of()).build();
         }
 
+        // Apply pagination
         if (limit < tamagotchis.size() - offset) {
-           int end = Math.min(offset + limit, tamagotchis.size());
-           tamagotchis = tamagotchis.subList(offset, end);
-            } else if (offset > 0) {
+            int end = Math.min(offset + limit, tamagotchis.size());
+            tamagotchis = tamagotchis.subList(offset, end);
+        } else if (offset > 0) {
             tamagotchis = tamagotchis.subList(offset, tamagotchis.size());
         }
 
@@ -84,7 +94,7 @@ public class TamagotchiResource {
         return tamagotchiService.getTamagotchiById(id)
                 .map(tama -> Response.ok(tama).build())
                 .orElse(Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\": \"Tamagotchi med ID " + id + " finns inte\"}")
+                        .entity(Map.of("error", "Tamagotchi med ID " + id + " finns inte"))
                         .build());
     }
 
@@ -98,7 +108,7 @@ public class TamagotchiResource {
             // Return 404 if Tamagotchi not found
             if (fed == null) {
                 return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\": \"Tamagotchi med ID " + id + " finns inte\"}")
+                        .entity(Map.of("error", "Tamagotchi med ID " + id + " finns inte"))
                         .build();
             }
 
@@ -106,7 +116,7 @@ public class TamagotchiResource {
         } catch (IllegalStateException e) {
             // Return 400 for business rule violations (e.g., feeding while sleeping)
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\": \"" + e.getMessage() + "\"}")
+                    .entity(Map.of("error", e.getMessage()))
                     .build();
         }
     }
@@ -120,14 +130,14 @@ public class TamagotchiResource {
 
             if (played == null) {
                 return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\": \"Tamagotchi med ID " + id + " finns inte\"}")
+                        .entity(Map.of("error", "Tamagotchi med ID " + id + " finns inte"))
                         .build();
             }
 
             return Response.ok(played).build();
         } catch (IllegalStateException e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\": \"" + e.getMessage() + "\"}")
+                    .entity(Map.of("error", e.getMessage()))
                     .build();
         }
     }
@@ -141,14 +151,14 @@ public class TamagotchiResource {
 
             if (sleeping == null) {
                 return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\": \"Tamagotchi med ID " + id + " finns inte\"}")
+                        .entity(Map.of("error", "Tamagotchi med ID " + id + " finns inte"))
                         .build();
             }
 
             return Response.ok(sleeping).build();
         } catch (IllegalStateException e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\": \"" + e.getMessage() + "\"}")
+                    .entity(Map.of("error", e.getMessage()))
                     .build();
         }
     }
@@ -162,14 +172,14 @@ public class TamagotchiResource {
 
             if (awake == null) {
                 return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\": \"Tamagotchi med ID " + id + " finns inte\"}")
+                        .entity(Map.of("error", "Tamagotchi med ID " + id + " finns inte"))
                         .build();
             }
 
             return Response.ok(awake).build();
         } catch (IllegalStateException e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\": \"" + e.getMessage() + "\"}")
+                    .entity(Map.of("error", e.getMessage()))
                     .build();
         }
     }
@@ -183,14 +193,14 @@ public class TamagotchiResource {
 
             if (cleaned == null) {
                 return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\": \"Tamagotchi med ID " + id + " finns inte\"}")
+                        .entity(Map.of("error", "Tamagotchi med ID " + id + " finns inte"))
                         .build();
             }
 
             return Response.ok(cleaned).build();
         } catch (IllegalStateException e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\": \"" + e.getMessage() + "\"}")
+                    .entity(Map.of("error", e.getMessage()))
                     .build();
         }
     }
@@ -204,14 +214,14 @@ public class TamagotchiResource {
 
             if (healed == null) {
                 return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\": \"Tamagotchi med ID " + id + " finns inte\"}")
+                        .entity(Map.of("error", "Tamagotchi med ID " + id + " finns inte"))
                         .build();
             }
 
             return Response.ok(healed).build();
         } catch (IllegalStateException e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\": \"" + e.getMessage() + "\"}")
+                    .entity(Map.of("error", e.getMessage()))
                     .build();
         }
     }
@@ -224,7 +234,7 @@ public class TamagotchiResource {
 
         if (!released) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\": \"Tamagotchi med ID " + id + " finns inte\"}")
+                    .entity(Map.of("error", "Tamagotchi med ID " + id + " finns inte"))
                     .build();
         }
 

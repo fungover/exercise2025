@@ -75,7 +75,7 @@
                 </configuration>
             </plugin>
 
-            <!-- WildFly Maven Plugin -->
+            <!-- WildFly Maven Plugin h-->
             <!-- Execute 'mvn clean package wildfly:deploy' to deploy to running WildFly -->
             <!-- Execute 'mvn clean wildfly:run' to start WildFly and deploy automatically -->
             <plugin>

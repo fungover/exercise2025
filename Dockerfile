@@ -15,6 +15,7 @@ USER jboss
 COPY --from=builder --chown=jboss:jboss /app/target/jakartaee-pet-adoption.war /opt/jboss/wildfly/standalone/deployments/
 EXPOSE 8080
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8080/api/pets || exit 1
+# Only applicable when running locally
+# HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+#    CMD curl -f http://localhost:8080/api/pets || exit 1
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]

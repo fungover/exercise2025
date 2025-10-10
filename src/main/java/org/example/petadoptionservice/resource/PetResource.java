@@ -41,12 +41,20 @@ public class PetResource {
     @PUT
     @Path("/{id}/feed")
     public PetDTO feed(@PathParam("id") Long id) {
+        PetDTO pet = petService.getById(id);
+        if (pet == null) {
+            throw new NotFoundException("Pet with id " + id + " does not exist");
+        }
         return petService.feed(id);
     }
 
     @PUT
     @Path("/{id}/play")
     public PetDTO play(@PathParam("id") Long id) {
+        PetDTO pet = petService.getById(id);
+        if (pet == null) {
+            throw new NotFoundException("Pet with id " + id + " does not exist");
+        }
         return petService.play(id);
     }
 

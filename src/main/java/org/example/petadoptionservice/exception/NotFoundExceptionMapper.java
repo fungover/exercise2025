@@ -1,6 +1,5 @@
 package org.example.petadoptionservice.exception;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;

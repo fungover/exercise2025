@@ -8,6 +8,7 @@ import jakarta.ws.rs.ext.Provider;
 import java.io.IOException;
 
 @Provider
+@RequiresAuth
 public class AuthHeaderFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {

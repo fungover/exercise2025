@@ -8,9 +8,11 @@ import jakarta.ws.rs.core.MediaType;
 
 import java.util.List;
 
+import org.example.filter.RequiresAuth;
 import org.example.users.UserCreatedEvent;
 import org.jboss.logging.Logger;
 
+@RequiresAuth
 @Path("hello")
 public class HelloWorldResource {
 

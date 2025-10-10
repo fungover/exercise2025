@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Project Information - UPDATED FOR TAMAGOTCHI -->
-    <groupId>com.example</groupId>
+    <!-- Project Information -->
+    <groupId>com.Jorlindstrom</groupId>
     <artifactId>tamagotchi-api</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
@@ -16,8 +16,27 @@
         Players can create, care for, and interact with virtual pets.
     </description>
 
+    <!-- Properties - ALL versions defined here -->
     <properties>
+        <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.report.sourceEncoding>UTF-8</project.report.sourceEncoding>
+
+        <!-- Java version -->
+        <maven.compiler.release>21</maven.compiler.release>
+
+        <!-- Jakarta EE -->
+        <jakartaee-api.version>10.0.0</jakartaee-api.version>
+
+        <!-- WildFly -->
+        <wildfly.version>35.0.1.Final</wildfly.version>
+
+        <!-- Maven Plugin versions -->
+        <compiler-plugin.version>3.13.0</compiler-plugin.version>
+        <war-plugin.version>3.4.0</war-plugin.version>
+        <wildfly-plugin.version>5.0.1.Final</wildfly-plugin.version>
+
+        <!-- Testing dependencies (optional) -->
         <junit.jupiter.version>5.13.4</junit.jupiter.version>
         <assertj.core.version>3.27.6</assertj.core.version>
         <mockito.version>5.20.0</mockito.version>
@@ -47,10 +66,32 @@
             <version>8.0.1.Final</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Optional: Testing dependencies -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.core.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
-        <!-- Output filename: tamagotchi.war (UPDATED) -->
+        <!-- Output filename: tamagotchi.war -->
         <finalName>tamagotchi</finalName>
 
         <plugins>
@@ -59,6 +100,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin.version}</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
             </plugin>
 
             <!-- Maven WAR Plugin -->
@@ -71,7 +115,7 @@
                 </configuration>
             </plugin>
 
-            <!-- WildFly Maven Plugin h-->
+            <!-- WildFly Maven Plugin -->
             <!-- Execute 'mvn clean package wildfly:deploy' to deploy to running WildFly -->
             <!-- Execute 'mvn clean wildfly:run' to start WildFly and deploy automatically -->
             <plugin>

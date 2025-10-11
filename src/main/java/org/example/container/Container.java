@@ -12,7 +12,7 @@ public class Container {
             Constructor<?>[] constructors = rootClass.getDeclaredConstructors();
             // Sort for deterministic selection when multiple constructors match
             java.util.Arrays.sort(constructors,
-                    java.util.Comparator.comparing(Constructor::toString));
+                    java.util.Comparator.comparing(Constructor::getParameterCount));
             for (Constructor<?> ctor : constructors) {
                 Class<?>[] paramTypes = ctor.getParameterTypes();
                 if (paramTypes.length == args.length) {
@@ -21,9 +21,6 @@ public class Container {
                         Class<?> argType = args[i] != null ? args[i].getClass() : null;
                         if (!isCompatible(paramTypes[i], argType)) {
                             match = false;
-                            System.err.println("Argument " + i +
-                                    " is not compatible with " +
-                                    paramTypes[i].getName());
                             break;
                         }
                     }

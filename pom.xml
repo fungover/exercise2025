@@ -18,6 +18,7 @@
         <junit.jupiter.version>5.13.4</junit.jupiter.version>
         <assertj.core.version>3.27.6</assertj.core.version>
         <mockito.version>5.20.0</mockito.version>
+        <weld.version>6.0.3.Final</weld.version>
     </properties>
     <dependencies>
         <dependency>
@@ -37,6 +38,11 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.weld.se</groupId>
+            <artifactId>weld-se-core</artifactId>
+            <version>${weld.version}</version>
         </dependency>
     </dependencies>
     <build>

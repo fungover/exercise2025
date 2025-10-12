@@ -20,4 +20,9 @@ public class PetService {
     public PetDTO getPetById(int id) {
         return petsService.getPets().get(--id);
     }
+
+    public void releasePet(int id) {
+        Long uuid = petsService.getPetIds().get(--id);
+        petsService.release(uuid);
+    }
 }

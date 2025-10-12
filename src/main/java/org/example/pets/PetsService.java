@@ -17,9 +17,7 @@ public class PetsService {
 
     public void adoptPet(PetDTO petDTO) {
         Long uuid = UUID.randomUUID().getMostSignificantBits();
-
         pets.put(uuid, petDTO);
-        logger.infov("Adopted pet: {0}", petDTO.name());
     }
 
     public List<PetDTO> getPets() {
@@ -28,5 +26,17 @@ public class PetsService {
             return Collections.emptyList();
         }
         return List.copyOf(pets.values());
+    }
+
+    public List<Long> getPetIds() {
+        if (pets.isEmpty()) {
+            logger.warn("No pets found");
+            return Collections.emptyList();
+        }
+        return List.copyOf(pets.keySet());
+    }
+
+    public void release(Long id) {
+        pets.remove(id);
     }
 }

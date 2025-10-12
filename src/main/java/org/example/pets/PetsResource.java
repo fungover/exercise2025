@@ -26,6 +26,7 @@ public class PetsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response adoptAPet(PetDTO petDTO) {
         petsService.adoptPet(petDTO);
+        logger.infov("Adopted pet: {0}", petDTO.name());
         return Response.ok()
                 .build();
     }

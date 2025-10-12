@@ -1,15 +1,11 @@
 package org.example.pet;
 
 public interface Pet {
-	String getName();
+	 String getName();
+	 String getSpecies();
+	 int getHunger();
+	 int getHappiness();
 
-	String getSpecies();
-
-	Hunger getHunger();
-
-	Happiness getHappiness();
-
-	void setHunger(Hunger hunger);
-
-	void setHappiness(Happiness happiness);
+	void setHappiness(int amount);
+	void setHunger(int amount);
 }

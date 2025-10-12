@@ -7,8 +7,10 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.example.pet.FeedRequest;
 import org.example.pet.Pet;
 import org.example.pet.PetDTO;
+import org.example.pet.PlayRequest;
 
 import java.util.List;
 
@@ -56,18 +58,21 @@ public class PetResource {
 	@PUT
 	@Path("{id}/feed")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response feedPet(@PathParam("id") String id) {
+	@Consumes({MediaType.APPLICATION_JSON})
+	public Response feedPet(@PathParam("id") String id, @Valid FeedRequest amount) {
+
 		return Response.status(200)
-						.entity(petService.feedPet(id))
+						.entity(petService.feedPet(id, amount.getAmount()))
 						.build();
 	}
 
 	@PUT
 	@Path("{id}/play")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response playWithPet(@PathParam("id") String id) {
+	@Consumes({MediaType.APPLICATION_JSON})
+	public Response playWithPet(@PathParam("id") String id, @Valid PlayRequest amount) {
 		return Response.status(200)
-						.entity(petService.playWithPet(id))
+						.entity(petService.playWithPet(id, amount.getAmount()))
 						.build();
 	}
 

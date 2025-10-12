@@ -1,5 +1,6 @@
 package org.example.pet;
 
+import org.example.validation.ValidAmount;
 import org.example.validation.ValidName;
 import org.example.validation.ValidSpecies;
 
@@ -8,24 +9,26 @@ public class PetDTO implements Pet {
 	private String name;
 	@ValidSpecies
 	private String species;
-	private Hunger hunger = Hunger.NEUTRAL;
-	private Happiness happiness = Happiness.NEUTRAL;
+	@ValidAmount
+	private int hunger = 5;
+	@ValidAmount
+	private int happiness = 5;
 
 	public PetDTO() {
 	}
 
-	public PetDTO(String name, String species) {
+	public PetDTO(@ValidName String name, @ValidSpecies String species) {
 		this.name = name;
 		this.species = species;
 	}
 
 	public String getName() { return name; }
 	public String getSpecies() { return species;	}
-	public Hunger getHunger() { return hunger; }
-	public Happiness getHappiness() {	return happiness;	}
+	public int getHunger() { return hunger; }
+	public int getHappiness() {	return happiness;	}
 
 	public void setName(@ValidName String name) { this.name = name; }
 	public void setSpecies(@ValidSpecies String species) { this.species = species; }
-	public void setHunger(Hunger hunger) { this.hunger = hunger; }
-	public void setHappiness(Happiness happiness) {	this.happiness = happiness;	}
+	public void setHunger(int hunger) { this.hunger = hunger; }
+	public void setHappiness(int happiness) { this.happiness = happiness; }
 }

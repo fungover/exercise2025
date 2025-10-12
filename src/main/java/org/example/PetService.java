@@ -1,10 +1,7 @@
 package org.example;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.example.pet.Happiness;
-import org.example.pet.Hunger;
 import org.example.pet.Pet;
-import org.example.pet.PetDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -26,18 +23,18 @@ public class PetService {
 		return pets.get(id);
 	}
 
-	public Pet feedPet(String id) {
+	public Pet feedPet(String id, int amount) {
 		Pet pet = pets.get(id);
 		if (pet != null) {
-			pet.setHunger(Hunger.FULL);
+			pet.setHunger(amount);
 		}
 		return pet;
 	}
 
-	public Pet playWithPet(String id) {
+	public Pet playWithPet(String id, int amount) {
 		Pet pet = pets.get(id);
 		if (pet != null) {
-			pet.setHappiness(Happiness.HAPPY);
+			pet.setHappiness(amount);
 		}
 		return pet;
 	}

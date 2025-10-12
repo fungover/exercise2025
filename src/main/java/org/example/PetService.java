@@ -18,9 +18,8 @@ public class PetService {
 		return List.copyOf(pets.values());
 	}
 
-	public Pet adoptPet(Pet pet) {;
+	public void adoptPet(Pet pet) {;
 		pets.put(pet.getName() + pet.getSpecies(), pet);
-		return pet;
 	}
 
 	public Pet getPet(String id) {

@@ -1,7 +1,12 @@
 package org.example.pet;
 
+import org.example.validation.ValidName;
+import org.example.validation.ValidSpecies;
+
 public class PetDTO implements Pet {
+	@ValidName
 	private String name;
+	@ValidSpecies
 	private String species;
 	private Hunger hunger = Hunger.NEUTRAL;
 	private Happiness happiness = Happiness.NEUTRAL;
@@ -19,8 +24,8 @@ public class PetDTO implements Pet {
 	public Hunger getHunger() { return hunger; }
 	public Happiness getHappiness() {	return happiness;	}
 
-	public void setName(String name) { this.name = name; }
-	public void setSpecies(String species) { this.species = species; }
+	public void setName(@ValidName String name) { this.name = name; }
+	public void setSpecies(@ValidSpecies String species) { this.species = species; }
 	public void setHunger(Hunger hunger) { this.hunger = hunger; }
 	public void setHappiness(Happiness happiness) {	this.happiness = happiness;	}
 }

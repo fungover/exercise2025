@@ -3,6 +3,7 @@ package org.example;
 import jakarta.inject.Inject;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -35,9 +36,9 @@ public class PetResource {
 	}
 
 	@POST
+	@Consumes({MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response adopt(@QueryParam("name") String name, @QueryParam("species") String species) {
-		Pet pet = new PetDTO(name, species);
+	public Response adopt(@Valid PetDTO pet) {
 		petService.adoptPet(pet);
 		return Response.status(201).entity(pet).build();
 	}

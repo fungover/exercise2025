@@ -1,5 +1,9 @@
 http://localhost:8080/jakartaee-hello-world/api/hello
 
+http://localhost:8080/ => Static HTML
+http://localhost:8080/api/hello => Endpoint OK
+
+
 Goal: A simple server that can receive REST API requests to handle virtual animals without a database.
 -> Adopt
 -> Feed

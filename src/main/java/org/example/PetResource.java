@@ -9,10 +9,8 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.example.pet.FeedRequest;
 import org.example.pet.Pet;
 import org.example.pet.PetDTO;
-import org.example.pet.PlayRequest;
 
 import java.util.List;
 
@@ -31,22 +29,33 @@ public class PetResource {
 
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getAllPetsPaginated(@QueryParam("offset") @DefaultValue("0") Integer offset,
-																			@QueryParam("limit") @DefaultValue("10") Integer limit,
-																			@QueryParam("species") String species) {
+	public Response getAllPetsPaginated(
+					@QueryParam("offset") Integer offset,
+					@QueryParam("limit") Integer limit,
+					@QueryParam("species") String species,
+					@QueryParam("sortBy") String sortBy,
+					@QueryParam("order") String order) {
 
-		List<Pet> pets;
+		List<Pet> pets = petService.getPets();
 		int total;
 
-		if (offset == null && limit == null) {
-			pets = petService.getPets();
-		} else if (species != null) {
-			pets = petService.getPets(species);
-		} else {
-			int safeOffset = offset != null ? offset : 10;
-			int safeLimit = limit != null ? limit : 10;
-			pets = petService.getPets(safeOffset, safeLimit);
+		if (species != null) {
+			pets = petService.getFilteredPets(pets, species);
 		}
+
+		if (sortBy != null && order != null) {
+			if (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc")) {
+				pets = petService.getSortedPets(pets, sortBy, order);
+			}
+		}
+
+		if (offset != null && limit != null) {
+			int safeOffset = offset >= 0 ? offset : 0;
+			int safeLimit = limit >= 1 ? limit : 10;
+			pets = petService.getPaginatedPets(pets, safeOffset, safeLimit);
+		}
+
+
 		total = pets.size();
 
 		Jsonb jsonb = JsonbBuilder.create();
@@ -54,8 +63,6 @@ public class PetResource {
 
 		return Response.ok(json)
 						.header("X-Total-Count", total)
-						.header("X-Offset", offset)
-						.header("X-Limit", limit)
 						.build();
 	}
 
@@ -82,21 +89,18 @@ public class PetResource {
 	@PUT
 	@Path("{id}/feed")
 	@Produces({MediaType.APPLICATION_JSON})
-	@Consumes({MediaType.APPLICATION_JSON})
-	public Response feedPet(@PathParam("id") String id, @Valid FeedRequest amount) {
-
+	public Response feedPet(@PathParam("id") String id) {
 		return Response.status(200)
-						.entity(petService.feedPet(id, amount.getAmount()))
+						.entity(petService.feedPet(id))
 						.build();
 	}
 
 	@PUT
 	@Path("{id}/play")
 	@Produces({MediaType.APPLICATION_JSON})
-	@Consumes({MediaType.APPLICATION_JSON})
-	public Response playWithPet(@PathParam("id") String id, @Valid PlayRequest amount) {
+	public Response playWithPet(@PathParam("id") String id) {
 		return Response.status(200)
-						.entity(petService.playWithPet(id, amount.getAmount()))
+						.entity(petService.playWithPet(id))
 						.build();
 	}
 

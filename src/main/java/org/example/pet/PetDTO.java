@@ -4,15 +4,19 @@ import org.example.validation.ValidAmount;
 import org.example.validation.ValidName;
 import org.example.validation.ValidSpecies;
 
+import java.util.Random;
+
+
 public class PetDTO implements Pet {
+	private final Random random = new Random();
 	@ValidName
 	private String name;
 	@ValidSpecies
 	private String species;
 	@ValidAmount
-	private int hunger = 5;
+	private int hunger = random.nextInt(10) + 1;
 	@ValidAmount
-	private int happiness = 5;
+	private int happiness = random.nextInt(10) + 1;
 
 	public PetDTO() {
 	}

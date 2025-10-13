@@ -1,9 +1,11 @@
 package org.example.di;
 
 import org.example.di.container.RobotChefContainer;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
 
-public class Resturant {
-    public static void main(String[] args) {
+public class Restaurant {
+    static void main() {
 
         // Without DI container
         IngredientSupplier supplier = new LocalIngredientSupplier();
@@ -22,5 +24,16 @@ public class Resturant {
 
         roboChef.serveBurger("Kevin");
         roboChef.servePizza("Bob");
+
+        // With Weld
+        Weld weld = new Weld();
+        WeldContainer container = weld.initialize();
+        try{
+            HeadChef chef = container.select(HeadChef.class).get();
+            chef.serveBurger("Kevin");
+            chef.servePizza("Bob");
+        } finally {
+            weld.shutdown();
+        }
     }
 }

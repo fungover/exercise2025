@@ -1,8 +1,6 @@
 package org.example.pets;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.example.pets.decorator.FeedDecorator;
-import org.example.pets.decorator.PlayDecorator;
 import org.jboss.logging.Logger;
 
 import java.util.Collections;
@@ -44,14 +42,14 @@ public class PetsService {
 
     public void feedPetById(int id) {
         PetDTO pet = getPetById(id);
-        PetDTO feedPet = new FeedDecorator(pet).feed();
-        pets.put(petId(id), feedPet);
+        PetDTO fedPet = pet.feed();
+        pets.put(petId(id), fedPet);
     }
 
     public void playWithPetById(int id) {
         PetDTO pet = getPetById(id);
-        PetDTO playWithPet = new PlayDecorator(pet).play();
-        pets.put(petId(id), playWithPet);
+        PetDTO happierPet = pet.play();
+        pets.put(petId(id), happierPet);
     }
 
     public void releasePetById(int id) {

@@ -8,6 +8,7 @@ import org.example.service.ZooService;
 
 public class App {
     public static void main(String[] args) {
+        // Part 1
         AnimalRepository repository = new InMemoryAnimalRepository();
 
         AnimalService service = new ZooService(repository);
@@ -15,5 +16,17 @@ public class App {
         Animal giraffe = new Animal("Longneck", "giraffe");
 
         service.registerAnimal(giraffe);
+
+        // Part 2 simple container
+
+        SimpleContainer container = new SimpleContainer();
+
+        container.bind(AnimalRepository.class, InMemoryAnimalRepository.class);
+
+        ZooService zooService = container.getInstance(ZooService.class);
+
+        Animal pig = new Animal("Greta", "pig");
+
+        zooService.registerAnimal(pig);
     }
 }

@@ -1,8 +1,10 @@
 package org.example.repository;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.example.animal.Animal;
 
 import java.util.*;
 
+@ApplicationScoped
 public class InMemoryAnimalRepository implements AnimalRepository {
     private final List<Animal> animals = new ArrayList<>();
 

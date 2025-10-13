@@ -11,15 +11,19 @@ import org.jboss.logging.Logger;
 @Path("pets")
 public class PetsResource {
 
-    PetsService petsService;
-
-    Logger logger = Logger.getLogger(PetsResource.class);
+    private PetsService petsService;
+    private static final Logger logger = Logger.getLogger(PetsResource.class);
 
     public PetsResource() {}
 
     @Inject
     public PetsResource(PetsService petsService) {
         this.petsService = petsService;
+    }
+
+    @Path("{id}")
+    public PetIdResource pet(@PathParam("id") int id) {
+        return new PetIdResource(petsService, id);
     }
 
     @POST
@@ -38,42 +42,51 @@ public class PetsResource {
         return petsService.getPets();
     }
 
-    @GET
-    @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public PetDTO getPetById(@PathParam("id") int id) {
-        logger.infov("Getting pet with id: {0}", id);
-        return petsService.getPetById(id);
-    }
+    public static class PetIdResource {
+        private final PetsService petsService;
+        private final int id;
 
-    @PUT
-    @Path("{id}/feed")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response feedPetById(@PathParam("id") int id) {
-        petsService.feedPetById(id);
-        logger.infov("Feeding pet with id: {0}", id);
-        return Response.ok()
-                .build();
-    }
+        public PetIdResource(PetsService petsService, int id) {
+            this.petsService = petsService;
+            this.id = id;
+        }
 
-    @PUT
-    @Path("{id}/play")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response playWithPetById(@PathParam("id") int id) {
-        petsService.playWithPetById(id);
-        logger.infov("Playing with pet with id: {0}", id);
-        return Response.ok()
-                .build();
-    }
+        @GET
+        @Produces(MediaType.APPLICATION_JSON)
+        public PetDTO getPetById() {
+            logger.infov("Getting pet with id: {0}", id);
+            return petsService.getPetById(id);
+        }
 
-    @DELETE
-    @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response releasePetById(@PathParam("id") int id) {
-        petsService.releasePetById(id);
-        logger.infov("Giving away {0}", petsService.getPetById(id).name(),
-                " to a new happy family...");
-        return Response.ok()
-                .build();
+        @PUT
+        @Path("feed")
+        @Consumes(MediaType.APPLICATION_JSON)
+        public Response feedPetById() {
+            petsService.feedPetById(id);
+            logger.infov("Feeding pet with id: {0}", id);
+            return Response.ok()
+                    .build();
+        }
+
+        @PUT
+        @Path("play")
+        @Consumes(MediaType.APPLICATION_JSON)
+        public Response playWithPetById() {
+            petsService.playWithPetById(id);
+            logger.infov("Playing with pet with id: {0}", id);
+            return Response.ok()
+                    .build();
+        }
+
+        @DELETE
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response releasePetById() {
+            String name = petsService.getPetById(id).name();
+            petsService.releasePetById(id);
+            logger.infov("Giving away {0}", name +
+                    ", to a new happy family...");
+            return Response.ok()
+                    .build();
+        }
     }
 }

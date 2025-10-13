@@ -1,8 +1,13 @@
 package org.example.di;
 
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
+
+@Dependent
 public class BurgerChef implements BurgerMaker {
     private final IngredientSupplier supplier;
 
+    @Inject
     public BurgerChef(IngredientSupplier supplier) {
         this.supplier = supplier;
     }

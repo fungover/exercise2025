@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+
+// RobotChefContainer that uses Java Reflection to instantiate objects
+// and resolve dependencies based on constructor parameters.
 public class RobotChefContainer {
     public final Map<Class<?>, Class<?>> typeMappings = new HashMap<>();
 

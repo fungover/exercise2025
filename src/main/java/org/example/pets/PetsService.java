@@ -1,6 +1,8 @@
 package org.example.pets;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import org.example.pets.decorator.FeedDecorator;
+import org.example.pets.decorator.PlayDecorator;
 import org.jboss.logging.Logger;
 
 import java.util.Collections;
@@ -28,7 +30,7 @@ public class PetsService {
         return List.copyOf(pets.values());
     }
 
-    public List<Long> getPetIds() {
+    private List<Long> getPetIds() {
         if (pets.isEmpty()) {
             logger.warn("No pets found");
             return Collections.emptyList();
@@ -36,7 +38,27 @@ public class PetsService {
         return List.copyOf(pets.keySet());
     }
 
-    public void release(Long id) {
-        pets.remove(id);
+    public PetDTO getPetById(int id) {
+        return getPets().get(--id);
+    }
+
+    public void feedPetById(int id) {
+        PetDTO pet = getPetById(id);
+        PetDTO feedPet = new FeedDecorator(pet).feed();
+        pets.put(petId(id), feedPet);
+    }
+
+    public void playWithPetById(int id) {
+        PetDTO pet = getPetById(id);
+        PetDTO playWithPet = new PlayDecorator(pet).play();
+        pets.put(petId(id), playWithPet);
+    }
+
+    public void releasePetById(int id) {
+        pets.remove(petId(id));
+    }
+
+    private Long petId(int id) {
+        return getPetIds().get(--id);
     }
 }

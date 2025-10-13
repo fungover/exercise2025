@@ -10,7 +10,7 @@ import java.util.Map;
 // RobotChefContainer that uses Java Reflection to instantiate objects
 // and resolve dependencies based on constructor parameters.
 public class RobotChefContainer {
-    public final Map<Class<?>, Class<?>> typeMappings = new HashMap<>();
+    private final Map<Class<?>, Class<?>> typeMappings = new HashMap<>();
 
     public <T> void register(Class<T> baseType, Class<? extends T> implType) {
         typeMappings.put(baseType, implType);

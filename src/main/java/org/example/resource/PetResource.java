@@ -67,11 +67,11 @@ public class PetResource {
      **/
     @PUT
     @Path("/{id}/feed")
-    public PetDto feed(@PathParam("id") Long id,
+    public Response feed(@PathParam("id") Long id,
                        @DefaultValue("10") @QueryParam("amount") int amount) {
         PetDto updated = pet.feedPet(id);
         if (updated == null) throw new NotFoundException("Pet not found");
-        return updated;
+        return Response.noContent().build();
     }
 
     /**
@@ -79,11 +79,11 @@ public class PetResource {
      **/
     @PUT
     @Path("/{id}/play")
-    public PetDto play(@PathParam("id") Long id,
+    public Response play(@PathParam("id") Long id,
                        @DefaultValue("10") @QueryParam("amount") int amount) {
         PetDto updated = pet.playWithPet(id);
         if (updated == null) throw new NotFoundException("Pet not found");
-        return updated;
+        return Response.noContent().build();
     }
 
     /**

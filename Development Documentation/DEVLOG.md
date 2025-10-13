@@ -50,6 +50,9 @@ curl http://localhost:8080/api/pet/1
 # 5) release
 curl -Method DELETE http://localhost:8080/api/pet/1
 
+OK, so I discovered powershell test scripts 🤤 
+![img.png](PowershellScriptTest.png)
+
 ______________________________________________________
 ## Assignment 6 - https://github.com/fungover/exercise2025/issues/142
 

@@ -7,7 +7,8 @@ import org.jboss.weld.environment.se.WeldContainer;
 public class Restaurant {
     static void main() {
 
-        // Without DI container
+        // Part 1: Manual Constructor Injection
+        System.out.println("\n Part 1: Manual Dependency Injection");
         IngredientSupplier supplier = new LocalIngredientSupplier();
         BurgerMaker burgerChef = new BurgerChef(supplier);
         PizzaMaker pizzaChef = new PizzaChef(supplier);
@@ -15,7 +16,8 @@ public class Restaurant {
         head.serveBurger("Kevin");
         head.servePizza("Bob");
 
-        // With DI container
+        // Part 2: Minimal Dependency Injection container
+        System.out.println("\n Part 2: Reflection-based Dependency Injection");
         RobotChefContainer robotChef = new RobotChefContainer();
         robotChef.register(IngredientSupplier.class, LocalIngredientSupplier.class);
         robotChef.register(BurgerMaker.class, BurgerChef.class);
@@ -25,7 +27,8 @@ public class Restaurant {
         roboChef.serveBurger("Kevin");
         roboChef.servePizza("Bob");
 
-        // With Weld
+        // Part 3: Using Weld CDI container
+        System.out.println("\n Part 3: Weld Dependency Injection");
         Weld weld = new Weld();
         WeldContainer container = weld.initialize();
         try{

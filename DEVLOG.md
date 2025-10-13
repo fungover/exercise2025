@@ -3,34 +3,45 @@ http://localhost:8080/jakartaee-hello-world/api/hello
 http://localhost:8080/ => Static HTML
 http://localhost:8080/api/hello => Endpoint OK
 
-
 Goal: A simple server that can receive REST API requests to handle virtual animals without a database.
 -> Adopt
 -> Feed
 -> Play with
 -> Release
 
-Step 1: REST- server & Jakarta EE (java´s standard for building webb apps and REST api´s)
-Served through wildfly which is an application server that runs my API. 
-### Commands: 
+[x] REST- server & Jakarta EE (java´s standard for building webb apps and REST api´s)
+Served through wildfly which is an application server that runs my API.
+
+### Commands:
+
 server start: _mvn clean package wildfly:run_
-delete previous build files in target/: _mvn clean_ 
+delete previous build files in target/: _mvn clean_
 start wildfly server locally and load the .war-app: _wildfly:run_
 
-Step 2: Entry point file
+[x] Entry point file
 ApiApplication.java with code:[@ApplicationPath("/api") public class ApiApplication extends Application { } ]
 
+[x] Create pet data that is ready to be used.
+JSON format:
+{
+"name": "Polly",
+"species": "Dog",
+"hungerLevel": 59,
+"happiness": 90
+}
 
-
-
+[] Create a pet service file, with all the logic for pet handling
 
 
 ## Assignment 6 - https://github.com/fungover/exercise2025/issues/142
+
 About the assignment:
 🎯 Objective
 [x] Start your implementation from the branch kappsegla/jakarta-ee which is setup for jakarta ee with java 21.
 
-Implement a RESTful Web Service using Jakarta EE 10 and the JAX-RS specification. The service will run inside an application server (e.g., WildFly) and utilize CDI for dependency injection and Bean Validation for input validation. No persistence layer will be used; instead, data will be stored in a thread-safe in-memory service.
+Implement a RESTful Web Service using Jakarta EE 10 and the JAX-RS specification. The service will run inside an
+application server (e.g., WildFly) and utilize CDI for dependency injection and Bean Validation for input validation. No
+persistence layer will be used; instead, data will be stored in a thread-safe in-memory service.
 
 📦 Technologies
 Jakarta EE 10

@@ -51,7 +51,7 @@ public class PetResource {
     }
 
     /**
-     * GET /api/pet{id} -> get one specific pet
+     * GET /api/pet/{id} -> get one specific pet
      **/
     @GET
     @Path("/{id}")
@@ -63,7 +63,7 @@ public class PetResource {
     }
 
     /**
-     * PUT /api/pet{id}/feed[?amount=10] -> feed: Decrease hunger level, not bellow 0
+     * PUT /api/pet/{id}/feed -> feed: Decrease hunger level, not bellow 0
      **/
     @PUT
     @Path("/{id}/feed")
@@ -75,13 +75,26 @@ public class PetResource {
     }
 
     /**
-     * PUT /api/pet{id}/play[?amount=10] -> play: Increase happiness level, not above 100
+     * PUT /api/pet/{id}/play -> play: Increase happiness level, not above 100
      **/
-    public PetDto Play(@PathParam("id") Long id,
+    @PUT
+    @Path("/{id}/play")
+    public PetDto play(@PathParam("id") Long id,
                        @DefaultValue("10") @QueryParam("amount") int amount) {
         PetDto updated = pet.playWithPet(id);
         if (updated == null) throw new NotFoundException("Pet not found");
         return updated;
+    }
+
+    /**
+     * DELETE /api/pet/{id} -> release one pet
+     **/
+    @DELETE
+    @Path("/{id}")
+    public Response release(@PathParam("id") Long id) {
+        boolean removed = pet.releasePet(id);
+        if (!removed) throw new NotFoundException("Pet not found");
+        return Response.noContent().build();
     }
 
 

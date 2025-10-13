@@ -9,14 +9,18 @@ Goal: A simple server that can receive REST API requests to handle virtual anima
 -> Play with
 -> Release
 
+### Commands:
+* server start: _mvn clean package wildfly:run_
+* delete previous build files in target/: _mvn clean_
+* start wildfly server locally and load the .war-app: _wildfly:run_
+* shutdown server: _mvn wildfly:shutdown_
+* clean and restart:
+taskkill /F /IM java.exe
+mvn clean package wildfly:run
+
+## TODO:
 [x] REST- server & Jakarta EE (java´s standard for building webb apps and REST api´s)
 Served through wildfly which is an application server that runs my API.
-
-### Commands:
-
-server start: _mvn clean package wildfly:run_
-delete previous build files in target/: _mvn clean_
-start wildfly server locally and load the .war-app: _wildfly:run_
 
 [x] Entry point file
 ApiApplication.java with code:[@ApplicationPath("/api") public class ApiApplication extends Application { } ]
@@ -31,8 +35,22 @@ JSON format:
 }
 
 [x] Create a pet service file, with all the logic for pet handling
-[] Create REST resource
+[x] Create and test REST resource
+Try following test sequence in powershell:
+# 1) adopt
+curl -Method POST http://localhost:8080/api/pet `
+  -ContentType "application/json" `
+-Body '{"name":"Polly","species":"dog","hungerLevel":50,"happiness":90}'
+# 2) play
+curl -Method PUT http://localhost:8080/api/pet/1/play
+# 3) feed
+curl -Method PUT http://localhost:8080/api/pet/1/feed
+# 4) check
+curl http://localhost:8080/api/pet/1
+# 5) release
+curl -Method DELETE http://localhost:8080/api/pet/1
 
+______________________________________________________
 ## Assignment 6 - https://github.com/fungover/exercise2025/issues/142
 
 About the assignment:

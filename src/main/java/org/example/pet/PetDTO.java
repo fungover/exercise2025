@@ -27,8 +27,8 @@ public class PetDTO implements Pet {
 	public int getHunger() { return hunger; }
 	public int getHappiness() {	return happiness;	}
 
-	public void setName(@ValidName String name) { this.name = name; }
-	public void setSpecies(@ValidSpecies String species) { this.species = species; }
+	public void setName( String name) { this.name = name; }
+	public void setSpecies( String species) { this.species = species; }
 	public void setHunger(int hunger) { this.hunger = hunger; }
 	public void setHappiness(int happiness) { this.happiness = happiness; }
 }

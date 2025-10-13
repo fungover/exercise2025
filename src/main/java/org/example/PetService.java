@@ -15,7 +15,21 @@ public class PetService {
 		return List.copyOf(pets.values());
 	}
 
-	public void adoptPet(Pet pet) {;
+	public List<Pet> getPets(int offset, int limit) {
+		return pets.values().stream()
+						.skip(offset)
+						.limit(limit)
+						.toList();
+	}
+
+	public List<Pet> getPets(String species) {
+		return pets.values().stream()
+						.filter(p -> p.getSpecies().equalsIgnoreCase(species))
+						.toList();
+	}
+
+	public void adoptPet(Pet pet) {
+		pet.setSpecies(pet.getSpecies().toLowerCase().trim());
 		pets.put(pet.getName() + pet.getSpecies(), pet);
 	}
 

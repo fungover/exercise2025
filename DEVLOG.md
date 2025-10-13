@@ -30,8 +30,8 @@ JSON format:
 "happiness": 90
 }
 
-[] Create a pet service file, with all the logic for pet handling
-
+[x] Create a pet service file, with all the logic for pet handling
+[] Create REST resource
 
 ## Assignment 6 - https://github.com/fungover/exercise2025/issues/142
 

@@ -12,7 +12,8 @@ import java.util.concurrent.atomic.AtomicLong;
  * Used by REST-API resources
  **/
 
-@ApplicationScoped /// Instance is shared between all requests
+@ApplicationScoped
+/// Instance is shared between all requests
 public class PetService {
 
     /// Thread safe map (id -> pet) instead of DB
@@ -60,11 +61,11 @@ public class PetService {
     /**
      * Plays with one animal -> increases happiness level, not above 100
      **/
-    public PetDto PlatWithPet(Long id) {
+    public PetDto playWithPet(Long id) {
         PetDto pet = pets.get(id);
         if (pet != null) {
             int newHappiness = Math.min(100, pet.getHappiness() + 10);
-                    pet.setHappiness(newHappiness);
+            pet.setHappiness(newHappiness);
         }
         return pet;
     }

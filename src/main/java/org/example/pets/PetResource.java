@@ -52,4 +52,12 @@ public class PetResource {
     public PetDTO feedPet(@PathParam("id") Long id, @QueryParam("amount") @DefaultValue("10") int amount) {
         return petService.feedPet(id, amount);
     }
+
+    @PUT
+    @Path("{id}/play")
+    public PetDTO playWithPet(@PathParam("id") Long id,
+                              @QueryParam("amount") @DefaultValue("10") int amount) {
+        return petService.playWithPet(id, amount);
+    }
+
 }

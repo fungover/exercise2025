@@ -47,4 +47,13 @@ public class PetService {
         pet.setHungerLevel(newHunger);
         return pet;
     }
+
+    //play with pet
+    public PetDTO playWithPet(Long id, int amount) {
+        PetDTO pet = getPetById(id);
+        int newHappiness = Math.min(100, pet.getHappiness() + amount);
+        pet.setHappiness(newHappiness);
+        return pet;
+    }
+
 }

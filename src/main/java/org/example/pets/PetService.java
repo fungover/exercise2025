@@ -39,4 +39,12 @@ public class PetService {
         }
         return pet;
     }
+
+    // feed the chosen pet
+    public PetDTO feedPet(Long id, int amount) {
+        PetDTO pet = getPetById(id);
+        int newHunger = Math.max(0, pet.getHungerLevel() - amount);
+        pet.setHungerLevel(newHunger);
+        return pet;
+    }
 }

@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class ErrorResponse {
     private String error;
-    private Map<String, String> details; // valfritt, t.ex. för valideringsfel
+    private Map<String, String> details;
 
     public ErrorResponse() {}
 

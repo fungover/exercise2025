@@ -46,4 +46,10 @@ public class PetResource {
     public PetDTO getPet(@PathParam("id") Long id) {
         return petService.getPetById(id);
     }
+
+    @PUT
+    @Path("{id}/feed")
+    public PetDTO feedPet(@PathParam("id") Long id, @QueryParam("amount") @DefaultValue("10") int amount) {
+        return petService.feedPet(id, amount);
+    }
 }

@@ -53,6 +53,8 @@ curl -Method DELETE http://localhost:8080/api/pet/1
 OK, so I discovered powershell test scripts 🤤 
 ![img.png](PowershellScriptTest.png)
 
+[x] Apply the requested REST convention in the assignment and change pet to plural -> pets.
+
 ______________________________________________________
 ## Assignment 6 - https://github.com/fungover/exercise2025/issues/142
 

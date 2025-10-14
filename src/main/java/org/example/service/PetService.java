@@ -33,15 +33,12 @@ public class PetService {
     }
 
     /**
-     * Gets all pets
+     * Readings - gets several or one pet
      **/
     public Map<Long, PetDto> getAllPets() {
         return pets;
     }
 
-    /**
-     * Gets one specific pet based on ID
-     **/
     public PetDto getPetById(Long id) {
         return pets.get(id);
     }
@@ -49,25 +46,27 @@ public class PetService {
     /**
      * Feeds one animal -> decreases hunger level, not bellow 0
      **/
-    public PetDto feedPet(Long id) {
-        PetDto pet = pets.get(id);
-        if (pet != null) {
-            int newHunger = Math.max(0, pet.getHungerLevel() - 10);
-            pet.setHungerLevel(newHunger);
-        }
-        return pet;
+    public PetDto feedPet(Long id, int amount) {
+        int a = Math.max(0, amount);
+        return pets.compute(id, (k, p) -> {
+            if (p == null) return null;
+            int newHunger = Math.max(0, p.getHungerLevel() - a);
+            p.setHungerLevel(newHunger);
+            return p;
+        });
     }
 
     /**
      * Plays with one animal -> increases happiness level, not above 100
      **/
-    public PetDto playWithPet(Long id) {
-        PetDto pet = pets.get(id);
-        if (pet != null) {
-            int newHappiness = Math.min(100, pet.getHappiness() + 10);
-            pet.setHappiness(newHappiness);
-        }
-        return pet;
+    public PetDto playWithPet(Long id, int amount) {
+        int a = Math.max(0, amount);
+        return pets.compute(id, (k, p) -> {
+            if (p == null) return null;
+            int newHappy = Math.min(100, p.getHappiness() + a);
+            p.setHappiness(newHappy);
+            return p;
+        });
     }
 
     /**
@@ -75,6 +74,22 @@ public class PetService {
      **/
     public boolean releasePet(Long id) {
         return pets.remove(id) != null;
+    }
+
+
+
+
+
+
+    /**
+     * Backup to not crash old requests
+     **/
+    public PetDto feedPet(Long id) {
+        return feedPet(id, 10);
+    }
+
+    public PetDto playWithPet(Long id) {
+        return playWithPet(id, 10);
     }
 
 }

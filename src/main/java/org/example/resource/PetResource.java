@@ -41,7 +41,7 @@ public class PetResource {
     }
 
     /**
-     * GET /api/pet -> list all pets
+     * GET /api/pets -> list all pets
      **/
     @GET
     public List<PetDto> all() {
@@ -51,7 +51,7 @@ public class PetResource {
     }
 
     /**
-     * GET /api/pet/{id} -> get one specific pet
+     * GET /api/pets/{id} -> get one specific pet
      **/
     @GET
     @Path("/{id}")
@@ -63,31 +63,31 @@ public class PetResource {
     }
 
     /**
-     * PUT /api/pet/{id}/feed -> feed: Decrease hunger level, not bellow 0
+     * PUT /api/pets/{id}/feed -> feed: Decrease hunger level, not bellow 0
      **/
     @PUT
     @Path("/{id}/feed")
     public Response feed(@PathParam("id") Long id,
-                       @DefaultValue("10") @QueryParam("amount") int amount) {
+                       @Valid @BeanParam AmountParams p) {
         PetDto updated = pet.feedPet(id);
         if (updated == null) throw new NotFoundException("Pet not found");
         return Response.noContent().build();
     }
 
     /**
-     * PUT /api/pet/{id}/play -> play: Increase happiness level, not above 100
+     * PUT /api/pets/{id}/play -> play: Increase happiness level, not above 100
      **/
     @PUT
     @Path("/{id}/play")
     public Response play(@PathParam("id") Long id,
-                       @DefaultValue("10") @QueryParam("amount") int amount) {
+                         @Valid @BeanParam AmountParams p) {
         PetDto updated = pet.playWithPet(id);
         if (updated == null) throw new NotFoundException("Pet not found");
         return Response.noContent().build();
     }
 
     /**
-     * DELETE /api/pet/{id} -> release one pet
+     * DELETE /api/pets/{id} -> release one pet
      **/
     @DELETE
     @Path("/{id}")

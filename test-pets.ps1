@@ -166,6 +166,16 @@ $r = Invoke-Api -Method GET -Url "$baseUrl/$id"
 $ok = ($r.Status -eq 200)
 Show-Result $ok "200 OK" "Expected 200, got $( $r.Status )" $r.Body
 
+# 6.1) Check that values changed (happiness up, hunger down)
+try {
+    $obj = $r.Body | ConvertFrom-Json
+    $okValues = ($obj.happiness -gt 59) -and ($obj.hungerLevel -lt 50)
+    Show-Result $okValues "Values updated correctly (happy up, hunger down)" "Unexpected values" ($r.Body)
+} catch {
+    Show-Result $false "—" "Could not parse JSON body for assertions" $r.Body
+}
+
+
 # 7) DELETE – Release (204)
 Show-Step "7) DELETE /api/pets/$id (release)"
 $r = Invoke-Api -Method DELETE -Url "$baseUrl/$id"

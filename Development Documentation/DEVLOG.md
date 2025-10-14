@@ -54,7 +54,8 @@ OK, so I discovered powershell test scripts 🤤
 ![img.png](PowershellScriptTest.png)
 
 [x] Apply the requested REST convention in the assignment and change pet to plural -> pets.
-
+[x] Ensure consistent JSON responses (400, 404, 500)
+[x] Validate amount vid @BeanParam in feed/play
 ______________________________________________________
 ## Assignment 6 - https://github.com/fungover/exercise2025/issues/142
 

@@ -1,5 +1,6 @@
 package org.example.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import org.example.DTO.PetDTO;
 
 import jakarta.ws.rs.NotFoundException;
@@ -9,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
+@ApplicationScoped
 public class PetService {
 
     private final ConcurrentHashMap<Long, PetDTO> pets = new ConcurrentHashMap<>();

@@ -2,10 +2,9 @@ package org.fungover.resource;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.fungover.dto.PetDTO;
 import org.fungover.service.PetService;
 
 @Path("pets")
@@ -16,6 +15,12 @@ public class PetResource {
 
     @Inject
     PetService petService;
+
+    @GET
+    @Path("{id}")
+    public PetDTO get(@PathParam("id") long id) {
+        return petService.get(id);
+    }
 
 
 }

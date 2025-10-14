@@ -3,7 +3,7 @@ package org.fungover.dto;
 import jakarta.validation.constraints.*;
 
 public class PetDTO {
-    private long id;
+    private Long id;
 
     @Min(value = 0)
     @Max(value = 10)
@@ -18,9 +18,9 @@ public class PetDTO {
 
     @Min(value = 0)
     @Max (value = 10)
-    private int hungerLevel;
+    private int hunger;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
     public int getHappiness() {
@@ -32,7 +32,7 @@ public class PetDTO {
     public String getSpecies() {
         return species;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public void setHappiness(int happiness) {
@@ -44,10 +44,10 @@ public class PetDTO {
     public void setSpecies(String species) {
         this.species = species;
     }
-    public void setHungerLevel(int hungerLevel) {
-        this.hungerLevel = hungerLevel;
+    public void setHunger(int hunger) {
+        this.hunger = hunger;
     }
-    public int getHungerLevel() {
-        return hungerLevel;
+    public int getHunger() {
+        return hunger;
     }
 }

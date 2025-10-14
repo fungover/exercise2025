@@ -56,4 +56,13 @@ public class PetService {
         return pet;
     }
 
+    //delete pet
+    public void removePet(Long id) {
+        PetDTO removed = pets.remove(id);
+        if (removed == null) {
+            throw new NotFoundException("Pet with id " + id + " not found");
+        }
+    }
+
+
 }

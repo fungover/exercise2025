@@ -60,4 +60,12 @@ public class PetResource {
         return petService.playWithPet(id, amount);
     }
 
+    @DELETE
+    @Path("{id}")
+    public Response deletePet(@PathParam("id") Long id) {
+        petService.removePet(id);
+        return Response.noContent().build();
+    }
+
+
 }

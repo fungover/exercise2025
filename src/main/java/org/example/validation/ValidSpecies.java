@@ -4,13 +4,11 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import org.example.validation.validators.SpeciesValidator;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
+@Documented
 @Constraint(validatedBy = {SpeciesValidator.class})
-@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE, ElementType.RECORD_COMPONENT})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidSpecies {
 	String message() default "Invalid species";

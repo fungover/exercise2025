@@ -3,8 +3,6 @@ package org.example;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -58,10 +56,7 @@ public class PetResource {
 
 		total = pets.size();
 
-		Jsonb jsonb = JsonbBuilder.create();
-		String json = jsonb.toJson(new Pets(pets));
-
-		return Response.ok(json)
+		return Response.ok(new Pets(pets))
 						.header("X-Total-Count", total)
 						.build();
 	}
@@ -90,8 +85,12 @@ public class PetResource {
 	@Path("{id}/feed")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response feedPet(@PathParam("id") String id) {
+		Pet pet = petService.feedPet(id);
+		if (pet == null) {
+			return nullResponse(id);
+		}
 		return Response.status(200)
-						.entity(petService.feedPet(id))
+						.entity(pet)
 						.build();
 	}
 
@@ -99,8 +98,12 @@ public class PetResource {
 	@Path("{id}/play")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response playWithPet(@PathParam("id") String id) {
+		Pet pet = petService.playWithPet(id);
+		if (pet == null) {
+			return nullResponse(id);
+		}
 		return Response.status(200)
-						.entity(petService.playWithPet(id))
+						.entity(pet)
 						.build();
 	}
 

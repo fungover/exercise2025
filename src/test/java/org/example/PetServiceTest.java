@@ -85,7 +85,7 @@ class PetServiceTest {
 	}
 
 	@Test
-	void getSortedPetsDescendingHungerDescending() {
+	void getSortedPetsDescendingHunger() {
 		List<Pet> sortedPets = petService.getSortedPets(petService.getPets(), "hunger", "desc");
 		Pet firstPet = sortedPets.getFirst();
 		Pet middlePet = sortedPets.get(sortedPets.size() / 2);

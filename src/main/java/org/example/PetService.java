@@ -51,8 +51,13 @@ public class PetService {
 	}
 
 	public void adoptPet(Pet pet) {
-		pet.setSpecies(pet.getSpecies().toLowerCase().trim());
-		pets.put(pet.getName() + pet.getSpecies(), pet);
+		if (pet == null || pet.getName() == null || pet.getSpecies() == null) {
+			throw new IllegalArgumentException("Pet, Name or Species cannot be null");
+		}
+		String name = pet.getName().trim();
+		String species = pet.getSpecies().trim().toLowerCase(java.util.Locale.ROOT);
+		pet.setSpecies(species);
+		pets.put(name + ":" + species, pet);
 	}
 
 	public Pet getPet(String id) {

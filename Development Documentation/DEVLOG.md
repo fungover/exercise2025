@@ -56,6 +56,13 @@ OK, so I discovered powershell test scripts 🤤
 [x] Apply the requested REST convention in the assignment and change pet to plural -> pets.
 [x] Ensure consistent JSON responses (400, 404, 500)
 [x] Validate amount vid @BeanParam in feed/play
+
+[x] VG part with query params:
+- `?species=dog` — filter by species
+- `?sortBy=happiness&order=desc` — sort descending by happiness
+- `?offset=0&limit=2` — pagination, shows 2 pets per page, starting from the first pet (Default limit = 10 if not specified)
+## params combined: GET /api/pets?species=dog&sortBy=happiness&order=desc&offset=0&limit=2
+
 ______________________________________________________
 ## Assignment 6 - https://github.com/fungover/exercise2025/issues/142
 

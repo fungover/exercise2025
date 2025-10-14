@@ -13,7 +13,6 @@ import org.example.service.PetService;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Path("/pets")
 @Produces(MediaType.APPLICATION_JSON)
@@ -30,7 +29,7 @@ public class PetResource {
         /// Sends PetDto to service, which provides with new id and saves in heap
         PetDto created = pet.adoptPet(body);
 
-        ///  Build a Location-header: /api/pet/{id}
+        ///  Build a Location-header: /api/pets/{id}
         URI location = uri.getAbsolutePathBuilder()
                 .path(String.valueOf(created.getId()))
                 .build();
@@ -41,13 +40,44 @@ public class PetResource {
     }
 
     /**
-     * GET /api/pets -> list all pets
+     * GET /api/pets -> list + filter/sorting/pagination
      **/
     @GET
-    public List<PetDto> all() {
-        ///  pet.getAllPets() returns Map<Long...> converted to JSON for display
-        Map<Long, PetDto> map = pet.getAllPets();
-        return new ArrayList<>(map.values());
+    public List<PetDto> all(
+            @QueryParam("species") String species,
+            @DefaultValue("0") @QueryParam("offset") int offset, /// pagination start
+            @DefaultValue("10") @QueryParam("limit") int limit, /// Shows maximum 10 at a time
+            @DefaultValue("id") @QueryParam("sortBy") String sortBy, ///  Sorted by fields: id, name, happiness, hungerLevel
+            @DefaultValue("desc") @QueryParam("order") String order /// Falling order, Happy dog -> Less happy dog
+    ) {
+        /// Protection against weird values
+        offset = Math.max(0, offset);
+        limit = Math.max(0, limit);
+
+        ///  Get all pets from the Service
+        var petsList = new ArrayList<>(pet.getAllPets().values());
+
+        ///  Filter by species
+        if (species != null && !species.isBlank()) {
+            petsList.removeIf(p -> !p.getSpecies().equalsIgnoreCase(species));
+        }
+        ///  Sort the displayed List
+        petsList.sort((a, b) -> {
+            int cmp;
+            switch (sortBy.toLowerCase()) {
+                case "happiness" -> cmp = Integer.compare(a.getHappiness(), b.getHappiness());
+                case "hungerlevel" -> cmp = Integer.compare(a.getHungerLevel(), b.getHungerLevel());
+                case "name" -> cmp = a.getName().compareToIgnoreCase(b.getName());
+                default -> cmp = Long.compare(a.getId() == null ? Long.MAX_VALUE : a.getId(),
+                        b.getId() == null ? Long.MAX_VALUE : b.getId());
+            }
+            return order.equalsIgnoreCase("desc") ? -cmp : cmp;
+        });
+
+        ///  pagination, protection against out of range problems
+        int from = Math.min(offset, petsList.size());
+        int to = Math.min(from + limit, petsList.size());
+        return petsList.subList(from, to);
     }
 
     /**
@@ -63,13 +93,13 @@ public class PetResource {
     }
 
     /**
-     * PUT /api/pets/{id}/feed -> feed: Decrease hunger level, not bellow 0
+     * PUT /api/pets/{id}/feed -> feed: Decrease hunger level, not below 0
      **/
     @PUT
     @Path("/{id}/feed")
     public Response feed(@PathParam("id") Long id,
-                       @Valid @BeanParam AmountParams p) {
-        PetDto updated = pet.feedPet(id);
+                         @Valid @BeanParam AmountParams p) {
+        PetDto updated = pet.feedPet(id, p.amount);
         if (updated == null) throw new NotFoundException("Pet not found");
         return Response.noContent().build();
     }
@@ -81,7 +111,7 @@ public class PetResource {
     @Path("/{id}/play")
     public Response play(@PathParam("id") Long id,
                          @Valid @BeanParam AmountParams p) {
-        PetDto updated = pet.playWithPet(id);
+        PetDto updated = pet.playWithPet(id, p.amount);
         if (updated == null) throw new NotFoundException("Pet not found");
         return Response.noContent().build();
     }

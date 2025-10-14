@@ -92,7 +92,7 @@ function Invoke-Api
         catch
         {
             $errResp = $_.Exception.Response
-            if ($errResp -ne $null)
+            if ($null -ne $errResp)
             {
                 $status = [int]$errResp.StatusCode
                 $reader = New-Object System.IO.StreamReader($errResp.GetResponseStream())

@@ -70,7 +70,7 @@ public class PetService {
 
     public PetDTO play(Long id) {
         return pets.compute(id, (k, v) -> {
-            if (v == null) throw new NoSuchElementException("Pet " + id + " not found");
+            if (v == null) throw new NoSuchElementException("Pet with id" + id + " not found");
             int newHappiness = Math.min(10, v.getHappiness() + 1);
             v.setHappiness(newHappiness);
 

@@ -11,6 +11,10 @@ Define a Pet DTO class with Bean Validation for the fields with
 name, species, hungerLevel and happiness.
 */
 public class PetDTO {
+
+    private Long id;
+
+
     @NotBlank (message = "Name cannot be empty")
     private String name;
 
@@ -31,6 +35,9 @@ public class PetDTO {
         this.name = name;
         this.species = species;
     }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

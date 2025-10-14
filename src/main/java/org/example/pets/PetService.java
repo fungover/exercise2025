@@ -1,6 +1,8 @@
 package org.example.pets;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.NotFoundException;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -27,5 +29,14 @@ public class PetService {
     // List all pets
     public List<PetDTO> getAllPets() {
         return new ArrayList<>(pets.values());
+    }
+
+    // Get pet after id
+    public PetDTO getPetById(Long id) {
+        PetDTO pet = pets.get(id);
+        if (pet == null) {
+            throw new NotFoundException("Pet with id " + id + " not found");
+        }
+        return pet;
     }
 }

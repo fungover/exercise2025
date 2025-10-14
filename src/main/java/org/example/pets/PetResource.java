@@ -40,4 +40,10 @@ public class PetResource {
         PetDTO savedPet = petService.addPet(pet);
         return Response.status(Response.Status.CREATED).entity(savedPet).build();
     }
+
+    @GET
+    @Path("{id}")
+    public PetDTO getPet(@PathParam("id") Long id) {
+        return petService.getPetById(id);
+    }
 }

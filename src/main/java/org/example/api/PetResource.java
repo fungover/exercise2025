@@ -2,7 +2,9 @@ package org.example.api;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -36,8 +38,23 @@ public class PetResource {
     }
 
     @GET
-    public List<PetDTO> list() {
-        return service.list();
+    public Response list(
+            @QueryParam("species") String species,
+            @QueryParam("sortBy") @DefaultValue("id")
+            @Pattern(regexp = "(?i)id|name|species|hungerLevel|happiness")
+            String sortBy,
+            @QueryParam("order") @DefaultValue("asc")
+            @Pattern(regexp = "(?i)asc|desc")
+            String order,
+            @QueryParam("offset") @DefaultValue("0") @Min(0) int offset,
+            @QueryParam("limit")  @DefaultValue("10") @Min(0) @Max(100) int limit
+    ) {
+        var page = service.list(species, sortBy, order, offset, limit);
+        return Response.ok(page.items())
+                .header("X-Total-Count", page.total())
+                .header("X-Offset", offset)
+                .header("X-Limit",  limit)
+                .build();
     }
 
     @GET @Path("/{id}")

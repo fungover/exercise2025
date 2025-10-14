@@ -44,11 +44,11 @@ class PetServiceTest {
     void delete_removes_pet_from_list() {
         PetDTO p = service.adopt(new PetDTO(null, "Parrot name", "parrot", 40, 40));
 
-        service.release(p.getId()); // should not throw
+        service.release(p.getId());
 
-        boolean stillThere = service.list().stream()
-                .anyMatch(it -> it.getId().equals(p.getId()));
-
+        var page = service.list(null, "id", "asc", 0, 100);
+        boolean stillThere = page.items().stream().anyMatch(it -> it.getId().equals(p.getId()));
         assertFalse(stillThere, "pet should be removed after delete");
     }
+
 }

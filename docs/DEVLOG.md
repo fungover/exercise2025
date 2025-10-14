@@ -1,5 +1,6 @@
-http://localhost:8080/jakartaee-hello-world/api/hello
+### Development notes, for the cause of my own learning process
 
+http://localhost:8080/jakartaee-hello-world/api/hello
 http://localhost:8080/ => Static HTML
 http://localhost:8080/api/hello => Endpoint OK
 
@@ -63,8 +64,10 @@ OK, so I discovered powershell test scripts 🤤
 - `?offset=0&limit=2` — pagination, shows 2 pets per page, starting from the first pet (Default limit = 10 if not specified)
 ## params combined: GET /api/pets?species=dog&sortBy=happiness&order=desc&offset=0&limit=2
 
+[x] Clean up structure and docs
+
 ______________________________________________________
-## Assignment 6 - https://github.com/fungover/exercise2025/issues/142
+# ABOUT Assignment 6 - https://github.com/fungover/exercise2025/issues/142
 
 About the assignment:
 🎯 Objective

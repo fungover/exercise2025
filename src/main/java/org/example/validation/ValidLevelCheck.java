@@ -6,6 +6,9 @@ import jakarta.validation.ConstraintValidatorContext;
 public class ValidLevelCheck implements ConstraintValidator<ValidLevel, Integer> {
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
         return value >= 1 && value <= 10;
     }
 }

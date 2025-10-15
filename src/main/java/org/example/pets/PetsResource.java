@@ -23,7 +23,7 @@ public class PetsResource {
     }
 
     @Path("{id}")
-    public PetIdResource pet(@PathParam("id") int id) {
+    public PetIdResource pet(@PathParam("id") long id) {
         return new PetIdResource(petsService, id);
     }
 
@@ -45,9 +45,9 @@ public class PetsResource {
 
     public static class PetIdResource {
         private final PetsService petsService;
-        private final int id;
+        private final long id;
 
-        public PetIdResource(PetsService petsService, int id) {
+        public PetIdResource(PetsService petsService, long id) {
             this.petsService = petsService;
             this.id = id;
         }

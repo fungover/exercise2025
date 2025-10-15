@@ -6,6 +6,9 @@ import jakarta.validation.ConstraintValidatorContext;
 public class ValidNameCheck implements ConstraintValidator<ValidName, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
         return value.length() >= 2 && value.length() <= 10 &&
                 value.matches("[a-zA-Z]+");
     }

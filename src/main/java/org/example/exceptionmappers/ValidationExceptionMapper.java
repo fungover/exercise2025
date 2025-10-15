@@ -3,6 +3,7 @@ package org.example.exceptionmappers;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -30,8 +31,13 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
                 .collect(Collectors.toList());
 
         Jsonb jsonb = JsonbBuilder.create();
-        String json = jsonb.toJson(new ErrorResponse(violations));
-        logger.info(json);
+        String json;
+        try {
+            json = jsonb.toJson(new ErrorResponse(violations));
+            logger.info(json);
+        } catch (RuntimeException re) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
 
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity(json)

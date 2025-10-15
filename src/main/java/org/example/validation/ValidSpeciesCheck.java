@@ -6,6 +6,9 @@ import jakarta.validation.ConstraintValidatorContext;
 public class ValidSpeciesCheck implements ConstraintValidator<ValidSpecies, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
         return value.matches("[a-zA-Z]+") && !value.isEmpty() &&
                 value.length() <= 100;
     }

@@ -1,6 +1,7 @@
 package org.example.pets;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.NotFoundException;
 import org.jboss.logging.Logger;
 
 import java.util.Collections;
@@ -36,27 +37,22 @@ public class PetsService {
         return List.copyOf(pets.keySet());
     }
 
-    public PetDTO getPetById(int id) {
-        return getPets().get(--id);
+    public PetDTO getPetById(long id) {
+        PetDTO pet = pets.get(id);
+        if (pet == null) throw new NotFoundException("Pet not found: " + id);
+        return pet;
     }
 
-    public void feedPetById(int id) {
-        PetDTO pet = getPetById(id);
-        PetDTO fedPet = pet.feed();
-        pets.put(petId(id), fedPet);
+    public void feedPetById(long id) { pets.compute(id, (k, v) -> ensure(v).feed()); }
+
+    public void playWithPetById(long id) { pets.compute(id, (k, v) -> ensure(v).play()); }
+
+    public void releasePetById(long id) {
+        if (pets.remove(id) == null) throw new NotFoundException("Pet not found: " + id);
     }
 
-    public void playWithPetById(int id) {
-        PetDTO pet = getPetById(id);
-        PetDTO happierPet = pet.play();
-        pets.put(petId(id), happierPet);
-    }
-
-    public void releasePetById(int id) {
-        pets.remove(petId(id));
-    }
-
-    private Long petId(int id) {
-        return getPetIds().get(--id);
+    private static PetDTO ensure(PetDTO v) {
+        if (v == null) throw new NotFoundException("Pet not found");
+        return v;
     }
 }

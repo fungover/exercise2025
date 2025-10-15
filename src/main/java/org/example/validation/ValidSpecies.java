@@ -2,18 +2,14 @@ package org.example.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-@Constraint(validatedBy={})
-@NotNull
-@Size(min=1, max=100)
+@Constraint(validatedBy = ValidSpeciesCheck.class)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidSpecies {
-    String message() default "Ogiltig art";
+    String message() default "Arten måste innehålla 1-100 bokstäver och inga specialtecken";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

@@ -24,7 +24,6 @@ public class PetResource {
 	public PetResource() {
 	}
 
-
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getAllPetsPaginated(
@@ -111,8 +110,12 @@ public class PetResource {
 	@Path("{id}")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response deletePet(@PathParam("id") String id) {
+		Pet pet = petService.deletePet(id);
+		if (pet == null) {
+			return nullResponse(id);
+		}
 		return Response.status(200)
-						.entity(petService.deletePet(id))
+						.entity(pet)
 						.build();
 	}
 
@@ -125,6 +128,4 @@ public class PetResource {
 		return Response.status(404).entity(json).build();
 	}
 
-	public record Pets(List<Pet> pets) {
-	}
 }

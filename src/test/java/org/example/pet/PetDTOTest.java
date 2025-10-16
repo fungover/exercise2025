@@ -15,20 +15,21 @@ class PetDTOTest {
 	@Test
 	void testAdoptingANewPet() {
 		Pet pet = new PetDTO("Fido", "dog");
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		Validator validator = factory.getValidator();
-		Set<ConstraintViolation<Pet>> violations = validator.validate(pet);
-
-		assertTrue(violations.isEmpty());
+		try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+			Validator validator = factory.getValidator();
+			Set<ConstraintViolation<Pet>> violations = validator.validate(pet);
+			assertTrue(violations.isEmpty());
+		}
 	}
 
 	@Test
 	void testAdoptingAnInvalidPet() {
 		Pet pet = new PetDTO("Fido", "Cow");
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		Validator validator = factory.getValidator();
-		Set<ConstraintViolation<Pet>> violations = validator.validate(pet);
-		assertThat(violations.size()).isEqualTo(1);
-		assertThat(violations.iterator().next().getMessage()).isEqualTo("Invalid species");
+		try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+			Validator validator = factory.getValidator();
+			Set<ConstraintViolation<Pet>> violations = validator.validate(pet);
+			assertThat(violations.size()).isEqualTo(1);
+			assertThat(violations.iterator().next().getMessage()).isEqualTo("Invalid species");
+		}
 	}
 }

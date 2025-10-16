@@ -26,13 +26,43 @@ public class PetDTO implements Pet {
 		this.species = species;
 	}
 
-	public String getName() { return name; }
-	public String getSpecies() { return species;	}
-	public int getHunger() { return hunger; }
-	public int getHappiness() {	return happiness;	}
+	@Override
+	public String getName() {
+		return name;
+	}
 
-	public void setName( String name) { this.name = name; }
-	public void setSpecies( String species) { this.species = species; }
-	public void setHunger(int hunger) { this.hunger = hunger; }
-	public void setHappiness(int happiness) { this.happiness = happiness; }
+	@Override
+	public String getSpecies() {
+		return species;
+	}
+
+	@Override
+	public int getHunger() {
+		return hunger;
+	}
+
+	@Override
+	public int getHappiness() {
+		return happiness;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public void setSpecies(String species) {
+		this.species = species;
+	}
+
+	@Override
+	public void setHunger(int hunger) {
+		this.hunger = hunger;
+	}
+
+	@Override
+	public void setHappiness(int happiness) {
+		this.happiness = happiness;
+	}
 }

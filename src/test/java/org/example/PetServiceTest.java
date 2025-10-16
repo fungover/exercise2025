@@ -99,7 +99,7 @@ class PetServiceTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"Lucy", "Sadie", "Fido"})
 	void testGetDogPet(String dogName) {
-		Pet dog = petService.getPet(dogName + "dog");
+		Pet dog = petService.getPet(dogName + ":" + "dog");
 
 		assertThat(dog).isNotNull();
 		assertThat(dog.getName()).isEqualTo(dogName);
@@ -109,8 +109,8 @@ class PetServiceTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"Lucy", "Sadie", "Fido"})
 	void testFeedingPet(String dogName) {
-		int dogHungerBefore = petService.getPet(dogName + "dog").getHunger();
-		Pet fedPet = petService.feedPet(dogName + "dog");
+		int dogHungerBefore = petService.getPet(dogName + ":" + "dog").getHunger();
+		Pet fedPet = petService.feedPet(dogName + ":" + "dog");
 		int dogHungerAfter = fedPet.getHunger();
 
 		assertThat(dogHungerBefore > dogHungerAfter).isTrue();
@@ -119,8 +119,8 @@ class PetServiceTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"Rut", "Krullis", "Chilla", "Capy"})
 	void testPlayingWithPet(String rabbitName) {
-		int rabbitHappinessBefore = petService.getPet(rabbitName + "rabbit").getHappiness();
-		Pet happyPet = petService.playWithPet(rabbitName + "rabbit");
+		int rabbitHappinessBefore = petService.getPet(rabbitName + ":" + "rabbit").getHappiness();
+		Pet happyPet = petService.playWithPet(rabbitName + ":" + "rabbit");
 		int rabbitHappinessAfter = happyPet.getHappiness();
 
 		assertThat(rabbitHappinessBefore < rabbitHappinessAfter).isTrue();
@@ -128,8 +128,8 @@ class PetServiceTest {
 
 	@Test
 	void testDeletingAPet() {
-		petService.deletePet("Fidodog");
-		assertThat(petService.getPet("Fidodog")).isNull();
+		petService.deletePet("Fido:dog");
+		assertThat(petService.getPet("Fido:dog")).isNull();
 		assertThat(petService.getPets().size()).isEqualTo(17);
 	}
 }

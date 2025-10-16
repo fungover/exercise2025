@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @ApplicationScoped
 public class PetService {
-	Map<String, Pet> pets = new ConcurrentHashMap<>();
-	Random rand = new Random();
+	private final Map<String, Pet> pets = new ConcurrentHashMap<>();
+	private final Random rand = new Random();
 
 	public List<Pet> getPets() {
 		return List.copyOf(pets.values());
@@ -27,8 +27,12 @@ public class PetService {
 	}
 
 	public List<Pet> getFilteredPets(List<Pet> inputPets, String species) {
+		if (species == null || species.isBlank()) {
+			return List.copyOf(inputPets);
+		}
+		String needle = species.trim();
 		List<Pet> filteredPets = inputPets.stream()
-						.filter(p -> p.getSpecies().equalsIgnoreCase(species))
+						.filter(p -> p.getSpecies() != null && p.getSpecies().equalsIgnoreCase(needle))
 						.toList();
 		return List.copyOf(filteredPets);
 	}
@@ -65,23 +69,19 @@ public class PetService {
 	}
 
 	public Pet feedPet(String id) {
-		Pet pet = pets.get(id);
-		int reduce = rand.nextInt(10) + 1;
-		if (pet != null) {
-			int petHunger = pet.getHunger();
-			pet.setHunger(Math.max(petHunger - reduce, 0));
-		}
-		return pet;
+		return pets.computeIfPresent(id, (k, pet) -> {
+			int reduce = rand.nextInt(10) + 1;
+			pet.setHunger(Math.max(pet.getHunger() - reduce, 0));
+			return pet;
+		});
 	}
 
 	public Pet playWithPet(String id) {
-		Pet pet = pets.get(id);
-		int increase = rand.nextInt(10) + 1;
-		if (pet != null) {
-			int petHappiness = pet.getHappiness();
-			pet.setHappiness(Math.min(petHappiness + increase, 10));
-		}
-		return pet;
+		return pets.computeIfPresent(id, (k, pet) -> {
+			int increase = rand.nextInt(10) + 1;
+			pet.setHappiness(Math.max(pet.getHappiness() + increase, 0));
+			return pet;
+		});
 	}
 
 	public Pet deletePet(String id) {

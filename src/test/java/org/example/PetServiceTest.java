@@ -2,7 +2,6 @@ package org.example;
 
 import org.example.pet.Pet;
 import org.example.pet.PetDTO;
-import org.jboss.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class PetServiceTest {
 	PetService petService;
@@ -79,9 +77,9 @@ class PetServiceTest {
 		Pet middlePet = sortedPets.get(sortedPets.size() / 2);
 		Pet secondPet = sortedPets.getLast();
 
-		assertThat(firstPet.getHappiness() < middlePet.getHappiness()).isTrue();
-		assertThat(middlePet.getHappiness() < secondPet.getHappiness()).isTrue();
-		assertThat(firstPet.getHappiness() < secondPet.getHappiness()).isTrue();
+		assertThat(firstPet.getHappiness()).isLessThan(middlePet.getHappiness());
+		assertThat(middlePet.getHappiness()).isLessThan(secondPet.getHappiness());
+		assertThat(firstPet.getHappiness()).isLessThan(secondPet.getHappiness());
 	}
 
 	@Test
@@ -91,9 +89,9 @@ class PetServiceTest {
 		Pet middlePet = sortedPets.get(sortedPets.size() / 2);
 		Pet secondPet = sortedPets.getLast();
 
-		assertThat(firstPet.getHunger() > middlePet.getHunger()).isTrue();
-		assertThat(middlePet.getHunger() > secondPet.getHunger()).isTrue();
-		assertThat(firstPet.getHunger() > secondPet.getHunger()).isTrue();
+		assertThat(firstPet.getHunger()).isGreaterThan(middlePet.getHunger());
+		assertThat(middlePet.getHunger()).isGreaterThan(secondPet.getHunger());
+		assertThat(firstPet.getHunger()).isGreaterThan(secondPet.getHunger());
 	}
 
 	@ParameterizedTest
@@ -113,7 +111,7 @@ class PetServiceTest {
 		Pet fedPet = petService.feedPet(dogName + ":" + "dog");
 		int dogHungerAfter = fedPet.getHunger();
 
-		assertThat(dogHungerBefore > dogHungerAfter).isTrue();
+		assertThat(dogHungerBefore).isGreaterThan(dogHungerAfter);
 	}
 
 	@ParameterizedTest
@@ -123,7 +121,7 @@ class PetServiceTest {
 		Pet happyPet = petService.playWithPet(rabbitName + ":" + "rabbit");
 		int rabbitHappinessAfter = happyPet.getHappiness();
 
-		assertThat(rabbitHappinessBefore < rabbitHappinessAfter).isTrue();
+		assertThat(rabbitHappinessBefore).isLessThan(rabbitHappinessAfter);
 	}
 
 	@Test

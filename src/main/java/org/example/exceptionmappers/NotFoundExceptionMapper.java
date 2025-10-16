@@ -19,14 +19,13 @@ public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundExceptio
     @Override
     public Response toResponse(NotFoundException e) {
         logger.error(e.getLocalizedMessage());
-        Jsonb jsonb = JsonbBuilder.create();
         String json;
-        try {
+        try (Jsonb jsonb = JsonbBuilder.create()) {
             json = jsonb.toJson(Map.of(
                     "error", "Kunde inte hitta resursen",
                     "detaljer", e.getMessage()
             ));
-        } catch (JsonbException ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
 

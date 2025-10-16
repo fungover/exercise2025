@@ -7,6 +7,7 @@ public class ContainerDemoPt2 {
         SimpleContainer container = new SimpleContainer();
         var program = container.getInstance(Program.class);
         program.run(); // ska skriva samma hälsning som Weld-versionen
+
     }
 
 }

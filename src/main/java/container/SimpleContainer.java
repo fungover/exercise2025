@@ -4,6 +4,11 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
+// NOTE:
+// This class was part of Part 2 in the assignment (manual DI container). //För att undvika code rabbit error.
+// It’s not used in the final Weld version but kept here for reference.
+// The final version (Part 3) uses Weld CDI for dependency injection instead.
+
 @SuppressWarnings("unused")
  public class SimpleContainer {
 

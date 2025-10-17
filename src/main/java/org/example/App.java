@@ -25,7 +25,7 @@ public class App {
 
         container.bind(AnimalRepository.class, InMemoryAnimalRepository.class);
 
-        ZooService zooService = container.getInstance(ZooService.class);
+        AnimalService zooService = container.getInstance(ZooService.class);
 
         Animal pig = new Animal("Greta", "pig");
 

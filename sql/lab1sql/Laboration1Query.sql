@@ -46,7 +46,7 @@ select max(launch_date) as max_date
 from successful_mission;
 
 -- Uppgift 5
--- skapa en ny kolumn för gender
+-- skapa en ny kolumn för name och gender
 alter table account
     add column gender varchar(10) not null;
 select a.*,
@@ -78,7 +78,7 @@ select count(*) as rows_in_account
 from account;
 
 -- Uppgift 7
--- räkna ut medelålder per kön
+-- räkna ut medelålder per kön och returnera två kolumner, gender och average_age
 select gender,
        round(avg(age), 1) as average_age
 from (select if(substring(replace(a.ssn, '-', ''), -2, 1) in ('0', '2', '4', '6', '8'), 'female', 'male') as gender,
@@ -92,6 +92,6 @@ from (select if(substring(replace(a.ssn, '-', ''), -2, 1) in ('0', '2', '4', '6'
                              '%Y%m%d'
                      ),
                      curdate()
-             )                                                                                            as age
+             ) as age
       from account a) as t
 group by gender;

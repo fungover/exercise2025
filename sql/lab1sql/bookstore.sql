@@ -74,7 +74,7 @@ insert into inventory (store_id, isbn, amount) VALUE
 ((select id from bookstore where store_name='Campus Bokhandeln' limit 1), '9789129658010', 3),
 ((select id from bookstore where store_name='Campus Bokhandeln' limit 1), '9780000000001', 12);
 
--- Vy: total_author_book_value
+-- View: total_author_book_value
 create or replace view total_author_book_value as
 select
     concat(a.first_name, ' ', a.last_name) as name,
@@ -85,3 +85,23 @@ from author a
     left join book b on b.author_id = a.id
     left join inventory i on i.isbn = b.isbn
 group by a.id;
+
+-- Skapa användare
+drop user if exists 'dev_user'@'localhost';
+drop user if exists 'web_user'@'localhost';
+create user 'dev_user'@'localhost' identified by 'dev_user';
+create user 'web_user'@'localhost' identified by 'web_user';
+
+-- rättigheter
+grant select, insert, update, delete, create,
+    alter, create view, show view, trigger, references on bookstore.* to 'dev_user'@'localhost';
+grant drop on bookstore.author to 'dev_user'@'localhost';
+grant drop on bookstore.book to 'dev_user'@'localhost';
+grant drop on bookstore.bookstore to 'dev_user'@'localhost';
+grant drop on bookstore.inventory to 'dev_user'@'localhost';
+grant drop on bookstore.language to 'dev_user'@'localhost';
+grant select, insert, update, delete on bookstore.* to 'web_user'@'localhost';
+
+-- Verifiera
+show grants for 'dev_user'@'localhost';
+show grants for 'web_user'@'localhost';

@@ -46,43 +46,31 @@ select max(launch_date) as max_date
 from successful_mission;
 
 -- Uppgift 5
--- skapae en ny kolumn för gender
+-- skapa en ny kolumn för gender
 alter table account
     add column gender varchar(10) not null;
 select a.*,
        concat(a.first_name, ' ', a.last_name) as name,
-       case
-           when substring(replace(a.ssn, '-', ''), -2, 1) in ('0', '2', '4', '6', '8') then 'female'
-           else 'male'
-           end as gender
+       if(substring(replace(a.ssn, '-', ''), -2, 1) in ('0', '2', '4', '6', '8'), 'female', 'male') as gender
 from account as a;
 
 -- Uppgift 6
 -- Kontroller vilka som är kvinnor och födda före 1970
 select user_id, first_name, last_name, ssn
 from account
-where
-    substring(replace(ssn,'-',''), -2, 1) in ('0','2','4','6','8')
+where substring(replace(ssn, '-', ''), -2, 1) in ('0', '2', '4', '6', '8')
   and (
-         case
-              when (substring(replace(ssn,'-',''), 1, 2) + 0) <= 24
-                  then 2000 + (substring(replace(ssn,'-',''), 1, 2) + 0)
-              else 1900 + (substring(replace(ssn,'-',''), 1, 2) + 0)
-              end
-
+          if((substring(replace(ssn, '-', ''), 1, 2) + 0) <= 24, 2000 + (substring(replace(ssn, '-', ''), 1, 2) + 0),
+             1900 + (substring(replace(ssn, '-', ''), 1, 2) + 0))
           ) < 1970;
 
 -- Ta bort alla kvinnor födda före 1970
-delete from account
-where
-    substring(replace(ssn,'-',''), -2, 1) in ('0','2','4','6','8')
+delete
+from account
+where substring(replace(ssn, '-', ''), -2, 1) in ('0', '2', '4', '6', '8')
   and (
-          case
-              when (substring(replace(ssn, '-', ''), 1, 2) + 0) <= 24
-                  then 2000 + (substring(replace(ssn, '-', ''), 1, 2) + 0)
-              else 1900 + (substring(replace(ssn, '-', ''), 1, 2) + 0)
-              end
-
+          if((substring(replace(ssn, '-', ''), 1, 2) + 0) <= 24, 2000 + (substring(replace(ssn, '-', ''), 1, 2) + 0),
+             1900 + (substring(replace(ssn, '-', ''), 1, 2) + 0))
           ) < 1970;
 
 -- Verifiera
@@ -91,31 +79,19 @@ from account;
 
 -- Uppgift 7
 -- räkna ut medelålder per kön
-select
-    gender,
-    round(avg(age), 1) as average_age
-from (
-         select
-             case
-                 when substring(replace(a.ssn, '-', ''), -2, 1) in ('0', '2', '4', '6', '8') then 'female'
-                 else 'male'
-                 end as gender,
+select gender,
+       round(avg(age), 1) as average_age
+from (select if(substring(replace(a.ssn, '-', ''), -2, 1) in ('0', '2', '4', '6', '8'), 'female', 'male') as gender,
              timestampdiff(
-                     year ,
+                     year,
                      str_to_date(
                              concat(
-                                     case
-                                         when (substring(replace(a.ssn, '-', ''), 1, 2) + 0) <= 24 then '20'
-                                         else '19'
-                                         end,
+                                     if((substring(replace(a.ssn, '-', ''), 1, 2) + 0) <= 24, '20', '19'),
                                      substring(replace(a.ssn, '-', ''), 1, 6)
                              ),
                              '%Y%m%d'
                      ),
                      curdate()
-             ) as age
-         from account a
-     ) as t
+             )                                                                                            as age
+      from account a) as t
 group by gender;
-
-

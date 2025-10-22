@@ -26,7 +26,7 @@ create table book (
     publication_date date not null,
     author_id int not null,
     constraint pk_book primary key (isbn),
-    constraint chk_isbn13 check ( isbn REGEXP '^[0-9]{13}$' ),
+    constraint chk_isbn13 check ( isbn regexp '^[0-9]{13}$' ),
     constraint fk_book_author foreign key (author_id) references author(id),
     constraint fk_book_language foreign key (language_code) references language(language_code)
 );
@@ -63,11 +63,11 @@ insert into book (isbn, title, language_code, price, publication_date, author_id
 ('9780316066525','The Wind-Up Bird Chronicle','en',199.00,'1997-10-01',(select id from author where last_name='Murakami' limit 1)),
 ('9780000000001','Eddies första bok','sv',129.00,'2024-01-01',(select id from author where last_name='Neumann' limit 1));
 
-insert into bookstore (store_name, city) VALUE
+insert into bookstore (store_name, city) values
 ('Bokhandel', 'Stockholm'),
 ('Campus Bokhandeln', 'Uppsala');
 
-insert into inventory (store_id, isbn, amount) VALUE
+insert into inventory (store_id, isbn, amount) values
 ((select id from bookstore where store_name='Bokhandel' limit 1), '9789129658010', 10 ),
 ((select id from bookstore where store_name='Bokhandel' limit 1), '9789129695442', 5),
 ((select id from bookstore where store_name='Bokhandel' limit 1), '9780316066525', 7),

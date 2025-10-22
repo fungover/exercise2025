@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.NotFoundException;
 import org.example.dto.PetDTO;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -77,5 +76,31 @@ public class PetService {
     private static PetDTO copy(PetDTO p) {
         if (p == null) return null;
         return new PetDTO(p.getId(), p.getName(), p.getSpecies(), p.getHungerLevel(), p.getHappiness());
+    }
+    // metod för pagination/filter/sort
+    public List<PetDTO> search(Integer offset, Integer limit, String species, String sortBy, String order) {
+        int off = (offset != null && offset >= 0) ? offset : 0;
+        int lim = (limit != null && limit > 0 && limit <= 1000) ? limit : 50;
+        String sort = (sortBy == null || sortBy.isBlank()) ? "id" : sortBy.toLowerCase();
+        boolean desc = "desc".equalsIgnoreCase(order);
+
+        // Välj sorteringsnyckel
+        Comparator<PetDTO> cmp = switch (sort) {
+            case "name" -> Comparator.comparing(PetDTO::getName, Comparator.nullsLast(String::compareToIgnoreCase));
+            case "species" -> Comparator.comparing(PetDTO::getSpecies, Comparator.nullsLast(String::compareToIgnoreCase));
+            case "hunger", "hungerlevel" -> Comparator.comparingInt(PetDTO::getHungerLevel);
+            case "happiness" -> Comparator.comparingInt(PetDTO::getHappiness);
+            default -> Comparator.comparing(PetDTO::getId);
+        };
+        if (desc) cmp = cmp.reversed();
+
+        return store.values().stream()
+                .filter(p -> species == null || species.isBlank()
+                        || (p.getSpecies() != null && p.getSpecies().equalsIgnoreCase(species)))
+                .sorted(cmp)
+                .skip(off)
+                .limit(lim)
+                .map(PetService::copy)
+                .toList();
     }
 }

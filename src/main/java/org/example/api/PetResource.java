@@ -28,10 +28,15 @@ public class PetResource {
 
     // GET /pets → lista alla
     @GET
-    public Response list() {
-        List<PetDTO> all = service.findAll();
-        return Response.ok(all).build();
+    public Response list(@QueryParam("offset") Integer offset,
+                         @QueryParam("limit") Integer limit,
+                         @QueryParam("species") String species,
+                         @QueryParam("sortBy") @DefaultValue("id") String sortBy,
+                         @QueryParam("order") @DefaultValue("asc") String order) {
+        List<PetDTO> result = service.search(offset, limit, species, sortBy, order);
+        return Response.ok(result).build();
     }
+
 
     // GET /pets/{id} → visa status
     @GET

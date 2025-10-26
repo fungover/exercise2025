@@ -33,9 +33,36 @@ public class PetResource {
 
     @GET
     @Path("/{id}")
-    public Response getPetById(@PathParam("id") long id) {
+    public Response getPetById(@PathParam("id") Long id) {
         PetDTO pet = petService.getPet(id);
 
         return Response.ok(pet).build();
+    }
+
+    @PUT
+    @Path("/{id}/feed")
+    public Response feedPet(@PathParam("id") Long id) {
+        boolean success = petService.feedPet(id);
+
+        return success
+                ? Response.ok().entity("Pet feed has been successfully").build()
+                : Response.status(Response.Status.NOT_FOUND).entity("Incorrect ID pet was not found.").build();
+    }
+
+    @PUT
+    @Path("/{id}/play")
+    public Response playPet(@PathParam("id") Long id) {
+        boolean success = petService.playPet(id);
+
+        return success
+                ? Response.ok().entity("Pet played with successfully").build()
+                : Response.status(Response.Status.NOT_FOUND).entity("Incorrect ID pet was not found.").build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deletePet(@PathParam("id") Long id) {
+        petService.removePet(id);
+        return Response.noContent().build();
     }
 }

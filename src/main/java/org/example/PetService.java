@@ -24,7 +24,7 @@ public class PetService {
         pets.remove(id);
     }
 
-    public boolean feedPet(PetDTO pet) {
+    public boolean feedPet(Long id) {
         lock.lock();
 
         try {

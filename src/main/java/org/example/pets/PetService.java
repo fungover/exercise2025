@@ -1,6 +1,5 @@
-package org.example;
+package org.example.pets;
 
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 

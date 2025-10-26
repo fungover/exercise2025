@@ -1,11 +1,10 @@
-package org.example;
+package org.example.pets;
 
 import jakarta.inject.Singleton;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 

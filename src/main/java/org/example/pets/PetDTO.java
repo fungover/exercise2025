@@ -1,4 +1,4 @@
-package org.example;
+package org.example.pets;
 import jakarta.validation.constraints.*;
 
 public class PetDTO {

@@ -29,7 +29,7 @@ public class PetService {
         try {
             PetDTO pet = pets.get(id);
 
-            if (pet == null) {
+            if (pet != null) {
                 pet.setHungerLevel(pet.getHungerLevel() + 10);
                 System.out.println("You fed " + pet.getName() + ". " +  pet.getName() + " hunger is now at " + pet.getHungerLevel() + "%");
                 return true;
@@ -44,7 +44,7 @@ public class PetService {
         lock.lock();
         try {
             PetDTO pet = pets.get(id);
-            if (pet == null) {
+            if (pet != null) {
                 pet.setHappiness(pet.getHappiness() + 10);
                 System.out.println("You played with " +  pet.getName() + ". " + pet.getName() + " is now " + pet.getHappiness() + "% happy");
                 return true;

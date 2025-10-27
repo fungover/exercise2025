@@ -16,6 +16,8 @@ public class PetDTO {
     @Max(value = 100, message = "Happiness can't go above 100")
     private int happiness;
 
+    public PetDTO() {}
+
     public PetDTO(String name, String species, int hungerLevel, int happiness) {
         this.name = name;
         this.species = species;

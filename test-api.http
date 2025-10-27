@@ -1,0 +1,4 @@
+POST http://localhost:8080/api/pets
+Content-Type: application/json
+
+{ "name": "X", "species": cat }

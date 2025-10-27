@@ -15,10 +15,10 @@ public class ErrorResponse {
 
     public Instant timestamp = Instant.now();
     public int status;
-    public String error;     // "Bad Request", "Not Found", "Internal Server Error"
-    public String message;   // sammanfattning eller detaljer
-    public String path;      // request path
-    public List<Violation> violations; // valideringsfel
+    public String error;
+    public String message;
+    public String path;
+    public List<Violation> violations;
 
     public ErrorResponse status(int s) { this.status = s; return this; }
     public ErrorResponse error(String e) { this.error = e; return this; }

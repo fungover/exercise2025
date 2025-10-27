@@ -4,7 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.NotFoundException;
 import org.example.dto.PetDTO;
-
+import jakarta.ws.rs.BadRequestException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -19,15 +19,16 @@ public class PetService {
     private final AtomicLong seq = new AtomicLong(1);
 
     public PetDTO create(@Valid PetDTO dto) {
-        Objects.requireNonNull(dto, "dto must not be null");
+        if (dto == null) {
+            throw new BadRequestException("Request body is required");
+        }
         long id = seq.getAndIncrement();
-        dto.setId(id);
-        store.put(id, dto);
-        return dto;
+        PetDTO toStore = new PetDTO(id, dto.getName(), dto.getSpecies(), dto.getHungerLevel(), dto.getHappiness());
+        store.put(id, toStore);
+        return copy(toStore);
     }
 
     public List<PetDTO> findAll() {
-        // Returnera kopior i stabil ordning (id asc)
         return store.values().stream()
                 .sorted(Comparator.comparing(PetDTO::getId))
                 .map(PetService::copy)
@@ -77,14 +78,14 @@ public class PetService {
         if (p == null) return null;
         return new PetDTO(p.getId(), p.getName(), p.getSpecies(), p.getHungerLevel(), p.getHappiness());
     }
-    // metod för pagination/filter/sort
+
     public List<PetDTO> search(Integer offset, Integer limit, String species, String sortBy, String order) {
         int off = (offset != null && offset >= 0) ? offset : 0;
         int lim = (limit != null && limit > 0 && limit <= 1000) ? limit : 50;
         String sort = (sortBy == null || sortBy.isBlank()) ? "id" : sortBy.toLowerCase();
         boolean desc = "desc".equalsIgnoreCase(order);
 
-        // Välj sorteringsnyckel
+
         Comparator<PetDTO> cmp = switch (sort) {
             case "name" -> Comparator.comparing(PetDTO::getName, Comparator.nullsLast(String::compareToIgnoreCase));
             case "species" -> Comparator.comparing(PetDTO::getSpecies, Comparator.nullsLast(String::compareToIgnoreCase));

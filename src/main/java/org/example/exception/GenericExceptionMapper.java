@@ -7,16 +7,18 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
+import java.util.logging.Logger;
 
 @Provider
 public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
+    private static final Logger log = Logger.getLogger(GenericExceptionMapper.class.getName());
 
     @Context
     UriInfo uri;
 
     @Override
     public Response toResponse(Throwable ex) {
-        ex.printStackTrace();
+        log.log(java.util.logging.Level.SEVERE, "Unhandled exception", ex);
 
         Throwable c = ex;
         while (c != null) {

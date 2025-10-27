@@ -49,24 +49,22 @@ public class PetResource {
     // PUT /pets/{id}/feed?amount=10
     @PUT
     @Path("/{id}/feed")
-    public Response feed(@PathParam("id") long id, @QueryParam("amount") Integer amount) {
-        int delta = amount != null ? amount : 10;
-        if (delta < 0) {
+    public Response feed(@PathParam("id") long id, @DefaultValue("10") @QueryParam("amount") int amount) {
+        if (amount < 0) {
             throw new BadRequestException("amount must be >= 0");
         }
-        PetDTO updated = service.feed(id, delta);
+        PetDTO updated = service.feed(id, amount);
         return Response.ok(updated).build();
     }
 
     // PUT /pets/{id}/play?amount=10
     @PUT
     @Path("/{id}/play")
-    public Response play(@PathParam("id") long id, @QueryParam("amount") Integer amount) {
-        int delta = amount != null ? amount : 10;
-        if (delta < 0) {
+    public Response play(@PathParam("id") long id, @DefaultValue("10") @QueryParam("amount") int amount) {
+        if (amount < 0) {
             throw new BadRequestException("amount must be >= 0");
         }
-        PetDTO updated = service.play(id, delta);
+        PetDTO updated = service.play(id, amount);
         return Response.ok(updated).build();
     }
 

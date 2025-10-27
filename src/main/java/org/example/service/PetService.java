@@ -46,7 +46,10 @@ public class PetService {
     }
 
     public PetDTO feed(long id, int amount) {
-        int delta = amount > 0 ? amount : 10;
+        if (amount<0){
+            throw new BadRequestException("amount must be >= 0");
+        }
+        int delta = amount;
         PetDTO updated = store.compute(id, (k, pet) -> {
             if (pet == null) throw notFound(id);
             pet.setHungerLevel(clamp(pet.getHungerLevel() - delta, 0, 100));
@@ -56,7 +59,10 @@ public class PetService {
     }
 
     public PetDTO play(long id, int amount) {
-        int delta = amount > 0 ? amount : 10;
+        if(amount<0){
+            throw new BadRequestException("amount must be >= 0");
+        }
+        int delta = amount;
         PetDTO updated = store.compute(id, (k, pet) -> {
             if (pet == null) throw notFound(id);
             pet.setHappiness(clamp(pet.getHappiness() + delta, 0, 100));

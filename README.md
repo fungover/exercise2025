@@ -11,7 +11,10 @@ is not actually needed. You may first need to execute `chmod +x mvnw`.
 ./mvnw clean package wildfly:run
 ```
 
-Once the runtime starts, you can access the REST end-point at [http://localhost:8080/jakartaee-hello-world/rest/hello](http://localhost:8080/jakartaee-hello-world/rest/hello).
+Once the runtime starts, you can access the REST end-point at:
+Health check → http://localhost:8080/jakartaee-hello-world/api/health
+
+Pets API → http://localhost:8080/jakartaee-hello-world/api/pets
 
 You can also run the project via Docker. To build the Docker image, execute the following commands from the
 directory where this file resides. Please ensure you have installed
@@ -32,4 +35,8 @@ You can then run the Docker image by executing:
 docker run -it --rm -p 8080:8080 jakartaee-hello-world:v1
 ```
 
-Once the runtime starts, you can access the REST end-point at [http://localhost:8080/jakartaee-hello-world/rest/hello](http://localhost:8080/jakartaee-hello-world/rest/hello).
+Once the runtime starts, you can verify the API again at:
+
+http://localhost:8080/jakartaee-hello-world/api/health
+
+http://localhost:8080/jakartaee-hello-world/api/pets

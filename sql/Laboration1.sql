@@ -86,7 +86,7 @@ INSERT INTO moon_mission
 INSERT INTO moon_mission
     (spacecraft, launch_date, carrier_rocket, operator, mission_type, outcome) VALUES ('TESS',  '2019-04-18', 'Falcon 9 Full Thrust', 'N ASA', 'Gravity assist', 'Successful');
 INSERT INTO moon_mission
-    (spacecraft, launch_date, carrier_rocket, operator, mission_type, outcome) VALUES ("Chang'es 5-T1",  '2014-10-23', 'Long March 3C', 'CN SA', 'Flyby', 'Successful');
+    (spacecraft, launch_date, carrier_rocket, operator, mission_type, outcome) VALUES ('Chang\'es 5-T1',  '2014-10-23', 'Long March 3C', 'CN SA', 'Flyby', 'Successful');
 INSERT INTO moon_mission
     (spacecraft, launch_date, carrier_rocket, operator, mission_type, outcome) VALUES ('Manfred Memorial Moon Mission',  '2014-10-23', 'Long March 3C', 'Lu xSpace', 'Flyby', 'Successful');
 INSERT INTO moon_mission

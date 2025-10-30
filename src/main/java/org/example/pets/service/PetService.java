@@ -65,7 +65,6 @@ public class PetService {
         try {
             PetDTO pet = pets.get(id);
             if (pet == null) throw new IllegalArgumentException("Pet not found");
-            //pet.setHappinessLevel(pet.getHappinessLevel() + amount);
 
             int newHappinessLevel = Math.min(100, pet.getHappinessLevel() + amount);
             pet.setHappinessLevel(newHappinessLevel);

@@ -2,9 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Pet Manager</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<p>A test page. Static of course</p>
+<h1>Pet Manager</h1>
+
+<h2>Adopt a Pet</h2>
+<input id="name" placeholder="Name">
+<input id="species" placeholder="Species">
+<input id="hungerLevel" type="number" placeholder="Hunger Level">
+<input id="happinessLevel" type="number" placeholder="Happiness Level">
+<button id="adoptBtn">Adopt</button>
+
+<h2>Pets</h2>
+<button id="refreshBtn">Refresh List</button>
+<div id="pets"></div>
+
+<script src="script.js"></script>
 </body>
 </html>

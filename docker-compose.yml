@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: 'mysql:9.5.0'
+    environment:
+      - 'MYSQL_DATABASE=auth'
+      - 'MYSQL_PASSWORD=secret'
+      - 'MYSQL_ROOT_PASSWORD=verysecret'
+      - 'MYSQL_USER=user'
+    ports:
+      - '3306:3306'

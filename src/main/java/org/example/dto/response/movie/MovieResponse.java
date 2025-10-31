@@ -1,19 +1,19 @@
-package org.example.dto.request.movie;
+package org.example.dto.response.movie;
 
-import jakarta.validation.constraints.NotNull;
-
-public class CreateMovieRequest {
-    @NotNull
+public class MovieResponse {
+    private Long id;
     private String title;
-
-    @NotNull
     private Long duration;
-
-    @NotNull
     private String genre;
-
-    @NotNull
     private Long directorId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

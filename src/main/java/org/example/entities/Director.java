@@ -23,7 +23,7 @@ public class Director {
     private List<Movie> movies;
 
     // For JPA
-    protected Director() {}
+    public Director() {}
 
     public Long getId() {
         return id;

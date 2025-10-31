@@ -27,7 +27,7 @@ public class Movie {
     private Director director;
 
     // For JPA
-    protected Movie() {}
+    public Movie() {}
 
     public Long getId() {
         return id;

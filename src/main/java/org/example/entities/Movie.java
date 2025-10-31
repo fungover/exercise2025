@@ -26,6 +26,9 @@ public class Movie {
     @JoinColumn(name = "director_id", nullable = false)
     private Director director;
 
+    // For JPA
+    protected Movie() {}
+
     public Long getId() {
         return id;
     }

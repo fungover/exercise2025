@@ -22,6 +22,9 @@ public class Director {
     @OneToMany(mappedBy = "director", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Movie> movies;
 
+    // For JPA
+    protected Director() {}
+
     public Long getId() {
         return id;
     }

@@ -1,0 +1,8 @@
+services:
+  db:
+    image: mysql:latest
+    environment:
+      - 'MYSQL_DATABASE=exercise8'
+      - 'MYSQL_ROOT_PASSWORD=secret'
+    ports:
+      - '3306:3306'

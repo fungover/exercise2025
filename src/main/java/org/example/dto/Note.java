@@ -1,4 +1,6 @@
 package org.example.dto;
 
-public record Note(String value) {
+import java.time.LocalDateTime;
+
+public record Note(Long id, String value, Long userId, LocalDateTime createdAt) {
 }

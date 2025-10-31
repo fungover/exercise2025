@@ -13,7 +13,6 @@ public class User {
   List<Note> notes = new ArrayList<>();
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(nullable = false)
   private Long id;
   private String name;
   private String passwordHashed;

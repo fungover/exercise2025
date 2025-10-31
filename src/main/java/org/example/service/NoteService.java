@@ -1,9 +1,12 @@
 package org.example.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.dto.Note;
+import org.example.entity.User;
 import org.example.repository.NoteRepository;
 import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,9 +21,20 @@ public class NoteService {
 
   }
 
+  @Transactional(readOnly = true)
   public List<Note> getNotes(Long userId) {
     return noteRepository.findByUserId(userId).stream()
-            .map(note -> new Note(note.getValue())).toList();
+            .map(note -> new Note(note.getId(), note.getValue(), userId, note.getCreatedAt())).toList();
+  }
+
+  @Transactional
+  public Note createNewUserNote(Note note) {
+    User user = userRepository.findById(note.userId()).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + note.userId())
+    );
+
+    var savedEntity = noteRepository.save(new org.example.entity.Note(null, user, note.value(), null));
+    return new Note(savedEntity.getId(), savedEntity.getValue(), savedEntity.getUser().getId(), savedEntity.getCreatedAt());
+
   }
 }
 

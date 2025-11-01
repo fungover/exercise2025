@@ -8,6 +8,11 @@ import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import static org.example.utils.BCryptUtil.hashPassword;
+
 @Service
 public class UserService {
   private final UserRepository userRepository;
@@ -21,13 +26,13 @@ public class UserService {
     var newUser = userRepository.save(new UserEntity(
             null,
             user.name(),
-            user.password(),
+            hashPassword(user.password()),
             user.email(),
             null));
     return new User(
             newUser.getId(),
             newUser.getName(),
-            newUser.getPassword(),
+            "hashedPassword",
             newUser.getEmail(),
             null
     );

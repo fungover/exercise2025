@@ -6,9 +6,7 @@ import org.example.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -24,5 +22,11 @@ public class UserController {
   public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
     log.info("Received user: {}", user);
     return ResponseEntity.status(201).body(userService.addNewUser(user));
+  }
+
+  @GetMapping("/users/{userId}")
+  public ResponseEntity<User> getUserById(@PathVariable Long userId) {
+    log.info("Received request for user with id: {}", userId);
+    return ResponseEntity.ok(userService.getUserById(userId));
   }
 }

@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import org.example.dto.User;
 import org.example.service.UserService;
 import org.slf4j.Logger;
@@ -20,8 +21,8 @@ public class UserController {
   }
 
   @PostMapping("/users")
-  public ResponseEntity<User> addUser(@RequestBody User user) {
+  public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
     log.info("Received user: {}", user);
-    return ResponseEntity.ok(userService.addNewUser(user));
+    return ResponseEntity.status(201).body(userService.addNewUser(user));
   }
 }

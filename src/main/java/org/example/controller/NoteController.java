@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import org.example.dto.Note;
 import org.example.service.NoteService;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class NoteController {
   }
 
   @PostMapping("/notes")
-  public ResponseEntity<Note> createNote(@RequestBody Note note) {
+  public ResponseEntity<Note> createNote(@Valid @RequestBody Note note) {
     log.info("Received note: {}", note);
     return ResponseEntity.status(201).body(noteService.createNewUserNote(note));
   }

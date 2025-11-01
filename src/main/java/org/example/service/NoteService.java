@@ -2,7 +2,8 @@ package org.example.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.example.dto.Note;
-import org.example.entity.User;
+import org.example.entity.NoteEntity;
+import org.example.entity.UserEntity;
 import org.example.repository.NoteRepository;
 import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,17 @@ public class NoteService {
 
   @Transactional
   public Note createNewUserNote(Note note) {
-    User user = userRepository.findById(note.userId()).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + note.userId())
+    UserEntity user = userRepository.findById(note.userId())
+            .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + note.userId())
     );
 
-    var savedEntity = noteRepository.save(new org.example.entity.Note(null, user, note.value(), null));
-    return new Note(savedEntity.getId(), savedEntity.getValue(), savedEntity.getUser().getId(), savedEntity.getCreatedAt());
+    var savedEntity = noteRepository.save(new NoteEntity(null, user, note.value(), null));
+    return new Note(
+            savedEntity.getId(),
+            savedEntity.getValue(),
+            savedEntity.getUser().getId(),
+            savedEntity.getCreatedAt()
+    );
 
   }
 }

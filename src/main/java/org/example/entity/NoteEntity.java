@@ -7,22 +7,22 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "note")
-public class Note {
+public class NoteEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
-  private User user;
+  private UserEntity user;
   private String value;
   @CreationTimestamp
   private LocalDateTime createdAt;
 
-  public Note() {
+  public NoteEntity() {
   }
 
-  public Note(Long id, User user, String value, LocalDateTime createdAt) {
+  public NoteEntity(Long id, UserEntity user, String value, LocalDateTime createdAt) {
     this.id = id;
     this.user = user;
     this.value = value;
@@ -53,11 +53,11 @@ public class Note {
     this.id = id;
   }
 
-  public User getUser() {
+  public UserEntity getUser() {
     return user;
   }
 
-  public void setUser(User user) {
+  public void setUser(UserEntity user) {
     this.user = user;
   }
 }

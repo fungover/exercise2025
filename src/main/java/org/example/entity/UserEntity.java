@@ -8,23 +8,24 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class User {
+@Table(name = "user")
+public class UserEntity {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-  List<Note> notes = new ArrayList<>();
+  List<NoteEntity> notes = new ArrayList<>();
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
-  private String passwordHashed;
+  private String password;
   private String email;
 
-  public User() {
+  public UserEntity() {
   }
 
-  public User(Long id, String name, String passwordHashed, String email, List<Note> notes) {
+  public UserEntity(Long id, String name, String passwordHashed, String email, List<NoteEntity> notes) {
     this.id = id;
     this.name = name;
-    this.passwordHashed = passwordHashed;
+    this.password = passwordHashed;
     this.email = email;
     this.notes = notes;
   }
@@ -37,12 +38,12 @@ public class User {
     this.name = name;
   }
 
-  public String getPasswordHashed() {
-    return passwordHashed;
+  public String getPassword() {
+    return password;
   }
 
-  public void setPasswordHashed(String passwordHashed) {
-    this.passwordHashed = passwordHashed;
+  public void setPassword(String passwordHashed) {
+    this.password = passwordHashed;
   }
 
   public String getEmail() {
@@ -53,11 +54,11 @@ public class User {
     this.email = email;
   }
 
-  public List<Note> getNotes() {
+  public List<NoteEntity> getNotes() {
     return notes;
   }
 
-  public void setNotes(List<Note> notes) {
+  public void setNotes(List<NoteEntity> notes) {
     this.notes = notes;
   }
 
@@ -76,7 +77,7 @@ public class User {
     Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
     Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
     if (thisEffectiveClass != oEffectiveClass) return false;
-    User user = (User) o;
+    UserEntity user = (UserEntity) o;
     return getId() != null && Objects.equals(getId(), user.getId());
   }
 

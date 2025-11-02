@@ -41,7 +41,6 @@ public class TodoController {
     public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
         return service.getTodoById(id)
                 .map(existing -> {
-                    existing.setTitle(todo.getTitle());
                     existing.setCompleted(todo.isCompleted());
                     return new ResponseEntity<>(service.saveTodo(existing), HttpStatus.OK);
                 })

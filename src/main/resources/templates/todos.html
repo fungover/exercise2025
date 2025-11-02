@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To Do List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<div class="container">
+    <div>
+        <h1>My To Do</h1>
+
+        <div>
+            <p id="countTodo">0 completed</p>
+        </div>
+
+        <div class="todo-body">
+            <input type="text" name="input1" id="inputTodo" placeholder="Add a new task...">
+            <button type="button" id="addBtn">OK</button>
+        </div>
+
+        <small id="infoText"></small>
+
+        <ul id="todoList">
+            <li th:each="todo : ${todos}" th:attr="data-id=${todo.id}" th:classappend="${todo.completed} ? 'completed'">
+                <span class="text" th:text="${todo.title}" onclick="toggleTodo(this)"></span>
+                <span class="trashcan" onclick="deleteTodo(this)">🗑️</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    const apiUrl = '/api/todos';
+    const todoList = document.getElementById('todoList');
+    const inputTodo = document.getElementById('inputTodo');
+    const addBtn = document.getElementById('addBtn');
+    const countTodo = document.getElementById('countTodo');
+
+    function updateCount() {
+        const completed = document.querySelectorAll('#todoList li.completed').length;
+        countTodo.textContent = `${completed} completed`;
+    }
+
+    function toggleTodo(span) {
+        const li = span.closest('li');
+        const todoId = li.dataset.id;
+        const completed = !li.classList.contains('completed');
+
+        fetch(`${apiUrl}/${todoId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ completed: completed })
+        })
+            .then(res => {
+                if (res.ok) {
+                    li.classList.toggle('completed', completed);
+                    updateCount();
+                } else {
+                    alert('Failed to update todo');
+                }
+            });
+    }
+
+    function deleteTodo(span) {
+        const li = span.closest('li');
+        const todoId = li.dataset.id;
+
+        fetch(`${apiUrl}/${todoId}`, { method: 'DELETE' })
+            .then(res => {
+                if (res.ok) {
+                    li.remove();
+                    updateCount();
+                } else {
+                    alert('Failed to delete todo');
+                }
+            });
+    }
+
+    function addTodo() {
+        const title = inputTodo.value.trim();
+        if (!title) return;
+
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: title, completed: false })
+        })
+            .then(res => res.json())
+            .then(todo => {
+                const li = document.createElement('li');
+                li.dataset.id = todo.id;
+                li.innerHTML = `
+                <span class="text" onclick="toggleTodo(this)">${todo.title}</span>
+                <span class="trashcan" onclick="deleteTodo(this)">🗑️</span>
+            `;
+                todoList.appendChild(li);
+                inputTodo.value = '';
+                updateCount();
+            });
+    }
+
+    addBtn.addEventListener('click', addTodo);
+    inputTodo.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') addTodo();
+    });
+
+    updateCount();
+</script>
+</body>
+</html>

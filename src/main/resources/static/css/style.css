@@ -1,0 +1,122 @@
+* {
+    box-sizing: border-box;
+    text-align: center;
+}
+
+h1 {
+    font-size: 300%;
+    animation: fadeIn 2s;
+}
+
+div {
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+body {
+    background: linear-gradient(10deg, #fa7373, #fbe4e4);
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    background: #ffffff;
+    padding: 0px;
+    width: 540px;
+    height: 30vh;
+    position: absolute;
+    animation: fadeIn 1s;
+}
+
+li {
+    list-style-type: none;
+    color: black;
+    font-size: 150%;
+    font-family: 'Arial';
+    margin: 5%;
+    animation: addItem 1s;
+    position: relative;
+    transition: color 0.5s;
+}
+
+ul {
+    background-color:#ffffff;
+    border-color: #ffffff;
+    margin-bottom: 30%;
+    border-bottom-width: 15px;
+    padding-bottom: 15px;
+    border-radius: 10px;
+}
+
+span.text:hover {
+    text-decoration: line-through;
+    cursor: pointer;
+}
+
+.completed span.text  {
+    color:grey;
+    text-decoration: line-through;
+    transition: color 0.5s;
+}
+
+p {
+    font-family: arial;
+    animation: fadeIn 2s;
+}
+
+button {
+    animation: fadeIn 2.5s;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+input {
+    animation: fadeIn 2.5s;
+    width: 250px;
+}
+
+#infoText {
+    color: red;
+    background-color: #ffffff;
+    font-style: italic;
+    font-family: Arial;
+}
+
+.alert {
+    animation: alert 0.5s 3;
+}
+
+.trashcan {
+    padding-left: 1rem;
+}
+
+.trashcan:hover {
+    cursor: pointer;
+}
+
+@keyframes fadeIn {
+    0% {color: rgb(255, 255, 255);opacity: 0; top: -500px; }
+
+    50% {color: rgb(255, 255, 255); opacity: 0; top: -250px;}
+
+    75% {top: 50px;}
+
+    90% {top: 25px;}
+
+    100% {opacity: 1; top: 0 }
+}
+
+@keyframes alert {
+    0% {opacity: 1;}
+    50% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+@keyframes addItem {
+    0% {color:white; opacity: 0; bottom: -50px;}
+    100% {color:black; opacity: 1; bottom: 0px;}
+}

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record User(Long id,
-                   @NotBlank @NotNull String name,
+                   String name,
                    @NotBlank @NotNull String password,
                    @NotBlank @NotNull String email,
                    List<Note> notes) {

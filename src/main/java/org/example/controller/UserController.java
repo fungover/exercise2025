@@ -29,4 +29,11 @@ public class UserController {
     log.info("Received request for user with id: {}", userId);
     return ResponseEntity.ok(userService.getUserById(userId));
   }
+
+  @GetMapping("/user/notes")
+  public ResponseEntity<User> getUserById(@Valid @RequestBody User user) {
+    log.info("Received user: {}", user);
+    return ResponseEntity.ok(userService.findUserAndGetNotes(user.email(), user.password()));
+  }
+
 }

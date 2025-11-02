@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record Note(Long id,
-                   @NotBlank @NotNull String value,
-                   @NotBlank @NotNull Long userId,
+                   @NotNull String value,
+                   Long userId,
                    LocalDateTime createdAt) {
 }

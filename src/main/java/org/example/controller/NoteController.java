@@ -1,7 +1,9 @@
 package org.example.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.example.dto.Note;
+import org.example.entity.NoteEntity;
 import org.example.service.NoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +24,23 @@ public class NoteController {
   @GetMapping("/notes/{userId}")
   public ResponseEntity<List<Note>> getNotes(@PathVariable Long userId) {
     log.info("Received request for notes for user: {}", userId);
-    return ResponseEntity.ok(noteService.getNotes(userId));
+    var notes = noteService.getNotes(userId);
+    return ResponseEntity.ok(notes);
   }
 
-  @PostMapping("/notes")
-  public ResponseEntity<Note> createNote(@Valid @RequestBody Note note) {
+  @PostMapping("/notes/{userId}")
+  public ResponseEntity<Note> createNote(@Valid @RequestBody Note note, @PathVariable Long userId) {
     log.info("Received note: {}", note);
-    return ResponseEntity.status(201).body(noteService.createNewUserNote(note));
+    var createNote = noteService.createNewUserNote(note, userId);
+    log.info("Created note: {}", createNote);
+    return ResponseEntity.ok(createNote);
+  }
+
+  @DeleteMapping("/notes/{userId}/{noteId}")
+  public ResponseEntity<Note> deleteNote(@PathVariable Long userId, @PathVariable Long noteId) {
+    log.info("Received request to delete note with id: {} for user with id: {}", noteId, userId);
+    var deleteNote = noteService.deleteNote(noteId, userId);
+    log.info("Deleted note: {}", deleteNote);
+    return ResponseEntity.ok(deleteNote);
   }
 }

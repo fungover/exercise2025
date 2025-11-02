@@ -8,9 +8,6 @@ import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import static org.example.utils.BCryptUtil.hashPassword;
 
 @Service

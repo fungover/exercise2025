@@ -18,13 +18,13 @@ public class UserController {
     this.userService = userService;
   }
 
-  @PostMapping("/users")
+  @PostMapping("/user")
   public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
     log.info("Received user: {}", user);
     return ResponseEntity.status(201).body(userService.addNewUser(user));
   }
 
-  @GetMapping("/users/{userId}")
+  @GetMapping("/user/{userId}")
   public ResponseEntity<User> getUserById(@PathVariable Long userId) {
     log.info("Received request for user with id: {}", userId);
     return ResponseEntity.ok(userService.getUserById(userId));

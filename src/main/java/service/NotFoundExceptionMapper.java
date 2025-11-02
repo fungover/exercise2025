@@ -10,8 +10,12 @@ public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundExceptio
 
     @Override
     public Response toResponse(NotFoundException e) {
+        String message = e.getMessage();
+        if (message == null || message.isBlank()) {
+            message = "Resource not found";
+        }
         return Response.status(Response.Status.NOT_FOUND)
-        .entity(Map.of("error", e.getMessage()))
+                .entity(Map.of("error", message))
                 .build();
     }
 }

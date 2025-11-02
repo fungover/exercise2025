@@ -40,7 +40,7 @@ public class PetDTO {
     }
 
     public String getSpecies() {
-        return name;
+        return species;
     }
     public void setSpecies(String species) {
         this.species = species;

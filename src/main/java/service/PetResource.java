@@ -32,7 +32,7 @@ public class PetResource {
     @Path("/{id}")
     public PetDTO getPet(@PathParam("id") Long id) {
         PetDTO pet = petService.getPet(id);
-        //NotFoundExeption returns 404.
+        //NotFoundException returns 404.
         if (pet == null) throw new NotFoundException("Pet not found");
         return pet;
     }

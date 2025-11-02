@@ -23,7 +23,7 @@ class PetServiceTest {
     @Test
     void adoptAndGet() {
         Pet input = Pet.builder().name("Hugo").species("Dog").build();
-        PetDTO dto = service.adpot(input);
+        PetDTO dto = service.adopt(input);
         assertThat(dto.name()).isEqualTo("Hugo");
         assertThat(service.get(dto.id()).species()).isEqualTo("Dog");
     }
@@ -50,7 +50,7 @@ class PetServiceTest {
 
     @Test
     void release() {
-        Pet p = repo.save(Pet.builder().name("E").species("F").build());
+        Pet p = repo.save(Pet.builder().name("EE").species("F").build());
         service.release(p.getId());
         assertThat(repo.findById(p.getId())).isEmpty();
     }

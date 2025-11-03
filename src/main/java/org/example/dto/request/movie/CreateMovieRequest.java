@@ -12,7 +12,6 @@ public class CreateMovieRequest {
     @NotNull
     private String genre;
 
-    @NotNull
     private Long directorId;
 
     public String getTitle() {

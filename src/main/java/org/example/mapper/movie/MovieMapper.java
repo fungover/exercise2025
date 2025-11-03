@@ -1,6 +1,7 @@
 package org.example.mapper.movie;
 
 import org.example.dto.request.movie.CreateMovieRequest;
+import org.example.dto.request.movie.UpdateMovieRequest;
 import org.example.dto.response.movie.MovieResponse;
 import org.example.entities.Movie;
 
@@ -11,6 +12,14 @@ public class MovieMapper {
         movie.setTitle(request.getTitle());
         movie.setDuration(request.getDuration());
         movie.setGenre(request.getGenre());
+
+        return movie;
+    }
+
+    public static Movie toEntity(Long id, UpdateMovieRequest request) {
+        Movie movie = new Movie();
+        movie.setTitle(request.getTitle());
+        movie.setDuration(request.getDuration());
 
         return movie;
     }

@@ -1,6 +1,9 @@
 spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
   main:
-    web-application-type: none
+    web-application-type: servlet
   application:
     name: exercise2025
 
@@ -8,7 +11,7 @@ spring:
     virtual:
       enabled: true
 
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/exercise2025?useSSL=false&serverTimezone=UTC
-#    username: ${MYSQL_USER}
-#    password: ${MYSQL_PASSWORD}
+  datasource:
+    url: jdbc:mysql://localhost:3306/exercise2025?useSSL=false&serverTimezone=UTC
+    username: root
+    password: secret

@@ -31,7 +31,9 @@ public class CatchController {
     @PostMapping("catches")
     public ResponseEntity<Catch> createCatch(@RequestBody Catch c) {
         Catch saved = catchRepository.save(c);
-        return ResponseEntity.status(201).build() ;
+        return ResponseEntity
+                .created(URI.create("/api/catches/" + saved.getId()))
+                .body(saved) ;
     }
 
     // Delete catch by id

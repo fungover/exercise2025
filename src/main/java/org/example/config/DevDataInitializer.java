@@ -33,3 +33,5 @@ public class DevDataInitializer implements ApplicationRunner {
         }
     }
 }
+
+// TODO: Setup security config to enable authentication

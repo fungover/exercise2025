@@ -11,4 +11,5 @@ import java.util.List;
 public interface CatchRepository extends JpaRepository<Catch, Long> {
 
    List<Catch> findBySpecies(String species);
+
 }

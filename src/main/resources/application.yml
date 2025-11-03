@@ -6,12 +6,11 @@ spring:
     web-application-type: servlet
   application:
     name: exercise2025
-
   threads:
     virtual:
       enabled: true
-
   datasource:
     url: jdbc:mysql://localhost:3306/exercise2025?useSSL=false&serverTimezone=UTC
     username: root
     password: secret
+

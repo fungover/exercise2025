@@ -2,10 +2,10 @@ package org.example.entities;
 
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.hibernate.annotations.CreationTimestamp;
-
-
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table (name="catches")
@@ -17,18 +17,26 @@ public class Catch {
     @Column(name="catch_id")
     private Long id;
 
+    @NotNull
     @Column(name="species", nullable=false)
     private String species;
 
+    @Positive
     @Column(name="weight_g", nullable=false)
     private Double weight;
 
+    @Positive
     @Column(name="length", nullable=false)
     private Double length;
 
     @CreationTimestamp
-    @Column(name="created_at", updatable = false)
-    LocalDate createdAt;
+    @Column(
+            name = "caught_at",
+            updatable = false,
+            nullable = false,
+            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+    )
+    private OffsetDateTime caughtAt;
 
     public Catch() {}
 
@@ -64,9 +72,5 @@ public class Catch {
 
     public Double getWeight() {
         return weight;
-    }
-
-    public LocalDate getCreatedAt() {
-        return createdAt;
     }
 }

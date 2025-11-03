@@ -1,0 +1,40 @@
+### Add a Director
+POST http://localhost:8080/api/director
+Content-Type: application/json
+
+{
+  "firstName": "Alfred",
+  "lastName": "Brännare",
+  "movies": [
+    {
+      "title": "Spring Boot the Movie",
+      "duration": 120,
+      "genre": "Action"
+    },
+    {
+      "title": "Spring Boot the Movie 2",
+      "duration": 240,
+      "genre": "Action/Comedy"
+    }
+  ]
+}
+
+### Get All Directors
+GET http://localhost:8080/api/director
+Content-Type: application/json
+
+### Get Director By Id
+GET http://localhost:8080/api/director/3
+Content-Type: application/json
+
+### Update Director
+PUT http://localhost:8080/api/director/3
+Content-Type: application/json
+
+{
+  "firstName": "Derfla"
+}
+
+### Delete Director
+DELETE http://localhost:8080/api/director/3
+Content-Type: application/json

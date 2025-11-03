@@ -1,6 +1,7 @@
 package org.example.mapper.director;
 
 import org.example.dto.request.director.CreateDirectorRequest;
+import org.example.dto.request.director.UpdateDirectorRequest;
 import org.example.dto.response.director.DirectorResponse;
 import org.example.entities.Director;
 import org.example.entities.Movie;
@@ -22,6 +23,15 @@ public class DirectorMapper {
                     .toList();
             director.setMovies(movies);
         }
+
+        return director;
+    }
+
+    public static Director toEntity(Long id, UpdateDirectorRequest request) {
+        Director director = new Director();
+        director.setId(id);
+        director.setFirstName(request.getFirstName());
+        director.setLastName(request.getLastName());
 
         return director;
     }

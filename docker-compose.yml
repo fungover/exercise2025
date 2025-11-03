@@ -1,0 +1,10 @@
+services:
+  mysql_zoo:
+    image: 'mysql:9.5.0'
+    environment:
+      - 'MYSQL_DATABASE=exercise8_zoo'
+      - 'MYSQL_ROOT_PASSWORD=verysecret'
+      - 'MYSQL_USER=user'
+      - 'MYSQL_PASSWORD=secret'
+    ports:
+      - '3306:3306'

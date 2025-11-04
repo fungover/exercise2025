@@ -1,6 +1,4 @@
 package org.example.entities;
-
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

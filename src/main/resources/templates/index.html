@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Welcome</title></head>
+<body>
+<h1>Alla produkter</h1>
+<table border="1">
+    <tr>
+        <th>Namn</th><th>SKU</th><th>Antal</th><th>Plats</th>
+    </tr>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.sku}"></td>
+        <td th:text="${product.quantity}"></td>
+        <td th:text="${product.location.zone} + ' - ' + ${product.location.shelf}"></td>
+    </tr>
+</table>
+<h2>Lägg till ny produkt</h2>
+<form th:action="@{/products/form}" th:object="${product}" method="post">
+    <input type="text" th:field="*{name}" placeholder="Namn" />
+    <input type="text" th:field="*{sku}" placeholder="SKU" />
+    <input type="number" th:field="*{quantity}" placeholder="Antal" />
+    <select th:field="*{location.id}">
+        <option th:each="loc : ${locations}" th:value="${loc.id}" th:text="${loc.zone} + ' - ' + ${loc.shelf}"></option>
+    </select>
+    <button type="submit">Spara</button>
+</form>
+
+
+</body>
+</html>

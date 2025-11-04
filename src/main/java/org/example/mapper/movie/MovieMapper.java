@@ -20,6 +20,7 @@ public class MovieMapper {
         Movie movie = new Movie();
         movie.setTitle(request.getTitle());
         movie.setDuration(request.getDuration());
+        movie.setGenre(request.getGenre());
 
         return movie;
     }

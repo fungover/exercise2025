@@ -1,0 +1,17 @@
+<div th:fragment="_form(directorId)"
+     th:id="'update-director-form-container-' + ${directorId}"
+     style="display: none; margin-top: 1rem;">
+
+    <form th:id="'form-' + ${directorId}"
+          th:data-director-id="${directorId}"
+          onsubmit="return handleDirectorUpdate(event, this)">
+
+        <label th:for="'firstName-' + ${directorId}">New First Name:</label>
+        <input type="text" name="firstName">
+
+        <label th:for="'lastName-' + ${directorId}">New Last Name:</label>
+        <input type="text" name="lastName">
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>

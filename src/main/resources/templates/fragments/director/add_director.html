@@ -1,0 +1,21 @@
+<div th:fragment="add_director">
+
+    <form id="add-director-form">
+
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <h4>Movies (Optional)</h4>
+        <div id="movies-container">
+
+        </div>
+        <button type="button" onclick="addMovieForm()">Add Movie</button>
+        <br><br>
+        <button type="submit">Add Director</button>
+
+    </form>
+
+</div>

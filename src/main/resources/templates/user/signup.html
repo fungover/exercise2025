@@ -45,7 +45,7 @@
 
             if (response.ok) {
                 alert("User created successfully");
-                window.location.href = "/login"; // redirect to login page
+                window.location.href = "/login";
             } else {
                 const text = await response.text();
                 alert("Sign up failed: " + text);

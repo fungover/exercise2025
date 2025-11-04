@@ -1,0 +1,20 @@
+<div th:fragment="_form(movieId)"
+     th:id="'update-movie-form-container-' + ${movieId}"
+     style="display: none; margin-top: 1rem;">
+
+    <form th:id="'form-' + ${movieId}"
+          th:data-movie-id="${movieId}"
+          onsubmit="return handleMovieUpdate(event, this)">
+
+        <label th:for="'title-' + ${movieId}">New Title:</label>
+        <input type="text" name="title">
+
+        <label th:for="'duration-' + ${movieId}">New Duration:</label>
+        <input type="number" name="duration">
+
+        <label th:for="'genre-' + ${movieId}">New Genre:</label>
+        <input type="text" name="genre">
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>

@@ -18,12 +18,13 @@ GET http://localhost:8080/api/movie/1
 Content-Type: application/json
 
 ### Update Movie
-PUT http://localhost:8080/api/movie/1
+PUT http://localhost:8080/api/movie/10
 Content-Type: application/json
 
 {
   "title": "Boot Spring the Movie",
-  "duration": 1337
+  "duration": 1337,
+  "genre": "Test"
 }
 
 ### Delete Movie

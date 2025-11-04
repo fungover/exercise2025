@@ -13,4 +13,8 @@ spring:
     url: jdbc:mysql://localhost:3306/exercise2025?useSSL=false&serverTimezone=UTC
     username: root
     password: secret
+  security:
+    user:
+      name: admin
+      password: admin123
 

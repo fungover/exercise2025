@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.OffsetDateTime;
 
 @Entity
 @Table (name="catches")
-
 public class Catch {
 
     @Id
@@ -46,8 +46,24 @@ public class Catch {
         this.length = length;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
     public void setSpecies(String species) {
         this.species = species;
+    }
+
+    public Double getWeight() {
+        return weight;
     }
 
     public void setWeight(Double weight) {
@@ -62,15 +78,12 @@ public class Catch {
         this.length = length;
     }
 
-    public Long getId() {
-        return id;
+    public OffsetDateTime getCaughtAt() {
+        return caughtAt;
     }
 
-    public String getSpecies() {
-        return species;
+    public void setCaughtAt(OffsetDateTime caughtAt) {
+        this.caughtAt = caughtAt;
     }
 
-    public Double getWeight() {
-        return weight;
-    }
 }

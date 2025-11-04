@@ -4,6 +4,10 @@ spring:
       enabled: true
       file: docker-compose.yml
       lifecycle-management: start_only
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    validate-on-migrate: true
   jpa:
     show-sql: true
     properties:

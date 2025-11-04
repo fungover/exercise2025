@@ -22,6 +22,10 @@ public class UserService implements UserDetailsService {
     }
 
     public String createUser(String username, String password) {
+        if (userRepository.findByUsername(username) != null) {
+            return "User already exists";
+        }
+
         User user = User.builder()
                 .username(username)
                 .password(new BCryptPasswordEncoder().encode(password))

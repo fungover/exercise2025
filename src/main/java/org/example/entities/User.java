@@ -75,4 +75,40 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public static class Builder {
+        private Long id;
+        private String username;
+        private String password;
+        private String authorities;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder authorities(String authorities) {
+            this.authorities = authorities;
+            return this;
+        }
+
+        public User build() {
+            return new User(id, username, password, authorities);
+        }
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
 }

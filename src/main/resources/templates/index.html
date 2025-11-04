@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<style>
+    .nav-grp {
+        display: flex;
+        flex-direction: row;
+
+        a {
+            padding-right: 1rem;
+            font-size: 1.5rem;
+        }
+
+    }
+</style>
+<div th:replace="fragments/navbar :: main-nav">
+</div>
+<h1>Welcome to the Home Page</h1>
+<p>Directors</p>
+<ul>
+    <li th:each="director : ${directors}">
+        <a th:href="@{/director/{id}(id=${director.id})}" th:text="${director.firstName} + ' ' + ${director.lastName}"></a>
+    </li>
+</ul>
+
+<p>Movies</p>
+<ul>
+    <li th:each="movie : ${movies}">
+        <a th:href="@{/movie/{id}(id=${movie.id})}" th:text="${movie.title}"></a>
+    </li>
+</ul>
+</body>
+</html>

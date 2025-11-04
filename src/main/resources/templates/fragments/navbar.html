@@ -1,0 +1,35 @@
+<nav class="nav-grp"
+     th:fragment="main-nav"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <style>
+
+        .nav-grp {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            padding: 0.5rem 0;
+        }
+
+        .btn-grp {
+            margin-top: 1rem;
+        }
+
+
+        .nav-grp a {
+            font-size: 1.5rem;
+        }
+    </style>
+
+    <a href="/">Home</a>
+
+    <a href="/user/signup" sec:authorize="!isAuthenticated()">Sign up</a>
+    <a href="/login" sec:authorize="!isAuthenticated()">Login</a>
+
+    <a href="/admin" sec:authorize="hasAuthority('ROLE_ADMIN')">Admin</a>
+
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
+        <button type="submit">Logout</button>
+    </form>
+</nav>

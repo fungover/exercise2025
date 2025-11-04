@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: main-nav">
+</div>
+<h1>Sign up</h1>
+<form id="signupForm">
+    <label for="username">Email</label>
+    <input id="username" type="text" name="username" placeholder="Enter Email" required>
+
+    <label for="psw">Password</label>
+    <input id="psw" type="password" name="psw" placeholder="Enter Password" required>
+
+    <button class="rgstr" type="submit">Sign Up</button>
+</form>
+
+<div class="btn-grp">
+    <button href="/">Home</button>
+    <button href="/login">Login</button>
+</div>
+
+<script>
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("psw").value;
+
+        try {
+            const response = await fetch("/api/user/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            if (response.ok) {
+                alert("User created successfully");
+                window.location.href = "/login"; // redirect to login page
+            } else {
+                const text = await response.text();
+                alert("Sign up failed: " + text);
+            }
+        } catch (err) {
+            alert("Error: " + err);
+        }
+    });
+</script>
+</body>
+</html>

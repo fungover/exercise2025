@@ -36,9 +36,10 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authorizeHttpRequests -> authorizeHttpRequests
-                                .requestMatchers("/api/auth/director/**").hasRole("DIRECTOR")
                                 .requestMatchers("/api/auth/admin/**").hasRole("ADMIN")
-                                .anyRequest().permitAll()
+                                .requestMatchers("/").permitAll()
+                                .requestMatchers("/user/signup").permitAll()
+                                .anyRequest().authenticated()
                 ).formLogin(Customizer.withDefaults());
         return httpSecurity.build();
     }

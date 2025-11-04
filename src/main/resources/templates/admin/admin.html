@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+<div th:replace="fragments/navbar :: main-nav">
+</div>
+<h1>Admin</h1>
+<p>Welcome to the admin page.</p>
+<h2>Directors</h2>
+<ul>
+    <li th:each="director : ${directors}">
+        <a th:href="@{/director/{id}(id=${director.id})}" th:text="${director.firstName} + ' ' + ${director.lastName}"></a>
+    </li>
+</ul>
+</body>
+</html>

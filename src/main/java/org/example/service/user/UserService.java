@@ -1,6 +1,7 @@
 package org.example.service.user;
 
 import org.example.entities.User;
+import org.example.exceptions.UserAlreadyExistsException;
 import org.example.repository.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +24,7 @@ public class UserService implements UserDetailsService {
 
     public String createUser(String username, String password) {
         if (userRepository.findByUsername(username) != null) {
-            return "User already exists";
+            throw new UserAlreadyExistsException("Username already exists");
         }
 
         User user = User.builder()

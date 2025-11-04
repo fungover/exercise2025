@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${director.firstName} + ' ' + ${director.lastName}">Director</title>
+</head>
+<body>
+<div th:replace="fragments/navbar :: main-nav">
+</div>
+<h1 th:text="${director.firstName} + ' ' + ${director.lastName}"></h1>
+<h2>Movies</h2>
+<ul>
+    <li th:each="movie : ${movies}" th:text="${movie.title}"></li>
+</ul>
+<button onclick="history.back()">Back</button>
+</body>
+</html>

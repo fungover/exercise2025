@@ -12,6 +12,7 @@ Content-Type: application/json
 ### Get All Movies
 GET http://localhost:8080/api/movie
 Content-Type: application/json
+X-API-KEY: Baeldung
 
 ### Get Movie By Id
 GET http://localhost:8080/api/movie/1

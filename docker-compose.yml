@@ -7,3 +7,12 @@ services:
       - 'MYSQL_ROOT_PASSWORD=secret'
     ports:
       - '3306:3306'
+
+  db-dev:
+    container_name: exercise8-dev
+    image: mysql:latest
+    environment:
+      - 'MYSQL_DATABASE=exercise8_dev'
+      - 'MYSQL_ROOT_PASSWORD=secret'
+    ports:
+      - '3307:3306'

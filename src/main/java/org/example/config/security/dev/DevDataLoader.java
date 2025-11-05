@@ -2,12 +2,15 @@ package org.example.config.security.dev;
 
 import org.example.entities.Director;
 import org.example.entities.Movie;
+import org.example.entities.User;
 import org.example.repository.director.DirectorRepository;
 import org.example.repository.movie.MovieRepository;
+import org.example.repository.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @Profile("dev")
@@ -15,10 +18,13 @@ public class DevDataLoader {
 
     @Bean
     CommandLineRunner loadTestData(DirectorRepository directorRepository,
-                                   MovieRepository movieRepository) {
+                                   MovieRepository movieRepository,
+                                   UserRepository userRepository,
+                                   PasswordEncoder passwordEncoder) {
         return args -> {
             System.out.println("Loading test data...");
 
+            // Directors
             Director nolan = new Director();
             nolan.setFirstName("Christopher");
             nolan.setLastName("Nolan");
@@ -29,6 +35,7 @@ public class DevDataLoader {
             spielberg.setLastName("Spielberg");
             directorRepository.save(spielberg);
 
+            // Movies
             Movie inception = new Movie();
             inception.setTitle("Inception");
             inception.setDuration(148L);
@@ -49,6 +56,21 @@ public class DevDataLoader {
             jaws.setGenre("Thriller");
             jaws.setDirector(spielberg);
             movieRepository.save(jaws);
+
+            // Users
+            User adminUser = User.builder()
+                    .username("admin")
+                    .password(passwordEncoder.encode("admin"))
+                    .authorities("ROLE_ADMIN")
+                    .build();
+            userRepository.save(adminUser);
+
+            User regularUser = User.builder()
+                    .username("user")
+                    .password(passwordEncoder.encode("user"))
+                    .authorities("ROLE_USER")
+                    .build();
+            userRepository.save(regularUser);
 
             System.out.println("Test data loaded successfully");
         };

@@ -20,6 +20,9 @@
 <div th:replace="fragments/navbar :: main-nav">
 </div>
 <h1>Welcome to the Home Page</h1>
+<p sec:authorize="isAuthenticated()">
+    Hello, <span sec:authentication="name"></span>!
+</p>
 <p>Directors</p>
 <ul>
     <li th:each="director : ${directors}">

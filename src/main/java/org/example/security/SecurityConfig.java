@@ -2,6 +2,7 @@ package org.example.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,18 +23,40 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-            .disable() //for API simplicity, if i want forms i have to enable
+    @Order(1)
+    public SecurityFilterChain apifilterChain(HttpSecurity http) throws Exception {
+        http//for API simplicity, if i want forms i have to enable
+            .securityMatcher("/api/**") // restric this filter cahin to api/**
             .authorizeHttpRequests(
               auth -> auth.requestMatchers(HttpMethod.GET, "/api/animals/**")
-                          .permitAll()
+                          .permitAll() // allow anyone to GET /api/animals
                           .requestMatchers("/api/**")
+                          // requires Admin role for all post,put, delete for /api/**
                           .hasRole("ADMIN")
                           .anyRequest()
                           .authenticated())
             .httpBasic(Customizer.withDefaults());
         return http.build();
+    }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain formLoginSecurityFilterChain(
+      HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/login/**")
+
+                                               .permitAll() //allow anyone to
+                                               // access login
+                                               .anyRequest()
+                                               .authenticated()) //other requests
+            // require auth
+            .formLogin()
+            .loginPage("/login")
+            .defaultSuccessUrl("/home", true)
+            .permitAll();
+
+        return http.build();
+
     }
 
     @Bean

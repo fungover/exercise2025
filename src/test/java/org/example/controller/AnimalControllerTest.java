@@ -11,9 +11,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,7 +31,7 @@ class AnimalControllerTest {
     @Autowired
     MockMvc mvc;
 
-    @MockBean
+    @MockitoBean
     AnimalService animalService;
 
     @Test
@@ -37,15 +39,17 @@ class AnimalControllerTest {
         mvc.perform(post("/api/animals").contentType(MediaType.APPLICATION_JSON)
                                         .content(
                                           "{\"name\":\"Leo\",\"species\":\"Lion\"}"))
-           .andExpect(status().isUnauthorized());
+           .andExpect(status().isForbidden());
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN")
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     void adminCanPost() throws Exception {
         mvc.perform(post("/api/animals").contentType(MediaType.APPLICATION_JSON)
                                         .content(
-                                          "{\"name\":\"Leo\",\"species\":\"Lion\"}"))
+                                          "{\"name\":\"Leo\",\"species\":\"Lion\"}")
+                                        .with(csrf()))
+
            .andExpect(status().isCreated());
     }
 

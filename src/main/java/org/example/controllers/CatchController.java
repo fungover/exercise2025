@@ -2,43 +2,94 @@ package org.example.controllers;
 
 import jakarta.validation.Valid;
 import org.example.DTO.CatchYearDTO;
+import org.example.services.CatchService;
+import org.example.DTO.CreateCatchDTO;
+import org.example.DTO.ErrorResponseDTO;
 import org.example.entities.Catch;
+import org.example.services.CatchService;
 import org.example.repository.CatchRepository;
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/catches")
 public class CatchController {
 
     private final CatchRepository catchRepository;
+    private final CatchService catchService;
 
-    public CatchController(CatchRepository catchRepository) {
+    public CatchController(CatchRepository catchRepository, CatchService catchService) {
         this.catchRepository = catchRepository;
+        this.catchService = catchService;
     }
 
-
-    // Gets all catches
-    @GetMapping("catches")
-    public ResponseEntity<Object> getAllCatches() {
-        return ResponseEntity.status(200).header("Catches total", String.valueOf(catchRepository.count())).body(catchRepository.findAll());
+    /**
+     * Hämtar alla fångster
+     */
+    @GetMapping
+    public ResponseEntity<List<Catch>> getAllCatches() {
+        List<Catch> catches = catchRepository.findAll();
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(catchRepository.count()))
+                .body(catches);
     }
 
-    // Add catch (Post)
-    @PostMapping("catches")
-    public ResponseEntity<Catch> createCatch(@Valid @RequestBody Catch c) {
-        /*c.setSpecies(sanitizationService.sanitize(c.getSpecies()));*/
-        Catch saved = catchRepository.save(c);
+    /**
+     * Hämtar en specifik fångst via ID
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Catch> getCatchById(@PathVariable Long id) {
+        return catchRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Hämtar fångster sorterade efter vikt
+     */
+    @GetMapping("/weight")
+    public ResponseEntity<?> getCatchesOrderedByWeight(
+            @RequestParam(defaultValue = "asc") String order) {
+
+        if (!order.equalsIgnoreCase("asc") && !order.equalsIgnoreCase("desc")) {
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponseDTO(
+                            400,
+                            "Bad Request",
+                            "Invalid order parameter. Must be either 'asc' or 'desc'."
+                    )
+            );
+        }
+
+        List<CatchYearDTO> result = order.equalsIgnoreCase("desc")
+                ? catchRepository.orderByWeightDesc()
+                : catchRepository.orderByWeightAsc();
+
+        return ResponseEntity.ok(result);
+    }
+
+    /**
+     * Skapar en ny fångst
+     */
+    @PostMapping
+    // Disable XSS warning (Sonar/IntelliJ)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Catch> createCatch(@Valid @RequestBody CreateCatchDTO catchDTO) {
+        Catch created = catchService.createCatch(catchDTO);
         return ResponseEntity
-                .created(URI.create("/api/catches/" + saved.getId()))
-                .body(saved);
+                .created(URI.create("/api/catches/" + created.getId()))
+                .body(created);
     }
 
-    // Delete catch by id
-    @DeleteMapping("/catches/{id}")
+    /**
+     * Raderar en fångst via ID
+     */
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCatch(@PathVariable Long id) {
         if (!catchRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
@@ -47,30 +98,4 @@ public class CatchController {
         catchRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("catches/{id}")
-    public ResponseEntity<Catch> getCatchById(@PathVariable Long id) {
-        return catchRepository.findById(id).stream()
-                .findFirst()
-                .map(c -> ResponseEntity.ok().body(c))
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("catches/weight")
-    public ResponseEntity<?> getCatchesOrderedByWeight(@RequestParam(defaultValue = "asc") String order) {
-
-        List<CatchYearDTO> result;
-
-        if (order.equals("asc")) {
-            result = catchRepository.orderByWeightAsc();
-        } else if (order.equals("desc")) {
-            result = catchRepository.orderByWeightDesc();
-        } else {
-            return ResponseEntity.status(400).body(
-                    new org.example.backend.DTO.ErrorResponseDTO(400, "Bad Request", "Invalid order parameter. Must be either 'asc' or 'desc'.")
-            );
-        }
-        return ResponseEntity.ok(result);
-    }
-
 }

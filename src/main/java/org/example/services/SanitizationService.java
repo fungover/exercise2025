@@ -10,7 +10,9 @@ public class SanitizationService {
         if (input == null) {
             return null;
         }
+        String cleanedInput = input.trim();
+        cleanedInput= cleanedInput.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
         // Escape HTML special characters
-        return HtmlUtils.htmlEscape(input.trim());
+        return HtmlUtils.htmlEscape(cleanedInput);
     }
 }

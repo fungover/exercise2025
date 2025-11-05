@@ -1,5 +1,7 @@
 package org.example.entities;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -20,11 +22,15 @@ public class Catch {
     private String species;
 
     @Positive(message = "Weight must be positive")
+    @DecimalMin("0.0")
+    @DecimalMax("50000.0")
     @Column(name="weight_g", nullable=false)
     private Double weight;
 
     @Positive(message = "Length must be positive")
     @Column(name="length", nullable=false)
+    @DecimalMin("0.0")
+    @DecimalMax("500.0")
     private Double length;
 
     @CreationTimestamp

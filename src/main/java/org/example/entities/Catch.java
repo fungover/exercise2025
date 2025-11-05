@@ -15,15 +15,15 @@ public class Catch {
     @Column(name="catch_id")
     private Long id;
 
-    @NotNull
+    @NotNull(message = "Species cannot be null")
     @Column(name="species", nullable=false)
     private String species;
 
-    @Positive
+    @Positive(message = "Weight must be positive")
     @Column(name="weight_g", nullable=false)
     private Double weight;
 
-    @Positive
+    @Positive(message = "Length must be positive")
     @Column(name="length", nullable=false)
     private Double length;
 

@@ -26,7 +26,8 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain apifilterChain(HttpSecurity http) throws Exception {
         http//for API simplicity, if i want forms i have to enable
-            .securityMatcher("/api/**") // restric this filter cahin to api/**
+            .securityMatcher("/api/**")// restrict this filter chain to api/**
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(
               auth -> auth.requestMatchers(HttpMethod.GET, "/api/animals/**")
                           .permitAll() // allow anyone to GET /api/animals
@@ -43,7 +44,8 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain formLoginSecurityFilterChain(
       HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/login/**")
+        http.securityMatcher("/login/**", "/home/**")
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/login/**")
 
                                                .permitAll() //allow anyone to
                                                // access login

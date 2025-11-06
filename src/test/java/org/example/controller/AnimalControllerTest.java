@@ -21,9 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(AnimalController.class)
-// the test might  a bit slower, and it hits the DB, but access all the real stuff.
-// so it will add a lion everytime to our DB.
-//@SpringBootTest
 @Import(SecurityConfig.class)
 @AutoConfigureMockMvc
 class AnimalControllerTest {
@@ -39,7 +36,7 @@ class AnimalControllerTest {
         mvc.perform(post("/api/animals").contentType(MediaType.APPLICATION_JSON)
                                         .content(
                                           "{\"name\":\"Leo\",\"species\":\"Lion\"}"))
-           .andExpect(status().isForbidden());
+           .andExpect(status().isUnauthorized());
     }
 
     @Test

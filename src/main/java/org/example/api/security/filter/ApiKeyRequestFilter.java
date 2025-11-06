@@ -7,6 +7,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.api.security.service.AuthenticationService;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -15,14 +16,31 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class ApiKeyRequestFilter extends GenericFilterBean {
+    AuthenticationService authenticationService;
+
+    public ApiKeyRequestFilter(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+
+        System.out.println("API Key from header: " + httpRequest.getHeader("X-API-KEY"));
+
+        Authentication existingAuth = SecurityContextHolder.getContext().getAuthentication();
+        if (existingAuth != null && existingAuth.isAuthenticated() && !(existingAuth instanceof AnonymousAuthenticationToken)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         try {
-            Authentication authentication = AuthenticationService.getAuthentication((HttpServletRequest) request);
+            Authentication authentication = authenticationService.getAuthentication((HttpServletRequest) request);
+            System.out.println("Authentication successful: " + authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(request, response);
         } catch (Exception e) {
+            System.out.println("Authentication failed: " + e.getMessage());
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpResponse.setContentType("application/json");

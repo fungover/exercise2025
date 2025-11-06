@@ -63,6 +63,7 @@ public class DevDataLoader {
                     .password(passwordEncoder.encode("admin"))
                     .authorities("ROLE_ADMIN")
                     .build();
+            adminUser.setApiKey("123");
             userRepository.save(adminUser);
 
             User regularUser = User.builder()
@@ -70,6 +71,7 @@ public class DevDataLoader {
                     .password(passwordEncoder.encode("user"))
                     .authorities("ROLE_USER")
                     .build();
+            regularUser.setApiKey("456");
             userRepository.save(regularUser);
 
             System.out.println("Test data loaded successfully");

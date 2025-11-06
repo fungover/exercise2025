@@ -1,5 +1,6 @@
 package org.example.service.user;
 
+import org.example.api.security.service.AuthenticationService;
 import org.example.entities.User;
 import org.example.exceptions.UserAlreadyExistsException;
 import org.example.repository.user.UserRepository;
@@ -11,10 +12,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements UserDetailsService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final AuthenticationService authenticationService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AuthenticationService authenticationService) {
         this.userRepository = userRepository;
+        this.authenticationService = authenticationService;
     }
 
     @Override
@@ -32,6 +35,7 @@ public class UserService implements UserDetailsService {
                 .password(new BCryptPasswordEncoder().encode(password))
                 .authorities("ROLE_USER")
                 .build();
+        user.setApiKey(authenticationService.generateApiKey());
 
         userRepository.save(user);
 

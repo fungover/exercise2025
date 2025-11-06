@@ -26,6 +26,8 @@ public class User implements UserDetails {
 
     private String authorities;
 
+    private String apiKey;
+
     public User(Long id, String username, String password, String authorities) {
         this.id = id;
         this.username = username;
@@ -56,6 +58,14 @@ public class User implements UserDetails {
         return username;
     }
 
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -81,6 +91,7 @@ public class User implements UserDetails {
         private String username;
         private String password;
         private String authorities;
+
 
         public Builder id(Long id) {
             this.id = id;

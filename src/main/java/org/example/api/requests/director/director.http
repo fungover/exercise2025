@@ -1,6 +1,7 @@
 ### Add a Director
 POST http://localhost:8080/api/director
 Content-Type: application/json
+X-API-KEY: 123
 
 {
   "firstName": "Alfred",
@@ -22,14 +23,17 @@ Content-Type: application/json
 ### Get All Directors
 GET http://localhost:8080/api/director
 Content-Type: application/json
+X-API-KEY: 123
 
 ### Get Director By Id
 GET http://localhost:8080/api/director/3
 Content-Type: application/json
+X-API-KEY: 123
 
 ### Update Director
 PUT http://localhost:8080/api/director/3
 Content-Type: application/json
+X-API-KEY: 123
 
 {
   "firstName": "Derfla"
@@ -38,3 +42,4 @@ Content-Type: application/json
 ### Delete Director
 DELETE http://localhost:8080/api/director/3
 Content-Type: application/json
+X-API-KEY: 123

@@ -1,6 +1,7 @@
 ### Add a Movie
 POST http://localhost:8080/api/movie
 Content-Type: application/json
+X-API-KEY: 123
 
 {
   "title": "Some Movie",
@@ -12,15 +13,17 @@ Content-Type: application/json
 ### Get All Movies
 GET http://localhost:8080/api/movie
 Content-Type: application/json
-X-API-KEY: Baeldung
+X-API-KEY: 123
 
 ### Get Movie By Id
 GET http://localhost:8080/api/movie/1
 Content-Type: application/json
+X-API-KEY: 123
 
 ### Update Movie
 PUT http://localhost:8080/api/movie/10
 Content-Type: application/json
+X-API-KEY: 123
 
 {
   "title": "Boot Spring the Movie",
@@ -31,3 +34,4 @@ Content-Type: application/json
 ### Delete Movie
 DELETE http://localhost:8080/api/movie/1
 Content-Type: application/json
+X-API-KEY: 123

@@ -1,6 +1,7 @@
 package org.example.config.security;
 
 import org.example.api.security.filter.ApiKeyRequestFilter;
+import org.example.api.security.service.AuthenticationService;
 import org.example.service.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,20 +16,21 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     private UserService userService;
+    private AuthenticationService authenticationService;
 
-    public SecurityConfig(UserService userService) {
+    public SecurityConfig(UserService userService, AuthenticationService authenticationService) {
         this.userService = userService;
+        this.authenticationService = authenticationService;
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
@@ -36,25 +38,9 @@ public class SecurityConfig {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
-        http
-                .securityMatcher("/api/**")
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry
-                        .requestMatchers("/api/**").authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(httpSecuritySessionManagementConfigurer ->
-                        httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new ApiKeyRequestFilter(), UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
-
-    @Bean
-    @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .securityMatcher("/**")
+                .securityMatcher(request -> !request.getRequestURI().startsWith("/api"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(
@@ -69,9 +55,26 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
+    @Bean
+    @Order(2)
+    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/api/**")
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                        authorizationManagerRequestMatcherRegistry
+                                .requestMatchers("/login").permitAll()
+                                .requestMatchers("/api/user/create").permitAll()
+                                .requestMatchers("/api/**").authenticated())
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(httpSecuritySessionManagementConfigurer ->
+                        httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(new ApiKeyRequestFilter(authenticationService), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

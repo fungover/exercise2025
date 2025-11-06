@@ -31,7 +31,7 @@ X-API-KEY: 123
   "genre": "Test"
 }
 
-### Delete Movie
+### Delete Movie - Should fail
 DELETE http://localhost:8080/api/movie/1
 Content-Type: application/json
 X-API-KEY: 123

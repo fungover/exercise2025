@@ -26,6 +26,13 @@ public class Movie {
     @JoinColumn(name = "director_id", nullable = false)
     private Director director;
 
+    public Movie(String title, Long duration, String genre, Director director) {
+        this.title = title;
+        this.duration = duration;
+        this.genre = genre;
+        this.director = director;
+    }
+
     // For JPA
     public Movie() {}
 

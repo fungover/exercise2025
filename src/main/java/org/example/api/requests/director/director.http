@@ -40,6 +40,6 @@ X-API-KEY: 123
 }
 
 ### Delete Director
-DELETE http://localhost:8080/api/director/3
+DELETE http://localhost:8080/api/director/2
 Content-Type: application/json
 X-API-KEY: 123

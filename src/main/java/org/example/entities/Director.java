@@ -22,6 +22,12 @@ public class Director {
     @OneToMany(mappedBy = "director", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Movie> movies;
 
+    public Director(String firstName, String lastName, List<Movie> movies) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.movies = movies;
+    }
+
     // For JPA
     public Director() {}
 

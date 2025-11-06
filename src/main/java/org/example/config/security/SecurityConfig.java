@@ -6,6 +6,7 @@ import org.example.service.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -61,15 +62,27 @@ public class SecurityConfig {
         http
                 .securityMatcher("/api/**")
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/login").permitAll()
-                                .requestMatchers("/api/user/create").permitAll()
-                                .requestMatchers("/api/**").authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(httpSecuritySessionManagementConfigurer ->
-                        httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new ApiKeyRequestFilter(authenticationService), UsernamePasswordAuthenticationFilter.class);
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/user/create").permitAll()
+
+                        // Director
+                        .requestMatchers(HttpMethod.POST, "/api/director").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/director/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/director/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/director/**").permitAll()
+
+                        // Movie
+                        .requestMatchers(HttpMethod.POST, "/api/movie").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/movie/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/movie/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/movie/**").permitAll()
+
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .addFilterBefore(new ApiKeyRequestFilter(authenticationService),
+                        UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

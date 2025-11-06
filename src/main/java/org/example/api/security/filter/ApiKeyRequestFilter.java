@@ -24,6 +24,8 @@ public class ApiKeyRequestFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        SecurityContextHolder.clearContext();
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         System.out.println("API Key from header: " + httpRequest.getHeader("X-API-KEY"));

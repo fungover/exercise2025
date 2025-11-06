@@ -114,6 +114,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
+
                 .httpBasic(Customizer.withDefaults()) // TODO: this is needed for postman requests read about it more
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/api/**")
@@ -142,7 +143,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-}
+}*/
 
 //TODO: API-key for authentication when RestAPI is used
 // Role based API

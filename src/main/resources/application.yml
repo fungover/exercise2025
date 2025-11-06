@@ -17,6 +17,5 @@ spring:
       ddl-auto: none
     defer-datasource-initialization: true
 
-  # ❌ Stäng av Spring Boots autokonfiguration av Flyway
   flyway:
-    enabled: false
+    enabled: true

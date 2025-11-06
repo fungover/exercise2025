@@ -33,29 +33,4 @@ import org.springframework.stereotype.Component;
 //        }
 //    }
 //}
-/*
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 
-@Component
-@Profile("dev")
-public class DevDataInitializer {
-    private static final Logger log = LoggerFactory.getLogger(DevDataInitializer.class);
-    private final CatchRepository catchRepository;
-
-    public DevDataInitializer(CatchRepository catchRepository) {
-        this.catchRepository = catchRepository;
-    }
-
-    @EventListener(ApplicationReadyEvent.class)
-    @Transactional
-    public void initDevData() {
-        if (catchRepository.count() == 0) {
-            log.info("Initializing dev data after Flyway migration");
-            catchRepository.save(new Catch("Pike", 1.2, 1.5));
-            catchRepository.save(new Catch("Goldfish", 0.5, 0.5));
-        } else {
-            log.info("Dev data already initialized");
-        }
-    }
-}*/

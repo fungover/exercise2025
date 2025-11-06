@@ -24,15 +24,19 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     @Order(1)
-    public SecurityFilterChain apifilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain apifilterChain(
+      HttpSecurity http) throws Exception {
         http//for API simplicity, if i want forms i have to enable
-            .securityMatcher("/api/**")// restrict this filter chain to api/**
+            .securityMatcher(
+              "/api/**")// restrict this filter chain to api/**
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(
-              auth -> auth.requestMatchers(HttpMethod.GET, "/api/animals/**")
+              auth -> auth.requestMatchers(HttpMethod.GET,
+                                           "/api/animals/**")
                           .permitAll() // allow anyone to GET /api/animals
                           .requestMatchers("/api/**")
-                          // requires Admin role for all post,put, delete for /api/**
+                          // requires Admin role for all post,put,
+                          // delete for /api/**
                           .hasRole("ADMIN")
                           .anyRequest()
                           .authenticated())
@@ -44,21 +48,19 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain formLoginSecurityFilterChain(
       HttpSecurity http) throws Exception {
-        http.securityMatcher("/login/**", "/home/**")
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/login/**")
-
-                                               .permitAll() //allow anyone to
-                                               // access login
-                                               .anyRequest()
-                                               .authenticated()) //other requests
-            // require auth
-            .formLogin()
-            .loginPage("/login")
-            .defaultSuccessUrl("/home", true)
-            .permitAll();
-
+        //this one picks up everything that isn't /api/**
+        http.authorizeHttpRequests(
+              auth -> auth.requestMatchers("/login/**")
+                          .permitAll() //allow anyone to
+                          // access login
+                          .anyRequest()
+                          .authenticated())
+            .formLogin(form -> form.defaultSuccessUrl("/animals", true)
+                                   .permitAll())
+            .logout(logout -> logout.logoutUrl("/logout")
+                                    .logoutSuccessUrl("/login?logout")
+                                    .permitAll());
         return http.build();
-
     }
 
     @Bean

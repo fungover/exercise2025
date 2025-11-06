@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Zoo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 0.5rem;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            text-align: left;
+            background: #eee;
+        }
+    </style>
+</head>
+<body>
+<h1>Zoo Animals </h1>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Species</th>
+        <th>Age</th>
+        <th>Enclosure</th>
+        <th>Endangered</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="animal : ${animals}">
+        <td th:text="${animal.name}">Name</td>
+        <td th:text="${animal.species}">Species</td>
+        <td th:text="${animal.age}">Age</td>
+        <td th:text="${animal.enclosure}">Enclosure</td>
+        <td th:text="${animal.endangered} ? 'Yes' : 'No'">Endangered</td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/logout}">Logout</a>
+
+</body>
+</html>

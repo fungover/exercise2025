@@ -2,7 +2,7 @@ package org.example.controllers;
 
 import org.example.repository.UserRepository;
 import org.example.services.UserService;
-import org.springframework.security.core.userdetails.User;
+import org.example.entities.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +18,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    /*@GetMapping("/register")*/
+    @GetMapping("/register")
+    public String showRegistrationForm(org.springframework.ui.Model model) {
+        model.addAttribute("user", new User());
+        return "register";
+    }
 
 
-    /*@PostMapping("/register")
+
+    @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") User user) {
         userService.registerUser(user);
         return "redirect:/login";
-    }*/
+    }
 }

@@ -33,15 +33,15 @@ public class SecurityConfig {
                         // Admin-gränssnitt
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        // Offentliga sidor
-                        .requestMatchers(HttpMethod.GET, "/", "/login/**", "/register/**", "/error").permitAll()
+                        // Offentliga sidor - TILLÅT ALLA HTTP-METODER
+                        .requestMatchers("/", "/login/**", "/register/**", "/error").permitAll()
 
                         // Allt annat kräver inloggning
                         .anyRequest().authenticated()
                 )
                 // Form-login för vanliga användare
                 .formLogin(form -> form
-                        .loginPage("/login") // valfritt, om du har en egen sida
+
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
@@ -50,7 +50,7 @@ public class SecurityConfig {
 
                 // CSRF avstängt för API-anrop
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**")
+                        .ignoringRequestMatchers("/api/**", "/register/**")
                 )
                 // Logout-hantering
                 .logout(logout -> logout
@@ -77,6 +77,19 @@ public class SecurityConfig {
         provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
+
+/*    @Bean
+    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
+
+
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(encoder.encode("adminpassword"))
+                .roles("ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(admin);
+    }*/
 }
 //old code
 
@@ -124,11 +137,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(encoder.encode("password"))
-                .roles("USER")
-                .build();
+
 
         UserDetails admin = User.builder()
                 .username("admin")

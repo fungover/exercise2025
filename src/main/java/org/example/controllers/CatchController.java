@@ -32,9 +32,9 @@ public class CatchController {
      */
     @GetMapping
     public ResponseEntity<List<Catch>> getAllCatches() {
-        List<Catch> catches = catchRepository.findAll();
+        List<Catch> catches = catchService.getAllCatches();
         return ResponseEntity.ok()
-                .header("X-Total-Count", String.valueOf(catchRepository.count()))
+                .header("X-Total-Count", String.valueOf(catchService.countCatches()))
                 .body(catches);
     }
 
@@ -43,7 +43,7 @@ public class CatchController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Catch> getCatchById(@PathVariable Long id) {
-        return catchRepository.findById(id)
+        return catchService.getCatchById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -64,10 +64,9 @@ public class CatchController {
                     )
             );
         }
-
-        List<CatchYearDTO> result = order.equalsIgnoreCase("desc")
-                ? catchRepository.orderByWeightDesc()
-                : catchRepository.orderByWeightAsc();
+        
+        boolean stmt = order.equalsIgnoreCase("asc");
+        List<CatchYearDTO> result = catchService.getCatchesOrderedByWeight(stmt);
 
         return ResponseEntity.ok(result);
     }
@@ -77,7 +76,6 @@ public class CatchController {
      */
     @PostMapping
     // Disable XSS warning (Sonar/IntelliJ)
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Catch> createCatch(@Valid @RequestBody CreateCatchDTO catchDTO) {
         Catch created = catchService.createCatch(catchDTO);
         return ResponseEntity

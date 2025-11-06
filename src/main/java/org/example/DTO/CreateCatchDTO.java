@@ -15,8 +15,5 @@ public record CreateCatchDTO(
 
         @NotNull(message = "Length is required")
         @Positive(message = "Length must be positive")
-        Double length,
-
-        @NotNull(message = "CaughtAt is required")
-        OffsetDateTime caughtAt
+        Double length
 ) {}

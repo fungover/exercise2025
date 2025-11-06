@@ -35,8 +35,8 @@ public class CatchService {
         return catchRepository.count();
     }
 
-    public List<CatchYearDTO> getCatchesOrderedByWeight(boolean ascending) {
-        return ascending
+    public List<CatchYearDTO> getCatchesOrderedByWeight(boolean stmt) {
+        return stmt
                 ? catchRepository.orderByWeightAsc()
                 : catchRepository.orderByWeightDesc();
     }
@@ -51,7 +51,6 @@ public class CatchService {
         catchEntity.setSpecies(sanitizedSpecies);
         catchEntity.setWeight(dto.weight());
         catchEntity.setLength(dto.length());
-        catchEntity.setCaughtAt(dto.caughtAt());
 
         return catchRepository.save(catchEntity);
     }

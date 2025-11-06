@@ -1,5 +1,5 @@
 
-package org.example.config;
+/*package org.example.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +21,8 @@ public class SecurityConfig {
 
         return http.build();
     }
-}
-/*package org.example.config;
+}*/
+package org.example.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,7 +54,10 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
-        ;
+                .httpBasic(Customizer.withDefaults()) // TODO: this is needed for postman requests read about it more
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/**")
+                );
         return http.build();
     }
 
@@ -79,7 +82,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-}*/
+}
 
 //TODO: API-key for authentication when RestAPI is used
 // Role based API

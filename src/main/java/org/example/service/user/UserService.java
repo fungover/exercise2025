@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -25,6 +26,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
+    @Transactional
     public String createUser(String username, String password) {
         if (userRepository.findByUsername(username) != null) {
             throw new UserAlreadyExistsException("Username already exists");

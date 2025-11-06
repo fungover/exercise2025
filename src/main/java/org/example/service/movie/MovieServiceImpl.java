@@ -6,6 +6,7 @@ import org.example.exceptions.ResourceNotFoundException;
 import org.example.repository.movie.MovieRepository;
 import org.example.service.director.DirectorService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class MovieServiceImpl implements MovieService {
         this.directorService = directorService;
     }
 
+    @Transactional
     @Override
     public Movie addMovie(Long directorId, Movie movie) {
         Director director = directorService.getDirector(directorId);
@@ -38,6 +40,7 @@ public class MovieServiceImpl implements MovieService {
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id: " + id));
     }
 
+    @Transactional
     @Override
     public Movie updateMovie(Long id, Movie movie) {
         Movie existingMovie = movieRepository.findById(id)
@@ -58,6 +61,7 @@ public class MovieServiceImpl implements MovieService {
         return movieRepository.save(existingMovie);
     }
 
+    @Transactional
     @Override
     public void deleteMovie(Long id) {
         movieRepository.findById(id)

@@ -24,8 +24,6 @@ public class UserController {
         return "register";
     }
 
-
-
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") User user) {
         userService.registerUser(user);

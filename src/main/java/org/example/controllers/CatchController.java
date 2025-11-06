@@ -6,7 +6,6 @@ import org.example.services.CatchService;
 import org.example.DTO.CreateCatchDTO;
 import org.example.DTO.ErrorResponseDTO;
 import org.example.entities.Catch;
-import org.example.services.CatchService;
 import org.example.repository.CatchRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

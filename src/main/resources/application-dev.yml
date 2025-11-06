@@ -4,12 +4,14 @@ spring:
       enabled: true
       file: docker-compose.yml
       lifecycle-management: start_only
-  flyway:
-    enabled: true
-    locations: classpath:db/migration
-    validate-on-migrate: true
+
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: validate  # Kontrollera att Flyway-schemat matchar entiteterna
     properties:
       hibernate:
         format_sql: true
+
+  flyway:
+    validate-on-migrate: true

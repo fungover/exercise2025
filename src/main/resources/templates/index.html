@@ -1,14 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+    <meta charset="UTF-8">
     <title>Exercise 2025</title>
 </head>
 <body>
 <h1>Welcome to Exercise 2025!</h1>
 
-<p>
+<!-- Om inte inloggad -->
+<div sec:authorize="!isAuthenticated()">
     <a th:href="@{/register}">Register</a> |
     <a th:href="@{/login}">Login</a>
-</p>
+</div>
+
+<!-- Om inloggad -->
+<div sec:authorize="isAuthenticated()">
+    <p>Welcome, <span sec:authentication="name"></span>!</p>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+</div>
+
 </body>
 </html>

@@ -14,8 +14,8 @@ public class ApiEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
+  @OneToOne
+  @JoinColumn(name = "user_id", nullable = false, unique = true)
   private UserEntity user;
 
   @Column(nullable = false, unique = true, updatable = false)
@@ -33,12 +33,23 @@ public class ApiEntity {
     }
   }
 
+  public ApiEntity() {
+  }
+
   public ApiEntity(Long id, UserEntity user, String apiKey, Long counter, LocalDateTime lastUsedAt) {
     this.id = id;
     this.user = user;
     this.apiKey = apiKey;
     this.counter = counter;
     this.lastUsedAt = lastUsedAt;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public UserEntity getUser() {
@@ -71,16 +82,5 @@ public class ApiEntity {
 
   public void setLastUsedAt(LocalDateTime lastUsedAt) {
     this.lastUsedAt = lastUsedAt;
-  }
-
-  public ApiEntity() {
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 }

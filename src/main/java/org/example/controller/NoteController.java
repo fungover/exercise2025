@@ -30,17 +30,21 @@ public class NoteController {
   }
 
   @PostMapping("/notes/{userId}")
-  public ResponseEntity<Note> createNote(@Valid @RequestBody Note note, @PathVariable Long userId) {
+  public ResponseEntity<Note> createNote(@Valid @RequestBody Note note,
+                                         @PathVariable Long userId,
+                                         @RequestHeader("X-API-KEY") String apiKey) {
     log.info("Received note: {}", note);
-    var createNote = noteService.createNewUserNote(note, userId);
+    var createNote = noteService.createNewUserNote(note, userId, apiKey);
     log.info("Created note: {}", createNote);
     return ResponseEntity.ok(createNote);
   }
 
   @DeleteMapping("/notes/{userId}/{noteId}")
-  public ResponseEntity<Note> deleteNote(@PathVariable Long userId, @PathVariable Long noteId) {
+  public ResponseEntity<Note> deleteNote(@PathVariable Long userId,
+                                         @PathVariable Long noteId,
+                                         @RequestHeader("X-API-KEY") String apiKey) {
     log.info("Received request to delete note with id: {} for user with id: {}", noteId, userId);
-    var deleteNote = noteService.deleteNote(noteId, userId);
+    var deleteNote = noteService.deleteNote(noteId, userId, apiKey);
     log.info("Deleted note: {}", deleteNote);
     return ResponseEntity.ok(deleteNote);
   }

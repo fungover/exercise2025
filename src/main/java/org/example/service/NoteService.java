@@ -2,6 +2,7 @@ package org.example.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.example.dto.Note;
+import org.example.entity.ApiEntity;
 import org.example.entity.NoteEntity;
 import org.example.entity.UserEntity;
 import org.example.repository.NoteRepository;
@@ -40,10 +41,15 @@ public class NoteService {
   }
 
   @Transactional
-  public Note createNewUserNote(Note note, Long userId) {
+  public Note createNewUserNote(Note note, Long userId, String apiKey) {
     UserEntity user = userRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId)
     );
+
+    ApiEntity apiEntity = user.getApiKey();
+    if(apiEntity == null || !apiEntity.getApiKey().equals(apiKey)){
+      throw new SecurityException("API key not valid for user with id: " + userId + " or invalid API key provided: " + apiKey + " (expected: " + apiEntity.getApiKey() + "");
+    }
 
     var savedEntity = noteRepository.save(new NoteEntity(null, user, note.value(), null));
     return new Note(
@@ -52,14 +58,18 @@ public class NoteService {
             savedEntity.getUser().getId(),
             savedEntity.getCreatedAt()
     );
-
   }
 
   @Transactional
-  public Note deleteNote(Long noteId, Long userId) {
+  public Note deleteNote(Long noteId, Long userId, String apiKey) {
     NoteEntity noteToDelete = noteRepository.findByIdAndUserId(noteId, userId)
             .orElseThrow(() -> new EntityNotFoundException("Note not found with id: " + noteId + " for user with id: " + userId));
     noteRepository.delete(noteToDelete);
+
+    ApiEntity apiEntity = noteToDelete.getUser().getApiKey();
+    if(apiEntity == null || !apiEntity.getApiKey().equals(apiKey)){
+      throw new SecurityException("API key not valid for user with id: " + userId + " or invalid API key provided: " + apiKey + " (expected: " + apiEntity.getApiKey() + "");
+    }
 
     return new Note(noteToDelete.getId(),
             noteToDelete.getValue(),

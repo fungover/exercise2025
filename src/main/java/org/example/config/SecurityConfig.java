@@ -25,8 +25,8 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/user/**").permitAll()   // <-- открытые эндпоинты
-                    .requestMatchers("/api/**").authenticated() // <-- требует API key
+                    .requestMatchers("/user/**").permitAll()
+                    .requestMatchers("/api/**").authenticated()
                     .anyRequest().denyAll()
             );
     return http.build();

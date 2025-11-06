@@ -18,6 +18,16 @@ public class UserEntity {
   private String name;
   private String password;
   private String email;
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+  private ApiEntity apiKey;
+
+  public ApiEntity getApiKey() {
+    return apiKey;
+  }
+
+  public void setApiKey(ApiEntity apiKey) {
+    this.apiKey = apiKey;
+  }
 
   public UserEntity() {
   }

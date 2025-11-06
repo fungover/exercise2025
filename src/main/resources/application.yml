@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: exercise2025
+  datasource:
+    url: jdbc:mysql://localhost:3306/${DATABASE_NAME:spring}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${DATABASE_USER:user}
+    password: ${DATABASE_PASSWORD:secret}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  thymeleaf:
+    check-template-location: false
+  flyway:
+    locations: classpath:db/migration
+
+logging:
+  level:
+    org.hibernate.SQL: info

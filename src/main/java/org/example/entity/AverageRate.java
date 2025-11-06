@@ -1,7 +1,8 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,32 +14,26 @@ public class AverageRate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Bank name is required")
+    @NotBlank
     private String bankName;
 
-    @Positive(message = "Rate must be positive")
+    @Positive
     private BigDecimal rate;
 
-    @NotNull(message = "Date is required")
     private LocalDate date;
 
-    // Tom konstruktor - Obligatoriskt för JPA
+    // Tom konstruktor krävs av JPA
     public AverageRate() {}
 
-    // Hjälpkonstruktor för att skapa objekt enklare i kod/tester
-    public AverageRate(String bankName, BigDecimal rate, LocalDate date) {
+    public AverageRate(String bankName, double rate, LocalDate date) {
         this.bankName = bankName;
-        this.rate = rate;
+        this.rate = BigDecimal.valueOf(rate);
         this.date = date;
     }
 
-    // Getters och Setters
+    // Getters och setters
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getBankName() {

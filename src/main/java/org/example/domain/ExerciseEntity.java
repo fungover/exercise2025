@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "exercises")
 public class ExerciseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

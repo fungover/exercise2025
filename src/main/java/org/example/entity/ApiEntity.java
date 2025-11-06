@@ -24,8 +24,7 @@ public class ApiEntity {
   @Column(nullable = false)
   private Long counter;
 
-  @CreationTimestamp
-  private LocalDateTime submittedAt;
+  private LocalDateTime lastUsedAt;
 
   @PrePersist
   public void generateApiKey() {
@@ -34,12 +33,12 @@ public class ApiEntity {
     }
   }
 
-  public ApiEntity(Long id, UserEntity user, String apiKey, Long counter, LocalDateTime submittedAt) {
+  public ApiEntity(Long id, UserEntity user, String apiKey, Long counter, LocalDateTime lastUsedAt) {
     this.id = id;
     this.user = user;
     this.apiKey = apiKey;
     this.counter = counter;
-    this.submittedAt = submittedAt;
+    this.lastUsedAt = lastUsedAt;
   }
 
   public UserEntity getUser() {
@@ -66,12 +65,12 @@ public class ApiEntity {
     this.counter = counter;
   }
 
-  public LocalDateTime getSubmittedAt() {
-    return submittedAt;
+  public LocalDateTime getLastUsedAt() {
+    return lastUsedAt;
   }
 
-  public void setSubmittedAt(LocalDateTime submittedAt) {
-    this.submittedAt = submittedAt;
+  public void setLastUsedAt(LocalDateTime lastUsedAt) {
+    this.lastUsedAt = lastUsedAt;
   }
 
   public ApiEntity() {

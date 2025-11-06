@@ -1,29 +1,88 @@
+package org.example.config;
 
-/*package org.example.config;
-
+import org.example.services.UserService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.example.services.UserService;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(@NotNull HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll() // tillåt allt (för test)
+                        // API-behörigheter
+                        .requestMatchers(HttpMethod.DELETE, "/api/catches/**").hasRole("ADMIN")
+                        .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
+
+                        // Admin-gränssnitt
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // Offentliga sidor
+                        .requestMatchers(HttpMethod.GET, "/", "/login/**", "/register/**", "/error").permitAll()
+
+                        // Allt annat kräver inloggning
+                        .anyRequest().authenticated()
                 )
+                // Form-login för vanliga användare
+                .formLogin(form -> form
+                        .loginPage("/login") // valfritt, om du har en egen sida
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                )
+                // HTTP Basic (för t.ex. Postman)
                 .httpBasic(Customizer.withDefaults())
-                .csrf(csrf -> csrf.disable()); // avaktivera CSRF
+
+                // CSRF avstängt för API-anrop
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/**")
+                )
+                // Logout-hantering
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
+                );
 
         return http.build();
     }
-}*/
-package org.example.config;
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        // Du kan välja styrka 10 som i din första config
+        return new BCryptPasswordEncoder(10);
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(
+            UserService userDetailsService,
+            PasswordEncoder passwordEncoder) {
+
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
+    }
+}
+//old code
+
+/*package org.example.config;
+
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -41,13 +100,13 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(@NotNull HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.DELETE, "/api/catches/**").hasRole("ADMIN")
                         .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/", "/login/**", "/register/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // the user will be redirected to /login if not logged in when accessing any page except default page

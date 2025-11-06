@@ -16,8 +16,6 @@
 <h2>Add Director</h2>
 <div th:replace="fragments/director/add_director :: add_director"></div>
 
-<hr>
-
 <h2>Manage Directors</h2>
 <ul>
     <li th:each="director : ${directors}" style="margin-top: 1rem">
@@ -27,6 +25,11 @@
         <div th:replace="fragments/director/update_director :: _form(directorId=${director.id})"></div>
     </li>
 </ul>
+
+<hr>
+
+<h2>Add Movie</h2>
+<div th:replace="fragments/movie/add_movie :: add_movie"></div>
 
 <h2>Manage Movies</h2>
 <ul>
@@ -73,6 +76,7 @@
         })
 
         document.querySelector('#add-director-form').addEventListener('submit', handleAddDirector);
+        document.querySelector('#add-movie-form').addEventListener('submit', handleAddMovie);
     });
 
     function toggleDirectorForm(directorId) {
@@ -282,6 +286,42 @@
             window.location.reload();
         } else {
             alert('Failed to add director');
+        }
+    }
+
+    async function handleAddMovie(event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        console.log("FormData contents:");
+        for (let [key, value] of formData.entries()) {
+            console.log(key, ":", value);
+        }
+
+        const title = formData.get('title');
+        const duration = formData.get('duration');
+        const genre = formData.get('genre');
+        const directorId = parseInt(formData.get('director'));
+
+        const data = {
+            title: title.trim(),
+            duration: parseInt(duration),
+            genre: genre.trim(),
+            directorId: directorId
+        }
+
+        const response = await fetch('/api/movie', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            alert('Failed to add movie');
         }
     }
 

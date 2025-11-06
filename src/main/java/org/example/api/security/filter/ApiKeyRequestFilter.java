@@ -24,7 +24,6 @@ public class ApiKeyRequestFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        SecurityContextHolder.clearContext();
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 

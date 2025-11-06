@@ -1,4 +1,4 @@
-<div th:fragmet="add_movie">
+<div th:fragment="add_movie">
 
     <form id="add-movie-form">
 
@@ -10,6 +10,15 @@
 
         <label for="genre">Genre:</label>
         <input type="text" id="genre" name="genre" required>
+
+        <label for="director">Director:</label>
+        <select id="director" name="director">
+            <option value="">Select a director</option>
+            <option th:each="director : ${directors}" th:value="${director.id}" th:text="${director.firstName} + ' ' + ${director.lastName}"></option>
+        </select>
+
+        <br><br>
+        <button type="submit">Add Movie</button>
 
     </form>
 

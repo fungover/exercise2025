@@ -17,8 +17,8 @@ public class Exercise2025Application {
     /**
      * Kör Flyway-migreringarna innan Hibernate EntityManagerFactory byggs.
      */
-    @Bean
+    /*@Bean
     public FlywayMigrationStrategy flywayMigrationStrategy() {
         return Flyway::migrate;
-    }
+    }*/
 }

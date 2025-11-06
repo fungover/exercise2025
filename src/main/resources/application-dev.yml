@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: file:.env[.properties]
   docker:
     compose:
       enabled: true
@@ -6,12 +8,9 @@ spring:
       lifecycle-management: start_only
 
   jpa:
-    show-sql: true
+    show-sql: ${JPA_SHOW_SQL:false}
     hibernate:
-      ddl-auto: validate  # Kontrollera att Flyway-schemat matchar entiteterna
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
-
-  flyway:
-    validate-on-migrate: true

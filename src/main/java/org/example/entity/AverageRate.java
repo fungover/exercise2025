@@ -1,7 +1,8 @@
 package org.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
@@ -14,49 +15,41 @@ public class AverageRate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String bankName;
+    // Många räntor kan tillhöra en bank
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bank_id", nullable = false)
+    @JsonBackReference
+    private Bank bank;
 
+    // Själva räntesatsen (t.ex. 3.25 %)
     @Positive
+    @Column(nullable = false, precision = 4, scale = 2)
     private BigDecimal rate;
 
+    // Datum då räntan gäller från
+    @Column(nullable = false)
     private LocalDate date;
 
     // Tom konstruktor krävs av JPA
     public AverageRate() {}
 
-    public AverageRate(String bankName, double rate, LocalDate date) {
-        this.bankName = bankName;
+    // Praktisk konstruktor
+    public AverageRate(Bank bank, double rate, LocalDate date) {
+        this.bank = bank;
         this.rate = BigDecimal.valueOf(rate);
         this.date = date;
     }
 
-    // Getters och setters
-    public Long getId() {
-        return id;
-    }
+    // --- Getters & setters ---
+    public Long getId() { return id; }
 
-    public String getBankName() {
-        return bankName;
-    }
+    public Bank getBank() { return bank; }
+    public void setBank(Bank bank) { this.bank = bank; }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
+    public BigDecimal getRate() { return rate; }
+    public void setRate(BigDecimal rate) { this.rate = rate; }
 
-    public BigDecimal getRate() {
-        return rate;
-    }
-
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
 }

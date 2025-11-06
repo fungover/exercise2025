@@ -1,8 +1,0 @@
-ALTER TABLE user
-    ADD password VARCHAR(255) NULL;
-
-ALTER TABLE user
-    DROP COLUMN password_hashed;
-
-ALTER TABLE note
-    MODIFY id BIGINT AUTO_INCREMENT;

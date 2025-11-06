@@ -1,0 +1,87 @@
+package org.example.entity;
+
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "user_api")
+public class ApiEntity {
+  @Id
+  @Column(nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private UserEntity user;
+
+  @Column(nullable = false, unique = true, updatable = false)
+  private String apiKey;
+
+  @Column(nullable = false)
+  private Long counter;
+
+  @CreationTimestamp
+  private LocalDateTime submittedAt;
+
+  @PrePersist
+  public void generateApiKey() {
+    if (this.apiKey == null) {
+      this.apiKey = UUID.randomUUID().toString();
+    }
+  }
+
+  public ApiEntity(Long id, UserEntity user, String apiKey, Long counter, LocalDateTime submittedAt) {
+    this.id = id;
+    this.user = user;
+    this.apiKey = apiKey;
+    this.counter = counter;
+    this.submittedAt = submittedAt;
+  }
+
+  public UserEntity getUser() {
+    return user;
+  }
+
+  public void setUser(UserEntity user) {
+    this.user = user;
+  }
+
+  public String getApiKey() {
+    return apiKey;
+  }
+
+  public void setApiKey(String apiKey) {
+    this.apiKey = apiKey;
+  }
+
+  public Long getCounter() {
+    return counter;
+  }
+
+  public void setCounter(Long counter) {
+    this.counter = counter;
+  }
+
+  public LocalDateTime getSubmittedAt() {
+    return submittedAt;
+  }
+
+  public void setSubmittedAt(LocalDateTime submittedAt) {
+    this.submittedAt = submittedAt;
+  }
+
+  public ApiEntity() {
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+}

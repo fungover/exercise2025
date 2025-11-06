@@ -1,0 +1,17 @@
+version: '3.9'
+services:
+  db:
+    image: mysql:9
+    container_name: mysql9
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bolaneradarmini
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 20

@@ -1,6 +1,7 @@
 package org.example.e2e.director;
 
 import org.example.dto.request.director.CreateDirectorRequest;
+import org.example.dto.request.director.UpdateDirectorRequest;
 import org.example.dto.response.director.DirectorResponse;
 import org.example.entities.Director;
 import org.example.entities.User;
@@ -8,6 +9,8 @@ import org.example.repository.director.DirectorRepository;
 import org.example.repository.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -19,8 +22,9 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
@@ -66,29 +70,99 @@ public class DirectorE2ETest {
                 .build();
         adminUser.setApiKey("123");
         userRepository.save(adminUser);
+
+        User userUser = User.builder()
+                .username("user")
+                .password(passwordEncoder.encode("user"))
+                .authorities("ROLE_USER")
+                .build();
+        userUser.setApiKey("456");
+        userRepository.save(userUser);
     }
 
 
-    @Test
-    void addDirectorShouldReturnCreated() {
+    @ParameterizedTest
+    @CsvSource({
+            "123, CREATED",
+            "456, FORBIDDEN"
+    })
+    void addDirectorShouldReturnCreated(String apiKey, HttpStatus expectedStatus) {
         CreateDirectorRequest cdr = new CreateDirectorRequest();
         cdr.setFirstName("James");
         cdr.setLastName("Gunn");
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-API-KEY", "123");
+        headers.set("X-API-KEY", apiKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<CreateDirectorRequest> request = new HttpEntity<>(cdr, headers);
 
         ResponseEntity<DirectorResponse> response = restTemplate.postForEntity("/api/director", request, DirectorResponse.class);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
+        assertEquals(expectedStatus, response.getStatusCode());
 
-        Director saved = directorRepository.findById(response.getBody().getId()).get();
-        assertEquals("James", saved.getFirstName());
-        assertEquals("Gunn", saved.getLastName());
+        if (expectedStatus == HttpStatus.CREATED) {
+            assertNotNull(response.getBody());
+            Director saved = directorRepository.findById(response.getBody().getId()).get();
+            assertEquals("James", saved.getFirstName());
+            assertEquals("Gunn", saved.getLastName());
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "123, OK",
+            "456, FORBIDDEN"
+    })
+    void updateDirectorShouldReturnOk(String apiKey, HttpStatus expectedStatus) {
+        Director originalDirector = new Director("Original", "Director", List.of());
+        Long directorId = directorRepository.save(originalDirector).getId();
+
+        UpdateDirectorRequest udr = new UpdateDirectorRequest();
+        udr.setFirstName("Updated");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-API-KEY", apiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<UpdateDirectorRequest> request = new HttpEntity<>(udr, headers);
+
+        ResponseEntity<DirectorResponse> response = restTemplate.exchange("/api/director/{id}", HttpMethod.PUT, request, DirectorResponse.class, directorId);
+
+        assertEquals(expectedStatus, response.getStatusCode());
+
+        if (expectedStatus == HttpStatus.OK) {
+            Director updatedDirector = directorRepository.findById(directorId).get();
+            assertEquals("Updated", updatedDirector.getFirstName());
+            assertEquals("Director", updatedDirector.getLastName());
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "123, NO_CONTENT",
+            "456, FORBIDDEN"
+    })
+    void deleteDirectorShouldReturnNoContent(String apiKey, HttpStatus expectedStatus) {
+        Director originalDirector = new Director("Original", "Director", List.of());
+        Long directorId = directorRepository.save(originalDirector).getId();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-API-KEY", apiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity request = new HttpEntity<>(headers);
+
+        ResponseEntity<Void> response = restTemplate.exchange("/api/director/{id}", HttpMethod.DELETE, request, Void.class, directorId);
+
+        assertEquals(expectedStatus, response.getStatusCode());
+
+        if (expectedStatus == HttpStatus.NO_CONTENT) {
+            assertEquals(0, directorRepository.count());
+
+            Director deletedDirector = directorRepository.findById(directorId).orElse(null);
+            assertNull(deletedDirector);
+        }
     }
 
 

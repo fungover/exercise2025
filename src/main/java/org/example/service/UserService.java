@@ -1,7 +1,11 @@
 package org.example.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.example.dto.*;
+import org.example.dto.note.NoteResponse;
+import org.example.dto.user.User;
+import org.example.dto.user.UserApi;
+import org.example.dto.user.UserNew;
+import org.example.dto.user.UserNotes;
 import org.example.entity.ApiEntity;
 import org.example.entity.UserEntity;
 import org.example.repository.ApiRepository;

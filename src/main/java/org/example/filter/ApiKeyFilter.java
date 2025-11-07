@@ -4,7 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.dto.ApiPrincipal;
+import org.example.dto.user.ApiPrincipal;
 import org.example.entity.ApiEntity;
 import org.example.entity.UserEntity;
 import org.example.repository.ApiRepository;

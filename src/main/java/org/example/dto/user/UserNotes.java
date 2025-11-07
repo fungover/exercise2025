@@ -1,4 +1,6 @@
-package org.example.dto;
+package org.example.dto.user;
+
+import org.example.dto.note.NoteResponse;
 
 import java.util.List;
 

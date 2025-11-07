@@ -1,36 +1,88 @@
-## 🧪 How to Work on the Exercises
+## Bolåneradar Mini (Exercise 2)
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+Bolåneradar Mini is a simplified version of my upcoming full-scale project BolåneRadar.
+It demonstrates the core backend structure — a RESTful Spring Boot application that displays banks and their average mortgage rates.
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
+This mini version includes MySQL (via Docker), Spring Data JPA, Spring Security, and Thymeleaf for server-side rendering (SSR).
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+_______
 
-Example for user githubuser working on Exercise 1:
+### Tech Stack Overview
+Technology | Purpose
+------|-------
+Spring Boot 3.5+    |	Application framework
+Spring Data JPA    |   ORM and database handling
+MySQL 9    |     (Docker Compose)	Persistent database
+Spring Security     |	Basic authentication
+Thymeleaf   |	Server-side rendering (HTML)
+JUnit + MockMvc    |	Integration and security testing
 
-```bash
-git checkout -b githubuser/exercise1
-```
+_______
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
+### How to Run the Project
 
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
+#### 1: Start MySQL via Docker
+- docker compose up -d
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
+#### 2: Run the Spring Boot Application
+- mvn spring-boot:run
 
-Link the PR to the issue you're solving.
+_______
 
-Include a clear description of your solution.
+## REST API Endpoints
 
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+### Bank Endpoints (/api/banks)
+
+Method  |	Endpoint    |	Description
+------|------|------
+GET |	/api/banks  |	Retrieve all banks
+POST    |	/api/banks  |	Add a new bank
+DELETE  |	/api/banks  |	Delete all banks
+POST    |	/api/banks/load-example-banks   |	Load example bank data
+
+### Average Rate Endpoints (/api/rates)
+
+Method  |	Endpoint    |	Description
+------|------|------
+GET |	/api/rates  |	Retrieve all average rates
+POST    |	/api/rates  |	Add a new average rate
+DELETE  |	/api/rates  |	Delete all rates
+POST    |	/api/rates/load-example-data    |	Load example mortgage rate data for all banks
+
+### Thymeleaf Page (/banks)
+
+Method  |   Endpoint    |   Description
+------|------|------
+GET |	/banks  |	Displays all banks and their average rates in a table (SSR)
+
+________
+
+## Testing
+
+This project includes integration and access control tests for:
+- AverageRateController
+- BankController
+- SecurityAccess
+
+Run all tests:
+- mvn test
+
+________
+
+## Server-Side Rendering
+
+The /banks endpoint renders an HTML page listing all banks and their average rates.
+Styling is handled via /static/css/style.css.
+
+________
+
+## Summary
+
+- MySQL runs in Docker with persistent storage.
+- REST endpoints secured with Basic Auth.
+- Thymeleaf used for server-side rendering.
+- Integration tests implemented using MockMvc and JUnit.
+- Represents a foundation for the future full-scale BolåneRadar project.
+
+________
+

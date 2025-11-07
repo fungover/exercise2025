@@ -10,8 +10,13 @@ services:
       MYSQL_PASSWORD: app
     ports:
       - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-proot"]
       interval: 5s
       timeout: 3s
       retries: 20
+
+volumes:
+  mysql_data:

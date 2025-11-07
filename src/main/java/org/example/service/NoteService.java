@@ -2,6 +2,7 @@ package org.example.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.example.dto.Note;
+import org.example.dto.NoteNew;
 import org.example.entity.ApiEntity;
 import org.example.entity.NoteEntity;
 import org.example.entity.UserEntity;
@@ -10,6 +11,7 @@ import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,50 +26,50 @@ public class NoteService {
   }
 
   @Transactional(readOnly = true)
-  public List<Note> getNotes(Long userId) {
+  public List<NoteNew> getNotes(Long userId) {
     userRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-    List<NoteEntity> userNotes = noteRepository.findByUserId(userId);
+    List<NoteEntity> userNotes = noteRepository.findByUserIdAndDeletedAtIsNull(userId);
 
     return userNotes.stream()
-            .map(note -> new Note(
+            .map(note -> new NoteNew(
                     note.getId(),
                     note.getValue(),
-                    note.getUser().getId(),
                     note.getCreatedAt()
             ))
             .toList();
   }
 
   @Transactional
-  public Note createNewUserNote(Note note, Long userId) {
+  public NoteNew createNewUserNote(Note note, Long userId) {
     UserEntity user = userRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId)
     );
 
-    var savedEntity = noteRepository.save(new NoteEntity(null, user, note.value(), null));
-    return new Note(
+    var savedEntity = noteRepository.save(new NoteEntity(null, user, note.value(), null, null));
+    return new NoteNew(
             savedEntity.getId(),
             savedEntity.getValue(),
-            savedEntity.getUser().getId(),
             savedEntity.getCreatedAt()
     );
   }
 
   @Transactional
   public Note deleteNote(Long noteId, Long userId) {
-    NoteEntity noteToDelete = noteRepository.findByIdAndUserId(noteId, userId)
+    NoteEntity noteToDelete = noteRepository.findByIdAndUserIdAndDeletedAtIsNull(noteId, userId)
             .orElseThrow(() -> new EntityNotFoundException("Note not found with id: " + noteId + " for user with id: " + userId));
 
-    noteRepository.delete(noteToDelete);
+    noteToDelete.setDeletedAt(LocalDateTime.now());
+    var deletedNote = noteRepository.save(noteToDelete);
 
-    return new Note(noteToDelete.getId(),
-            noteToDelete.getValue(),
-            noteToDelete.getUser().getId(),
-            noteToDelete.getCreatedAt()
+    return new Note(
+            deletedNote.getId(),
+            deletedNote.getValue(),
+            deletedNote.getUser().getId(),
+            deletedNote.getCreatedAt(),
+            deletedNote.getDeletedAt()
     );
-
   }
 }
 

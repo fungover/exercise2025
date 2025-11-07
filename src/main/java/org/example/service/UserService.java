@@ -52,7 +52,8 @@ public class UserService {
 
       return new UserNotes(
               user.getName(),
-              user.getNotes().stream().map(note -> new NoteResponse(
+              user.getNotes().stream().filter(note -> note.getDeletedAt() == null)
+                      .map(note -> new NoteResponse(
                       note.getId(),
                       note.getValue())).toList());
 

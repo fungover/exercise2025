@@ -18,11 +18,20 @@ public class NoteEntity {
   private String value;
   @CreationTimestamp
   private LocalDateTime createdAt;
+  private LocalDateTime deletedAt;
+
+  public LocalDateTime getDeletedAt() {
+    return deletedAt;
+  }
+
+  public void setDeletedAt(LocalDateTime deletedAt) {
+    this.deletedAt = deletedAt;
+  }
 
   public NoteEntity() {
   }
 
-  public NoteEntity(Long id, UserEntity user, String value, LocalDateTime createdAt) {
+  public NoteEntity(Long id, UserEntity user, String value, LocalDateTime createdAt, LocalDateTime deletedAt) {
     this.id = id;
     this.user = user;
     this.value = value;

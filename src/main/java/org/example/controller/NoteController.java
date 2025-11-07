@@ -3,6 +3,7 @@ package org.example.controller;
 import jakarta.validation.Valid;
 import org.example.dto.ApiPrincipal;
 import org.example.dto.Note;
+import org.example.dto.NoteNew;
 import org.example.dto.UserNotes;
 import org.example.service.NoteService;
 import org.example.service.UserService;
@@ -27,8 +28,8 @@ public class NoteController {
   }
 
   @PostMapping("/notes")
-  public ResponseEntity<Note> createNote(@Valid @RequestBody Note note,
-                                         Authentication authentication) {
+  public ResponseEntity<NoteNew> createNote(@Valid @RequestBody Note note,
+                                            Authentication authentication) {
 
     ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
 

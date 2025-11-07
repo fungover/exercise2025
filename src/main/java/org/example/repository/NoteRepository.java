@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
-  List<NoteEntity> findByUserId(Long userId);
+  List<NoteEntity> findByUserIdAndDeletedAtIsNull(Long userId);
 
-  Optional<NoteEntity> findByIdAndUserId(Long id, Long userId);
+  Optional<NoteEntity> findByIdAndUserIdAndDeletedAtIsNull(Long id, Long userId);
 
   @Query(value = "SELECT * FROM note WHERE value LIKE CONCAT('%', :value, '%')", nativeQuery = true)
   Optional<NoteEntity> findNote(String value);

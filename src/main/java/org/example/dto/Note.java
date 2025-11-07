@@ -8,5 +8,6 @@ import java.time.LocalDateTime;
 public record Note(Long id,
                    @NotNull String value,
                    Long userId,
-                   LocalDateTime createdAt) {
+                   LocalDateTime createdAt,
+                   LocalDateTime deletedAt) {
 }

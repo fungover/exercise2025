@@ -43,8 +43,6 @@ public class Author {
          this.lastName = lastName;
     }
 
-
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

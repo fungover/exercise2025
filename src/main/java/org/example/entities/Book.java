@@ -1,9 +1,6 @@
 package org.example.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.example.Genre;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -17,17 +14,23 @@ public class Book {
     private Integer id;
 
     String title;
-    String author;
     Genre genre;
     int Rating;
 
+    @ManyToOne
+     private Language language;
+
+    @ManyToOne
+    private Author author;
+
     public Book() {}
 
-    public Book(String title, String author, Genre genre, int Rating) {
+    public Book(String title, Genre genre, int Rating, Author author, Language language) {
      this.title = title;
-     this.author = author;
      this.genre = genre;
      this.Rating = Rating;
+     this.author = author;
+     this.language = language;
     }
 
     public Integer getId() {
@@ -46,14 +49,6 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public Genre getGenre() {
         return genre;
     }
@@ -68,6 +63,22 @@ public class Book {
 
     public void setRating(int rating) {
         Rating = rating;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     @Override
@@ -86,4 +97,15 @@ public class Book {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", genre=" + genre +
+                ", Rating=" + Rating +
+                ", language=" + language +
+                ", author=" + author +
+                '}';
+    }
 }

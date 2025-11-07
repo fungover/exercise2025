@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.bolaneradarmini.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

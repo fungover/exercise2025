@@ -1,6 +1,6 @@
-package org.example.repository;
+package org.bolaneradarmini.repository;
 
-import org.example.entity.Bank;
+import org.bolaneradarmini.entity.Bank;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

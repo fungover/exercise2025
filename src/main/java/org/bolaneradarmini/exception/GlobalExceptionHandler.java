@@ -1,4 +1,4 @@
-package org.example.exception;
+package org.bolaneradarmini.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

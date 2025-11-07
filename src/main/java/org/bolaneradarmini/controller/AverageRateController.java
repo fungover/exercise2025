@@ -1,10 +1,10 @@
-package org.example.controller;
+package org.bolaneradarmini.controller;
 
 import jakarta.validation.Valid;
-import org.example.entity.AverageRate;
-import org.example.entity.Bank;
-import org.example.repository.AverageRateRepository;
-import org.example.repository.BankRepository;
+import org.bolaneradarmini.entity.AverageRate;
+import org.bolaneradarmini.entity.Bank;
+import org.bolaneradarmini.repository.AverageRateRepository;
+import org.bolaneradarmini.repository.BankRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;

@@ -1,13 +1,13 @@
-package org.example;
+package org.bolaneradarmini;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Exercise2025Application {
+public class BolaneradarminiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Exercise2025Application.class, args);
+        SpringApplication.run(BolaneradarminiApplication.class, args);
     }
 
 }

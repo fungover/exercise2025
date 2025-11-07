@@ -1,10 +1,10 @@
-package org.example;
+package org.bolaneradarmini;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Exercise2025ApplicationTest {
+class BolaneradarminiApplicationTest {
 
     @Test
     void contextLoads() {

@@ -24,13 +24,13 @@ public class AuthenticationService {
         String apiKey = request.getHeader(AUTH_TOKEN_HEADER_NAME);
 
         if (apiKey == null) {
-            throw new BadCredentialsException("Invalid API key");
+            throw new BadCredentialsException("Unauthorized");
         }
 
         Optional<User> user = userRepository.findByApiKey(apiKey);
 
         if (user.isEmpty()) {
-            throw new BadCredentialsException("Invalid API key");
+            throw new BadCredentialsException("Unauthorized");
         }
 
         User foundUser = user.get();

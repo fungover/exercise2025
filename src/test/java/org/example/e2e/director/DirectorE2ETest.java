@@ -165,5 +165,41 @@ public class DirectorE2ETest {
         }
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "456, OK",
+            "789, UNAUTHORIZED"
+    })
+    void getDirectorShouldReturnDirector(String apiKey, HttpStatus expectedStatus) {
+        Director directorOne = new Director("Director", "One", List.of());
+        directorRepository.save(directorOne);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-API-KEY", apiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity request = new HttpEntity<>(headers);
+
+        if (apiKey.equals("456")) {
+            ResponseEntity<DirectorResponse> response = restTemplate.exchange("/api/director/{id}", HttpMethod.GET, request, DirectorResponse.class, directorOne.getId());
+
+            assertEquals(expectedStatus, response.getStatusCode());
+
+            if (expectedStatus == HttpStatus.OK) {
+                assertNotNull(response.getBody());
+                assertEquals(directorOne.getId(), response.getBody().getId());
+                assertEquals(directorOne.getFirstName(), response.getBody().getFirstName());
+                assertEquals(directorOne.getLastName(), response.getBody().getLastName());
+            }
+        } else {
+            ResponseEntity<String> response = restTemplate.exchange("/api/director/{id}", HttpMethod.GET, request, String.class, directorOne.getId());
+
+            assertEquals(expectedStatus, response.getStatusCode());
+
+            if (expectedStatus == HttpStatus.UNAUTHORIZED) {
+                assertEquals("Unauthorized", response.getBody());
+            }
+        }
+    }
 
 }

@@ -33,6 +33,19 @@ public class AverageRateController {
     // POST: Lägg till en ny post
     @PostMapping
     public AverageRate createRate(@Valid @RequestBody AverageRate averageRate) {
+        // Kolla om banken finns i JSON
+        if (averageRate.getBank() == null | averageRate.getBank().getName() == null) {
+            throw new RuntimeException("Bank name must be provided in the JSON under bank.name");
+        }
+
+        // Leta upp banken i databasen via namnet
+        var existingBank = bankRepository.findByName(averageRate.getBank().getName())
+                .orElseThrow(() -> new RuntimeException("Bank not found " + averageRate.getBank().getName()));
+
+        // Koppla dn befintliga banken till AVerageRate
+        averageRate.setBank(existingBank);
+
+        // Spara snitträntan
         return averageRateRepository.save(averageRate);
     }
 

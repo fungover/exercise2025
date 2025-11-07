@@ -1,6 +1,6 @@
 package org.example.services;
 
-import org.example.DTO.UserDTO;
+/*import org.example.DTO.UserDTO;*/
 import org.example.config.SecurityUser;
 import org.example.entities.User;
 import org.example.repository.UserRepository;
@@ -36,12 +36,18 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-
+    //default value for mustChangePassword is false
     public void createUser(String username, String rawPassword, String role) {
+        createUser(username, rawPassword, role, false); //default
+    }
+
+    //if you want to initailize a user with a specific role, the password must be changed later
+    public void createUser(String username, String rawPassword, String role, boolean mustChangePassword) {
         User user = new User();
         user.setUserName(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole(role);
+        user.setMustChangePassword(mustChangePassword);
         userRepository.save(user);
     }
 
@@ -57,13 +63,13 @@ public class UserService implements UserDetailsService {
     }
 
 
-    @Bean
+    /*@Bean
     public CommandLineRunner initAdmin(UserService userService) {
         return args -> {
             if (userService.findByName("admin") == null) {
-                userService.createUser("admin", "adminpassword", "ROLE_ADMIN");
+                userService.createUser("admin", "adminpassword", "ROLE_ADMIN", true);
                 System.out.println("Admin user created");
             }
         };
-    }
+    }*/
 }

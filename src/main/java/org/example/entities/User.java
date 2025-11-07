@@ -19,6 +19,9 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "must_change_password")
+    private boolean mustChangePassword;
+
     public User() {
     }
 
@@ -53,6 +56,14 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean isMustChangePassword() {
+        return mustChangePassword;
+    }
+
+    public void setMustChangePassword(boolean mustChangePassword) {
+        this.mustChangePassword = mustChangePassword;
     }
 
 }

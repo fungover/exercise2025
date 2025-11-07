@@ -24,7 +24,7 @@ public class MustChangePasswordAuthProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         // Debug, valfritt:
-        System.out.println("🔥 MustChangePasswordAuthProvider AUTHENTICATE ENTERED");
+        System.out.println("MustChangePasswordAuthProvider AUTHENTICATE ENTERED");
 
         Authentication result = delegate.authenticate(authentication);
 

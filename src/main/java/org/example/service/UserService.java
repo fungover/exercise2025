@@ -9,8 +9,6 @@ import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static org.example.utils.BCryptUtil.checkPassword;
 import static org.example.utils.BCryptUtil.hashPassword;
 
@@ -47,35 +45,17 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public UserPublic getUserById(Long id) {
-    UserEntity user = userRepository
-            .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
-
-    return new UserPublic(
-            user.getName(),
-            user.getEmail()
-    );
-  }
-
-  @Transactional(readOnly = true)
-  public UserNotes findUserAndGetNotes(String email, String password) {
+  public UserNotes findUserAndGetNotes(String email) {
     UserEntity user = userRepository
             .findByEmail(email)
             .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
 
-    if(checkPassword(password, user.getPassword())){
       return new UserNotes(
-              user.getId(),
               user.getName(),
-              user.getNotes().stream().map(note -> new Note(
+              user.getNotes().stream().map(note -> new NoteResponse(
                       note.getId(),
-                      note.getValue(),
-                      note.getUser().getId(),
-                      note.getCreatedAt())).toList());
-    }else{
-      throw new EntityNotFoundException("Invalid credentials");
-    }
+                      note.getValue())).toList());
+
   }
 
   public UserApi getUserApiByEmailAndPassword(String email, String password) {

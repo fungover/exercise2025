@@ -1,13 +1,15 @@
 package org.example.controller;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.example.dto.ApiPrincipal;
 import org.example.dto.Note;
-import org.example.entity.NoteEntity;
+import org.example.dto.UserNotes;
 import org.example.service.NoteService;
+import org.example.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,36 +18,42 @@ import java.util.List;
 @RequestMapping("/api")
 public class NoteController {
   private final NoteService noteService;
+  private final UserService userService;
   private static final Logger log = LoggerFactory.getLogger(NoteController.class);
 
-  public NoteController(NoteService noteService) {
+  public NoteController(NoteService noteService, UserService userService) {
     this.noteService = noteService;
+    this.userService = userService;
   }
 
-  @GetMapping("/notes/{userId}")
-  public ResponseEntity<List<Note>> getNotes(@PathVariable Long userId) {
-    log.info("Received request for notes for user: {}", userId);
-    var notes = noteService.getNotes(userId);
-    return ResponseEntity.ok(notes);
-  }
-
-  @PostMapping("/notes/{userId}")
+  @PostMapping("/notes")
   public ResponseEntity<Note> createNote(@Valid @RequestBody Note note,
-                                         @PathVariable Long userId,
-                                         @RequestHeader("X-API-KEY") String apiKey) {
+                                         Authentication authentication) {
+
+    ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
+
     log.info("Received note: {}", note);
-    var createNote = noteService.createNewUserNote(note, userId, apiKey);
+    var createNote = noteService.createNewUserNote(note, apiPrincipal.userId());
     log.info("Created note: {}", createNote);
     return ResponseEntity.ok(createNote);
   }
 
-  @DeleteMapping("/notes/{userId}/{noteId}")
-  public ResponseEntity<Note> deleteNote(@PathVariable Long userId,
-                                         @PathVariable Long noteId,
-                                         @RequestHeader("X-API-KEY") String apiKey) {
-    log.info("Received request to delete note with id: {} for user with id: {}", noteId, userId);
-    var deleteNote = noteService.deleteNote(noteId, userId, apiKey);
+  @DeleteMapping("/notes/{noteId}")
+  public ResponseEntity<Note> deleteNote(@PathVariable Long noteId,
+                                         Authentication authentication) {
+
+    ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
+
+    log.info("Received request to delete note with id: {} for user with id: {}", noteId, apiPrincipal.userId());
+    var deleteNote = noteService.deleteNote(noteId, apiPrincipal.userId());
     log.info("Deleted note: {}", deleteNote);
     return ResponseEntity.ok(deleteNote);
+  }
+
+  @GetMapping("/notes/user")
+  public ResponseEntity<UserNotes> getUserById(Authentication authentication) {
+    ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
+    log.info("User: {} requested notes", apiPrincipal.userId());
+    return ResponseEntity.ok(userService.findUserAndGetNotes(apiPrincipal.email()));
   }
 }

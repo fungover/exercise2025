@@ -4,9 +4,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.dto.ApiPrincipal;
 import org.example.entity.ApiEntity;
+import org.example.entity.UserEntity;
 import org.example.repository.ApiRepository;
-import org.example.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,11 +20,9 @@ import java.time.LocalDateTime;
 @Component
 public class ApiKeyFilter extends OncePerRequestFilter {
 
-  private final UserRepository userRepository;
   private final ApiRepository apiRepository;
 
-  public ApiKeyFilter(UserRepository userRepository, ApiRepository apiRepository) {
-    this.userRepository = userRepository;
+  public ApiKeyFilter(ApiRepository apiRepository) {
     this.apiRepository = apiRepository;
   }
 
@@ -49,13 +48,19 @@ public class ApiKeyFilter extends OncePerRequestFilter {
       return;
     }
 
+    UserEntity user = apiEntity.getUser();
+    if (user == null) {
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API key");
+      return;
+    }
+
     long currentCount = apiEntity.getCounter() == null ? 0 : apiEntity.getCounter();
     apiEntity.setCounter(currentCount + 1);
     apiEntity.setLastUsedAt(LocalDateTime.now());
     apiRepository.save(apiEntity);
 
-
-    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken("api_user", null,
+  ApiPrincipal apiPrincipal = new ApiPrincipal(user.getId(), user.getEmail());
+    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(apiPrincipal, null,
             AuthorityUtils.createAuthorityList("ROLE_API_USER"));
     SecurityContextHolder.getContext().setAuthentication(authentication);
     filterChain.doFilter(request, response);

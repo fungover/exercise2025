@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Banker och snitträntor</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<h1>Banker och deras snitträntor</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Bank</th>
+        <th>Snittränta</th>
+        <th>Datum</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- För varje bank, visa alla dess räntor -->
+    <th:block th:each="bank : ${banks}">
+        <tr th:each="rate : ${bank.rates}">
+            <td th:text="${bank.name}"></td>
+            <td th:text="${#numbers.formatDecimal(rate.rate, 1, 2) + ' %'}"></td>
+            <td th:text="${#temporals.format(rate.date, 'yyyy-MM-dd')}"></td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -16,16 +16,20 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        // Tillåt CSS, bilder, JS
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+
                         // Tillåt GET för alla
                         .requestMatchers(HttpMethod.GET, "/**").permitAll()
+
                         // Kräver auth för POST, PUT, DELETE
                         .requestMatchers(HttpMethod.POST, "/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/**").authenticated()
-                        // Resten också tillåtet
+
+                        // Övrigt tillåtet
                         .anyRequest().permitAll()
                 )
-                // Enkel Basic Auth i utvecklingssyfte
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

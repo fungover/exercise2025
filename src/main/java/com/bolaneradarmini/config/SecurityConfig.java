@@ -1,4 +1,4 @@
-package org.bolaneradarmini.config;
+package com.bolaneradarmini.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

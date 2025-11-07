@@ -1,6 +1,6 @@
-package org.bolaneradarmini.repository;
+package com.bolaneradarmini.repository;
 
-import org.bolaneradarmini.entity.AverageRate;
+import com.bolaneradarmini.entity.AverageRate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

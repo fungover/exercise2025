@@ -1,4 +1,4 @@
-package org.bolaneradarmini;
+package com.bolaneradarmini;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

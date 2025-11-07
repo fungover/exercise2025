@@ -1,4 +1,4 @@
-package org.bolaneradarmini.entity;
+package com.bolaneradarmini.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;

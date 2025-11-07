@@ -1,4 +1,4 @@
-package org.bolaneradarmini.security;
+package com.bolaneradarmini.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

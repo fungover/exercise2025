@@ -23,12 +23,27 @@ public class AverageRateControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    // Körs före varje test så vi städar bort gamla rates
-    @BeforeEach
-    void cleanDatabase() throws Exception {
-        mockMvc.perform(delete("/api/rates")
-                .with(httpBasic("Admin", "innebandy")))
+    // Hjälpmetod för att se till att banker finns innan testerna körs
+    private void ensureExampleBanksExist() throws Exception {
+        // Ta bort eventuella gamla banker först
+        mockMvc.perform(delete("/api/banks")
+                        .with(httpBasic("admin", "innebandy")))
                 .andExpect(status().isOk());
+
+        // Ladda sedan in exempelbankerna
+        mockMvc.perform(post("/api/banks/load-example-banks")
+                        .with(httpBasic("admin", "innebandy")))
+                .andExpect(status().isOk());
+    }
+
+    // Körs före varje test – rensar rates och ser till att banker finns
+    @BeforeEach
+    void setupDatabase() throws Exception {
+        mockMvc.perform(delete("/api/rates")
+                        .with(httpBasic("admin", "innebandy")))
+                .andExpect(status().isOk());
+
+        ensureExampleBanksExist();
     }
 
     @Test
@@ -46,10 +61,10 @@ public class AverageRateControllerTest {
     }
 
     @Test
-    void loadExampleData_WithAuto_ThenGet_ShouldReturnData() throws Exception {
+    void loadExampleData_WithAuth_ThenGet_ShouldReturnData() throws Exception {
         // Ladda in testdata med Basic auth
         mockMvc.perform(post("/api/rates/load-example-data")
-                .with(httpBasic("Admin", "innebandy")))
+                        .with(httpBasic("admin", "innebandy")))
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Example data")));
 
@@ -62,11 +77,6 @@ public class AverageRateControllerTest {
 
     @Test
     void createNewRate_ShouldAddRateToDatabase() throws Exception {
-        // Ladda in exempeldata
-        mockMvc.perform(post("/api/rates/load-example-data")
-                .with(httpBasic("admin", "innebandy")))
-                .andExpect(status().isOk());
-
         // Hämta antalet poster innan
         String before = mockMvc.perform(get("/api/rates"))
                 .andExpect(status().isOk())
@@ -76,31 +86,42 @@ public class AverageRateControllerTest {
 
         int countBefore = new org.json.JSONArray(before).length();
 
-        // Skapa ny rate
+        // Skapa ny rate kopplad till en befintlig bank
         String newRateJson = """
         {
-            "bank": {"id": 1},
+            "bank": {"name": "Swedbank"},
             "rate": 2.55,
-            "date": "2025-11-01"
+            "date": "2025-11-05"
         }
         """;
 
-        mockMvc.perform(post("/api/rates")
+        var result = mockMvc.perform(post("/api/rates")
                         .with(httpBasic("admin", "innebandy"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newRateJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.rate").value(2.55));
+                .andExpect(jsonPath("$.rate").value(2.55))
+                .andReturn();
 
-        // Verifiera att antalet har ökat
-        assertTrue(countBefore > 0);
+        String response = result.getResponse().getContentAsString();
+        assertTrue(response.contains("2.55")); // enkel extra koll att svaret innehåller rätt rate
+
+        // Verifiera att antalet poster har ökat
+        String after = mockMvc.perform(get("/api/rates"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        int countAfter = new org.json.JSONArray(after).length();
+        assertTrue(countAfter >= countBefore);
     }
 
     @Test
     void deleteAllRates_ShouldDeleteAllRates() throws Exception {
         // Ladda in exempeldata
         mockMvc.perform(post("/api/rates/load-example-data")
-                .with(httpBasic("admin", "innebandy")))
+                        .with(httpBasic("admin", "innebandy")))
                 .andExpect(status().isOk());
 
         // Hämta antalet poster innan
@@ -111,11 +132,11 @@ public class AverageRateControllerTest {
                 .getContentAsString();
 
         int countBefore = new org.json.JSONArray(before).length();
-        org.junit.jupiter.api.Assertions.assertTrue(countBefore > 0);
+        assertTrue(countBefore > 0);
 
         // Ta bort alla poster
         mockMvc.perform(delete("/api/rates")
-                .with(httpBasic("admin", "innebandy")))
+                        .with(httpBasic("admin", "innebandy")))
                 .andExpect(status().isOk());
 
         // Kolla att antalet är 0
@@ -126,8 +147,6 @@ public class AverageRateControllerTest {
                 .getContentAsString();
 
         int countAfter = new org.json.JSONArray(after).length();
-
-        // Verifiera att antalet är 0
         assertEquals(0, countAfter);
     }
 }

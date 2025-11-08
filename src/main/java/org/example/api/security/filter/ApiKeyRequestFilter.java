@@ -24,10 +24,15 @@ public class ApiKeyRequestFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String apiKey = httpRequest.getHeader("X-API-KEY");
 
         System.out.println("API Key from header: " + httpRequest.getHeader("X-API-KEY"));
+
+        if (apiKey == null || apiKey.isEmpty()) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         Authentication existingAuth = SecurityContextHolder.getContext().getAuthentication();
         if (existingAuth != null && existingAuth.isAuthenticated() && !(existingAuth instanceof AnonymousAuthenticationToken)) {

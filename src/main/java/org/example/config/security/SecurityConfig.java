@@ -49,6 +49,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/movie/**").permitAll()
                                 .requestMatchers("/director/**").permitAll()
+                                .requestMatchers("/user/create").permitAll()
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/user/signup").permitAll()
                                 .anyRequest().authenticated()
@@ -76,6 +77,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/movie/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/movie/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/movie/**").permitAll()
+
+                        // User
+                        .requestMatchers("/user/create").permitAll()
 
                         .anyRequest().authenticated()
                 )

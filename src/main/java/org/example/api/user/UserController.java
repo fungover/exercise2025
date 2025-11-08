@@ -2,7 +2,11 @@ package org.example.api.user;
 
 import jakarta.validation.Valid;
 import org.example.dto.request.user.CreateUserRequest;
+import org.example.dto.response.user.UserResponse;
+import org.example.entities.User;
+import org.example.mapper.user.UserMapper;
 import org.example.service.user.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,8 +19,11 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String create(@Valid @RequestBody CreateUserRequest request){
+    public ResponseEntity<UserResponse> create(@Valid @RequestBody CreateUserRequest request){
+        User user = UserMapper.toEntity(request);
+        User newUser = userService.createUser(user);
+        UserResponse response = UserMapper.toResponse(newUser);
 
-        return  userService.createUser(request.getUsername(), request.getPassword());
+        return ResponseEntity.status(201).body(response);
     }
 }

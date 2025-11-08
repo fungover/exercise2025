@@ -27,20 +27,13 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public String createUser(String username, String password) {
-        if (userRepository.findByUsername(username) != null) {
+    public User createUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
             throw new UserAlreadyExistsException("Username already exists");
         }
 
-        User user = User.builder()
-                .username(username)
-                .password(new BCryptPasswordEncoder().encode(password))
-                .authorities("ROLE_USER")
-                .build();
         user.setApiKey(authenticationService.generateApiKey());
 
-        userRepository.save(user);
-
-        return "User created successfully";
+        return userRepository.save(user);
     }
 }

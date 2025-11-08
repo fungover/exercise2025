@@ -1,4 +1,20 @@
 services:
+#  Run mvn spring-boot:build-image before uncommenting the following lines:
+#  app:
+#    image: exercise2025:0.0.1-SNAPSHOT
+#    pull_policy: never
+#    container_name: exercise8-app
+#    ports:
+#      - '8080:8080'
+#    environment:
+#      - 'SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/exercise8'
+#      - 'SPRING_DATASOURCE_USERNAME=root'
+#      - 'SPRING_DATASOURCE_PASSWORD=secret'
+#      - 'SPRING_JPA_HIBERNATE_DDL_AUTO=update'
+#      - 'SPRING_PROFILES_ACTIVE=dev'
+#    depends_on:
+#      - db
+
   db:
     container_name: exercise8
     image: mysql:latest
@@ -7,6 +23,10 @@ services:
       - 'MYSQL_ROOT_PASSWORD=secret'
     ports:
       - '3306:3306'
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
   db-dev:
     container_name: exercise8-dev

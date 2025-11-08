@@ -5,11 +5,8 @@ import org.example.services.UserService;
 import org.example.entities.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
@@ -41,22 +38,21 @@ public class UserController {
 
     //TODO: We need functionality to update the user password. This should be done with PUT
     //TODO: Fix error handling when log in.
-    @PostMapping("/change-password")
+    @PutMapping("/change-password")
     public String handlePasswordChange(
             @RequestParam String username,
+            @RequestParam String currentPassword,
             @RequestParam String newPassword,
             @RequestParam String confirmPassword,
             Model model
     ) {
-        if (!newPassword.equals(confirmPassword)) {
+        try {
+            userService.updatePassword(username, currentPassword, newPassword, confirmPassword);
+            return "redirect:/";
+        } catch (IllegalArgumentException e) {
             model.addAttribute("username", username);
-            model.addAttribute("error", "Passwords do not match");
+            model.addAttribute("error", e.getMessage());
             return "change-password";
         }
-
-        userService.createUser(username, newPassword, "ROLE_ADMIN");
-        
-
-        return "redirect:/login";
     }
 }

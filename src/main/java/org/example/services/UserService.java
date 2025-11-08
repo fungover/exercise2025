@@ -1,18 +1,13 @@
 package org.example.services;
 
-/*import org.example.DTO.UserDTO;*/
 import org.example.config.SecurityUser;
 import org.example.entities.User;
 import org.example.repository.UserRepository;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 
 
 @Service
@@ -62,7 +57,23 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUserName(username).orElse(null);
     }
 
+    public void updatePassword(String username, String oldPassword, String newPassword, String confirmPassword) {
+        User user = userRepository.findByUserName(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        // check that old password is correct
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Old password is incorrect");
+        }
 
+        // check that new password matches confirm password
+        if (!newPassword.equals(confirmPassword)) {
+            throw new IllegalArgumentException("New password does not match confirm password");
+        }
+        // update password
+        user.setMustChangePassword(false);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
     /*@Bean
     public CommandLineRunner initAdmin(UserService userService) {
         return args -> {

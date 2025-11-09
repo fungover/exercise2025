@@ -8,16 +8,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
   thymeleaf:
     cache: false
-server:
-  servlet:
-    context-path: /pet-api
 logging:
   level:
     org.springframework.web: DEBUG

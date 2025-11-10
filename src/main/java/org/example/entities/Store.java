@@ -19,9 +19,11 @@ public class Store {
 
     public Store() {
     }
+
     public Store(String storeName) {
         this.storeName = storeName;
     }
+
     public Integer getStoreId() {
         return storeId;
     }
@@ -33,10 +35,6 @@ public class Store {
     }
     public void setStoreName(String storeName) {
         this.storeName = storeName;
-    }
-    @Override
-    public String toString() {
-        return "Store{" + "storeId=" + storeId + ", storeName=" + storeName + '}';
     }
 
     @Override
@@ -53,5 +51,11 @@ public class Store {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+
+    @Override
+    public String toString() {
+        return "Store{" + "storeId=" + storeId + ", storeName=" + storeName + '}';
     }
 }

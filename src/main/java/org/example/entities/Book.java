@@ -11,7 +11,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer bookId;
 
     String title;
     Genre genre;
@@ -33,12 +33,12 @@ public class Book {
      this.language = language;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getBookId() {
+        return bookId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setBookId(Integer id) {
+        this.bookId = id;
     }
 
     public String getTitle() {
@@ -89,7 +89,7 @@ public class Book {
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         Book book = (Book) o;
-        return getId() != null && Objects.equals(getId(), book.getId());
+        return getBookId() != null && Objects.equals(getBookId(), book.getBookId());
     }
 
     @Override
@@ -100,7 +100,7 @@ public class Book {
     @Override
     public String toString() {
         return "Book{" +
-                "id=" + id +
+                "id=" + bookId +
                 ", title='" + title + '\'' +
                 ", genre=" + genre +
                 ", Rating=" + Rating +

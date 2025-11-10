@@ -18,6 +18,7 @@ public class MovieMapper {
 
     public static Movie toEntity(Long id, UpdateMovieRequest request) {
         Movie movie = new Movie();
+        movie.setId(id);
         movie.setTitle(request.getTitle());
         movie.setDuration(request.getDuration());
         movie.setGenre(request.getGenre());

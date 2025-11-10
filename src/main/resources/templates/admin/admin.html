@@ -293,10 +293,6 @@
         event.preventDefault();
 
         const formData = new FormData(event.target);
-        console.log("FormData contents:");
-        for (let [key, value] of formData.entries()) {
-            console.log(key, ":", value);
-        }
 
         const title = formData.get('title');
         const duration = formData.get('duration');

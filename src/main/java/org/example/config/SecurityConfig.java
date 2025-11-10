@@ -1,11 +1,9 @@
 package org.example.config;
 
-import org.example.services.UserService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -76,6 +74,3 @@ public class SecurityConfig {
     }
 }
 
-// TODO: Create mapping to /change-password
-// TODO: When create new password, admin should enter old password with the new password two times
-// TODO: After should redirect to login page

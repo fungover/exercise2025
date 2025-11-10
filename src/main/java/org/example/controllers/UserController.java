@@ -1,9 +1,7 @@
 package org.example.controllers;
 
-import org.example.repository.UserRepository;
 import org.example.services.UserService;
 import org.example.entities.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -32,12 +30,9 @@ public class UserController {
     @GetMapping("/change-password")
     public String showForm(@RequestParam String username, Model model) {
         model.addAttribute("username", username);
-        return "change-password";  // thymeleaf-view
+        return "change-password";
     }
 
-
-    //TODO: We need functionality to update the user password. This should be done with PUT
-    //TODO: Fix error handling when log in.
     @PutMapping("/change-password")
     public String handlePasswordChange(
             @RequestParam String username,

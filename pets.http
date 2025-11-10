@@ -2,3 +2,6 @@
 GET http://localhost:8080/pets
 
 ###
+@name =Spot
+
+GET http://localhost:8080/pets/{{name}}

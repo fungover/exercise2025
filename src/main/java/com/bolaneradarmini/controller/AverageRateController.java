@@ -34,7 +34,7 @@ public class AverageRateController {
     @PostMapping
     public AverageRate createRate(@Valid @RequestBody AverageRate averageRate) {
         // Kolla om banken finns i JSON
-        if (averageRate.getBank() == null | averageRate.getBank().getName() == null) {
+        if (averageRate.getBank() == null || averageRate.getBank().getName() == null) {
             throw new RuntimeException("Bank name must be provided in the JSON under bank.name");
         }
 

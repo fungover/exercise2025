@@ -7,15 +7,17 @@ This mini version includes MySQL (via Docker), Spring Data JPA, Spring Security,
 
 _______
 
+
 ### Tech Stack Overview
 Technology | Purpose
 ------|-------
-Spring Boot 3.5+    |	Application framework
-Spring Data JPA    |   ORM and database handling
-MySQL 9    |     (Docker Compose)	Persistent database
-Spring Security     |	Basic authentication
-Thymeleaf   |	Server-side rendering (HTML)
-JUnit + MockMvc    |	Integration and security testing
+Spring Boot 3.5+ | Application framework
+Spring Data JPA | ORM and database handling
+MySQL 9 (Docker Compose) | Persistent database
+Spring Security | Basic authentication
+Thymeleaf | Server-side rendering (HTML)
+JUnit + MockMvc | Integration and security testing
+
 
 _______
 

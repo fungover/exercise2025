@@ -27,11 +27,13 @@ public class DirectorMapper {
         return director;
     }
 
-    public static Director toEntity(Long id, UpdateDirectorRequest request) {
-        Director director = new Director();
-        director.setId(id);
-        director.setFirstName(request.getFirstName());
-        director.setLastName(request.getLastName());
+    public static Director toEntity(Director director, UpdateDirectorRequest request) {
+        if (request.getFirstName() != null) {
+            director.setFirstName(request.getFirstName());
+        }
+        if (request.getLastName() != null) {
+            director.setLastName(request.getLastName());
+        }
 
         return director;
     }

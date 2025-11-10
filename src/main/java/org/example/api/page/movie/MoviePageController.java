@@ -21,7 +21,7 @@ public class MoviePageController {
         this.directorService = directorService;
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public String moviePage(@PathVariable Long id, Model model){
         Movie movie = movieService.getMovie(id);
         Director director = directorService.getDirector(movie.getDirector().getId());

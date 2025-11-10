@@ -70,13 +70,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/director").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/director/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/director/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/director/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/director/**").authenticated()
 
                         // Movie
                         .requestMatchers(HttpMethod.POST, "/api/movie").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/movie/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/movie/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/movie/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/movie/**").authenticated()
 
                         // User
                         .requestMatchers("/user/create").permitAll()

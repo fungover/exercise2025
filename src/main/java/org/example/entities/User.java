@@ -43,6 +43,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (authorities == null || authorities.isEmpty())
+            return java.util.Collections.emptyList();
+
         return Arrays.stream(this.authorities.split(AUTHORITIES_DELIMITER))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());

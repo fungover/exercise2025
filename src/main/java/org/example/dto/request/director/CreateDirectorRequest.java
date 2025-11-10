@@ -1,5 +1,6 @@
 package org.example.dto.request.director;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.example.dto.request.movie.CreateMovieRequest;
 import org.example.entities.Movie;
@@ -13,6 +14,7 @@ public class CreateDirectorRequest {
     @NotNull
     private String lastName;
 
+    @Valid
     private List<CreateMovieRequest> movies;
 
     public String getFirstName() {

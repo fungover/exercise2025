@@ -56,8 +56,11 @@ public class DirectorController {
             @PathVariable Long id,
             @Valid @RequestBody UpdateDirectorRequest request) {
 
-        Director director = DirectorMapper.toEntity(id, request);
+        Director existingDirector = directorService.getDirector(id);
+
+        Director director = DirectorMapper.toEntity(existingDirector, request);
         Director updatedDirector = directorService.updateDirector(id, director);
+
         DirectorResponse response = DirectorMapper.toResponse(updatedDirector);
 
         return ResponseEntity.ok(response);

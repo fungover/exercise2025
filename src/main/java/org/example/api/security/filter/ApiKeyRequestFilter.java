@@ -27,8 +27,6 @@ public class ApiKeyRequestFilter extends GenericFilterBean {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String apiKey = httpRequest.getHeader("X-API-KEY");
 
-        System.out.println("API Key from header: " + httpRequest.getHeader("X-API-KEY"));
-
         if (apiKey == null || apiKey.isEmpty()) {
             chain.doFilter(request, response);
             return;
@@ -42,11 +40,9 @@ public class ApiKeyRequestFilter extends GenericFilterBean {
 
         try {
             Authentication authentication = authenticationService.getAuthentication((HttpServletRequest) request);
-            System.out.println("Authentication successful: " + authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(request, response);
         } catch (Exception e) {
-            System.out.println("Authentication failed: " + e.getMessage());
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpResponse.setContentType("application/json");

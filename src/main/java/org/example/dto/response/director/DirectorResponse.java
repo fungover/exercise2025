@@ -1,7 +1,6 @@
 package org.example.dto.response.director;
 
 import org.example.dto.response.movie.MovieResponse;
-import org.example.entities.Movie;
 
 import java.util.List;
 

@@ -17,20 +17,20 @@ services:
 
   db:
     container_name: exercise8
-    image: mysql:latest
+    image: mysql:9.1
     environment:
       - 'MYSQL_DATABASE=exercise8'
       - 'MYSQL_ROOT_PASSWORD=secret'
     ports:
       - '3306:3306'
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 20s
-      retries: 10
+#    healthcheck:
+#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+#      timeout: 20s
+#      retries: 10
 
   db-dev:
     container_name: exercise8-dev
-    image: mysql:latest
+    image: mysql:9.1
     environment:
       - 'MYSQL_DATABASE=exercise8_dev'
       - 'MYSQL_ROOT_PASSWORD=secret'

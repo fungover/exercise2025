@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@NamedEntityGraph( name = "Pet.favorite", attributeNodes = @NamedAttributeNode( "favorite" ))
 public class Pet {
 
 

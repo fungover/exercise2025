@@ -17,7 +17,7 @@ public class PetController {
 
     @GetMapping("pets")
     public List<Pet> getAll() {
-        return repository.findPets().stream()
+        return repository.findPetsBy().stream()
                 .map(pet -> new Pet(pet.getName(), pet.getType(), pet.getFavorite()))
                 .toList();
     }

@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.entities.Pet;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +21,9 @@ public interface PetRepository extends ListCrudRepository<Pet, Integer> {
     @Query("""
         from Pet pet join fetch pet.favorite f 
         """)
-    List<Pet> findPets();
+    List<Pet> findPetsAndFood();
+
+    @EntityGraph("Pet.favorite")
+    List<Pet> findPetsBy();
 
 }

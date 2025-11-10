@@ -1,10 +1,7 @@
 package org.example.entities;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -25,6 +22,15 @@ public class Pet {
 
     @CreationTimestamp
     LocalDateTime createdAt;
+
+    public Pet() {
+    }
+
+    public Pet(String name, String type) {
+        this.name = name;
+        this.type = type;
+    }
+
 
     public Integer getId() {
         return id;

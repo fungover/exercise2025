@@ -53,9 +53,9 @@ POST    |	/api/rates/load-example-data    |	Load example mortgage rate data for 
 
 ### Thymeleaf Page (/banks)
 
-Method  |   Endpoint    |   Description
+Method | Endpoint | Description
 ------|------|------
-GET |	/banks  |	Displays all banks and their average rates in a table (SSR)
+GET | /banks | Displays all banks and their average rates in a table (SSR)
 
 _______
 

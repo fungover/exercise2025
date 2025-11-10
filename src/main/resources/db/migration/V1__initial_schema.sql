@@ -21,8 +21,8 @@ CREATE TABLE movie
 CREATE TABLE user
 (
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
-    username    VARCHAR(255),
-    password    VARCHAR(255),
-    authorities VARCHAR(255),
+    username    VARCHAR(255) NOT NULL UNIQUE,
+    password    VARCHAR(255) NOT NULL,
+    authorities VARCHAR(255) NOT NULL,
     api_key     VARCHAR(255)
 );

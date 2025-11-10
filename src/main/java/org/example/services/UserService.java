@@ -38,6 +38,15 @@ public class UserService implements UserDetailsService {
 
     //if you want to initailize a user with a specific role, the password must be changed later
     public void createUser(String username, String rawPassword, String role, boolean mustChangePassword) {
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
+        if (rawPassword == null || rawPassword.isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+        if (userRepository.findByUserName(username).isPresent()) {
+            throw new IllegalArgumentException("User already exists");
+        }
         User user = new User();
         user.setUserName(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
@@ -69,18 +78,10 @@ public class UserService implements UserDetailsService {
         if (!newPassword.equals(confirmPassword)) {
             throw new IllegalArgumentException("New password does not match confirm password");
         }
+        
         // update password
         user.setMustChangePassword(false);
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
-    /*@Bean
-    public CommandLineRunner initAdmin(UserService userService) {
-        return args -> {
-            if (userService.findByName("admin") == null) {
-                userService.createUser("admin", "adminpassword", "ROLE_ADMIN", true);
-                System.out.println("Admin user created");
-            }
-        };
-    }*/
 }

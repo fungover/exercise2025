@@ -17,7 +17,7 @@ public class AdminInitializer {
             try {
                 if (userService.findByName("admin") == null) {
                     userService.createUser("admin", "adminpassword", "ROLE_ADMIN", true);
-                    log.info("Admin user created!");
+                    log.warning("Admin user created with DEFAULT PASSWORD 'adminpassword'. CHANGE IMMEDIATELY!");
                 } else {
                     log.info("Admin user already exists!");
                 }

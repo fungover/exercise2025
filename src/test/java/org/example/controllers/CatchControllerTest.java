@@ -125,7 +125,7 @@ class CatchControllerTest {
                 .andExpect(jsonPath("$.message")
                         .value("Invalid order parameter. Must be either 'asc' or 'desc'."));
     }
-
+    
     @Test
     @WithMockUser(roles = "USER")
     void CreateCatch_valid_shouldReturn201() throws Exception {

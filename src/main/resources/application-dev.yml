@@ -1,6 +1,4 @@
 spring:
-  config:
-    import: file:.env[.properties]
   docker:
     compose:
       enabled: true
@@ -8,7 +6,7 @@ spring:
       lifecycle-management: start_only
 
   jpa:
-    show-sql: ${JPA_SHOW_SQL:false}
+    show-sql: true
     hibernate:
       ddl-auto: none
     properties:

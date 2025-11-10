@@ -78,9 +78,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/movie/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/movie/**").authenticated()
 
-                        // User
-                        .requestMatchers("/user/create").permitAll()
-
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->

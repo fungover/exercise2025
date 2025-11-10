@@ -32,5 +32,12 @@ public class ViewController {
         productRepository.save(product);
         return "redirect:/";
     }
+
+
+    @PostMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productRepository.deleteById(id);
+        return "redirect:/";
+    }
 }
 

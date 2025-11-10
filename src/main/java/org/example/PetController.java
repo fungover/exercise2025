@@ -17,15 +17,15 @@ public class PetController {
 
     @GetMapping("pets")
     public List<Pet> getAll() {
-        return repository.findAll().stream()
-                .map(pet -> new Pet(pet.getName(), pet.getType()))
+        return repository.findPets().stream()
+                .map(pet -> new Pet(pet.getName(), pet.getType(), pet.getFavorite()))
                 .toList();
     }
 
     @GetMapping("pets/{name}")
     public Pet getByName(@PathVariable String name) {
-        return repository.findPetByName(name).map(
-                pet -> new Pet(pet.getName(), pet.getType()))
+        return repository.findByName(name).map(
+                pet -> new Pet(pet.getName(), pet.getType(), pet.getFavorite()))
                 .orElseThrow();
     }
 }

@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -23,12 +25,16 @@ public class Pet {
     @CreationTimestamp
     LocalDateTime createdAt;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    List<Food> favorite = new ArrayList<>();
+
     public Pet() {
     }
 
-    public Pet(String name, String type) {
+    public Pet(String name, String type, List<Food> favorite) {
         this.name = name;
         this.type = type;
+        this.favorite.addAll(favorite);
     }
 
 
@@ -62,6 +68,14 @@ public class Pet {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<Food> getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(List<Food> favorite) {
+        this.favorite = favorite;
     }
 
     @Override

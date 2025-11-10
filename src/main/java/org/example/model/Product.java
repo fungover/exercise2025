@@ -35,7 +35,7 @@ public class Product {
      public String getSku() {
          return sku;
      }
-     public void setSku(String Sku) {
+     public void setSku(String sku) {
          this.sku = sku;
      }
      public int getQuantity() {

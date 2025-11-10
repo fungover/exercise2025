@@ -1,0 +1,23 @@
+
+services:
+  mysql:
+    image: mysql:9
+    container_name: exercise2025-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tobiasdb-exercise8
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+
+volumes:
+  mysql_data:
+

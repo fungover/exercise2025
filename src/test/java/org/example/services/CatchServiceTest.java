@@ -33,7 +33,7 @@ class CatchServiceTest {
     }
 
     @Test
-    void DreateCatch_sanitizesAndSaves() {
+    void CreateCatch_sanitizesAndSaves() {
         CreateCatchDTO dto = new CreateCatchDTO("Pike<script>", 100.0, 25.0);
         when(sanitizationService.sanitize(anyString())).thenReturn("Pike");
         when(catchRepository.save(any(Catch.class))).thenAnswer(i -> i.getArgument(0));

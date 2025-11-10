@@ -57,7 +57,7 @@ Method  |   Endpoint    |   Description
 ------|------|------
 GET |	/banks  |	Displays all banks and their average rates in a table (SSR)
 
-________
+_______
 
 ## Testing
 
@@ -69,14 +69,14 @@ This project includes integration and access control tests for:
 Run all tests:
 - mvn test
 
-________
+_______
 
 ## Server-Side Rendering
 
 The /banks endpoint renders an HTML page listing all banks and their average rates.
 Styling is handled via /static/css/style.css.
 
-________
+_______
 
 ## Summary
 
@@ -86,5 +86,5 @@ ________
 - Integration tests implemented using MockMvc and JUnit.
 - Represents a foundation for the future full-scale BolåneRadar project.
 
-________
+_______
 

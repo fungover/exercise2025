@@ -1,0 +1,11 @@
+### Get all pets via service
+GET http://localhost:8080/test/service/pets
+
+### Filter by species
+GET http://localhost:8080/test/service/pets?species=Cat
+
+### Sort by name
+GET http://localhost:8080/test/service/pets?sortBy=name&order=asc
+
+### Pagination
+GET http://localhost:8080/test/service/pets?offset=2&limit=2

@@ -4,10 +4,8 @@ import org.example.entities.Pet;
 import org.example.exceptions.BadRequestException;
 import org.example.exceptions.NotFoundException;
 import org.example.repositories.PetRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.example.services.PetService;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,9 +14,11 @@ import java.util.List;
 public class TestController {
 
     private final PetRepository repository;
+    private final PetService petService;
 
-    public TestController(PetRepository repository) {
+    public TestController(PetRepository repository, PetService petService) {
         this.repository = repository;
+        this.petService = petService;
     }
 
     @GetMapping("/pets")
@@ -45,6 +45,18 @@ public class TestController {
     @GetMapping("/test-error")
     public String testBadRequest() {
         throw new BadRequestException("This is a test bad request error!");
+    }
+
+    // Test PetService endpoint
+    @GetMapping("/service/pets")
+    public List<Pet> getAllPetsService(
+            @RequestParam(required = false) String species,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String order,
+            @RequestParam(required = false) Integer offset,
+            @RequestParam(required = false) Integer limit) {
+
+        return petService.getAllPets(species, sortBy, order, offset, limit);
     }
 
 }

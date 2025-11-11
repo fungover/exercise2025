@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import org.example.dto.RecipeListResponse;
 import org.example.dto.RecipeResponse;
 import org.example.dto.RecipeUpsertDto;
@@ -30,7 +31,7 @@ public class RecipeController {
     }
 
     @PostMapping("/recipes")
-    public ResponseEntity<RecipeResponse> create(@RequestBody RecipeUpsertDto dto) {
+    public ResponseEntity<RecipeResponse> create(@Valid @RequestBody RecipeUpsertDto dto) {
         RecipeResponse created = service.create(dto);
         return ResponseEntity
                 .created(URI.create("/api/recipes/" + created.id()))

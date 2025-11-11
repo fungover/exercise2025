@@ -1,0 +1,113 @@
+### Get all pets
+GET http://localhost:8080/api/pets
+
+### Get all pets - filter by species (Dog)
+GET http://localhost:8080/api/pets?species=Dog
+
+### Get all pets - filter by species (Cat)
+GET http://localhost:8080/api/pets?species=Cat
+
+### Get all pets - sort by name (ascending)
+GET http://localhost:8080/api/pets?sortBy=name&order=asc
+
+### Get all pets - sort by name (descending)
+GET http://localhost:8080/api/pets?sortBy=name&order=desc
+
+### Get all pets - sort by hunger level
+GET http://localhost:8080/api/pets?sortBy=hungerLevel&order=asc
+
+### Get all pets - sort by happiness level
+GET http://localhost:8080/api/pets?sortBy=happinessLevel&order=desc
+
+### Get all pets - pagination (offset=2, limit=3)
+GET http://localhost:8080/api/pets?offset=2&limit=3
+
+### Get all pets - combined (Cats, sorted by name, with pagination)
+GET http://localhost:8080/api/pets?species=Cat&sortBy=name&order=asc&offset=0&limit=2
+
+### Get pet by ID (Rex)
+GET http://localhost:8080/api/pets/1
+
+### Get pet by ID (Garfield)
+GET http://localhost:8080/api/pets/2
+
+### Get pet by ID - non-existent (should return 404)
+GET http://localhost:8080/api/pets/999999
+
+### Create new pet
+POST http://localhost:8080/api/pets
+Content-Type: application/json
+
+{
+  "name": "Bella",
+  "species": "Dog"
+}
+
+### Create new pet - with explicit hunger/happiness
+POST http://localhost:8080/api/pets
+Content-Type: application/json
+
+{
+  "name": "Max",
+  "species": "Cat",
+  "hungerLevel": 7,
+  "happinessLevel": 8
+}
+
+### Create new pet - invalid (name too long, should return 400)
+POST http://localhost:8080/api/pets
+Content-Type: application/json
+
+{
+  "name": "This name is way too long for validation",
+  "species": "Dog"
+}
+
+### Create new pet - invalid (blank name, should return 400)
+POST http://localhost:8080/api/pets
+Content-Type: application/json
+
+{
+  "name": "",
+  "species": "Dog"
+}
+
+### Create new pet - invalid (hunger level out of range, should return 400)
+POST http://localhost:8080/api/pets
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "species": "Dog",
+  "hungerLevel": 15
+}
+
+### Feed Rex (id = 1)
+PUT http://localhost:8080/api/pets/1/feed
+
+### Feed Quack (id = 4) - has hunger = 1, feed once to make it 0
+PUT http://localhost:8080/api/pets/4/feed
+
+### Feed Quack again (should return 400 - pet is full)
+PUT http://localhost:8080/api/pets/4/feed
+
+### Play with Garfield (id = 2) - has happiness = 1
+PUT http://localhost:8080/api/pets/2/play
+
+### Play with Rex (id = 1) - has happiness = 10, should return 400
+PUT http://localhost:8080/api/pets/1/play
+
+### Feed non-existent pet (should return 404)
+PUT http://localhost:8080/api/pets/999/feed
+
+### Play with non-existent pet (should return 404)
+PUT http://localhost:8080/api/pets/999/play
+
+### Delete pet (id = 6, Spot)
+DELETE http://localhost:8080/api/pets/6
+
+### Delete non-existent pet (should return 404)
+DELETE http://localhost:8080/api/pets/999
+
+### Verify Spot is deleted (should return 404)
+GET http://localhost:8080/api/pets/6

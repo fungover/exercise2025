@@ -3,3 +3,5 @@ GET http://localhost:8080/api/recipes
 
 
 ###
+@id =2
+GET http://localhost:8080/api/recipes/{{id}}

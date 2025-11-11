@@ -27,9 +27,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/products/form", "/css/**", "/login").permitAll() // Remove ("/" & "/products/form") to prompt user to login
-                        .requestMatchers("/products/**", "/locations/**").authenticated()
-                        .anyRequest().permitAll() // fallback
+                      //  .requestMatchers( "/css/**", "/login").permitAll() // Remove ("/" & "/products/form") to prompt user to login
+                      // .requestMatchers("/products/**", "/locations/**").authenticated()
+                       // .anyRequest().permitAll() // fallback
+                                .requestMatchers("/css/**", "/login").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // Login page

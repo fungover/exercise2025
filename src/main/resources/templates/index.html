@@ -3,6 +3,9 @@
 <head><title>Welcome</title></head>
 <body>
 <h1>Alla produkter</h1>
+<form th:action="@{/logout}" method="post">
+    <button type="submit" class="logout-button">Logga ut</button>
+</form>
 <style>
     body {
         font-family: 'Segoe UI', sans-serif;
@@ -66,6 +69,21 @@
     .delete-button:hover {
         background-color: #c0392b;
     }
+    .logout-button {
+        background-color: #e67e22;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        float: right;
+        margin-bottom: 1rem;
+    }
+
+    .logout-button:hover {
+        background-color: #d35400;
+    }
+
 </style>
 <table border="1">
     <tr>
@@ -91,6 +109,8 @@
         <option th:each="loc : ${locations}" th:value="${loc.id}" th:text="${loc.zone} + ' - ' + ${loc.shelf}"></option>
     </select>
     <button type="submit">Spara</button>
+
+
 </form>
 
 

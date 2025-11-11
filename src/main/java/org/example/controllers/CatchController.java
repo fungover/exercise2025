@@ -25,10 +25,7 @@ public class CatchController {
         this.catchRepository = catchRepository;
         this.catchService = catchService;
     }
-
-    /**
-     * Hämtar alla fångster
-     */
+    
     @GetMapping
     public ResponseEntity<List<Catch>> getAllCatches() {
         List<Catch> catches = catchService.getAllCatches();
@@ -37,9 +34,6 @@ public class CatchController {
                 .body(catches);
     }
 
-    /**
-     * Hämtar en specifik fångst via ID
-     */
     @GetMapping("/{id}")
     public ResponseEntity<Catch> getCatchById(@PathVariable Long id) {
         return catchService.getCatchById(id)
@@ -47,9 +41,7 @@ public class CatchController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Hämtar fångster sorterade efter vikt
-     */
+ 
     @GetMapping("/weight")
     public ResponseEntity<?> getCatchesOrderedByWeight(
             @RequestParam(defaultValue = "asc") String order) {
@@ -70,11 +62,7 @@ public class CatchController {
         return ResponseEntity.ok(result);
     }
 
-    /**
-     * Skapar en ny fångst
-     */
     @PostMapping
-    // Disable XSS warning (Sonar/IntelliJ)
     public ResponseEntity<Catch> createCatch(@Valid @RequestBody CreateCatchDTO catchDTO) {
         Catch created = catchService.createCatch(catchDTO);
         return ResponseEntity
@@ -82,9 +70,6 @@ public class CatchController {
                 .body(created);
     }
 
-    /**
-     * Raderar en fångst via ID
-     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCatch(@PathVariable Long id) {

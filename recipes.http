@@ -66,3 +66,19 @@ Content-Type: application/json
     }
   ]
 }
+
+###
+PUT http://localhost:8080/api/recipes/{{id}}
+Content-Type: application/json
+
+{
+  "title": "New Title",
+  "instructions": "New instructions",
+  "items": [
+    {
+      "name": "Bacon",
+      "amount": 200,
+      "unit": "g"
+    }
+  ]
+}

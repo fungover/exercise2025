@@ -1,12 +1,14 @@
 package org.example.mapper;
 
 import org.example.dto.*;
-import org.example.model.*;
+import org.example.model.Recipe;
+import org.example.model.RecipeItem;
 
 import java.util.List;
 
 public final class RecipeMapper {
-    private RecipeMapper() {}
+    private RecipeMapper() {
+    }
 
     public static RecipeListResponse toList(Recipe recipe) {
         return new RecipeListResponse(recipe.getId(), recipe.getTitle(), recipe.getInstructions());
@@ -38,5 +40,19 @@ public final class RecipeMapper {
             }
         }
         return recipeBuilder.build();
+    }
+
+    public static void apply(Recipe target, RecipeUpsertDto dto) {
+        List<RecipeItem> rebuilt =
+                dto.items() == null ? List.of()
+                        : dto.items().stream()
+                        .map(item -> RecipeItem.builder()
+                                .name(item.name())
+                                .amount(item.amount())
+                                .unit(item.unit())
+                                .build())
+                        .toList();
+
+        target.replaceContent(dto.title(), dto.instructions(), rebuilt);
     }
 }

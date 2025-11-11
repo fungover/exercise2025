@@ -67,6 +67,18 @@ public class Recipe {
         for (var it : new ArrayList<>(items)) removeItem(it);
     }
 
+    public void replaceContent(String title, String instructions, List<RecipeItem> newItems) {
+        this.title = title;
+        this.instructions = instructions;
+
+        clearItems();
+        if (newItems != null) {
+            for (RecipeItem item : newItems) {
+                addItem(item);
+            }
+        }
+    }
+
     // Equals and hashcode
     @Override
     public final boolean equals(Object o) {

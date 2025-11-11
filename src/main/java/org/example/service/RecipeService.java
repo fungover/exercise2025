@@ -41,4 +41,14 @@ public class RecipeService {
         Recipe saved = repository.save(toSave);
         return RecipeMapper.toDetail(saved);
     }
+
+    @Transactional
+    public RecipeResponse update(Integer id, RecipeUpsertDto dto) {
+        Recipe recipe = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found"));
+
+        RecipeMapper.apply(recipe, dto);
+        Recipe saved = repository.save(recipe);
+        return RecipeMapper.toDetail(saved);
+    }
 }

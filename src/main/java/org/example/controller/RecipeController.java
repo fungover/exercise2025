@@ -37,4 +37,9 @@ public class RecipeController {
                 .created(URI.create("/api/recipes/" + created.id()))
                 .body(created);
     }
+
+    @PutMapping("/recipes/{id}")
+    public RecipeResponse update(@PathVariable Integer id, @Valid @RequestBody RecipeUpsertDto dto) {
+        return service.update(id, dto);
+    }
 }

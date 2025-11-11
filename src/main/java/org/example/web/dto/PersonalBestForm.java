@@ -2,6 +2,8 @@ package org.example.web.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,9 +16,11 @@ public class PersonalBestForm {
     @Min(1)
     private Integer reps;
 
+    @Positive
     @NotNull
     private BigDecimal weightKg;
 
+    @PastOrPresent
     @NotNull
     private LocalDate achievedOn;
 

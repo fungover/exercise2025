@@ -1,10 +1,12 @@
 spring:
   application:
     name: exercise2025
+
   datasource:
     url: jdbc:mysql://localhost:3306/${DATABASE_NAME:spring}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: ${DATABASE_USER:user}
     password: ${DATABASE_PASSWORD:secret}
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -12,9 +14,15 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  thymeleaf:
-    check-template-location: false
+        jdbc:
+          time_zone: UTC
+
+  mvc:
+    format:
+      date: iso
+
   flyway:
+    enabled: true
     locations: classpath:db/migration
 
 logging:

@@ -1,60 +1,92 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <title>Min profil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <style>
+        body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;margin:2rem;max-width:900px}
+        header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+        .card{border:1px solid #ddd;border-radius:10px;padding:1rem;margin:.5rem 0}
+        .row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+        label{display:block;font-size:.9rem;margin:.25rem 0}
+        input,select{width:100%;padding:.5rem;border:1px solid #ccc;border-radius:.4rem}
+        table{width:100%;border-collapse:collapse;margin-top:1rem}
+        th,td{border-bottom:1px solid #eee;padding:.5rem;text-align:left}
+        .flash{background:#e7f7ec;border:1px solid #bfe8cb;color:#246b3d;padding:.6rem;border-radius:.5rem;margin-bottom:1rem}
+        .danger{color:#a33}
+        .actions form{display:inline}
+        .btn{padding:.4rem .8rem;border:1px solid #999;border-radius:.4rem;background:#fafafa;cursor:pointer}
+    </style>
 </head>
 <body>
-<h1>Min profil</h1>
-<p>Användare: <strong th:text="${username}">user</strong></p>
+<header>
+    <h1 th:text="'Hej, ' + ${username} + '!'">Hej!</h1>
+    <form th:action="@{/logout}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button class="btn" type="submit">Logga ut</button>
+    </form>
+</header>
 
-<h2>Mina PRs</h2>
-<table border="1" cellpadding="6">
-    <thead>
-    <tr>
-        <th>Övning</th>
-        <th>Reps</th>
-        <th>Vikt (kg)</th>
-        <th>Datum</th>
-        <th>Ta bort</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="pr : ${prs}">
-        <td th:text="${pr.exerciseName}">Bench Press</td>
-        <td th:text="${pr.reps}">5</td>
-        <td th:text="${pr.weightKg}">100.0</td>
-        <td th:text="${pr.achievedOn}">2025-11-01</td>
-        <td>
-            <form th:action="@{'/profile/pr/' + ${pr.id}}" method="post">
-                <input type="hidden" name="_method" value="delete"/>
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <button type="submit">🗑</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div th:if="${flash}" class="flash" th:text="${flash}">Sparat</div>
 
-<h2>Lägg till/uppdatera PR</h2>
-<form th:action="@{/profile/pr}" method="post">
-    <label>Övning:
-        <select name="exerciseId" required>
-            <option th:each="ex : ${exercises}"
-                    th:value="${ex.id}"
-                    th:text="${ex.name}">Bench Press
-            </option>
-        </select>
-    </label>
-    <br>
-    <label>Reps: <input type="number" name="reps" min="1" required></label><br>
-    <label>Vikt (kg): <input type="number" step="0.01" name="weightKg" required></label><br>
-    <label>Datum: <input type="date" name="achievedOn" required></label><br>
+<section class="card">
+    <h2>Lägg till / uppdatera PR</h2>
+    <form th:action="@{/profile/pr}" method="post" th:object="${form}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="row">
+            <div>
+                <label for="exerciseId">Övning</label>
+                <select id="exerciseId" th:field="*{exerciseId}">
+                    <option th:each="ex : ${exercises}" th:value="${ex.id}" th:text="${ex.name}">Bench Press</option>
+                </select>
+            </div>
+            <div>
+                <label for="reps">Reps</label>
+                <input id="reps" type="number" min="1" th:field="*{reps}"/>
+            </div>
+            <div>
+                <label for="weightKg">Vikt (kg)</label>
+                <input id="weightKg" type="number" step="0.01" th:field="*{weightKg}"/>
+            </div>
+            <div>
+                <label for="achievedOn">Datum</label>
+                <input id="achievedOn" type="date" th:field="*{achievedOn}"/>
+            </div>
+        </div>
+        <div style="margin-top:1rem">
+            <button class="btn" type="submit">Spara</button>
+        </div>
 
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    <button type="submit">Spara PR</button>
-</form>
+        <div th:if="${#fields.hasErrors()}" class="danger" style="margin-top:.5rem">
+            <div th:each="e : ${#fields.errors('*')}" th:text="${e}">Fel</div>
+        </div>
+    </form>
+</section>
 
-<p><a th:href="@{/}">Hem</a></p>
+<section class="card">
+    <h2>Mina PR</h2>
+    <table>
+        <thead>
+        <tr><th>Övning</th><th>Reps</th><th>Vikt (kg)</th><th>Datum</th><th></th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="pr : ${prs}">
+            <td th:text="${pr.exerciseName}">Bench Press</td>
+            <td th:text="${pr.reps}">1</td>
+            <td th:text="${pr.weightKg}">120.0</td>
+            <td th:text="${pr.achievedOn}">2025-11-01</td>
+            <td class="actions">
+                <form th:action="@{|/profile/pr/${pr.id}/delete|}" method="post"
+                      onsubmit="return confirm('Ta bort PR?');">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button class="btn" type="submit">Ta bort</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
 </body>
 </html>

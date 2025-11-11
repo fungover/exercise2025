@@ -39,8 +39,17 @@ public class SecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain webChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/css/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .defaultSuccessUrl("/profile", true)
+                )
+                .logout(logout -> logout.logoutSuccessUrl("/"));
         return http.build();
     }
+
 }
 

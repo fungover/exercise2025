@@ -1,25 +1,27 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Gym PRs</title>
+    <title>Gym PR Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif;
+            margin: 2rem
+        }
+
+        a.button {
+            display: inline-block;
+            padding: .6rem 1rem;
+            border: 1px solid #999;
+            border-radius: .5rem;
+            text-decoration: none
+        }
+    </style>
 </head>
 <body>
-<h1>Gym PRs</h1>
-
-<div sec:authorize="isAnonymous()">
-    <p>Logga in för att se och uppdatera dina PRs.</p>
-    <a th:href="@{/login}">Login</a>
-</div>
-
-<div sec:authorize="isAuthenticated()">
-    <p>Inloggad som <strong sec:authentication="name"></strong></p>
-    <p><a th:href="@{/profile}">Gå till profil</a></p>
-    <form th:action="@{/logout}" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <button type="submit">Logga ut</button>
-    </form>
-</div>
+<h1>Gym PR Tracker</h1>
+<p>Logga in för att se och lägga till dina personbästa.</p>
+<a class="button" href="/login">Logga in</a>
 </body>
 </html>

@@ -8,7 +8,7 @@ public class RecipeItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false)
     private String name;
@@ -26,7 +26,7 @@ public class RecipeItem {
     protected RecipeItem() {}
 
     // getters
-    public Long getId() { return id; }
+    public Integer getId() { return id; }
     public String getName() { return name; }
     public double getAmount() { return amount; }
     public String getUnit() { return unit; }

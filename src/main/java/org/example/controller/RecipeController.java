@@ -2,6 +2,9 @@ package org.example.controller;
 
 import org.example.dto.RecipeItemResponse;
 import org.example.dto.RecipeResponse;
+import org.example.model.Recipe;
+import org.example.repository.RecipeRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,13 +15,33 @@ import java.util.List;
 @RequestMapping("/api")
 public class RecipeController {
 
+    RecipeRepository repository;
+
+    public RecipeController(RecipeRepository recipeRepository) {
+        this.repository = recipeRepository;
+    }
+
     @GetMapping("/recipes")
+    @Transactional(readOnly = true)
     public List<RecipeResponse> listRecipes() {
-        return List.of(new RecipeResponse(232,"Tacos", "Use a good knife",
-                List.of(
-                        new RecipeItemResponse(1, "Meat", 500.0, "g"),
-                        new RecipeItemResponse(2, "Tortillas", 8.0, "pcs"),
-                        new RecipeItemResponse(3, "Onion", 1.0, "pcs")
-        )));
+        return repository.findAll().stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    private RecipeResponse toResponse(Recipe recipe) {
+        return new RecipeResponse(
+                recipe.getId(),
+                recipe.getTitle(),
+                recipe.getInstructions(),
+                recipe.getItems().stream()
+                        .map(item -> new RecipeItemResponse(
+                                item.getId(),
+                                item.getName(),
+                                item.getAmount(),
+                                item.getUnit()
+                        ))
+                        .toList()
+        );
     }
 }

@@ -1,6 +1,6 @@
 package org.example.repository;
 
 import org.example.model.Recipe;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.ListCrudRepository;
 
-public interface RecipeRepository extends JpaRepository<Recipe, Integer> {}
+public interface RecipeRepository extends ListCrudRepository<Recipe, Integer> {}

@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.dto.RecipeListResponse;
 import org.example.dto.RecipeResponse;
+import org.example.dto.RecipeUpsertDto;
 import org.example.mapper.RecipeMapper;
 import org.example.model.Recipe;
 import org.example.repository.RecipeRepository;
@@ -32,5 +33,12 @@ public class RecipeService {
         Recipe recipe = repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found"));
         return RecipeMapper.toDetail(recipe);
+    }
+
+    @Transactional
+    public RecipeResponse create(RecipeUpsertDto dto) {
+        Recipe toSave = RecipeMapper.fromUpsert(dto);
+        Recipe saved = repository.save(toSave);
+        return RecipeMapper.toDetail(saved);
     }
 }

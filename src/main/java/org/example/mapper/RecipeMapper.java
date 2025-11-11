@@ -22,4 +22,21 @@ public final class RecipeMapper {
     private static RecipeItemResponse toItem(RecipeItem item) {
         return new RecipeItemResponse(item.getId(), item.getName(), item.getAmount(), item.getUnit());
     }
+
+    public static Recipe fromUpsert(RecipeUpsertDto dto) {
+        Recipe.Builder recipeBuilder = Recipe.builder()
+                .title(dto.title())
+                .instructions(dto.instructions());
+
+        if (dto.items() != null) {
+            for (RecipeItemUpsertDto item : dto.items()) {
+                recipeBuilder.addItem(RecipeItem.builder()
+                        .name(item.name())
+                        .amount(item.amount())
+                        .unit(item.unit())
+                        .build());
+            }
+        }
+        return recipeBuilder.build();
+    }
 }

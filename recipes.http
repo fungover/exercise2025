@@ -5,3 +5,24 @@ GET http://localhost:8080/api/recipes
 ###
 @id =2
 GET http://localhost:8080/api/recipes/{{id}}
+
+###
+POST http://localhost:8080/api/recipes
+Content-Type: application/json
+
+{
+  "title": "Bacon and Eggs",
+  "instructions": "Fry the eggs first",
+  "items": [
+    {
+      "name": "Bacon",
+      "amount": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Eggs",
+      "amount": 2,
+      "unit": "pcs"
+    }
+  ]
+}

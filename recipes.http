@@ -6,6 +6,9 @@ GET http://localhost:8080/api/recipes
 @id =2
 GET http://localhost:8080/api/recipes/{{id}}
 
+### Not found
+GET http://localhost:8080/api/recipes/-10
+
 ###
 POST http://localhost:8080/api/recipes
 Content-Type: application/json
@@ -23,6 +26,22 @@ Content-Type: application/json
       "name": "Eggs",
       "amount": 2,
       "unit": "pcs"
+    }
+  ]
+}
+
+### Error
+POST http://localhost:8080/api/recipes
+Content-Type: application/json
+
+{
+  "title": "",
+  "instructions": "",
+  "items": [
+    {
+      "name": "",
+      "amount": -1,
+      "unit": ""
     }
   ]
 }

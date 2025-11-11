@@ -45,11 +45,17 @@ Then visit http://localhost:8080
  to use the Thymeleaf HTML interface.
 
 
-## 🔐 Authentication (for API)
+## 🔐 Authentication
 
-REST endpoints like /products require HTTP Basic Auth:
-Username: admin  
-Password: admin
+The application uses form-based login with Spring Security.
+
+- Login page: `/login`
+- Default credentials:
+  - **Username:** `admin`
+  - **Password:** `admin`
+
+🔒 All routes, including REST endpoints like `/products`, require login.  
+🌐 Users are redirected to `/login` before accessing any part of the application.
 
 🧪 Run Tests
 

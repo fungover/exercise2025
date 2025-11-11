@@ -39,5 +39,13 @@ public class ViewController {
         productRepository.deleteById(id);
         return "redirect:/";
     }
+
+    @Controller
+    public class LoginController {
+        @GetMapping("/login")
+        public String loginPage() {
+            return "login"; // returns login.html
+        }
+    }
 }
 

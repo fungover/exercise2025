@@ -27,11 +27,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/products/form", "/css/**").permitAll()
+                        .requestMatchers("/", "/products/form", "/css/**", "/login").permitAll() // Remove ("/" & "/products/form") to prompt user to login
                         .requestMatchers("/products/**", "/locations/**").authenticated()
                         .anyRequest().permitAll() // fallback
                 )
-                .httpBasic(c -> {})
+                .formLogin(form -> form
+                        .loginPage("/login") // Login page
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                )
                 .csrf(csrf -> csrf.disable());
         return http.build();
     }

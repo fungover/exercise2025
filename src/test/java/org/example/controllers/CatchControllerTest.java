@@ -193,8 +193,7 @@ class CatchControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void DeleteCatchNotFoundShouldReturn404() throws Exception {
-        boolean deleted = catchService.deleteCatch(1L);
-        when(deleted).thenReturn(false);
+        when(catchService.deleteCatch(1L)).thenReturn(false);
 
         mockMvc.perform(delete("/api/catches/1"))
                 .andExpect(status().isNotFound());

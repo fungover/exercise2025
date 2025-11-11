@@ -41,7 +41,7 @@ public class CatchController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
- 
+
     @GetMapping("/weight")
     public ResponseEntity<?> getCatchesOrderedByWeight(
             @RequestParam(defaultValue = "asc") String order) {

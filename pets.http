@@ -1,0 +1,11 @@
+### Get all pets
+GET http://localhost:8080/test/pets
+
+### Get pet by ID
+GET http://localhost:8080/test/pets/1
+
+### Get pets by species
+GET http://localhost:8080/test/pets/species/cat
+
+### Get pet by name, ignore casing
+GET http://localhost:8080/test/pets/name/LEONardo

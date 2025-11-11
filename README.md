@@ -18,7 +18,7 @@ This project is part of a Java programming course and implements a simple invent
 |-------------------|------------------------------|
 | Spring Boot 3.5   | Backend and configuration    |
 | Spring Data JPA   | Database access              |
-| Spring Security   | Basic authentication         |
+| Spring Security   | Form authentication          |
 | Thymeleaf         | HTML rendering               |
 | MySQL 9           | Database (via Docker)        |
 | Adminer           | DB management (via Docker)   |
@@ -45,11 +45,17 @@ Then visit http://localhost:8080
  to use the Thymeleaf HTML interface.
 
 
-## 🔐 Authentication (for API)
+## 🔐 Authentication
 
-REST endpoints like /products require HTTP Basic Auth:
-Username: admin  
-Password: admin
+The application uses form-based login with Spring Security.
+
+- Login page: `/login`
+- Default credentials:
+  - **Username:** `admin`
+  - **Password:** `admin`
+
+🔒 All routes, including REST endpoints like `/products`, require login.  
+🌐 Users are redirected to `/login` before accessing any part of the application.
 
 🧪 Run Tests
 

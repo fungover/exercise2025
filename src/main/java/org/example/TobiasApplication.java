@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TobiasApplication {
 
-    void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(TobiasApplication.class, args);
     }
 

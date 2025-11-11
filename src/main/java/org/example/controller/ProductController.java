@@ -23,6 +23,7 @@ public class ProductController {
 
     @PostMapping
     public Product create(@RequestBody Product product) {
+        System.out.println("POST /api/products kallades av: " + product.getName());
         return repo.save(product);
     }
 

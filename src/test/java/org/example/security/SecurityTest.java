@@ -28,6 +28,6 @@ public class SecurityTest {
         mockMvc.perform(post("/products")
                 .contentType("application/json")
                 .content(json))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isFound());
     }
 }

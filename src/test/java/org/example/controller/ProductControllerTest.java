@@ -1,5 +1,8 @@
 package org.example.controller;
 
+import org.example.config.SecurityConfig;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.example.model.Product;
 import org.example.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -19,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-
+@Import(SecurityConfig.class)
 @WebMvcTest(ProductController.class)
 public class ProductControllerTest {
 
@@ -31,6 +34,7 @@ public class ProductControllerTest {
 
     // GET-test
     @Test
+    @WithMockUser(roles = "USER")
     void shouldReturnListOfProducts() throws Exception {
         Product p = new Product();
         p.setName("Testproduct");
@@ -39,13 +43,14 @@ public class ProductControllerTest {
 
         when(productRepository.findAll()).thenReturn(List.of(p));
 
-        mockMvc.perform(get("/products"))
+        mockMvc.perform(get("/api/products"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Testproduct"));
     }
 
     // POST-test
     @Test
+    @WithMockUser(roles = "USER")
     void shouldCreateProduct() throws Exception {
         // Create JSON-string that simulate POST product.
         String json = """
@@ -64,7 +69,7 @@ public class ProductControllerTest {
         // Mock repository, should return product
         when(productRepository.save(any(Product.class))).thenReturn(p);
 
-        mockMvc.perform(post("/products")
+        mockMvc.perform(post("/api/products")
                         .contentType("application/json")
                         .content(json))
                 .andExpect(status().isOk())

@@ -5,6 +5,7 @@ import org.example.dto.RecipeListResponse;
 import org.example.dto.RecipeResponse;
 import org.example.dto.RecipeUpsertDto;
 import org.example.service.RecipeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +42,11 @@ public class RecipeController {
     @PutMapping("/recipes/{id}")
     public RecipeResponse update(@PathVariable Integer id, @Valid @RequestBody RecipeUpsertDto dto) {
         return service.update(id, dto);
+    }
+
+    @DeleteMapping("/recipes/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer id) {
+        service.delete(id);
     }
 }

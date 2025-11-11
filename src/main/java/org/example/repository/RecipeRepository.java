@@ -12,4 +12,6 @@ public interface RecipeRepository extends ListCrudRepository<Recipe, Integer> {
     @EntityGraph(attributePaths = "items")
     @NonNull
     Optional<Recipe> findById(@NonNull Integer id);
+
+    boolean existsByTitleIgnoreCase(String title);
 }

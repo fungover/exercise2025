@@ -1,5 +1,6 @@
 package org.example.error;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -38,6 +39,26 @@ public class GlobalExceptionHandler {
         body.put("error", ex.getReason());
         return ResponseEntity.status(ex.getStatusCode()).body(body);
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleDataIntegrity(DataIntegrityViolationException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", Instant.now());
+        body.put("status", HttpStatus.CONFLICT.value());
+
+        String lowerMsg = ex.getMostSpecificCause().getMessage().toLowerCase();
+
+        if (lowerMsg.contains("duplicate") || lowerMsg.contains("unique")) {
+            body.put("error", "A recipe with this title already exists");
+        } else if (lowerMsg.contains("foreign key")) {
+            body.put("error", "Cannot delete recipe because related items exist");
+        } else {
+            body.put("error", "Database constraint violated");
+        }
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {

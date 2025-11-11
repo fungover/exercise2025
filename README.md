@@ -18,7 +18,7 @@ This project is part of a Java programming course and implements a simple invent
 |-------------------|------------------------------|
 | Spring Boot 3.5   | Backend and configuration    |
 | Spring Data JPA   | Database access              |
-| Spring Security   | Basic authentication         |
+| Spring Security   | Form authentication          |
 | Thymeleaf         | HTML rendering               |
 | MySQL 9           | Database (via Docker)        |
 | Adminer           | DB management (via Docker)   |

@@ -87,12 +87,14 @@ public class CatchController {
      */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteCatch(@PathVariable Long id) {
-        if (!catchRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> deleteCatch(@PathVariable Long id) {
+
+        boolean deleted = catchService.deleteCatch(id);
+
+        if (!deleted) {
+            return ResponseEntity.status(404).build();
         }
 
-        catchRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(204).build();
     }
 }

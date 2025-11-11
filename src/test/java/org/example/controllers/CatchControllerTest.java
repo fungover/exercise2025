@@ -52,7 +52,7 @@ class CatchControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void GetAllCatches_shouldReturn200AndJson() throws Exception {
+    void GetAllCatchesShouldReturn200AndJson() throws Exception {
         when(catchService.getAllCatches()).thenReturn(Collections.emptyList());
         when(catchService.countCatches()).thenReturn(0L);
 
@@ -64,7 +64,7 @@ class CatchControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void GetCatchById_found_shouldReturn200() throws Exception {
+    void GetCatchByIdFoundShouldReturn200() throws Exception {
         Catch fish = new Catch();
         fish.setId(1L);
         fish.setSpecies("Pike");
@@ -83,7 +83,7 @@ class CatchControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void GetCatchById_notFound_shouldReturn404() throws Exception {
+    void GetCatchByIdNotFoundShouldReturn404() throws Exception {
         when(catchService.getCatchById(1L)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/catches/1"))
@@ -92,7 +92,7 @@ class CatchControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void GetCatchesOrderedByWeight_validAsc_shouldReturn200() throws Exception {
+    void GetCatchesOrderedByWeightValidAscShouldReturn200() throws Exception {
 
         OffsetDateTime now = OffsetDateTime.now();
 
@@ -119,16 +119,16 @@ class CatchControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void GetCatchesOrderedByWeight_invalidOrder_shouldReturn400() throws Exception {
+    void GetCatchesOrderedByWeightInvalidOrderShouldReturn400() throws Exception {
         mockMvc.perform(get("/api/catches/weight?order=hello"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
                         .value("Invalid order parameter. Must be either 'asc' or 'desc'."));
     }
-    
+
     @Test
     @WithMockUser(roles = "USER")
-    void CreateCatch_valid_shouldReturn201() throws Exception {
+    void CreateCatchValidShouldReturn201() throws Exception {
 
         Catch saved = new Catch();
         saved.setId(99L);
@@ -159,7 +159,7 @@ class CatchControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void CreateCatch_invalid_shouldReturn400() throws Exception {
+    void CreateCatchInvalidShouldReturn400() throws Exception {
 
         mockMvc.perform(post("/api/catches")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -169,8 +169,8 @@ class CatchControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void DeleteCatch_admin_shouldReturn204() throws Exception {
-        when(catchRepository.existsById(1L)).thenReturn(true);
+    void DeleteCatchAdminShouldReturn204() throws Exception {
+        when(catchService.deleteCatch(1L)).thenReturn(true);
         doNothing().when(catchRepository).deleteById(1L);
 
         mockMvc.perform(delete("/api/catches/1"))
@@ -193,7 +193,8 @@ class CatchControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void DeleteCatchNotFoundShouldReturn404() throws Exception {
-        when(catchRepository.existsById(1L)).thenReturn(false);
+        boolean deleted = catchService.deleteCatch(1L);
+        when(deleted).thenReturn(false);
 
         mockMvc.perform(delete("/api/catches/1"))
                 .andExpect(status().isNotFound());

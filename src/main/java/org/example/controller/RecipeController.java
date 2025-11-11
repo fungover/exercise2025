@@ -16,9 +16,9 @@ public class RecipeController {
     public List<RecipeResponse> listRecipes() {
         return List.of(new RecipeResponse(232,"Tacos", "Use a good knife",
                 List.of(
-                        new RecipeItemResponse(1L, "Meat", 500.0, "g"),
-                        new RecipeItemResponse(2L, "Tortillas", 8.0, "pcs"),
-                        new RecipeItemResponse(3L, "Onion", 1.0, "pcs")
+                        new RecipeItemResponse(1, "Meat", 500.0, "g"),
+                        new RecipeItemResponse(2, "Tortillas", 8.0, "pcs"),
+                        new RecipeItemResponse(3, "Onion", 1.0, "pcs")
         )));
     }
 }

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Login</title>
+</head>
+<body>
+<h1>Login</h1>
+
+<div th:if="${param.error}">
+    <p style="color:red">Felaktiga uppgifter.</p>
+</div>
+<div th:if="${param.logout}">
+    <p style="color:green">Utloggad.</p>
+</div>
+
+<form th:action="@{/login}" method="post">
+    <label>Username
+        <input type="text" name="username" autocomplete="username" required>
+    </label>
+    <br>
+    <label>Password
+        <input type="password" name="password" autocomplete="current-password" required>
+    </label>
+
+    <!-- CSRF -->
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <button type="submit">Logga in</button>
+</form>
+
+<p><a th:href="@{/}">Till startsidan</a></p>
+</body>
+</html>

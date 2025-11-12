@@ -16,7 +16,7 @@ Spring Boot will:
 
 ## What I will create
 - A REST API
-- a database with my data of choise (I will gather famous movie quotes)
+- a database with my data of choice (I will gather famous movie quotes)
   Table/Entity = @Quotes
   Fields = id, quote, movie, character, year
 
@@ -45,7 +45,7 @@ Spring Boot will:
 ## commands:
 mvn spring-boot:run
 
-## db = labb8db
+## db = quotesdb
 
 
 

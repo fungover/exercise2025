@@ -1,4 +1,6 @@
 package org.example.dtos;
 
-public record PatientDTO(String firstName, String lastName, String address) {
+import java.time.LocalDate;
+
+public record PatientDTO(String firstName, String lastName, String address, LocalDate dob) {
 }

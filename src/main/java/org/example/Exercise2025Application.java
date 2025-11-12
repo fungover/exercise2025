@@ -8,7 +8,7 @@ public class Exercise2025Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Exercise2025Application.class, args);
-        //Bla bla bla testing testing
+      
     }
 
 }

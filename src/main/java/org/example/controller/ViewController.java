@@ -23,4 +23,9 @@ public class ViewController {
         return "animals"; //this is animals.html in /templates
     }
 
+    @GetMapping("/login")
+    public String showLogin() {
+        return "login";
+    }
+
 }

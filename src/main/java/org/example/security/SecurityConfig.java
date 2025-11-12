@@ -51,14 +51,15 @@ public class SecurityConfig {
         //this one picks up everything that isn't /api/**
         http.authorizeHttpRequests(
               auth -> auth.requestMatchers("/login/**")
-                          .permitAll() //allow anyone to
-                          // access login
+                          .permitAll() //allow
+                          // anyone to access login
                           .anyRequest()
                           .authenticated())
-            .formLogin(form -> form.defaultSuccessUrl("/animals", true)
+            .formLogin(form -> form.loginPage("/login")
+                                   .defaultSuccessUrl("/animals", true)
                                    .permitAll())
             .logout(logout -> logout.logoutUrl("/logout")
-                                    .logoutSuccessUrl("/login?logout")
+                                    .logoutSuccessUrl("/login?logout=true")
                                     .permitAll());
         return http.build();
     }

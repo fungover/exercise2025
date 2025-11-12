@@ -1,0 +1,16 @@
+services:
+  db:
+    image: mysql:latest
+    container_name: quotes-mysql
+    environment:
+      MYSQL_DATABASE: quotesdb
+      MYSQL_USER: quotesuser
+      MYSQL_PASSWORD: quotespass
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - quotes-mysql-data:/var/lib/mysql
+
+volumes:
+  quotes-mysql-data:

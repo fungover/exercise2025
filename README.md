@@ -1,36 +1,102 @@
-## 🧪 How to Work on the Exercises
+# 🏋️ Spring Boot Personal Best Tracker
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+A RESTful web application built with Spring Boot for tracking personal records (PRs) in fitness training.
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
+## Tech Stack
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+- **Spring Boot** 3.5.6
+- **Java** 25
+- **Spring Data JPA** for database access
+- **MySQL** 9.5.0
+- **Spring Security** for authentication and authorization
+- **Thymeleaf** for server-side rendering
+- **Flyway** for database migrations
+- **Docker Compose** for reproducible environment
+- **JUnit 5** + **MockMvc** for testing
 
-Example for user githubuser working on Exercise 1:
+## Features
 
-```bash
-git checkout -b githubuser/exercise1
-```
+- ✅ User registration and authentication
+- ✅ CRUD operations for exercises
+- ✅ Personal record (PR) management
+- ✅ Web-based UI with Thymeleaf
+- ✅ RESTful API with JSON endpoints
+- ✅ Input validation
+- ✅ Secure access control
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
+## Getting Started
 
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
+### Prerequisites
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
+- **Java 25** or higher
+- **Maven** 3.6+
+- **Docker** and **Docker Compose**
+- **Git**
 
-Link the PR to the issue you're solving.
+### Installation
 
-Include a clear description of your solution.
+1. **Create .env file**
 
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+   Create a `.env` file in the project root:
+   ```env
+   DATABASE_NAME=spring
+   DATABASE_USER=user
+   DATABASE_PASSWORD=secret
+   DATABASE_ROOT_PASSWORD=verysecret
+   ```
+
+2. **Start the MySQL database**
+   ```bash
+   docker-compose up -d
+   ```
+
+   Wait ~10 seconds for MySQL to start (healthcheck runs automatically).
+
+3. **Verify database is running**
+   ```bash
+   docker-compose ps
+   ```
+   You should see `mysql` with status `healthy`.
+
+4. **Run the application**
+   ```bash
+   mvn spring-boot:run
+   ```
+
+   On first run, Flyway migrations will automatically create the database schema.
+
+## Running Tests
+
+Tests include:
+
+- REST endpoint testing (GET, POST, DELETE)
+- Spring Security access control
+- Input validation
+- Authenticated vs anonymous requests
+
+## Web Interface
+
+Navigate to http://localhost:8080 to:
+
+- Register an account
+- View and manage your personal records
+
+## API Endpoints
+
+### Public endpoints
+
+| Method | Endpoint             | Description        |
+|--------|----------------------|--------------------|
+| `POST` | `/api/auth/register` | Register new user  |
+| `GET`  | `/api/exercises`     | List all exercises |
+
+### Protected endpoints (requires authentication)
+
+| Method   | Endpoint       | Description                   |
+|----------|----------------|-------------------------------|
+| `GET`    | `/api/pr`      | Get my personal records       |
+| `POST`   | `/api/pr`      | Create/update personal record |
+| `DELETE` | `/api/pr/{id}` | Delete personal record        |
+
+
+

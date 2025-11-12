@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: exercise2025
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: 'jdbc:mysql://mysql:3306/hospital'
+    username: ${DATABASE_USER:user}
+    password: ${DATABASE_PASSWORD:secret}

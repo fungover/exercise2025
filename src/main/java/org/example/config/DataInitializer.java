@@ -3,8 +3,8 @@ package org.example.config;
 import jakarta.transaction.Transactional;
 import org.example.entities.Admission;
 import org.example.entities.Patient;
-import org.example.AdmissionRepository;
-import org.example.PatientRepository;
+import org.example.repositories.AdmissionRepository;
+import org.example.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,10 +18,13 @@ import java.util.List;
 @Profile({"dev", "default"})
 public class DataInitializer implements ApplicationRunner {
 
-	@Autowired
-	private AdmissionRepository admissionRepository;
-	@Autowired
-	private PatientRepository patientRepository;
+	private final AdmissionRepository admissionRepository;
+	private final PatientRepository patientRepository;
+
+	public DataInitializer(AdmissionRepository admissionRepository, PatientRepository patientRepository) {
+		this.admissionRepository = admissionRepository;
+		this.patientRepository = patientRepository;
+	}
 
 	@Override
 	@Transactional

@@ -65,6 +65,11 @@ public class Quote {
         this.year = year;
     }
 
-    public void setText(String testquoteFromTest) {
+    public String getText() {
+        return quote;
+    }
+
+    public void setText(String text) {
+        this.quote = text;
     }
 }

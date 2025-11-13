@@ -53,7 +53,11 @@ mvn spring-boot:run
 
 ## db = quotesdb
 
+## Check Json = http://localhost:8080/api/quotes
+## Check HTML + Thyme = http://localhost:8080/quotes
+
 ![img.png](img.png)
+
 
 
 

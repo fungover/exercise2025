@@ -40,23 +40,22 @@ Spring Boot will:
 
 [x] Add testing
 
-[] Add Thymeleaf route
+[x] Add Thymeleaf route
 
-[] Controller that returns my HTML page 
+[x] Controller that returns my HTML page 
 
-[] A complete README with instructions
+[X] A complete README with instructions
 
-[] Descriptions/comments in the files? 
+[-] Descriptions/comments in the files? Might add in the future, but I need time to work on my exam.
 
-## commands:
+## commands:git 
 mvn spring-boot:run
 
-## db = quotesdb
+### db = quotesdb
 
 ## Check Json = http://localhost:8080/api/quotes
 ## Check HTML + Thyme = http://localhost:8080/quotes
 
-![img.png](img.png)
 
 
 

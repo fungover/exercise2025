@@ -36,6 +36,7 @@ public class NoteEntity {
     this.user = user;
     this.value = value;
     this.createdAt = createdAt;
+    this.deletedAt = deletedAt;
   }
 
   public LocalDateTime getCreatedAt() {

@@ -19,14 +19,14 @@ public class UserEntity {
   private String password;
   private String email;
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-  private ApiEntity apiKey;
+  private TokenEntity token;
 
-  public ApiEntity getApiKey() {
-    return apiKey;
+  public TokenEntity getToken() {
+    return token;
   }
 
-  public void setApiKey(ApiEntity apiKey) {
-    this.apiKey = apiKey;
+  public void setToken(TokenEntity token) {
+    this.token = token;
   }
 
   public UserEntity() {

@@ -5,9 +5,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.dto.user.ApiPrincipal;
-import org.example.entity.ApiEntity;
 import org.example.entity.UserEntity;
-import org.example.repository.ApiRepository;
+import org.example.repository.UserRepository;
+import org.example.utils.JwtUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,15 +15,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Component
 public class ApiKeyFilter extends OncePerRequestFilter {
 
-  private final ApiRepository apiRepository;
+  private final UserRepository userRepository;
+  private  final JwtUtil jwtUtil;
 
-  public ApiKeyFilter(ApiRepository apiRepository) {
-    this.apiRepository = apiRepository;
+  public ApiKeyFilter(UserRepository userRepository, JwtUtil jwtUtil) {
+    this.userRepository = userRepository;
+    this.jwtUtil = jwtUtil;
   }
 
   @Override
@@ -35,29 +36,26 @@ public class ApiKeyFilter extends OncePerRequestFilter {
       return;
     }
 
-    String apiKey = request.getHeader("X-API-KEY");
-    if (apiKey == null) {
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API key");
+    String token = request.getHeader("Bearer");
+
+    if (token == null || !jwtUtil.validateJwtToken(token)) {
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or missing JWT token");
       return;
     }
 
-    ApiEntity apiEntity = apiRepository.findByApiKey(apiKey).orElse(null);
+    String email = jwtUtil.getUsernameFromToken(token);
 
-    if (apiEntity == null) {
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API key");
+    if (email == null) {
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token does not contain user info");
       return;
     }
 
-    UserEntity user = apiEntity.getUser();
+    UserEntity user = userRepository.findByEmail(email).orElse(null);
+
     if (user == null) {
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API key");
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not found for provided token");
       return;
     }
-
-    long currentCount = apiEntity.getCounter() == null ? 0 : apiEntity.getCounter();
-    apiEntity.setCounter(currentCount + 1);
-    apiEntity.setLastUsedAt(LocalDateTime.now());
-    apiRepository.save(apiEntity);
 
   ApiPrincipal apiPrincipal = new ApiPrincipal(user.getId(), user.getEmail());
     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(apiPrincipal, null,

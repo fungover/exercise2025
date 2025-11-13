@@ -2,14 +2,17 @@ package org.example.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.example.dto.note.NoteResponse;
+import org.example.dto.token.TokenRequest;
+import org.example.dto.token.UpdatedToken;
 import org.example.dto.user.User;
 import org.example.dto.user.UserApi;
 import org.example.dto.user.UserNew;
 import org.example.dto.user.UserNotes;
-import org.example.entity.ApiEntity;
+import org.example.entity.TokenEntity;
 import org.example.entity.UserEntity;
-import org.example.repository.ApiRepository;
+import org.example.repository.TokenRepository;
 import org.example.repository.UserRepository;
+import org.example.utils.JwtUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +22,13 @@ import static org.example.utils.BCryptUtil.hashPassword;
 @Service
 public class UserService {
   private final UserRepository userRepository;
-  private final ApiRepository apiRepository;
+  private final TokenRepository tokenRepository;
+  private final JwtUtil jwtUtil;
 
-  public UserService(UserRepository userRepository, ApiRepository apiRepository) {
+  public UserService(UserRepository userRepository, TokenRepository tokenRepository, JwtUtil jwtUtil) {
     this.userRepository = userRepository;
-    this.apiRepository = apiRepository;
+    this.tokenRepository = tokenRepository;
+    this.jwtUtil = jwtUtil;
   }
 
   @Transactional
@@ -38,13 +43,14 @@ public class UserService {
             user.email(),
             null));
 
-    var api = apiRepository.save(new ApiEntity(null, newUser, null, 0L , null));
+    var api = tokenRepository.save(new TokenEntity(null, newUser, jwtUtil.generateToken(newUser.getEmail(), 1000*60*5L), jwtUtil.generateToken(newUser.getEmail(), 1000*60*60*7*24L),  0L , null));
 
     return new UserNew(
             newUser.getId(),
             newUser.getName(),
             newUser.getEmail(),
-            api.getApiKey()
+            api.getToken(),
+            api.getRefreshToken()
     );
   }
 
@@ -63,17 +69,22 @@ public class UserService {
 
   }
 
-  public UserApi getUserApiByEmailAndPassword(String email, String password) {
+  public TokenRequest login(String email, String password) {
     UserEntity user = userRepository
             .findByEmail(email)
             .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
 
     if(checkPassword(password, user.getPassword())){
-      return new UserApi(
-              user.getApiKey().getApiKey(),
-              user.getApiKey().getCounter(),
-              user.getApiKey().getLastUsedAt()
-      );
+      var tokenEntity = tokenRepository.findByToken(user.getToken().getToken())
+              .orElseThrow(() -> new EntityNotFoundException("Token not found"));
+
+      String newAccessToken = jwtUtil.generateToken(tokenEntity.getUser().getEmail(), 1000 * 60 * 5L);
+      String newRefreshToken = jwtUtil.generateToken(tokenEntity.getUser().getEmail(), 1000 * 60 * 60 * 7 * 24L);
+      tokenEntity.setToken(newAccessToken);
+      tokenEntity.setRefreshToken(newRefreshToken);
+      tokenRepository.save(tokenEntity);
+
+      return new TokenRequest(newAccessToken, newRefreshToken);
     }else{
       throw new EntityNotFoundException("Invalid credentials");
     }

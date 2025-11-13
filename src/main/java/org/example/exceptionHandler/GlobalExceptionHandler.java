@@ -29,8 +29,8 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleSecurityException(SecurityException ex, HttpServletRequest request) {
     final Logger log = LoggerFactory.getLogger(NoteController.class);
 
-    String apiKey = request.getHeader("X-API-KEY");
-    log.error("Handling SecurityException for API key: {}. Message: {}", apiKey, ex.getMessage());
+    String bearer = request.getHeader("X-API-KEY");
+    log.error("Handling SecurityException for API key: {}. Message: {}", bearer, ex.getMessage());
 
     ErrorResponse errorResponse = new ErrorResponse("API key not valid for this user", HttpStatus.FORBIDDEN.value());
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);

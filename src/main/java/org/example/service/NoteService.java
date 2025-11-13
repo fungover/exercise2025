@@ -6,6 +6,7 @@ import org.example.dto.note.NoteNew;
 import org.example.entity.NoteEntity;
 import org.example.entity.UserEntity;
 import org.example.repository.NoteRepository;
+import org.example.repository.TokenRepository;
 import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,11 +18,12 @@ import java.util.List;
 public class NoteService {
   private final UserRepository userRepository;
   private final NoteRepository noteRepository;
+  private final TokenRepository tokenRepository;
 
-  public NoteService(UserRepository userRepository, NoteRepository noteRepository) {
+  public NoteService(UserRepository userRepository, NoteRepository noteRepository, TokenRepository tokenRepository) {
     this.userRepository = userRepository;
     this.noteRepository = noteRepository;
-
+    this.tokenRepository = tokenRepository;
   }
 
   @Transactional(readOnly = true)

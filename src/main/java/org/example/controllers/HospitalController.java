@@ -1,7 +1,6 @@
 package org.example.controllers;
 
 import org.example.dtos.AdmissionDTO;
-import org.example.dtos.NewAdmissionDTO;
 import org.example.dtos.Handler;
 import org.example.dtos.PatientDTO;
 import org.example.entities.Admission;

@@ -4,8 +4,6 @@ import org.example.entities.Patient;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 
-import java.util.List;
-
 public interface PatientRepository extends ListCrudRepository<Patient, Long> {
 
 	@Query("""

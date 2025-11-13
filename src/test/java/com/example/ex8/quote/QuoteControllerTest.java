@@ -9,7 +9,6 @@
  */
 package com.example.ex8.quote;
 
-import com.example.ex8.Application;
 import com.example.ex8.entities.Quote;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -24,15 +23,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = Application.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 class QuoteControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
-    ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Verifies that an unauthenticated user cannot access the GET /api/quotes endpoint.
@@ -65,7 +63,10 @@ class QuoteControllerTest {
     @WithMockUser(username = "user", roles = "USER")
     void createQuote_Authenticated_ShouldReturn201() throws Exception {
         Quote quote = new Quote();
-        quote.setText("test quote from test");
+        quote.setQuote("Test quote from Test");
+        quote.setMovie("Test Movie");
+        quote.setCharacterName("Test Character");
+        quote.setYear(1990);
 
         mockMvc.perform(post("/api/quotes")
                         .contentType(MediaType.APPLICATION_JSON)

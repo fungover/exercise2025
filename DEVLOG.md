@@ -40,7 +40,13 @@ Spring Boot will:
 
 [x] Add testing
 
-[x] Add Thymeleaf
+[] Add Thymeleaf route
+
+[] Controller that returns my HTML page 
+
+[] A complete README with instructions
+
+[] Descriptions/comments in the files? 
 
 ## commands:
 mvn spring-boot:run

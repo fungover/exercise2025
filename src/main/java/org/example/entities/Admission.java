@@ -17,8 +17,8 @@ public class Admission {
 	private String diagnosis;
 	private String department;
 
-	@OneToOne
-	@JoinColumn(name = "pat_id", unique = true)
+	@ManyToOne
+	@JoinColumn(name = "pat_id")
 	Patient patient;
 
 	public Admission() {}
@@ -57,8 +57,8 @@ public class Admission {
 
 	// -- Setter --
 
-	public void setDateOut(LocalDateTime dateOut) {
-		this.dateOut = dateOut;
+	public void setDateOut() {
+		this.dateOut = LocalDateTime.now();
 	}
 
 	public void setDiagnosis(String diagnosis) {

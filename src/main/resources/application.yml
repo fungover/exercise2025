@@ -8,3 +8,6 @@ spring:
     url: 'jdbc:mysql://mysql:3306/hospital'
     username: ${DATABASE_USER:user}
     password: ${DATABASE_PASSWORD:secret}
+  jpa:
+    hibernate:
+      ddl-auto: update

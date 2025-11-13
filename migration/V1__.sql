@@ -12,15 +12,13 @@ CREATE TABLE admission
 CREATE TABLE patient
 (
     pat_id        BIGINT AUTO_INCREMENT NOT NULL,
-    first_name    VARCHAR(255)          NULL,
-    last_name     VARCHAR(255)          NULL,
-    address       VARCHAR(255)          NULL,
-    date_of_birth datetime              NULL,
+    first_name    VARCHAR(255)          NOT NULL,
+    last_name     VARCHAR(255)          NOT NULL,
+    address       VARCHAR(255)          NOT NULL,
+    date_of_birth date                  NOT NULL,
+    ssn           VARCHAR(255)          NULL,
     CONSTRAINT pk_patient PRIMARY KEY (pat_id)
 );
-
-ALTER TABLE admission
-    ADD CONSTRAINT uc_admission_pat UNIQUE (pat_id);
 
 ALTER TABLE admission
     ADD CONSTRAINT FK_ADMISSION_ON_PAT FOREIGN KEY (pat_id) REFERENCES patient (pat_id);

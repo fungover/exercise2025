@@ -31,9 +31,9 @@ public class DataInitializer implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		boolean forceInit = args.containsOption("force-init");
 		if (forceInit || admissionRepository.count() == 0) {
-			var patient1 = new Patient(LocalDate.of(1978, 12, 3), "Rome", "Vance", "Liora");
-			var patient2 = new Patient(LocalDate.of(1997, 6, 13), "Venice", "Mendel", "Tarek");
-			var patient3 = new Patient(LocalDate.of(2001, 7, 13), "Florence", "Holt", "Cassian");
+			var patient1 = new Patient(LocalDate.of(1978, 12, 3), "Rome", "Vance", "Liora", "19781303-8912");
+			var patient2 = new Patient(LocalDate.of(1997, 6, 13), "Venice", "Mendel", "Tarek", "19970613-1397");
+			var patient3 = new Patient(LocalDate.of(2001, 7, 13), "Florence", "Holt", "Cassian", "20010713-9721");
 			patientRepository.saveAll(List.of(patient1, patient2, patient3));
 
 			var admission1 = new Admission(patient2, "Pneumonia", "Infection");

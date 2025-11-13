@@ -1,0 +1,17 @@
+###GET all stores
+
+GET http://localhost:8080/api/store
+
+### GET store depending on author in stock
+@author =Fredrik
+
+GET http://localhost:8080/api/store/{{author}}
+
+### GET all stores with select
+
+GET http://localhost:8080/api/store/all
+
+### GET store by name
+@name =Books of books
+ 
+GET http://localhost:8080/api/store/{{name}}

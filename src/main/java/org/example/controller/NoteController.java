@@ -6,7 +6,6 @@ import org.example.dto.note.Note;
 import org.example.dto.note.NoteNew;
 import org.example.dto.user.UserNotes;
 import org.example.service.NoteService;
-import org.example.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class NoteController {
   private final NoteService noteService;
-  private final UserService userService;
   private static final Logger log = LoggerFactory.getLogger(NoteController.class);
 
-  public NoteController(NoteService noteService, UserService userService) {
+  public NoteController(NoteService noteService) {
     this.noteService = noteService;
-    this.userService = userService;
   }
 
   @PostMapping("/notes")
@@ -53,6 +50,6 @@ public class NoteController {
   public ResponseEntity<UserNotes> getUserById(Authentication authentication) {
     ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
     log.info("User: {} requested notes", apiPrincipal.userId());
-    return ResponseEntity.ok(userService.findUserAndGetNotes(apiPrincipal.email()));
+    return ResponseEntity.ok(noteService.findUserAndGetNotes(apiPrincipal.email()));
   }
 }

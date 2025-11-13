@@ -4,10 +4,8 @@ import jakarta.validation.Valid;
 import org.example.dto.token.TokenRequest;
 import org.example.dto.token.UpdatedToken;
 import org.example.dto.user.User;
-import org.example.dto.user.UserApi;
 import org.example.dto.user.UserCheck;
 import org.example.dto.user.UserNew;
-import org.example.entity.TokenEntity;
 import org.example.service.TokenService;
 import org.example.service.UserService;
 import org.slf4j.Logger;
@@ -30,13 +28,13 @@ public class UserController {
   @PostMapping("/user/register")
   public ResponseEntity<UserNew> register(@Valid @RequestBody User user) {
     log.info("New user created: {} {}", user.name(), user.email());
-    return ResponseEntity.status(201).body(userService.addNewUser(user));
+    return ResponseEntity.status(201).body(userService.registerUser(user));
   }
 
-  @GetMapping("/user/login")
+  @PostMapping("/user/login")
   public ResponseEntity<TokenRequest> login(@Valid @RequestBody UserCheck user) {
     log.info("User api check: {}", user.email());
-    return ResponseEntity.ok(userService.login(user.email(), user.password()));
+    return ResponseEntity.ok(userService.loginUser(user.email(), user.password()));
   }
 
   @PutMapping("/user/refresh")

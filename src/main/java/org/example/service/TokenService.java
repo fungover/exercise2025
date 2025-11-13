@@ -2,11 +2,12 @@ package org.example.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.example.dto.token.UpdatedToken;
-import org.example.entity.TokenEntity;
 import org.example.repository.TokenRepository;
 import org.example.utils.JwtUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 public class TokenService {
@@ -24,7 +25,7 @@ public class TokenService {
             .orElseThrow(() -> new EntityNotFoundException("Refresh token not found"));
 
     if(!tokenEntity.getToken().equals(token)){
-      throw new EntityNotFoundException("Invalid token, please log in again");
+      throw new EntityNotFoundException("The token does not match the refresh token");
     }
 
     if (!jwtUtil.validateJwtToken(refreshToken)) {
@@ -34,6 +35,7 @@ public class TokenService {
     String newAccessToken = jwtUtil.generateToken(tokenEntity.getUser().getEmail(), 1000 * 60 * 5L);
 
     tokenEntity.setToken(newAccessToken);
+    tokenEntity.setLastUsedAt(LocalDateTime.now());
     tokenRepository.save(tokenEntity);
 
     return new UpdatedToken(newAccessToken);

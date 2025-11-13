@@ -3,43 +3,25 @@ package org.example.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.dto.note.Note;
 import org.example.dto.note.NoteNew;
+import org.example.dto.note.NoteResponse;
+import org.example.dto.user.UserNotes;
 import org.example.entity.NoteEntity;
 import org.example.entity.UserEntity;
 import org.example.repository.NoteRepository;
-import org.example.repository.TokenRepository;
 import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class NoteService {
   private final UserRepository userRepository;
   private final NoteRepository noteRepository;
-  private final TokenRepository tokenRepository;
 
-  public NoteService(UserRepository userRepository, NoteRepository noteRepository, TokenRepository tokenRepository) {
+  public NoteService(UserRepository userRepository, NoteRepository noteRepository) {
     this.userRepository = userRepository;
     this.noteRepository = noteRepository;
-    this.tokenRepository = tokenRepository;
-  }
-
-  @Transactional(readOnly = true)
-  public List<NoteNew> getNotes(Long userId) {
-    userRepository.findById(userId)
-            .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-
-    List<NoteEntity> userNotes = noteRepository.findByUserIdAndDeletedAtIsNull(userId);
-
-    return userNotes.stream()
-            .map(note -> new NoteNew(
-                    note.getId(),
-                    note.getValue(),
-                    note.getCreatedAt()
-            ))
-            .toList();
   }
 
   @Transactional
@@ -54,6 +36,21 @@ public class NoteService {
             savedEntity.getValue(),
             savedEntity.getCreatedAt()
     );
+  }
+
+  @Transactional(readOnly = true)
+  public UserNotes findUserAndGetNotes(String email) {
+    UserEntity user = userRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
+
+    return new UserNotes(
+            user.getName(),
+            user.getNotes().stream().filter(note -> note.getDeletedAt() == null)
+                    .map(note -> new NoteResponse(
+                            note.getId(),
+                            note.getValue())).toList());
+
   }
 
   @Transactional

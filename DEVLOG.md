@@ -36,7 +36,7 @@ Spring Boot will:
 
 [] Test API endpoints with Postman
 
-[] Add security layer
+[x] Add security layer
 
 [] Add testing
 

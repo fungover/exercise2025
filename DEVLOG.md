@@ -34,18 +34,20 @@ Spring Boot will:
 
 [x] Do Repository and Controller
 
-[] Test API endpoints with Postman
+[x] Test API endpoints with Postman
 
 [x] Add security layer
 
-[] Add testing
+[x] Add testing
 
-[] Add Thymeleaf
+[x] Add Thymeleaf
 
 ## commands:
 mvn spring-boot:run
 
 ## db = quotesdb
+
+![img.png](img.png)
 
 
 

@@ -64,4 +64,7 @@ public class Quote {
     public void setYear(Integer year) {
         this.year = year;
     }
+
+    public void setText(String testquoteFromTest) {
+    }
 }

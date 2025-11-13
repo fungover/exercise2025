@@ -1,5 +1,6 @@
 package exercise8.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class Event {
     private Integer maxParticipants;
 
     @OneToMany(mappedBy = "event")
+    @JsonIgnoreProperties({"event", "participant"})
     private List<Registration> registrations = new ArrayList<>();
 
     // Constructors

@@ -1,5 +1,6 @@
 package exercise8.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class Patrol {
     private String contactEmail;
 
     @OneToMany(mappedBy = "patrol")
+    @JsonIgnoreProperties({"patrol", "registrations"})
     private List<Participant> participants = new ArrayList<>();
 
     // Constructors

@@ -1,5 +1,6 @@
 package exercise8.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,9 +31,11 @@ public class Participant {
 
     @ManyToOne
     @JoinColumn(name = "patrol_id")
+    @JsonIgnoreProperties({"participants"})
     private Patrol patrol;
 
     @OneToMany(mappedBy = "participant")
+    @JsonIgnoreProperties({"participant", "event"})
     private List<Registration> registrations = new ArrayList<>();
 
     @ManyToMany

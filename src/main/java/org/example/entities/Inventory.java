@@ -1,6 +1,7 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
@@ -9,13 +10,17 @@ import java.util.Objects;
 public class Inventory {
     @EmbeddedId
     private InventoryId inventoryId = new InventoryId();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("bookId")
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id", nullable = false)
+    @NotNull
     private Book book;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("storeId")
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "store_id",  nullable = false)
+    @NotNull
     private Store store;
 
     private int amount;

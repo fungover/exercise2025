@@ -7,6 +7,9 @@ import org.hibernate.proxy.HibernateProxy;
 import java.util.Objects;
 
 @Entity
+//inkluderar författare
+@NamedEntityGraph(name = "Book.author",
+attributeNodes = @NamedAttributeNode("author"))
 public class Book {
 
     @Id
@@ -14,6 +17,7 @@ public class Book {
     private Integer bookId;
 
     String title;
+    @Enumerated(EnumType.STRING)
     Genre genre;
     int Rating;
 

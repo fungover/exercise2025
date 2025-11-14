@@ -37,4 +37,9 @@ public class WebController {
 		return "admissions";
 	}
 
+	@GetMapping("/login")
+	public String login(Model model) {
+		return "login";
+	}
+
 }

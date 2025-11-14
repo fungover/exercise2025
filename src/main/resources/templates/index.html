@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
@@ -12,6 +12,11 @@
     </h1>
     <a href="/patients" th:text="patients"></a>
     <a href="/admissions" th:text="admissions"></a>
+</div>
+<div>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign out">
+    </form>
 </div>
 </body>
 </html>

@@ -1,11 +1,14 @@
 package org.example.config;
 
+import jakarta.transaction.Transactional;
+import org.example.Authority;
 import org.example.entities.*;
 import org.example.repository.*;
 import org.example.Genre;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,17 +22,31 @@ public class DevDataInitialize implements ApplicationRunner {
     private final LanguageRepository languageRepository;
     private final StoreRepository storeRepository;
     private final InventoryRepository inventoryRepository;
+    private final RoleRepository roleRepository;
+    private final UserRepository  userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DevDataInitialize(BookRepository bookRepository, AuthorRepository authorRepository, LanguageRepository languageRepository, StoreRepository storeRepository, InventoryRepository inventoryRepository) {
+    public DevDataInitialize(BookRepository bookRepository,
+                             AuthorRepository authorRepository,
+                             LanguageRepository languageRepository,
+                             StoreRepository storeRepository,
+                             InventoryRepository inventoryRepository,
+                             RoleRepository roleRepository,
+                             UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.languageRepository = languageRepository;
         this.storeRepository = storeRepository;
         this.inventoryRepository = inventoryRepository;
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
+    @Transactional
     public void run(ApplicationArguments args) throws Exception {
+
     if(bookRepository.count()==0){
 
         Store storeBooks = new Store("Books of books");
@@ -59,5 +76,28 @@ public class DevDataInitialize implements ApplicationRunner {
 
         inventoryRepository.saveAll(List.of(invent1, invent2, invent3, invent4, invent5, invent6));
     }
+
+        if(roleRepository.count()==0){
+            Role admin = new Role(Authority.ADMIN);
+            Role user = new Role(Authority.USER);
+            roleRepository.saveAll(List.of(admin, user));
+            roleRepository.flush();
+        }
+
+        if(userRepository.count()==0){
+            CustomizedUser admin = new CustomizedUser();
+            admin.setUserName("admin");
+            admin.setPassword(passwordEncoder.encode("admin"));
+            admin.getRoles().add(roleRepository.findByAuthority(Authority.ADMIN));
+            userRepository.save(admin);
+
+            CustomizedUser visitor = new CustomizedUser();
+            visitor.setUserName("visitor");
+            visitor.setPassword(passwordEncoder.encode("visitor"));
+            visitor.getRoles().add(roleRepository.findByAuthority(Authority.USER));
+            userRepository.save(visitor);
+
+        }
+
     }
 }

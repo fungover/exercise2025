@@ -4,12 +4,14 @@ import org.example.api.dto.RegisterRequest;
 import org.example.api.dto.UserView;
 import org.example.domain.UserEntity;
 import org.example.repo.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -30,7 +32,13 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public UserView register(RegisterRequest req) {
-        if (users.existsByUsername(req.username())) throw new IllegalArgumentException("Username already exists");
+        if (users.existsByUsername(req.username())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Username already exists"
+            );
+        }
+
         var e = new UserEntity();
         e.setUsername(req.username());
         e.setPassword(encoder.encode(req.password()));

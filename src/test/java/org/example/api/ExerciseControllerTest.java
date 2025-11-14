@@ -37,8 +37,8 @@ class ExerciseControllerTest {
     void getExercises_returnsList_forAnonymousUser_accordingToSecurityConfig() throws Exception {
         var e = new ExerciseEntity();
         e.setName("Bench Press");
+        e.setMuscleGroup("Chest");
         when(repo.findAll()).thenReturn(List.of(e));
-
 
         var res = mvc.perform(get("/api/exercises"))
                 .andExpect(status().isOk())
@@ -48,6 +48,10 @@ class ExerciseControllerTest {
         var list = om.readValue(json, new TypeReference<List<Map<String, Object>>>() {
         });
         assertThat(list).hasSize(1);
-        assertThat(list.get(0).get("name")).isEqualTo("Bench Press");
+
+        var first = list.get(0);
+        assertThat(first.get("name")).isEqualTo("Bench Press");
+        assertThat(first.get("muscleGroup")).isEqualTo("Chest");
     }
+
 }

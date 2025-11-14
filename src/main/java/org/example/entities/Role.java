@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.example.Authority;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -13,10 +14,11 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer roleId;
 
+    @Enumerated(EnumType.STRING)
     private Authority authority;
 
     @ManyToMany(mappedBy = "roles")
-    private Set<User> user;
+    private Set<CustomizedUser> customizedUser = new HashSet<>();
 
     public Role() {
     }
@@ -41,12 +43,12 @@ public class Role {
         this.authority = authority;
     }
 
-    public Set<User> getUser() {
-        return user;
+    public Set<CustomizedUser> getUser() {
+        return customizedUser;
     }
 
-    public void setUser(Set<User> user) {
-        this.user = user;
+    public void setUser(Set<CustomizedUser> customizedUser) {
+        this.customizedUser = customizedUser;
     }
 
     @Override

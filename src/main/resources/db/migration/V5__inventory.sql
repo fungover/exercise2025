@@ -1,8 +1,7 @@
-ALTER TABLE book
-    ADD PRIMARY KEY (book_id);
-
-ALTER TABLE inventory
-    ADD CONSTRAINT FK_INVENTORY_ON_BOOK FOREIGN KEY (book_id) REFERENCES book (book_id);
-
-ALTER TABLE inventory
-    ADD CONSTRAINT FK_INVENTORY_ON_STORE FOREIGN KEY (store_id) REFERENCES store (store_id);
+CREATE TABLE inventory
+(
+    amount   INT NOT NULL,
+    book_id  INT NOT NULL,
+    store_id INT NOT NULL,
+    CONSTRAINT pk_inventory PRIMARY KEY (book_id, store_id)
+);

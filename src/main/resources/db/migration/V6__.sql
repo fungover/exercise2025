@@ -1,52 +1,27 @@
-CREATE TABLE author
+CREATE TABLE customized_user
 (
-    id         INT AUTO_INCREMENT NOT NULL,
-    first_name VARCHAR(255)       NULL,
-    last_name  VARCHAR(255)       NULL,
-    CONSTRAINT pk_author PRIMARY KEY (id)
+    user_id   INT AUTO_INCREMENT NOT NULL,
+    user_name VARCHAR(255) NULL,
+    password  VARCHAR(255) NULL,
+    CONSTRAINT pk_customizeduser PRIMARY KEY (user_id)
 );
 
-CREATE TABLE book
+CREATE TABLE `role`
 (
-    book_id     INT AUTO_INCREMENT NOT NULL,
-    title       VARCHAR(255) NULL,
-    genre       SMALLINT     NULL,
-    rating      INT          NOT NULL,
-    language_id INT          NULL,
-    author_id   INT          NULL,
-    CONSTRAINT pk_book PRIMARY KEY (book_id)
+    role_id   INT AUTO_INCREMENT NOT NULL,
+    authority VARCHAR(255) NULL,
+    CONSTRAINT pk_role PRIMARY KEY (role_id)
 );
 
-CREATE TABLE inventory
+CREATE TABLE user_roles
 (
-    amount   INT NOT NULL,
-    book_id  INT NOT NULL,
-    store_id INT NOT NULL,
-    CONSTRAINT pk_inventory PRIMARY KEY (book_id, store_id)
+    roles_role_id INT NOT NULL,
+    user_user_id  INT NOT NULL,
+    CONSTRAINT pk_user_roles PRIMARY KEY (roles_role_id, user_user_id)
 );
 
-CREATE TABLE language
-(
-    id            INT AUTO_INCREMENT NOT NULL,
-    text_language VARCHAR(255)       NULL,
-    CONSTRAINT pk_language PRIMARY KEY (id)
-);
+ALTER TABLE user_roles
+    ADD CONSTRAINT fk_userol_on_customized_user FOREIGN KEY (user_user_id) REFERENCES customized_user (user_id);
 
-CREATE TABLE store
-(
-    store_id   INT AUTO_INCREMENT NOT NULL,
-    store_name VARCHAR(255) NULL,
-    CONSTRAINT pk_store PRIMARY KEY (store_id)
-);
-
-ALTER TABLE book
-    ADD CONSTRAINT FK_BOOK_ON_AUTHOR FOREIGN KEY (author_id) REFERENCES author (id);
-
-ALTER TABLE book
-    ADD CONSTRAINT FK_BOOK_ON_LANGUAGE FOREIGN KEY (language_id) REFERENCES language (id);
-
-ALTER TABLE inventory
-    ADD CONSTRAINT FK_INVENTORY_ON_BOOK FOREIGN KEY (book_id) REFERENCES book (book_id);
-
-ALTER TABLE inventory
-    ADD CONSTRAINT FK_INVENTORY_ON_STORE FOREIGN KEY (store_id) REFERENCES store (store_id);
+ALTER TABLE user_roles
+    ADD CONSTRAINT fk_userol_on_role FOREIGN KEY (roles_role_id) REFERENCES `role` (role_id);

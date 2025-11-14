@@ -17,17 +17,17 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
-        // Plocka ut ALLA fältfel och bygg en lista med "field message"
+
         List<String> errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(f -> f.getField() + " " + f.getDefaultMessage())
                 .toList();
 
-        // Fallback om något gått snett och listan skulle vara tom
+
         if (errors.isEmpty()) {
             errors = List.of("Validation error");
         }
 
-        // Returnera alla fel i en array under "errors"
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("errors", errors));
     }
@@ -54,6 +54,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArg(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("error", ex.getMessage()));
+                .body(Map.of("error", "Invalid argument"));
     }
+
 }

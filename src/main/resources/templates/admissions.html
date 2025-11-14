@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admissions</title>
+</head>
+<body>
+<div>
+    <h1>Admissions List</h1>
+    <ul th:each="admission : ${admissions}">
+        <li>
+            <ul>
+                <li><p th:text="${admission.patId()}"></p></li>
+                <li><p th:text="${admission.dateIn()}"></p></li>
+                <li><p th:text="${admission.dateOut() == null? '-' : admission.dateOut()}"></p></li>
+                <li><p th:text="${admission.diagnosis()}"></p></li>
+                <li><p th:text="${admission.department()}"></p></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

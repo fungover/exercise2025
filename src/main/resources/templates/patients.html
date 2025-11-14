@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Patients</title>
+</head>
+<body>
+<div>
+    <h1>Patients List</h1>
+    <ul th:each="patient : ${patients}">
+        <li>
+            <p th:text="${patient.firstName()}" style="display: inline"></p>
+            <p style="display: inline"></p>
+            <p th:text="${patient.lastName()}" style="display: inline"></p>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

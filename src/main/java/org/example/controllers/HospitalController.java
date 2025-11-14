@@ -21,7 +21,6 @@ public class HospitalController {
 		this.admissionRepository = admissionRepository;
 		this.patientRepository = patientRepository;
 	}
-
 	// ---- PATIENTS ----
 
 	@GetMapping("patients")

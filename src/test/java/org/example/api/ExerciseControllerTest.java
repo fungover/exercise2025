@@ -2,12 +2,13 @@ package org.example.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.config.SecurityConfig;
 import org.example.domain.ExerciseEntity;
 import org.example.repo.ExerciseRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,12 +21,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ExerciseController.class)
-
-@AutoConfigureMockMvc(addFilters = false)
+@Import(SecurityConfig.class)
 class ExerciseControllerTest {
 
     @Autowired
     MockMvc mvc;
+
     @Autowired
     ObjectMapper om;
 
@@ -33,10 +34,11 @@ class ExerciseControllerTest {
     ExerciseRepository repo;
 
     @Test
-    void getExercises_returnsList_whenAnonymous() throws Exception {
+    void getExercises_returnsList_forAnonymousUser_accordingToSecurityConfig() throws Exception {
         var e = new ExerciseEntity();
         e.setName("Bench Press");
         when(repo.findAll()).thenReturn(List.of(e));
+
 
         var res = mvc.perform(get("/api/exercises"))
                 .andExpect(status().isOk())

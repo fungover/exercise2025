@@ -11,6 +11,8 @@ import org.example.dto.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Map;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -34,6 +36,15 @@ public class GlobalExceptionHandler {
 
     ErrorResponse errorResponse = new ErrorResponse("API key not valid for this user", HttpStatus.FORBIDDEN.value());
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+  }
+
+  @ExceptionHandler(ConflictException.class)
+  public ResponseEntity<?> handleExists(ConflictException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(Map.of(
+                    "status", 409,
+                    "message", ex.getMessage()
+            ));
   }
 
 }

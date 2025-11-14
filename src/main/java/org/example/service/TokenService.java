@@ -2,6 +2,7 @@ package org.example.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.example.dto.token.UpdatedToken;
+import org.example.exceptionHandler.ConflictException;
 import org.example.repository.TokenRepository;
 import org.example.utils.JwtUtil;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,10 @@ public class TokenService {
   @Transactional
   public UpdatedToken updateToken(String token, String refreshToken) {
     var tokenEntity = tokenRepository.findByRefreshToken(refreshToken)
-            .orElseThrow(() -> new EntityNotFoundException("Refresh token not found"));
+            .orElseThrow(() -> new ConflictException("Refresh token not found"));
 
     if(!tokenEntity.getToken().equals(token)){
-      throw new EntityNotFoundException("The token does not match the refresh token");
+      throw new ConflictException("The token does not match the refresh token");
     }
 
     if (!jwtUtil.validateJwtToken(refreshToken)) {

@@ -51,7 +51,7 @@ class UserControllerMySQLIntegrationTest {
   private TokenRepository tokenRepository;
 
   @Test
-  void UserRegister() throws Exception {
+  void UserCanRegister() throws Exception {
     User req = new User("User", "password", "user@user.com");
     mockMvc.perform(post("/user/register")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -61,8 +61,20 @@ class UserControllerMySQLIntegrationTest {
             .andExpect(jsonPath("$.token").exists())
             .andExpect(jsonPath("$.refreshToken").exists());
   }
+
   @Test
-  void UserLoginAndTokensUpdate () throws Exception {
+  void UserCantRegisterWithSameEmail() throws Exception {
+    User req = new User("sameUser", "password", "user@user.com");
+    mockMvc.perform(post("/user/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(req)))
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.status").exists());
+  }
+
+  @Test
+  void UserCanLoginAndUpdateTokens () throws Exception {
     UserCheck req = new UserCheck("password", "user@user.com");
     mockMvc.perform(post("/user/login")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +85,18 @@ class UserControllerMySQLIntegrationTest {
   }
 
   @Test
-  void UserTokenUpdateByRefreshToken() throws Exception {
+  void UserCantLoginWithWrongPassword () throws Exception {
+    UserCheck req = new UserCheck("wrongPassword", "user@user.com");
+    mockMvc.perform(post("/user/login")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(req)))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.status").exists());
+  }
+
+  @Test
+  void UserTokenCanBeUpdatedByRefreshToken() throws Exception {
     var loginBody = new UserCheck("password", "user@user.com");
 
     var loginResult = mockMvc.perform(post("/user/login")
@@ -97,5 +120,31 @@ class UserControllerMySQLIntegrationTest {
 
     org.junit.jupiter.api.Assertions.assertEquals(updated.token(), tokenEntity.getToken());
     org.junit.jupiter.api.Assertions.assertEquals(tokenRequest.refreshToken(), tokenEntity.getRefreshToken());
+  }
+
+  @Test
+  void UserCantRefreshTokenIfNotLatest() throws Exception {
+    var loginBody = new UserCheck("password", "user@user.com");
+
+    var loginResult = mockMvc.perform(post("/user/login")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(loginBody)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    String loginJson = loginResult.getResponse().getContentAsString();
+    TokenRequest validTokens = objectMapper.readValue(loginJson, TokenRequest.class);
+
+    TokenRequest invalidReq = new TokenRequest(
+            validTokens.token(),
+            "old_refresh_token_value"
+    );
+
+    mockMvc.perform(put("/user/refresh")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(invalidReq)))
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.status").exists());
   }
 }

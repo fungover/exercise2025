@@ -6,6 +6,7 @@ import org.example.dto.user.User;
 import org.example.dto.user.UserNew;
 import org.example.entity.TokenEntity;
 import org.example.entity.UserEntity;
+import org.example.exceptionHandler.ConflictException;
 import org.example.repository.TokenRepository;
 import org.example.repository.UserRepository;
 import org.example.utils.JwtUtil;
@@ -32,8 +33,9 @@ public class UserService {
   @Transactional
   public UserNew registerUser(User user) {
     if (userRepository.existsByEmail(user.email())) {
-      throw new EntityNotFoundException("User with email: " + user.email() + " already exists");
+      throw new ConflictException(user.email());
     }
+
     var newUser = userRepository.save(new UserEntity(
             null,
             user.name(),

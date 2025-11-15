@@ -1,6 +1,5 @@
 package org.example.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.example.dto.token.UpdatedToken;
 import org.example.exceptionHandler.ConflictException;
 import org.example.repository.TokenRepository;

@@ -52,10 +52,6 @@ public class UserEntity {
     return password;
   }
 
-  public void setPassword(String passwordHashed) {
-    this.password = passwordHashed;
-  }
-
   public String getEmail() {
     return email;
   }
@@ -66,10 +62,6 @@ public class UserEntity {
 
   public List<NoteEntity> getNotes() {
     return notes;
-  }
-
-  public void setNotes(List<NoteEntity> notes) {
-    this.notes = notes;
   }
 
   public Long getId() {

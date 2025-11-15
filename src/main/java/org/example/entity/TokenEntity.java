@@ -79,10 +79,6 @@ public class TokenEntity {
     this.counter = counter;
   }
 
-  public LocalDateTime getLastUsedAt() {
-    return lastUsedAt;
-  }
-
   public void setLastUsedAt(LocalDateTime lastUsedAt) {
     this.lastUsedAt = lastUsedAt;
   }

@@ -6,7 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "note")
+@Table(name = "notes")
 public class NoteEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -30,7 +30,7 @@ public class TokenService {
     }
 
     if (!jwtUtil.validateJwtToken(refreshToken)) {
-      throw new EntityNotFoundException("Invalid refresh token");
+      throw new SecurityException("Invalid or expired refresh token");
     }
 
     String newAccessToken = jwtUtil.generateToken(tokenEntity.getUser().getEmail(), 1000 * 60 * 5L);

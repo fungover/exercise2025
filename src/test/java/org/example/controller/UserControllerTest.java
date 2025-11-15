@@ -100,8 +100,8 @@ class UserControllerMySQLIntegrationTest {
     var loginBody = new UserCheck("password", "user@user.com");
 
     var loginResult = mockMvc.perform(post("/user/login")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(loginBody))).andReturn();
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(loginBody))).andReturn();
 
     String loginJson = loginResult.getResponse().getContentAsString();
     TokenRequest tokenRequest = objectMapper.readValue(loginJson, TokenRequest.class);

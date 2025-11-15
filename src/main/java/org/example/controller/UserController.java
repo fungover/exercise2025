@@ -39,7 +39,7 @@ public class UserController {
 
   @PutMapping("/user/refresh")
   public ResponseEntity<UpdatedToken> updateToken(@Valid @RequestBody TokenRequest request) {
-    log.info("Token update request: {}", request);
+    log.info("Token update request received");
     return ResponseEntity.ok(tokenService.updateToken(request.token(), request.refreshToken()));
   }
 

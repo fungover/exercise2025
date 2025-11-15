@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "token")
+@Table(name = "tokens")
 public class TokenEntity {
   @Id
   @Column(nullable = false)

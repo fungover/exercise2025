@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(EntityNotFoundException.class)
   public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex) {
-    final Logger log = LoggerFactory.getLogger(NoteController.class);
+    final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     log.error("Handling EntityNotFoundException: {}", ex.getMessage());
 
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(SecurityException.class)
   public ResponseEntity<ErrorResponse> handleSecurityException(SecurityException ex, HttpServletRequest request) {
-    final Logger log = LoggerFactory.getLogger(NoteController.class);
+    final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     String bearer = request.getHeader("X-API-KEY");
     log.error("Handling SecurityException for API key: {}. Message: {}", bearer, ex.getMessage());
@@ -39,12 +39,9 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(ConflictException.class)
-  public ResponseEntity<?> handleExists(ConflictException ex) {
-    return ResponseEntity.status(HttpStatus.CONFLICT)
-            .body(Map.of(
-                    "status", 409,
-                    "message", ex.getMessage()
-            ));
+  public ResponseEntity<ErrorResponse> handleExists(ConflictException ex) {
+    ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.CONFLICT.value());
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
   }
 
 }

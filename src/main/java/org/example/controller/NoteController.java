@@ -31,7 +31,7 @@ public class NoteController {
     log.info("Received note: {}", note);
     var createNote = noteService.createNewUserNote(note, apiPrincipal.userId());
     log.info("Created note: {}", createNote);
-    return ResponseEntity.ok(createNote);
+    return ResponseEntity.status(201).body(createNote);
   }
 
   @DeleteMapping("/notes/{noteId}")

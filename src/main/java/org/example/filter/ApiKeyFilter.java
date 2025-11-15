@@ -36,9 +36,15 @@ public class ApiKeyFilter extends OncePerRequestFilter {
       return;
     }
 
-    String token = request.getHeader("Bearer");
+    String header = request.getHeader("Authorization");
+    if (header == null || !header.startsWith("Bearer ")) {
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or missing JWT token");
+      return;
+    }
 
-    if (token == null || !jwtUtil.validateJwtToken(token)) {
+    String token = header.substring(7);
+
+    if (!jwtUtil.validateJwtToken(token)) {
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or missing JWT token");
       return;
     }

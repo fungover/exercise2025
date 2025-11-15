@@ -1,7 +1,8 @@
 ## How to run the application
 
-* Start a Docker
+* Ensure Docker is running (Docker Desktop or daemon)
 * Run application
+* The application will be available at `http://localhost:8080`
 
 _Before starting Exercise2025AuthApplication, make sure Docker is running._
 
@@ -16,4 +17,4 @@ In this case:
     Run the application again.
 
 ### Dev profile
-By default, the application uses the dev profile
+By default, the application uses the dev profile, which configures the MySQL database connection, initializes seed data, and enables debug logging. See `application-dev.properties` for details.

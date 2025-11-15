@@ -21,10 +21,10 @@ public class Book {
     Genre genre;
     int Rating;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST})
      private Language language;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     private Author author;
 
     public Book() {}

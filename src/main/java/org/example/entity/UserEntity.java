@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   List<NoteEntity> notes = new ArrayList<>();

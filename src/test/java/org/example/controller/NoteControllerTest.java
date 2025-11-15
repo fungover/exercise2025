@@ -99,7 +99,7 @@ class NoteControllerTest {
     user.setEmail("test@email.com");
     userRepository.save(user);
 
-    String token = jwtUtil.generateToken("test@email.com", 1L);
+    String token = jwtUtil.generateToken("test@email.com", -1L);
 
     String jsonContent = "{\"value\": \"Test note content\"}";
 
@@ -129,7 +129,9 @@ class NoteControllerTest {
                     .with(csrf()))
             .andExpect(status().isCreated());
 
-    mockMvc.perform(delete("/api/notes/2")
+    Long noteId = noteRepository.findAll().getFirst().getId();
+
+    mockMvc.perform(delete("/api/notes/" + noteId)
             .header("Authorization", "Bearer " + token)
             .with(csrf()))
             .andExpect(status().isOk());
@@ -159,7 +161,9 @@ class NoteControllerTest {
                     .with(csrf()))
             .andExpect(status().isCreated());
 
-    mockMvc.perform(delete("/api/notes/3")
+    Long noteId = noteRepository.findAll().getFirst().getId();
+
+    mockMvc.perform(delete("/api/notes/" + noteId)
                     .header("Authorization", "Bearer " + token2)
                     .with(csrf()))
                     .andExpect(status().isNotFound())

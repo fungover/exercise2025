@@ -92,11 +92,21 @@
             .then(todo => {
                 const li = document.createElement('li');
                 li.dataset.id = todo.id;
-                li.innerHTML = `
-                <span class="text" onclick="toggleTodo(this)">${todo.title}</span>
-                <span class="trashcan" onclick="deleteTodo(this)">🗑️</span>
-            `;
+                li.classList.toggle('completed', Boolean(todo.completed));
+
+                const textSpan = document.createElement('span');
+                textSpan.classList.add('text');
+                textSpan.textContent = todo.title;
+                textSpan.addEventListener('click', () => toggleTodo(textSpan));
+
+                const deleteSpan = document.createElement('span');
+                deleteSpan.classList.add('trashcan');
+                deleteSpan.textContent = '🗑️';
+                deleteSpan.addEventListener('click', () => deleteTodo(deleteSpan));
+
+                li.append(textSpan, deleteSpan);
                 todoList.appendChild(li);
+
                 inputTodo.value = '';
                 updateCount();
             });

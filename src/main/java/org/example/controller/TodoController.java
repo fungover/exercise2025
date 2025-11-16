@@ -42,14 +42,19 @@ public class TodoController {
         return service.getTodoById(id)
                 .map(existing -> {
                     existing.setCompleted(todo.isCompleted());
-                    return new ResponseEntity<>(service.saveTodo(existing), HttpStatus.OK);
+                    Todo updated = service.saveTodo(existing);
+                    return new ResponseEntity<>(updated, HttpStatus.OK);
                 })
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
-        service.deleteTodo(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return service.getTodoById(id)
+                .map(existing -> {
+                    service.deleteTodo(id);
+                    return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+                })
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

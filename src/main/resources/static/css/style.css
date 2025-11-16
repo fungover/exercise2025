@@ -25,7 +25,9 @@ body {
     background: #ffffff;
     padding: 0px;
     width: 540px;
-    height: 30vh;
+    min-height: 30vh;
+    max-height: 80vh;
+    overflow-y: auto;
     position: absolute;
     animation: fadeIn 1s;
 }

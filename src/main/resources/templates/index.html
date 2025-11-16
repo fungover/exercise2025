@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Pet Adoption Service</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -127,7 +129,7 @@
 </head>
 <body>
 <header>
-    <h1 th:text="${pageTitle} ?: 'Pet Adoption Service'">🐾 Pet Adoption Service 🐾</h1>
+    <h1 th:text="${pageTitle ?: 'Pet Adoption Service'}">🐾 Pet Adoption Service 🐾</h1>
 </header>
 <section>
     <h2>Adopt the pet of your dreams! - <i>mySQL-style</i></h2>
@@ -180,9 +182,14 @@
 
     async function fetchApi(method, path, body = null) {
         try {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
             const options = {
                 method,
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                }
             };
             if (body) options.body = JSON.stringify(body);
             const response = await fetch(`${baseUrl}${path}`, options);

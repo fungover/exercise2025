@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -52,7 +54,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(
               auth -> auth.requestMatchers("/login/**")
                           .permitAll() //allow anyone to access login
-                          .requestMatchers("animals/add")
+                          .requestMatchers("/animals/add")
                           .hasRole("ADMIN")
                           .anyRequest()
                           .authenticated())
@@ -66,15 +68,22 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService users() {
-        UserDetails admin = User.withDefaultPasswordEncoder()
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public UserDetailsService users(PasswordEncoder passwordEncoder) {
+        UserDetails admin = User.builder()
                                 .username("admin")
-                                .password("adminpass")
+                                .password(
+                                  passwordEncoder.encode("adminpass"))
                                 .roles("ADMIN")
                                 .build();
-        UserDetails user = User.withDefaultPasswordEncoder()
+        UserDetails user = User.builder()
                                .username("user")
-                               .password("userpass")
+                               .password(
+                                 passwordEncoder.encode("userpass"))
                                .roles("USER")
                                .build();
         return new InMemoryUserDetailsManager(admin, user);

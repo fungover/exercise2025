@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Animal</title>
+</head>
+<body>
+<h1>Add Animal</h1>
+<form th:action="@{/animals/add}" method="post">
+    <div>Name: <input type="text" name="name" required></div>
+    <div>Species: <input type="text" name="species" required></div>
+    <div>Age: <input type="number" name="age"></div>
+    <div>Enclosure: <input type="text" name="enclosure"></div>
+    <div>Endangered: <input type="text" name="endangered" required></div>
+    <button type="submit">Save</button>
+</form>
+
+<p><a href="/animals">Back to Zoo</a></p>
+
+</body>
+</html>

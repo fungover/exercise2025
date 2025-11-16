@@ -51,8 +51,9 @@ public class SecurityConfig {
         //this one picks up everything that isn't /api/**
         http.authorizeHttpRequests(
               auth -> auth.requestMatchers("/login/**")
-                          .permitAll() //allow
-                          // anyone to access login
+                          .permitAll() //allow anyone to access login
+                          .requestMatchers("animals/add")
+                          .hasRole("ADMIN")
                           .anyRequest()
                           .authenticated())
             .formLogin(form -> form.loginPage("/login")

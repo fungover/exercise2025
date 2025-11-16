@@ -5,32 +5,102 @@
     <title>Zoo Login</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+
+
+            background: linear-gradient(
+                    135deg,
+                    #92d36e 0%,
+                    #b4e59f 40%,
+                    #d9f7c1 100%
+            );
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            width: 350px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 5rem;
         }
 
-        form {
-            border: 1px solid #ccc;
-            padding: 2rem;
-            border-radius: 8px;
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            text-align: center;
         }
 
         input {
-            margin: .5rem 0;
-            padding: .5rem;
-            width: 200px;
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
         }
 
         button {
-            padding: .5rem 1rem;
-            margin-top: .5rem;
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 1rem;
+            border-radius: 6px;
+            border: none;
+            background: #2c3e50;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #1f2d3a;
+        }
+
+        p {
+            margin-top: 0.8rem;
+            text-align: center;
+        }
+
+        p[th\\:if] {
+            font-size: 0.9rem;
+        }
+        .sticky-note {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 180px;
+            background: #fffa72;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            transform: rotate(-3deg);
+            z-index: 2;
+        }
+
+        .sticky-note h3 {
+            margin-top: 0;
+            font-size: 1rem;
+        }
+
+        .sticky-note p {
+            margin: 0.3rem 0;
         }
     </style>
 </head>
 <body>
+<div class="glass-panel">
 <h1>Zoo Login</h1>
 <form th:action="@{/login}" method="post">
     <div><input type="text" name="username" placeholder="Username" required>
@@ -43,6 +113,11 @@
     <p th:if="${param.error}" style="color:red;">Invalid username or password</p>
     <p th:if="${param.logout}" style="color:green;">You have been logged out</p>
 </form>
-
+</div>
+<div class="sticky-note">
+    <h3>Test Logins</h3>
+    <p><strong>Admin:</strong> admin / adminpass</p>
+    <p><strong>User:</strong> user / userpass</p>
+</div>
 </body>
 </html>

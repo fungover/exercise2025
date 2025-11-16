@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>The Zoo</title>
@@ -7,10 +8,36 @@
         body {
             font-family: Arial, sans-serif;
             margin: 2rem;
+
+
+            background: linear-gradient(
+                    135deg,
+                    #92d36e 0%,
+                    #b4e59f 40%,
+                    #d9f7c1 100%
+            );
+            min-height: 100vh;
+
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         h1 {
             color: #2c3e50;
+            margin-bottom: 2rem;
+        }
+
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 12px;
+            padding: 2rem;
+            width: min(900px, 100%);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
         }
 
         table {
@@ -19,43 +46,75 @@
         }
 
         th, td {
-            padding: 0.5rem;
-            border-bottom: 1px solid #ccc;
+            padding: 0.7rem 0.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
         }
 
         th {
             text-align: left;
-            background: #eee;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+        }
+
+        .admin-add {
+            margin-bottom: 2rem;
+            text-align: right;
+        }
+
+        .logout-form {
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        button, .btn {
+            padding: 0.5rem 1.2rem;
+            border-radius: 6px;
+            border: none;
+            background: #2c3e50;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        button:hover,
+        .btn:hover {
+            background: #1f2d3a;
         }
     </style>
 </head>
 <body>
 <h1>Zoo Animals </h1>
 
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Species</th>
-        <th>Age</th>
-        <th>Enclosure</th>
-        <th>Endangered</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="animal : ${animals}">
-        <td th:text="${animal.name}">Name</td>
-        <td th:text="${animal.species}">Species</td>
-        <td th:text="${animal.age}">Age</td>
-        <td th:text="${animal.enclosure}">Enclosure</td>
-        <td th:text="${animal.endangered} ? 'Yes' : 'No'">Endangered</td>
-    </tr>
-    </tbody>
-</table>
-<form th:action="@{/logout}" method="post">
-    <button type="submit">Logout</button>
-</form>
+<div class="glass-panel">
+    <div sec:authorize="hasRole('ADMIN')" class="admin-add">
+        <a href="/animals/add" class="btn btn-primary">Add Animal</a>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Species</th>
+            <th>Age</th>
+            <th>Enclosure</th>
+            <th>Endangered</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="animal : ${animals}">
+            <td th:text="${animal.name}">Name</td>
+            <td th:text="${animal.species}">Species</td>
+            <td th:text="${animal.age}">Age</td>
+            <td th:text="${animal.enclosure}">Enclosure</td>
+            <td th:text="${animal.endangered} ? 'Yes' : 'No'">Endangered</td>
+        </tr>
+        </tbody>
+    </table>
+    <form class="logout-form" th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+    </form>
 
-
+</div>
 </body>
 </html>

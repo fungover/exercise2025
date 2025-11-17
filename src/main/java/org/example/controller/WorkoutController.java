@@ -3,9 +3,7 @@ package org.example.controller;
 
 import org.example.model.Workout;
 import org.example.repository.WorkoutRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +21,11 @@ public class WorkoutController {
     @GetMapping
     public List<Workout> getAllWorkouts() {
         return workoutRepository.findAll();
+    }
+
+    // skapa ny workout
+    @PostMapping
+    public Workout createWorkout(@RequestBody Workout workout) {
+        return workoutRepository.save(workout);
     }
 }

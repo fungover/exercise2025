@@ -29,4 +29,40 @@ public class Workout {
         this.caloriesBurned = caloriesBurned;
         this.date = date;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public Integer getCaloriesBurned() {
+        return caloriesBurned;
+    }
+
+    public void setCaloriesBurned(Integer caloriesBurned) {
+        this.caloriesBurned = caloriesBurned;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 }

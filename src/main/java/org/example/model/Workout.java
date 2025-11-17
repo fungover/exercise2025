@@ -18,4 +18,15 @@ public class Workout {
     private Integer caloriesBurned;
     private LocalDate date;
 
+    // måste finnas en tom konstruktor
+    public Workout() {
+    }
+
+    // konstruktor med alla fält förutom Id eftersom Id ska autogenereras
+    public Workout(String name, Integer duration, Integer caloriesBurned, LocalDate date) {
+        this.name = name;
+        this.duration = duration;
+        this.caloriesBurned = caloriesBurned;
+        this.date = date;
+    }
 }

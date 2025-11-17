@@ -49,6 +49,10 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/")
                         .permitAll()
                 )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/")
+                        .permitAll()
+                )
                 .csrf(csrf -> csrf
                                 .ignoringRequestMatchers("/api/**")
                         // CSRF enabled för Thymeleaf forms

@@ -22,7 +22,7 @@
         <a sec:authorize="!isAuthenticated()" href="/login" class="login-btn">Login</a>
 
         <!-- Logout button for authenticated users -->
-        <form sec:authorize="isAuthenticated()" action="/logout" method="post" style="margin: 0;">
+        <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="margin: 0;">
             <button type="submit" class="logout-btn">Logout</button>
         </form>
     </div>

@@ -28,4 +28,10 @@ public class WorkoutController {
     public Workout createWorkout(@RequestBody Workout workout) {
         return workoutRepository.save(workout);
     }
+
+    // hämta en specifik workout
+    @GetMapping("/{id}")
+    public Workout getWorkoutById(@PathVariable Long id) {
+        return workoutRepository.findById(id).orElse(null);
+    }
 }

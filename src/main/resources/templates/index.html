@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Application</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header>
+    <h1>Pet Management Application</h1>
+    <div class="user-info">
+        <!-- Show username if authenticated -->
+        <span sec:authorize="isAuthenticated()">
+            Welcome, <strong sec:authentication="name"></strong>
+            <span sec:authorize="hasRole('ADMIN')">(Admin)</span>
+        </span>
+
+        <!-- Login button for anonymous users -->
+        <a sec:authorize="!isAuthenticated()" href="/login" class="login-btn">Login</a>
+
+        <!-- Logout button for authenticated users -->
+        <form sec:authorize="isAuthenticated()" action="/logout" method="post" style="margin: 0;">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</header>
+
+<!-- Message for non-authenticated users -->
+<div sec:authorize="!isAuthenticated()" class="login-message">
+    ℹ️ You can view pets without logging in. <a href="/login">Login</a> to feed and play with them!
+</div>
+
+<!-- Admin section for creating pets -->
+<div sec:authorize="hasRole('ADMIN')" class="admin-section">
+    <h2>Admin Panel - Create New Pet</h2>
+    <form action="/pets/add" method="post" class="create-form">
+        <input type="text" name="name" placeholder="Pet name" required maxlength="20"/>
+        <input type="text" name="species" placeholder="Species" required maxlength="20"/>
+        <button type="submit">Create Pet</button>
+    </form>
+</div>
+
+<!-- Pets list -->
+<div th:if="${#lists.isEmpty(pets)}" class="no-pets">
+    <h2>No pets found 😢</h2>
+    <p>There are no pets in the system yet.</p>
+</div>
+
+<div th:if="${!#lists.isEmpty(pets)}" class="pets-grid">
+    <div th:each="pet : ${pets}" class="pet-card">
+        <h3>
+            <span th:text="${pet.name}">Pet Name</span>
+            <small th:text="'(' + ${pet.species} + ')'"></small>
+        </h3>
+
+        <div class="pet-info">
+            <p><strong>ID:</strong> <span th:text="${pet.id}"></span></p>
+
+            <p><strong>Hunger Level:</strong> <span th:text="${pet.hungerLevel}"></span>/10</p>
+            <div class="stat-bar">
+                <div class="stat-fill hunger-bar"
+                     th:style="'width: ' + (${pet.hungerLevel} * 10) + '%'"></div>
+            </div>
+
+            <p><strong>Happiness Level:</strong> <span th:text="${pet.happinessLevel}"></span>/10</p>
+            <div class="stat-bar">
+                <div class="stat-fill happiness-bar"
+                     th:style="'width: ' + (${pet.happinessLevel} * 10) + '%'"></div>
+            </div>
+        </div>
+
+        <!-- Actions for authenticated users -->
+        <div sec:authorize="isAuthenticated()" class="pet-actions">
+            <form th:action="@{'/pets/' + ${pet.id} + '/feed'}" method="post" style="margin: 0;">
+                <button type="submit" class="action-btn feed-btn"
+                        th:disabled="${pet.hungerLevel == 0}">
+                    🍖 Feed
+                </button>
+            </form>
+
+            <form th:action="@{'/pets/' + ${pet.id} + '/play'}" method="post" style="margin: 0;">
+                <button type="submit" class="action-btn play-btn"
+                        th:disabled="${pet.happinessLevel == 10}">
+                    🎾 Play
+                </button>
+            </form>
+
+            <!-- Delete button only for admins -->
+            <form sec:authorize="hasRole('ADMIN')"
+                  th:action="@{'/pets/' + ${pet.id} + '/delete'}"
+                  method="post"
+                  style="margin: 0;"
+                  onsubmit="return confirm('Are you sure you want to delete this pet?');">
+                <button type="submit" class="action-btn delete-btn">
+                    🗑️ Delete
+                </button>
+            </form>
+        </div>
+
+        <!-- Message for non-authenticated users -->
+        <div sec:authorize="!isAuthenticated()" class="pet-actions">
+            <p style="color: #666; font-style: italic;">
+                <a href="/login">Login</a> to interact with this pet
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

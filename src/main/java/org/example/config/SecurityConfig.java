@@ -22,31 +22,39 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        // Static resources
+                        .requestMatchers("/css/**").permitAll()
 
-                        // GET requests - Everyone can see the pets
-                        .requestMatchers(HttpMethod.GET, "api/pets/**").permitAll()
+                        // Public pages
+                        .requestMatchers(HttpMethod.GET, "/").permitAll()
+                        .requestMatchers("/login").permitAll()
 
-                        // PUT - feed & play only authenticated users
-                        .requestMatchers(HttpMethod.PUT,"/api/pets/**").authenticated()
+                        // Thymeleaf form actions (WebController)
+                        .requestMatchers(HttpMethod.POST, "/pets/*/feed").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/pets/*/play").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/pets/*/delete").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/pets/add").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/pets/add").hasRole("ADMIN")
 
-                        // POST & DELETE - admin only
-                        .requestMatchers(HttpMethod.POST,"/api/pets/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/pets/**").hasRole("ADMIN")
+                        // REST API endpoints
+                        .requestMatchers(HttpMethod.GET, "/api/pets/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/pets/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/pets/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/pets/**").hasRole("ADMIN")
 
-                        // Anything else - only authenticated users
+                        // Everything else requires authentication
                         .anyRequest().authenticated()
                 )
-
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/api/pets")
+                        .defaultSuccessUrl("/")
                         .permitAll()
                 )
-
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**")
+                                .ignoringRequestMatchers("/api/**")
+                        // CSRF enabled för Thymeleaf forms
                 );
 
-                return http.build();
+        return http.build();
     }
 
     @Bean

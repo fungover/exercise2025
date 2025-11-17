@@ -1,0 +1,202 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+header {
+    background-color: #035f07;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    margin: 0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.login-btn, .logout-btn {
+    background-color: white;
+    color: #4CAF50;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.logout-btn {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.admin-section {
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.admin-section h2 {
+    color: #856404;
+    margin-top: 0;
+}
+
+.create-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.create-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.create-form button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.create-form button:hover {
+    background-color: #218838;
+}
+
+.pets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.pet-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.pet-card h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.pet-info {
+    margin: 10px 0;
+}
+
+.pet-info p {
+    margin: 5px 0;
+}
+
+.stat-bar {
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    height: 20px;
+    margin: 5px 0;
+    overflow: hidden;
+}
+
+.stat-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.hunger-bar {
+    background-color: #ff9800;
+}
+
+.happiness-bar {
+    background-color: #2196F3;
+}
+
+.pet-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.feed-btn {
+    background-color: #ff9800;
+    color: white;
+}
+
+.feed-btn:hover {
+    background-color: #f57c00;
+}
+
+.feed-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.play-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+.play-btn:hover {
+    background-color: #1976D2;
+}
+
+.play-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
+}
+
+.login-message {
+    background-color: #e3f2fd;
+    border: 1px solid #2196F3;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    color: #1565C0;
+}
+
+.no-pets {
+    text-align: center;
+    color: #666;
+    padding: 40px;
+    background-color: white;
+    border-radius: 8px;
+}

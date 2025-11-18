@@ -16,6 +16,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         this.workoutRepository = workoutRepository;
     }
 
+    // Override = "detta är en metod som deklarerats i interfacet workoutService"
     @Override
     public List<Workout> getAllWorkouts() {
         return workoutRepository.findAll();

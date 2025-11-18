@@ -6,8 +6,7 @@ RUN mvn -B -DskipTests clean package
 
 FROM eclipse-temurin:25-jre
 WORKDIR /app
-RUN addgroup --system --gid 1000 spring && \
-    adduser --system --uid 1000 --ingroup spring spring
+RUN addgroup --system spring && adduser --system --ingroup spring spring
 USER spring:spring
 COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080

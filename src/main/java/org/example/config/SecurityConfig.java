@@ -28,9 +28,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/", "/login", "/errors").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/books/add").hasRole("ADMIN")
-                        .requestMatchers("/api/books/**").authenticated()
+                        .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/books/**").authenticated()
-                        .requestMatchers("/api/stores/**").authenticated()
                         .requestMatchers("/stores/**").permitAll()
                         .anyRequest().permitAll()
                 )

@@ -2,7 +2,7 @@ package org.example.controller;
 
 
 import org.example.model.Workout;
-import org.example.repository.WorkoutRepository;
+import org.example.service.WorkoutService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,27 +11,32 @@ import java.util.List;
 @RequestMapping("/api/workouts")
 public class WorkoutController {
 
-    private final WorkoutRepository workoutRepository;
+    private final WorkoutService workoutService;
 
-    public WorkoutController(WorkoutRepository workoutRepository) {
-        this.workoutRepository = workoutRepository;
+    public WorkoutController(WorkoutService workoutService) {
+
+        this.workoutService = workoutService;
     }
 
     // Hämta alla workouts
     @GetMapping
     public List<Workout> getAllWorkouts() {
-        return workoutRepository.findAll();
+        return workoutService.getAllWorkouts();
     }
 
     // skapa ny workout
     @PostMapping
     public Workout createWorkout(@RequestBody Workout workout) {
-        return workoutRepository.save(workout);
+        return workoutService.createWorkout(workout);
     }
 
     // hämta en specifik workout
     @GetMapping("/{id}")
     public Workout getWorkoutById(@PathVariable Long id) {
-        return workoutRepository.findById(id).orElse(null);
+        return workoutService.getWorkoutById(id);
     }
 }
+
+// nästa sak att göra är att
+// testa endpointsen i postman
+// göra en userController

@@ -93,7 +93,7 @@
         <td th:text="${product.name}"></td>
         <td th:text="${product.sku}"></td>
         <td th:text="${product.quantity}"></td>
-        <td th:text="${product.location.zone} + ' - ' + ${product.location.shelf}"></td>
+        <td th:text="${product.location.zone} + ' - ' + product.location.shelf"></td>
         <td> <form th:action="@{'/delete/' + ${product.id}}" method="post" style="display:inline">
             <button type="submit" class="delete-button">🗑️ Radera</button>
         </form>

@@ -29,5 +29,12 @@
     </tr>
     </tbody>
 </table>
+<h2>Add new workout</h2>
+<form th:action="@{/workouts/add}" method="post">
+    Activity: <input type="text" name="name" required/>
+    Duration (min): <input type="number" name="duration" required/>
+    Date: <input type="date" name="date" required/>
+    <button type="submit" class="button">Add</button>
+</form>
 </body>
 </html>

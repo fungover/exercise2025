@@ -24,6 +24,10 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public Workout createWorkout(Workout workout) {
+
+        int calories = workout.getDuration() * 10;
+        workout.setCaloriesBurned(calories);
+
         return workoutRepository.save(workout);
     }
 
@@ -36,4 +40,5 @@ public class WorkoutServiceImpl implements WorkoutService {
     public void deleteWorkout(Long id) {
         workoutRepository.deleteById(id);
     }
+
 }

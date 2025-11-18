@@ -1,13 +1,14 @@
-FROM maven:3.9-eclipse-temurin-21 as builder
+FROM maven:3.9.11-eclipse-temurin-25 as builder
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 RUN mvn -B -DskipTests clean package
 
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre
 WORKDIR /app
-RUN addgroup --system spring && adduser --system --ingroup spring spring
+RUN addgroup --system --gid 1000 spring && \
+    adduser --system --uid 1000 --ingroup spring spring
 USER spring:spring
 COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

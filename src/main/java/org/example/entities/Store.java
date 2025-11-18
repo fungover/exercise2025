@@ -1,6 +1,7 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
@@ -12,6 +13,7 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer storeId;
 
+    @NotEmpty
     String storeName;
 
     public Store() {

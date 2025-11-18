@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Workouts</title>
+</head>
+<body>
+<h1>All Workouts</h1>
+<ul>
+    <li th:each="workout : ${workouts}">
+        <span th:text="${workout.name}"></span> -
+        <span th:text="${workout.duration}"></span> min,
+        <span th:text="${workout.caloriesBurned}"></span> kcal
+    </li>
+</ul>
+</body>
+</html>

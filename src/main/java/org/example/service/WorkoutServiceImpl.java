@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// Här skriver jag hur metoderna faktiskt FUNGERAR
 @Service
 public class WorkoutServiceImpl implements WorkoutService {
 

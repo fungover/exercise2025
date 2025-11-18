@@ -9,4 +9,5 @@ public interface WorkoutService {
     List<Workout> getAllWorkouts();
     Workout createWorkout(Workout workout);
     Workout getWorkoutById(Long id);
+    void deleteWorkout(Long id);
 }

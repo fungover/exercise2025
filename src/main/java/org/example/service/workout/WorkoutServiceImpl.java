@@ -31,4 +31,9 @@ public class WorkoutServiceImpl implements WorkoutService {
     public Workout getWorkoutById(Long id) {
         return workoutRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public void deleteWorkout(Long id) {
+        workoutRepository.deleteById(id);
+    }
 }

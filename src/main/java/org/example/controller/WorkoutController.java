@@ -35,8 +35,11 @@ public class WorkoutController {
     public Workout getWorkoutById(@PathVariable Long id) {
         return workoutService.getWorkoutById(id);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteWorkout(@PathVariable Long id) {
+        workoutService.deleteWorkout(id);
+    }
 }
 
-// nästa sak att göra är att
-// testa endpointsen i postman
-// göra en userController
+

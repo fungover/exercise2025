@@ -4,6 +4,7 @@
 <body>
 <h1>Alla produkter</h1>
 <form th:action="@{/logout}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <button type="submit" class="logout-button">Logga ut</button>
 </form>
 <style>
@@ -95,6 +96,7 @@
         <td th:text="${product.quantity}"></td>
         <td th:text="${product.location.zone} + ' - ' + product.location.shelf"></td>
         <td> <form th:action="@{'/delete/' + ${product.id}}" method="post" style="display:inline">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <button type="submit" class="delete-button">🗑️ Radera</button>
         </form>
         </td>
@@ -102,6 +104,7 @@
 </table>
 <h2>Lägg till ny produkt</h2>
 <form th:action="@{/products/form}" th:object="${product}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <input type="text" th:field="*{name}" placeholder="Namn" />
     <input type="text" th:field="*{sku}" placeholder="SKU" />
     <input type="number" th:field="*{quantity}" placeholder="Antal" />

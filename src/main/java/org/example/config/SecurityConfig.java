@@ -44,8 +44,8 @@ public class SecurityConfig {
                         .loginPage("/login") // Login page
                         .defaultSuccessUrl("/", true)
                         .permitAll()
-                )
-                .csrf(csrf -> csrf.disable());
+                );
+
         return http.build();
     }
 }

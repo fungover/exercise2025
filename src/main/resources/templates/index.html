@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Welcome</title></head>
+<body>
+<h1>Alla produkter</h1>
+<form th:action="@{/logout}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <button type="submit" class="logout-button">Logga ut</button>
+</form>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f9f9f9;
+        padding: 2rem;
+        color: #333;
+    }
+
+    h1, h2 {
+        color: #2c3e50;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+        background-color: white;
+        box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f0f0f0;
+    }
+
+    form {
+        margin-top: 1rem;
+    }
+
+    input, select {
+        padding: 0.5rem;
+        margin: 0.5rem 0;
+        width: 100%;
+        max-width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #2980b9;
+    }
+
+    .delete-button {
+        background-color: #e74c3c;
+    }
+
+    .delete-button:hover {
+        background-color: #c0392b;
+    }
+    .logout-button {
+        background-color: #e67e22;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        float: right;
+        margin-bottom: 1rem;
+    }
+
+    .logout-button:hover {
+        background-color: #d35400;
+    }
+
+</style>
+<table border="1">
+    <tr>
+        <th>Namn</th><th>SKU</th><th>Antal</th><th>Plats</th>
+    </tr>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.sku}"></td>
+        <td th:text="${product.quantity}"></td>
+        <td th:text="${product.location.zone} + ' - ' + product.location.shelf"></td>
+        <td> <form th:action="@{'/delete/' + ${product.id}}" method="post" style="display:inline">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit" class="delete-button">🗑️ Radera</button>
+        </form>
+        </td>
+    </tr>
+</table>
+<h2>Lägg till ny produkt</h2>
+<form th:action="@{/products/form}" th:object="${product}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <input type="text" th:field="*{name}" placeholder="Namn" />
+    <input type="text" th:field="*{sku}" placeholder="SKU" />
+    <input type="number" th:field="*{quantity}" placeholder="Antal" />
+    <select th:field="*{location.id}">
+        <option th:each="loc : ${locations}" th:value="${loc.id}" th:text="${loc.zone} + ' - ' + ${loc.shelf}"></option>
+    </select>
+    <button type="submit">Spara</button>
+
+
+</form>
+
+
+</body>
+</html>

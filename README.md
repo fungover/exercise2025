@@ -1,36 +1,71 @@
-## 🧪 How to Work on the Exercises
+# 📦 Exercise 8 – Inventory Management with Spring Boot
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+This project is part of a Java programming course and implements a simple inventory system using Spring Boot, MySQL, and Thymeleaf.
 
-### 📥 1. Clone or Fork the Repository
+## 🚀 Features
+
+- View all products and their storage locations
+- Add new products via HTML form
+- Delete products from the list
+- REST API for products (`GET`, `POST`)
+- Separate controllers for REST and view
+- Basic authentication with Spring Security
+- Unit tests for REST and security
+
+## 🧱 Technologies Used
+
+| Technology        | Purpose                      |
+|-------------------|------------------------------|
+| Spring Boot 3.5   | Backend and configuration    |
+| Spring Data JPA   | Database access              |
+| Spring Security   | Form authentication          |
+| Thymeleaf         | HTML rendering               |
+| MySQL 9           | Database (via Docker)        |
+| Adminer           | DB management (via Docker)   |
+| JUnit 5 + Mockito | Testing                      |
+
+## 🐳 Run with Docker
+(Docker desktop open)
+
 ```bash
-git clone https://github.com/fungover/exercise2025.git
+docker-compose up
 ```
-Or fork the repository via GitHub and clone your fork.
+This starts 
+- MySQL on port 3306 
+- Adminer on port 8081
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+---
 
-Example for user githubuser working on Exercise 1:
+## ▶️ Run the Application
 
 ```bash
-git checkout -b githubuser/exercise1
+mvn spring-boot:run
 ```
+Then visit http://localhost:8080
+ to use the Thymeleaf HTML interface.
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
 
-### 🚀 4. Push Your Branch
+## 🔐 Authentication
+
+The application uses form-based login with Spring Security.
+
+- Login page: `/login`
+- Default credentials:
+  - **Username:** `admin`
+  - **Password:** `admin`
+
+🔒 All routes, including REST endpoints like `/products`, require login.  
+🌐 Users are redirected to `/login` before accessing any part of the application.
+
+🧪 Run Tests
+
+Run all tests with:
 ```bash
-git push origin githubuser/exercise1
+mvn test
 ```
+Includes:
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
+ProductControllerTest – tests GET and POST endpoints
 
-Link the PR to the issue you're solving.
+SecurityTest – verifies 401 Unauthorized for unauthenticated access
 
-Include a clear description of your solution.
-
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.

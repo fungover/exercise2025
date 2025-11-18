@@ -3,6 +3,7 @@ package org.example.config;
 import org.example.service.CustomAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,13 +27,16 @@ public class SecurityConfig {
                .authenticationProvider(customAuthenticationProvider)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/", "/login", "/errors").permitAll()
-                        //.requestMatchers("/books/**").permitAll()
-                        //.requestMatchers(HttpMethod.POST, "/books/**").permitAll()
-                        .requestMatchers("/books").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/books/add").hasRole("ADMIN")
+                        .requestMatchers("/api/books/**").authenticated()
                         .requestMatchers("/books/**").authenticated()
-                        //.requestMatchers(HttpMethod.POST).hasRole("ADMIN")
+                        .requestMatchers("/api/stores/**").authenticated()
+                        .requestMatchers("/stores/**").permitAll()
+                        .anyRequest().permitAll()
                 )
-               .formLogin(Customizer.withDefaults()).build();
+               .httpBasic(Customizer.withDefaults())
+               .formLogin(Customizer.withDefaults())
+               .build();
 
     }
 

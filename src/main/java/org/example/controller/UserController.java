@@ -1,7 +1,7 @@
 package org.example.controller;
 
 import org.example.model.User;
-import org.example.service.UserService;
+import org.example.service.user.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

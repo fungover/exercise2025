@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.workout;
 
 import org.example.model.Workout;
 

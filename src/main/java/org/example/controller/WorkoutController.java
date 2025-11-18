@@ -2,7 +2,7 @@ package org.example.controller;
 
 
 import org.example.model.Workout;
-import org.example.service.WorkoutService;
+import org.example.service.workout.WorkoutService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

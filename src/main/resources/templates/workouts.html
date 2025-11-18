@@ -1,16 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Workouts</title>
 </head>
 <body>
 <h1>All Workouts</h1>
-<ul>
-    <li th:each="workout : ${workouts}">
-        <span th:text="${workout.name}"></span> -
-        <span th:text="${workout.duration}"></span> min,
-        <span th:text="${workout.caloriesBurned}"></span> kcal
-    </li>
-</ul>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Duration</th>
+        <th>Calories</th>
+        <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="workout : ${workouts}" th:if="${workouts != null}">
+        <td th:text="${workout.name}"></td>
+        <td th:text="${workout.duration}"></td>
+        <td th:text="${workout.caloriesBurned}"></td>
+        <td th:text="${workout.date}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

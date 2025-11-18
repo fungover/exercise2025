@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Users</title>
 </head>
 <body>
 <h1>All Users</h1>
-<ul>
-    <li th:each="user : ${users}">
-        <span th:text="${user.username}"></span> -
-        <span th:text="${user.email}"></span>
-    </li>
-</ul>
+<table border="1" cellpadding="5">
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.email}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

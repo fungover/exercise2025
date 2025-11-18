@@ -36,7 +36,7 @@
 <!-- Admin section for creating pets -->
 <div sec:authorize="hasRole('ADMIN')" class="admin-section">
     <h2>Admin Panel - Create New Pet</h2>
-    <form action="/pets/add" method="post" class="create-form">
+    <form th:action="@{/pets/add}" method="post" class="create-form">
         <input type="text" name="name" placeholder="Pet name" required maxlength="20"/>
         <input type="text" name="species" placeholder="Species" required maxlength="20"/>
         <button type="submit">Create Pet</button>

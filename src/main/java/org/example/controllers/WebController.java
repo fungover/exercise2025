@@ -22,15 +22,10 @@ public class WebController {
         return "index";
     }
 
-    // Show Add a pet form (admin only)
-    @GetMapping("/pets/add")
-    public String showAddPetForm() {
-        return "addPet";
-    }
-
     // Create a new pet (admin only)
     @PostMapping("/pets/add")
-    public String addPet(@ModelAttribute Pet pet) {
+    public String addPet(@RequestParam String name, @RequestParam String species) {
+        Pet pet = new Pet(name, species);
         petService.addPet(pet);
         return "redirect:/";
     }

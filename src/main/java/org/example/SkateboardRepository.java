@@ -14,8 +14,8 @@ public interface SkateboardRepository extends ListCrudRepository<Skateboard, Int
 
     @Query("""
            select skateboard.id, upper(skateboard.brand), skateboard.boardWidth,
-           skateboard.createdAt from Skateboard skateboard\s
-           where skateboard.brand = :brand\s
-          \s""")
+           skateboard.createdAt from Skateboard skateboard
+           where skateboard.brand = :brand
+          """)
     Optional<Skateboard> findBoardBy(@Param("brand") String brand);
 }

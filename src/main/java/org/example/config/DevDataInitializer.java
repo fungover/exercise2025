@@ -26,15 +26,16 @@ public class DevDataInitializer implements ApplicationRunner {
 
     @Override
     @Transactional
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         boolean forceInit = args.containsOption("force-init");
 
         if (forceInit || repository.count() == 0) {
             log.info("Initializing dev data...");
 
             repository.saveAll(List.of(
-                    new Skateboard("Zero", 8.0),
-                    new Skateboard("Polar", 8.5)
+                    new Skateboard("ZERO", 8.0),
+                    new Skateboard("POLAR", 8.5),
+                    new Skateboard("AntiHero", 9.0)
             ));
 
             log.info("Done initializing dev data.");

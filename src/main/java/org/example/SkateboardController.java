@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController("api")
+@RestController
 public class SkateboardController {
 
     private final SkateboardRepository repository;

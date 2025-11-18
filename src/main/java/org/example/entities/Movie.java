@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 @Entity
@@ -28,6 +29,34 @@ public class Movie {
     private LocalDateTime updatedAt;
 
     protected Movie() {}
+    public Movie(String title, String genre, String description, int year, int runtimeMinutes) {
+        this.title = title;
+        this.genre = genre;
+        this.description = description;
+        this.year = year;
+        this.runtimeMinutes = runtimeMinutes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Movie movie = (Movie) o;
+        return year == movie.year && runtimeMinutes == movie.runtimeMinutes && id.equals(movie.id) && Objects.equals(title, movie.title) && Objects.equals(genre, movie.genre) && Objects.equals(description, movie.description) && createdAt.equals(movie.createdAt) && updatedAt.equals(movie.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + Objects.hashCode(title);
+        result = 31 * result + Objects.hashCode(genre);
+        result = 31 * result + Objects.hashCode(description);
+        result = 31 * result + year;
+        result = 31 * result + runtimeMinutes;
+        result = 31 * result + createdAt.hashCode();
+        result = 31 * result + updatedAt.hashCode();
+        return result;
+    }
 
     //Getters & Setters
     public Integer getId() {return id;}

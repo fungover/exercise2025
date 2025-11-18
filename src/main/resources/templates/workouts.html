@@ -16,11 +16,16 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="workout : ${workouts}" th:if="${workouts != null}">
+    <tr th:each="workout : ${workouts}">
         <td th:text="${workout.name}"></td>
         <td th:text="${workout.duration}"></td>
         <td th:text="${workout.caloriesBurned}"></td>
         <td th:text="${workout.date}"></td>
+        <td>
+            <form th:action="@{/workouts/delete/{id}(id=${workout.id})}" method="post">
+                <button type="submit" class="button" onclick="return confirm('Are you sure?')">Delete</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

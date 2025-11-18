@@ -4,6 +4,8 @@ import org.example.service.workout.WorkoutService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -20,5 +22,11 @@ public class WorkoutViewController {
     public String getWorkoutsPage(Model model) {
         model.addAttribute("workouts", workoutService.getAllWorkouts());
         return "workouts";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteWorkout(@PathVariable Long id) {
+        workoutService.deleteWorkout(id);
+        return "redirect:/workouts";
     }
 }

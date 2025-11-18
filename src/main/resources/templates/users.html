@@ -17,6 +17,11 @@
     <tr th:each="user : ${users}">
         <td th:text="${user.username}"></td>
         <td th:text="${user.email}"></td>
+        <td>
+            <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post">
+                <button type="submit" class="button" onclick="return confirm('Are you sure?')">Delete</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

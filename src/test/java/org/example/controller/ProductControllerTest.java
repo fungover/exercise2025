@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @Import(SecurityConfig.class)
 @WebMvcTest(ProductController.class)
@@ -70,6 +71,7 @@ public class ProductControllerTest {
         when(productRepository.save(any(Product.class))).thenReturn(p);
 
         mockMvc.perform(post("/api/products")
+                        .with(csrf())
                         .contentType("application/json")
                         .content(json))
                 .andExpect(status().isOk())

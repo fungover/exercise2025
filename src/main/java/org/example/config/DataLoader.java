@@ -32,7 +32,7 @@ public class DataLoader {
                 products.forEach(prod -> {
                     Location location = prod.getLocation();
                     if (location != null) {
-                        System.out.println(prod.getName() + " @ " + loc.getZone());
+                        System.out.println(prod.getName() + " @ " + location.getZone());
                     } else {
                         System.out.println(prod.getName() + " has no location");
                     }
@@ -42,4 +42,4 @@ public class DataLoader {
 
         };
     }
-};
+}

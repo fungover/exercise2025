@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api")
-public class StoreController {
+@RequestMapping("/api")
+public class StoreController{
 
     private final StoreRepository storeRepository;
 
@@ -22,24 +22,19 @@ public class StoreController {
         this.storeRepository = storeRepository;
     }
 
-    @GetMapping("store")
+    @GetMapping("/stores")
     public List<StoreDto> getStores() {
         return storeRepository.findAll().stream()
                 .map(store -> new StoreDto(store.getStoreName())).toList();
     }
 
-    @GetMapping("store/{author})")
+    @GetMapping("/stores/author/{author}")
     public List<StoreDto> getBooksByAuthor(@PathVariable("author") String author) {
         return storeRepository.findStoreByAuthorName(author).stream()
-                .map(store -> new StoreDto(store.getStoreName())).toList();
+                .map(StoreDto::new).toList();
     }
 
-    @GetMapping("store/all")
-    public List<StoreDto> getAllStores() {
-        return storeRepository.allStores().stream().map(store -> new StoreDto(store.getStoreName())).toList();
-    }
-
-    @GetMapping("store/{name}")
+    @GetMapping("/stores/{name}")
     public List<StoreDto> getBooksByName(@PathVariable("name") String name) {
         return storeRepository.findByStoreName(name).stream().map(store -> new StoreDto(store.getStoreName())).toList();
     }

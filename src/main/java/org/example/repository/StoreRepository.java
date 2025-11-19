@@ -16,14 +16,9 @@ public interface StoreRepository extends ListCrudRepository<Store,Integer> {
         JOIN books.inventory i on store.store_id = i.store_id
         JOIN books.book b on b.book_id = i.book_id
         JOIN books.author a on a.id = b.author_id
-        WHERE a.first_name = :name GROUP BY store_name;
+        WHERE a.first_name = :author GROUP BY store_name;
 """, nativeQuery = true)
-    List<Store> findStoreByAuthorName(@Param("name") String name);
-
-    @Query(value = """
-Select * from store
-""", nativeQuery = true)
-    List<Store> allStores();
+    List<String> findStoreByAuthorName(@Param("author") String authorName);
 
     @Query(value = """
     SELECT * FROM store WHERE store_name = :store

@@ -20,13 +20,13 @@ class StoreControllerTest extends TestSetup{
 
     @Test
     void getStores() {
-        ResponseEntity<String> response = loggedInUser().getForEntity("/api/store", String.class);
+        ResponseEntity<String> response = loggedInUser().getForEntity("/api/stores", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
     void shouldFindAllStores() {
-        Store [] stores = loggedInUser().getForObject("/api/store", Store[].class);
+        Store [] stores = loggedInUser().getForObject("/api/stores", Store[].class);
         assertThat(stores.length).isEqualTo(2);
     }
 

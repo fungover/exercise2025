@@ -2,6 +2,7 @@ package org.example.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +21,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/pets").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/pets", "/pets/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/pets").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/pets/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/pets/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

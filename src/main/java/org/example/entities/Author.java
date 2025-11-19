@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
@@ -15,9 +14,7 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-     @NotEmpty
      String firstName;
-     @NotEmpty
      String lastName;
 
      public Author() {}

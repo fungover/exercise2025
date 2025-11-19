@@ -1,4 +1,6 @@
 package org.example.dto;
 
-public record Inventory(int amount) {
+import jakarta.validation.constraints.Min;
+
+public record Inventory(@Min(value = 0, message = "Value cant be less than 0") int amount) {
 }

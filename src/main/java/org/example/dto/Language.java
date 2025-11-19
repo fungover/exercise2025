@@ -1,4 +1,6 @@
 package org.example.dto;
 
-public record Language(String textLanguage) {
+import jakarta.validation.constraints.NotEmpty;
+
+public record Language(@NotEmpty(message = "Language must be inserted") String textLanguage) {
 }

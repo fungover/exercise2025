@@ -1,7 +1,6 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,9 +13,7 @@ public class CustomizedUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
-    @NotEmpty
     private String userName;
-    @NotEmpty
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

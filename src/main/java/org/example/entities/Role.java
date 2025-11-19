@@ -31,8 +31,8 @@ public class Role {
         return roleId;
     }
 
-    public void setRoleId(Integer id) {
-        this.roleId = id;
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
     public Authority getAuthority() {
@@ -43,11 +43,11 @@ public class Role {
         this.authority = authority;
     }
 
-    public Set<CustomizedUser> getUser() {
+    public Set<CustomizedUser> getCustomizedUser() {
         return customizedUser;
     }
 
-    public void setUser(Set<CustomizedUser> customizedUser) {
+    public void setCustomizedUser(Set<CustomizedUser> customizedUser) {
         this.customizedUser = customizedUser;
     }
 

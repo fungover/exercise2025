@@ -1,4 +1,10 @@
 package org.example.dto;
 
-public record Author(String firstName, String lastName) {
+import jakarta.validation.constraints.NotEmpty;
+
+public record Author(
+        @NotEmpty(message = "Firstname is mandatory")
+        String firstName,
+        @NotEmpty(message = "Lastname is mandatory")
+        String lastName) {
 }

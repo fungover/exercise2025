@@ -1,8 +1,6 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import org.example.Genre;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -17,18 +15,16 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bookId;
 
-    @NotEmpty(message = "Name is mandatory")
     String title;
-    @NotNull(message = "Genre is mandatory")
+
     @Enumerated(EnumType.STRING)
     Genre genre;
+
     int Rating;
 
-    @NotNull
     @ManyToOne(cascade = {CascadeType.PERSIST})
      private Language language;
 
-    @NotNull
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Author author;
 

@@ -1,4 +1,6 @@
 package org.example.dto;
 
-public record StoreDto(String name) {
+import jakarta.validation.constraints.NotEmpty;
+
+public record StoreDto(@NotEmpty(message = "Store name must be inserted") String name) {
 }

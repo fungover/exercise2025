@@ -1,7 +1,6 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -24,7 +23,6 @@ public class Inventory {
     @NotNull(message = "Store must be inserted")
     private Store store;
 
-    @Min(value = 0, message = "Value cant be less than 0")
     private int amount;
 
     public Inventory(){}

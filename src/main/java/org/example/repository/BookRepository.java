@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface BookRepository extends ListCrudRepository<Book,Integer>, PagingAndSortingRepository<Book,Integer> {
     List<Book> findByGenre(Genre genre);
 
-    @EntityGraph("Book.author")
+    @EntityGraph("Book.authorAndLanguages")
     List<Book> findBooksBy();
 
     Optional<Book> findBookByTitle(String title);

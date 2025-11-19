@@ -1,2 +1,19 @@
-### GET request for books
-GET http://localhost:8080/books
+### Login
+POST http://localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=admin
+
+### GET request for books include author and language by entityGraph
+GET http://localhost:8080/api/books
+
+
+### GET request for books by genre
+@genre = FICTION
+
+GET http://localhost:8080/api/books/genre/{{genre}}
+
+### GET book by id
+@id =1
+
+GET http://localhost:8080/api/books/id/{{id}}

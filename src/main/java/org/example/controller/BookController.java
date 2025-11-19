@@ -59,6 +59,10 @@ public class BookController {
         currentBook.setLanguage(bookDto.language());
 
         return bookRepository.save(currentBook);
+    }
 
+    @DeleteMapping("/books/delete/{id}")
+    public void removeBook(@PathVariable Integer id) {
+        bookRepository.deleteById(id);
     }
 }

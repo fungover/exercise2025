@@ -11,7 +11,6 @@ import org.springframework.http.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-
 class BookControllerTest extends TestSetup {
 
     @Autowired
@@ -121,6 +120,12 @@ class BookControllerTest extends TestSetup {
         HttpEntity<Book> request = new HttpEntity<>(updateBook, headers);
         ResponseEntity<String> response = loggedInUser().exchange("/api/books/update/3", HttpMethod.PUT, request, String.class);
 
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    void shouldDeleteBook(){
+        ResponseEntity<String> response = loggedInUser().exchange("/api/books/delete/3", HttpMethod.DELETE, null, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 

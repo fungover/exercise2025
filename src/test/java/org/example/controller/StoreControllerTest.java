@@ -19,7 +19,7 @@ class StoreControllerTest extends TestSetup{
     }
 
     @Test
-    void getStores() {
+    void shouldReturnResponseStatusOkWhenAllStoresIsRequested() {
         ResponseEntity<String> response = loggedInUser().getForEntity("/api/stores", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
@@ -30,11 +30,4 @@ class StoreControllerTest extends TestSetup{
         assertThat(stores.length).isEqualTo(2);
     }
 
-    @Test
-    void getBooksByAuthor() {
-    }
-
-    @Test
-    void getBooksByName() {
-    }
 }

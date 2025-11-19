@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Profile("developer")
+@Profile({"developer", "test"})
 public class DevDataInitialize implements ApplicationRunner {
 
     private final BookRepository bookRepository;
@@ -45,7 +45,7 @@ public class DevDataInitialize implements ApplicationRunner {
 
     @Override
     @Transactional
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args){
 
     if(bookRepository.count()==0){
 

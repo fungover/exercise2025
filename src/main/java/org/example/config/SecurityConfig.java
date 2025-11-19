@@ -3,7 +3,6 @@ package org.example.config;
 import org.example.service.CustomAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,10 +26,8 @@ public class SecurityConfig {
                .authenticationProvider(customAuthenticationProvider)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/", "/login", "/errors").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/books/add").hasRole("ADMIN")
-                        .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/books/**").authenticated()
-                        .requestMatchers("/stores/**").permitAll()
+                        .requestMatchers("/api/**").hasRole("ADMIN")
                         .anyRequest().permitAll()
                 )
                .httpBasic(Customizer.withDefaults())
@@ -38,7 +35,4 @@ public class SecurityConfig {
                .build();
 
     }
-
-
-
 }

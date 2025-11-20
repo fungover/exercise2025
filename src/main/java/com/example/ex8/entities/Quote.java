@@ -17,6 +17,7 @@ public class Quote {
     @Column(name = "character_name")
     private String characterName;
 
+    @Column(name = "release_year")
     private Integer year;
 
     public Quote() {

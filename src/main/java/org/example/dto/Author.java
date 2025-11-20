@@ -3,8 +3,8 @@ package org.example.dto;
 import jakarta.validation.constraints.NotEmpty;
 
 public record Author(
-        @NotEmpty(message = "Firstname is mandatory")
+        @NotEmpty(message = "First name is mandatory")
         String firstName,
-        @NotEmpty(message = "Lastname is mandatory")
+        @NotEmpty(message = "Last name is mandatory")
         String lastName) {
 }

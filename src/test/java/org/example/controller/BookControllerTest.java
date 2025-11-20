@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import net.bytebuddy.asm.Advice;
 import org.example.Genre;
 import org.example.entities.Author;
 import org.example.entities.Book;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

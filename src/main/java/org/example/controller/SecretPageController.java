@@ -11,7 +11,7 @@ public class SecretPageController {
 
     @GetMapping
     public String index(Model model){
-        model.addAttribute("secret", "Welcome to the secret page. You are know logged in as admin.");
+        model.addAttribute("secret", "Welcome to the secret page. You are now logged in as admin.");
         return "secret";
     }
 

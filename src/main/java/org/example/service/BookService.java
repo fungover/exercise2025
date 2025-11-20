@@ -8,6 +8,7 @@ import org.example.repository.AuthorRepository;
 import org.example.repository.BookRepository;
 import org.example.repository.LanguageRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BookService {
@@ -23,6 +24,7 @@ public class BookService {
     }
 
     //The controller sends a bookDto that is mapped to a book entity to be stored in repository
+    @Transactional
     public Book createBook(BookDto bookDto){
 
         if(bookRepository.findBookByTitle(bookDto.title()).isPresent()){

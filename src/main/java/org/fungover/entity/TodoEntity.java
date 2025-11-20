@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Table(name="Todo")
 public class TodoEntity {
 
-    protected TodoEntity() {
+    public TodoEntity() {
 
     }
 

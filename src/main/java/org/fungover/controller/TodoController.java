@@ -1,5 +1,6 @@
 package org.fungover.controller;
 
+import jakarta.validation.Valid;
 import org.fungover.dto.Todo;
 import org.fungover.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,12 @@ public class TodoController {
     }
 
     @PostMapping
-    public Todo create(@RequestBody Todo todo) {
+    public Todo create(@Valid @RequestBody Todo todo) {
         return todoService.create(todo);
     }
 
     @PutMapping("/{id}")
-    public Todo update(@PathVariable Long id, @RequestBody Todo todo) {
+    public Todo update(@PathVariable Long id, @Valid @RequestBody Todo todo) {
         return todoService.update(id, todo);
     }
 

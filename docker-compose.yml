@@ -1,6 +1,6 @@
 services:
   db:
-    image: mysql:latest
+    image: mysql:8.0
     container_name: quotes-mysql
     environment:
       MYSQL_DATABASE: quotesdb

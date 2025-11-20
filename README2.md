@@ -16,7 +16,7 @@ A simple Spring Boot web application that demonstrates how to work with:
    mvn spring-boot:run
 
 3. Open the HTML page
-   http://localhost:8080/quotes
+   <http://localhost:8080/quotes>
 
 4. Test the REST API
    GET http://localhost:8080/api/quotes

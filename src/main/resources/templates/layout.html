@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/styles/layout.css}" rel="stylesheet" type="text/css" media="all" />
+    <title>Book's</title>
+</head>
+<body>
+<header class="header" th:fragment="header">
+    <h1>The Book's book stores</h1>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/books}">Books</a>
+        <a th:href="@{/secret}">Secret</a>
+    </nav>
+</header>
+<footer th:fragment="footer">
+    <div>
+        <p>&copy;Louise</p>
+    </div>
+</footer>
+</body>
+</html>

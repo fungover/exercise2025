@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/styles/layout.css}" rel="stylesheet" type="text/css" media="all" />
+    <script src="https://unpkg.dev/htmx.org@2.0.8"></script>
+    <title>Books in store</title>
+</head>
+<body>
+<header th:replace="~{layout :: header}"></header>
+<div id="container" hx-get="/books/list" hx-trigger="load" hx-target="#container">
+</div>
+
+<footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

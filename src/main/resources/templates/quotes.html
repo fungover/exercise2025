@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Famous Movie Quotes</title>
+</head>
+<body>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #fafafa;
+        margin: 40px;
+        color: #333;
+    }
+
+    h1 {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 12px 16px;
+        text-align: left;
+    }
+
+    th {
+        background: #4a90e2;
+        color: white;
+        font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+        background: #f1f5f9;
+    }
+
+    tr:hover {
+        background: #e2e8f0;
+    }
+</style>
+
+<h1>Famous Movie Quotes</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Quote</th>
+        <th>Movie</th>
+        <th>Character</th>
+        <th>Year</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="q : ${quotes}">
+        <td th:text="${q.quote}"></td>
+        <td th:text="${q.movie}"></td>
+        <td th:text="${q.characterName}"></td>
+        <td th:text="${q.year}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

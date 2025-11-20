@@ -8,6 +8,7 @@ import org.example.repository.RoleRepository;
 import org.example.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,6 +34,26 @@ public class UserController {
         newUser.getRoles().add(roleRepository.findByAuthority(Authority.USER));
 
         userRepository.save(newUser);
+    }
+
+    @PostMapping("/user/create")
+    public String createUser(@Valid @ModelAttribute UserDto user, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "Username and password are mandatory";
+        }
+
+        try{
+            CustomizedUser newUser = new CustomizedUser();
+            newUser.setUserName(user.userName());
+            newUser.setPassword(passwordEncoder.encode(user.password()));
+            newUser.getRoles().add(roleRepository.findByAuthority(Authority.USER));
+            userRepository.save(newUser);
+            return "User successfully created";
+        }catch (Exception e){
+            return "Save failed: "+e.getMessage();
+        }
+
     }
 
 }

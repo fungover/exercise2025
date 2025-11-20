@@ -2,6 +2,7 @@ package org.fungover.service;
 
 import org.fungover.dto.Todo;
 import org.fungover.entity.TodoEntity;
+import org.fungover.exception.TodoNotFoundException;
 import org.fungover.mapper.TodoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +32,12 @@ public class TodoService {
     }
 
     public Todo findById(Long id) {
-        TodoEntity entity = todoRepository.findById(id).orElse(null); // will change
+        TodoEntity entity = todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException(id));
         return TodoMapper.todoDTO(entity);
     }
 
     public Todo update(Long id, Todo todoDTO) {
-        TodoEntity existing = todoRepository.findById(id).orElse(null); // will change
-
+        TodoEntity existing = todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException(id));
         existing.setTitle(todoDTO.title());
         existing.setDescription(todoDTO.description());
         existing.setCompleted(todoDTO.completed());
@@ -49,7 +49,7 @@ public class TodoService {
 
     public void delete(Long id) {
         if (!todoRepository.existsById(id)) {
-            // will add custom exception
+            throw new TodoNotFoundException(id);
         }
         todoRepository.deleteById(id);
     }

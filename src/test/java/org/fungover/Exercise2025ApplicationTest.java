@@ -1,4 +1,4 @@
-package org.example;
+package org.fungover;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

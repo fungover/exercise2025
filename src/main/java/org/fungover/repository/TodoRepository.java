@@ -1,4 +1,4 @@
-package org.fungover.service;
+package org.fungover.repository;
 
 import org.fungover.entity.TodoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

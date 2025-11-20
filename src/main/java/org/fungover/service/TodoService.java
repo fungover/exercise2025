@@ -4,6 +4,7 @@ import org.fungover.dto.Todo;
 import org.fungover.entity.TodoEntity;
 import org.fungover.exception.TodoNotFoundException;
 import org.fungover.mapper.TodoMapper;
+import org.fungover.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

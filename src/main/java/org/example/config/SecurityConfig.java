@@ -38,9 +38,14 @@ public class SecurityConfig {
 
                         // REST API endpoints
                         .requestMatchers(HttpMethod.GET, "/api/pets/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/pets/**").authenticated()
+                        // Play & Feed requires authentication
+                        .requestMatchers(HttpMethod.PUT, "/api/pets/*/feed").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/pets/*/play").authenticated()
+                        // Create & Delete requires ADMIN role
                         .requestMatchers(HttpMethod.POST, "/api/pets/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/pets/**").hasRole("ADMIN")
+                        // Other PUT requests require ADMIN role
+                        .requestMatchers(HttpMethod.PUT, "/api/pets/**").hasRole("ADMIN")
 
                         // Everything else requires authentication
                         .anyRequest().authenticated()
@@ -49,6 +54,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/")
                         .permitAll()
                 )
+                .httpBasic(basic -> {})
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                         .permitAll()

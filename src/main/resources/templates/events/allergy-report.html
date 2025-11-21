@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allergi-rapport - [[${event.name}]]</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #3d5a80;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .event-info {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .export-buttons {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .export-buttons button {
+            background-color: #3d5a80;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .export-buttons button:hover {
+            background-color: #2c4460;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #3d5a80;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .no-allergies {
+            padding: 40px;
+            text-align: center;
+            color: #666;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .allergy-section {
+            background: linear-gradient(135deg, #3d5a80 0%, #2c4460 100%);
+            color: white;
+            padding: 5px 15px;
+            margin-top: 20px;
+            margin-bottom: 0;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .allergy-count {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+        }
+
+        .participant-list {
+            background-color: #f8f9fa;
+            padding: 0;
+            margin-bottom: 30px;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .participant-item {
+            padding: 7px 15px;
+            border-bottom: 1px solid #dee2e6;
+            transition: background-color 0.2s;
+        }
+
+        .participant-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .participant-item:last-child {
+            border-bottom: none;
+        }
+
+        .participant-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .participant-details {
+            font-size: 14px;
+            color: #666;
+            margin-left: 4px;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+
+            .export-buttons,
+            .back-link {
+                display: none;
+            }
+
+            .allergy-section {
+                background: #3d5a80 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .participant-item {
+                break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a th:href="@{/events/{id}(id=${eventId})}" class="back-link">← Tillbaka till [[${event.name}]]</a>
+
+    <div class="header">
+        <h1>Allergi-rapport</h1>
+        <div class="event-info">
+            <strong th:text="${event.name}">Event namn</strong><br>
+            <span th:text="${event.startDate} + ' - ' + ${event.endDate}">Datum</span><br>
+            <span th:text="${event.location}">Plats</span>
+        </div>
+    </div>
+
+    <div class="export-buttons">
+        <button onclick="window.print()">📄 Exportera till PDF</button>
+        <button onclick="exportToCSV()">📊 Exportera till CSV</button>
+        <button onclick="exportToJSON()">🔗 Exportera till JSON</button>
+    </div>
+
+    <!-- If there are no allergies -->
+    <div th:if="${allergyReport.isEmpty()}" class="no-allergies">
+        <h2>Inga allergier registrerade</h2>
+        <p>Det finns inga deltagare med registrerade allergier för detta event.</p>
+    </div>
+
+    <!-- Loop through each allergy type -->
+    <div th:each="entry : ${allergyReport}">
+        <div class="allergy-section">
+            <span th:text="${entry.key}">Allergi namn</span>
+            <span class="allergy-count" th:text="${statistics.get(entry.key)} + ' st.'">0 st.</span>
+        </div>
+
+        <div class="participant-list">
+            <!-- Loop through participants with this allergy -->
+            <div class="participant-item" th:each="participant : ${entry.value}">
+                <span class="participant-name" th:text="${participant.fullName}">Efternamn Förnamn</span>
+                <span class="participant-details" th:text="${participant.patrol}">Patrull</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const eventId = /*[[${eventId}]]*/ 0;
+
+    function exportToCSV() {
+        window.location.href = '/api/events/' + eventId + '/allergy-report/csv';
+    }
+
+    function exportToJSON() {
+        window.location.href = '/api/events/' + eventId + '/allergy-report';
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

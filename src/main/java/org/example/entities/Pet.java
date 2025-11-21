@@ -27,6 +27,18 @@ public class Pet {
     @CreationTimestamp
     LocalDateTime createdAt;
 
+    public Pet() {
+
+    }
+
+    public Pet(String name, int age, String species, int hungerLevel, int happiness) {
+        this.name = name;
+        this.age = age;
+        this.species = species;
+        this.hungerLevel = hungerLevel;
+        this.happiness = happiness;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -16,11 +16,10 @@ public class PetController {
     }
 
     @GetMapping("pets")
-    public List<PetDto> getPets() {
+    public List<Pet> getPets() {
         return repository.findAll().stream()
-                .map(p -> new PetDto(p.getId(), p.getName(), p.getAge(), p.getSpecies(), p.getHungerLevel(), p.getHappiness(), p.getCreatedAt()))
+                .map(p -> new Pet(p.getName(), p.getAge(), p.getSpecies(), p.getHungerLevel(), p.getHappiness()))
                 .toList();
     }
-
 }
 

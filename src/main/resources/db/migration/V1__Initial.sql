@@ -1,6 +1,6 @@
 CREATE TABLE pet
 (
-    id           INT NOT NULL,
+    id           INT AUTO_INCREMENT NOT NULL,
     name         VARCHAR(255) NULL,
     age          INT NOT NULL,
     species      VARCHAR(255) NULL,

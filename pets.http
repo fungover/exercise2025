@@ -1,6 +1,36 @@
 ### GET request for pets to list all pets
 
-GET http://localhost:8080/pets
+# GET http://localhost:8080/pets
+
+### POST request to add a new animal
+
+POST http://localhost:8080/addPet
+Content-Type: application/json
+
+{
+  "name": "Erik",
+  "age": 21,
+  "species": "Hund",
+  "hungerLevel": 50,
+  "happiness": 75
+}
+
+### Get request to list specific animal with ID
+
+GET http://localhost:8080/pets/2
 
 ###
 
+### DELETE request to delete animal with ID
+
+DELETE http://localhost:8080/deletePet/2
+
+### POST request to feed with a animal with ID
+
+POST http://localhost:8080/feed/2
+
+### POST request to play with a animal with ID
+
+POST http://localhost:8080/play/2
+
+###

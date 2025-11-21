@@ -4,6 +4,7 @@ import org.example.dto.BookDto;
 import org.example.entities.Author;
 import org.example.entities.Book;
 import org.example.entities.Language;
+import org.example.exception.DuplicateBooks;
 import org.example.repository.AuthorRepository;
 import org.example.repository.BookRepository;
 import org.example.repository.LanguageRepository;
@@ -28,7 +29,7 @@ public class BookService {
     public Book createBook(BookDto bookDto){
 
         if(bookRepository.findBookByTitle(bookDto.title()).isPresent()){
-            throw new RuntimeException("Book already exists");
+            throw new DuplicateBooks("Book already exists");
         }
 
         //Checks if author or language already exist in other case its saved
@@ -36,6 +37,7 @@ public class BookService {
                 .orElseGet(() ->{
                             Author newAuthor = new Author();
                             newAuthor.setFirstName(bookDto.author().getFirstName());
+                            newAuthor.setLastName(bookDto.author().getLastName());
                             return authorRepository.save(newAuthor);
                         });
 
@@ -49,7 +51,7 @@ public class BookService {
         Book book = new Book();
         book.setTitle(bookDto.title());
         book.setGenre(bookDto.genre());
-        book.setRating(bookDto.Rating());
+        book.setRating(bookDto.rating());
         book.setAuthor(author);
         book.setLanguage(language);
 

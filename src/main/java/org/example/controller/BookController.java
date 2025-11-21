@@ -54,7 +54,7 @@ public class BookController {
 
         currentBook.setTitle(bookDto.title());
         currentBook.setGenre(bookDto.genre());
-        currentBook.setRating(bookDto.Rating());
+        currentBook.setRating(bookDto.rating());
         currentBook.setAuthor(bookDto.author());
         currentBook.setLanguage(bookDto.language());
 

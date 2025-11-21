@@ -21,7 +21,7 @@ public class CustomException {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<String> handleNotFund(NoHandlerFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Page does not exist"+e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Page does not exist");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -36,6 +36,11 @@ public class CustomException {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+
+    @ExceptionHandler(DuplicateBooks.class)
+    public ResponseEntity<String> handleDuplicateBooks(Exception e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
 }

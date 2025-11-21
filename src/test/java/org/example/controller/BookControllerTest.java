@@ -1,6 +1,5 @@
 package org.example.controller;
 
-import net.bytebuddy.asm.Advice;
 import org.example.Genre;
 import org.example.entities.Author;
 import org.example.entities.Book;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -38,6 +36,7 @@ class BookControllerTest extends TestSetup {
     void shouldFindBookById() {
         ResponseEntity<Book> response = loggedInUser().exchange("/api/books/id/1", HttpMethod.GET, null, Book.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getTitle()).isEqualTo("En man som heter Ove");
     }
 
@@ -91,7 +90,7 @@ class BookControllerTest extends TestSetup {
         HttpEntity<Book> request = new HttpEntity<>(book, headers);
         ResponseEntity<String> response = loggedInUser().exchange("/api/books/add", HttpMethod.POST, request, String.class);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
         assertThat(response.getBody()).isEqualTo("Book already exists");
     }
 

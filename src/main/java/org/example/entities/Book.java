@@ -20,7 +20,7 @@ public class Book {
     @Enumerated(EnumType.STRING)
     Genre genre;
 
-    int Rating;
+    int rating;
 
     @ManyToOne(cascade = {CascadeType.PERSIST})
      private Language language;
@@ -33,7 +33,7 @@ public class Book {
     public Book(String title, Genre genre, int Rating, Author author, Language language) {
      this.title = title;
      this.genre = genre;
-     this.Rating = Rating;
+     this.rating = Rating;
      this.author = author;
      this.language = language;
     }
@@ -63,11 +63,11 @@ public class Book {
     }
 
     public int getRating() {
-        return Rating;
+        return rating;
     }
 
     public void setRating(int rating) {
-        Rating = rating;
+        this.rating = rating;
     }
 
     public Language getLanguage() {
@@ -108,7 +108,7 @@ public class Book {
                 "id=" + bookId +
                 ", title='" + title + '\'' +
                 ", genre=" + genre +
-                ", Rating=" + Rating +
+                ", rating=" + rating +
                 ", language=" + language +
                 ", author=" + author +
                 '}';

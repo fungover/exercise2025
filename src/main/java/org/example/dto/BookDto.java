@@ -17,7 +17,7 @@ public record BookDto(
         @NotNull
         @Min(value = 0, message = "Rating must be at least 0")
         @Max(value = 10, message = "Rating must not exceed 10")
-        int Rating,
+        int rating,
         @NotNull
         Author author,
         @NotNull

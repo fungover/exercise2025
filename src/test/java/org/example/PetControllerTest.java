@@ -75,8 +75,11 @@ class PetControllerTest {
     @Test
     @WithMockUser(username="admin", roles={"ADMIN"})
     void feedPetShouldReturnOk() throws Exception {
-        Pet pet2 = new Pet("Bergman", "Dog", 40, 60, 2);
-        Mockito.when(petRepository.findPetById(2)).thenReturn(Optional.of(pet2));
+        Pet pet = new Pet("Bergman", "Dog", 40, 60, 2);
+        Mockito.when(petRepository.findPetById(2)).thenReturn(Optional.of(pet));
+        PetDTO petDTO = new PetDTO(pet.getName(), pet.getSpecies(), pet.getHunger(), pet.getHappiness(), pet.getId());
+        PetDTO petDTO2 = new PetDTO(pet.getName(), pet.getSpecies(), pet.getHunger()-10, pet.getHappiness(), pet.getId());
+        Mockito.when(petService.feedPet(petDTO)).thenReturn(petDTO2);
         mockMvc.perform(put("/api/pets/2/feed").with(csrf()).header("X-API-KEY", "secret"))
                 .andExpect(status().isOk());
     }
@@ -85,6 +88,9 @@ class PetControllerTest {
     void playWithPetShouldReturnOk() throws Exception {
         Pet pet = new Pet("Bergman", "Dog", 40, 40, 1);
         Mockito.when(petRepository.findPetById(1)).thenReturn(Optional.of(pet));
+        PetDTO petDTO = new PetDTO(pet.getName(), pet.getSpecies(), pet.getHunger(), pet.getHappiness(), pet.getId());
+        PetDTO petDTO2 = new PetDTO(pet.getName(), pet.getSpecies(), pet.getHunger(), pet.getHappiness()+10, pet.getId());
+        Mockito.when(petService.playWithPet(petDTO)).thenReturn(petDTO2);
         mockMvc.perform(put("/api/pets/1/play").with(csrf()).header("X-API-KEY", "secret"))
                 .andExpect(status().isOk());
     }

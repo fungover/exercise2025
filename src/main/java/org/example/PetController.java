@@ -14,9 +14,11 @@ import java.util.List;
 public class PetController {
 
     private final PetRepository repository;
+    private final PetService service;
 
-    public PetController(PetRepository repository) {
+    public PetController(PetRepository repository, PetService service) {
         this.repository = repository;
+        this.service = service;
     }
 
     @GetMapping("pets")
@@ -51,7 +53,7 @@ public class PetController {
 
     @PutMapping("pets/{id}/feed")
     public ResponseEntity<PetDTO> feedPet(@PathVariable Integer id){
-        PetDTO petDto = PetService.feedPet(repository.findPetById(id)
+        PetDTO petDto = service.feedPet(repository.findPetById(id)
                 .map(pet -> new PetDTO(pet.getName(), pet.getSpecies(), pet.getHunger(), pet.getHappiness(), pet.getId()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
         Pet fedPet = new Pet(petDto.getName(), petDto.getSpecies(), petDto.getHunger(), petDto.getHappiness(), petDto.getId());
@@ -62,7 +64,7 @@ public class PetController {
     @PutMapping("pets/{id}/play")
     public ResponseEntity<PetDTO> playWithPet(@PathVariable Integer id){
         System.out.println("In controller.playWithPet()");
-        PetDTO petDto = PetService.playWithPet(repository.findPetById(id)
+        PetDTO petDto = service.playWithPet(repository.findPetById(id)
                 .map(pet -> new PetDTO(pet.getName(), pet.getSpecies(), pet.getHunger(), pet.getHappiness(), pet.getId()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
         Pet fedPet = new Pet(petDto.getName(), petDto.getSpecies(), petDto.getHunger(), petDto.getHappiness(), petDto.getId());

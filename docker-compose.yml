@@ -8,3 +8,6 @@ services:
       - 'MYSQL_USER=user'
     ports:
       - '3306:3306'
+    volumes:
+      - type: tmpfs
+        target: /var/lib/mysql

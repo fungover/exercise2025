@@ -6,7 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Exercise2025Application {
 
-    void main(String[] args) {
+    // Can't run without static
+    public static void main(String[] args) {
         SpringApplication.run(Exercise2025Application.class, args);
     }
 

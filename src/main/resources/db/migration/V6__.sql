@@ -1,15 +1,15 @@
 CREATE TABLE customized_user
 (
     user_id   INT AUTO_INCREMENT NOT NULL,
-    user_name VARCHAR(255) NULL,
-    password  VARCHAR(255) NULL,
+    user_name VARCHAR(255) NOT NULL,
+    password  VARCHAR(255) NOT NULL,
     CONSTRAINT pk_customizeduser PRIMARY KEY (user_id)
 );
 
 CREATE TABLE `role`
 (
     role_id   INT AUTO_INCREMENT NOT NULL,
-    authority VARCHAR(255) NULL,
+    authority VARCHAR(255) NOT NULL,
     CONSTRAINT pk_role PRIMARY KEY (role_id)
 );
 

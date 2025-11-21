@@ -2,9 +2,10 @@ package org.example.exceptions;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -70,8 +71,11 @@ public class GlobalExceptionHandler {
     }
 
     // Handle any other unexpected exception - returns 500 Internal Server Error
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
+        logger.error("Unexpected error occurred", ex);
         Map<String, String> error = new HashMap<>();
         error.put("message", "An unexpected error occured: " + ex.getMessage());
 

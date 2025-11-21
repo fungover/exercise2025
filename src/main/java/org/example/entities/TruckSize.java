@@ -1,40 +1,37 @@
 package org.example.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @Entity
-public class Skateboard {
+public class TruckSize {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    String brand;
+    int size;
 
     double boardWidth;
+
+    int brandId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    public TruckSize() {}
 
-    @ManyToMany
-    Map<TruckBrand, TruckSize> fittingTrucks = new HashMap<>();
-
-    public Skateboard() {}
-
-    public Skateboard(String brand, double boardWidth) {
-        this.brand = brand;
+    public TruckSize(int size, double boardWidth, int brandId) {
+        this.size = size;
         this.boardWidth = boardWidth;
+        this.brandId = brandId;
     }
 
     public Integer getId() {
@@ -45,12 +42,12 @@ public class Skateboard {
         this.id = id;
     }
 
-    public String getBrand() {
-        return brand;
+    public int getSize() {
+        return size;
     }
 
-    public void setBrand(String deckBrand) {
-        this.brand = deckBrand;
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public double getBoardWidth() {
@@ -61,20 +58,20 @@ public class Skateboard {
         this.boardWidth = boardWidth;
     }
 
+    public int getTruckId() {
+        return brandId;
+    }
+
+    public void setTruckId(int truckId) {
+        this.brandId = truckId;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     @Override
@@ -84,8 +81,8 @@ public class Skateboard {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Skateboard skateboard = (Skateboard) o;
-        return getId() != null && Objects.equals(getId(), skateboard.getId());
+        TruckSize truckSize = (TruckSize) o;
+        return getId() != null && Objects.equals(getId(), truckSize.getId());
     }
 
     @Override

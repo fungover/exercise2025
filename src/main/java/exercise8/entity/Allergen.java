@@ -39,4 +39,17 @@ public class Allergen {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Allergen)) return false;
+        Allergen allergen = (Allergen) o;
+        return name != null && name.equals(allergen.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

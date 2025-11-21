@@ -20,5 +20,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByNameContainingIgnoreCase(String name);
 
     // Find ongoing events (between start and end dates)
-    List<Event> findByStartDateBeforeAndEndDateAfter(LocalDate endDate, LocalDate startDate);
+    List<Event> findByStartDateBeforeAndEndDateAfter(LocalDate startDate, LocalDate endDate);
+
 }

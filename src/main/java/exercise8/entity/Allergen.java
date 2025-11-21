@@ -1,6 +1,7 @@
 package exercise8.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "allergen")
@@ -10,24 +11,16 @@ public class Allergen {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name is required")
     @Column(nullable = false, unique = true)
     private String name;
-
-    @Column(length = 1000)
-    private String description;
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private AllergenSeverity severity;
 
     // Constructors
     public Allergen() {
     }
 
-    public Allergen(String name, String description, AllergenSeverity severity) {
+    public Allergen(String name) {
         this.name = name;
-        this.description = description;
-        this.severity = severity;
     }
 
     // Getters and Setters
@@ -45,21 +38,5 @@ public class Allergen {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public AllergenSeverity getSeverity() {
-        return severity;
-    }
-
-    public void setSeverity(AllergenSeverity severity) {
-        this.severity = severity;
     }
 }

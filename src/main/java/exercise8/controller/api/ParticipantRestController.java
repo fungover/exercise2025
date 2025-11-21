@@ -17,21 +17,21 @@ public class ParticipantRestController {
     @Autowired
     private ParticipantService participantService;
 
-    // GET /api/participants - Hämta alla deltagare
+    // GET /api/participants - Get all participants
     @GetMapping
     public ResponseEntity<List<Participant>> getAllParticipants() {
         List<Participant> participants = participantService.findAll();
         return ResponseEntity.ok(participants);
     }
 
-    // GET /api/participants/{id} - Hämta specifik deltagare
+    // GET /api/participants/{id} - Get specific participant
     @GetMapping("/{id}")
     public ResponseEntity<Participant> getParticipantById(@PathVariable Long id) {
         Participant participant = participantService.findById(id);
         return ResponseEntity.ok(participant);
     }
 
-    // POST /api/participants - Skapa ny deltagare
+    // POST /api/participants - Create new participant
     @PostMapping
     public ResponseEntity<Participant> createParticipant(
             @Valid @RequestBody Participant participant) {
@@ -39,7 +39,7 @@ public class ParticipantRestController {
         return new ResponseEntity<>(createdParticipant, HttpStatus.CREATED);
     }
 
-    // PUT /api/participants/{id} - Uppdatera deltagare
+    // PUT /api/participants/{id} - Update participants
     @PutMapping("/{id}")
     public ResponseEntity<Participant> updateParticipant(
             @PathVariable Long id,
@@ -48,14 +48,14 @@ public class ParticipantRestController {
         return ResponseEntity.ok(updatedParticipant);
     }
 
-    // DELETE /api/participants/{id} - Ta bort deltagare
+    // DELETE /api/participants/{id} - Delete participants
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteParticipant(@PathVariable Long id) {
         participantService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    // GET /api/participants/patrol/{patrolId} - Deltagare i en scoutkår
+    // GET /api/participants/patrol/{patrolId} - Participant in a scout troop
     @GetMapping("/patrol/{patrolId}")
     public ResponseEntity<List<Participant>> getParticipantsByPatrol(
             @PathVariable Long patrolId) {
@@ -63,11 +63,5 @@ public class ParticipantRestController {
         return ResponseEntity.ok(participants);
     }
 
-    // GET /api/participants/search?name=xxx - Sök deltagare
-    @GetMapping("/search")
-    public ResponseEntity<List<Participant>> searchParticipants(@RequestParam String name) {
-        List<Participant> participants = participantService.searchByName(name);
-        return ResponseEntity.ok(participants);
-    }
 }
 

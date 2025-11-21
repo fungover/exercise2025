@@ -12,9 +12,7 @@ CREATE TABLE patrol
 CREATE TABLE allergen
 (
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name        VARCHAR(100) UNIQUE NOT NULL,
-    description VARCHAR(1000),
-    severity    VARCHAR(20)
+    name        VARCHAR(100) UNIQUE NOT NULL
 );
 
 -- Create event table
@@ -47,7 +45,7 @@ CREATE TABLE registration
     id                BIGINT AUTO_INCREMENT PRIMARY KEY,
     event_id          BIGINT NOT NULL,
     participant_id    BIGINT NOT NULL,
-    registration_date TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status            VARCHAR(20) DEFAULT 'PENDING',
     special_requests  VARCHAR(1000),
     FOREIGN KEY (event_id) REFERENCES event (id),

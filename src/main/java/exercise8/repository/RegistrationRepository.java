@@ -13,25 +13,25 @@ import java.util.Optional;
 @Repository
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
 
-    // Hitta alla registreringar för ett event
+    // Find all registrations for an event
     List<Registration> findByEventId(Long eventId);
 
-    // Hitta alla registreringar för en deltagare
+    // Find all registrations for a participant
     List<Registration> findByParticipantId(Long participantId);
 
-    // Hitta registreringar med viss status
+    // Find registrations with a certain status
     List<Registration> findByStatus(RegistrationStatus status);
 
-    // Hitta registreringar för ett event med viss status
+    // Find registrations for an event with a specific status
     List<Registration> findByEventIdAndStatus(Long eventId, RegistrationStatus status);
 
-    // Kolla om en deltagare redan är registrerad till ett event
+    // Check if a participant is already registered for an event
     boolean existsByEventIdAndParticipantId(Long eventId, Long participantId);
 
-    // Räkna antal bekräftade registreringar för ett event
+    // Count the number of confirmed registrations for an event
     @Query("SELECT COUNT(r) FROM Registration r WHERE r.event.id = :eventId AND r.status = 'CONFIRMED'")
     long countConfirmedByEventId(@Param("eventId") Long eventId);
 
-    // Hitta specifik registrering
+    // Find specific registration
     Optional<Registration> findByEventIdAndParticipantId(Long eventId, Long participantId);
 }

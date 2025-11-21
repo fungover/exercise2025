@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${event.id != null ? 'Redigera Event' : 'Skapa Nytt Event'}">Event Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px 0;
+        }
+
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: #dc3545;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input:invalid {
+            border-color: #dc3545;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            border: none;
+            transition: background 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="header-content">
+        <a th:href="@{/events}" class="back-link">← Tillbaka till alla events</a>
+        <form th:action="@{/logout}" method="post" style="display: inline;">
+            <button type="submit" class="logout-btn">Logga ut</button>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <div class="form-card">
+        <h1 th:text="${event.id != null ? '✏️ Redigera Event' : '➕ Skapa Nytt Event'}">Event Form</h1>
+
+        <form th:action="${event.id != null ? '/events/' + event.id : '/events'}"
+              th:object="${event}"
+              method="post"
+              id="eventForm">
+
+            <div class="form-group">
+                <label for="name">
+                    Eventnamn <span class="required">*</span>
+                </label>
+                <input type="text"
+                       id="name"
+                       th:field="*{name}"
+                       required
+                       placeholder="T.ex. Sommarläger Böda 2026">
+                <div class="help-text">Välj ett beskrivande namn för ditt event</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="startDate">
+                        Startdatum <span class="required">*</span>
+                    </label>
+                    <input type="date"
+                           id="startDate"
+                           th:field="*{startDate}"
+                           required>
+                    <div class="error" id="startDateError">Startdatum kan inte vara efter slutdatum</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="endDate">
+                        Slutdatum <span class="required">*</span>
+                    </label>
+                    <input type="date"
+                           id="endDate"
+                           th:field="*{endDate}"
+                           required>
+                    <div class="error" id="endDateError">Slutdatum kan inte vara före startdatum</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="location">
+                    Plats <span class="required">*</span>
+                </label>
+                <input type="text"
+                       id="location"
+                       th:field="*{location}"
+                       required
+                       placeholder="T.ex. Böda Sand, Öland">
+                <div class="help-text">Ange var eventet kommer att äga rum</div>
+            </div>
+
+            <div class="form-group">
+                <label for="maxParticipants">
+                    Max antal deltagare
+                </label>
+                <input type="number"
+                       id="maxParticipants"
+                       th:field="*{maxParticipants}"
+                       min="1"
+                       placeholder="T.ex. 150">
+                <div class="help-text">Lämna tomt för obegränsat antal deltagare</div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span th:text="${event.id != null ? '💾 Spara ändringar' : '➕ Skapa event'}">Spara</span>
+                </button>
+                <a th:href="@{/events}" class="btn btn-secondary">
+                    Avbryt
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Get date inputs
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    const startDateError = document.getElementById('startDateError');
+    const endDateError = document.getElementById('endDateError');
+    const submitBtn = document.getElementById('submitBtn');
+    const eventForm = document.getElementById('eventForm');
+
+    // Date validation function
+    function validateDates() {
+        const startDate = startDateInput.value;
+        const endDate = endDateInput.value;
+
+        // Reset errors
+        startDateError.classList.remove('show');
+        endDateError.classList.remove('show');
+        startDateInput.style.borderColor = '#ddd';
+        endDateInput.style.borderColor = '#ddd';
+
+        let isValid = true;
+
+        // If both dates are selected, validate
+        if (startDate && endDate) {
+            if (new Date(startDate) > new Date(endDate)) {
+                endDateError.classList.add('show');
+                endDateInput.style.borderColor = '#dc3545';
+                isValid = false;
+            }
+        }
+
+        // Update submit
+        submitBtn.disabled = !isValid;
+
+        return isValid;
+    }
+
+    // Update min/max of dates when a date changes
+    startDateInput.addEventListener('change', function() {
+        // Sätt minimum för slutdatum till startdatum
+        if (this.value) {
+            endDateInput.min = this.value;
+        }
+        validateDates();
+    });
+
+    endDateInput.addEventListener('change', function() {
+        // Set maximum start date to end date
+        if (this.value) {
+            startDateInput.max = this.value;
+        }
+        validateDates();
+    });
+
+    // Validate on submit
+    eventForm.addEventListener('submit', function(e) {
+        if (!validateDates()) {
+            e.preventDefault();
+            alert('Vänligen korrigera datumfelen innan du fortsätter.');
+        }
+    });
+
+    // Initial validation if dates are already set (when editing)
+    if (startDateInput.value && endDateInput.value) {
+        if (startDateInput.value) {
+            endDateInput.min = startDateInput.value;
+        }
+        if (endDateInput.value) {
+            startDateInput.max = endDateInput.value;
+        }
+        validateDates();
+    }
+</script>
+</body>
+</html>

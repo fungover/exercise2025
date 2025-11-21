@@ -24,28 +24,28 @@ public class RegistrationService {
     @Autowired
     private ParticipantService participantService;
 
-    // Hämta alla registreringar
+    // Get all registrations
     public List<Registration> findAll() {
         return registrationRepository.findAll();
     }
 
-    // Hämta registrering via ID
+    // Get registration via ID
     public Registration findById(Long id) {
         return registrationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Registration", "id", id));
     }
 
-    // Skapa ny registrering
+    // Create new registration
     public Registration create(Registration registration) {
         Event event = registration.getEvent();
 
-        // Kolla om deltagaren redan är registrerad
+        // Check if the participant is already registered
         if (registrationRepository.existsByEventIdAndParticipantId(
                 event.getId(), registration.getParticipant().getId())) {
             throw new IllegalStateException("Participant is already registered for this event");
         }
 
-        // Kolla om eventet har plats
+        // Check if the event is available
         if (event.getMaxParticipants() != null) {
             long confirmedCount = registrationRepository.countConfirmedByEventId(event.getId());
             if (confirmedCount >= event.getMaxParticipants()) {
@@ -59,7 +59,7 @@ public class RegistrationService {
         return registrationRepository.save(registration);
     }
 
-    // Uppdatera registrering
+    // Update registration
     public Registration update(Long id, Registration registrationDetails) {
         Registration registration = findById(id);
 
@@ -69,37 +69,37 @@ public class RegistrationService {
         return registrationRepository.save(registration);
     }
 
-    // Bekräfta registrering
+    // Confirm registration
     public Registration confirm(Long id) {
         Registration registration = findById(id);
         registration.setStatus(RegistrationStatus.CONFIRMED);
         return registrationRepository.save(registration);
     }
 
-    // Avboka registrering
+    // Cancel registration
     public Registration cancel(Long id) {
         Registration registration = findById(id);
         registration.setStatus(RegistrationStatus.CANCELLED);
         return registrationRepository.save(registration);
     }
 
-    // Ta bort registrering
+    // Delete registration
     public void delete(Long id) {
         Registration registration = findById(id);
         registrationRepository.delete(registration);
     }
 
-    // Hitta alla registreringar för ett event
+    // Find all registrations for an event
     public List<Registration> findByEventId(Long eventId) {
         return registrationRepository.findByEventId(eventId);
     }
 
-    // Hitta alla registreringar för en deltagare
+    // Find all registrations for a participant
     public List<Registration> findByParticipantId(Long participantId) {
         return registrationRepository.findByParticipantId(participantId);
     }
 
-    // Hitta bekräftade registreringar för ett event
+    // Find confirmed registrations for an event
     public List<Registration> findConfirmedByEventId(Long eventId) {
         return registrationRepository.findByEventIdAndStatus(eventId, RegistrationStatus.CONFIRMED);
     }

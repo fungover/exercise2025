@@ -12,17 +12,17 @@ import java.util.Optional;
 @Repository
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
-    // Hitta deltagare via email
+    // Find participants via email
     Optional<Participant> findByEmail(String email);
 
-    // Hitta alla deltagare i en scoutkår
+    // Find all participants in a scout troop
     List<Participant> findByPatrolId(Long patrolId);
 
-    // Hitta deltagare med en specifik allergi
+    // Find participants with a specific allergy
     @Query("SELECT p FROM Participant p JOIN p.allergens a WHERE a.id = :allergenId")
     List<Participant> findByAllergenId(@Param("allergenId") Long allergenId);
 
-    // Sök deltagare på namn
+    // Search participants by name
     @Query("SELECT p FROM Participant p WHERE " +
             "LOWER(p.firstName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
             "LOWER(p.lastName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")

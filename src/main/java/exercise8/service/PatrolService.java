@@ -16,23 +16,23 @@ public class PatrolService {
     @Autowired
     private PatrolRepository patrolRepository;
 
-    // Hämta alla scoutkårer
+    // Get all scout troops
     public List<Patrol> findAll() {
         return patrolRepository.findAll();
     }
 
-    // Hämta scoutkår via ID
+    // Get scout corps by ID
     public Patrol findById(Long id) {
         return patrolRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Patrol", "id", id));
     }
 
-    // Skapa ny scoutkår
+    // Create new scout troop
     public Patrol create(Patrol patrol) {
         return patrolRepository.save(patrol);
     }
 
-    // Uppdatera scoutkår
+    // Update scout corps
     public Patrol update(Long id, Patrol patrolDetails) {
         Patrol patrol = findById(id);
 
@@ -44,13 +44,13 @@ public class PatrolService {
         return patrolRepository.save(patrol);
     }
 
-    // Ta bort scoutkår
+    // Delete scout troop
     public void delete(Long id) {
         Patrol patrol = findById(id);
         patrolRepository.delete(patrol);
     }
 
-    // Hitta scoutkårer i ett distrikt
+    // Find Scout Troops in a District
     public List<Patrol> findByDistrict(String district) {
         return patrolRepository.findByDistrict(district);
     }

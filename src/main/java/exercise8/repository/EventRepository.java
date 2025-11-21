@@ -10,15 +10,15 @@ import java.util.List;
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    // Hitta events efter ett visst datum
+    // Find events by a specific date
     List<Event> findByStartDateAfter(LocalDate date);
 
-    // Hitta events före ett visst datum
+    // Find events before a certain date
     List<Event> findByStartDateBefore(LocalDate date);
 
-    // Sök events med namn som innehåller text
+    // Search for events with names that contain text
     List<Event> findByNameContainingIgnoreCase(String name);
 
-    // Hitta pågående events (mellan start och slutdatum)
+    // Find ongoing events (between start and end dates)
     List<Event> findByStartDateBeforeAndEndDateAfter(LocalDate endDate, LocalDate startDate);
 }

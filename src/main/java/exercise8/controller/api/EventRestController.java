@@ -2,71 +2,105 @@ package exercise8.controller.api;
 
 import exercise8.entity.Event;
 import exercise8.service.EventService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/events")
 public class EventRestController {
 
-    @Autowired
-    private EventService eventService;
+    private final EventService eventService;
 
-    // GET /api/events - Hämta alla events
+    public EventRestController(EventService eventService) {
+        this.eventService = eventService;
+    }
+
+     // Get all events as JSON
     @GetMapping
     public ResponseEntity<List<Event>> getAllEvents() {
-        List<Event> events = eventService.findAll();
-        return ResponseEntity.ok(events);
+        return ResponseEntity.ok(eventService.getAllEvents());
     }
 
-    // GET /api/events/{id} - Hämta specifikt event
+
+     // Get a specific event as JSON
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable Long id) {
-        Event event = eventService.findById(id);
-        return ResponseEntity.ok(event);
+    public ResponseEntity<Event> getEvent(@PathVariable Long id) {
+        try {
+            Event event = eventService.getEventById(id);
+            return ResponseEntity.ok(event);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // POST /api/events - Skapa nytt event
-    @PostMapping
-    public ResponseEntity<Event> createEvent(@Valid @RequestBody Event event) {
-        Event createdEvent = eventService.create(event);
-        return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
+
+     // Download allergy report as JSON
+    @GetMapping("/{id}/allergy-report")
+    public ResponseEntity<Map<String, List<EventService.ParticipantAllergyInfo>>> getAllergyReport(@PathVariable Long id) {
+        try {
+            var report = eventService.getAllergyReportForEvent(id);
+            return ResponseEntity.ok(report);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // PUT /api/events/{id} - Uppdatera event
-    @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(
-            @PathVariable Long id,
-            @Valid @RequestBody Event event) {
-        Event updatedEvent = eventService.update(id, event);
-        return ResponseEntity.ok(updatedEvent);
+
+     // Export allergi-statistics to CSV
+    @GetMapping("/{id}/allergy-report/csv")
+    public ResponseEntity<String> exportAllergyReportToCsv(@PathVariable Long id) {
+        try {
+            Event event = eventService.getEventById(id);
+            var report = eventService.getAllergyReportForEvent(id);
+
+            StringBuilder csv = new StringBuilder();
+            csv.append("Allergi,Antal,Efternamn,Förnamn,Patrull,Roll\n");
+
+            report.forEach((allergyName, participants) -> {
+                boolean first = true;
+                for (var participant : participants) {
+                    csv.append(String.format("\"%s\",%d,\"%s\",\"%s\",\"%s\",\"%s\"\n",
+                            allergyName,
+                            first ? participants.size() : 0,
+                            participant.getLastName(),
+                            participant.getFirstName(),
+                            participant.getPatrol(),
+                            participant.getRoleGroup() != null ? participant.getRoleGroup() : ""
+                    ));
+                    first = false;
+                }
+            });
+
+            String filename = String.format("allergi-rapport-%s-%s.csv",
+                    event.getName().replaceAll("[^a-zA-Z0-9]", "-"),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"))
+            );
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                    .contentType(new MediaType("text", "csv", java.nio.charset.StandardCharsets.UTF_8))
+                    .body(csv.toString());
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // DELETE /api/events/{id} - Ta bort event
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
-        eventService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
 
-    // GET /api/events/upcoming - Hämta kommande events
-    @GetMapping("/upcoming")
-    public ResponseEntity<List<Event>> getUpcomingEvents() {
-        List<Event> events = eventService.findUpcomingEvents();
-        return ResponseEntity.ok(events);
-    }
-
-    // GET /api/events/search?name=xxx - Sök events
-    @GetMapping("/search")
-    public ResponseEntity<List<Event>> searchEvents(@RequestParam String name) {
-        List<Event> events = eventService.searchByName(name);
-        return ResponseEntity.ok(events);
+     // Export allergy statistics to JSON
+    @GetMapping("/{id}/allergy-statistics")
+    public ResponseEntity<Map<String, Long>> getAllergyStatistics(@PathVariable Long id) {
+        try {
+            var statistics = eventService.getAllergyStatisticsForEvent(id);
+            return ResponseEntity.ok(statistics);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

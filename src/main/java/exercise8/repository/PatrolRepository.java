@@ -10,12 +10,12 @@ import java.util.Optional;
 @Repository
 public interface PatrolRepository extends JpaRepository<Patrol, Long> {
 
-    // Hitta scoutkår via namn
+    // Find scout troop by name
     Optional<Patrol> findByName(String name);
 
-    // Hitta alla scoutkårer i ett distrikt
+    // Find all scout troops in a district
     List<Patrol> findByDistrict(String district);
 
-    // Sök scoutkårer på namn
+    // Search scout troops by name
     List<Patrol> findByNameContainingIgnoreCase(String name);
 }

@@ -16,29 +16,29 @@ public class ParticipantService {
     @Autowired
     private ParticipantRepository participantRepository;
 
-    // Hämta alla deltagare
+    // Get all participants
     public List<Participant> findAll() {
         return participantRepository.findAll();
     }
 
-    // Hämta deltagare via ID
+    // Retrieve participants via ID
     public Participant findById(Long id) {
         return participantRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Participant", "id", id));
     }
 
-    // Hämta deltagare via email
+    // Get participants via email
     public Participant findByEmail(String email) {
         return participantRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Participant", "email", email));
     }
 
-    // Skapa ny deltagare
+    // Create new participant
     public Participant create(Participant participant) {
         return participantRepository.save(participant);
     }
 
-    // Uppdatera deltagare
+    // Update participants
     public Participant update(Long id, Participant participantDetails) {
         Participant participant = findById(id);
 
@@ -53,18 +53,18 @@ public class ParticipantService {
         return participantRepository.save(participant);
     }
 
-    // Ta bort deltagare
+    // Delete participants
     public void delete(Long id) {
         Participant participant = findById(id);
         participantRepository.delete(participant);
     }
 
-    // Hitta deltagare i en scoutkår
+    // Find participants in a scout troop
     public List<Participant> findByPatrolId(Long patrolId) {
         return participantRepository.findByPatrolId(patrolId);
     }
 
-    // Sök deltagare på namn
+    // Search participants by name
     public List<Participant> searchByName(String searchTerm) {
         return participantRepository.searchByName(searchTerm);
     }

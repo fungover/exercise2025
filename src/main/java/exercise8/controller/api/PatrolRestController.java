@@ -17,28 +17,28 @@ public class PatrolRestController {
     @Autowired
     private PatrolService patrolService;
 
-    // GET /api/patrols - Hämta alla scoutkårer
+    // GET /api/patrols - Get all scout troops
     @GetMapping
     public ResponseEntity<List<Patrol>> getAllPatrols() {
         List<Patrol> patrols = patrolService.findAll();
         return ResponseEntity.ok(patrols);
     }
 
-    // GET /api/patrols/{id} - Hämta specifik scoutkår
+    // GET /api/patrols/{id} - Get specific scout corps
     @GetMapping("/{id}")
     public ResponseEntity<Patrol> getPatrolById(@PathVariable Long id) {
         Patrol patrol = patrolService.findById(id);
         return ResponseEntity.ok(patrol);
     }
 
-    // POST /api/patrols - Skapa ny scoutkår
+    // POST /api/patrols - Create a new scout troop
     @PostMapping
     public ResponseEntity<Patrol> createPatrol(@Valid @RequestBody Patrol patrol) {
         Patrol createdPatrol = patrolService.create(patrol);
         return new ResponseEntity<>(createdPatrol, HttpStatus.CREATED);
     }
 
-    // PUT /api/patrols/{id} - Uppdatera scoutkår
+    // PUT /api/patrols/{id} - Update scout corps
     @PutMapping("/{id}")
     public ResponseEntity<Patrol> updatePatrol(
             @PathVariable Long id,
@@ -47,14 +47,14 @@ public class PatrolRestController {
         return ResponseEntity.ok(updatedPatrol);
     }
 
-    // DELETE /api/patrols/{id} - Ta bort scoutkår
+    // DELETE /api/patrols/{id} - Delete Scout Corps
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePatrol(@PathVariable Long id) {
         patrolService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    // GET /api/patrols/district/{district} - Scoutkårer i ett distrikt
+    // GET /api/patrols/district/{district} - Scout corps in a district
     @GetMapping("/district/{district}")
     public ResponseEntity<List<Patrol>> getPatrolsByDistrict(@PathVariable String district) {
         List<Patrol> patrols = patrolService.findByDistrict(district);

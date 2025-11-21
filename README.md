@@ -1,18 +1,8 @@
+### LoginInformation
+- User:admin
+- Lösen:admin123
+- Som oinloggad så omdirigeras du automatiskt till login.
 
-### Hämta alla events
-curl http://localhost:8080/api/events
-
-### Hämta alla allergener
-curl http://localhost:8080/api/allergens
-
-### Hämta alla deltagare
-curl http://localhost:8080/api/participants
-
-### Hämta alla scoutkårer
-curl http://localhost:8080/api/patrols
-
-### Hämta alla registreringar
-curl http://localhost:8080/api/registrations
 
 ## **Alla tillgängliga endpoints:**
 ```

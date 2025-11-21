@@ -1,64 +1,161 @@
 package exercise8.service;
 
+import exercise8.entity.Allergen;
 import exercise8.entity.Event;
+import exercise8.entity.Participant;
+import exercise8.entity.Registration;
 import exercise8.exception.ResourceNotFoundException;
 import exercise8.repository.EventRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 @Service
-@Transactional
 public class EventService {
 
-    @Autowired
-    private EventRepository eventRepository;
+    private final EventRepository eventRepository;
 
-    // Hämta alla events
-    public List<Event> findAll() {
+    public EventService(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
+    }
+
+
+     // Retrieving all events
+    @Transactional(readOnly = true)
+    public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
 
-    // Hämta event via ID
-    public Event findById(Long id) {
+
+     // Get a specific event
+    @Transactional(readOnly = true)
+    public Event getEventById(Long id) {
         return eventRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
+    }
+
+
+     // Saving an event
+    @Transactional
+    public Event saveEvent(Event event) {
+        return eventRepository.save(event);
+    }
+
+
+     // Delete an event
+    @Transactional
+    public void deleteEvent(Long id) {
+        Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event", "id", id));
-    }
 
-    // Skapa nytt event
-    public Event create(Event event) {
-        return eventRepository.save(event);
-    }
+        // Kontrollera om eventet har registreringar
+        if (event.getRegistrations() != null && !event.getRegistrations().isEmpty()) {
+            throw new IllegalStateException(
+                    "Cannot delete event with existing registrations. " +
+                            "Please delete all registrations first or cancel them.");
+        }
 
-    // Uppdatera event
-    public Event update(Long id, Event eventDetails) {
-        Event event = findById(id);
-
-        event.setName(eventDetails.getName());
-        event.setStartDate(eventDetails.getStartDate());
-        event.setEndDate(eventDetails.getEndDate());
-        event.setLocation(eventDetails.getLocation());
-        event.setMaxParticipants(eventDetails.getMaxParticipants());
-
-        return eventRepository.save(event);
-    }
-
-    // Ta bort event
-    public void delete(Long id) {
-        Event event = findById(id);
         eventRepository.delete(event);
     }
 
-    // Hitta kommande events
-    public List<Event> findUpcomingEvents() {
-        return eventRepository.findByStartDateAfter(LocalDate.now());
+
+     // Retrieves allergy report for a specific event
+     // Groups participants by allergy type
+    @Transactional(readOnly = true)
+    public Map<String, List<ParticipantAllergyInfo>> getAllergyReportForEvent(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        // Map: allergy-name -> list of participants
+        Map<String, List<ParticipantAllergyInfo>> allergyReport = new LinkedHashMap<>();
+
+        // Review all registered participants
+        for (Registration registration : event.getRegistrations()) {
+            Participant participant = registration.getParticipant();
+
+            // Review the participant's allergies
+            for (Allergen allergen : participant.getAllergens()) {
+                String allergyName = allergen.getName();
+
+                // Create list if it doesn't exist
+                allergyReport.putIfAbsent(allergyName, new ArrayList<>());
+
+                // Add participants to the list
+                allergyReport.get(allergyName).add(
+                        new ParticipantAllergyInfo(
+                                participant.getLastName(),
+                                participant.getFirstName(),
+                                participant.getPatrol() != null ? participant.getPatrol().getName() : "Ingen patrull",
+                                participant.getRoleGroup()
+                        )
+                );
+            }
+        }
+
+        // Sort allergies alphabetically
+        Map<String, List<ParticipantAllergyInfo>> sortedReport = new TreeMap<>(allergyReport);
+
+        // Sort each list alphabetically by last name
+        sortedReport.values().forEach(list ->
+                list.sort(Comparator.comparing(ParticipantAllergyInfo::getLastName)
+                        .thenComparing(ParticipantAllergyInfo::getFirstName))
+        );
+
+        return sortedReport;
     }
 
-    // Sök events på namn
-    public List<Event> searchByName(String name) {
-        return eventRepository.findByNameContainingIgnoreCase(name);
+
+     // Counts number of participants per allergy for an event
+    @Transactional(readOnly = true)
+    public Map<String, Long> getAllergyStatisticsForEvent(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        Map<String, Long> statistics = new TreeMap<>();
+
+        for (Registration registration : event.getRegistrations()) {
+            for (Allergen allergen : registration.getParticipant().getAllergens()) {
+                statistics.merge(allergen.getName(), 1L, Long::sum);
+            }
+        }
+
+        return statistics;
+    }
+
+
+     // Inner class to hold participants-info
+    public static class ParticipantAllergyInfo {
+        private final String lastName;
+        private final String firstName;
+        private final String patrol;
+        private final String roleGroup;
+
+        public ParticipantAllergyInfo(String lastName, String firstName, String patrol, String roleGroup) {
+            this.lastName = lastName;
+            this.firstName = firstName;
+            this.patrol = patrol;
+            this.roleGroup = roleGroup;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public String getFullName() {
+            return lastName + " " + firstName;
+        }
+
+        public String getPatrol() {
+            return patrol;
+        }
+
+        public String getRoleGroup() {
+            return roleGroup;
+        }
     }
 }

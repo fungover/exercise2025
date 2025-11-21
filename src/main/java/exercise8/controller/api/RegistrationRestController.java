@@ -17,21 +17,21 @@ public class RegistrationRestController {
     @Autowired
     private RegistrationService registrationService;
 
-    // GET /api/registrations - Hämta alla registreringar
+    // GET /api/registrations - Download all registrations
     @GetMapping
     public ResponseEntity<List<Registration>> getAllRegistrations() {
         List<Registration> registrations = registrationService.findAll();
         return ResponseEntity.ok(registrations);
     }
 
-    // GET /api/registrations/{id} - Hämta specifik registrering
+    // GET /api/registrations/{id} - Get specific registration
     @GetMapping("/{id}")
     public ResponseEntity<Registration> getRegistrationById(@PathVariable Long id) {
         Registration registration = registrationService.findById(id);
         return ResponseEntity.ok(registration);
     }
 
-    // POST /api/registrations - Skapa ny registrering
+    // POST /api/registrations - Create new registration
     @PostMapping
     public ResponseEntity<Registration> createRegistration(
             @Valid @RequestBody Registration registration) {
@@ -39,7 +39,7 @@ public class RegistrationRestController {
         return new ResponseEntity<>(createdRegistration, HttpStatus.CREATED);
     }
 
-    // PUT /api/registrations/{id} - Uppdatera registrering
+    // PUT /api/registrations/{id} - Update registration
     @PutMapping("/{id}")
     public ResponseEntity<Registration> updateRegistration(
             @PathVariable Long id,
@@ -48,35 +48,35 @@ public class RegistrationRestController {
         return ResponseEntity.ok(updatedRegistration);
     }
 
-    // PUT /api/registrations/{id}/confirm - Bekräfta registrering
+    // PUT /api/registrations/{id}/confirm - Confirm registration
     @PutMapping("/{id}/confirm")
     public ResponseEntity<Registration> confirmRegistration(@PathVariable Long id) {
         Registration registration = registrationService.confirm(id);
         return ResponseEntity.ok(registration);
     }
 
-    // PUT /api/registrations/{id}/cancel - Avboka registrering
+    // PUT /api/registrations/{id}/cancel - Cancel registration
     @PutMapping("/{id}/cancel")
     public ResponseEntity<Registration> cancelRegistration(@PathVariable Long id) {
         Registration registration = registrationService.cancel(id);
         return ResponseEntity.ok(registration);
     }
 
-    // DELETE /api/registrations/{id} - Ta bort registrering
+    // DELETE /api/registrations/{id} - Delete registration
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRegistration(@PathVariable Long id) {
         registrationService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    // GET /api/registrations/event/{eventId} - Registreringar för ett event
+    // GET /api/registrations/event/{eventId} - Registrations for an event
     @GetMapping("/event/{eventId}")
     public ResponseEntity<List<Registration>> getRegistrationsByEvent(@PathVariable Long eventId) {
         List<Registration> registrations = registrationService.findByEventId(eventId);
         return ResponseEntity.ok(registrations);
     }
 
-    // GET /api/registrations/participant/{participantId} - Registreringar för en deltagare
+    // GET /api/registrations/participant/{participantId} - Registrations for a participant
     @GetMapping("/participant/{participantId}")
     public ResponseEntity<List<Registration>> getRegistrationsByParticipant(
             @PathVariable Long participantId) {

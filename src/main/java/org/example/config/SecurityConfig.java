@@ -23,7 +23,7 @@ public class SecurityConfig {
                         .requestMatchers("/pets").permitAll()
                         .anyRequest().authenticated()
                 )
-                .csrf(csrf -> csrf.disable())
+                // .csrf(csrf -> csrf.disable())
                 .formLogin(Customizer.withDefaults())
                 .logout(Customizer.withDefaults());
         return http.build();

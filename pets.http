@@ -1,0 +1,4 @@
+### GET request for pets to list all pets
+GET http://localhost:8080/pets
+
+###

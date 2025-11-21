@@ -1,4 +1,7 @@
 package org.example;
 
-public class PetRepository {
+import org.example.entities.Pet;
+import org.springframework.data.repository.ListCrudRepository;
+
+public interface PetRepository extends ListCrudRepository<Pet, Integer> {
 }

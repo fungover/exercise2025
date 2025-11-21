@@ -24,17 +24,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, ApiKeyFilter apiKeyFilter) throws Exception {
         http.securityMatcher("/api/pets/**")
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.GET, "/api/pets").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/pets").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/pets/**/feed").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/pets").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/pets/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/pets/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/pets/**").authenticated()
-
                         .anyRequest().denyAll()
                 )
-                .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class);
         //http.authorizeHttpRequests((authorizeRequests) -> authorizeRequests.anyRequest().permitAll())
-                .csrf(AbstractHttpConfigurer::disable);
+                //.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
    /* public SecurityFilterChain securityFilterChain(HttpSecurity http, ApiKeyFilter apiKeyFilter) throws Exception {

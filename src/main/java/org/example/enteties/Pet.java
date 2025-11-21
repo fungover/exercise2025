@@ -15,13 +15,13 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    String name;
+    private String name;
 
-    String species;
+    private String species;
 
-    int hunger;
+    private int hunger;
 
-    int happiness;
+    private int happiness;
 
     public Pet(){}
 

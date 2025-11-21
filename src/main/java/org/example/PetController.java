@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class PetController {
     public PetController(PetRepository repository) {
         this.repository = repository;
     }
+
     @GetMapping("pets")
     @PreAuthorize("hasRole('API')")
     public List<PetDTO> getAllPets(){
@@ -27,15 +29,16 @@ public class PetController {
 
     @GetMapping("pets/{id}")
     public ResponseEntity<PetDTO> getPet(@PathVariable Integer id){
-        PetDTO petWithId = (repository.findPetById(id)
+        return repository.findPetById(id)
                 .map(pet -> new PetDTO(pet.getName(), pet.getSpecies(), pet.getHunger(), pet.getHappiness(), pet.getId()))
-                .orElseThrow());
-        return new ResponseEntity<>(petWithId, HttpStatus.OK);
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
      @PostMapping("pets")
      @PreAuthorize("hasRole('API')")
-    public ResponseEntity<Void> adoptPet(@RequestBody Pet newPet){
+    public ResponseEntity<Void> adoptPet(@RequestBody PetDTO newPet){
+        repository.save(new Pet(newPet.getName(), newPet.getSpecies(), newPet.getHunger(), newPet.getHappiness()));
          return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -50,23 +53,20 @@ public class PetController {
     public ResponseEntity<PetDTO> feedPet(@PathVariable Integer id){
         PetDTO petDto = PetService.feedPet(repository.findPetById(id)
                 .map(pet -> new PetDTO(pet.getName(), pet.getSpecies(), pet.getHunger(), pet.getHappiness(), pet.getId()))
-                .orElseThrow());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
         Pet fedPet = new Pet(petDto.getName(), petDto.getSpecies(), petDto.getHunger(), petDto.getHappiness(), petDto.getId());
         repository.save(fedPet);
         return new ResponseEntity<>(petDto, HttpStatus.OK);
     }
+
     @PutMapping("pets/{id}/play")
     public ResponseEntity<PetDTO> playWithPet(@PathVariable Integer id){
         System.out.println("In controller.playWithPet()");
-        PetDTO petToPlayWith = repository.findPetById(id)
+        PetDTO petDto = PetService.playWithPet(repository.findPetById(id)
                 .map(pet -> new PetDTO(pet.getName(), pet.getSpecies(), pet.getHunger(), pet.getHappiness(), pet.getId()))
-                .orElseThrow();
-        System.out.println("petToPlayWith:");
-        System.out.println(petToPlayWith.getName());
-        PetDTO petDto = PetService.playWithPet(petToPlayWith);
-        System.out.println(petDto);
-        Pet playedWithPet = new Pet(petDto.getName(), petDto.getSpecies(), petDto.getHunger(), petDto.getHappiness(), petDto.getId());
-        repository.save(playedWithPet);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        Pet fedPet = new Pet(petDto.getName(), petDto.getSpecies(), petDto.getHunger(), petDto.getHappiness(), petDto.getId());
+        repository.save(fedPet);
         return new ResponseEntity<>(petDto, HttpStatus.OK);
     }
 }

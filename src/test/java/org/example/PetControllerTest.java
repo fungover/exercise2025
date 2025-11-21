@@ -1,15 +1,12 @@
 package org.example;
 
-import org.example.config.SecurityConfig;
 import org.example.enteties.Pet;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,10 +18,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
-
 class PetControllerTest {
     @MockitoBean
     PetRepository petRepository;
+
+    @MockitoBean
+    PetService petService;
 
     @Autowired
     MockMvc mockMvc;
@@ -84,10 +83,10 @@ class PetControllerTest {
     @Test
     @WithMockUser
     void playWithPetShouldReturnOk() throws Exception {
-        Pet pet2 = new Pet("Bergman", "Dog", 40, 60, 2);
-        Mockito.when(petRepository.findPetById(2)).thenReturn(Optional.of(pet2));
-        mockMvc.perform(put("/api/pets/2/play").with(csrf()).header("X-API-KEY", "secret"))
-           .andExpect(status().isOk());
+        Pet pet = new Pet("Bergman", "Dog", 40, 40, 1);
+        Mockito.when(petRepository.findPetById(1)).thenReturn(Optional.of(pet));
+        mockMvc.perform(put("/api/pets/1/play").with(csrf()).header("X-API-KEY", "secret"))
+                .andExpect(status().isOk());
     }
 
 }

@@ -63,7 +63,6 @@ public class PetController {
 
     @PutMapping("pets/{id}/play")
     public ResponseEntity<PetDTO> playWithPet(@PathVariable Integer id){
-        System.out.println("In controller.playWithPet()");
         PetDTO petDto = service.playWithPet(repository.findPetById(id)
                 .map(pet -> new PetDTO(pet.getName(), pet.getSpecies(), pet.getHunger(), pet.getHappiness(), pet.getId()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));

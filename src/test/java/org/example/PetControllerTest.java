@@ -59,7 +59,7 @@ class PetControllerTest {
     @Test
     @WithMockUser(username="api", roles = {"API"})
     void createPetShouldReturnPet() throws Exception {
-        Pet pet = new Pet("Bergman", "Dog", 40, 70);
+        Pet pet = new Pet("Bergman", "Dog", 50, 50);
         Mockito.when(petRepository.save(pet)).thenReturn(pet);
 
         mockMvc.perform(post("/api/pets").with(csrf()).header("X-API-KEY", "secret").contentType(MediaType.APPLICATION_JSON)

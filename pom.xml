@@ -19,7 +19,7 @@
     <description>Event Management System with Allergen Tracking</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
     </properties>
 
     <dependencies>

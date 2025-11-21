@@ -1,0 +1,8 @@
+### Test NotFoundException for id
+GET http://localhost:8080/test/pets/999
+
+### Test NotFoundException for name
+GET http://localhost:8080/test/pets/name/abcdefg
+
+### Test BadRequestException
+GET http://localhost:8080/test/test-error

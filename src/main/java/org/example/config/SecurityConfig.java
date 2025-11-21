@@ -20,11 +20,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/pets").permitAll()
+                        .requestMatchers("/pets**", "/login").permitAll()
                         .anyRequest().authenticated()
                 )
-                // .csrf(csrf -> csrf.disable())
-                .formLogin(Customizer.withDefaults())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                )
                 .logout(Customizer.withDefaults());
         return http.build();
     }

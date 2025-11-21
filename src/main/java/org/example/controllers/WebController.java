@@ -5,6 +5,7 @@ import org.example.services.PetService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class WebController {
@@ -24,9 +25,28 @@ public class WebController {
 
     // Create a new pet (admin only)
     @PostMapping("/pets/add")
-    public String addPet(@RequestParam String name, @RequestParam String species) {
-        Pet pet = new Pet(name, species);
-        petService.addPet(pet);
+    public String addPet(@RequestParam String name, @RequestParam String species, RedirectAttributes redirectAttributes) {
+
+        name = name.trim();
+        species = species.trim();
+
+        if (name.isBlank() || species.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Name and Species cannot be blank!");
+            return "redirect:/";
+        }
+
+        if (name.length() > 20 || species.length() > 20) {
+            redirectAttributes.addFlashAttribute("error", "Name and Species must be under 20 characters!");
+            return "redirect:/";
+        }
+
+        try {
+            Pet pet = new Pet(name, species);
+            petService.addPet(pet);
+            redirectAttributes.addFlashAttribute("success", "New pet added!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to create pet: " + e.getMessage());
+        }
         return "redirect:/";
     }
 

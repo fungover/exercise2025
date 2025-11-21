@@ -62,6 +62,10 @@ h1 {
     flex-wrap: wrap;
 }
 
+.create-form label {
+    padding-top: 0.5rem;
+}
+
 .create-form input {
     padding: 10px;
     border: 1px solid #ddd;
@@ -81,6 +85,25 @@ h1 {
 
 .create-form button:hover {
     background-color: #218838;
+}
+
+.alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.alert-error {
+    background-color: #fee;
+    border: 1px solid #fcc;
+    color: #c33;
+}
+
+.alert-success {
+    background-color: #efe;
+    border: 1px solid #cfc;
+    color: #3c3;
 }
 
 .pets-grid {

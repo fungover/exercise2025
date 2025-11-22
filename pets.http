@@ -1,10 +1,14 @@
 ### GET request for pets to list all pets
 
-# GET http://localhost:8080/pets
+GET http://localhost:8080/api/pets
+X-API-Key: secret
+Accept: application/json
 
 ### POST request to add a new animal
 
-POST http://localhost:8080/addPet
+POST http://localhost:8080/api/addPet
+X-API-Key: secret
+Accept: application/json
 Content-Type: application/json
 
 {
@@ -17,20 +21,28 @@ Content-Type: application/json
 
 ### Get request to list specific animal with ID
 
-GET http://localhost:8080/pets/2
+GET http://localhost:8080/api/pets
+X-API-Key: secret
+Accept: application/json
 
 ###
 
 ### DELETE request to delete animal with ID
 
-DELETE http://localhost:8080/deletePet/2
+DELETE http://localhost:8080/api/deletePet/2
+X-API-Key: secret
+Accept: application/json
 
 ### POST request to feed with a animal with ID
 
-POST http://localhost:8080/feed/2
+POST http://localhost:8080/api/feed/2
+X-API-Key: secret
+Accept: application/json
 
 ### POST request to play with a animal with ID
 
-POST http://localhost:8080/play/2
+POST http://localhost:8080/api/play/2
+X-API-Key: secret
+Accept: application/json
 
 ###

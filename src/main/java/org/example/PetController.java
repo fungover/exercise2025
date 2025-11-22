@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("api")
+@RestController
+@RequestMapping("api")
 public class PetController {
     private final PetRepository repository;
 
@@ -19,9 +20,7 @@ public class PetController {
 
     @GetMapping("pets")
     public List<Pet> getPets() {
-        return repository.findAll().stream()
-                .map(p -> new Pet(p.getName(), p.getAge(), p.getSpecies(), p.getHungerLevel(), p.getHappiness()))
-                .toList();
+        return repository.findAll().stream().toList();
     }
 
     @PostMapping("addPet")

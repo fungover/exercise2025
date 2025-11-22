@@ -1,87 +1,80 @@
-### GET request for recipes
+### 1) GET all recipes (allowed: USER, ADMIN)
 GET http://localhost:8080/api/recipes
+Authorization: Basic dXNlcjp1c2Vy    # user:user
 
 
-###
-@id =2
+### 2) GET recipe by ID (allowed: USER, ADMIN)
+#update to match a recipe id
+@id = 18
 GET http://localhost:8080/api/recipes/{{id}}
+Authorization: Basic dXNlcjp1c2Vy
 
-### Not found
-GET http://localhost:8080/api/recipes/-10
 
-###
+### 3) GET without credentials → should return 401 Unauthorized
+GET http://localhost:8080/api/recipes
+# No Authorization header
+
+
+### 4) POST as USER → should return 403 Forbidden (USER is logged in but not allowed)
 POST http://localhost:8080/api/recipes
+Authorization: Basic dXNlcjp1c2Vy    # user:user
+Content-Type: application/json
+
+{
+  "title": "Forbidden Test",
+  "instructions": "Trying to POST as USER",
+  "items": [
+    { "name": "Salt", "amount": 1, "unit": "tsp" }
+  ]
+}
+
+
+### 5) POST as ADMIN (allowed)
+POST http://localhost:8080/api/recipes
+Authorization: Basic YWRtaW46YWRtaW4=    # admin:admin
 Content-Type: application/json
 
 {
   "title": "Bacon and Eggs",
   "instructions": "Fry the eggs first",
   "items": [
-    {
-      "name": "Bacon",
-      "amount": 200,
-      "unit": "g"
-    },
-    {
-      "name": "Eggs",
-      "amount": 2,
-      "unit": "pcs"
-    }
+    { "name": "Bacon", "amount": 200, "unit": "g" },
+    { "name": "Eggs", "amount": 2, "unit": "pcs" }
   ]
 }
 
-### Error
-POST http://localhost:8080/api/recipes
-Content-Type: application/json
 
-{
-  "title": "",
-  "instructions": "",
-  "items": [
-    {
-      "name": "",
-      "amount": -1,
-      "unit": ""
-    }
-  ]
-}
-
-### Duplicated title
+### 6) POST duplicate title → should return 409 Conflict
 POST http://localhost:8080/api/recipes
+Authorization: Basic YWRtaW46YWRtaW4=
 Content-Type: application/json
 
 {
   "title": "Bacon and Eggs",
-  "instructions": "Fry the eggs first",
+  "instructions": "Duplicate test",
   "items": [
-    {
-      "name": "Bacon",
-      "amount": 200,
-      "unit": "g"
-    },
-    {
-      "name": "Eggs",
-      "amount": 2,
-      "unit": "pcs"
-    }
+    { "name": "Bacon", "amount": 200, "unit": "g" }
   ]
 }
 
-###
+
+### 7) PUT update recipe (ADMIN only)
 PUT http://localhost:8080/api/recipes/{{id}}
+Authorization: Basic YWRtaW46YWRtaW4=
 Content-Type: application/json
 
 {
-  "title": "New Title",
+  "title": "Updated Pancakes",
   "instructions": "New instructions",
   "items": [
-    {
-      "name": "Bacon",
-      "amount": 200,
-      "unit": "g"
-    }
+    { "name": "Milk", "amount": 300, "unit": "ml" }
   ]
 }
 
-###
+### 8) DELETE as ADMIN (allowed, returns 204 No Content)
 DELETE http://localhost:8080/api/recipes/{{id}}
+Authorization: Basic YWRtaW46YWRtaW4=   # admin:admin
+
+### 9) DELETE as USER → should return 403 Forbidden
+DELETE http://localhost:8080/api/recipes/{{id}}
+Authorization: Basic dXNlcjp1c2Vy     # user:user

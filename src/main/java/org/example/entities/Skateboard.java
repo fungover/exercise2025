@@ -6,9 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Skateboard {
@@ -17,9 +15,9 @@ public class Skateboard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    String brand;
+    private String brand;
 
-    double boardWidth;
+    private double boardWidth;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -27,8 +25,8 @@ public class Skateboard {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToMany
-    Map<TruckBrand, TruckSize> fittingTrucks = new HashMap<>();
+    @OneToMany(mappedBy = "size", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TruckSize> fittingTrucks = new ArrayList<>();
 
     public Skateboard() {}
 
@@ -75,6 +73,14 @@ public class Skateboard {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<TruckSize> getFittingTrucks() {
+        return fittingTrucks;
+    }
+
+    public void setFittingTrucks(List<TruckSize> fittingTrucks) {
+        this.fittingTrucks = fittingTrucks;
     }
 
     @Override

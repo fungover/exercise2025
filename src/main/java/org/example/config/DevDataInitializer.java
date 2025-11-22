@@ -59,17 +59,17 @@ public class DevDataInitializer implements ApplicationRunner {
 
             // The sizing is a bit simplified than in reality...
             truckSizeRepository.saveAll(List.of(
-                    new TruckSize(33, 8.0, ace.getId()),
-                    new TruckSize(55, 8.5, ace.getId()),
-                    new TruckSize(66, 9.0, ace.getId()),
+                    new TruckSize(33, 8.0, ace),
+                    new TruckSize(55, 8.5, ace),
+                    new TruckSize(66, 9.0, ace),
 
-                    new TruckSize(139, 8.0, independent.getId()),
-                    new TruckSize(149, 8.5, independent.getId()),
-                    new TruckSize(169, 9.0, independent.getId()),
+                    new TruckSize(139, 8.0, independent),
+                    new TruckSize(149, 8.5, independent),
+                    new TruckSize(169, 9.0, independent),
 
-                    new TruckSize(147, 8.0, thunder.getId()),
-                    new TruckSize(149, 8.5, thunder.getId()),
-                    new TruckSize(161, 9.0, thunder.getId())
+                    new TruckSize(147, 8.0, thunder),
+                    new TruckSize(149, 8.5, thunder),
+                    new TruckSize(161, 9.0, thunder)
             ));
 
             log.info("Done initializing dev data.");

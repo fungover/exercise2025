@@ -1,13 +1,11 @@
 package org.example.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,10 +15,13 @@ public class TruckBrand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    String brand;
+    private String brand;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "brandId")
+    private List<TruckSize> sizes;
 
     public TruckBrand(){}
 

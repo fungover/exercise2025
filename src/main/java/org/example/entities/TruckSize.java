@@ -1,9 +1,6 @@
 package org.example.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -17,18 +14,20 @@ public class TruckSize {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    int size;
+    private int size;
 
-    double boardWidth;
+    private double boardWidth;
 
-    int brandId;
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private TruckBrand brandId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     public TruckSize() {}
 
-    public TruckSize(int size, double boardWidth, int brandId) {
+    public TruckSize(int size, double boardWidth, TruckBrand brandId) {
         this.size = size;
         this.boardWidth = boardWidth;
         this.brandId = brandId;
@@ -58,11 +57,11 @@ public class TruckSize {
         this.boardWidth = boardWidth;
     }
 
-    public int getTruckId() {
+    public TruckBrand getBrandId() {
         return brandId;
     }
 
-    public void setTruckId(int truckId) {
+    public void setBrandId(TruckBrand truckId) {
         this.brandId = truckId;
     }
 

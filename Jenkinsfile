@@ -78,28 +78,15 @@ spec:
       containers:
       - name: ${APP_NAME}
         image: ${DOCKER_IMAGE}
-        imagePullPolicy: Always
         ports:
         - containerPort: ${APP_PORT}
         resources:
           requests:
-            cpu: ${CPU_REQUEST}
-            memory: ${MEMORY_REQUEST}
+            cpu: "${CPU_REQUEST}"
+            memory: "${MEMORY_REQUEST}"
           limits:
-            cpu: ${CPU_LIMIT}
-            memory: ${MEMORY_LIMIT}
-        readinessProbe:
-          httpGet:
-            path: /actuator/health/readiness
-            port: ${APP_PORT}
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        livenessProbe:
-          httpGet:
-            path: /actuator/health/liveness
-            port: ${APP_PORT}
-          initialDelaySeconds: 60
-          periodSeconds: 10
+            cpu: "${CPU_LIMIT}"
+            memory: "${MEMORY_LIMIT}"
         env:
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://mycluster.mysql.svc.cluster.local:3306/${SPRING_MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true

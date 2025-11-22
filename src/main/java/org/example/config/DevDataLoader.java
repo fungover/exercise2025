@@ -15,34 +15,32 @@ public class DevDataLoader {
     @Bean
     CommandLineRunner loadTestData(RecipeRepository recipes) {
         return args -> {
-            System.out.println("Checking dev data...");
+            System.out.println("Resetting dev data...");
+
+            // Remove all existing recipes (items removed with cascade + orphanRemoval)
+            recipes.deleteAll();
 
             // Recipe 1
-            if (!recipes.existsByTitleIgnoreCase("Tacos")) {
-                Recipe tacos = Recipe.builder()
-                        .title("Tacos")
-                        .instructions("Use a good knife")
-                        .addItem(RecipeItem.builder().name("Meat").amount(500.0).unit("g").build())
-                        .addItem(RecipeItem.builder().name("Tortillas").amount(8.0).unit("pcs").build())
-                        .addItem(RecipeItem.builder().name("Onion").amount(1.0).unit("pcs").build())
-                        .build();
-                recipes.save(tacos);
-                System.out.println("Added: Tacos");
-            }
+            Recipe tacos = Recipe.builder()
+                    .title("Tacos")
+                    .instructions("Use a good knife")
+                    .addItem(RecipeItem.builder().name("Meat").amount(500.0).unit("g").build())
+                    .addItem(RecipeItem.builder().name("Tortillas").amount(8.0).unit("pcs").build())
+                    .addItem(RecipeItem.builder().name("Onion").amount(1.0).unit("pcs").build())
+                    .build();
 
             // Recipe 2
-            if (!recipes.existsByTitleIgnoreCase("Pasta")) {
-                Recipe pasta = Recipe.builder()
-                        .title("Pasta")
-                        .instructions("Boil water, salt it, cook pasta al dente.")
-                        .addItem(RecipeItem.builder().name("Pasta").amount(200.0).unit("g").build())
-                        .addItem(RecipeItem.builder().name("Salt").amount(1.0).unit("tsp").build())
-                        .build();
-                recipes.save(pasta);
-                System.out.println("Added: Pasta");
-            }
+            Recipe pasta = Recipe.builder()
+                    .title("Pasta")
+                    .instructions("Boil water, salt it, cook pasta al dente.")
+                    .addItem(RecipeItem.builder().name("Pasta").amount(200.0).unit("g").build())
+                    .addItem(RecipeItem.builder().name("Salt").amount(1.0).unit("tsp").build())
+                    .build();
 
-            System.out.println("Dev data check complete.");
+            recipes.save(tacos);
+            recipes.save(pasta);
+
+            System.out.println("Dev data reset complete.");
         };
     }
 }

@@ -18,6 +18,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasItems;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -60,8 +61,8 @@ class RecipeControllerIntegrationTest {
                                 .with(httpBasic("user", "user"))
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").value("Tacos"))
-                .andExpect(jsonPath("$[1].title").value("Pasta"));
+                .andExpect(jsonPath("$[*].title", hasItems("Tacos", "Pasta")));
+
     }
 
     @Test

@@ -46,7 +46,8 @@ public class GlobalExceptionHandler {
         body.put("timestamp", Instant.now());
         body.put("status", HttpStatus.CONFLICT.value());
 
-        String lowerMsg = ex.getMostSpecificCause().getMessage().toLowerCase();
+        String message = ex.getMostSpecificCause().getMessage();
+        String lowerMsg = message != null ? message.toLowerCase() : "";
 
         if (lowerMsg.contains("duplicate") || lowerMsg.contains("unique")) {
             body.put("error", "A recipe with this title already exists");

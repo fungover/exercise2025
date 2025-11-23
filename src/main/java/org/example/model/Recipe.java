@@ -47,7 +47,7 @@ public class Recipe {
     }
 
     public List<RecipeItem> getItems() {
-        return items;
+        return List.copyOf(items);
     }
 
     // helpers

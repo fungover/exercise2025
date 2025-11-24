@@ -60,7 +60,11 @@ A RESTful web application built with Spring Boot for tracking personal records (
    mvn spring-boot:run
    ```
 
-5. NOTE, to register a new user. Use POSTMAN or curl. No UI-functionality for this yet.
+5.  **How to register a new user**
+   ```bash
+   NOTE, to register a new user. Use POSTMAN or curl. No UI-functionality for this yet.
+   ```
+
 
 ## Running Tests
 

@@ -50,20 +50,17 @@ A RESTful web application built with Spring Boot for tracking personal records (
    docker-compose up -d
    ```
 
-   Wait ~10 seconds for MySQL to start (healthcheck runs automatically).
-
 3. **Verify database is running**
    ```bash
    docker-compose ps
    ```
-   You should see `mysql` with status `healthy`.
 
 4. **Run the application**
    ```bash
    mvn spring-boot:run
    ```
 
-   On first run, Flyway migrations will automatically create the database schema.
+5. NOTE, to register a new user. Use POSTMAN or curl. No UI-functionality for this yet.
 
 ## Running Tests
 

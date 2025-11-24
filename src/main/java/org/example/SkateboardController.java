@@ -1,47 +1,51 @@
 package org.example;
 
-import org.example.entities.Skateboard;
-import org.example.entities.TruckBrand;
-import org.example.entities.TruckSize;
+import org.example.entities.DTOs.TruckDTO;
+import org.example.entities.Deck;
 import org.example.repositories.SkateboardRepository;
+import org.example.repositories.TruckSizeRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @RestController
 public class SkateboardController {
 
     private final SkateboardRepository repository;
+    private final TruckSizeRepository truckSizeRepository;
 
-    public SkateboardController(SkateboardRepository repository) {
+    public SkateboardController(SkateboardRepository repository,
+                                TruckSizeRepository truckSizeRepository) {
         this.repository = repository;
+        this.truckSizeRepository = truckSizeRepository;
     }
 
-    @GetMapping("skateboards")
-    public List<Object> findAllBoards() {
-        return repository.findBoardBy();
+    @GetMapping("decks")
+    public List<Object> findAllDecks() {
+        return repository.findDeckBy();
     }
 
-    @GetMapping("skateboards/id/{id}")
-    public Skateboard findBoardById(@PathVariable Integer id) {
-        return repository.findById(id).orElseThrow();
+    @GetMapping("decks/id/{id}")
+    public Deck findDeckById(@PathVariable Integer id) {
+        Deck deck = repository.findById(id).orElseThrow();
+        deck.setFittingTrucks(truckSizeRepository.findTruckByWidth(deck.getBoardWidth()));
+        return deck;
     }
 
-    @GetMapping("skateboards/brand/{brand}")
-    public List<Skateboard> findBoardBy(@PathVariable String brand) {
-        return repository.findBoardBy(brand);
+    @GetMapping("decks/brand/{brand}")
+    public List<Deck> findDeckBy(@PathVariable String brand) {
+        List<Deck> decks = repository.findDeckBy(brand);
+        for (Deck deck : decks) {
+            deck.setFittingTrucks(truckSizeRepository.findTruckByWidth(deck.getBoardWidth()));
+        }
+        return decks;
     }
 
-    @GetMapping("/trucks/{boardWidth}")
-    public Map<TruckBrand, TruckSize> getFittingTrucks(@PathVariable double boardWidth) {
-        return repository.findByBoardWidth(boardWidth).stream()
-                .collect(Collectors.toMap(TruckSize::getBrandId, Function.identity()));
+    @GetMapping("trucks/{boardWidth}")
+    public List<TruckDTO> findFittingTrucks(@PathVariable double boardWidth) {
+        return truckSizeRepository.findTruckByWidth(boardWidth);
     }
 
 }

@@ -1,10 +1,10 @@
 package org.example.config;
 
 import jakarta.transaction.Transactional;
+import org.example.entities.Deck;
 import org.example.entities.TruckBrand;
 import org.example.entities.TruckSize;
 import org.example.repositories.SkateboardRepository;
-import org.example.entities.Skateboard;
 import org.example.repositories.TruckBrandRepository;
 import org.example.repositories.TruckSizeRepository;
 import org.slf4j.Logger;
@@ -42,9 +42,9 @@ public class DevDataInitializer implements ApplicationRunner {
             log.info("Initializing dev data...");
 
             skateboardRepository.saveAll(List.of(
-                    new Skateboard("ZERO", 8.0),
-                    new Skateboard("POLAR", 8.5),
-                    new Skateboard("AntiHero", 9.0)
+                    new Deck("ZERO", 8.0),
+                    new Deck("POLAR", 8.5),
+                    new Deck("AntiHero", 9.0)
             ));
 
             var ace = new TruckBrand("ACE");
@@ -59,17 +59,17 @@ public class DevDataInitializer implements ApplicationRunner {
 
             // The sizing is a bit simplified than in reality...
             truckSizeRepository.saveAll(List.of(
-                    new TruckSize(33, 8.0, ace),
-                    new TruckSize(55, 8.5, ace),
-                    new TruckSize(66, 9.0, ace),
+                    new TruckSize(33, 8.0, ace.getId()),
+                    new TruckSize(55, 8.5, ace.getId()),
+                    new TruckSize(66, 9.0, ace.getId()),
 
-                    new TruckSize(139, 8.0, independent),
-                    new TruckSize(149, 8.5, independent),
-                    new TruckSize(169, 9.0, independent),
+                    new TruckSize(139, 8.0, independent.getId()),
+                    new TruckSize(149, 8.5, independent.getId()),
+                    new TruckSize(169, 9.0, independent.getId()),
 
-                    new TruckSize(147, 8.0, thunder),
-                    new TruckSize(149, 8.5, thunder),
-                    new TruckSize(161, 9.0, thunder)
+                    new TruckSize(147, 8.0, thunder.getId()),
+                    new TruckSize(149, 8.5, thunder.getId()),
+                    new TruckSize(161, 9.0, thunder.getId())
             ));
 
             log.info("Done initializing dev data.");

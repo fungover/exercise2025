@@ -18,16 +18,14 @@ public class TruckSize {
 
     private double boardWidth;
 
-    @ManyToOne
-    @JoinColumn(name = "brand_id")
-    private TruckBrand brandId;
+    private Integer brandId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     public TruckSize() {}
 
-    public TruckSize(int size, double boardWidth, TruckBrand brandId) {
+    public TruckSize(int size, double boardWidth, Integer brandId) {
         this.size = size;
         this.boardWidth = boardWidth;
         this.brandId = brandId;
@@ -57,11 +55,11 @@ public class TruckSize {
         this.boardWidth = boardWidth;
     }
 
-    public TruckBrand getBrandId() {
+    public Integer getBrandId() {
         return brandId;
     }
 
-    public void setBrandId(TruckBrand truckId) {
+    public void setBrandId(Integer truckId) {
         this.brandId = truckId;
     }
 

@@ -1,33 +1,25 @@
 package org.example.repositories;
 
-import org.example.entities.Skateboard;
-import org.example.entities.TruckSize;
+import org.example.entities.Deck;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface SkateboardRepository extends ListCrudRepository<Skateboard, Integer> {
-
-    @Query("""
-            select upper(skateboard.brand), skateboard.boardWidth
-            from Skateboard skateboard
-            """)
-    List<Object> findBoardBy();
+public interface SkateboardRepository extends ListCrudRepository<Deck, Integer> {
 
     @Query("""
-            select skateboard
-            from Skateboard skateboard
-            where skateboard.brand = :brand
+            select upper(deck.brand), deck.boardWidth
+            from Deck deck
             """)
-    List<Skateboard> findBoardBy(@Param("brand") String brand);
+    List<Object> findDeckBy();
 
     @Query("""
-            select ts from TruckSize ts
-            where ts.boardWidth = :boardWidth
+            select deck
+            from Deck deck
+            where deck.brand = :brand
             """)
-    List<TruckSize> findByBoardWidth(@Param("boardWidth") double boardWidth);
+    List<Deck> findDeckBy(@Param("brand") String brand);
 
 }

@@ -5,7 +5,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,9 +18,6 @@ public class TruckBrand {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "brandId")
-    private List<TruckSize> sizes;
 
     public TruckBrand(){}
 

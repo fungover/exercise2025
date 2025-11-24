@@ -1,6 +1,7 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
+import org.example.entities.DTOs.TruckDTO;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
-public class Skateboard {
+public class Deck {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +26,12 @@ public class Skateboard {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "size", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TruckSize> fittingTrucks = new ArrayList<>();
+    @Transient
+    private List<TruckDTO> fittingTrucks = new ArrayList<>();
 
-    public Skateboard() {}
+    public Deck() {}
 
-    public Skateboard(String brand, double boardWidth) {
+    public Deck(String brand, double boardWidth) {
         this.brand = brand;
         this.boardWidth = boardWidth;
     }
@@ -75,11 +76,11 @@ public class Skateboard {
         this.updatedAt = updatedAt;
     }
 
-    public List<TruckSize> getFittingTrucks() {
+    public List<TruckDTO> getFittingTrucks() {
         return fittingTrucks;
     }
 
-    public void setFittingTrucks(List<TruckSize> fittingTrucks) {
+    public void setFittingTrucks(List<TruckDTO> fittingTrucks) {
         this.fittingTrucks = fittingTrucks;
     }
 
@@ -90,8 +91,8 @@ public class Skateboard {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Skateboard skateboard = (Skateboard) o;
-        return getId() != null && Objects.equals(getId(), skateboard.getId());
+        Deck deck = (Deck) o;
+        return getId() != null && Objects.equals(getId(), deck.getId());
     }
 
     @Override

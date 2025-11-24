@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class Admission {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long admission_id;
+	private java.lang.Long admission_id;
 
 	private LocalDateTime dateIn;
 	private LocalDateTime dateOut = null;
@@ -30,7 +30,7 @@ public class Admission {
 	}
 
 	// -- Getter
-	public Long getAdmission_id() {
+	public java.lang.Long getAdmission_id() {
 		return admission_id;
 	}
 

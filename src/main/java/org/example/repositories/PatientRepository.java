@@ -4,12 +4,12 @@ import org.example.entities.Patient;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 
-public interface PatientRepository extends ListCrudRepository<Patient, Long> {
+public interface PatientRepository extends ListCrudRepository<Patient, java.lang.Long> {
 
 	@Query("""
 					select pat from Patient pat where  pat.pat_id = :id
 					""")
-	public Patient findPatientById(Long id);
+	public Patient findPatientById(java.lang.Long id);
 
 	@Query("""
 						select pat from Patient pat where concat(pat.firstName, ' ', pat.lastName) = concat(:first, ' ', :last)

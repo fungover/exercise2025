@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Patient</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>
+    New Patient
+</h1>
+<form method="post" th:action="@{/api/admissions/new}" th:object="${admission}">
+<!--
+    <label for="firstName">First Name:</label><input type="text" id="firstName" th:field="*{patient.firstName}">
+    <label for="lastName">Last Name:</label><input type="text" id="lastName" th:field="*{patient.lastName}">
+    <label for="address">Address:</label><input type="text" id="address" th:field="*{patient.address}">
+    <label for="dob">Date of Birth:</label><input type="date" id="dob" th:field="*{patient.dateOfBirth}">
+    <label for="ssn">Social Security Number:</label><input type="text" id="ssn" th:field="*{patient.ssn}"
+-->
+
+    <label for="patient">Patient ID:</label><input type="text" id="patient" th:field="*{patSsn}">
+    <label for="diagnosis">Diagnosis:</label><input type="text" id="diagnosis" th:field="*{diagnosis}">
+    <label for="department">Department:</label><input type="text" id="department" th:field="*{department}">
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>

@@ -1,17 +1,18 @@
 package org.example.controllers;
 
 import org.example.dtos.AdmissionDTO;
-import org.example.dtos.Handler;
+import org.example.dtos.NewAdmissionDTO;
 import org.example.dtos.PatientDTO;
 import org.example.entities.Admission;
 import org.example.entities.Patient;
 import org.example.repositories.AdmissionRepository;
 import org.example.repositories.PatientRepository;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("api")
 public class HospitalController {
 	private final AdmissionRepository admissionRepository;
@@ -30,10 +31,16 @@ public class HospitalController {
 						.toList();
 	}
 
+	@PostMapping("patients/new")
+	public String newPatient(@ModelAttribute Patient pat) {
+		patientRepository.save(pat);
+		return  "redirect:/patients";
+	}
+
 	@GetMapping("patients/{id}")
-	public PatientDTO findPatientById(@PathVariable Long id) {
+	public PatientDTO findPatientById(@PathVariable java.lang.Long id) {
 		var pat = patientRepository.findById(id);
-		if  (pat.isEmpty()) {
+		if (pat.isEmpty()) {
 			throw new IllegalArgumentException("Patient with id " + id + " not found");
 		}
 		Patient foundPat = pat.get();
@@ -46,7 +53,9 @@ public class HospitalController {
 	@GetMapping("admissions")
 	public List<AdmissionDTO> findAllAdmissions() {
 		return admissionRepository.getAllAdmissions().stream()
-						.map(adm -> new AdmissionDTO(adm.getPatient().getId(),
+						.map(adm -> new AdmissionDTO(
+										adm.getAdmission_id(),
+										adm.getPatient().getId(),
 										adm.getDateIn(),
 										adm.getDateOut(),
 										adm.getDiagnosis(),
@@ -55,25 +64,21 @@ public class HospitalController {
 	}
 
 	@PostMapping("admissions/new")
-	public void handleNew(@RequestBody Handler handler) {
-		var adm = handler.admission();
-		var patInput = handler.patient();
-		Patient pat;
-		pat = patientRepository.findBySsn(patInput.getSsn());
-		if (pat == null) {
-			pat = new Patient(patInput.getDateOfBirth(),
-							patInput.getAddress(),
-							patInput.getLastName(),
-							patInput.getFirstName(),
-							patInput.getSsn());
-			patientRepository.save(pat);
-		}
+	public String handleNew(@ModelAttribute NewAdmissionDTO newAdm) {
 
-		admissionRepository.save(new Admission(pat, adm.diagnosis(), adm.department()));
+		Patient pat;
+		pat = patientRepository.findBySsn(newAdm.patSsn());
+		if (pat == null) {
+			return "error";
+		}
+		else {
+			admissionRepository.save(new Admission(pat, newAdm.diagnosis(), newAdm.department()));
+			return "redirect:/admissions";
+		}
 	}
 
 	@PatchMapping("admissions/{id}/writeOut")
-	public void writeOut(@PathVariable Long id) {
+	public void writeOut(@PathVariable java.lang.Long id) {
 		var admission = admissionRepository.getAdmissionById(id);
 		if (admission != null) {
 			admission.setDateOut();
@@ -82,10 +87,24 @@ public class HospitalController {
 	}
 
 	@GetMapping("admissions/{pat_id}")
-	public List<AdmissionDTO> findAllPatientsByPatId(@PathVariable Long pat_id) {
+	public List<AdmissionDTO> findAllPatientsByPatId(@PathVariable java.lang.Long pat_id) {
 		return admissionRepository.getAdmissionsByPatId(pat_id).stream()
-						.map(adm -> new AdmissionDTO(adm.getPatient().getId(), adm.getDateIn(), adm.getDateOut(), adm.getDiagnosis(), adm.getDepartment()))
+						.map(adm -> new AdmissionDTO(adm.getAdmission_id(), adm.getPatient().getId(), adm.getDateIn(), adm.getDateOut(), adm.getDiagnosis(), adm.getDepartment()))
 						.toList();
 	}
+
+
+/*
+	Patient pat;
+	pat = patientRepository.findBySsn(patInput.getSsn());
+		if (pat == null) {
+		pat = new Patient(patInput.getDateOfBirth(),
+						patInput.getAddress(),
+						patInput.getLastName(),
+						patInput.getFirstName(),
+						patInput.getSsn());
+		patientRepository.save(pat);
+	}
+*/
 
 }

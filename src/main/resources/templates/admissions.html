@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Admissions</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div>
     <h1>Admissions List</h1>
     <ul th:each="admission : ${admissions}">
         <li>
-            <ul>
-                <li><p th:text="${admission.patId()}"></p></li>
-                <li><p th:text="${admission.dateIn()}"></p></li>
-                <li><p th:text="${admission.dateOut() == null? '-' : admission.dateOut()}"></p></li>
-                <li><p th:text="${admission.diagnosis()}"></p></li>
-                <li><p th:text="${admission.department()}"></p></li>
+            <ul style="list-style-type:disc; margin-top:2em;">
+                <li><p th:text="${'Admission ID:' + admission.admId}"></p></li>
+                <li><p th:text="${'Patient ID: ' + admission.patId}"></p></li>
+                <li><p th:text="${'Date In: ' + admission.dateIn}"></p></li>
+                <li><p th:text="${'Date Out: ' + (admission.dateOut == null? '-' : admission.dateOut)}"></p></li>
+                <li><p th:text="${'Diagnosis: ' + admission.diagnosis}"></p></li>
+                <li><p th:text="${'Department: ' + admission.department}"></p></li>
             </ul>
         </li>
     </ul>

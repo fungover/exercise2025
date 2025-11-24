@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class Patient {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long pat_id;
+	private java.lang.Long pat_id;
 
 	@NotNull
 	private String firstName;
@@ -25,7 +25,8 @@ public class Patient {
 	private LocalDate dateOfBirth;
 	private String ssn;
 
-	public Patient() {}
+	public Patient() {
+	}
 
 	public Patient(LocalDate dateOfBirth, String address, String lastName, String firstName, String ssn) {
 		this.dateOfBirth = dateOfBirth;
@@ -36,7 +37,7 @@ public class Patient {
 	}
 
 	// -- Getter --
-	public Long getId() {
+	public java.lang.Long getId() {
 		return pat_id;
 	}
 
@@ -59,4 +60,28 @@ public class Patient {
 	public String getSsn() {
 		return ssn;
 	}
+
+	// -- Setter --
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setDateOfBirth(LocalDate dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public void setSsn(String ssn) {
+		this.ssn = ssn;
+	}
 }
+
+

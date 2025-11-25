@@ -4,9 +4,7 @@ import org.example.entities.DTOs.TruckDTO;
 import org.example.entities.Deck;
 import org.example.repositories.SkateboardRepository;
 import org.example.repositories.TruckSizeRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,6 +44,12 @@ public class SkateboardController {
     @GetMapping("trucks/{boardWidth}")
     public List<TruckDTO> findFittingTrucks(@PathVariable double boardWidth) {
         return truckSizeRepository.findTruckByWidth(boardWidth);
+    }
+
+    @PostMapping("decks/create")
+    public Deck addDeck(@RequestBody Deck newDeck) {
+        repository.save(newDeck);
+        return newDeck;
     }
 
 }

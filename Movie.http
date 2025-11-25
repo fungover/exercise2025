@@ -1,4 +1,27 @@
 ### GET request to example server
-GET http://localhost:8080/api/movies
 
+//Test get request. No role needed
+//No role needed for viewing access of the DB.
+GET http://localhost:8080/api/movies
+###
+
+//Test delete request. Admin role needed
+// Just check the DB manually that the id exists or type in another id instead of 1
+DELETE http://localhost:8080/api/movies/1
+Authorization: Basic admin adminpassword
+###
+
+//Test post request. User role needed
+// To add a movie to the DB.
+POST http://localhost:8080/api/movies
+Content-Type: application/json
+Authorization: Basic user password
+
+{
+  "title": "Just write whatever",
+  "genre": "Sci-Fi",
+  "description": "A movie about bla bla bla",
+  "year": 2025,
+  "runtimeMinutes": 240
+}
 ###

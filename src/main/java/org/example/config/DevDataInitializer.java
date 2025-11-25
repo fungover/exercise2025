@@ -31,7 +31,8 @@ public class DevDataInitializer implements ApplicationRunner {
             log.info("DB empty and profile set to dev initializing dev data...");
             movieRepository.saveAll(List.of(
                     new Movie("Made up", "fantasy", "just something i made up", 2020, 90),
-                    new Movie("Made up 2", "fantasy", "just something i made up", 2022, 100)
+                    new Movie("Made up 2", "fantasy", "just something i made up", 2022, 100),
+                    new Movie("Made up 3", "fantasy", "just something i made up", 2024, 120)
             ));
         }
     }

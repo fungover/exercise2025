@@ -1,3 +1,23 @@
 body {
-    font-family: fantasy;
+    font-family: Corbel, serif;
+    font-weight: bolder;
+}
+
+div {
+    width: 300px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 2em;
+    text-align: center;
+    color: blue;
+}
+
+a {
+    display: block;
+}
+
+label {
+    display: block;
 }

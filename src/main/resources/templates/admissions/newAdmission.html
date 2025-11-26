@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Patient</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>
+    New Admission
+</h1>
+<div>
+    <form method="post" th:action="@{/api/admissions/new}" th:object="${admission}">
+        <label for="patient">Patient SSN:</label><input type="text" id="patient" th:field="*{patSsn}">
+        <label for="diagnosis">Diagnosis:</label><input type="text" id="diagnosis" th:field="*{diagnosis}">
+        <label for="department">Department:</label><input type="text" id="department" th:field="*{department}">
+        <button type="submit">Submit</button>
+    </form>
+</div>
+</body>
+</html>

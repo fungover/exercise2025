@@ -1,6 +1,6 @@
-package org.example.dtos;
+package org.example.dto;
 
-import org.example.entities.Patient;
+import org.example.entity.Patient;
 
 public record Handler(Patient patient, NewAdmissionDTO admission) {
 }

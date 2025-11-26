@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admission Menu</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div>
+    <h1>Admission Menu</h1>
+    <a href="/admissions" th:text="@{all admissions}" ></a>
+    <a href="/admissions/new" th:text="@{new admission}"></a>
+    <a href="/admissions/find" th:text="@{find admission}"></a>
+    <a href="/admissions/delete" th:text="@{delete admission}"></a>
+</div>
+</body>
+</html>

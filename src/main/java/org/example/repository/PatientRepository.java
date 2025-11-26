@@ -1,6 +1,6 @@
-package org.example.repositories;
+package org.example.repository;
 
-import org.example.entities.Patient;
+import org.example.entity.Patient;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 

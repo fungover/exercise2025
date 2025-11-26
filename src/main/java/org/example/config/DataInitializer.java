@@ -1,10 +1,10 @@
 package org.example.config;
 
 import jakarta.transaction.Transactional;
-import org.example.entities.Admission;
-import org.example.entities.Patient;
-import org.example.repositories.AdmissionRepository;
-import org.example.repositories.PatientRepository;
+import org.example.entity.Admission;
+import org.example.entity.Patient;
+import org.example.repository.AdmissionRepository;
+import org.example.repository.PatientRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
@@ -37,7 +37,7 @@ public class DataInitializer implements ApplicationRunner {
 
 			var admission1 = new Admission(patient2, "Pneumonia", "Infection");
 			var admission2 = new Admission(patient1, "Heart thing", "HIA");
-			var admission3 = new Admission(patient3, "Autism", "High Security Ward");
+			var admission3 = new Admission(patient3, "Corona", "Emergency");
 			admissionRepository.saveAll(List.of(admission1, admission2, admission3));
 		}
 	}

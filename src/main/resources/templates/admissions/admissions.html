@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Admissions</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <div>
@@ -11,7 +11,12 @@
     <ul th:each="admission : ${admissions}">
         <li>
             <ul style="list-style-type:disc; margin-top:2em;">
-                <li><p th:text="${'Admission ID:' + admission.admId}"></p></li>
+                <li><p th:text="${'Admission ID:' + admission.admId}"></p>
+                    <form th:style="${admission.dateOut == null}? 'display: block;' : 'display: none;'"
+                          th:action="@{/api/admissions/{id}/writeOut(id = ${admission.admId})}" method="post">
+                        <input type="submit" value="Submit" th:value="${'Write Out'}">
+                    </form>
+                </li>
                 <li><p th:text="${'Patient ID: ' + admission.patId}"></p></li>
                 <li><p th:text="${'Date In: ' + admission.dateIn}"></p></li>
                 <li><p th:text="${'Date Out: ' + (admission.dateOut == null? '-' : admission.dateOut)}"></p></li>

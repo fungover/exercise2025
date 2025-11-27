@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: exercise8
+  threads:
+    virtual:
+      enabled: true
+  flyway:
+    locations: classpath:db/migration
+
+  docker:
+    compose:
+      lifecycle-management: start_only
+  jpa:
+    show-sql: true
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+
+
+    # Scans the classpath for all entities and loads them into the database.
+#    hibernate:
+#      ddl-auto: update
+
+
+# Connects to the database using the credentials specified in the application.properties file
+# or environment variables.
+
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/spring
+#    username: ${DATABASE_USER:user}
+#    password: ${DATABASE_PASSWORD:password}

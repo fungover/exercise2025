@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: exercise8
+  threads:
+    virtual:
+      enabled: true
+  docker:
+    compose:
+      lifecycle-management: start_and_stop
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring
+    username: ${DATABASE_USER:user}
+    password: ${DATABASE_PASSWORD:password}

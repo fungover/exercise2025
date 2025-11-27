@@ -1,0 +1,11 @@
+services:
+  mysql:
+    container_name: exercise8-mysql
+    image: 'mysql:9.5.0'
+    environment:
+      - 'MYSQL_DATABASE=spring'
+      - 'MYSQL_PASSWORD=secret'
+      - 'MYSQL_ROOT_PASSWORD=verysecret'
+      - 'MYSQL_USER=user'
+    ports:
+      - '3306:3306'

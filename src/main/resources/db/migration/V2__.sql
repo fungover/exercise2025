@@ -1,0 +1,2 @@
+ALTER TABLE pet
+    ADD birth_date VARCHAR(255) NULL;

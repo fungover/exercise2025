@@ -5,7 +5,9 @@ import org.example.entities.DTOs.TruckDTO;
 import org.example.entities.Deck;
 import org.example.repositories.SkateboardRepository;
 import org.example.repositories.TruckSizeRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,7 +31,9 @@ public class SkateboardController {
 
     @GetMapping("/decks/id/{id}")
     public Deck findDeckById(@PathVariable Integer id) {
-        Deck deck = repository.findById(id).orElseThrow();
+        Deck deck = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Deck not found with id: " + id));
         deck.setFittingTrucks(truckSizeRepository.findTruckByWidth(deck.getBoardWidth()));
         return deck;
     }
@@ -37,6 +41,11 @@ public class SkateboardController {
     @GetMapping("/decks/brand/{brand}")
     public List<Deck> findDeckBy(@PathVariable String brand) {
         List<Deck> decks = repository.findDeckBy(brand);
+        if (decks.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "No " + brand + " deck found."
+            );
+        }
         for (Deck deck : decks) {
             deck.setFittingTrucks(truckSizeRepository.findTruckByWidth(deck.getBoardWidth()));
         }

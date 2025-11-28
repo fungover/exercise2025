@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.entities.DTOs.DeckDTO;
 import org.example.entities.DTOs.TruckDTO;
 import org.example.entities.Deck;
 import org.example.repositories.SkateboardRepository;
@@ -22,7 +23,7 @@ public class SkateboardController {
     }
 
     @GetMapping("/decks")
-    public List<Object> findAllDecks() {
+    public List<DeckDTO> findAllDecks() {
         return repository.findDeckBy();
     }
 
@@ -49,8 +50,7 @@ public class SkateboardController {
 
     @PostMapping("/decks/create")
     public Deck addDeck(@RequestBody Deck newDeck) {
-        repository.save(newDeck);
-        return newDeck;
+        return repository.save(newDeck);
     }
 
 }

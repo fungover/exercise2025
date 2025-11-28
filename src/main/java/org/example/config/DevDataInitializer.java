@@ -41,6 +41,12 @@ public class DevDataInitializer implements ApplicationRunner {
         if (forceInit || skateboardRepository.count() == 0) {
             log.info("Initializing dev data...");
 
+            if (forceInit) {
+                truckSizeRepository.deleteAll();
+                truckBrandRepository.deleteAll();
+                skateboardRepository.deleteAll();
+            }
+
             skateboardRepository.saveAll(List.of(
                     new Deck("ZERO", 8.0),
                     new Deck("POLAR", 8.5),

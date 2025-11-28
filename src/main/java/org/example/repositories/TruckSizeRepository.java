@@ -11,7 +11,7 @@ import java.util.List;
 public interface TruckSizeRepository extends ListCrudRepository<TruckSize, Integer> {
 
     @Query("""
-            select upper(tb.brand), ts.size
+            select new org.example.entities.DTOs.TruckDTO(upper(tb.brand), ts.size)
             from TruckSize ts
             inner join TruckBrand tb
             on tb.id = ts.brandId

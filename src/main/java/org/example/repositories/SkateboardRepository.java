@@ -1,5 +1,6 @@
 package org.example.repositories;
 
+import org.example.entities.DTOs.DeckDTO;
 import org.example.entities.Deck;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
@@ -10,10 +11,10 @@ import java.util.List;
 public interface SkateboardRepository extends ListCrudRepository<Deck, Integer> {
 
     @Query("""
-            select upper(deck.brand), deck.boardWidth
+            select new org.example.entities.DTOs.DeckDTO(upper(deck.brand), deck.boardWidth)
             from Deck deck
             """)
-    List<Object> findDeckBy();
+    List<DeckDTO> findDeckBy();
 
     @Query("""
             select deck

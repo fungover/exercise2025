@@ -9,7 +9,7 @@ CREATE TABLE truck_brand
 CREATE TABLE truck_size
 (
     id            INT AUTO_INCREMENT NOT NULL,
-    size          INT                NULL,
+    size          INT                NOT NULL,
     board_width   DOUBLE PRECISION   NOT NULL,
     brand_id      INT                NOT NULL,
     created_at    datetime           NULL,

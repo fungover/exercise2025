@@ -1,0 +1,17 @@
+### GET all cats (needs API key)
+GET http://localhost:8080/api/cats
+X-API-KEY: secret
+
+### GET cat by name
+GET http://localhost:8080/api/cats/Whiskers
+X-API-KEY: secret
+
+### POST - Create a new cat
+POST http://localhost:8080/api/cats
+Content-Type: application/json
+X-API-KEY: secret
+
+{
+  "name": "Whiskers",
+  "age": 3
+}

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Cat Manager</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .login-container {
+        width: 100%;
+        max-width: 420px;
+      }
+
+      .login-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 50px 40px;
+        text-align: center;
+      }
+
+      .logo {
+        font-size: 5rem;
+        margin-bottom: 10px;
+        animation: bounce 2s ease infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      h1 {
+        color: #333;
+        font-size: 2rem;
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        color: #888;
+        font-size: 1rem;
+        margin-bottom: 35px;
+      }
+
+      .alert {
+        padding: 14px 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        font-size: 0.95rem;
+      }
+
+      .alert-error {
+        background: #fee2e2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+      }
+
+      .alert-success {
+        background: #d1fae5;
+        color: #059669;
+        border: 1px solid #a7f3d0;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+      }
+
+      label {
+        display: block;
+        color: #555;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 16px 20px;
+        border: 2px solid #e1e5ee;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8f9fc;
+      }
+
+      input[type="text"]:focus,
+      input[type="password"]:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+      }
+
+      input[type="text"]::placeholder,
+      input[type="password"]::placeholder {
+        color: #aaa;
+      }
+
+      button[type="submit"] {
+        width: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 18px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 15px;
+      }
+
+      button[type="submit"]:hover {
+        transform: scale(1.01);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+      }
+
+      button[type="submit"]:active {
+        transform: translateY(-1px);
+      }
+
+      .divider {
+        margin: 30px 0;
+        display: flex;
+        align-items: center;
+        color: #ccc;
+        font-size: 0.85rem;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #e1e5ee;
+      }
+
+      .divider span {
+        padding: 0 15px;
+      }
+
+      .demo-credentials {
+        background: #f8f9fc;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: left;
+      }
+
+      .demo-credentials h3 {
+        font-size: 0.85rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+      }
+
+      .credential-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #e8e8e8;
+        font-size: 0.95rem;
+      }
+
+      .credential-item:last-child {
+        border-bottom: none;
+      }
+
+      .credential-label {
+        color: #666;
+      }
+
+      .credential-value {
+        font-family: "SF Mono", Monaco, monospace;
+        color: #667eea;
+        font-weight: 600;
+      }
+
+      .footer {
+        margin-top: 30px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+      }
+
+      .footer a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-card">
+        <div class="logo" role="img" aria-label="Cat emoji logo">🐱</div>
+        <h1>Welcome Back!</h1>
+        <p class="subtitle">Sign in to Cat Manager</p>
+
+        <div th:if="${param.error}" class="alert alert-error" role="alert" aria-live="assertive">
+          Wrong credential, check example
+        </div>
+
+        <div th:if="${param.logout}" class="alert alert-success" role="alert" aria-live="assertive">
+          You have been logged out successfully
+        </div>
+
+        <form th:action="@{/login}" method="post">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter your username"
+              required
+              aria-required="true"
+              autocomplete="username"
+              autofocus />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              required
+              aria-required="true"
+              autocomplete="current-password" />
+          </div>
+
+          <button type="submit" aria-label="Sign in to your account">Sign In</button>
+        </form>
+
+        <div class="divider"><span>Example accounts</span></div>
+
+        <div class="demo-credentials">
+          <h3>Test Credentials</h3>
+          <div class="credential-item">
+            <span class="credential-label">User:</span>
+            <span class="credential-value">user / password</span>
+          </div>
+          <div class="credential-item">
+            <span class="credential-label">Admin:</span>
+            <span class="credential-value">admin / admin</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

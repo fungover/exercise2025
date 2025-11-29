@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: 'mysql:9.5.0'
+    environment:
+      - 'MYSQL_DATABASE=spring'
+      - 'MYSQL_PASSWORD=secret'
+      - 'MYSQL_ROOT_PASSWORD=verysecret'
+      - 'MYSQL_USER=user'
+    ports:
+      - '3306:3306'
+  spring-boot:
+    image: 'exercise2025:0.0.1-SNAPSHOT'
+    ports:
+      - '8080:8080'
+    environment:
+      - 'DATABASE_USER=user'
+      - 'DATABASE_PASSWORD=secret'

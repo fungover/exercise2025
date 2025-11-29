@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cat Manager</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        color: #333;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      h1::before {
+        content: "🐱";
+        font-size: 2.5rem;
+      }
+
+      .subtitle {
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        text-align: left;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+      }
+
+      th:first-child {
+        border-radius: 10px 0 0 10px;
+      }
+
+      th:last-child {
+        border-radius: 0 10px 10px 0;
+      }
+
+      td {
+        padding: 18px 20px;
+        color: #444;
+        font-size: 1rem;
+      }
+
+      td:last-child,
+      th:last-child {
+        text-align: right;
+      }
+
+      tbody tr {
+        border-top: solid rgb(223, 220, 220) 1px;
+      }
+
+      tbody tr:first-child {
+        border-top: none;
+      }
+
+      tr:hover {
+        background: rgba(102, 126, 234, 0.05);
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        color: #888;
+      }
+
+      .empty-state::before {
+        content: "😿";
+        font-size: 4rem;
+        display: block;
+        margin-bottom: 15px;
+      }
+
+      h2 {
+        color: #333;
+        font-size: 1.5rem;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      h2::before {
+        content: "➕";
+        font-size: 1.2rem;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        color: #555;
+        font-weight: 500;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid #e1e5ee;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8f9fc;
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      }
+
+      /* Age Slider Styles */
+      .slider-container {
+        position: relative;
+        padding: 3px 0;
+      }
+
+      .slider-value {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        min-width: 100px;
+        text-align: center;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 12px;
+        border-radius: 10px;
+        background: linear-gradient(
+          to right,
+          #667eea 0%,
+          #764ba2 var(--slider-progress, 25%),
+          #e1e5ee var(--slider-progress, 25%),
+          #e1e5ee 100%
+        );
+        outline: none;
+        transition: background 0.3s ease;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        border: 4px solid #667eea;
+        transition: all 0.2s ease;
+      }
+
+      input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.15);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        border: 4px solid #667eea;
+        transition: all 0.2s ease;
+      }
+
+      .slider-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 8px;
+        color: #888;
+        font-size: 0.85rem;
+      }
+
+      button[type="submit"] {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 16px 40px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      button[type="submit"]:hover {
+        transform: scale(1.01);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      button[type="submit"]:active {
+        transform: translateY(0);
+      }
+
+      .cat-count {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      .age-badge {
+        background: #f0f4ff;
+        color: #667eea;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .header {
+        display: grid;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="header">
+          <h1>Cat Manager</h1>
+          <p class="subtitle">
+            Keep track of all your feline friends
+            <span class="cat-count" th:text="${#lists.size(cats)} + ' cats'">0 cats</span>
+          </p>
+        </div>
+
+        <div th:if="${#lists.isEmpty(cats)}" class="empty-state">
+          <p>No cats found. Add your first cat below!</p>
+        </div>
+
+        <table th:if="${!#lists.isEmpty(cats)}">
+          <thead>
+            <tr class="name-age">
+              <th>Name</th>
+              <th>Age</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr th:each="cat : ${cats}">
+              <td th:text="${cat.name}">Cat Name</td>
+              <td><span class="age-badge" th:text="${cat.age} + ' years'">0 years</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>Add a New Cat</h2>
+        <form th:action="@{/cats}" method="post">
+          <div class="form-group">
+            <label for="name">Cat's Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter cat's name..." required />
+          </div>
+          <div class="form-group">
+            <label for="age">Cat's Age</label>
+            <div class="slider-container">
+              <span class="slider-value" id="ageValue">0 years</span>
+              <input
+                type="range"
+                id="age"
+                name="age"
+                min="0"
+                max="25"
+                value="0"
+                oninput="updateSlider(this)"
+                aria-describedby="ageValue" />
+              <div class="slider-labels">
+                <span>0</span>
+                <span>Kitten</span>
+                <span>Adult</span>
+                <span>Senior</span>
+                <span>25</span>
+              </div>
+            </div>
+          </div>
+          <button type="submit">Add Cat 🐾</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function updateSlider(slider) {
+        const value = slider.value;
+        const max = slider.max;
+        const progress = (value / max) * 100;
+
+        // Update the displayed value
+        document.getElementById("ageValue").textContent = value + (value === "1" ? " year" : " years");
+
+        // Update the gradient progress
+        slider.style.setProperty("--slider-progress", progress + "%");
+      }
+
+      // Initialize on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        const slider = document.getElementById("age");
+        updateSlider(slider);
+      });
+    </script>
+  </body>
+</html>

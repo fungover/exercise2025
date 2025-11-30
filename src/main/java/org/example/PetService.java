@@ -1,9 +1,11 @@
 package org.example;
 
 import org.example.entities.Pet;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.locks.ReentrantLock;
 
+@Service
 public class PetService {
     private final ReentrantLock lock = new ReentrantLock();
     private final PetRepository repository;
@@ -12,8 +14,9 @@ public class PetService {
         this.repository = repository;
     }
 
-    public void addPet(Pet pet) {
+    public Pet addPet(Pet pet) {
         repository.save(pet);
+        return pet;
     }
 
     public Pet getPet(Integer id) {

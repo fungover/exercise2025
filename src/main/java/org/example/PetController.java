@@ -13,9 +13,11 @@ import java.util.List;
 @RequestMapping("api")
 public class PetController {
     private final PetRepository repository;
+    private final PetService service;
 
-    public PetController(PetRepository repository) {
+    public PetController(PetRepository repository, PetService service) {
         this.repository = repository;
+        this.service = service;
     }
 
     @GetMapping("pets")
@@ -24,34 +26,33 @@ public class PetController {
     }
 
     @PostMapping("addPet")
-    public String addPet(@RequestBody Pet pet) {
-        PetService service = new PetService(repository);
-
-        service.addPet(pet);
-
-        return "You added a " + pet.getSpecies() + " named " + pet.getName();
+    public ResponseEntity<Pet> addPet(@RequestBody Pet pet) {
+        Pet saved = service.addPet(pet);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping("pets/{id}")
-    public Pet getPet(@PathVariable Integer id) {
-        PetService service = new PetService(repository);
-
-        return service.getPet(id);
+    public ResponseEntity<?> getPet(@PathVariable Integer id) {
+        Pet pet = service.getPet(id);
+        if (pet == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(pet);
     }
 
     @DeleteMapping("/deletePet/{id}")
     public ResponseEntity<String> deletePet(@PathVariable Integer id) {
-        try {
-            repository.deleteById(id);
-            return ResponseEntity.ok("Deleted pet with id: " + id);
-        } catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No pet with id: " + id);
+        if (!repository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No pet with id: " + id);
         }
+
+        repository.deleteById(id);
+        return ResponseEntity.ok("Deleted pet with id: " + id);
     }
 
     @PostMapping("/feed/{id}")
     public ResponseEntity<String> feedPet(@PathVariable Integer id) {
-        PetService service = new PetService(repository);
         try {
             Pet fedPet = service.feedPet(id);
             repository.save(fedPet);
@@ -63,7 +64,6 @@ public class PetController {
 
     @PostMapping("/play/{id}")
     public ResponseEntity<String> playPet(@PathVariable Integer id) {
-        PetService service = new PetService(repository);
         try {
             Pet happyPet = service.playPet(id);
             repository.save(happyPet);

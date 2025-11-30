@@ -47,30 +47,30 @@ public class PetController {
                     .body("No pet with id: " + id);
         }
 
-        repository.deleteById(id);
+        service.removePet(id);
         return ResponseEntity.ok("Deleted pet with id: " + id);
     }
 
     @PostMapping("/feed/{id}")
     public ResponseEntity<String> feedPet(@PathVariable Integer id) {
-        try {
-            Pet fedPet = service.feedPet(id);
-            repository.save(fedPet);
-            return ResponseEntity.ok("You just fed " + fedPet.getName() + " its hunger is now at " + fedPet.getHungerLevel() + "%");
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        Pet fedPet = service.feedPet(id);
+
+        if (fedPet == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet not found with id: " + id);
         }
+
+        return ResponseEntity.ok("You just fed " + fedPet.getName() + " its hunger is now at " + fedPet.getHungerLevel() + "%");
     }
 
     @PostMapping("/play/{id}")
     public ResponseEntity<String> playPet(@PathVariable Integer id) {
-        try {
-            Pet happyPet = service.playPet(id);
-            repository.save(happyPet);
-            return ResponseEntity.ok("You just played with " + happyPet.getName() + " its happiness is now at " + happyPet.getHappiness() + "%");
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        Pet happyPet = service.playPet(id);
+
+        if (happyPet == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet not found with id: " + id);
         }
+
+        return ResponseEntity.ok("You just played with " + happyPet.getName() + " its happiness is now at " + happyPet.getHappiness() + "%");
     }
 }
 

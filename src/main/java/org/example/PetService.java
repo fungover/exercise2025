@@ -36,6 +36,7 @@ public class PetService {
 
             if (pet != null) {
                 pet.setHungerLevel(pet.getHungerLevel() + 10);
+                repository.save(pet);
                 return pet;
             }
 
@@ -53,6 +54,7 @@ public class PetService {
 
             if (pet != null) {
                 pet.setHappiness(pet.getHappiness() + 10);
+                repository.save(pet);
                 return pet;
             }
 

@@ -38,8 +38,16 @@ private final AnimalRepository savedAnimals;
         return savedAnimals.save(pet);
     }
 
-    public void deleteAnimal(Integer id) {
-        savedAnimals.deleteById(id);
+        return savedAnimals.save(existing);
+    }
+
+    public boolean deleteAnimal(Integer id) {
+        Optional<Pet> pet = savedAnimals.findById(id);
+        if(pet.isPresent()) {
+            savedAnimals.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
 

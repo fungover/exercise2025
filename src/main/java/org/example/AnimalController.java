@@ -1,13 +1,16 @@
 package org.example;
 
 
+import org.example.entity.Pet;
 import org.example.service.AnimalService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 public class AnimalController {
     private final AnimalService repository;
 

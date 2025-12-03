@@ -60,6 +60,15 @@ public class AnimalController {
 
 //    @DeleteMapping
     // deleting animals
+    @DeleteMapping("/animals/{id}")
+    public ResponseEntity<Void> deleteAnimal(@PathVariable Integer id) {
+        boolean deleted = repository.deleteAnimal(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 //    @PutMapping
     // updating animals

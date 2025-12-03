@@ -20,13 +20,17 @@ public class AnimalController {
         return "Authentication successful!";
     }
 
-    @GetMapping("animals")
+    @GetMapping("/animals")
     public List<PetDto> getAllAnimals() {
        return repository.findAllAnimals().stream()
                .map(Pet -> new PetDto(
+                       Pet.getId(),
                        Pet.getSpecies(),
                        Pet.getName(),
-                       Pet.getAge()
+                       Pet.getAge(),
+                       Pet.getBirthDate(),
+                       Pet.getCreatedAt()
+
                ))
                .toList();
     }

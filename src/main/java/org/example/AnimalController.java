@@ -18,11 +18,13 @@ public class AnimalController {
         this.repository = repository;
     }
 
+    // Test request to check if authentication is successful
     @GetMapping("/")
     public String index() {
         return "Authentication successful!";
     }
 
+    // Get request to get list of all animals
     @GetMapping("/animals")
     public List<PetDto> getAllAnimals() {
        return repository.findAllAnimals().stream()
@@ -39,10 +41,9 @@ public class AnimalController {
     }
 
 
-    // @PostMapping
-    // adding animals
+    // Post request to create animal to list
     @PostMapping("animals")
-    public ResponseEntity<PetDto> saveAnimal(@RequestBody Pet pet) {
+    public ResponseEntity<PetDto> createAnimal(@RequestBody Pet pet) {
         Pet saved = repository.createAnimal(pet);
         PetDto petDto = new PetDto(
                 saved.getId(),
@@ -62,7 +63,7 @@ public class AnimalController {
 
     }
 
-    // deleting animals
+    // Delete request to delete animal by id
     @DeleteMapping("/animals/{id}")
     public ResponseEntity<Void> deleteAnimal(@PathVariable Integer id) {
         boolean deleted = repository.deleteAnimal(id);
@@ -73,7 +74,7 @@ public class AnimalController {
         }
     }
 
-        // updating animals
+        // Put request can update specific fields without emptying other fields
      @PutMapping("/animals/{id}")
         public ResponseEntity<PetDto> updateAnimal(@PathVariable int id, @RequestBody Pet pet) {
          System.out.println(pet.getSpecies());

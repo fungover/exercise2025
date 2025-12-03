@@ -5,27 +5,27 @@ spring:
     virtual:
       enabled: true
   flyway:
+    # Location of the SQL migration scripts.
     locations: classpath:db/migration
 
   docker:
     compose:
+      # Enable Docker image to start automatically and not close after stopping the application.
       lifecycle-management: start_only
+    datasource:
+      url: jdbc:mysql://localhost:3306/spring
+      username: ${DATABASE_USER:user}
+      password: ${DATABASE_PASSWORD:password}
+
+ # Enables SQL logging.
   jpa:
     show-sql: true
 
+# Enables logging of SQL statements.
 logging:
   level:
     org.springframework.security: DEBUG
 
-    # Scans the classpath for all entities and loads them into the database.
-#    hibernate:
-#      ddl-auto: update
 
 
-# Connects to the database using the credentials specified in the application.properties file
-# or environment variables.
 
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/spring
-#    username: ${DATABASE_USER:user}
-#    password: ${DATABASE_PASSWORD:password}

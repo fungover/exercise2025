@@ -18,7 +18,7 @@ private final AnimalRepository savedAnimals;
     public List<Pet> findAllAnimals() {
         return savedAnimals.findAll();
     }
-
+    // Create animal method
     public Pet createAnimal(Pet pet) {
         if (pet.getName() == null) {
             throw new IllegalArgumentException("Name does not exist");
@@ -34,17 +34,9 @@ private final AnimalRepository savedAnimals;
         }
         return savedAnimals.save(pet);
     }
-
+    // Update animal method
     public Pet updateAnimal(Pet pet) {
-//      Optional<Pet> savedPet = savedAnimals.findById(pet.getId());
         Pet existing = savedAnimals.findById(pet.getId()).orElseThrow(() -> new IllegalArgumentException("Animal with ID " + pet.getId() + " does not exist"));
-
-        // Debug info
-        System.out.println("Age: " + existing.getAge());
-        System.out.println("Created at: " + existing.getCreatedAt());
-        System.out.println("Name: " + existing.getName());
-        System.out.println("Species: " + existing.getSpecies());
-        System.out.println("Birthdate: " + existing.getBirthDate());
 
         if (pet.getName() != null) {
             existing.setName(pet.getName());
@@ -68,7 +60,7 @@ private final AnimalRepository savedAnimals;
 
         return savedAnimals.save(existing);
     }
-
+    // Delete animal method
     public boolean deleteAnimal(Integer id) {
         Optional<Pet> pet = savedAnimals.findById(id);
         if(pet.isPresent()) {

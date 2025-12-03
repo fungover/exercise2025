@@ -23,6 +23,8 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http
+                // API security filter
+                // All endpoints except GET require ADMIN role
                 .securityMatcher("/api/animals/**")
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
@@ -33,7 +35,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
-               // .httpBasic(Customizer.withDefaults()
+
                 .httpBasic(basic -> basic.authenticationEntryPoint(
                         (request, response, authException) -> {
                             response.setStatus(401);
@@ -47,6 +49,8 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
         http
+                // Web Security Filter
+                // Browsers can access login page form
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login","/css/**").permitAll()

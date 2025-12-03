@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface AnimalRepository extends ListCrudRepository<Pet, Integer> {
+
     // Optional search methods for sql queries
     Optional<Pet> findByName(String name);
     Optional<Pet> findBySpecies(String species);

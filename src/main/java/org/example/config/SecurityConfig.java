@@ -2,6 +2,8 @@ package org.example.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,11 +20,38 @@ import static org.springframework.security.core.userdetails.User.withUsername;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http
+                .securityMatcher("/api/animals/**")
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, "/api/animals/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/animals/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/animals/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/animals/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+
+               // .httpBasic(Customizer.withDefaults()
+                .httpBasic(basic -> basic.authenticationEntryPoint(
+                        (request, response, authException) -> {
+                            response.setStatus(401);
+                        })
+        );
+
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login","/css/**").permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()
+                )
 //                .formLogin(Customizer.withDefaults());
                 .formLogin(form ->
                         form.defaultSuccessUrl("/api/animals",true)
@@ -31,8 +60,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-
 
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager(PasswordEncoder passwordEncoder){

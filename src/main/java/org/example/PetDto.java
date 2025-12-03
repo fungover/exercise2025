@@ -1,4 +1,6 @@
 package org.example;
 
-public record PetDto(String species, String name, int age) {
+import java.time.LocalDateTime;
+
+public record PetDto(Integer id,String species, String name, int age, String birthDate, LocalDateTime createdAt) {
 }

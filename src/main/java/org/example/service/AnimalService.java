@@ -19,6 +19,18 @@ private final AnimalRepository savedAnimals;
     }
 
     public Pet createAnimal(Pet pet) {
+        if (pet.getName() == null) {
+            throw new IllegalArgumentException("Name does not exist");
+        }
+        if (pet.getSpecies() == null) {
+            throw new IllegalArgumentException("Species does not exist");
+        }
+        if (pet.getAge() == null) {
+            throw new IllegalArgumentException("Age does not exist");
+        }
+        if (pet.getBirthDate() == null) {
+            throw new IllegalArgumentException("Birthdate does not exist");
+        }
         return savedAnimals.save(pet);
     }
 

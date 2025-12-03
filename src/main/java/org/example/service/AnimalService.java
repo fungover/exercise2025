@@ -5,6 +5,7 @@ import org.example.entity.Pet;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AnimalService {
@@ -35,8 +36,35 @@ private final AnimalRepository savedAnimals;
     }
 
     public Pet updateAnimal(Pet pet) {
-        return savedAnimals.save(pet);
-    }
+//      Optional<Pet> savedPet = savedAnimals.findById(pet.getId());
+        Pet existing = savedAnimals.findById(pet.getId()).orElseThrow(() -> new IllegalArgumentException("Animal with ID " + pet.getId() + " does not exist"));
+
+        // Debug info
+        System.out.println("Age: " + existing.getAge());
+        System.out.println("Created at: " + existing.getCreatedAt());
+        System.out.println("Name: " + existing.getName());
+        System.out.println("Species: " + existing.getSpecies());
+        System.out.println("Birthdate: " + existing.getBirthDate());
+
+        if (pet.getName() != null) {
+            existing.setName(pet.getName());
+        }
+
+        if (pet.getSpecies() != null) {
+            existing.setSpecies(pet.getSpecies());
+        }
+
+        if (pet.getCreatedAt() != null) {
+            existing.setCreatedAt(pet.getCreatedAt());
+        }
+
+       if (pet.getAge() != null) {
+           existing.setAge(pet.getAge());
+       }
+
+       if (pet.getBirthDate() != null) {
+           existing.setBirthDate(pet.getBirthDate());
+       }
 
         return savedAnimals.save(existing);
     }

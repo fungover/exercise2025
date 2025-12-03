@@ -36,8 +36,7 @@ public class AnimalController {
     }
 
 
-
-// @PostMapping
+    // @PostMapping
     // adding animals
     @PostMapping("animals")
     public ResponseEntity<PetDto> saveAnimal(@RequestBody Pet pet) {
@@ -58,7 +57,8 @@ public class AnimalController {
             return ResponseEntity.badRequest().build();
         }
 
-//    @DeleteMapping
+    }
+
     // deleting animals
     @DeleteMapping("/animals/{id}")
     public ResponseEntity<Void> deleteAnimal(@PathVariable Integer id) {

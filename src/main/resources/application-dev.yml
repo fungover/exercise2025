@@ -13,12 +13,9 @@ spring:
   jpa:
     show-sql: true
 
-
 logging:
   level:
     org.springframework.security: DEBUG
-
-
 
     # Scans the classpath for all entities and loads them into the database.
 #    hibernate:

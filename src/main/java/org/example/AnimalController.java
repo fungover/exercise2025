@@ -70,7 +70,27 @@ public class AnimalController {
         }
     }
 
-//    @PutMapping
-    // updating animals
+        // updating animals
+     @PutMapping("/animals/{id}")
+        public ResponseEntity<PetDto> updateAnimal(@PathVariable int id, @RequestBody Pet pet) {
+         System.out.println(pet.getSpecies());
+         System.out.println("Birth: "+pet.getBirthDate());
+         System.out.println("Created: "+pet.getCreatedAt());
+            pet.setId(id);
+            Pet updatedPet = repository.updateAnimal(pet);
+            if (updatedPet != null) {
+                PetDto sendBack = new PetDto(
+                        updatedPet.getId(),
+                        updatedPet.getSpecies(),
+                        updatedPet.getName(),
+                        updatedPet.getAge(),
+                        updatedPet.getBirthDate(),
+                        updatedPet.getCreatedAt()
+                );
+                return ResponseEntity.ok(sendBack);
+            } else {
+                return ResponseEntity.notFound().build();
+     }
+      }
 
 }

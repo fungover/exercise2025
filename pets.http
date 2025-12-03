@@ -1,4 +1,81 @@
-### GET request to example server
-GET http://localhost:8080/animals
+### GET request to example server (expect 200 OK)
+GET http://localhost:8080/api/animals
+
+### POST request to add a new animal as admin user (expect 201 Created)
+POST http://localhost:8080/api/animals
+Authorization: Basic YWRtaW46YWRtaW4=
+Content-Type: application/json
+
+{
+  "name": "Buddy",
+  "species": "Dog",
+  "age": 3,
+  "birthDate": "2025-10-14 12:00:00"
+}
+
+### POST request to add a new animal as anonymous user (expect 401 Unauthorized)
+POST http://localhost:8080/api/animals
+Content-Type: application/json
+
+{
+  "name": "Buddy",
+  "species": "Dog",
+  "age": 3
+}
+
+
+### PUT request to update an animal as admin user (expect 200 OK)
+PUT http://localhost:8080/api/animals/4
+Authorization: Basic YWRtaW46YWRtaW4=  # admin:admin
+Content-Type: application/json
+
+{
+    "name": "Max",
+    "species": "Dog",
+    "age": 4,
+  "birthDate": "2022-05-20 12:00:00",
+  "createdAt": "2022-01-01T10:00:00"
+
+}
+
+### PUT request to update an animal as user (expect 200 OK)
+PUT http://localhost:8080/api/animals/7
+Authorization: Basic dXNlcjpwYXNzd29yZA==  # user:password
+Content-Type: application/json
+
+{
+  "age": 5
+
+}
+
+### DELETE (http client) - as anonymous (expect 401 Unauthorized)
+DELETE http://localhost:8080/api/animals/5
+
+Accept: application/json
 
 ###
+
+### DELETE (http client) - as admin (expect 204 No Content)
+DELETE http://localhost:8080/api/animals/4
+Authorization: Basic YWRtaW46YWRtaW4=
+Accept: application/json
+
+###
+
+### 1️⃣ DELETE as anonymous (no auth)
+DELETE http://localhost:8080/api/animals/5
+Accept: application/json
+
+###
+
+### 2️⃣ DELETE as regular user (expect 403 Forbidden)
+DELETE http://localhost:8080/api/animals/5
+Authorization: Basic dXNlcjpwYXNzd29yZA==  # user:password
+Accept: application/json
+
+###
+
+### 3️⃣ DELETE as admin (expect 204 No Content)
+DELETE http://localhost:8080/api/animals/5
+Authorization: Basic YWRtaW46YWRtaW4=  # admin:admin
+Accept: application/json

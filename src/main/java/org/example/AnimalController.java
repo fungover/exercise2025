@@ -35,6 +35,24 @@ public class AnimalController {
 
 // @PostMapping
     // adding animals
+    @PostMapping("animals")
+    public ResponseEntity<PetDto> saveAnimal(@RequestBody Pet pet) {
+        Pet saved = repository.createAnimal(pet);
+        PetDto petDto = new PetDto(
+                saved.getId(),
+                saved.getSpecies(),
+                saved.getName(),
+                saved.getAge(),
+                saved.getBirthDate(),
+                saved.getCreatedAt()
+        );
+
+        if (saved != null) {
+            URI location = URI.create("/api/animals/" + saved.getId());
+            return ResponseEntity.created(location).body(petDto);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
 
 //    @DeleteMapping
     // deleting animals

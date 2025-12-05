@@ -53,7 +53,7 @@ public class AnimalControllerTest {
     }
 
     @Test
-    void testGetPetById_Any200() throws Exception {
+    void testGetPet_Any200() throws Exception {
         when(animalService.findAllAnimals()).thenReturn(List.of(testPet));
 
         mockMvc.perform(get("/api/animals"))

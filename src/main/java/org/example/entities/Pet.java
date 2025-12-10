@@ -14,18 +14,18 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    String name;
+    private String name;
 
-    int age;
+    private int age;
 
-    String species;
+    private String species;
 
-    int hungerLevel;
+    private int hungerLevel;
 
-    int happiness;
+    private int happiness;
 
     @CreationTimestamp
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     public Pet() {
 

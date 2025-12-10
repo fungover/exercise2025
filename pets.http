@@ -21,7 +21,7 @@ Content-Type: application/json
 
 ### Get request to list specific animal with ID
 
-GET http://localhost:8080/api/pets
+GET http://localhost:8080/api/pets/2
 X-API-Key: secret
 Accept: application/json
 

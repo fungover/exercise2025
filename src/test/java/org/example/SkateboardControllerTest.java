@@ -69,7 +69,7 @@ public class SkateboardControllerTest {
     void whenValidJwt_thenOk_apiDecksBrand() throws Exception {
         String token = "Bearer " + jwtService.generateToken("user");
 
-        mockMvc.perform(get("/api/decks/brand/anyBrand")
+        mockMvc.perform(get("/api/decks/brand/BAKER")
                         .header("Authorization", token))
                 .andExpect(status().isOk());
     }

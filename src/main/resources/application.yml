@@ -10,4 +10,4 @@ spring:
     password: ${DATABASE_PASSWORD:secret}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate

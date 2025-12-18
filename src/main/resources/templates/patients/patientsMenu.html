@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <title>Patients Menu</title>
@@ -8,10 +8,10 @@
 <body>
 <div>
     <h1>Patients Menu</h1>
-    <a href="/patients" th:text="@{all patients}"></a>
-    <a href="/patients/new" th:text="@{new patient}"></a>
-    <a href="/patients/find" th:text="@{find patient}"></a>
-    <a href="/patients/delete" th:text="@{delete patient}"></a>
+    <a href="/patients">all patients</a>
+    <a href="/patients/new">new patient</a>
+    <a href="/patients/find">find patient</a>
+    <a href="/patients/delete">delete patient</a>
 </div>
 </body>
 </html>

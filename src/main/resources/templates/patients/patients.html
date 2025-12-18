@@ -11,7 +11,6 @@
     <ul th:each="patient : ${patients}">
         <li>
             <p th:text="${patient.firstName()}" style="display: inline"></p>
-            <p style="display: inline"></p>
             <p th:text="${patient.lastName()}" style="display: inline"></p>
         </li>
     </ul>

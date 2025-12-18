@@ -20,7 +20,7 @@ public interface AdmissionRepository extends ListCrudRepository<Admission, Long>
 
 	@Query("""
 						select admission from Admission admission
-						join Patient pat on admission.patient.pat_id = :patId 
+						where admission.patient.pat_id = :pat_id
 					""")
 	public List<Admission> getAdmissionsByPatId(Long patId);
 }

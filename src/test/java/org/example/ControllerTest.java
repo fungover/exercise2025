@@ -71,10 +71,14 @@ class ControllerTest {
 		Patient patient = new Patient(LocalDate.of(2000, 1, 10), "Address", "LastName", "FirstName", "ssn");
 
 		mockMvc.perform(post("/api/patients/new")
-										.with(csrf())
-										.contentType(MediaType.APPLICATION_JSON)
-										.content(objectMapper.writeValueAsString(patient)))
-						.andExpect(status().is3xxRedirection());
+						.with(csrf())
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("firstName", "FirstName")
+						.param("lastName", "LastName")
+						.param("address", "Address")
+						.param("dateOfBirth", "2000-01-10")
+						.param("ssn", "ssn"))
+				.andExpect(status().is3xxRedirection());
 	}
 
 }

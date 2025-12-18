@@ -31,9 +31,9 @@ public class SecurityConfig {
 										.requestMatchers("/").permitAll()
 										.requestMatchers("**.css").permitAll()
 										.requestMatchers("/login").permitAll()
+										.requestMatchers("/api/admissions/new").hasRole("ADMIN")
 										.requestMatchers("/api/**").authenticated()
 										.requestMatchers("/logout").authenticated()
-										.requestMatchers("/api/admissions/new").hasRole("ADMIN")
 										.anyRequest().authenticated());
 		return http.build();
 	}

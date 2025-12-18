@@ -1,0 +1,11 @@
+services:
+  mysql:
+    image: mysql:9.4.0
+    container_name: exercise2025-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: exercise2025
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    ports:
+      - "3306:3306"

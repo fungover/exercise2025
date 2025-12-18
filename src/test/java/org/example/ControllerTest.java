@@ -14,6 +14,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -42,9 +43,9 @@ class ControllerTest {
 	void getAllAdmissions() throws Exception {
 		when(admissionRepository.findAll())
 						.thenReturn(List.of(
-										new Admission(new Patient(), "Pneumonia", "Infection"),
-										new Admission(new Patient(), "Heart Thing", "HIA"),
-										new Admission(new Patient(), "Corona", "Emergency")
+										new Admission(new Patient(), "Pneumonia", "Infection", LocalDateTime.now()),
+										new Admission(new Patient(), "Heart Thing", "HIA", LocalDateTime.now()),
+										new Admission(new Patient(), "Corona", "Emergency", LocalDateTime.now())
 						));
 
 		mockMvc.perform(get("/admissions"))

@@ -16,17 +16,17 @@ public class Admission {
 	private String diagnosis;
 	private String department;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pat_id")
 	Patient patient;
 
 	public Admission() {}
 
-	public Admission(Patient patient, String diagnosis, String department) {
+	public Admission(Patient patient, String diagnosis, String department, LocalDateTime dateIn) {
 		this.patient = patient;
 		this.diagnosis = diagnosis;
 		this.department = department;
-		this.dateIn = LocalDateTime.now();
+		this.dateIn = dateIn;
 	}
 
 	// -- Getter
@@ -56,8 +56,8 @@ public class Admission {
 
 	// -- Setter --
 
-	public void setDateOut() {
-		this.dateOut = LocalDateTime.now();
+	public void setDateOut(LocalDateTime dateOut) {
+		this.dateOut = dateOut;
 	}
 
 	public void setDiagnosis(String diagnosis) {

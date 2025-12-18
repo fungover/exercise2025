@@ -37,7 +37,7 @@ public class Patient {
 	}
 
 	// -- Getter --
-	public java.lang.Long getId() {
+	public Long getPatId() {
 		return pat_id;
 	}
 

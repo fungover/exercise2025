@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -35,9 +36,9 @@ public class DataInitializer implements ApplicationRunner {
 			var patient3 = new Patient(LocalDate.of(2001, 7, 13), "Florence", "Holt", "Cassian", "20010713-9721");
 			patientRepository.saveAll(List.of(patient1, patient2, patient3));
 
-			var admission1 = new Admission(patient2, "Pneumonia", "Infection");
-			var admission2 = new Admission(patient1, "Heart thing", "HIA");
-			var admission3 = new Admission(patient3, "Corona", "Emergency");
+			var admission1 = new Admission(patient2, "Pneumonia", "Infection", LocalDateTime.now());
+			var admission2 = new Admission(patient1, "Heart thing", "HIA", LocalDateTime.now());
+			var admission3 = new Admission(patient3, "Corona", "Emergency", LocalDateTime.now());
 			admissionRepository.saveAll(List.of(admission1, admission2, admission3));
 		}
 	}

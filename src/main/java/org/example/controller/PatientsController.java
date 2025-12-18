@@ -8,6 +8,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
@@ -36,5 +39,21 @@ public class PatientsController {
 	public String newPatient(Model model) {
 		model.addAttribute("patient", new Patient());
 		return "patients/newPatient";
+	}
+
+	@PostMapping("/api/patients/new")
+	public String newPatient(@ModelAttribute Patient pat) {
+		patientRepository.save(pat);
+		return "redirect:/patients";
+	}
+
+	@GetMapping("/api/patients/{id}")
+	public PatientDTO findPatientById(@PathVariable java.lang.Long id) {
+		var pat = patientRepository.findById(id);
+		if (pat.isEmpty()) {
+			throw new IllegalArgumentException("Patient with id " + id + " not found");
+		}
+		Patient foundPat = pat.get();
+		return new PatientDTO(foundPat.getFirstName(), foundPat.getLastName(), foundPat.getAddress(), foundPat.getDateOfBirth());
 	}
 }

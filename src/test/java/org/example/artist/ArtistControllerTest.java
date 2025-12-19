@@ -26,7 +26,7 @@ class ArtistControllerTest {
     @Test
     void authenticatedAccessSucceeds() throws Exception {
         mockMvc.perform(get("/api/artists")
-                        .with(httpBasic("user", "pass")))
+                        .with(httpBasic("user", "password")))
                 .andExpect(status().isOk());
     }
 }

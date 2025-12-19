@@ -4,6 +4,7 @@ import org.example.artist.Artist;
 import org.example.artist.ArtistRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class SongController {
             @RequestBody Song song
     ) {
         Artist artist = artistRepository.findById(artistId)
-                .orElseThrow();
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Artist not found"));
 
         song.setArtist(artist);
         return songRepository.save(song);

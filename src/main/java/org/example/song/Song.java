@@ -17,6 +17,10 @@ public class Song {
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
+    public Long getId(){
+        return id;
+    }
+
     public String getTitle(){
         return title;
     }
